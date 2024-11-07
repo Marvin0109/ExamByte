@@ -1,0 +1,114 @@
+/* index.css */
+
+/* 1. Global Styles (Basis-Stile für die gesamte Seite) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+/* 2. Container */
+.container {
+    width: 80%;
+    margin: auto;
+    max-width: 1200px;
+}
+
+/* 3. Header und Navigation */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* 4. Hauptinhalte */
+.main-content {
+    padding: 20px;
+    background-color: #fff;
+    margin-top: 20px;
+}
+
+/* 5. Footer */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 20px;
+}
+
+/* 6. Weitere Stilgruppen (Buttons, Formulare, etc.) */
+button {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+/* index.css */
+
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 250px;
+    padding-top: 20px;
+}
+
+/* Anpassung für die Hauptinhalte */
+.content {
+    margin-left: 250px; /* Platz für die Sidebar */
+    padding: 20px;
+}
+
+/* Zusätzliche Styling-Anpassungen */
+.sidebar .navbar-nav .nav-link {
+    color: #ddd;
+    font-size: 1.1em;
+}
+
+.sidebar .navbar-nav .nav-link:hover {
+    color: #fff;
+}
+
+#search-icon {
+    background-color: #343a40;
+    color: white;
+    padding: 5px;            /* Optional: etwas Abstand für das Icon */
+    border: none;            /* Umrandung entfernen */
+}
+
+#search-icon i {
+    font-size: 16px;         /* Größe des Icons anpassen (optional) */
+}
+
