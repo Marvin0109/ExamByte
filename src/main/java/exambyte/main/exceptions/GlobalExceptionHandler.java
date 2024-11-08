@@ -15,4 +15,10 @@ public class GlobalExceptionHandler {
         return "error/404";
     }
 
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public String postNotWorking(NoHandlerFoundException exception, Model model) {
+        model.addAttribute("errorMessage", "POST Requests sind noch nicht erlaubt.");
+        return "error/405";
+    }
+
 }

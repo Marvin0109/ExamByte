@@ -1,0 +1,30 @@
+.popup {
+    display: none;
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 250px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    color: #343a40;
+}
+.popup label {
+    font-size: 14px;
+    display: block;
+    margin-top: 10px;
+    color: #343a40;
+    text-align: left;
+}
+.popup input[type="text"],
+.popup input[type="password"],
+.popup input[type="submit"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

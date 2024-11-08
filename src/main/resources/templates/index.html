@@ -18,6 +18,7 @@
 
     <!-- Custom styles for this template -->
     <link href="custom/index.css" rel="stylesheet">
+    <link href="custom/popup.css" rel="stylesheet">
 
 </head>
 <body>
@@ -44,9 +45,24 @@
                         <li class="nav-item">
                             <a class="nav-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"> ??? </a>
                         </li>
+
+                        <li class="nav-item" style="position: relative;">
+                            <a class="nav-link" href="#" onclick="togglePopup()">Login</a>
+                            <div class="popup" id="loginPopup">
+                                <form action="/login" method="post">
+                                    <label for="username">Benutzername:</label>
+                                    <input type="text" id="username" name="username" required>
+
+                                    <label for="password">Passwort:</label>
+                                    <input type="password" id="password" name="password" required>
+
+                                    <input type="submit" value="Anmelden" class="btn btn-primary btn-block mt-2">
+                                </form>
+                            </div>
+                        </li>
                         <!-- Hier kommen weitere links hinzu (li navbar-nav mr-auto und a...)//-->
                     </ul>
-                    <form class="form-inline mt-2 mt-md-0 d-flex">
+                    <form class="form-inline mt-2 mt-md-0 d-flex" method="get" action="">
                         <span class="input-group-text" id="search-icon">
                             <i class="fas fa-search"></i> <!-- Font Awesome Lupe -->
                         </span>
@@ -62,12 +78,42 @@
         <!-- Main Content -->
         <main role="main" class="container mt-5 pt-5">
             <h1>Willkommen bei ExamByte</h1>
-            <p>Hier ist dein Hauptinhalt ...</p>
+            <p>Hier ist dein Hauptinhalt ... (Text ist Lorem Ipsum und fungiert als Beispieltext)</p>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
+            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+            Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+            consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+            sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
+            no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
+            sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+            At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+            <br>
+            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu
+            feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit
+            augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
+            nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+
+            Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+            Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse.
+            <p> <a href="https://www.loremipsum.de/" aria-label="Lorem Ipsum Generator Link"> Lorem Ipsum Generator</a> </p>
         </main>
 
         <!-- Optional JavaScript for Bootstrap (requires jQuery and Popper.js) -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-        <script src="/static/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+        <script src="/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+        <script>
+            function togglePopup() {
+                const popup = document.getElementById('loginPopup');
+                popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+            }
+
+            window.onclick = function(event) {
+                const popup = document.getElementById('loginPopup');
+                if (event.target !== popup && !popup.contains(event.target) && event.target.className !== 'nav-link') {
+                    popup.style.display = 'none';
+                }
+            }
+        </script>
 </body>
 </html>
