@@ -21,81 +21,20 @@
     <link href="custom/popup.css" rel="stylesheet">
 </head>
 <body>
-<header>
-    <nav class= "navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="/">
-            <img src="pictures/HHUKoksLogo.jpg" alt="HHU Koks Logo" style="height: 75px;">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <!-- Collapsible Navbar Links -->
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/contact">
-                        Contact
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"> ??? </a>
-                </li>
+    <!-- Navigation -->
+    <header th:replace="~{navigation/navbar.html}"> </header>
 
-                <li class="nav-item" style="position: relative;">
-                    <a class="nav-link" href="#" onclick="togglePopup()">Login</a>
-                    <div class="popup" id="loginPopup">
-                        <form action="/login" method="post">
-                            <label for="username">Benutzername:</label>
-                            <input type="text" id="username" name="username" required>
-
-                            <label for="password">Passwort:</label>
-                            <input type="password" id="password" name="password" required>
-
-                            <input type="submit" value="Anmelden" class="btn btn-primary btn-block mt-2">
-                        </form>
-                    </div>
-                </li>
-                <!-- Hier kommen weitere links hinzu (li navbar-nav mr-auto und a...)//-->
-            </ul>
-            <form class="form-inline mt-2 mt-md-0 d-flex" method="get" action="">
-                        <span class="input-group-text" id="search-icon">
-                            <i class="fas fa-search"></i> <!-- Font Awesome Lupe -->
-                        </span>
-                <!-- Suchfeld -->
-                <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search" aria-label="Search">
-                <!-- Submit-Button -->
-                <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
-</header>
         <main role="main" class="container mt-5 pt-5">
             <h1>Contact</h1>
             <p>You can contact us here.</p>
             <p> <img src="/pictures/workCat.webp" alt="Working Cat"> </p>
         </main>
 
-    <!-- Optional JavaScript for Bootstrap (requires jQuery and Popper.js) -->
+    <!-- js Imports -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="/bootstrap-4.0.0/js/bootstrap.min.js"></script>
-    <script>
-        function togglePopup() {
-            const popup = document.getElementById('loginPopup');
-            popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
-        }
-
-        window.onclick = function(event) {
-            const popup = document.getElementById('loginPopup');
-                if (event.target !== popup && !popup.contains(event.target) && event.target.className !== 'nav-link') {
-                popup.style.display = 'none';
-            }
-        }
-    </script>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
 
