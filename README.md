@@ -6,3 +6,6 @@ Login Popup, 405 Post Error Page, Extras
 
 13.11.24
 Navigations-Logik von HTML-Pages getrennt und scripts.js Einbindung
+
+14.11.24
+oauth2 Login
