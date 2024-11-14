@@ -20,5 +20,4 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage", "POST Requests sind noch nicht erlaubt.");
         return "error/405";
     }
-
 }
