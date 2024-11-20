@@ -9,3 +9,7 @@ Navigations-Logik von HTML-Pages getrennt und scripts.js Einbindung
 
 14.11.24
 oauth2 Login
+
+20.11.24
+Admin Rolle hinzugefügt, Methode loadUser() wird aber nicht aufgerufen aus 
+unbekannten Gründen, 403 Error Page, Tests.html erstellt, Extras

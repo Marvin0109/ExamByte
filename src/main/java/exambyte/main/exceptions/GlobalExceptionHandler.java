@@ -20,4 +20,10 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage", "POST Requests sind noch nicht erlaubt.");
         return "error/405";
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public String forbiddenAccess(NoHandlerFoundException exception, Model model) {
+        model.addAttribute("errorMessage", "Keine Berechtigung für die Seite.");
+        return "error/403";
+    }
 }
