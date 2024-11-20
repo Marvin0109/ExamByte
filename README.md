@@ -12,4 +12,4 @@ oauth2 Login
 
 20.11.24
 Admin Rolle hinzugefügt, Methode loadUser() wird aber nicht aufgerufen aus 
-unbekannten Gründen, 403 Error Page, Tests.html erstellt, Extras
+unbekannten Gründen, 403 Error Page, exams.html erstellt, Extras
