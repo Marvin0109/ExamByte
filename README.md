@@ -13,3 +13,8 @@ oauth2 Login
 20.11.24
 Admin Rolle hinzugefügt, Methode loadUser() wird aber nicht aufgerufen aus 
 unbekannten Gründen, 403 Error Page, exams.html erstellt, Extras
+
+22.11.24
+Browser muss neu gestartet werden damit die Änderungen der Rollenverteilung
+in Kraft kommt. Benutzername in loadUser() selber manuell mit dem eigenen
+Benutzernamen ersetzen.
