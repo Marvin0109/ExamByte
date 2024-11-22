@@ -11,15 +11,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(WebController.class)
+@WebMvcTest
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-public class ContactTest {
+public class ExamsTest {
 
     @Autowired
     MockMvc mvc;
@@ -28,21 +26,26 @@ public class ContactTest {
     AppUserService appUserService;
 
     @Test
-    @DisplayName("Die contact Seite ist für nicht-authentifizierte User nicht erreichbar")
+    @DisplayName("Die exams Seite ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/contact"))
-                .andExpect(status().is3xxRedirection())
-                .andReturn();
-        assertThat(mvcResult.getResponse().getRedirectedUrl())
-                .contains("oauth2/authorization/github");
+        mvc.perform(get("/exams"))
+                .andExpect(status().is3xxRedirection());
     }
 
     @Test
     @WithMockOAuth2User(login = "Marvin0109")
-    @DisplayName("Die contact Seite ist für authentifizierte User erreichbar")
+    @DisplayName("Die exams Seite ist für normale authentifizierte User nicht erreichbar")
     void test_02() throws Exception {
-        mvc.perform(get("/contact"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("name", "Marvin0109"));
+        mvc.perform(get("/exams"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "ADMIN"})
+    @DisplayName("Die exams Seite ist sichtbar für Admins")
+    void test_03() throws Exception{
+        mvc.perform(get("/exams"))
+                .andExpect(status().isOk());
+
     }
 }
