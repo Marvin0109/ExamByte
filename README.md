@@ -19,3 +19,6 @@ unbekannten Gründen, 403 Error Page, exams.html erstellt, Extras
 in Kraft kommt. Benutzername in loadUser() selber manuell mit dem eigenen
 Benutzernamen ersetzen. 
 - Tests geschrieben für WebController/ Authentifizierung
+
+24.11024
+- Logout Funktion wurde hinzugefügt, Einlog daten werden aber bei Logout nicht richtig gelöscht
