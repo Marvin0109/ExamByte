@@ -1,22 +1,25 @@
-package exambyte.main.controllers;
+package exambyte.presentation.controllers;
 
-import exambyte.main.config.AppUserService;
-import exambyte.main.config.MethodSecurityConfig;
-import exambyte.main.config.SecurityConfig;
-import exambyte.main.securityHelper.WithMockOAuth2User;
+import exambyte.application.ExamByteApplication;
+import exambyte.domain.config.AppUserService;
+import exambyte.domain.config.MethodSecurityConfig;
+import exambyte.domain.config.SecurityConfig;
+import exambyte.presentation.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-@WebMvcTest
+@WebMvcTest(WebController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
+@ContextConfiguration(classes = ExamByteApplication.class)
 public class ExamsTest {
 
     @Autowired

@@ -1,4 +1,4 @@
-package exambyte.main.config;
+package exambyte.domain.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

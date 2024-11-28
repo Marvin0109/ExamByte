@@ -1,11 +1,11 @@
-package exambyte.main;
+package exambyte.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.awt.Desktop; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"exambyte.*", "resources.*", "test.*"})
 public class ExamByteApplication {
 
 	private static void openInBrowser(URI uri) {

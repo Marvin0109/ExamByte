@@ -1,4 +1,4 @@
-package exambyte.main;
+package exambyte.application;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
