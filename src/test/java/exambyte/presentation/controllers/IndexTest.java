@@ -2,7 +2,6 @@ package exambyte.presentation.controllers;
 
 import exambyte.application.ExamByteApplication;
 import exambyte.domain.config.MethodSecurityConfig;
-import exambyte.domain.config.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(WebController.class)
-@Import({SecurityConfig.class, MethodSecurityConfig.class})
+@Import({MethodSecurityConfig.class})
 @ContextConfiguration(classes = ExamByteApplication.class)
 public class IndexTest {
 
