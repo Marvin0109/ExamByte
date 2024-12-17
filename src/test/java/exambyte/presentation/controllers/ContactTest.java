@@ -5,6 +5,8 @@ import exambyte.domain.config.AppUserService;
 import exambyte.domain.config.MethodSecurityConfig;
 import exambyte.domain.config.SecurityConfig;
 import exambyte.presentation.controllers.securityHelper.WithMockOAuth2User;
+import exambyte.presentation.controllers.WebController;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
