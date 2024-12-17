@@ -33,3 +33,6 @@ Benutzernamen ersetzen.
 28.11.24
 - Projekt nach Onion-Architektur umgestellt, IndexTest läuft nicht
 - 5 min später: IndexTest ist wieder behoben :)
+
+17.12.2024
+- Test zur Onion-Architektur geschrieben und daran gescheitert
