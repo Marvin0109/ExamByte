@@ -27,10 +27,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ContactTest {
 
     @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @MockBean
-    AppUserService appUserService;
+    private AppUserService appUserService;
+
+    @Autowired
+    public ContactTest(AppUserService appUserService) {
+        this.appUserService = appUserService;
+    }
 
     @Test
     @DisplayName("Die contact Seite ist für nicht-authentifizierte User nicht erreichbar")

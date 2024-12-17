@@ -23,10 +23,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class ExamsTest {
 
     @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @MockBean
-    AppUserService appUserService;
+    private AppUserService appUserService;
+
+    @Autowired
+    public ExamsTest(AppUserService appUserService) {
+        this.appUserService = appUserService;
+    }
 
     @Test
     @DisplayName("Die exams Seite ist für nicht authentifizierte User nicht erreichbar")
@@ -46,9 +51,8 @@ public class ExamsTest {
     @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "ADMIN"})
     @DisplayName("Die exams Seite ist sichtbar für Admins")
-    void test_03() throws Exception{
+    void test_03() throws Exception {
         mvc.perform(get("/exams"))
                 .andExpect(status().isOk());
-
     }
 }

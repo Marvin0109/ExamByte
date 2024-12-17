@@ -19,8 +19,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = ExamByteApplication.class)
 public class IndexTest {
 
+    private final MockMvc mvc;
     @Autowired
-    MockMvc mvc;
+    public IndexTest(MockMvc mvc) {
+        this.mvc = mvc;
+    }
 
     @Test
     @DisplayName("Startseite ist öffentlich erreichbar")
