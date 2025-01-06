@@ -1,0 +1,23 @@
+Feedback:
+
+Geschäftslogik: Die Modellierung der Geschäftslogik ist noch nicht wirklich vorhanden, was sich hoffentlich bald ändern wird.
+
+Acessibility: Es ist schön, dass ihr in den Beispielen schon Alt-Text verwendet habt. Das sollte natürlich beibehalten werden.
+
+Architektur und Struktur: Ich weiß selbst nicht genau, woran der Test für die Onion-Architektur gescheitert ist, aber wenn es weiterhin nicht funktioniert, solltet ihr euch an jemanden aus der Orga wenden. Die Ordnerstruktur sieht schon mal richtig aus.
+
+Authentifikation und Autorisierung: Sieht soweit gut aus, obwohl das natürlich schwer zu sagen ist, solange noch größere Teile der Funktionalität fehlen. Toll ist, dass ihr schon Tests für die bereits implementierten Teile der Autorisierung geschrieben habt.
+
+Code: Bitte entscheidet euch für einen Formatierungs-Styleguide und schreibt in die Dokumentation, welchen ihr verwendet. Die gängigen Java-Konventionen scheinen soweit eingehalten zu werden.
+
+Dokumentation: Die Dokumentation fehlt bis jetzt. Fangt am besten möglichst schnell damit an, dann müsst ihr nicht alles am Ende des Projekts machen.
+
+Funktionalität: Spätestens sobald der Test für die Onion-Architektur funktioniert, solltet ihr euch darum kümmern, die in der Aufgabenstellung beschriebenen Funktionen umzusetzen.
+
+Git: Bitte benennt eure Commits in Zukunft so, dass auch Außenstehende daran ablesen können, was jeweils gemacht wurde. Auffällig ist außerdem, dass die mit Abstand meisten Commits von muz70wuc und Marvin0109 stammen. Dafür kann es natürlich unter Umständen gute Gründe geben (die ihr dann aufschreiben solltet), aber falls nicht: Denkt daran, dass sich alle am Projekt beteiligen sollen.
+
+Testing: Die bereits vorhandenen Tests sehen schonmal gut aus; sobald mehr Funktionalität da ist, muss natürlich noch viel mehr getestet werden.
+
+Fazit: Was bis jetzt vorhanden ist, sieht gut aus, die nächsten großen Aufgaben sollten vermutlich die Implementierung der Funktionalität und Geschäftslogik sowie das Schreiben der Dokumentation sein. Außerdem solltet ihr auf sinnvolle Commitnamen und eine gleichäßige Arbeitsverteilung achten.
+
+Ich wünsche euch allen noch viel Erfolg, bei Rückfragen könnt ihr mich unter dem Namen chber119 auf RocketChat erreichen.
