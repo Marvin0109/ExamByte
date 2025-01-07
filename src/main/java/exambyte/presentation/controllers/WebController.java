@@ -9,15 +9,36 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Diese Klasse verwaltet die verschiedenen HTTP-Request-Handler für die Webanwendung,
+ * einschließlich der Anzeige von Seiten wie der Startseite, Kontaktseite und Prüfungsliste.
+ * Sie implementiert auch Sicherheitslogik, z.B. für den geschützen Zugriff auf die Prüfungsseite
+ * und das erzwungene Abmelden.
+ */
 @Controller
 public class WebController {
 
+    /**
+     * Zeigt die Startseite an und fügt die aktuelle URL zur Ansicht hinzu.
+     *
+     * @param model Das Model, um Daten an die View zu übergeben.
+     * @param request Das {@link HttpServletRequest}-Objekt, um die aktuelle URL zu ermitteln.
+     * @return Der Name der View für die Startseite.
+     */
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
         model.addAttribute("currentPath", request.getRequestURI());
         return "index";
     }
 
+    /**
+     * Zeigt die Kontaktseite an und fügt den Namen des authentifizierten Benutzers sowie die aktuelle URL zur Ansicht hinzu.
+     *
+     * @param model Das Model, um Daten an die View zu übergeben.
+     * @param request Das {@link HttpServletRequest}-Objekt, um die aktuelle URL zu ermitteln.
+     * @param auth Das {@link OAuth2AuthenticationToken}-Objekt, das Informationen zum authentifizierten Benutzer enthält.
+     * @return Der Name der View für die Kontaktseite.
+     */
     @GetMapping("/contact")
     public String contact(Model model, HttpServletRequest request, OAuth2AuthenticationToken auth) {
         System.out.println(auth);
@@ -26,22 +47,48 @@ public class WebController {
         return "contact";
     }
 
+    /**
+     * Zeigt die Login-Seite an.
+     *
+     * @return Der Name der View für die Login-Seite.
+     */
     @GetMapping("/login")
     public String login() {
         return "login";
     }
 
+    /**
+     * Zeigt die Prüfungsseite an, aber nur für Benutzer mit der Rolle "ROLE_ADMIN".
+     * Der Zugriff wird durch die {@link Secured}-Annotation geschützt.
+     *
+     * @param model Das Model, um Daten an die View zu übergeben.
+     * @return Der Name der View für die Prüfungsseite.
+     */
     @GetMapping("/exams")
     @Secured("ROLE_ADMIN")
     public String exams(Model model) {
         System.out.println("Entered Exams");
         return "exams";
     }
+
+    /**
+     * Verhindert das Caching der Anwort.
+     * Wird für sicherheitsrelevante Seiten verwendet.
+     *
+     * @param response Das {@link HttpServletResponse}-Objekt, um die Cache-Header zu setzen.
+     */
     private void preventCaching(HttpServletResponse response) {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Expires", "0");
     }
+
+    /**
+     * Erzwingt das Abmelden des Benutzers, indem die Session invalidiert und der Sicherheitskontext gelöscht wird.
+     *
+     * @param request Das {@link HttpServletRequest}-Objekt, um die Session zu invalidieren.
+     * @return Eine Weiterleitung zur Startseite nach dem Logout.
+     */
     @PostMapping("/force-logout")
     public String forceLogout(HttpServletRequest request) {
         request.getSession(false).invalidate(); // Session invalidieren
