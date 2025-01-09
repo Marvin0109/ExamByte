@@ -3,14 +3,14 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: exambyte_postgres
-    environment:
-      POSTGRES_USER: exambyte_user
-      POSTGRES_PASSWORD: exambyte_password
-      POSTGRES_DB: exambyte_db
     ports:
       - "5432:5432"
     volumes:
       - exambyte_postgres_data:/var/lib/postgresql/data
+    environment:
+      - "POSTGRES_DB=exambyte_db"
+      - "POSTGRES_USER=exambyte_user"
+      - "POSTGRES_PASSWORD=exambyte_password"
 
 volumes:
   exambyte_postgres_data:
