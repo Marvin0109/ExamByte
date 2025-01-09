@@ -44,3 +44,9 @@ Benutzernamen ersetzen.
 
 08.01.2025
 - Styleguide hinzugefügt, bitte durchlesen.
+
+09.01.2025
+- docker-compose Datei erstellt
+- (noch nicht funktionierender) Datenbank Test
+- Gradle dependencies update + Dokumentation
+- application.yml settings
