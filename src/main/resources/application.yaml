@@ -18,3 +18,15 @@ spring:
             authorization-uri: https://github.com/login/oauth/authorize
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/exambyte_db
+    username: exambyte_user
+    password: exambyte_password
+    driver-class-name: org.postgresql.driver
+  jpa:
+    hibernate:
+      ddl-auto: none # Verhindert die automatische DDL-Ausführung
+  flyway:
+    enabled: true
+    locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
