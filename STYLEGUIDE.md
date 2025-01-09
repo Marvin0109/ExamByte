@@ -2,7 +2,7 @@
 
 **Autor**: Marvin0109
 **erstellt am**: 08.01.2025
-**letzte Änderung**: 08.01.2025
+**letzte Änderung**: 09.01.2025
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -15,7 +15,8 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 - Alle Kommentare und Dokumentationen sind auf **Deutsch** zu schreiben.
 
 ### Dateinamen
-- Verwende **UpperCamelCase** (z.B. 'HelloWorld.java' oder 'BasedBeepo.png').
+- Verwende **UpperCamelCase** für Java Dateien (z.B. 'HelloWorld.java').
+- Sonstige Dateien normaler **camelCase** (z.B. 'beepoRun.png').
 - Tests enden auf 'Test' (z.B. 'UserRepositoryTest.java').
 
 ## Formatierung
@@ -234,7 +235,8 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 
 ### Verwendung von Platzhaltern
 - Nutze die **Thymeleaf-Ausdruckssyntax** '${}' für Variablen.
-- Vermeide es, reinen HTML-Code mit serverseitigen Werten zu mischen, wenn es durch Thymeleaf-Ausdrücke gelöst werden kann.
+- Vermeide es, reinen HTML-Code mit serverseitigen Werten zu mischen, wenn es durch Thymeleaf-Ausdrücke gelöst werden 
+  kann.
   - Beispiel:
   ```html
   <p th:text="${user.name}">Benutzername</p>
