@@ -1,4 +1,4 @@
-package exambyte.domain.aggregate;
+package exambyte.domain.aggregate.user;
 
 import jakarta.persistence.Id;
 

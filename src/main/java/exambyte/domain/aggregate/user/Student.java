@@ -1,7 +1,6 @@
-package exambyte.domain.aggregate;
+package exambyte.domain.aggregate.user;
 
 import jakarta.persistence.Id;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.data.annotation.PersistenceCreator;
 
 public class Student implements Person {
