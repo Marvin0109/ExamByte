@@ -49,4 +49,8 @@ Benutzernamen ersetzen.
 - docker-compose Datei erstellt
 - (noch nicht funktionierender) Datenbank Test
 - Gradle dependencies update + Dokumentation
-- application.yml settings
+- application.yml setting
+
+14.01.2025
+- SQL User, Antwort und Frage Tabellen erstellt
+- Die dazu nötigen Aggregate für jetzt fertiggestellt :)
