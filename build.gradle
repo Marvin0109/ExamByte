@@ -35,11 +35,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
-	// Datenbanken
-	implementation 'org.flywaydb:flyway-core'
+	// JDBC API
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	runtimeOnly 'org.postgresql:postgresql'
-	testRuntimeOnly 'com.h2database:h2'
+
+	// DB Migration
+	implementation 'org.flywaydb:flyway-core'
 
 	// Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
