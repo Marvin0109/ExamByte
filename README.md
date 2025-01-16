@@ -54,3 +54,7 @@ Benutzernamen ersetzen.
 14.01.2025
 - SQL User, Antwort und Frage Tabellen erstellt
 - Die dazu nötigen Aggregate für jetzt fertiggestellt :)
+
+16.01.2025 
+- Onion Architektur nochmal überarbeitet
+- Architektur Test angepasst (schlägt Erwartungsgemäß fehl)
