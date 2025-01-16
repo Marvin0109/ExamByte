@@ -41,3 +41,6 @@ Benutzernamen ersetzen.
 
 07.01.2025
 - Dokumentation
+
+08.01.2025
+- Styleguide hinzugefügt, bitte durchlesen.
