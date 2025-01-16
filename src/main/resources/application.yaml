@@ -25,5 +25,5 @@ spring:
     url: jdbc:postgresql://exambyte_postgres:5432/exambyte_db
     driver-class-name: org.postgresql.Driver
   flyway:
-    enabled: true
+    enabled: false
     locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
