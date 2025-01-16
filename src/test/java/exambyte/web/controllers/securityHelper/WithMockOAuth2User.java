@@ -1,4 +1,4 @@
-package exambyte.presentation.controllers.securityHelper;
+package exambyte.web.controllers.securityHelper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
