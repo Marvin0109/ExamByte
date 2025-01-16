@@ -36,3 +36,6 @@ Benutzernamen ersetzen.
 
 17.12.2024
 - Test zur Onion-Architektur geschrieben und daran gescheitert
+
+07.01.2025
+- Dokumentation
