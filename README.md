@@ -63,3 +63,4 @@ Benutzernamen ersetzen.
 - Onion-Architektur in domain
 - mapper-Klassen und entity-Klassen in persistence erstellt
 - Bugfix in ExamByteApplication.java bei scanBasePackages
+- Data-Ordner wird jetzt im Projekt gespeichert, auf keinen Fall commiten :)
