@@ -7,27 +7,28 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 public class Antwort {
-    @Id
-    private final int id;
-    private final String[] AntwortText;
+
+    private final Integer id;
+    private final String[] antwortText;
     private boolean istKorrekt;
-    @ManyToOne
-    @JoinColumn(name = "frage_id", foreignKey = @ForeignKey(name = "FK_FRAGE_ID"))
-    private Frage frage;
+    private final Frage frage;
+    private final Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "FK_STUDENT_ID"))
-    private Student student;
-
-    private Antwort(int id, String[] AntwortText, boolean istKorrekt, Frage frage, Student student) {
+    private Antwort(Integer id, String[] antwortText, boolean istKorrekt, Frage frage, Student student) {
         this.id = id;
-        this.AntwortText = AntwortText;
+        this.antwortText = antwortText;
         this.istKorrekt = istKorrekt;
         this.frage = frage;
         this.student = student;
     }
+
+    // Factory Methode
+    public static Antwort of(Integer id, String[] antwortText, boolean istKorrekt, Frage frage, Student student) {
+        return new Antwort(id, antwortText, istKorrekt, null, student);
+    }
+
     public Antwort getAntwort() {
-        return new Antwort(id, AntwortText, istKorrekt, frage, student);
+        return new Antwort(id, antwortText, istKorrekt, frage, student);
     }
 
     public void setIstKorrekt(boolean istKorrekt) {
@@ -39,7 +40,7 @@ public class Antwort {
     }
 
     public String[] getAntwortText() {
-        return AntwortText;
+        return antwortText;
     }
 
     public Frage getFrage() {
