@@ -17,9 +17,10 @@ public class DataConfig {
     @Bean
     public DataSource configureDB() {
         return DataSourceBuilder.create()
-                .url("jdbc:postgresql://exambyte_postgres:5432/exambyte_db")
+                .url("jdbc:postgresql://localhost:5432/exambyte_db")
                 .username("exambyte_user")
                 .password("exambyte_password")
+                .driverClassName("org.postgresql.Driver")
                 .build();
     }
 }

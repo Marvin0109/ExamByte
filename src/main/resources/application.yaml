@@ -34,11 +34,10 @@ spring:
         cachecontrol:
           no-store: true
 
-
   datasource:
+    url: jdbc:postgresql://localhost:5432/exambyte_db
     username: exambyte_user
     password: exambyte_password
-    url: jdbc:postgresql://exambyte_postgres:5432/exambyte_db
     driver-class-name: org.postgresql.Driver
   flyway:
     enabled: false
