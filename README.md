@@ -58,3 +58,8 @@ Benutzernamen ersetzen.
 16.01.2025 
 - Onion Architektur nochmal überarbeitet
 - Architektur Test angepasst (schlägt Erwartungsgemäß fehl)
+
+21.01.2025
+- Onion-Architektur in domain
+- mapper-Klassen und entity-Klassen in persistence erstellt
+- Bugfix in ExamByteApplication.java bei scanBasePackages
