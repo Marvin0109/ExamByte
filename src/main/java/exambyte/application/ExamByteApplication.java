@@ -2,7 +2,7 @@ package exambyte.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import java.awt.Desktop; import java.io.IOException; import java.net.URI; import java.net.URISyntaxException;
+import java.io.IOException; import java.net.URI;
 
 /**
  * Die Hauptklasse der Anwendung, die den Spring Boot Server startet und eine URL in einem Browser öffnet. ඞ
@@ -16,7 +16,7 @@ import java.awt.Desktop; import java.io.IOException; import java.net.URI; import
  * @see SpringApplication
  */
 
-@SpringBootApplication(scanBasePackages = {"exambyte.*", "resources.*", "test.*"})
+@SpringBootApplication(scanBasePackages = {"exambyte"})
 public class ExamByteApplication {
 
 	/**
@@ -28,15 +28,23 @@ public class ExamByteApplication {
 	 */
 	private static void openInBrowser(URI uri) {
 		String[] browsers = {"firefox", "google-chrome", "microsoft-edge"};
+		boolean browserOpened = false;
+
 		for (String browser : browsers) {
 			try {
-				Runtime.getRuntime().exec(browser + " " + uri.toString());
-				return;
+				ProcessBuilder pb = new ProcessBuilder(browser, uri.toString());
+				pb.start();
+				browserOpened = true;
+				break;
 			} catch (IOException e) {
 				// Fehlerbehandlung für den Fall, dass der Browser nicht geöffnet werden konnte
 			}
 		}
-		System.err.println("Keiner der Browser konnte geöffnet werden.");
+
+		if (!browserOpened) {
+			System.err.println("Keiner der Browser konnte geöffnet werden.");
+		}
+
 	}
 
 	/**
@@ -50,18 +58,9 @@ public class ExamByteApplication {
 		try {
 			// Die URL, die beim Starten der Anwendung geöffnet werden soll
 			URI uri = new URI("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-
-			// Überprüfen, ob der Desktop zum Öffnen von URLs unterstützt wird
-			if (Desktop.isDesktopSupported()) {
-				Desktop desktop = Desktop.getDesktop();
-				if (desktop.isSupported(Desktop.Action.BROWSE)) {
-					desktop.browse(uri);
-				}
-			} else {
-				openInBrowser(uri);
-			}
-		} catch (IOException | URISyntaxException e) {
-			e.printStackTrace(); // Fehlerprotokollierung
+			openInBrowser(uri);
+		} catch (Exception e) {
+			System.err.println("Ungültige URI: " + e.getMessage());
 		}
 	}
 }
