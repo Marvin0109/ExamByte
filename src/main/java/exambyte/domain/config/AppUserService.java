@@ -47,9 +47,15 @@ public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAut
         OAuth2User originalUser = defaultService.loadUser(userRequest);
         Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
 
-        if ("Marvin0109".equals(originalUser.getAttribute("login"))) {
+//        if ("Marvin0109".equals(originalUser.getAttribute("login"))) {
+//            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+//        }
+//        Wurde etwas geändert um es zu ermöglichen auch anderen Usern mit dessen GitHub Namen einzuloggen
+        String login = originalUser.getAttribute("login");
+        if ("Marvin0109".equals(login) || "muz70wuc".equals(login) || "IhrGitHubUsername".equals(login)) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
+
         return new DefaultOAuth2User(authorities, originalUser.getAttributes(), "id");
     }
 }
