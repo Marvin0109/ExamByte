@@ -1,4 +1,4 @@
-package exambyte.presentation.controllers.securityHelper;
+package exambyte.web.controllers.securityHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;

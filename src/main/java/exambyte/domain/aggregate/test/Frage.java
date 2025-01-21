@@ -1,23 +1,22 @@
 package exambyte.domain.aggregate.test;
 
 import exambyte.domain.aggregate.user.Professor;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 public class Frage {
-    @Id
-    private final int id;
-    private final String[] frageText;
-    @ManyToOne
-    @JoinColumn(name = "professor_id", foreignKey = @ForeignKey(name = "FK_PROFESSOR_ID"))
-    private Professor professor;
 
-    private Frage(int id, String[] frageText, Professor professor) {
+    private final Integer id;
+    private final String[] frageText;
+    private final Professor professor;
+
+    private Frage(Integer id, String[] frageText, Professor professor) {
         this.id = id;
         this.frageText = frageText;
         this.professor = professor;
+    }
+
+    // Factory Methode
+    public static Frage of(Integer id, String[] frageText, Professor professor) {
+        return new Frage(id, frageText, professor);
     }
 
     public Professor getProfessor() {
@@ -30,9 +29,5 @@ public class Frage {
 
     public int getId() {
         return id;
-    }
-
-    public Frage getFrage() {
-        return new Frage(id, frageText, professor);
     }
 }

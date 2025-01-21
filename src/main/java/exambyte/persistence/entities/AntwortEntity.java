@@ -1,34 +1,36 @@
-package exambyte.domain.aggregate.test;
+package exambyte.persistence.entities;
 
+import exambyte.domain.aggregate.test.Antwort;
+import exambyte.domain.aggregate.test.Frage;
 import exambyte.domain.aggregate.user.Student;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import org.springframework.data.annotation.PersistenceCreator;
 
-public class Antwort {
+public class AntwortEntity {
 
-    private final Integer id;
-    private final String[] antwortText;
+    @Id
+    private final int id;
+    private final String[] AntwortText;
     private boolean istKorrekt;
+
+    @ManyToOne
+    @JoinColumn(name = "frage_id", foreignKey = @ForeignKey(name = "FK_FRAGE_ID"))
     private final Frage frage;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "FK_STUDENT_ID"))
     private final Student student;
 
-    private Antwort(Integer id, String[] antwortText, boolean istKorrekt, Frage frage, Student student) {
+    @PersistenceCreator
+    public AntwortEntity(int id, String[] AntwortText, boolean istKorrekt, Frage frage, Student student) {
         this.id = id;
-        this.antwortText = antwortText;
+        this.AntwortText = AntwortText;
         this.istKorrekt = istKorrekt;
         this.frage = frage;
         this.student = student;
-    }
-
-    // Factory Methode
-    public static Antwort of(Integer id, String[] antwortText, boolean istKorrekt, Frage frage, Student student) {
-        return new Antwort(id, antwortText, istKorrekt, null, student);
-    }
-
-    public Antwort getAntwort() {
-        return new Antwort(id, antwortText, istKorrekt, frage, student);
     }
 
     public void setIstKorrekt(boolean istKorrekt) {
@@ -40,7 +42,7 @@ public class Antwort {
     }
 
     public String[] getAntwortText() {
-        return antwortText;
+        return AntwortText;
     }
 
     public Frage getFrage() {

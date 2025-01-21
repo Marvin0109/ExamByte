@@ -1,10 +1,7 @@
 package exambyte.domain.aggregate.user;
 
-import jakarta.persistence.Id;
-import org.springframework.data.annotation.PersistenceCreator;
-
 public class Student implements Person {
-    @Id
+
     private final Integer id;
     private final String name;
 
@@ -12,6 +9,11 @@ public class Student implements Person {
         this.id = id;
         this.name = name;
     }
+
+    public static Student of(Integer id, String name) {
+        return new Student(id, name);
+    }
+
     @Override
     public int getId() {
         return id;
@@ -19,12 +21,5 @@ public class Student implements Person {
     @Override
     public String getName() {
         return name;
-    }
-    @PersistenceCreator
-    public static Student of(Integer id, String name) {
-        return new Student(id, name);
-    }
-    public static Student of(String name) {
-        return new Student(null, name);
     }
 }

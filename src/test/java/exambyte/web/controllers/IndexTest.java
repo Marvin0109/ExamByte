@@ -1,4 +1,4 @@
-package exambyte.presentation.controllers;
+package exambyte.web.controllers;
 
 import exambyte.application.ExamByteApplication;
 import exambyte.domain.config.MethodSecurityConfig;

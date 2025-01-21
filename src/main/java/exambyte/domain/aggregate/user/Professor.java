@@ -1,11 +1,12 @@
 package exambyte.domain.aggregate.user;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.annotation.PersistenceCreator;
 
 
 public class Professor implements Person {
-    @Id
+
     private final Integer id;
     private final String name;
 
@@ -13,6 +14,12 @@ public class Professor implements Person {
         this.id = id;
         this.name = name;
     }
+
+    // Factory Methode
+    public static Professor of(Integer id, String name) {
+        return new Professor(id, name);
+    }
+
     @Override
     public int getId() {
         return id;
@@ -20,12 +27,5 @@ public class Professor implements Person {
     @Override
     public String getName() {
         return name;
-    }
-    @PersistenceCreator
-    public static Professor of(Integer id, String name) {
-        return new Professor(id, name);
-    }
-    public static Professor of(String name) {
-        return new Professor(null, name);
     }
 }
