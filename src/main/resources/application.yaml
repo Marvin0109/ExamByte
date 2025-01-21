@@ -5,6 +5,15 @@ logging:
         security: info
 
 spring:
+  application:
+    name: ExamByte
+  devtools:
+    restart:
+      enabled: true
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
   security:
     oauth2:
       client:
@@ -19,6 +28,13 @@ spring:
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
 
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-store: true
+
+
   datasource:
     username: exambyte_user
     password: exambyte_password
@@ -27,3 +43,9 @@ spring:
   flyway:
     enabled: false
     locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
+  jpa:
+    properties:
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
