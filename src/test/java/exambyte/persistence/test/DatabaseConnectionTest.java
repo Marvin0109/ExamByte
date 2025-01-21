@@ -33,7 +33,7 @@ public class DatabaseConnectionTest {
 
         // Versuche eine einfache Datenbankabfrage (z.B. eine Entität abzurufen oder zu speichern)
         // Dies stellt sicher, dass die Verbindung und Kommunikation mit der Datenbank funktioniert
-        Long count = (Long) entityManager.createQuery("SELECT COUNT(e) FROM MyEntity e")
+        Long count = (Long) entityManager.createQuery("SELECT COUNT(e) FROM exambyte e")
                 .getSingleResult();
         assertThat(count).isGreaterThanOrEqualTo(0);
     }

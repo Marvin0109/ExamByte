@@ -65,7 +65,6 @@ public class SecurityConfig {
                         .addLogoutHandler((request, response, authentication) -> {
                             SecurityContextHolder.clearContext(); // Sicherheitskontext löschen
                         })
-
                 )
                 .build();
     }
