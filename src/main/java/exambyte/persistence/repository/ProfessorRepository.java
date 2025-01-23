@@ -1,8 +1,10 @@
 package exambyte.persistence.repository;
 
-import exambyte.domain.aggregate.user.Professor;
+import exambyte.persistence.entities.ProfessorEntity;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ProfessorRepository extends CrudRepository<Professor, Integer> {
+@Repository
+public interface ProfessorRepository extends CrudRepository<ProfessorEntity, Integer> {
 
 }

@@ -1,16 +1,22 @@
 package exambyte.persistence.entities;
 
-import exambyte.domain.aggregate.user.Professor;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import org.springframework.data.annotation.PersistenceCreator;
+import jakarta.persistence.Table;
 
+import org.springframework.data.annotation.PersistenceCreator;
+@Entity
+@Table(name ="professor")
 public class ProfessorEntity {
 
     @Id
     private final Integer id;
     private final String name;
 
-    @PersistenceCreator
+    protected ProfessorEntity() {
+        this.id = 0;
+        this.name = "";
+    }
     public ProfessorEntity(Integer id, String name) {
         this.id = id;
         this.name = name;
