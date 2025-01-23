@@ -3,6 +3,8 @@ logging:
     org:
       springframework:
         security: info
+    root: error
+    org.springframework.jdbc.core: trace
 
 spring:
   application:
