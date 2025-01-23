@@ -50,3 +50,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+axon:
+  axonserver:
+    servers: 127.0.0.1.***:8124
