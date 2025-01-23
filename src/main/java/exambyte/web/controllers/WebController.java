@@ -66,7 +66,8 @@ public class WebController {
      */
     @GetMapping("/exams")
     @Secured("ROLE_ADMIN")
-    public String exams(Model model) {
+    public String exams(Model model, OAuth2AuthenticationToken auth) {
+        System.out.println(auth);
         System.out.println("Entered Exams");
         return "exams";
     }
