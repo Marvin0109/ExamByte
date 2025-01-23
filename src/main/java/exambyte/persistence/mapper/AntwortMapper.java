@@ -2,7 +2,9 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.persistence.entities.AntwortEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AntwortMapper {
 
     public static Antwort toDomain(AntwortEntity antwortEntity) {
