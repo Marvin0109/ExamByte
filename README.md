@@ -64,3 +64,9 @@ Benutzernamen ersetzen.
 - mapper-Klassen und entity-Klassen in persistence erstellt
 - Bugfix in ExamByteApplication.java bei scanBasePackages
 - Data-Ordner wird jetzt im Projekt gespeichert, auf keinen Fall commiten :)
+
+23.01.2025
+- Bug fix mit Server Connection
+- Professor and Student Repositorys wurden hinzugefügt
+- Dazugehörige Mapper wurden fertiggestellt
+- Erster Test zum Datenaustausch zwischen ServerDB und Rechner wurde gemacht funktioniert aber bisher nicht
