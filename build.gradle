@@ -39,12 +39,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	runtimeOnly 'org.postgresql:postgresql'
+	testRuntimeOnly 'com.h2database:h2'
 
 	// DDD
 	implementation 'org.axonframework:axon-spring-boot-starter:4.10.1'
 
 	// DB Migration
 	implementation 'org.flywaydb:flyway-core:11.2.0'
+	implementation 'org.flywaydb:flyway-database-postgresql'
+	implementation 'org.hibernate.orm:hibernate-core:6.6.4.Final'
 
 	// Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
