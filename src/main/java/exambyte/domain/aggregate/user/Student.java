@@ -10,6 +10,7 @@ public class Student implements Person {
         this.name = name;
     }
 
+    //Factory Methode
     public static Student of(Integer id, String name) {
         return new Student(id, name);
     }
