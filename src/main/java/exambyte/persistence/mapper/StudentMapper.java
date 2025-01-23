@@ -2,7 +2,9 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.entities.StudentEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StudentMapper {
 
     public static Student toDomain(StudentEntity studentEntity) {
