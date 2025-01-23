@@ -1,7 +1,6 @@
 package exambyte.persistence.entities;
 
-import exambyte.domain.aggregate.test.Antwort;
-import exambyte.domain.aggregate.test.Frage;
+import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Student;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;

@@ -1,4 +1,4 @@
-package exambyte.domain.aggregate.test;
+package exambyte.domain.aggregate.exam;
 
 import exambyte.domain.aggregate.user.Professor;
 

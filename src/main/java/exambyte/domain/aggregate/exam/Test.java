@@ -1,4 +1,4 @@
-package exambyte.domain.aggregate.test;
+package exambyte.domain.aggregate.exam;
 
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.modelling.command.AggregateRoot;

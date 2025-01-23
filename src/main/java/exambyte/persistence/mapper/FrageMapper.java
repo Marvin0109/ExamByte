@@ -1,6 +1,6 @@
 package exambyte.persistence.mapper;
 
-import exambyte.domain.aggregate.test.Frage;
+import exambyte.domain.aggregate.exam.Frage;
 import exambyte.persistence.entities.FrageEntity;
 
 public class FrageMapper {

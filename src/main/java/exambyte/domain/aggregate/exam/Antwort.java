@@ -1,10 +1,6 @@
-package exambyte.domain.aggregate.test;
+package exambyte.domain.aggregate.exam;
 
 import exambyte.domain.aggregate.user.Student;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 
 public class Antwort {
 
