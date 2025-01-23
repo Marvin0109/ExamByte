@@ -5,7 +5,7 @@ import exambyte.persistence.entities.StudentEntity;
 
 public class StudentMapper {
 
-    public static Student fromEntity(StudentEntity studentEntity) {
+    public static Student toDomain(StudentEntity studentEntity) {
         return Student.of(studentEntity.getId(), studentEntity.getName());
     }
 
