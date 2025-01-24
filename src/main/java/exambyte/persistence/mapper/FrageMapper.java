@@ -2,16 +2,16 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.persistence.entities.FrageEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class FrageMapper {
 
-    public static Frage toDomain(FrageEntity frageEntity) {
+    public Frage toDomain(FrageEntity frageEntity) {
         return Frage.of(frageEntity.getId(), frageEntity.getFrageText(), frageEntity.getProfessor());
     }
 
-    public static FrageEntity toEntity(Frage frage) {
+    public FrageEntity toEntity(Frage frage) {
         return new FrageEntity(frage.getId(), frage.getFrageText(), frage.getProfessor());
     }
 }

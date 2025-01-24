@@ -2,16 +2,16 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.ProfessorEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ProfessorMapper {
 
-    public static Professor toDomain(ProfessorEntity professorEntity) {
+    public Professor toDomain(ProfessorEntity professorEntity) {
         return Professor.of(professorEntity.getId(), professorEntity.getName());
     }
-    public static ProfessorEntity toEntity(Professor professor) {
+
+    public ProfessorEntity toEntity(Professor professor) {
         return new ProfessorEntity(professor.getId(), professor.getName());
     }
 }
