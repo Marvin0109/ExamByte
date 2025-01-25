@@ -18,7 +18,8 @@ else
 fi
 
 # Fortschritt in der README.md aktualisieren
-sed -i "s|![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}%25-brightgreen)|" "$readme_file"
+# Escape das Prozentzeichen für die URL im Sed-Befehl
+sed -i "s|![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}\%25-brightgreen)|" "$readme_file"
 
 # Fortschritt in der TO_DO.md aktualisieren (Fortschrittsbild ersetzen)
 sed -i "s|**Status:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|**Status:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}\%25-brightgreen)|" "$todo_file"
