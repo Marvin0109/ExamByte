@@ -1,6 +1,6 @@
 # Projekt: ExamByte
 
-## 1. Aktueller Stand (Bestandsaufnahme)
+## 1. Aktueller Stand (Bestandsaufnahme) 
 - **Evaluationsfrist:** 11.02.2025
 - **Status:** In Arbeit
 - **Fertiggestellt:** ![Progress](https://progress-bar.dev/70) <!-- 70% -->
