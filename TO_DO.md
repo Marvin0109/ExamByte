@@ -3,7 +3,7 @@
 ## 1. Aktueller Stand (Bestandsaufnahme) 
 - **Evaluationsfrist:** 11.02.2025
 - **Status:** In Arbeit
-- **Fertiggestellt:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen) <!-- 70 -->
+  ![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen) <!-- 70 -->
 - **Was funktioniert bereits:**
   - [x] HTML-Seiten Layout (Grundstruktur)
   - [x] Datenbank-Verbindung (Erfolgreich eingerichtet und getestet)
