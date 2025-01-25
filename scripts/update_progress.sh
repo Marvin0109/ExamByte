@@ -1,25 +1,20 @@
 #!/bin/bash
 
-# Sicherstellen, dass die TO_DO.md-Datei vorhanden ist
-if [ ! -f TO_DO.md ]; then
-  echo "TO_DO.md file not found!"
-  exit 1
-fi
+# TO_DO.md-Datei einlesen
+todo_file="TO_DO.md"
 
-# Liest die TO_DO.md und zählt die erledigten Aufgaben
-total_tasks=$(grep -o '\[ \]' TO_DO.md | wc -l)
-completed_tasks=$(grep -o '\[x\]' TO_DO.md | wc -l)
+# Anzahl der Aufgaben insgesamt (Zeilen mit " - [ ]" oder " - [x]" zählen)
+total_tasks=$(grep -c " - \[" "$todo_file")
 
-# Verhindern einer Division durch null (falls keine Aufgaben vorhanden sind)
-if [ "$total_tasks" -eq 0 ]; then
-  progress=0
-else
-  # Berechnet den Fortschritt
+# Anzahl der erledigten Aufgaben (Zeilen mit " - [x]" zählen)
+completed_tasks=$(grep -c " - \[x\]" "$todo_file")
+
+# Prozentualer Fortschritt
+if [ "$total_tasks" -gt 0 ]; then
   progress=$(( 100 * completed_tasks / total_tasks ))
+else
+  progress=0
 fi
 
-# Aktualisiert die TO_DO.md-Datei mit dem neuen Fortschritt
-sed -i "s/Fertiggestellt: [0-9]*%/Fertiggestellt: $progress%/" TO_DO.md
-
-# Ausgabetest zur Verifikation (optional)
-echo "Updated progress: $progress%"
+# Fortschritt in der README.md aktualisieren
+sed -i "s|![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}%25-brightgreen)|" README.md

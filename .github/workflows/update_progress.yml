@@ -1,29 +1,32 @@
-name: Update TO_DO Progress
+name: Update Progress Badge
 
 on:
   push:
+    branches:
+      - main
     paths:
-      - TO_DO.md
-  pull_request:
-    paths:
-      - TO_DO.md
+      - 'TO_DO.md'  # Trigger nur, wenn sich die TO_DO.md ändert
 
 jobs:
   update-progress:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Run progress script
+      - name: Set up Git
         run: |
-          chmod +x ./scripts/update_progress.sh
-          ./scripts/update_progress.sh
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-      - name: Commit updated TO_DO.md
+      - name: Run progress update script
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add TO_DO.md
-          git commit -m "Update TO_DO progress"
+          chmod +x ./scripts/update_progress.sh  # Setze das Skript ausführbar
+          ./scripts/update_progress.sh          # Führe das Skript aus
+
+      - name: Commit and push changes
+        run: |
+          git add README.md
+          git commit -m "Update progress badge"
           git push
