@@ -2,7 +2,7 @@
 
 ## Aktueller Stand
 
-- **Fortschritt:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-0%25-brightgreen)
+**![Fortschritt](https://img.shields.io/badge/Fortschritt-0%25-brightgreen)**
 
 Weitere Details zum Projekt und den Aufgaben findest du in der TO_DO.md.
 Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
