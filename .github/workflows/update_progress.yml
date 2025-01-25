@@ -26,7 +26,9 @@ jobs:
           ./scripts/update_progress.sh          # Führe das Skript aus
 
       - name: Commit and push changes
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}  # Füge das Secret als Umgebungsvariable hinzu
         run: |
           git add -A
           git commit -m "Update progress badge"
-          git push origin main
+          git push https://github.com/${{ github.repository }}.git HEAD:main --force
