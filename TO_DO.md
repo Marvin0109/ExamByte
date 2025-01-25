@@ -1,6 +1,6 @@
 # Projekt: ExamByte
 
-## 1. Aktueller Stand (Bestandsaufnahme) 
+## 1. Aktueller Stand (Bestandsaufnahme)
 - **Evaluationsfrist:** 11.02.2025
 - **Status:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen) <!-- 70 -->
 - **Was funktioniert bereits:**
