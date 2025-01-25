@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# TO_DO.md-Datei einlesen
+# TO_DO.md-Datei und README.md-Datei einlesen
 todo_file="TO_DO.md"
+readme_file="README.md"
 
 # Anzahl der Aufgaben insgesamt (Zeilen mit " - [ ]" oder " - [x]" zählen)
 total_tasks=$(grep -c " - \[" "$todo_file")
@@ -17,4 +18,7 @@ else
 fi
 
 # Fortschritt in der README.md aktualisieren
-sed -i "s|![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}%25-brightgreen)|" README.md
+sed -i "s|![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}%25-brightgreen)|" "$readme_file"
+
+# Fortschritt in der TO_DO.md aktualisieren (Fortschrittsbild ersetzen)
+sed -i "s|**Fertiggestellt:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-[0-9]*%25-brightgreen)|**Fertiggestellt:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-${progress}%25-brightgreen)|" "$todo_file"
