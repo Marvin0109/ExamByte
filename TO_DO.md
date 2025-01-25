@@ -11,7 +11,7 @@
   - [x] Grundlegende Projektstruktur (Backend und Frontend integriert)
 
 - **Begonnene, aber unvollständige Funktionen:**
-  - [ ] Datenspeicherung von Test-Antworten (Backend-Logik teilweise implementiert)
+  - [x] Datenspeicherung von Test-Antworten (Backend-Logik teilweise implementiert)
   - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber ohne Funktionalität)
   - [ ] Testauswertungsseiten (Frontend noch unvollständig, Backend fehlt)
   - [ ] Datenvalidierung (Nur für wenige Eingaben implementiert)
