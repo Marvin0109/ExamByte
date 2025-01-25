@@ -3,7 +3,7 @@
 ## 1. Aktueller Stand (Bestandsaufnahme)
 - **Evaluationsfrist:** 11.02.2025
 - **Status:** In Arbeit
-- **Fertiggestellt:** ![Progress](https://progress-bar.dev/70) <!-- 0% -->
+- **Fertiggestellt:** ![Progress](https://progress-bar.dev/70) <!-- 70% -->
 - **Was funktioniert bereits:**
   - [x] HTML-Seiten Layout (Grundstruktur)
   - [x] Datenbank-Verbindung (Erfolgreich eingerichtet und getestet)
