@@ -27,6 +27,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add README.md
+          git add -A
           git commit -m "Update progress badge"
-          git push
+          git push origin main
