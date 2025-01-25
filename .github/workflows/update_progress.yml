@@ -1,0 +1,29 @@
+name: Update TO_DO Progress
+
+on:
+  push:
+    paths:
+      - TO_DO.md
+  pull_request:
+    paths:
+      - TO_DO.md
+
+jobs:
+  update-progress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run progress script
+        run: |
+          chmod +x ./scripts/update_progress.sh
+          ./scripts/update_progress.sh
+
+      - name: Commit updated TO_DO.md
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add TO_DO.md
+          git commit -m "Update TO_DO progress"
+          git push
