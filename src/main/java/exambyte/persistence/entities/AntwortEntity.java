@@ -1,30 +1,32 @@
 package exambyte.persistence.entities;
 
-import exambyte.domain.aggregate.exam.Frage;
-import exambyte.domain.aggregate.user.Student;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.PersistenceCreator;
 
+@Entity
+@Table(name = "antwort")
 public class AntwortEntity {
 
     @Id
-    private final int id;
-    private final String[] AntwortText;
+    private Long id;
+    private String AntwortText;
     private boolean istKorrekt;
 
     @ManyToOne
-    @JoinColumn(name = "frage_id", foreignKey = @ForeignKey(name = "FK_FRAGE_ID"))
-    private final Frage frage;
+    @JoinColumn(name = "frage_antwort_id", foreignKey = @ForeignKey(name = "FK_FRAGE_ID"))
+    private FrageEntity frage;
 
     @ManyToOne
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "FK_STUDENT_ID"))
-    private final Student student;
+    private StudentEntity student;
+
+    public AntwortEntity() {
+        this.AntwortText = "";
+        this.istKorrekt = false;
+    }
 
     @PersistenceCreator
-    public AntwortEntity(int id, String[] AntwortText, boolean istKorrekt, Frage frage, Student student) {
+    public AntwortEntity(Long id, String AntwortText, boolean istKorrekt, FrageEntity frage, StudentEntity student) {
         this.id = id;
         this.AntwortText = AntwortText;
         this.istKorrekt = istKorrekt;
@@ -40,18 +42,18 @@ public class AntwortEntity {
         return istKorrekt;
     }
 
-    public String[] getAntwortText() {
+    public String getAntwortText() {
         return AntwortText;
     }
 
-    public Frage getFrage() {
+    public FrageEntity getFrage() {
         return frage;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
-    public Student getStudent() {
+    public StudentEntity getStudent() {
         return student;
     }
 }

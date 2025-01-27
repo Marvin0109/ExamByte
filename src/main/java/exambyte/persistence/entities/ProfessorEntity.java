@@ -5,24 +5,26 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import org.springframework.data.annotation.PersistenceCreator;
+
 @Entity
 @Table(name ="professor")
 public class ProfessorEntity {
 
     @Id
-    private final Integer id;
+    private final Long id;
     private final String name;
 
-    protected ProfessorEntity() {
-        this.id = 0;
-        this.name = "";
+    public ProfessorEntity() {
+        this(null, "");
     }
-    public ProfessorEntity(Integer id, String name) {
+
+    @PersistenceCreator
+    public ProfessorEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 

@@ -1,38 +1,41 @@
 package exambyte.persistence.entities;
 
-import exambyte.domain.aggregate.user.Professor;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import org.springframework.data.annotation.PersistenceCreator;
 
+@Entity
+@Table(name = "frage")
 public class FrageEntity {
 
     @Id
-    private final Integer id;
-    private final String[] frageText;
+    private final Long id;
+    private final String frageText;
 
     @ManyToOne
     @JoinColumn(name = "professor_id", foreignKey = @ForeignKey(name = "FK_PROFESSOR_ID"))
-    private final Professor professor;
+    private ProfessorEntity professor;
+
+    public FrageEntity() {
+        this.id = null;
+        this.frageText = "";
+    }
 
     @PersistenceCreator
-    public FrageEntity(Integer id, String[] frageText, Professor professor) {
+    public FrageEntity(Long id, String frageText, ProfessorEntity professor) {
         this.id = id;
         this.frageText = frageText;
         this.professor = professor;
     }
 
-    public Professor getProfessor() {
+    public ProfessorEntity getProfessor() {
         return professor;
     }
 
-    public String[] getFrageText() {
+    public String getFrageText() {
         return frageText;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 }

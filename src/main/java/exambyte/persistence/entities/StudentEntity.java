@@ -4,24 +4,27 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.security.core.parameters.P;
 
 @Entity
 @Table(name = "student")
 public class StudentEntity {
+
     @Id
-    private final Integer id;
+    private final Long id;
     private final String name;
 
-    protected StudentEntity() {
-        this.id = 0;
-        this.name = "";
+    public StudentEntity() {
+        this(null, "");
     }
-    public StudentEntity(Integer id, String name) {
+
+    @PersistenceCreator
+    public StudentEntity(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
