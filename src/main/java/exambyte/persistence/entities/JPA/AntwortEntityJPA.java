@@ -1,11 +1,11 @@
-package exambyte.persistence.entities;
+package exambyte.persistence.entities.JPA;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.PersistenceCreator;
 
 @Entity
 @Table(name = "antwort")
-public class AntwortEntity {
+public class AntwortEntityJPA {
 
     @Id
     private Long id;
@@ -14,19 +14,19 @@ public class AntwortEntity {
 
     @ManyToOne
     @JoinColumn(name = "frage_antwort_id", foreignKey = @ForeignKey(name = "FK_FRAGE_ID"))
-    private FrageEntity frage;
+    private FrageEntityJPA frage;
 
     @ManyToOne
     @JoinColumn(name = "student_id", foreignKey = @ForeignKey(name = "FK_STUDENT_ID"))
-    private StudentEntity student;
+    private StudentEntityJPA student;
 
-    public AntwortEntity() {
+    public AntwortEntityJPA() {
         this.AntwortText = "";
         this.istKorrekt = false;
     }
 
     @PersistenceCreator
-    public AntwortEntity(Long id, String AntwortText, boolean istKorrekt, FrageEntity frage, StudentEntity student) {
+    public AntwortEntityJPA(Long id, String AntwortText, boolean istKorrekt, FrageEntityJPA frage, StudentEntityJPA student) {
         this.id = id;
         this.AntwortText = AntwortText;
         this.istKorrekt = istKorrekt;
@@ -46,14 +46,14 @@ public class AntwortEntity {
         return AntwortText;
     }
 
-    public FrageEntity getFrage() {
+    public FrageEntityJPA getFrage() {
         return frage;
     }
 
     public Long getId() {
         return id;
     }
-    public StudentEntity getStudent() {
+    public StudentEntityJPA getStudent() {
         return student;
     }
 }

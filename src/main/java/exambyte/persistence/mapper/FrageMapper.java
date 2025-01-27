@@ -2,8 +2,8 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.FrageEntity;
-import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.entities.JPA.FrageEntityJPA;
+import exambyte.persistence.entities.JPA.ProfessorEntityJPA;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,19 +15,19 @@ public class FrageMapper {
         this.professorMapper = professorMapper;
     }
 
-    public Frage toDomain(FrageEntity frageEntity) {
+    public Frage toDomain(FrageEntityJPA frageEntityJPA) {
 
-        ProfessorEntity professor = frageEntity.getProfessor();
+        ProfessorEntityJPA professor = frageEntityJPA.getProfessor();
         Professor prof = professorMapper.toDomain(professor);
 
-        return Frage.of(frageEntity.getId(), frageEntity.getFrageText(), prof);
+        return Frage.of(frageEntityJPA.getId(), frageEntityJPA.getFrageText(), prof);
     }
 
-    public FrageEntity toEntity(Frage frage) {
+    public FrageEntityJPA toEntity(Frage frage) {
 
         Professor professor = frage.getProfessor();
-        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
+        ProfessorEntityJPA professorEntityJPA = professorMapper.toEntity(professor);
 
-        return new FrageEntity(frage.getId(), frage.getFrageText(), professorEntity);
+        return new FrageEntityJPA(frage.getId(), frage.getFrageText(), professorEntityJPA);
     }
 }

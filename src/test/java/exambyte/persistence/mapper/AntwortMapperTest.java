@@ -3,9 +3,9 @@ package exambyte.persistence.mapper;
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Student;
-import exambyte.persistence.entities.AntwortEntity;
-import exambyte.persistence.entities.FrageEntity;
-import exambyte.persistence.entities.StudentEntity;
+import exambyte.persistence.entities.JPA.AntwortEntityJPA;
+import exambyte.persistence.entities.JPA.FrageEntityJPA;
+import exambyte.persistence.entities.JPA.StudentEntityJPA;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,15 +22,15 @@ public class AntwortMapperTest {
         FrageMapper mockFrageMapper = mock(FrageMapper.class);
         AntwortMapper antwortMapper = new AntwortMapper(mockStudentMapper, mockFrageMapper);
 
-        FrageEntity mockFrageEntity = mock(FrageEntity.class);
+        FrageEntityJPA mockFrageEntityJPA = mock(FrageEntityJPA.class);
         Frage mockFrage = mock(Frage.class);
-        when(mockFrageMapper.toDomain(mockFrageEntity)).thenReturn(mockFrage);
+        when(mockFrageMapper.toDomain(mockFrageEntityJPA)).thenReturn(mockFrage);
 
-        StudentEntity mockStudentEntity = mock(StudentEntity.class);
+        StudentEntityJPA mockStudentEntityJPA = mock(StudentEntityJPA.class);
         Student mockStudent = mock(Student.class);
-        when(mockStudentMapper.toDomain(mockStudentEntity)).thenReturn(mockStudent);
+        when(mockStudentMapper.toDomain(mockStudentEntityJPA)).thenReturn(mockStudent);
 
-        AntwortEntity entity = new AntwortEntity(1L, "Antwort Text ist falsch", false, mockFrageEntity, mockStudentEntity);
+        AntwortEntityJPA entity = new AntwortEntityJPA(1L, "Antwort Text ist falsch", false, mockFrageEntityJPA, mockStudentEntityJPA);
 
         // Act
         Antwort antwort = antwortMapper.toDomain(entity);
@@ -52,17 +52,17 @@ public class AntwortMapperTest {
         AntwortMapper antwortMapper = new AntwortMapper(mockStudentMapper, mockFrageMapper);
 
         Frage mockFrage = mock(Frage.class);
-        FrageEntity mockFrageEntity = mock(FrageEntity.class);
-        when(mockFrageMapper.toEntity(mockFrage)).thenReturn(mockFrageEntity);
+        FrageEntityJPA mockFrageEntityJPA = mock(FrageEntityJPA.class);
+        when(mockFrageMapper.toEntity(mockFrage)).thenReturn(mockFrageEntityJPA);
 
         Student mockStudent = mock(Student.class);
-        StudentEntity mockStudentEntity = mock(StudentEntity.class);
-        when(mockStudentMapper.toEntity(mockStudent)).thenReturn(mockStudentEntity);
+        StudentEntityJPA mockStudentEntityJPA = mock(StudentEntityJPA.class);
+        when(mockStudentMapper.toEntity(mockStudent)).thenReturn(mockStudentEntityJPA);
 
         Antwort antwort = Antwort.of(1L, "Antwort Text ist falsch", false, mockFrage, mockStudent);
 
         // Act
-        AntwortEntity entity = antwortMapper.toEntity(antwort);
+        AntwortEntityJPA entity = antwortMapper.toEntity(antwort);
 
         // Assert
         assertNotNull(entity);

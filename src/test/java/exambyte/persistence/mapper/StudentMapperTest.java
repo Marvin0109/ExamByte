@@ -1,7 +1,7 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Student;
-import exambyte.persistence.entities.StudentEntity;
+import exambyte.persistence.entities.JPA.StudentEntityJPA;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,10 +15,10 @@ public class StudentMapperTest {
     void test_01() {
         // Arrange
         StudentMapper studentMapper = new StudentMapper();
-        StudentEntity studentEntity = new StudentEntity(1L, "Max Mustermann");
+        StudentEntityJPA studentEntityJPA = new StudentEntityJPA(1L, "Max Mustermann");
 
         // Act
-        Student student = studentMapper.toDomain(studentEntity);
+        Student student = studentMapper.toDomain(studentEntityJPA);
 
         // Assert
         assertNotNull(student);
@@ -34,11 +34,11 @@ public class StudentMapperTest {
         Student student = Student.of(1L, "Max Mustermann");
 
         // Act
-        StudentEntity studentEntity = studentMapper.toEntity(student);
+        StudentEntityJPA studentEntityJPA = studentMapper.toEntity(student);
 
         // Assert
-        assertNotNull(studentEntity);
-        assertEquals(1L, studentEntity.getId());
-        assertEquals("Max Mustermann", studentEntity.getName());
+        assertNotNull(studentEntityJPA);
+        assertEquals(1L, studentEntityJPA.getId());
+        assertEquals("Max Mustermann", studentEntityJPA.getName());
     }
 }

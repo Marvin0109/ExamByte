@@ -1,17 +1,17 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.entities.JPA.ProfessorEntityJPA;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProfessorMapper {
 
-    public Professor toDomain(ProfessorEntity professorEntity) {
-        return Professor.of(professorEntity.getId(), professorEntity.getName());
+    public Professor toDomain(ProfessorEntityJPA professorEntityJPA) {
+        return Professor.of(professorEntityJPA.getId(), professorEntityJPA.getName());
     }
 
-    public ProfessorEntity toEntity(Professor professor) {
-        return new ProfessorEntity(professor.getId(), professor.getName());
+    public ProfessorEntityJPA toEntity(Professor professor) {
+        return new ProfessorEntityJPA(professor.getId(), professor.getName());
     }
 }

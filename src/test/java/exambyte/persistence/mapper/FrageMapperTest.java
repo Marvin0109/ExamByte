@@ -2,8 +2,8 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.FrageEntity;
-import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.entities.JPA.FrageEntityJPA;
+import exambyte.persistence.entities.JPA.ProfessorEntityJPA;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -20,14 +20,14 @@ public class FrageMapperTest {
         ProfessorMapper mockProfessorMapper = mock(ProfessorMapper.class);
         FrageMapper frageMapper = new FrageMapper(mockProfessorMapper);
 
-        ProfessorEntity professorEntity = new ProfessorEntity(1L, "Dr. Smith");
-        FrageEntity frageEntity = new FrageEntity(1L, "Was ist Java?", professorEntity);
+        ProfessorEntityJPA professorEntityJPA = new ProfessorEntityJPA(1L, "Dr. Smith");
+        FrageEntityJPA frageEntityJPA = new FrageEntityJPA(1L, "Was ist Java?", professorEntityJPA);
 
         Professor professor = Professor.of(1L, "Dr. Smith");
-        when(mockProfessorMapper.toDomain(professorEntity)).thenReturn(professor);
+        when(mockProfessorMapper.toDomain(professorEntityJPA)).thenReturn(professor);
 
         // Act
-        Frage frage = frageMapper.toDomain(frageEntity);
+        Frage frage = frageMapper.toDomain(frageEntityJPA);
 
         // Assert
         assertNotNull(frage);
@@ -35,7 +35,7 @@ public class FrageMapperTest {
         assertEquals("Was ist Java?", frage.getFrageText());
         assertEquals(professor, frage.getProfessor());
 
-        verify(mockProfessorMapper).toDomain(professorEntity);
+        verify(mockProfessorMapper).toDomain(professorEntityJPA);
     }
 
     @Test
@@ -48,15 +48,15 @@ public class FrageMapperTest {
         Professor professor = Professor.of(1L, "Dr. Smith");
         Frage frage = Frage.of(1L, "Was ist Java?", professor);
 
-        ProfessorEntity professorEntity = new ProfessorEntity(1L, "Dr. Smith");
-        when(mockProfessorMapper.toEntity(professor)).thenReturn(professorEntity);
+        ProfessorEntityJPA professorEntityJPA = new ProfessorEntityJPA(1L, "Dr. Smith");
+        when(mockProfessorMapper.toEntity(professor)).thenReturn(professorEntityJPA);
 
         // Act
-        FrageEntity frageEntity = frageMapper.toEntity(frage);
+        FrageEntityJPA frageEntityJPA = frageMapper.toEntity(frage);
 
         // Assert
-        assertNotNull(frageEntity);
-        assertEquals(1L, frageEntity.getId());
+        assertNotNull(frageEntityJPA);
+        assertEquals(1L, frageEntityJPA.getId());
         assertEquals("Was ist Java?", frage.getFrageText());
         assertEquals(professor, frage.getProfessor());
 

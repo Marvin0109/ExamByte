@@ -1,25 +1,24 @@
-package exambyte.persistence.entities;
+package exambyte.persistence.entities.JPA;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import org.springframework.data.annotation.PersistenceCreator;
 
 @Entity
-@Table(name ="professor")
-public class ProfessorEntity {
+@Table(name = "student")
+public class StudentEntityJPA {
 
     @Id
     private final Long id;
     private final String name;
 
-    public ProfessorEntity() {
+    public StudentEntityJPA() {
         this(null, "");
     }
 
     @PersistenceCreator
-    public ProfessorEntity(Long id, String name) {
+    public StudentEntityJPA(Long id, String name) {
         this.id = id;
         this.name = name;
     }
