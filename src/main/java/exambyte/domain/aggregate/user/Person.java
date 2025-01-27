@@ -3,6 +3,6 @@ package exambyte.domain.aggregate.user;
 import jakarta.persistence.Id;
 
 public interface Person {
-    int getId();
+    Long getId();
     String getName();
 }

@@ -10,12 +10,12 @@ import java.util.List;
 public class Test {
 
     @AggregateIdentifier
-    private final String id;
+    private final Long id;
     private final String title;
     private final List<Frage> fragen = new ArrayList<>();
     private final List<Antwort> antworten = new ArrayList<>();
 
-    public Test(String id, String title, List<Frage> fragen) {
+    public Test(Long id, String title, List<Frage> fragen) {
         if (fragen.isEmpty()) {
             throw new IllegalArgumentException("Test muss mindestens eine Frage enthalten");
         }

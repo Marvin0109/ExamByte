@@ -7,21 +7,21 @@ import org.springframework.data.annotation.PersistenceCreator;
 
 public class Professor implements Person {
 
-    private final Integer id;
+    private final Long id;
     private final String name;
 
-    private Professor(Integer id, String name) {
+    private Professor(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     // Factory Methode
-    public static Professor of(Integer id, String name) {
+    public static Professor of(Long id, String name) {
         return new Professor(id, name);
     }
 
     @Override
-    public int getId() {
+    public Long getId() {
         return id;
     }
     @Override

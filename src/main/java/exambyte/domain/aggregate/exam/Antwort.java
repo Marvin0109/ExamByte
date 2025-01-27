@@ -4,13 +4,13 @@ import exambyte.domain.aggregate.user.Student;
 
 public class Antwort {
 
-    private final Integer id;
-    private final String[] antwortText;
+    private final Long id;
+    private final String antwortText;
     private boolean istKorrekt;
     private final Frage frage;
     private final Student student;
 
-    private Antwort(Integer id, String[] antwortText, boolean istKorrekt, Frage frage, Student student) {
+    private Antwort(Long id, String antwortText, boolean istKorrekt, Frage frage, Student student) {
         this.id = id;
         this.antwortText = antwortText;
         this.istKorrekt = istKorrekt;
@@ -19,7 +19,7 @@ public class Antwort {
     }
 
     // Factory Methode
-    public static Antwort of(Integer id, String[] antwortText, boolean istKorrekt, Frage frage, Student student) {
+    public static Antwort of(Long id, String antwortText, boolean istKorrekt, Frage frage, Student student) {
         return new Antwort(id, antwortText, istKorrekt, null, student);
     }
 
@@ -35,7 +35,7 @@ public class Antwort {
         return istKorrekt;
     }
 
-    public String[] getAntwortText() {
+    public String getAntwortText() {
         return antwortText;
     }
 
@@ -43,7 +43,7 @@ public class Antwort {
         return frage;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
     public Student getStudent() {

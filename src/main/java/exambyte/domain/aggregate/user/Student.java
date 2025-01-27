@@ -2,21 +2,21 @@ package exambyte.domain.aggregate.user;
 
 public class Student implements Person {
 
-    private final Integer id;
+    private final Long id;
     private final String name;
 
-    private Student(Integer id, String name) {
+    private Student(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
     //Factory Methode
-    public static Student of(Integer id, String name) {
+    public static Student of(Long id, String name) {
         return new Student(id, name);
     }
 
     @Override
-    public int getId() {
+    public Long getId() {
         return id;
     }
     @Override
