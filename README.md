@@ -8,7 +8,7 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 
 07.11.24
 - index html wurde erstellt wie auch contact html 
-- nötigen controller wie auch tests die bei gradle build nicht funktionieren aber beim manuellen durchführen doch?
+- nötigen controller wie auch tests die bei gradle build nicht funktionieren aber beim manuellen Durchführen doch?
 
 08.11.24
 - Login Popup
@@ -40,7 +40,7 @@ Benutzernamen ersetzen.
 
 28.11.24
 - Projekt nach Onion-Architektur umgestellt, IndexTest läuft nicht
-- 5 min später: IndexTest ist wieder behoben :)
+- 5 Min später: IndexTest ist wieder behoben :)
 
 17.12.2024
 - Test zur Onion-Architektur geschrieben und daran gescheitert
@@ -76,3 +76,10 @@ Benutzernamen ersetzen.
 - Professor and Student Repositorys wurden hinzugefügt
 - Dazugehörige Mapper wurden fertiggestellt
 - Erster Test zum Datenaustausch zwischen ServerDB und Rechner wurde gemacht funktioniert aber bisher nicht
+
+27.01.2025
+- Separate Klassen für JPA und JDBC Verwendung + Packages
+- JDBC Test erstellt und läuft (es fehlen noch die restlichen JDBC Tests)
+- Service Klasse erstellt (implementiert Repository)
+- SQL Datei in 4 Dateien zerkleinert
+- (Hintergrundwissen zum Nachschauen: Woche 11 Spring Data)
