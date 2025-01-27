@@ -1,49 +1,44 @@
 package exambyte.persistence.mapper;
 
-import exambyte.application.ExamByteApplication;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.ProfessorEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest(classes = ExamByteApplication.class)
 public class ProfessorMapperTest {
 
-    @Autowired
-    private ProfessorMapper mapper;
-
     @Test
-    @DisplayName("Umwandlung von Entität zum Objekt (toDomain)")
+    @DisplayName("Umwandlung von der Entität zum Objekt (toDomain)")
     void testToDomain() {
         // Arrange
-        ProfessorEntity professorEntity = new ProfessorEntity(1, "Superman");
+        ProfessorMapper professorMapper = new ProfessorMapper();
+        ProfessorEntity professorEntity = new ProfessorEntity(1L, "Dr. Smith");
 
         // Act
-        Professor professor = mapper.toDomain(professorEntity);
+        Professor professor = professorMapper.toDomain(professorEntity);
 
         // Assert
         assertNotNull(professor);
-        assertEquals(1, professor.getId());
-        assertEquals("Superman", professor.getName());
+        assertEquals(1L, professor.getId());
+        assertEquals("Dr. Smith", professor.getName());
     }
 
     @Test
     @DisplayName("Umwandlung vom Objekt zur Entität (toEntity)")
     void testToEntity() {
         // Arrange
-        Professor professor = Professor.of(1, "Superman");
+        ProfessorMapper professorMapper = new ProfessorMapper();
+        Professor professor = Professor.of(1L, "Superman");
 
         // Act
-        ProfessorEntity professorEntity = mapper.toEntity(professor);
+        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 
         // Assert
         assertNotNull(professorEntity);
-        assertEquals(1, professorEntity.getId());
+        assertEquals(1L, professorEntity.getId());
         assertEquals("Superman", professorEntity.getName());
     }
 }

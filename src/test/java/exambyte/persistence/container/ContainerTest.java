@@ -37,7 +37,7 @@ public class ContainerTest {
     @DisplayName("Ein Aggregat kann gespeichert")
     void test_01() throws Exception {
         // Arrange
-        Professor professor = Professor.of(1, "Professor");
+        Professor professor = Professor.of(1L, "Professor");
         ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 
         // Act
