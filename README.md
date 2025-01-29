@@ -83,3 +83,9 @@ Benutzernamen ersetzen.
 - Service Klasse erstellt (implementiert Repository)
 - SQL Datei in 4 Dateien zerkleinert
 - (Hintergrundwissen zum Nachschauen: Woche 11 Spring Data)
+
+29.01.2025
+- Flyway Migration Error Fix (Bug wegen separate Flyway Skripte für 4 Tabellen lmao)
+- DataBaseTest geht nicht, weil er aus irgendeinen Grund sich nicht zufriedenstellt für jegliche Art von Bean,
+  die ich Spring zur Verfügung stelle (No Bean Type Found For SpringDataStudentRepository)
+- Klassenverschiebungen ähnlich wie Code Woche 12 VL (half aber trotzdem nicht für DataBaseTest)
