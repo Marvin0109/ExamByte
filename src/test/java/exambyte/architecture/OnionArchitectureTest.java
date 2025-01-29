@@ -2,6 +2,7 @@ package exambyte.architecture;
 
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
@@ -34,18 +35,20 @@ public class OnionArchitectureTest {
      * verwendet, um sicherzustellen, dass die vorgegebene Schichtenarchitektur und andere Richtlinien
      * eingehalten werden.
      */
-    private final JavaClasses klassen = new ClassFileImporter().importPackages("exambyte");
+    private final JavaClasses klassen = new ClassFileImporter()
+            .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
+            .importPackages("exambyte");
 
     @Test
     @DisplayName("Die ExamByte Anwendung hat eine Onion Architektur")
     public void onionArchitecture() throws Exception {
         ArchRule rule = Architectures.onionArchitecture()
                 .domainModels("exambyte.domain..")
-                .domainServices("exambyte.domain.services..")
-                .applicationServices("exambyte.application.services..")
+                .domainServices("exambyte.domain.service..")
+                .applicationServices("exambyte.application.service..")
                 .adapter("web", "exambyte.web..")
                 .adapter("persistence", "exambyte.persistence..")
-                .adapter("config", "exambyte.domain.config..");
+                .adapter("configuration", "exambyte.domain.config..", "exambyte.persistence.config..");
         rule.check(klassen);
     }
 

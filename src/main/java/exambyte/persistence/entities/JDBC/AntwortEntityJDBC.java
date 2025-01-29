@@ -50,7 +50,7 @@ public class AntwortEntityJDBC {
         this.antwortText = antwortText;
     }
 
-    public boolean isIstKorrekt() {
+    public boolean getIstKorrekt() {
         return istKorrekt;
     }
 

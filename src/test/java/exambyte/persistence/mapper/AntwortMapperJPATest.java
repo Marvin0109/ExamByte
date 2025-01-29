@@ -6,34 +6,37 @@ import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.entities.JPA.AntwortEntityJPA;
 import exambyte.persistence.entities.JPA.FrageEntityJPA;
 import exambyte.persistence.entities.JPA.StudentEntityJPA;
+import exambyte.persistence.mapper.JPA.AntwortMapperJPA;
+import exambyte.persistence.mapper.JPA.FrageMapperJPA;
+import exambyte.persistence.mapper.JPA.StudentMapperJPA;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class AntwortMapperTest {
+public class AntwortMapperJPATest {
 
     @Test
     @DisplayName("Umwandlung von der Entität zum Objekt (toDomain)")
     void test_01() {
         // Arrange
-        StudentMapper mockStudentMapper = mock(StudentMapper.class);
-        FrageMapper mockFrageMapper = mock(FrageMapper.class);
-        AntwortMapper antwortMapper = new AntwortMapper(mockStudentMapper, mockFrageMapper);
+        StudentMapperJPA mockStudentMapperJPA = mock(StudentMapperJPA.class);
+        FrageMapperJPA mockFrageMapperJPA = mock(FrageMapperJPA.class);
+        AntwortMapperJPA antwortMapperJPA = new AntwortMapperJPA(mockStudentMapperJPA, mockFrageMapperJPA);
 
         FrageEntityJPA mockFrageEntityJPA = mock(FrageEntityJPA.class);
         Frage mockFrage = mock(Frage.class);
-        when(mockFrageMapper.toDomain(mockFrageEntityJPA)).thenReturn(mockFrage);
+        when(mockFrageMapperJPA.toDomain(mockFrageEntityJPA)).thenReturn(mockFrage);
 
         StudentEntityJPA mockStudentEntityJPA = mock(StudentEntityJPA.class);
         Student mockStudent = mock(Student.class);
-        when(mockStudentMapper.toDomain(mockStudentEntityJPA)).thenReturn(mockStudent);
+        when(mockStudentMapperJPA.toDomain(mockStudentEntityJPA)).thenReturn(mockStudent);
 
         AntwortEntityJPA entity = new AntwortEntityJPA(1L, "Antwort Text ist falsch", false, mockFrageEntityJPA, mockStudentEntityJPA);
 
         // Act
-        Antwort antwort = antwortMapper.toDomain(entity);
+        Antwort antwort = antwortMapperJPA.toDomain(entity);
 
         // Assert
         assertNotNull(antwort);
@@ -47,22 +50,22 @@ public class AntwortMapperTest {
     @DisplayName("Umwandlung vom Objekt zur Entität (toEntity)")
     void test_02() {
         // Arrange
-        StudentMapper mockStudentMapper = mock(StudentMapper.class);
-        FrageMapper mockFrageMapper = mock(FrageMapper.class);
-        AntwortMapper antwortMapper = new AntwortMapper(mockStudentMapper, mockFrageMapper);
+        StudentMapperJPA mockStudentMapperJPA = mock(StudentMapperJPA.class);
+        FrageMapperJPA mockFrageMapperJPA = mock(FrageMapperJPA.class);
+        AntwortMapperJPA antwortMapperJPA = new AntwortMapperJPA(mockStudentMapperJPA, mockFrageMapperJPA);
 
         Frage mockFrage = mock(Frage.class);
         FrageEntityJPA mockFrageEntityJPA = mock(FrageEntityJPA.class);
-        when(mockFrageMapper.toEntity(mockFrage)).thenReturn(mockFrageEntityJPA);
+        when(mockFrageMapperJPA.toEntity(mockFrage)).thenReturn(mockFrageEntityJPA);
 
         Student mockStudent = mock(Student.class);
         StudentEntityJPA mockStudentEntityJPA = mock(StudentEntityJPA.class);
-        when(mockStudentMapper.toEntity(mockStudent)).thenReturn(mockStudentEntityJPA);
+        when(mockStudentMapperJPA.toEntity(mockStudent)).thenReturn(mockStudentEntityJPA);
 
         Antwort antwort = Antwort.of(1L, "Antwort Text ist falsch", false, mockFrage, mockStudent);
 
         // Act
-        AntwortEntityJPA entity = antwortMapper.toEntity(antwort);
+        AntwortEntityJPA entity = antwortMapperJPA.toEntity(antwort);
 
         // Assert
         assertNotNull(entity);

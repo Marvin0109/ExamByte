@@ -8,14 +8,12 @@ import org.springframework.data.relational.core.mapping.Table;
 public class StudentEntityJDBC {
 
     @Id
-    private final Long id;
+    private Long id;
 
     @Column("name")
-    private final String name;
+    private String name;
 
-    public StudentEntityJDBC() {
-        this(null, "");
-    }
+    public StudentEntityJDBC() {}
 
     public StudentEntityJDBC(Long id, String name) {
         this.id = id;
@@ -24,6 +22,14 @@ public class StudentEntityJDBC {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {

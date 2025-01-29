@@ -2,23 +2,24 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.JPA.ProfessorEntityJPA;
+import exambyte.persistence.mapper.JPA.ProfessorMapperJPA;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ProfessorMapperTest {
+public class ProfessorMapperJPATest {
 
     @Test
     @DisplayName("Umwandlung von der Entität zum Objekt (toDomain)")
     void testToDomain() {
         // Arrange
-        ProfessorMapper professorMapper = new ProfessorMapper();
+        ProfessorMapperJPA professorMapperJPA = new ProfessorMapperJPA();
         ProfessorEntityJPA professorEntityJPA = new ProfessorEntityJPA(1L, "Dr. Smith");
 
         // Act
-        Professor professor = professorMapper.toDomain(professorEntityJPA);
+        Professor professor = professorMapperJPA.toDomain(professorEntityJPA);
 
         // Assert
         assertNotNull(professor);
@@ -30,11 +31,11 @@ public class ProfessorMapperTest {
     @DisplayName("Umwandlung vom Objekt zur Entität (toEntity)")
     void testToEntity() {
         // Arrange
-        ProfessorMapper professorMapper = new ProfessorMapper();
+        ProfessorMapperJPA professorMapperJPA = new ProfessorMapperJPA();
         Professor professor = Professor.of(1L, "Superman");
 
         // Act
-        ProfessorEntityJPA professorEntityJPA = professorMapper.toEntity(professor);
+        ProfessorEntityJPA professorEntityJPA = professorMapperJPA.toEntity(professor);
 
         // Assert
         assertNotNull(professorEntityJPA);

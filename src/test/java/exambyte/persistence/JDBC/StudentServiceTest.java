@@ -1,6 +1,7 @@
 package exambyte.persistence.JDBC;
 
 import exambyte.application.ExamByteApplication;
+import exambyte.persistence.JDBC.repository.StudentRepository;
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
 import exambyte.persistence.service.StudentService;
 import org.junit.jupiter.api.DisplayName;

@@ -1,4 +1,4 @@
-package exambyte.domain.config;
+package exambyte.domain.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

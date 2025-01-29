@@ -1,4 +1,4 @@
-package exambyte.persistence.JDBC;
+package exambyte.persistence.JDBC.repository;
 
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
 import org.springframework.data.repository.CrudRepository;

@@ -1,4 +1,4 @@
-package exambyte.persistence.mapper;
+package exambyte.persistence.mapper.JPA;
 
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.aggregate.exam.Frage;
@@ -9,23 +9,23 @@ import exambyte.persistence.entities.JPA.StudentEntityJPA;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AntwortMapper {
+public class AntwortMapperJPA {
 
-    private final StudentMapper studentMapper;
-    private final FrageMapper frageMapper;
+    private final StudentMapperJPA studentMapperJPA;
+    private final FrageMapperJPA frageMapperJPA;
 
-    public AntwortMapper(StudentMapper studentMapper, FrageMapper frageMapper) {
-        this.studentMapper = studentMapper;
-        this.frageMapper = frageMapper;
+    public AntwortMapperJPA(StudentMapperJPA studentMapperJPA, FrageMapperJPA frageMapperJPA) {
+        this.studentMapperJPA = studentMapperJPA;
+        this.frageMapperJPA = frageMapperJPA;
     }
 
     public Antwort toDomain(AntwortEntityJPA antwortEntityJPA) {
 
         FrageEntityJPA frageEntityJPA = antwortEntityJPA.getFrage();
-        Frage frage = frageMapper.toDomain(frageEntityJPA);
+        Frage frage = frageMapperJPA.toDomain(frageEntityJPA);
 
         StudentEntityJPA studentEntityJPA = antwortEntityJPA.getStudent();
-        Student student = studentMapper.toDomain(studentEntityJPA);
+        Student student = studentMapperJPA.toDomain(studentEntityJPA);
 
         return Antwort.of(antwortEntityJPA.getId(), antwortEntityJPA.getAntwortText(), antwortEntityJPA.getIstKorrekt(),
                 frage, student);
@@ -33,10 +33,10 @@ public class AntwortMapper {
 
     public AntwortEntityJPA toEntity(Antwort antwort) {
         Frage frage = antwort.getFrage();
-        FrageEntityJPA frageEntityJPA = frageMapper.toEntity(frage);
+        FrageEntityJPA frageEntityJPA = frageMapperJPA.toEntity(frage);
 
         Student student = antwort.getStudent();
-        StudentEntityJPA studentEntityJPA = studentMapper.toEntity(student);
+        StudentEntityJPA studentEntityJPA = studentMapperJPA.toEntity(student);
 
         return new AntwortEntityJPA(antwort.getId(), antwort.getAntwortText(), antwort.getIstKorrekt(),
                 frageEntityJPA, studentEntityJPA);

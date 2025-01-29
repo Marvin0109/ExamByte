@@ -5,6 +5,7 @@ logging:
         security: info
     root: error
     org.springframework.jdbc.core: trace
+    org.flywaydb.core: DEBUG
 
 spring:
   application:
@@ -43,6 +44,11 @@ spring:
     driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
+    url: jdbc:postgresql://localhost:5432/exambyte_db
+    user: exambyte_user
+    password: exambyte_password
+    schemas:
+      - public
     locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
     baseline-on-migrate: true
   jpa:
