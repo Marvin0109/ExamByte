@@ -2,9 +2,7 @@ package exambyte.persistence.mapper.JDBC;
 
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
-import org.springframework.stereotype.Service;
 
-@Service
 public class ProfessorMapperJDBC {
 
     public Professor toDomain(ProfessorEntityJDBC professorEntityJDBC) {

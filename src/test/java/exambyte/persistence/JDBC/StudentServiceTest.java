@@ -1,9 +1,9 @@
 package exambyte.persistence.JDBC;
 
 import exambyte.application.ExamByteApplication;
-import exambyte.persistence.JDBC.repository.StudentRepository;
+import exambyte.persistence.repository.SpringDataStudentRepository;
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
-import exambyte.persistence.service.StudentService;
+import exambyte.service.SpringDataStudentRepositoryImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -21,27 +21,27 @@ import static org.mockito.Mockito.*;
 public class StudentServiceTest {
 
     @Mock
-    private StudentRepository studentRepository;
+    private SpringDataStudentRepository springDataStudentRepository;
 
     @InjectMocks
-    private StudentService studentService;
+    private SpringDataStudentRepositoryImpl springDataStudentRepositoryImpl;
 
     @Test
     @DisplayName("Test für Speichern eines Studenten")
     void test_01() {
         // Arrange
         StudentEntityJDBC student = new StudentEntityJDBC(1L, "Max Mustermann");
-        when(studentRepository.save(student)).thenReturn(student);
+        when(springDataStudentRepository.save(student)).thenReturn(student);
 
         // Act
-        StudentEntityJDBC savedStudent = studentRepository.save(student);
+        StudentEntityJDBC savedStudent = springDataStudentRepository.save(student);
 
         // Assert
         assertNotNull(savedStudent);
         assertEquals(1L, savedStudent.getId());
         assertEquals("Max Mustermann", savedStudent.getName());
 
-        verify(studentRepository, times(1)).save(student);
+        verify(springDataStudentRepository, times(1)).save(student);
     }
 
     @Test
@@ -49,10 +49,10 @@ public class StudentServiceTest {
     void test_02() {
         // Arrange
         StudentEntityJDBC student = new StudentEntityJDBC(1L, "Max Mustermann");
-        when(studentRepository.findById(1L)).thenReturn(Optional.of(student));
+        when(springDataStudentRepository.findById(1L)).thenReturn(Optional.of(student));
 
         // Act
-        Optional<StudentEntityJDBC> foundStudent = studentService.findStudentById(1L);
+        Optional<StudentEntityJDBC> foundStudent = springDataStudentRepositoryImpl.findById(1L);
 
         // Assert
         assertTrue(foundStudent.isPresent());

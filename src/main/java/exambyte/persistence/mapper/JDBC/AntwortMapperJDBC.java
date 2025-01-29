@@ -5,9 +5,7 @@ import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.entities.JDBC.AntwortEntityJDBC;
-import org.springframework.stereotype.Service;
 
-@Service
 public class AntwortMapperJDBC {
 
     public Antwort toDomain(AntwortEntityJDBC antwortEntityJDBC) {

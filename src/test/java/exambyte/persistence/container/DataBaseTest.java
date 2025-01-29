@@ -2,40 +2,51 @@ package exambyte.persistence.container;
 
 import exambyte.application.ExamByteApplication;
 import exambyte.domain.aggregate.user.Student;
-import exambyte.persistence.JDBC.repository.StudentRepository;
+import exambyte.persistence.repository.SpringDataStudentRepository;
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
 import exambyte.persistence.mapper.JDBC.StudentMapperJDBC;
-import exambyte.persistence.service.StudentService;
+import exambyte.service.SpringDataStudentRepositoryImpl;
+import exambyte.service.StudentRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = ExamByteApplication.class)
+@ContextConfiguration(classes = ExamByteApplication.class)
+@DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TestcontainerConfiguration.class)
 public class DataBaseTest {
 
     @Autowired
-    private StudentService studentService;
+    SpringDataStudentRepository studentRepository;
+
+    @Autowired
+    StudentRepository repository;
+
+    @BeforeEach
+    void setUp() { repository = new SpringDataStudentRepositoryImpl(studentRepository); }
 
     @Test
     @DisplayName("Eine Person kann gespeichert und wieder geladen werden")
     void test_01() {
         // Arrange
-        Student student = Student.of(null, "Max Mustermann");
-        StudentEntityJDBC studentEntityJDBC = new StudentMapperJDBC().toEntity(student);
-
-        // Act
-        StudentEntityJDBC savedStudent = studentService.saveStudent(studentEntityJDBC);
-        Optional<StudentEntityJDBC> found = studentService.findStudentById(savedStudent.getId());
-
-        // Assert
-        assertThat(found).isPresent();
-        assertThat(found.get().getName()).isEqualTo("Max Mustermann");
+        Student student = Student.of(1L, "Max Mustermann");
+        StudentMapperJDBC studentMapper = new StudentMapperJDBC();
+        StudentEntityJDBC studentEntityJDBC = studentMapper.toEntity(student);
+        repository.save(studentEntityJDBC);
+        Optional<StudentEntityJDBC> geladen = repository.findById(studentEntityJDBC.getId());
+        assertThat(geladen.isPresent()).isTrue();
+        assertThat(geladen.get().getName()).isEqualTo("Max Mustermann");
+        assertThat(geladen.get().getId()).isEqualTo(1L);
     }
 }

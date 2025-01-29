@@ -4,7 +4,6 @@ import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.JPA.ProfessorEntityJPA;
 import org.springframework.stereotype.Service;
 
-@Service
 public class ProfessorMapperJPA {
 
     public Professor toDomain(ProfessorEntityJPA professorEntityJPA) {

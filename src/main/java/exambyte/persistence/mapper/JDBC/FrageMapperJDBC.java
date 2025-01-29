@@ -4,23 +4,23 @@ import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
-import exambyte.persistence.service.ProfessorService;
-import org.springframework.stereotype.Service;
+import exambyte.service.ProfessorRepository;
+import exambyte.service.SpringDataProfessorRepositoryImpl;
+import org.springframework.context.annotation.Lazy;
 
-@Service
 public class FrageMapperJDBC {
 
     private final ProfessorMapperJDBC professorMapperJDBC;
-    private final ProfessorService professorService;
+    private final ProfessorRepository professorRepository;
 
-    public FrageMapperJDBC(ProfessorMapperJDBC professorMapperJDBC, ProfessorService professorService) {
+    public FrageMapperJDBC(ProfessorMapperJDBC professorMapperJDBC, @Lazy SpringDataProfessorRepositoryImpl professorRepository) {
         this.professorMapperJDBC = professorMapperJDBC;
-        this.professorService = professorService;
+        this.professorRepository = professorRepository;
     }
 
     public Frage toDomain(FrageEntityJDBC frageEntityJDBC) {
 
-        ProfessorEntityJDBC professor = professorService.findProfessorById(frageEntityJDBC.getProfessorId())
+        ProfessorEntityJDBC professor = professorRepository.findById(frageEntityJDBC.getProfessorId())
                 .orElse(new ProfessorEntityJDBC(frageEntityJDBC.getProfessorId(), "Unbekannt"));
 
         Professor prof = professorMapperJDBC.toDomain(professor);

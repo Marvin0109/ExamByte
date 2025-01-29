@@ -8,7 +8,6 @@ import exambyte.persistence.entities.JPA.FrageEntityJPA;
 import exambyte.persistence.entities.JPA.StudentEntityJPA;
 import org.springframework.stereotype.Service;
 
-@Service
 public class AntwortMapperJPA {
 
     private final StudentMapperJPA studentMapperJPA;

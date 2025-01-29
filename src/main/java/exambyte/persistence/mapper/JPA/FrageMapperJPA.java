@@ -6,7 +6,6 @@ import exambyte.persistence.entities.JPA.FrageEntityJPA;
 import exambyte.persistence.entities.JPA.ProfessorEntityJPA;
 import org.springframework.stereotype.Service;
 
-@Service
 public class FrageMapperJPA {
 
     private final ProfessorMapperJPA professorMapperJPA;
