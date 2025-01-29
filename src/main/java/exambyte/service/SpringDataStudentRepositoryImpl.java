@@ -13,7 +13,7 @@ public class SpringDataStudentRepositoryImpl implements StudentRepository {
 
     private final SpringDataStudentRepository springDataStudentRepository;
 
-    public SpringDataStudentRepositoryImpl(@Lazy SpringDataStudentRepository springDataStudentRepository) {
+    public SpringDataStudentRepositoryImpl(SpringDataStudentRepository springDataStudentRepository) {
         this.springDataStudentRepository = springDataStudentRepository;
     }
 

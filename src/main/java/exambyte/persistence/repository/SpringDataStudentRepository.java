@@ -1,10 +1,12 @@
 package exambyte.persistence.repository;
 
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 
-public interface SpringDataStudentRepository extends CrudRepository<StudentEntityJDBC, Long> {
+@Component
+public interface SpringDataStudentRepository{
 
     Optional<StudentEntityJDBC> findById(Long id);
 

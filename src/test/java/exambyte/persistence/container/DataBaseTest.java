@@ -28,13 +28,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DataBaseTest {
 
     @Autowired
-    SpringDataStudentRepository studentRepository;
-
-    @Autowired
-    StudentRepository repository;
+    private SpringDataStudentRepository studentRepository;
+    private StudentRepository repository;
 
     @BeforeEach
-    void setUp() { repository = new SpringDataStudentRepositoryImpl(studentRepository); }
+    void setUp() {
+        repository = new SpringDataStudentRepositoryImpl(studentRepository);
+    }
 
     @Test
     @DisplayName("Eine Person kann gespeichert und wieder geladen werden")
