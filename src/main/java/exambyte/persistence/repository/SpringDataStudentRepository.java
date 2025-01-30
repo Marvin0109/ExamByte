@@ -5,7 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-
 public interface SpringDataStudentRepository extends CrudRepository<StudentEntityJDBC, Long> {
 
     Optional<StudentEntityJDBC> findById(Long id);
