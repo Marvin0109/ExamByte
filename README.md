@@ -89,3 +89,10 @@ Benutzernamen ersetzen.
 - DataBaseTest geht nicht, weil er aus irgendeinen Grund sich nicht zufriedenstellt für jegliche Art von Bean,
   die ich Spring zur Verfügung stelle (No Bean Type Found For SpringDataStudentRepository)
 - Klassenverschiebungen ähnlich wie Code Woche 12 VL (half aber trotzdem nicht für DataBaseTest)
+
+30.01.2025
+- JPA entfernt + Dependencies
+- H2 entfernt (verwenden nur Testcontainer für Tests)
+- Bean Type Error Fix
+- Klassenverschiebung + Umbenennung
+- UUID eingeführt (noch nicht vollständig abgeschlossen und getestet)
