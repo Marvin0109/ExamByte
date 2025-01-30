@@ -1,19 +1,17 @@
-package exambyte.service;
+package exambyte.persistence.repository;
 
-import exambyte.persistence.repository.SpringDataStudentRepository;
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import exambyte.service.StudentRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public class SpringDataStudentRepositoryImpl implements StudentRepository {
+public class StudentRepositoryImpl implements StudentRepository {
 
     private final SpringDataStudentRepository springDataStudentRepository;
 
-    public SpringDataStudentRepositoryImpl(SpringDataStudentRepository springDataStudentRepository) {
+    public StudentRepositoryImpl(SpringDataStudentRepository springDataStudentRepository) {
         this.springDataStudentRepository = springDataStudentRepository;
     }
 

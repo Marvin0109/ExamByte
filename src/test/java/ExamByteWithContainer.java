@@ -1,4 +1,4 @@
-import exambyte.application.ExamByteApplication;
+import exambyte.ExamByteApplication;
 import exambyte.persistence.container.TestcontainerConfiguration;
 import org.springframework.boot.SpringApplication;
 

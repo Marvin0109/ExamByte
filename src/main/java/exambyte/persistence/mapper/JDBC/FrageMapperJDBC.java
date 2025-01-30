@@ -4,16 +4,15 @@ import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
-import exambyte.service.ProfessorRepository;
-import exambyte.service.SpringDataProfessorRepositoryImpl;
+import exambyte.persistence.repository.ProfessorRepositoryImpl;
 import org.springframework.context.annotation.Lazy;
 
 public class FrageMapperJDBC {
 
     private final ProfessorMapperJDBC professorMapperJDBC;
-    private final ProfessorRepository professorRepository;
+    private final ProfessorRepositoryImpl professorRepository;
 
-    public FrageMapperJDBC(ProfessorMapperJDBC professorMapperJDBC, @Lazy SpringDataProfessorRepositoryImpl professorRepository) {
+    public FrageMapperJDBC(ProfessorMapperJDBC professorMapperJDBC, @Lazy ProfessorRepositoryImpl professorRepository) {
         this.professorMapperJDBC = professorMapperJDBC;
         this.professorRepository = professorRepository;
     }

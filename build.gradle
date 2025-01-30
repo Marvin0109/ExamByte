@@ -41,12 +41,11 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 
 	// DDD
-	implementation 'org.axonframework:axon-spring-boot-starter:4.10.1'
+	//implementation 'org.axonframework:axon-spring-boot-starter:4.10.1'
 
 	// DB Migration
 	implementation 'org.flywaydb:flyway-core:11.2.0'
 	implementation 'org.flywaydb:flyway-database-postgresql'
-	implementation 'org.hibernate.orm:hibernate-core:6.6.4.Final'
 
 	// Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

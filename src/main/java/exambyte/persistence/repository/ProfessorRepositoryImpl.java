@@ -1,18 +1,18 @@
-package exambyte.service;
+package exambyte.persistence.repository;
 
-import exambyte.persistence.repository.SpringDataProfessorRepository;
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
+import exambyte.service.ProfessorRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public class SpringDataProfessorRepositoryImpl implements ProfessorRepository {
+public class ProfessorRepositoryImpl implements ProfessorRepository {
 
     private final SpringDataProfessorRepository springDataProfessorRepository;
 
-    public SpringDataProfessorRepositoryImpl(@Lazy SpringDataProfessorRepository springDataProfessorRepository) {
+    public ProfessorRepositoryImpl(@Lazy SpringDataProfessorRepository springDataProfessorRepository) {
         this.springDataProfessorRepository = springDataProfessorRepository;
     }
 

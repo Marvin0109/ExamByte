@@ -1,11 +1,6 @@
 logging:
   level:
-    org:
-      springframework:
-        security: info
-    root: error
-    org.springframework.jdbc.core: trace
-    org.flywaydb.core: DEBUG
+    root: info
 
 spring:
   application:
@@ -52,6 +47,6 @@ spring:
     locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
     baseline-on-migrate: true
 
-axon:
-  axonserver:
-    servers: 127.0.0.1.***:8124
+#axon:
+#  axonserver:
+#    servers: 127.0.0.1:8024

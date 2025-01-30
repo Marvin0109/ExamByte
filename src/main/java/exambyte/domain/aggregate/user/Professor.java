@@ -1,10 +1,5 @@
 package exambyte.domain.aggregate.user;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.springframework.data.annotation.PersistenceCreator;
-
-
 public class Professor implements Person {
 
     private final Long id;

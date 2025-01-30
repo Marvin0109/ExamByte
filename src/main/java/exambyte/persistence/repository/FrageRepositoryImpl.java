@@ -1,18 +1,18 @@
-package exambyte.service;
+package exambyte.persistence.repository;
 
-import exambyte.persistence.repository.SpringDataFrageRepository;
 import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
+import exambyte.service.FrageRepository;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public class SpringDataFrageRepositoryImpl implements FrageRepository {
+public class FrageRepositoryImpl implements FrageRepository {
 
     private final SpringDataFrageRepository springDataFrageRepository;
 
-    public SpringDataFrageRepositoryImpl(@Lazy SpringDataFrageRepository springDataFrageRepository) {
+    public FrageRepositoryImpl(@Lazy SpringDataFrageRepository springDataFrageRepository) {
         this.springDataFrageRepository = springDataFrageRepository;
     }
 

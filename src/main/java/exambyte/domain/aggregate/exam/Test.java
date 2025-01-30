@@ -1,15 +1,10 @@
 package exambyte.domain.aggregate.exam;
 
-import org.axonframework.modelling.command.AggregateIdentifier;
-import org.axonframework.modelling.command.AggregateRoot;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@AggregateRoot
 public class Test {
 
-    @AggregateIdentifier
     private final Long id;
     private final String title;
     private final List<Frage> fragen = new ArrayList<>();

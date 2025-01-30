@@ -1,6 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.ExamByteApplication;
+import exambyte.ExamByteApplication;
 import exambyte.domain.config.MethodSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,11 @@
 package exambyte.persistence.container;
 
-import exambyte.application.ExamByteApplication;
+import exambyte.ExamByteApplication;
 import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.repository.SpringDataStudentRepository;
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
 import exambyte.persistence.mapper.JDBC.StudentMapperJDBC;
-import exambyte.service.SpringDataStudentRepositoryImpl;
+import exambyte.persistence.repository.StudentRepositoryImpl;
 import exambyte.service.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -33,7 +32,7 @@ public class DataBaseTest {
 
     @BeforeEach
     void setUp() {
-        repository = new SpringDataStudentRepositoryImpl(studentRepository);
+        repository = new StudentRepositoryImpl(studentRepository);
     }
 
     @Test
