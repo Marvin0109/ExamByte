@@ -5,10 +5,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface SpringDataProfessorRepository extends CrudRepository<ProfessorEntityJDBC, Long> {
 
-    Optional<ProfessorEntityJDBC> findById(Long id);
+    Optional<ProfessorEntityJDBC> findByFachId(UUID id);
 
     ProfessorEntityJDBC save(ProfessorEntityJDBC professor);
 }

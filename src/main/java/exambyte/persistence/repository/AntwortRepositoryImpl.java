@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class AntwortRepositoryImpl implements AntwortRepository {
@@ -17,8 +18,8 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     }
 
     @Override
-    public Optional<AntwortEntityJDBC> findById(Long id) {
-        return springDataAntwortRepository.findById(id);
+    public Optional<AntwortEntityJDBC> findByFachId(UUID id) {
+        return springDataAntwortRepository.findByFachId(id);
     }
 
     @Override

@@ -5,6 +5,8 @@ import org.springframework.data.relational.core.mapping.Column;
 
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.util.UUID;
+
 @Table("frage")
 public class FrageEntityJDBC {
 
@@ -14,30 +16,39 @@ public class FrageEntityJDBC {
     @Column("frage_text")
     private final String frageText;
 
-    @Column("professor_id")
-    private final Long professorId;
+    @Column("fach_id")
+    private final UUID fachId;
+
+    @Column("professor_fach_id")
+    private final UUID professorFachId;
 
     public FrageEntityJDBC() {
         this.id = null;
+        this.fachId = UUID.randomUUID();
         this.frageText = "";
-        this.professorId = null;
+        this.professorFachId = null;
     }
 
-    public FrageEntityJDBC(Long id, String frageText, Long professorId) {
+    public FrageEntityJDBC(Long id, UUID fachId, String frageText, UUID professorFachId) {
+        this.fachId = fachId;
         this.id = id;
         this.frageText = frageText;
-        this.professorId = professorId;
+        this.professorFachId = professorFachId;
     }
 
     public Long getId() {
         return id;
     }
 
+    public UUID getFachId() {
+        return fachId;
+    }
+
     public String getFrageText() {
         return frageText;
     }
 
-    public Long getProfessorId() {
-        return professorId;
+    public UUID getProfessorFachId() {
+        return professorFachId;
     }
 }

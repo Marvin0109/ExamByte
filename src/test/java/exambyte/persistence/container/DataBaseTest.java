@@ -39,7 +39,7 @@ public class DataBaseTest {
     @DisplayName("Eine Person kann gespeichert und wieder geladen werden")
     void test_01() {
         // Arrange
-        Student student = Student.of(1L, "Max Mustermann");
+        Student student = Student.of(null, null, "Max Mustermann");
         StudentMapperJDBC studentMapper = new StudentMapperJDBC();
         StudentEntityJDBC studentEntityJDBC = studentMapper.toEntity(student);
         repository.save(studentEntityJDBC);

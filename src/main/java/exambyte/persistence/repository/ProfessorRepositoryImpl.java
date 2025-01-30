@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class ProfessorRepositoryImpl implements ProfessorRepository {
@@ -17,8 +18,8 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public Optional<ProfessorEntityJDBC> findById(Long id) {
-        return springDataProfessorRepository.findById(id);
+    public Optional<ProfessorEntityJDBC> findByFachId(UUID id) {
+        return springDataProfessorRepository.findByFachId(id);
     }
 
     @Override

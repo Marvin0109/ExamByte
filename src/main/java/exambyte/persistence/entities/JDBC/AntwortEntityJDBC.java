@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.util.UUID;
+
 @Table("antwort")
 public class AntwortEntityJDBC {
 
@@ -13,25 +15,30 @@ public class AntwortEntityJDBC {
     @Column("antwort_text")
     private String antwortText;
 
+    @Column("fach_id")
+    private UUID fachId;
+
     private boolean istKorrekt;
 
     @Column("frage_antwort_id")
-    private Long frageId;
+    private UUID frageFachId;
 
-    @Column("student_id")
-    private Long studentId;
+    @Column("student_fach_id")
+    private UUID studentFachId;
 
     public AntwortEntityJDBC() {
         this.antwortText = "";
+        this.fachId = UUID.randomUUID();
         this.istKorrekt = false;
     }
 
-    public AntwortEntityJDBC(Long id, String antwortText, boolean istKorrekt, Long frageId, Long studentId) {
+    public AntwortEntityJDBC(Long id, UUID fachId, String antwortText, boolean istKorrekt, UUID frageFachId, UUID studentFachId) {
+        this.fachId = fachId;
         this.id = id;
         this.antwortText = antwortText;
         this.istKorrekt = istKorrekt;
-        this.frageId = frageId;
-        this.studentId = studentId;
+        this.frageFachId = frageFachId;
+        this.studentFachId = studentFachId;
     }
 
     public Long getId() {
@@ -40,6 +47,10 @@ public class AntwortEntityJDBC {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getFachId() {
+        return fachId;
     }
 
     public String getAntwortText() {
@@ -58,19 +69,11 @@ public class AntwortEntityJDBC {
         this.istKorrekt = istKorrekt;
     }
 
-    public Long getFrageId() {
-        return frageId;
+    public UUID getFrageFachId() {
+        return frageFachId;
     }
 
-    public void setFrageId(Long frageId) {
-        this.frageId = frageId;
-    }
-
-    public Long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Long studentId) {
-        this.studentId = studentId;
+    public UUID getStudentFachId() {
+        return studentFachId;
     }
 }

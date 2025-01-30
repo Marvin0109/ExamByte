@@ -2,29 +2,33 @@ package exambyte.domain.aggregate.exam;
 
 import exambyte.domain.aggregate.user.Student;
 
+import java.util.UUID;
+
 public class Antwort {
 
     private final Long id;
+    private final UUID uuid;
     private final String antwortText;
     private boolean istKorrekt;
     private final Frage frage;
-    private final Student student;
+    private final UUID studentFachId;
 
-    private Antwort(Long id, String antwortText, boolean istKorrekt, Frage frage, Student student) {
+    private Antwort(Long id, UUID uuid,String antwortText, boolean istKorrekt, Frage frage, UUID studentFachID) {
+        this.uuid = uuid;
         this.id = id;
         this.antwortText = antwortText;
         this.istKorrekt = istKorrekt;
         this.frage = frage;
-        this.student = student;
+        this.studentFachId = studentFachID;
     }
 
     // Factory Methode
-    public static Antwort of(Long id, String antwortText, boolean istKorrekt, Frage frage, Student student) {
-        return new Antwort(id, antwortText, istKorrekt, null, student);
+    public static Antwort of(Long id, UUID uuid, String antwortText, boolean istKorrekt, Frage frage, UUID studentFachId) {
+        return new Antwort(id, uuid, antwortText, istKorrekt, frage, studentFachId);
     }
 
     public Antwort getAntwort() {
-        return new Antwort(id, antwortText, istKorrekt, frage, student);
+        return new Antwort(id, uuid, antwortText, istKorrekt, frage, studentFachId);
     }
 
     public void setIstKorrekt(boolean istKorrekt) {
@@ -46,7 +50,8 @@ public class Antwort {
     public Long getId() {
         return id;
     }
-    public Student getStudent() {
-        return student;
+    public UUID getStudentUUID() {
+        return studentFachId;
     }
+    public UUID getUuid() { return uuid; }
 }

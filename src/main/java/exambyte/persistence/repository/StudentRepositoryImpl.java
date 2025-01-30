@@ -5,6 +5,7 @@ import exambyte.service.StudentRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
@@ -16,8 +17,8 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<StudentEntityJDBC> findById(Long id) {
-        return springDataStudentRepository.findById(id);
+    public Optional<StudentEntityJDBC> findByFachId(UUID id) {
+        return springDataStudentRepository.findByFachId(id);
     }
 
     @Override

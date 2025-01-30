@@ -7,6 +7,8 @@ import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
 import exambyte.persistence.repository.ProfessorRepositoryImpl;
 import org.springframework.context.annotation.Lazy;
 
+import java.util.UUID;
+
 public class FrageMapperJDBC {
 
     private final ProfessorMapperJDBC professorMapperJDBC;
@@ -19,20 +21,19 @@ public class FrageMapperJDBC {
 
     public Frage toDomain(FrageEntityJDBC frageEntityJDBC) {
 
-        ProfessorEntityJDBC professor = professorRepository.findById(frageEntityJDBC.getProfessorId())
-                .orElse(new ProfessorEntityJDBC(frageEntityJDBC.getProfessorId(), "Unbekannt"));
+        ProfessorEntityJDBC professor = professorRepository.findByFachId(frageEntityJDBC.getProfessorFachId())
+                .orElse(new ProfessorEntityJDBC(null, frageEntityJDBC.getProfessorFachId(), "Unbekannt"));
 
         Professor prof = professorMapperJDBC.toDomain(professor);
+        UUID profUUID = prof.uuid();
 
-        return Frage.of(frageEntityJDBC.getId(), frageEntityJDBC.getFrageText(), prof);
+        return Frage.of(frageEntityJDBC.getId(), frageEntityJDBC.getFachId(), frageEntityJDBC.getFrageText(), profUUID);
     }
 
     public FrageEntityJDBC toEntity(Frage frage) {
 
-        Professor professor = frage.getProfessor();
-        ProfessorEntityJDBC professorEntityJDBC = professorMapperJDBC.toEntity(professor);
-        Long professorId = professorEntityJDBC.getId();
+        UUID profUUID = frage.getProfessorUUID();
 
-        return new FrageEntityJDBC(frage.getId(), frage.getFrageText(), professorId);
+        return new FrageEntityJDBC(frage.getId(), frage.getUuid(), frage.getFrageText(), profUUID);
     }
 }

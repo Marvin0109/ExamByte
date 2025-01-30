@@ -2,38 +2,41 @@ package exambyte.persistence.mapper.JDBC;
 
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.aggregate.exam.Frage;
-import exambyte.domain.aggregate.user.Professor;
-import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.entities.JDBC.AntwortEntityJDBC;
+
+import java.util.UUID;
 
 public class AntwortMapperJDBC {
 
     public Antwort toDomain(AntwortEntityJDBC antwortEntityJDBC) {
-        Long frageId = antwortEntityJDBC.getFrageId();
-        Long studentId = antwortEntityJDBC.getStudentId();
 
-        Frage frage = Frage.of(frageId, "", Professor.of(0L, ""));
-        Student student = Student.of(studentId, "");
+        // Hier muss die FachId des Professors gesucht werden anhand der frageId -> Datenbank Logik
+        UUID frageFachId = antwortEntityJDBC.getFachId();
+
+        Frage frage = Frage.of(null, frageFachId, "", null); // Null als UUID for now, Frage Text bleibt erstmal leer
+        UUID studentUUID = antwortEntityJDBC.getStudentFachId();
 
         return Antwort.of(
                 antwortEntityJDBC.getId(),
+                antwortEntityJDBC.getFachId(),
                 antwortEntityJDBC.getAntwortText(),
                 antwortEntityJDBC.getIstKorrekt(),
                 frage,
-                student
+                studentUUID
         );
     }
 
     public AntwortEntityJDBC toEntity(Antwort antwort) {
-        Long frageId = antwort.getFrage().getId();
-        Long studentId = antwort.getStudent().getId();
+        UUID frageFachId = antwort.getFrage().getUuid(); // LoD Verstoß
+        UUID studentFachId = antwort.getStudentUUID();
 
         return new AntwortEntityJDBC(
                 antwort.getId(),
+                antwort.getUuid(),
                 antwort.getAntwortText(),
                 antwort.getIstKorrekt(),
-                frageId,
-                studentId
+                frageFachId,
+                studentFachId
         );
     }
 }
