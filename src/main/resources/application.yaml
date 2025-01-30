@@ -51,12 +51,6 @@ spring:
       - public
     locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
     baseline-on-migrate: true
-  jpa:
-    properties:
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
-    hibernate:
-      ddl-auto: update
 
 axon:
   axonserver:
