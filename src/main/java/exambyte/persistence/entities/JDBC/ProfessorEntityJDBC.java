@@ -10,15 +10,15 @@ public class ProfessorEntityJDBC {
 
     @Id
     private final Long id;
-    private final UUID uuid;
+    private final UUID fachId;
     private final String name;
 
     public ProfessorEntityJDBC() {
         this(null, UUID.randomUUID(), "");
     }
 
-    public ProfessorEntityJDBC(Long id, UUID uuid, String name) {
-        this.uuid = uuid;
+    public ProfessorEntityJDBC(Long id, UUID fachId, String name) {
+        this.fachId = fachId;
         this.id = id;
         this.name = name;
     }
@@ -28,7 +28,7 @@ public class ProfessorEntityJDBC {
     }
 
     public UUID getUuid() {
-        return uuid;
+        return fachId;
     }
 
     public String getName() {
