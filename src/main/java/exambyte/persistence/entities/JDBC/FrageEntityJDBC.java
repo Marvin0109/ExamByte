@@ -14,7 +14,7 @@ public class FrageEntityJDBC {
     private final Long id;
 
     @Column("frage_text")
-    private final String frageText;
+    private String frageText;
 
     @Column("fach_id")
     private final UUID fachId;
@@ -22,11 +22,15 @@ public class FrageEntityJDBC {
     @Column("professor_fach_id")
     private final UUID professorFachId;
 
-    public FrageEntityJDBC(Long id, UUID fachId, String frageText, UUID professorFachId) {
+    @Column("exam_fach_id")
+    private final UUID examFachId;
+
+    public FrageEntityJDBC(Long id, UUID fachId, String frageText, UUID professorFachId, UUID examFachId) {
         this.id = id;
         this.fachId = fachId;
         this.frageText = frageText;
         this.professorFachId = professorFachId;
+        this.examFachId = examFachId;
     }
 
     public Long getId() {
@@ -41,7 +45,15 @@ public class FrageEntityJDBC {
         return frageText;
     }
 
+    public void setFrageText(String frageText) {
+        this.frageText = frageText;
+    }
+
     public UUID getProfessorFachId() {
         return professorFachId;
+    }
+
+    public UUID getExamFachId() {
+        return examFachId;
     }
 }

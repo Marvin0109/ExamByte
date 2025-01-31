@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @WebMvcTest(WebController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
 @ContextConfiguration(classes = ExamByteApplication.class)
-public class ExamsTest {
+public class ExamsExam {
 
     @Autowired
     private MockMvc mvc;
@@ -29,7 +29,7 @@ public class ExamsTest {
     private AppUserService appUserService;
 
     @Autowired
-    public ExamsTest(AppUserService appUserService) {
+    public ExamsExam(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
 

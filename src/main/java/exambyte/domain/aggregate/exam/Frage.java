@@ -8,17 +8,19 @@ public class Frage {
     private final UUID fachId;
     private final String frageText;
     private final UUID professorUUID;
+    private final UUID testUUID;
 
-    private Frage(Long id, UUID fachId,String frageText, UUID professorUUID) {
+    private Frage(Long id, UUID fachId,String frageText, UUID professorUUID, UUID testUUID) {
         this.fachId = fachId;
         this.id = id;
         this.frageText = frageText;
         this.professorUUID = professorUUID;
+        this.testUUID = testUUID;
     }
 
     // Factory Methode
-    public static Frage of(Long id, UUID fachId, String frageText, UUID professorUUID) {
-        return new Frage(id, fachId != null ? fachId : UUID.randomUUID(), frageText, professorUUID);
+    public static Frage of(Long id, UUID fachId, String frageText, UUID professorUUID, UUID testUUID) {
+        return new Frage(id, fachId != null ? fachId : UUID.randomUUID(), frageText, professorUUID, testUUID);
     }
 
     public UUID getProfessorUUID() {
@@ -35,5 +37,9 @@ public class Frage {
 
     public UUID getFachId() {
         return fachId;
+    }
+
+    public UUID getTestUUID() {
+        return testUUID;
     }
 }
