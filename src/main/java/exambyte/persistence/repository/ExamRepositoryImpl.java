@@ -1,0 +1,28 @@
+package exambyte.persistence.repository;
+
+import exambyte.persistence.entities.JDBC.ExamEntityJDBC;
+import exambyte.service.ExamRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public class ExamRepositoryImpl implements ExamRepository {
+
+    private final SpringDataExamRepository testRepository;
+
+    public ExamRepositoryImpl(SpringDataExamRepository testRepository) {
+        this.testRepository = testRepository;
+    }
+
+    @Override
+    public Optional<ExamEntityJDBC> findByFachId(UUID fachId) {
+        return testRepository.findByFachId(fachId);
+    }
+
+    @Override
+    public void save(ExamEntityJDBC examEntityJDBC) {
+        testRepository.save(examEntityJDBC);
+    }
+}
