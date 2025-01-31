@@ -6,6 +6,10 @@
 Weitere Details zum Projekt und den Aufgaben findest du in der TO_DO.md.
 Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
 
+---
+
+### Aktivitätsprotokoll
+
 07.11.24
 - index html wurde erstellt wie auch contact html 
 - nötigen controller wie auch tests die bei gradle build nicht funktionieren aber beim manuellen Durchführen doch?
@@ -96,3 +100,7 @@ Benutzernamen ersetzen.
 - Bean Type Error Fix
 - Klassenverschiebung + Umbenennung
 - UUID eingeführt (noch nicht vollständig abgeschlossen und getestet)
+
+31.01.2025
+- Exam Entität hinzugefügt
+- Laufende Tests für die Datenbankrelationen
