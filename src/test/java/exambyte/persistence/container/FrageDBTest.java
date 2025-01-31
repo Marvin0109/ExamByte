@@ -9,7 +9,6 @@ import exambyte.persistence.mapper.JDBC.ProfessorMapperJDBC;
 import exambyte.persistence.repository.*;
 import exambyte.service.FrageRepository;
 import exambyte.service.ProfessorRepository;
-import exambyte.service.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +52,7 @@ public class FrageDBTest {
         repository2.save(professorEntityJDBC);
 
         Frage frage = Frage.of(null, null, "Was ist Java?", professorEntityJDBC.getFachId());
-        FrageMapperJDBC frageMapperJDBC = new FrageMapperJDBC(professorMapper, (FrageRepositoryImpl) repository);
+        FrageMapperJDBC frageMapperJDBC = new FrageMapperJDBC((FrageRepositoryImpl) repository);
         FrageEntityJDBC frageEntity = frageMapperJDBC.toEntity(frage);
 
         // Act

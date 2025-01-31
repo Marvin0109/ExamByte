@@ -2,7 +2,7 @@
 
 **Autor**: Marvin0109
 **erstellt am**: 08.01.2025
-**letzte Änderung**: 09.01.2025
+**letzte Änderung**: 31.01.2025
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -83,7 +83,7 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
         POSTGRES_DB: mydb
 
 ### Datenbank
-- **Datenbank:** Das Projekt nutzt **PostgreSQL 13**
+- **Datenbank:** Das Projekt nutzt **postgres:15-alpine**
 - Nicht Ultimate-Versionen sollten Datenbank-Tools wie DBeaver-Community verwenden → https://dbeaver.io/download/
 
 ## Code-Stil
@@ -120,7 +120,7 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 
 ### Branch-Namen
 - Aktuell: Nur 'main'
-- Für zukünftige Erweiterungen: Branches nach [Feature], [Bugfix], etc. benennen.
+- Für zukünftige Erweiterungen: Branches nach [Feature], [BugFix], etc. benennen.
   - Beispiel: `feature/user-login`, `bugfix/login-error`.
 
 ### Commit-Messages
@@ -129,8 +129,8 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 - Übersicht aller Typen mit Beispielen:
   - [Feature]: Neue Funktionen oder Features werden hinzugefügt.
     - Bsp: [Feature] Add user authentication module
-  - [Bugfix]: Fehlerbehebungen, um bestehende Probleme zu lösen.
-    - Bsp: [Bugfix] Fix login validation issue
+  - [BugFix]: Fehlerbehebungen, um bestehende Probleme zu lösen.
+    - Bsp: [BugFix] Fix login validation issue
   - [Docs]: Änderungen an der Dokumentation oder das Hinzufügen von Dokumentationsdateien.
     - Bsp: [Docs] Update STYLEGUIDE with new setup instructions
   - [Refactor]: Codeänderungen, die die Struktur verbessern, ohne das Verhalten zu ändern.
@@ -142,7 +142,7 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
     - Bsp: [Chore] Update dependencies
 
 ### Testing
-- Wir verwenden **jUnit**, **spring-security-test**, **archunit** und **spring-boot-starter-test**.
+- Wir verwenden **jUnit**, **spring-security-test**, **archunit**, **spring-boot-starter-test** und **testcontainers**.
 
 ### Namenskonventionen für Tests
 - Testmethoden beginnen mit test_.
