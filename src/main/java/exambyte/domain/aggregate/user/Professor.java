@@ -5,23 +5,23 @@ import java.util.UUID;
 public class Professor implements Person {
 
     private final Long id;
-    private final UUID uuid;
+    private final UUID fachId;
     private final String name;
 
-    private Professor(Long id, UUID uuid, String name) {
-        this.uuid = uuid;
+    private Professor(Long id, UUID fachId, String name) {
+        this.fachId = fachId;
         this.id = id;
         this.name = name;
     }
 
     // Factory Methode
-    public static Professor of(Long id, UUID uuid, String name) {
-        return new Professor(id, UUID.randomUUID(), name);
+    public static Professor of(Long id, UUID fachId, String name) {
+        return new Professor(id, fachId != null ? fachId : UUID.randomUUID(), name);
     }
 
     @Override
     public UUID uuid() {
-        return uuid;
+        return fachId;
     }
     @Override
     public Long getId() {

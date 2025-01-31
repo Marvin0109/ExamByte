@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface StudentRepository {
 
-    Optional<StudentEntityJDBC> findByFachId(UUID id);
+    Optional<StudentEntityJDBC> findByFachId(UUID fachId);
 
     void save(StudentEntityJDBC student);
 }

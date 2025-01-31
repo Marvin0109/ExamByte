@@ -6,7 +6,7 @@ import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
 public class ProfessorMapperJDBC {
 
     public Professor toDomain(ProfessorEntityJDBC professorEntityJDBC) {
-        return Professor.of(professorEntityJDBC.getId(), professorEntityJDBC.getUuid(), professorEntityJDBC.getName());
+        return Professor.of(professorEntityJDBC.getId(), professorEntityJDBC.getFachId(), professorEntityJDBC.getName());
     }
 
     public ProfessorEntityJDBC toEntity(Professor professor) {

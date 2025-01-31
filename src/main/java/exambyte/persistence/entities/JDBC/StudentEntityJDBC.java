@@ -10,15 +10,13 @@ import java.util.UUID;
 public class StudentEntityJDBC {
 
     @Id
-    private Long id;
+    private final Long id;
 
     @Column("fach_id")
-    private UUID fachId;
+    private final UUID fachId;
 
     @Column("name")
     private String name;
-
-    public StudentEntityJDBC() {}
 
     public StudentEntityJDBC(Long id, UUID fachId, String name) {
         this.fachId = fachId;
@@ -32,10 +30,6 @@ public class StudentEntityJDBC {
 
     public UUID getFachId() {
         return fachId;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setName(String name) {

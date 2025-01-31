@@ -1,6 +1,5 @@
 package exambyte.persistence.container;
 
-import exambyte.ExamByteApplication;
 import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.repository.SpringDataStudentRepository;
 import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
@@ -14,17 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ContextConfiguration(classes = ExamByteApplication.class)
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
-public class DataBaseTest {
+public class StudentDBTest {
 
     @Autowired
     private SpringDataStudentRepository studentRepository;
@@ -36,16 +33,20 @@ public class DataBaseTest {
     }
 
     @Test
-    @DisplayName("Eine Person kann gespeichert und wieder geladen werden")
+    @DisplayName("Ein Student kann gespeichert und wieder geladen werden")
     void test_01() {
         // Arrange
         Student student = Student.of(null, null, "Max Mustermann");
         StudentMapperJDBC studentMapper = new StudentMapperJDBC();
         StudentEntityJDBC studentEntityJDBC = studentMapper.toEntity(student);
+
+        // Act
         repository.save(studentEntityJDBC);
-        Optional<StudentEntityJDBC> geladen = repository.findById(studentEntityJDBC.getId());
+        Optional<StudentEntityJDBC> geladen = repository.findByFachId(studentEntityJDBC.getFachId());
+
+        // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getName()).isEqualTo("Max Mustermann");
-        assertThat(geladen.get().getId()).isEqualTo(1L);
+        assertThat(geladen.get().getFachId()).isEqualTo(student.uuid());
     }
 }

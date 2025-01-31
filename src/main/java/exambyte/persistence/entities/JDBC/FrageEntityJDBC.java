@@ -22,16 +22,9 @@ public class FrageEntityJDBC {
     @Column("professor_fach_id")
     private final UUID professorFachId;
 
-    public FrageEntityJDBC() {
-        this.id = null;
-        this.fachId = UUID.randomUUID();
-        this.frageText = "";
-        this.professorFachId = null;
-    }
-
     public FrageEntityJDBC(Long id, UUID fachId, String frageText, UUID professorFachId) {
-        this.fachId = fachId;
         this.id = id;
+        this.fachId = fachId;
         this.frageText = frageText;
         this.professorFachId = professorFachId;
     }

@@ -17,12 +17,14 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<StudentEntityJDBC> findByFachId(UUID id) {
-        return springDataStudentRepository.findByFachId(id);
+    public Optional<StudentEntityJDBC> findByFachId(UUID fachId) {
+        return springDataStudentRepository.findByFachId(fachId);
     }
 
     @Override
     public void save(StudentEntityJDBC studentEntityJDBC) {
         springDataStudentRepository.save(studentEntityJDBC);
     }
+
+
 }

@@ -1,26 +1,24 @@
 package exambyte.domain.aggregate.exam;
 
-import exambyte.domain.aggregate.user.Professor;
-
 import java.util.UUID;
 
 public class Frage {
 
     private final Long id;
-    private final UUID uuid;
+    private final UUID fachId;
     private final String frageText;
     private final UUID professorUUID;
 
-    private Frage(Long id, UUID uuid,String frageText, UUID professorUUID) {
-        this.uuid = uuid;
+    private Frage(Long id, UUID fachId,String frageText, UUID professorUUID) {
+        this.fachId = fachId;
         this.id = id;
         this.frageText = frageText;
         this.professorUUID = professorUUID;
     }
 
     // Factory Methode
-    public static Frage of(Long id, UUID uuid, String frageText, UUID professorUUID) {
-        return new Frage(id, uuid, frageText, professorUUID);
+    public static Frage of(Long id, UUID fachId, String frageText, UUID professorUUID) {
+        return new Frage(id, fachId != null ? fachId : UUID.randomUUID(), frageText, professorUUID);
     }
 
     public UUID getProfessorUUID() {
@@ -35,7 +33,7 @@ public class Frage {
         return id;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID getFachId() {
+        return fachId;
     }
 }

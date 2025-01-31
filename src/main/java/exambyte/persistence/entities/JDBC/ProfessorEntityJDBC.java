@@ -1,6 +1,7 @@
 package exambyte.persistence.entities.JDBC;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.UUID;
@@ -10,12 +11,12 @@ public class ProfessorEntityJDBC {
 
     @Id
     private final Long id;
-    private final UUID fachId;
-    private final String name;
 
-    public ProfessorEntityJDBC() {
-        this(null, UUID.randomUUID(), "");
-    }
+    @Column("fach_id")
+    private final UUID fachId;
+
+    @Column("name")
+    private final String name;
 
     public ProfessorEntityJDBC(Long id, UUID fachId, String name) {
         this.fachId = fachId;
@@ -27,7 +28,7 @@ public class ProfessorEntityJDBC {
         return id;
     }
 
-    public UUID getUuid() {
+    public UUID getFachId() {
         return fachId;
     }
 

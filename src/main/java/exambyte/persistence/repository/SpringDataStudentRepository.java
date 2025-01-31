@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface SpringDataStudentRepository extends CrudRepository<StudentEntityJDBC, Long> {
 
-    Optional<StudentEntityJDBC> findByFachId(UUID id);
+    Optional<StudentEntityJDBC> findByFachId(UUID fachId);
 
     StudentEntityJDBC save(StudentEntityJDBC student);
 }

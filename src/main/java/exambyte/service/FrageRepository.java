@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface FrageRepository {
 
-    Optional<FrageEntityJDBC> findByFachId(UUID id);
+    Optional<FrageEntityJDBC> findByFachId(UUID fachId);
 
     void save(FrageEntityJDBC frage);
 }

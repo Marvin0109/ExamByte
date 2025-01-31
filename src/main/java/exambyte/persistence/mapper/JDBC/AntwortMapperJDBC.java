@@ -27,12 +27,12 @@ public class AntwortMapperJDBC {
     }
 
     public AntwortEntityJDBC toEntity(Antwort antwort) {
-        UUID frageFachId = antwort.getFrage().getUuid(); // LoD Verstoß
+        UUID frageFachId = antwort.getFrage().getFachId(); // LoD Verstoß
         UUID studentFachId = antwort.getStudentUUID();
 
         return new AntwortEntityJDBC(
                 antwort.getId(),
-                antwort.getUuid(),
+                antwort.getFachId(),
                 antwort.getAntwortText(),
                 antwort.getIstKorrekt(),
                 frageFachId,
