@@ -19,12 +19,12 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
  * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
  * Einige Tests sind noch in Arbeit oder funktionieren nicht vollständig.
  *
- * Hinweis: Der Test 'noFieldInjectionInProductionCode' ist momentan in "Work in progress" und wurde noch nicht
+ * Hinweis: Der Exam 'noFieldInjectionInProductionCode' ist momentan in "Work in progress" und wurde noch nicht
  * vollständig implementiert. Er wird dazu verwendet, um sicherzustellen, dass keine Feldinjektionen in Produktionscode
  * (außerhalb von Testklassen) verwendet wird.
  */
 @AnalyzeClasses(packages = "exambyte")
-public class OnionArchitectureTest {
+public class OnionArchitectureExam {
 
     /**
      * Enthält die importierten Java-Klassen aus dem angegebenen Paket "exambyte".
@@ -55,7 +55,7 @@ public class OnionArchitectureTest {
     /**
      * Diese Regel stellt sicher, dass keine Produktionskonfigurationsklassen wie {@link exambyte.domain.config.SecurityConfig}
      * in Testklassen verwendet werden.
-     * Hinweis: Der Test funktioniert nicht, da wir noch die Config Klassen als Testhilfsmittel verwenden.
+     * Hinweis: Der Exam funktioniert nicht, da wir noch die Config Klassen als Testhilfsmittel verwenden.
      */
     //@ArchTest
     //static final ArchRule noProductionCodeInTests = classes()
@@ -65,14 +65,14 @@ public class OnionArchitectureTest {
 
     /**
      * Regel zur Vermeidung von Feldinjektionen in Produktionscode (außer Testklassen).
-     * Der Test ist momentan noch in Arbeit und wurde noch nicht vollständig implementiert.
-     * {@link ArchTest} ist deaktiviert, bis der Test vollständig funktionstüchtig ist.
+     * Der Exam ist momentan noch in Arbeit und wurde noch nicht vollständig implementiert.
+     * {@link ArchTest} ist deaktiviert, bis der Exam vollständig funktionstüchtig ist.
      */
     /*  **WORK IN PROGRESS**
     @ArchTest
     static final ArchRule noFieldInjectionInProductionCode = classes()
             .that().resideInAPackage("exambyte..")
-            .and(classes -> !classes.getSimpleName().contains("Test"))
+            .and(classes -> !classes.getSimpleName().contains("Exam"))
             .should()
             .notBeAnnotatedWith(Autowired.class);*/
 }

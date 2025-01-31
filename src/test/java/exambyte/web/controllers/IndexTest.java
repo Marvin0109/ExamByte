@@ -17,11 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(WebController.class)
 @Import({MethodSecurityConfig.class})
 @ContextConfiguration(classes = ExamByteApplication.class)
-public class IndexExam {
+public class IndexTest {
 
     private final MockMvc mvc;
     @Autowired
-    public IndexExam(MockMvc mvc) {
+    public IndexTest(MockMvc mvc) {
         this.mvc = mvc;
     }
 

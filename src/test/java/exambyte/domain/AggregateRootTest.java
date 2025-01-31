@@ -5,7 +5,7 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchRule;
 import org.axonframework.modelling.command.AggregateRoot;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Exam;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
@@ -15,10 +15,10 @@ public class AggregateRootTest {
             .importPackages("exambyte.domain.aggregate.exam");
 
     @Test
-    @DisplayName("AggregatRoot Annotation Test")
+    @DisplayName("AggregatRoot Annotation Exam")
     void testAggregateRoot() {
         ArchRule rule = classes()
-                .that().haveSimpleNameContaining("Test")
+                .that().haveSimpleNameContaining("Exam")
                 .should().beAnnotatedWith(AggregateRoot.class);
 
         rule.check(importedClasses);
