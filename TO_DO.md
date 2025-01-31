@@ -22,7 +22,8 @@
 ### Priorität: Hoch
 - **Backend**
   - [ ] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung).
-  - [ ] **Datenbank-Tests**: Unit- und Integrationstests für die Datenbankanbindung schreiben.
+  - [x] **Datenbank-Tests**: Integrationstests für die Datenbankanbindung schreiben.
+  - [ ] **Mapper-Tests**: Unit-Tests für die Mapper Klassen schreiben.
   - [ ] **API-Routen**: Routen für den Zugriff auf gespeicherte Testergebnisse und Testfragen erstellen.
 
 - **Frontend**
