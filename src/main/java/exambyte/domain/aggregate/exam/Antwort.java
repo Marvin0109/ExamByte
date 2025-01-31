@@ -8,21 +8,23 @@ public class Antwort {
     private final UUID fachId;
     private final String antwortText;
     private boolean istKorrekt;
-    private final Frage frage;
+    private final UUID frageFachId;
     private final UUID studentFachId;
 
-    private Antwort(Long id, UUID fachId, String antwortText, boolean istKorrekt, Frage frage, UUID studentFachID) {
+    private Antwort(Long id, UUID fachId, String antwortText, boolean istKorrekt, UUID frageFachId, UUID studentFachID) {
         this.fachId = fachId;
         this.id = id;
         this.antwortText = antwortText;
         this.istKorrekt = istKorrekt;
-        this.frage = frage;
+        this.frageFachId = frageFachId;
         this.studentFachId = studentFachID;
     }
 
     // Factory Methode
-    public static Antwort of(Long id, UUID fachId, String antwortText, boolean istKorrekt, Frage frage, UUID studentFachId) {
-        return new Antwort(id, fachId != null ? fachId : UUID.randomUUID(), antwortText, istKorrekt, frage, studentFachId);
+    public static Antwort of(Long id, UUID fachId, String antwortText, boolean istKorrekt, UUID frageFachId,
+                             UUID studentFachId) {
+        return new Antwort(id, fachId != null ? fachId : UUID.randomUUID(), antwortText, istKorrekt, frageFachId,
+                studentFachId);
     }
 
     public void setIstKorrekt(boolean istKorrekt) {
@@ -37,8 +39,8 @@ public class Antwort {
         return antwortText;
     }
 
-    public Frage getFrage() {
-        return frage;
+    public UUID getFrageFachId() {
+        return frageFachId;
     }
 
     public Long getId() {

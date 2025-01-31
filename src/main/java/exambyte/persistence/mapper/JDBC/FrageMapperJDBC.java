@@ -5,9 +5,6 @@ import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
 import exambyte.persistence.repository.FrageRepositoryImpl;
-import exambyte.persistence.repository.ProfessorRepositoryImpl;
-import exambyte.service.FrageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.UUID;
 

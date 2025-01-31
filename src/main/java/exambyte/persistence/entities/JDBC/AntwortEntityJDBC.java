@@ -16,21 +16,15 @@ public class AntwortEntityJDBC {
     private String antwortText;
 
     @Column("fach_id")
-    private UUID fachId;
+    private final UUID fachId;
 
     private boolean istKorrekt;
 
     @Column("frage_antwort_id")
-    private UUID frageFachId;
+    private final UUID frageFachId;
 
     @Column("student_fach_id")
-    private UUID studentFachId;
-
-    public AntwortEntityJDBC() {
-        this.antwortText = "";
-        this.fachId = UUID.randomUUID();
-        this.istKorrekt = false;
-    }
+    private final UUID studentFachId;
 
     public AntwortEntityJDBC(Long id, UUID fachId, String antwortText, boolean istKorrekt, UUID frageFachId, UUID studentFachId) {
         this.fachId = fachId;

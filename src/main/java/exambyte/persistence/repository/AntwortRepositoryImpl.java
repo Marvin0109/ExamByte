@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
 import exambyte.persistence.entities.JDBC.AntwortEntityJDBC;
+import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
 import exambyte.service.AntwortRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +15,7 @@ public class AntwortRepositoryImpl implements AntwortRepository {
 
     private final SpringDataAntwortRepository springDataAntwortRepository;
 
-    public AntwortRepositoryImpl(@Lazy SpringDataAntwortRepository springDataAntwortRepository) {
+    public AntwortRepositoryImpl(SpringDataAntwortRepository springDataAntwortRepository) {
         this.springDataAntwortRepository = springDataAntwortRepository;
     }
 

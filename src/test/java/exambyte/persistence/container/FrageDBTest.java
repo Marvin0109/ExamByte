@@ -6,12 +6,10 @@ import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
 import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
 import exambyte.persistence.mapper.JDBC.FrageMapperJDBC;
 import exambyte.persistence.mapper.JDBC.ProfessorMapperJDBC;
-import exambyte.persistence.repository.FrageRepositoryImpl;
-import exambyte.persistence.repository.ProfessorRepositoryImpl;
-import exambyte.persistence.repository.SpringDataFrageRepository;
-import exambyte.persistence.repository.SpringDataProfessorRepository;
+import exambyte.persistence.repository.*;
 import exambyte.service.FrageRepository;
 import exambyte.service.ProfessorRepository;
+import exambyte.service.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -57,7 +55,6 @@ public class FrageDBTest {
         Frage frage = Frage.of(null, null, "Was ist Java?", professorEntityJDBC.getFachId());
         FrageMapperJDBC frageMapperJDBC = new FrageMapperJDBC(professorMapper, (FrageRepositoryImpl) repository);
         FrageEntityJDBC frageEntity = frageMapperJDBC.toEntity(frage);
-        System.out.println(frageEntity.getId());
 
         // Act
         repository.save(frageEntity);
