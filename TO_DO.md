@@ -23,7 +23,7 @@
 - **Backend**
   - [ ] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung).
   - [x] **Datenbank-Tests**: Integrationstests für die Datenbankanbindung schreiben.
-  - [ ] **Mapper-Tests**: Unit-Tests für die Mapper Klassen schreiben.
+  - [x] **Mapper-Tests**: Unit-Tests für die Mapper Klassen schreiben.
   - [ ] **API-Routen**: Routen für den Zugriff auf gespeicherte Testergebnisse und Testfragen erstellen.
 
 - **Frontend**
