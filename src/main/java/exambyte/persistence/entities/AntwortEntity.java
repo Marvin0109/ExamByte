@@ -18,19 +18,16 @@ public class AntwortEntityJDBC {
     @Column("fach_id")
     private final UUID fachId;
 
-    private boolean istKorrekt;
-
     @Column("frage_antwort_id")
     private final UUID frageFachId;
 
     @Column("student_fach_id")
     private final UUID studentFachId;
 
-    public AntwortEntityJDBC(Long id, UUID fachId, String antwortText, boolean istKorrekt, UUID frageFachId, UUID studentFachId) {
-        this.fachId = fachId;
+    public AntwortEntityJDBC(Long id, UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId) {
+        this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.antwortText = antwortText;
-        this.istKorrekt = istKorrekt;
         this.frageFachId = frageFachId;
         this.studentFachId = studentFachId;
     }
@@ -53,14 +50,6 @@ public class AntwortEntityJDBC {
 
     public void setAntwortText(String antwortText) {
         this.antwortText = antwortText;
-    }
-
-    public boolean getIstKorrekt() {
-        return istKorrekt;
-    }
-
-    public void setIstKorrekt(boolean istKorrekt) {
-        this.istKorrekt = istKorrekt;
     }
 
     public UUID getFrageFachId() {

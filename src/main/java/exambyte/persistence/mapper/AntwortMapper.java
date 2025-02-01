@@ -19,7 +19,6 @@ public class AntwortMapperJDBC {
                 antwortEntityJDBC.getId(),
                 antwortEntityJDBC.getFachId(),
                 antwortEntityJDBC.getAntwortText(),
-                antwortEntityJDBC.getIstKorrekt(),
                 frageFachId,
                 studentFachID
         );
@@ -33,7 +32,6 @@ public class AntwortMapperJDBC {
                 antwort.getId(),
                 antwort.getFachId(),
                 antwort.getAntwortText(),
-                antwort.getIstKorrekt(),
                 frageFachId,
                 studentFachId
         );

@@ -27,7 +27,7 @@ public class FrageEntityJDBC {
 
     public FrageEntityJDBC(Long id, UUID fachId, String frageText, UUID professorFachId, UUID examFachId) {
         this.id = id;
-        this.fachId = fachId;
+        this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.frageText = frageText;
         this.professorFachId = professorFachId;
         this.examFachId = examFachId;

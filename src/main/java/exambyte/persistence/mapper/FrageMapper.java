@@ -28,6 +28,6 @@ public class FrageMapperJDBC {
 
         UUID profUUID = frage.getProfessorUUID();
 
-        return new FrageEntityJDBC(frage.getId(), frage.getFachId(), frage.getFrageText(), profUUID, frage.getTestUUID());
+        return new FrageEntityJDBC(frage.getId(), frage.getFachId(), frage.getFrageText(), profUUID, frage.getExamUUID());
     }
 }

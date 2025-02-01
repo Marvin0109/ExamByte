@@ -19,7 +19,7 @@ public class ProfessorEntityJDBC {
     private final String name;
 
     public ProfessorEntityJDBC(Long id, UUID fachId, String name) {
-        this.fachId = fachId;
+        this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.name = name;
     }
