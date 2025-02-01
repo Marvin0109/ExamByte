@@ -64,7 +64,7 @@
 - Das Projekt ist zu etwa 70% abgeschlossen, aber die wichtigsten Funktionen für die Tests (Datenspeicherung, Anzeige der Ergebnisse) sind noch unvollständig.
 - Testabdeckung ist aktuell zu niedrig – mindestens 80% Codeabdeckung sollten angestrebt werden.
 - Aktuell genutzte Tools:
-  - **Backend**: Java, Spring Boot
+  - **Backend**: Java, Spring Boot/Data
   - **Frontend**: HTML, CSS, JavaScript
-  - **Datenbank**: MySQL (bereits eingerichtet und verbunden)
+  - **Datenbank**: PostgreSQL (bereits eingerichtet und verbunden)
   - **Build/Dependency Management**: Gradle
