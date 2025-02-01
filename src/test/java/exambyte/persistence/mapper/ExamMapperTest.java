@@ -7,6 +7,7 @@ import exambyte.persistence.entities.ProfessorEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +20,12 @@ public class ExamMapperTest {
         // Arrange
         ExamMapper examMapper = new ExamMapper();
         Professor professor = Professor.of(null, null, "Dr. Scalper");
-        Exam exam = Exam.of(null, null, "Test 1", professor.uuid());
+
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
+        Exam exam = Exam.of(null, null, "Test 1", professor.uuid(),
+                startTime, endTime, resultTime);
 
         // Act
         ExamEntity examEntity = examMapper.toEntity(exam);
@@ -32,6 +38,9 @@ public class ExamMapperTest {
         assertThat(entityFachId).isEqualTo(exam.getFachId());
         assertThat(entityTitle).isEqualTo("Test 1");
         assertThat(professorFachId).isEqualTo(professor.uuid());
+        assertThat(examEntity.getStartZeitpunkt()).isEqualTo(startTime);
+        assertThat(examEntity.getEndZeitpunkt()).isEqualTo(endTime);
+        assertThat(examEntity.getResultZeitpunkt()).isEqualTo(resultTime);
     }
 
     @Test
@@ -40,11 +49,15 @@ public class ExamMapperTest {
         // Arrange
         ExamMapper examMapper = new ExamMapper();
         ProfessorEntity professorEntity = new ProfessorEntity(null, null, "Dr. F");
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
         ExamEntity examEntity = new ExamEntity(
                 null,
                 null,
                 "Test 2",
-                professorEntity.getFachId());
+                professorEntity.getFachId(),
+                startTime, endTime, resultTime);
 
         // Act
         Exam exam = examMapper.toDomain(examEntity);
@@ -56,5 +69,8 @@ public class ExamMapperTest {
         assertThat(examFachId).isEqualTo(examEntity.getFachId());
         assertThat(examTitle).isEqualTo("Test 2");
         assertThat(exam.getProfessorFachId()).isEqualTo(professorEntity.getFachId());
+        assertThat(examEntity.getStartZeitpunkt()).isEqualTo(startTime);
+        assertThat(examEntity.getEndZeitpunkt()).isEqualTo(endTime);
+        assertThat(examEntity.getResultZeitpunkt()).isEqualTo(resultTime);
     }
 }

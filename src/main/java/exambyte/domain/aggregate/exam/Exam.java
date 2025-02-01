@@ -1,5 +1,6 @@
 package exambyte.domain.aggregate.exam;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Exam {
@@ -8,16 +9,25 @@ public class Exam {
     private final UUID fachId;
     private final String title;
     private final UUID professorFachId;
+    private final LocalDateTime startTime;
+    private final LocalDateTime endTime;
+    private final LocalDateTime resultTime;
 
-    private Exam(Long id, UUID fachId, String title, UUID professorFachId) {
+    private Exam(Long id, UUID fachId, String title, UUID professorFachId,
+                 LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
         this.fachId = fachId;
         this.id = id;
         this.title = title;
         this.professorFachId = professorFachId;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.resultTime = resultTime;
     }
 
-    public static Exam of(Long id, UUID fachId, String title, UUID professorFachId) {
-        return new Exam(id, fachId != null ? fachId : UUID.randomUUID(), title, professorFachId);
+    public static Exam of(Long id, UUID fachId, String title, UUID professorFachId,
+                          LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
+        return new Exam(id, fachId != null ? fachId : UUID.randomUUID()
+                , title, professorFachId, startTime, endTime, resultTime);
     }
 
     public Long getId() {
@@ -36,5 +46,15 @@ public class Exam {
         return professorFachId;
     }
 
-    // Getter und Methoden für das Arbeiten mit Fragen und Antworten
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public LocalDateTime getResultTime() {
+        return resultTime;
+    }
 }

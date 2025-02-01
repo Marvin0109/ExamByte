@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table("antwort")
@@ -24,12 +25,21 @@ public class AntwortEntity {
     @Column("student_fach_id")
     private final UUID studentFachId;
 
-    public AntwortEntity(Long id, UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId) {
+    @Column("antwort_zeitpunkt")
+    private final LocalDateTime antwortZeitpunkt;
+
+    @Column("last_changes_zeitpunkt")
+    private LocalDateTime lastChangesZeitpunkt;
+
+    public AntwortEntity(Long id, UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId,
+                         LocalDateTime antwortZeitpunkt, LocalDateTime lastChangesZeitpunkt) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.antwortText = antwortText;
         this.frageFachId = frageFachId;
         this.studentFachId = studentFachId;
+        this.antwortZeitpunkt = antwortZeitpunkt;
+        this.lastChangesZeitpunkt = lastChangesZeitpunkt;
     }
 
     public Long getId() {
@@ -58,5 +68,18 @@ public class AntwortEntity {
 
     public UUID getStudentFachId() {
         return studentFachId;
+    }
+
+    public LocalDateTime getAntwortZeitpunkt() {
+        return antwortZeitpunkt;
+    }
+
+    public LocalDateTime getLastChangesZeitpunkt() {
+        return lastChangesZeitpunkt;
+    }
+
+    public void updateAntwortText(String newAntwortText) {
+        this.antwortText = newAntwortText;
+        this.lastChangesZeitpunkt = LocalDateTime.now();
     }
 }

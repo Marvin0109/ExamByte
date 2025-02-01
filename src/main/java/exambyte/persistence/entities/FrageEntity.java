@@ -25,10 +25,14 @@ public class FrageEntity {
     @Column("exam_fach_id")
     private final UUID examFachId;
 
-    public FrageEntity(Long id, UUID fachId, String frageText, UUID professorFachId, UUID examFachId) {
+    @Column("max_punkte")
+    private int maxPunkte;
+
+    public FrageEntity(Long id, UUID fachId, String frageText, int maxPunkte, UUID professorFachId, UUID examFachId) {
         this.id = id;
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.frageText = frageText;
+        this.maxPunkte = maxPunkte;
         this.professorFachId = professorFachId;
         this.examFachId = examFachId;
     }
@@ -47,6 +51,14 @@ public class FrageEntity {
 
     public void setFrageText(String frageText) {
         this.frageText = frageText;
+    }
+
+    public int getMaxPunkte() {
+        return maxPunkte;
+    }
+
+    public void setMaxPunkte(int maxPunkte) {
+        this.maxPunkte = maxPunkte;
     }
 
     public UUID getProfessorFachId() {

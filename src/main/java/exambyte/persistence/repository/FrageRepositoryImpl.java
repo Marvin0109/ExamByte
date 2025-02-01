@@ -56,7 +56,7 @@ public class FrageRepositoryImpl implements FrageRepository {
         }
 
         // Erstmal so, ist auch an sich nicht korrekt
-        ExamEntity newTest = new ExamEntity(null, testFachId, "", null);
+        ExamEntity newTest = new ExamEntity(null, testFachId, "", null, null, null, null);
         springDataExamRepository.save(newTest);
         return newTest;
     }

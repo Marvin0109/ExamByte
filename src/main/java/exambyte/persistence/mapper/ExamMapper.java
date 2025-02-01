@@ -10,7 +10,10 @@ public class ExamMapper {
                 null,
                 exam.getFachId(),
                 exam.getTitle(),
-                exam.getProfessorFachId());
+                exam.getProfessorFachId(),
+                exam.getStartTime(),
+                exam.getEndTime(),
+                exam.getResultTime());
     }
 
     public Exam toDomain(ExamEntity examEntity) {
@@ -18,6 +21,9 @@ public class ExamMapper {
                 null,
                 examEntity.getFachId(),
                 examEntity.getTitle(),
-                examEntity.getProfessorFachId());
+                examEntity.getProfessorFachId(),
+                examEntity.getStartZeitpunkt(),
+                examEntity.getEndZeitpunkt(),
+                examEntity.getResultZeitpunkt());
     }
 }

@@ -33,7 +33,7 @@ public class FrageMapperTest {
 
         UUID profFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
-        Frage frage = Frage.of(null, null, "Fragetext", profFachId, examFachId);
+        Frage frage = Frage.of(null, null, "Fragetext", 5, profFachId, examFachId);
 
         // Act
         FrageEntity entity = frageMapper.toEntity(frage);
@@ -41,6 +41,7 @@ public class FrageMapperTest {
         // Assert
         assertThat(entity).isNotNull();
         assertThat(entity.getFrageText()).isEqualTo("Fragetext");
+        assertThat(entity.getMaxPunkte()).isEqualTo(5);
         assertThat(entity.getProfessorFachId()).isEqualTo(profFachId);
         assertThat(entity.getExamFachId()).isEqualTo(examFachId);
     }
@@ -54,7 +55,7 @@ public class FrageMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID professorFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
-        FrageEntity frageEntity = new FrageEntity(null, fachId, "Fragetext", professorFachId, examFachId);
+        FrageEntity frageEntity = new FrageEntity(null, fachId, "Fragetext", 5, professorFachId, examFachId);
         ProfessorEntity mockProfessor = new ProfessorEntity(null, professorFachId, "Dr. Scalper");
 
         when(mockFrageRepository.findByProfFachId(professorFachId)).thenReturn(mockProfessor);
@@ -66,6 +67,7 @@ public class FrageMapperTest {
 
         assertThat(frage).isNotNull();
         assertThat(frage.getFrageText()).isEqualTo("Fragetext");
+        assertThat(frage.getMaxPunkte()).isEqualTo(5);
         assertThat(frage.getProfessorUUID()).isEqualTo(professorFachId);
 
         verify(mockFrageRepository, times(1)).findByProfFachId(professorFachId);

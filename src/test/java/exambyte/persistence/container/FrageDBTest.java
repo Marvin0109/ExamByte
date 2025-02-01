@@ -21,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,13 +61,18 @@ public class FrageDBTest {
 
         repository2.save(professorEntity);
 
-        Exam exam = Exam.of(null, null, "Test 1", professorEntity.getFachId());
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
+        Exam exam = Exam.of(null, null, "Test 1", professorEntity.getFachId(),
+                startTime, endTime, resultTime);
         ExamMapper examMapper = new ExamMapper();
         ExamEntity examEntity = examMapper.toEntity(exam);
 
         repository3.save(examEntity);
 
-        Frage frage = Frage.of(null, null, "Was ist Java?", professorEntity.getFachId(), exam.getFachId());
+        Frage frage = Frage.of(null, null, "Was ist Java?", 6, professorEntity.getFachId(),
+                exam.getFachId());
         FrageMapper frageMapper = new FrageMapper((FrageRepositoryImpl) repository);
         FrageEntity frageEntity = frageMapper.toEntity(frage);
 
@@ -78,6 +84,7 @@ public class FrageDBTest {
         // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getFrageText()).isEqualTo("Was ist Java?");
+        assertThat(geladen.get().getMaxPunkte()).isEqualTo(6);
         assertThat(geladen.get().getFachId()).isEqualTo(frageEntity.getFachId());
 
         assertThat(extraction.getFachId()).isEqualTo(professorEntity.getFachId());

@@ -17,7 +17,9 @@ public class AntwortMapper {
                 antwortEntity.getFachId(),
                 antwortEntity.getAntwortText(),
                 frageFachId,
-                studentFachID
+                studentFachID,
+                antwortEntity.getAntwortZeitpunkt(),
+                antwortEntity.getLastChangesZeitpunkt()
         );
     }
 
@@ -30,7 +32,9 @@ public class AntwortMapper {
                 antwort.getFachId(),
                 antwort.getAntwortText(),
                 frageFachId,
-                studentFachId
+                studentFachId,
+                antwort.getAntwortZeitpunkt(),
+                antwort.getLastChangesZeitpunkt()
         );
     }
 }

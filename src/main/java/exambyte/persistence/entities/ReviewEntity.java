@@ -27,7 +27,7 @@ public class ReviewEntity {
     @Column("punkte")
     private int punkte;
 
-    public ReviewEntity(Long id, UUID fachId, String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId) {
+    public ReviewEntity(Long id, UUID fachId, UUID antwortFachId, UUID korrektorFachId, String bewertung, int punkte) {
         this.id = id;
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.bewertung = bewertung;
