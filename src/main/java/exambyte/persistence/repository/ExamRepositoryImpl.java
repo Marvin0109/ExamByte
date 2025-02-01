@@ -1,6 +1,6 @@
 package exambyte.persistence.repository;
 
-import exambyte.persistence.entities.JDBC.ExamEntityJDBC;
+import exambyte.persistence.entities.ExamEntity;
 import exambyte.service.ExamRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,12 +17,12 @@ public class ExamRepositoryImpl implements ExamRepository {
     }
 
     @Override
-    public Optional<ExamEntityJDBC> findByFachId(UUID fachId) {
+    public Optional<ExamEntity> findByFachId(UUID fachId) {
         return testRepository.findByFachId(fachId);
     }
 
     @Override
-    public void save(ExamEntityJDBC examEntityJDBC) {
-        testRepository.save(examEntityJDBC);
+    public void save(ExamEntity examEntity) {
+        testRepository.save(examEntity);
     }
 }

@@ -8,14 +8,14 @@ public class Frage {
     private final UUID fachId;
     private final String frageText;
     private final UUID professorUUID;
-    private final UUID testUUID;
+    private final UUID examUUID;
 
-    private Frage(Long id, UUID fachId,String frageText, UUID professorUUID, UUID testUUID) {
+    private Frage(Long id, UUID fachId,String frageText, UUID professorUUID, UUID examUUID) {
         this.fachId = fachId;
         this.id = id;
         this.frageText = frageText;
         this.professorUUID = professorUUID;
-        this.testUUID = testUUID;
+        this.examUUID = examUUID;
     }
 
     // Factory Methode
@@ -39,7 +39,7 @@ public class Frage {
         return fachId;
     }
 
-    public UUID getTestUUID() {
-        return testUUID;
+    public UUID getExamUUID() {
+        return examUUID;
     }
 }

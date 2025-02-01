@@ -1,33 +1,33 @@
-package exambyte.persistence.mapper.JDBC;
+package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
-import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
+import exambyte.persistence.entities.FrageEntity;
+import exambyte.persistence.entities.ProfessorEntity;
 import exambyte.persistence.repository.FrageRepositoryImpl;
 
 import java.util.UUID;
 
-public class FrageMapperJDBC {
+public class FrageMapper {
 
     private final FrageRepositoryImpl frageRepository;
 
-    public FrageMapperJDBC(FrageRepositoryImpl frageRepository) {
+    public FrageMapper(FrageRepositoryImpl frageRepository) {
         this.frageRepository = frageRepository;
     }
 
-    public Frage toDomain(FrageEntityJDBC frageEntityJDBC) {
+    public Frage toDomain(FrageEntity frageEntity) {
 
-        UUID professorFachID = frageEntityJDBC.getProfessorFachId();
-        ProfessorEntityJDBC professor = frageRepository.findByProfFachId(professorFachID);
+        UUID professorFachID = frageEntity.getProfessorFachId();
+        ProfessorEntity professor = frageRepository.findByProfFachId(professorFachID);
 
-        return Frage.of(frageEntityJDBC.getId(), frageEntityJDBC.getFachId(), frageEntityJDBC.getFrageText(),
-                professorFachID, frageEntityJDBC.getExamFachId());
+        return Frage.of(frageEntity.getId(), frageEntity.getFachId(), frageEntity.getFrageText(),
+                professorFachID, frageEntity.getExamFachId());
     }
 
-    public FrageEntityJDBC toEntity(Frage frage) {
+    public FrageEntity toEntity(Frage frage) {
 
         UUID profUUID = frage.getProfessorUUID();
 
-        return new FrageEntityJDBC(frage.getId(), frage.getFachId(), frage.getFrageText(), profUUID, frage.getExamUUID());
+        return new FrageEntity(frage.getId(), frage.getFachId(), frage.getFrageText(), profUUID, frage.getExamUUID());
     }
 }

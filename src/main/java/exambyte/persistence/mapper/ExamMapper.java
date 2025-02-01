@@ -1,23 +1,23 @@
-package exambyte.persistence.mapper.JDBC;
+package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Exam;
-import exambyte.persistence.entities.JDBC.ExamEntityJDBC;
+import exambyte.persistence.entities.ExamEntity;
 
-public class ExamMapperJDBC {
+public class ExamMapper {
 
-    public ExamEntityJDBC toEntity(Exam exam) {
-        return new ExamEntityJDBC(
+    public ExamEntity toEntity(Exam exam) {
+        return new ExamEntity(
                 null,
                 exam.getFachId(),
                 exam.getTitle(),
                 exam.getProfessorFachId());
     }
 
-    public Exam toDomain(ExamEntityJDBC examEntityJDBC) {
+    public Exam toDomain(ExamEntity examEntity) {
        return Exam.of(
                 null,
-                examEntityJDBC.getFachId(),
-                examEntityJDBC.getTitle(),
-                examEntityJDBC.getProfessorFachId());
+                examEntity.getFachId(),
+                examEntity.getTitle(),
+                examEntity.getProfessorFachId());
     }
 }

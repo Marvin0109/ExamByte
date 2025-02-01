@@ -3,12 +3,12 @@ package exambyte.persistence.container;
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.JDBC.ExamEntityJDBC;
-import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
-import exambyte.persistence.mapper.JDBC.ExamMapperJDBC;
-import exambyte.persistence.mapper.JDBC.FrageMapperJDBC;
-import exambyte.persistence.mapper.JDBC.ProfessorMapperJDBC;
+import exambyte.persistence.entities.ExamEntity;
+import exambyte.persistence.entities.FrageEntity;
+import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.mapper.ExamMapper;
+import exambyte.persistence.mapper.FrageMapper;
+import exambyte.persistence.mapper.ProfessorMapper;
 import exambyte.persistence.repository.*;
 import exambyte.service.ExamRepository;
 import exambyte.service.FrageRepository;
@@ -55,32 +55,32 @@ public class FrageDBTest {
     void test_01() {
         // Arrange
         Professor professor = Professor.of(null, null, "Dr. Lowkey");
-        ProfessorMapperJDBC professorMapper = new ProfessorMapperJDBC();
-        ProfessorEntityJDBC professorEntityJDBC = professorMapper.toEntity(professor);
+        ProfessorMapper professorMapper = new ProfessorMapper();
+        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 
-        repository2.save(professorEntityJDBC);
+        repository2.save(professorEntity);
 
-        Exam exam = Exam.of(null, null, "Test 1", professorEntityJDBC.getFachId());
-        ExamMapperJDBC examMapper = new ExamMapperJDBC();
-        ExamEntityJDBC examEntityJDBC = examMapper.toEntity(exam);
+        Exam exam = Exam.of(null, null, "Test 1", professorEntity.getFachId());
+        ExamMapper examMapper = new ExamMapper();
+        ExamEntity examEntity = examMapper.toEntity(exam);
 
-        repository3.save(examEntityJDBC);
+        repository3.save(examEntity);
 
-        Frage frage = Frage.of(null, null, "Was ist Java?", professorEntityJDBC.getFachId(), exam.getFachId());
-        FrageMapperJDBC frageMapperJDBC = new FrageMapperJDBC((FrageRepositoryImpl) repository);
-        FrageEntityJDBC frageEntity = frageMapperJDBC.toEntity(frage);
+        Frage frage = Frage.of(null, null, "Was ist Java?", professorEntity.getFachId(), exam.getFachId());
+        FrageMapper frageMapper = new FrageMapper((FrageRepositoryImpl) repository);
+        FrageEntity frageEntity = frageMapper.toEntity(frage);
 
         // Act
         repository.save(frageEntity);
-        Optional<FrageEntityJDBC> geladen = frageRepository.findByFachId(frageEntity.getFachId());
-        ProfessorEntityJDBC extraction = ((FrageRepositoryImpl) repository).findByProfFachId(professorEntityJDBC.getFachId());
+        Optional<FrageEntity> geladen = frageRepository.findByFachId(frageEntity.getFachId());
+        ProfessorEntity extraction = ((FrageRepositoryImpl) repository).findByProfFachId(professorEntity.getFachId());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getFrageText()).isEqualTo("Was ist Java?");
         assertThat(geladen.get().getFachId()).isEqualTo(frageEntity.getFachId());
 
-        assertThat(extraction.getFachId()).isEqualTo(professorEntityJDBC.getFachId());
+        assertThat(extraction.getFachId()).isEqualTo(professorEntity.getFachId());
         assertThat(extraction.getName()).isEqualTo("Dr. Lowkey");
 
         assertThat(exam.getFachId()).isEqualTo(frageEntity.getExamFachId());

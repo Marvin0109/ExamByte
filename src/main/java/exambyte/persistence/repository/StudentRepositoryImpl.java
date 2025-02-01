@@ -1,6 +1,6 @@
 package exambyte.persistence.repository;
 
-import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
+import exambyte.persistence.entities.StudentEntity;
 import exambyte.service.StudentRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,13 +17,13 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<StudentEntityJDBC> findByFachId(UUID fachId) {
+    public Optional<StudentEntity> findByFachId(UUID fachId) {
         return springDataStudentRepository.findByFachId(fachId);
     }
 
     @Override
-    public void save(StudentEntityJDBC studentEntityJDBC) {
-        springDataStudentRepository.save(studentEntityJDBC);
+    public void save(StudentEntity studentEntity) {
+        springDataStudentRepository.save(studentEntity);
     }
 
 

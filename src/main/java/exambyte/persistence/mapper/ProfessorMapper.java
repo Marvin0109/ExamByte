@@ -1,15 +1,15 @@
-package exambyte.persistence.mapper.JDBC;
+package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
+import exambyte.persistence.entities.ProfessorEntity;
 
-public class ProfessorMapperJDBC {
+public class ProfessorMapper {
 
-    public Professor toDomain(ProfessorEntityJDBC professorEntityJDBC) {
-        return Professor.of(professorEntityJDBC.getId(), professorEntityJDBC.getFachId(), professorEntityJDBC.getName());
+    public Professor toDomain(ProfessorEntity professorEntity) {
+        return Professor.of(professorEntity.getId(), professorEntity.getFachId(), professorEntity.getName());
     }
 
-    public ProfessorEntityJDBC toEntity(Professor professor) {
-        return new ProfessorEntityJDBC(professor.getId(), professor.uuid(), professor.getName());
+    public ProfessorEntity toEntity(Professor professor) {
+        return new ProfessorEntity(professor.getId(), professor.uuid(), professor.getName());
     }
 }

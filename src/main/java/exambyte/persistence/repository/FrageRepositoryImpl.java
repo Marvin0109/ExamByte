@@ -1,8 +1,8 @@
 package exambyte.persistence.repository;
 
-import exambyte.persistence.entities.JDBC.FrageEntityJDBC;
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
-import exambyte.persistence.entities.JDBC.ExamEntityJDBC;
+import exambyte.persistence.entities.FrageEntity;
+import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.entities.ExamEntity;
 import exambyte.service.FrageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -27,36 +27,36 @@ public class FrageRepositoryImpl implements FrageRepository {
     }
 
     @Override
-    public Optional<FrageEntityJDBC> findByFachId(UUID fachId) {
+    public Optional<FrageEntity> findByFachId(UUID fachId) {
         return springDataFrageRepository.findByFachId(fachId);
     }
 
     @Override
-    public void save(FrageEntityJDBC frageEntityJDBC) {
-        springDataFrageRepository.save(frageEntityJDBC);
+    public void save(FrageEntity frageEntity) {
+        springDataFrageRepository.save(frageEntity);
     }
 
-    public ProfessorEntityJDBC findByProfFachId(UUID profFachId) {
-        Optional<ProfessorEntityJDBC> existingProfessor = springDataProfessorRepository.findByFachId(profFachId);
+    public ProfessorEntity findByProfFachId(UUID profFachId) {
+        Optional<ProfessorEntity> existingProfessor = springDataProfessorRepository.findByFachId(profFachId);
 
         if (existingProfessor.isPresent()) {
             return existingProfessor.get();
         }
 
-        ProfessorEntityJDBC newProfessor = new ProfessorEntityJDBC(null, profFachId, "N/A");
+        ProfessorEntity newProfessor = new ProfessorEntity(null, profFachId, "N/A");
         springDataProfessorRepository.save(newProfessor);
         return newProfessor;
     }
 
-    public ExamEntityJDBC findByTestFachId(UUID testFachId) {
-        Optional<ExamEntityJDBC> existingTest = springDataExamRepository.findByFachId(testFachId);
+    public ExamEntity findByTestFachId(UUID testFachId) {
+        Optional<ExamEntity> existingTest = springDataExamRepository.findByFachId(testFachId);
 
         if (existingTest.isPresent()) {
             return existingTest.get();
         }
 
         // Erstmal so, ist auch an sich nicht korrekt
-        ExamEntityJDBC newTest = new ExamEntityJDBC(null, testFachId, "", null);
+        ExamEntity newTest = new ExamEntity(null, testFachId, "", null);
         springDataExamRepository.save(newTest);
         return newTest;
     }

@@ -1,14 +1,14 @@
 package exambyte.persistence.repository;
 
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
+import exambyte.persistence.entities.ProfessorEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataProfessorRepository extends CrudRepository<ProfessorEntityJDBC, Long> {
+public interface SpringDataProfessorRepository extends CrudRepository<ProfessorEntity, Long> {
 
-    Optional<ProfessorEntityJDBC> findByFachId(UUID fachId);
+    Optional<ProfessorEntity> findByFachId(UUID fachId);
 
-    ProfessorEntityJDBC save(ProfessorEntityJDBC professor);
+    ProfessorEntity save(ProfessorEntity professor);
 }

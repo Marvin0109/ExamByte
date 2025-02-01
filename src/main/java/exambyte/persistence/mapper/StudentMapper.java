@@ -1,15 +1,15 @@
-package exambyte.persistence.mapper.JDBC;
+package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Student;
-import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
+import exambyte.persistence.entities.StudentEntity;
 
-public class StudentMapperJDBC {
+public class StudentMapper {
 
-    public Student toDomain(StudentEntityJDBC studentEntityJDBC) {
-        return Student.of(studentEntityJDBC.getId(), studentEntityJDBC.getFachId(), studentEntityJDBC.getName());
+    public Student toDomain(StudentEntity studentEntity) {
+        return Student.of(studentEntity.getId(), studentEntity.getFachId(), studentEntity.getName());
     }
 
-    public StudentEntityJDBC toEntity(Student student) {
-        return new StudentEntityJDBC(student.getId(), student.uuid(), student.getName());
+    public StudentEntity toEntity(Student student) {
+        return new StudentEntity(student.getId(), student.uuid(), student.getName());
     }
 }

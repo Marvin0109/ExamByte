@@ -5,8 +5,8 @@ import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.aggregate.user.Student;
-import exambyte.persistence.entities.JDBC.*;
-import exambyte.persistence.mapper.JDBC.*;
+import exambyte.persistence.entities.*;
+import exambyte.persistence.mapper.*;
 import exambyte.persistence.repository.*;
 import exambyte.service.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,23 +60,23 @@ public class ExamDBTest {
     @DisplayName("Relationen der Entitäten testen")
     void test_01() {
         // Arrange
-        ProfessorMapperJDBC profMapper = new ProfessorMapperJDBC();
-        StudentMapperJDBC studentMapper = new StudentMapperJDBC();
-        FrageMapperJDBC frageMapper = new FrageMapperJDBC((FrageRepositoryImpl) frageRepository);
-        AntwortMapperJDBC antwortMapper = new AntwortMapperJDBC();
-        ExamMapperJDBC examMapper = new ExamMapperJDBC();
+        ProfessorMapper profMapper = new ProfessorMapper();
+        StudentMapper studentMapper = new StudentMapper();
+        FrageMapper frageMapper = new FrageMapper((FrageRepositoryImpl) frageRepository);
+        AntwortMapper antwortMapper = new AntwortMapper();
+        ExamMapper examMapper = new ExamMapper();
 
         Professor professor = Professor.of(null, null, "Dr.K");
         Student student = Student.of(null, null, "Peter Griffin");
         Exam exam = Exam.of(null, null, "Test 1", professor.uuid());
         Frage frage = Frage.of(null, null, "JPA oder JDBC?", professor.uuid(), exam.getFachId());
-        Antwort antwort = Antwort.of(null, null, "JDBC", false, frage.getFachId(), student.uuid());
+        Antwort antwort = Antwort.of(null, null, "JDBC", frage.getFachId(), student.uuid());
 
-        ProfessorEntityJDBC professorEntity = profMapper.toEntity(professor);
-        StudentEntityJDBC studentEntity = studentMapper.toEntity(student);
-        FrageEntityJDBC frageEntity = frageMapper.toEntity(frage);
-        AntwortEntityJDBC antwortEntity = antwortMapper.toEntity(antwort);
-        ExamEntityJDBC examEntity = examMapper.toEntity(exam);
+        ProfessorEntity professorEntity = profMapper.toEntity(professor);
+        StudentEntity studentEntity = studentMapper.toEntity(student);
+        FrageEntity frageEntity = frageMapper.toEntity(frage);
+        AntwortEntity antwortEntity = antwortMapper.toEntity(antwort);
+        ExamEntity examEntity = examMapper.toEntity(exam);
 
         studRepository.save(studentEntity);
         profRepository.save(professorEntity);
@@ -86,11 +86,11 @@ public class ExamDBTest {
 
         // Act
 
-        Optional<AntwortEntityJDBC> geladenAntwort = antRepository.findByFachId(antwortEntity.getFachId());
-        Optional<FrageEntityJDBC> geladenFrage = frageRepository.findByFachId(frageEntity.getFachId());
-        Optional<ProfessorEntityJDBC> geladenProf = profRepository.findByFachId(professorEntity.getFachId());
-        Optional<StudentEntityJDBC> geladenStud = studentRepository.findByFachId(studentEntity.getFachId());
-        Optional<ExamEntityJDBC> geladenExam = examRepository.findByFachId(examEntity.getFachId());
+        Optional<AntwortEntity> geladenAntwort = antRepository.findByFachId(antwortEntity.getFachId());
+        Optional<FrageEntity> geladenFrage = frageRepository.findByFachId(frageEntity.getFachId());
+        Optional<ProfessorEntity> geladenProf = profRepository.findByFachId(professorEntity.getFachId());
+        Optional<StudentEntity> geladenStud = studentRepository.findByFachId(studentEntity.getFachId());
+        Optional<ExamEntity> geladenExam = examRepository.findByFachId(examEntity.getFachId());
 
         // Assert
         assertThat(geladenAntwort).isPresent();

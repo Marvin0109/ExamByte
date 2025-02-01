@@ -1,13 +1,13 @@
 package exambyte.service;
 
-import exambyte.persistence.entities.JDBC.AntwortEntityJDBC;
+import exambyte.persistence.entities.AntwortEntity;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface AntwortRepository {
 
-    Optional<AntwortEntityJDBC> findByFachId(UUID id);
+    Optional<AntwortEntity> findByFachId(UUID id);
 
-    void save(AntwortEntityJDBC entity);
+    void save(AntwortEntity entity);
 }

@@ -1,8 +1,7 @@
 package exambyte.persistence.repository;
 
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
+import exambyte.persistence.entities.ProfessorEntity;
 import exambyte.service.ProfessorRepository;
-import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,23 +17,23 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public Optional<ProfessorEntityJDBC> findByFachId(UUID fachId) {
+    public Optional<ProfessorEntity> findByFachId(UUID fachId) {
         return springDataProfessorRepository.findByFachId(fachId);
     }
 
     @Override
-    public void save(ProfessorEntityJDBC professorEntityJDBC) {
-        springDataProfessorRepository.save(professorEntityJDBC);
+    public void save(ProfessorEntity professorEntity) {
+        springDataProfessorRepository.save(professorEntity);
     }
 
-    public ProfessorEntityJDBC findByProfFachId(UUID fachId) {
-        Optional<ProfessorEntityJDBC> existingProfessor = findByFachId(fachId);
+    public ProfessorEntity findByProfFachId(UUID fachId) {
+        Optional<ProfessorEntity> existingProfessor = findByFachId(fachId);
 
         if (existingProfessor.isPresent()) {
             return existingProfessor.get();
         }
 
-        ProfessorEntityJDBC newProfessor = new ProfessorEntityJDBC(null, fachId, "N/A");
+        ProfessorEntity newProfessor = new ProfessorEntity(null, fachId, "N/A");
         save(newProfessor);
         return newProfessor;
     }

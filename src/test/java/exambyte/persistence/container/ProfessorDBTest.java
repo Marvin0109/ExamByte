@@ -1,8 +1,8 @@
 package exambyte.persistence.container;
 
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.JDBC.ProfessorEntityJDBC;
-import exambyte.persistence.mapper.JDBC.ProfessorMapperJDBC;
+import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.mapper.ProfessorMapper;
 import exambyte.persistence.repository.ProfessorRepositoryImpl;
 import exambyte.persistence.repository.SpringDataProfessorRepository;
 import exambyte.service.ProfessorRepository;
@@ -37,12 +37,12 @@ public class ProfessorDBTest {
     void test_01() {
         // Arrange
         Professor professor = Professor.of(null, null, "Dr. KekW");
-        ProfessorMapperJDBC professorMapper = new ProfessorMapperJDBC();
-        ProfessorEntityJDBC professorEntityJDBC = professorMapper.toEntity(professor);
+        ProfessorMapper professorMapper = new ProfessorMapper();
+        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 
         // Act
-        repository.save(professorEntityJDBC);
-        Optional<ProfessorEntityJDBC> geladen = repository.findByFachId(professorEntityJDBC.getFachId());
+        repository.save(professorEntity);
+        Optional<ProfessorEntity> geladen = repository.findByFachId(professorEntity.getFachId());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();

@@ -2,8 +2,8 @@ package exambyte.persistence.container;
 
 import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.repository.SpringDataStudentRepository;
-import exambyte.persistence.entities.JDBC.StudentEntityJDBC;
-import exambyte.persistence.mapper.JDBC.StudentMapperJDBC;
+import exambyte.persistence.entities.StudentEntity;
+import exambyte.persistence.mapper.StudentMapper;
 import exambyte.persistence.repository.StudentRepositoryImpl;
 import exambyte.service.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,12 +37,12 @@ public class StudentDBTest {
     void test_01() {
         // Arrange
         Student student = Student.of(null, null, "Max Mustermann");
-        StudentMapperJDBC studentMapper = new StudentMapperJDBC();
-        StudentEntityJDBC studentEntityJDBC = studentMapper.toEntity(student);
+        StudentMapper studentMapper = new StudentMapper();
+        StudentEntity studentEntity = studentMapper.toEntity(student);
 
         // Act
-        repository.save(studentEntityJDBC);
-        Optional<StudentEntityJDBC> geladen = repository.findByFachId(studentEntityJDBC.getFachId());
+        repository.save(studentEntity);
+        Optional<StudentEntity> geladen = repository.findByFachId(studentEntity.getFachId());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();
