@@ -24,7 +24,11 @@ create table exam(
     fach_id                 uuid default gen_random_uuid() not null,
     title                   varchar(100),
     professor_fach_id       uuid,
+    start_time              timestamp not null,
+    end_time                timestamp not null,
+    result_time             timestamp not null,
     constraint unique_fach_id_test unique(fach_id),
+    constraint check_exam_times check(start_time < end_time AND end_time <= result_time),
     foreign key(professor_fach_id) references professor(fach_id)
 );
 
