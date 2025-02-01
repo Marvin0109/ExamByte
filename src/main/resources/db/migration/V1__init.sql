@@ -12,6 +12,13 @@ create table professor(
     constraint unique_fach_id_professor unique(fach_id)
 );
 
+create table korrektor(
+    id                      serial primary key,
+    name                    varchar(100),
+    fach_id                 uuid default gen_random_uuid() not null,
+    constraint unique_fach_id_korrektor unique(fach_id)
+);
+
 create table exam(
     id                      serial primary key,
     fach_id                 uuid default gen_random_uuid() not null,
@@ -23,7 +30,7 @@ create table exam(
 
 create table frage(
     id                      serial primary key,
-    frage_text              varchar(200),
+    frage_text              TEXT,
     professor_fach_id       uuid,
     exam_fach_id            uuid,
     fach_id                 uuid default gen_random_uuid() not null,
@@ -34,12 +41,23 @@ create table frage(
 
 create table antwort(
     id                      serial primary key,
+    fach_id                 uuid default gen_random_uuid() not null,
     frage_antwort_id        uuid,
     antwort_text            varchar(500),
-    ist_korrekt             boolean,
     student_fach_id         uuid,
-    fach_id                 uuid default gen_random_uuid() not null,
     foreign key(frage_antwort_id) references frage(fach_id),
     foreign key(student_fach_id) references student(fach_id),
     constraint unique_fach_id_antwort unique(fach_id)
+);
+
+create table review(
+    id                      serial primary key,
+    fach_id                 uuid default gen_random_uuid() not null,
+    antwort_fach_id         uuid not null,
+    korrektor_fach_id       uuid not null,
+    bewertung               TEXT,
+    punkte                  int,
+    foreign key (antwort_fach_id) references antwort(fach_id),
+    foreign key (korrektor_fach_id) references korrektor(fach_id),
+    constraint unique_fach_id_review unique(fach_id)
 );
