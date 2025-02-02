@@ -32,7 +32,7 @@ public class Review {
         return antwortFachId;
     }
 
-    public UUID getKorrektorId() {
+    public UUID getKorrektorFachId() {
         return korrektorId;
     }
 
@@ -75,7 +75,7 @@ public class Review {
             return this;
         }
 
-        public ReviewBuilder korrektorId(UUID korrektorId) {
+        public ReviewBuilder korrektorFachId(UUID korrektorId) {
             this.korrektorId = korrektorId;
             return this;
         }

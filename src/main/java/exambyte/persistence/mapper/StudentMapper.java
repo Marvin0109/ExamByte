@@ -6,10 +6,18 @@ import exambyte.persistence.entities.StudentEntity;
 public class StudentMapper {
 
     public Student toDomain(StudentEntity studentEntity) {
-        return Student.of(studentEntity.getId(), studentEntity.getFachId(), studentEntity.getName());
+        return new Student.StudentBuilder()
+                .id(null)
+                .fachId(studentEntity.getFachId())
+                .name(studentEntity.getName())
+                .build();
     }
 
     public StudentEntity toEntity(Student student) {
-        return new StudentEntity(student.getId(), student.uuid(), student.getName());
+        return new StudentEntity.StudentEntityBuilder()
+                .id(null)
+                .fachId(student.uuid())
+                .name(student.getName())
+                .build();
     }
 }

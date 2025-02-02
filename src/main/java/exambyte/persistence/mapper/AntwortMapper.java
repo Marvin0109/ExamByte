@@ -12,29 +12,29 @@ public class AntwortMapper {
         UUID frageFachId = antwortEntity.getFrageFachId();
         UUID studentFachID = antwortEntity.getStudentFachId();
 
-        return Antwort.of(
-                antwortEntity.getId(),
-                antwortEntity.getFachId(),
-                antwortEntity.getAntwortText(),
-                frageFachId,
-                studentFachID,
-                antwortEntity.getAntwortZeitpunkt(),
-                antwortEntity.getLastChangesZeitpunkt()
-        );
+    return new Antwort.AntwortBuilder()
+            .id(null)
+            .fachId(antwortEntity.getFachId())
+            .antwortText(antwortEntity.getAntwortText())
+            .frageFachId(frageFachId)
+            .studentFachId(studentFachID)
+            .antwortZeitpunkt(antwortEntity.getAntwortZeitpunkt())
+            .lastChangesZeitpunkt(antwortEntity.getLastChangesZeitpunkt())
+            .build();
     }
 
     public AntwortEntity toEntity(Antwort antwort) {
         UUID frageFachId = antwort.getFrageFachId(); // LoD Verstoß
         UUID studentFachId = antwort.getStudentUUID();
 
-        return new AntwortEntity(
-                antwort.getId(),
-                antwort.getFachId(),
-                antwort.getAntwortText(),
-                frageFachId,
-                studentFachId,
-                antwort.getAntwortZeitpunkt(),
-                antwort.getLastChangesZeitpunkt()
-        );
+        return new AntwortEntity.AntwortEntityBuilder()
+                .id(null)
+                .fachId(antwort.getFachId())
+                .antwortText(antwort.getAntwortText())
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwort.getAntwortZeitpunkt())
+                .lastChangesZeitpunkt(antwort.getLastChangesZeitpunkt())
+                .build();
     }
 }

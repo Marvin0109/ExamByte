@@ -6,24 +6,26 @@ import exambyte.persistence.entities.ExamEntity;
 public class ExamMapper {
 
     public ExamEntity toEntity(Exam exam) {
-        return new ExamEntity(
-                null,
-                exam.getFachId(),
-                exam.getTitle(),
-                exam.getProfessorFachId(),
-                exam.getStartTime(),
-                exam.getEndTime(),
-                exam.getResultTime());
+    return new ExamEntity.ExamEntityBuilder()
+            .id(null)
+            .fachId(exam.getFachId())
+            .title(exam.getTitle())
+            .professorFachId(exam.getProfessorFachId())
+            .startZeitpunkt(exam.getStartTime())
+            .endZeitpunkt(exam.getEndTime())
+            .resultZeitpunkt(exam.getResultTime())
+            .build();
     }
 
     public Exam toDomain(ExamEntity examEntity) {
-       return Exam.of(
-                null,
-                examEntity.getFachId(),
-                examEntity.getTitle(),
-                examEntity.getProfessorFachId(),
-                examEntity.getStartZeitpunkt(),
-                examEntity.getEndZeitpunkt(),
-                examEntity.getResultZeitpunkt());
+       return new Exam.ExamBuilder()
+               .id(null)
+               .fachId(examEntity.getFachId())
+               .title(examEntity.getTitle())
+               .professorFachId(examEntity.getProfessorFachId())
+               .startTime(examEntity.getStartZeitpunkt())
+               .endTime(examEntity.getEndZeitpunkt())
+               .resultTime(examEntity.getResultZeitpunkt())
+               .build();
     }
 }

@@ -6,10 +6,18 @@ import exambyte.persistence.entities.KorrektorEntity;
 public class KorrektorMapper {
 
     public Korrektor toDomain(KorrektorEntity korrektorEntity) {
-        return Korrektor.of(korrektorEntity.getId(), korrektorEntity.getFachId(), korrektorEntity.getName());
+        return new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(korrektorEntity.getFachId())
+                .name(korrektorEntity.getName())
+                .build();
     }
 
     public KorrektorEntity toEntity(Korrektor korrektor) {
-        return new KorrektorEntity(korrektor.getId(), korrektor.uuid(), korrektor.getName());
+        return new KorrektorEntity.KorrektorEntityBuilder()
+                .id(null)
+                .fachId(korrektor.uuid())
+                .name(korrektor.getName())
+                .build();
     }
 }

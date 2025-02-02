@@ -20,25 +20,27 @@ public class FrageMapper {
         UUID professorFachID = frageEntity.getProfessorFachId();
         ProfessorEntity professor = frageRepository.findByProfFachId(professorFachID);
 
-        return Frage.of(
-                frageEntity.getId(),
-                frageEntity.getFachId(),
-                frageEntity.getFrageText(),
-                frageEntity.getMaxPunkte(),
-                professorFachID,
-                frageEntity.getExamFachId());
+        return new Frage.FrageBuilder()
+                .id(null)
+                .fachId(frageEntity.getFachId())
+                .frageText(frageEntity.getFrageText())
+                .maxPunkte(frageEntity.getMaxPunkte())
+                .professorUUID(professorFachID)
+                .examUUID(frageEntity.getExamFachId())
+                .build();
     }
 
     public FrageEntity toEntity(Frage frage) {
 
         UUID profUUID = frage.getProfessorUUID();
 
-        return new FrageEntity(
-                frage.getId(),
-                frage.getFachId(),
-                frage.getFrageText(),
-                frage.getMaxPunkte(),
-                profUUID,
-                frage.getExamUUID());
+        return new FrageEntity.FrageEntityBuilder()
+                .id(null)
+                .fachId(frage.getFachId())
+                .frageText(frage.getFrageText())
+                .maxPunkte(frage.getMaxPunkte())
+                .professorFachId(profUUID)
+                .examFachId(frage.getExamUUID())
+                .build();
     }
 }

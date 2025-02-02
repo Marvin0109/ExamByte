@@ -6,24 +6,24 @@ import exambyte.persistence.entities.ReviewEntity;
 public class ReviewMapper {
 
     public Review toDomain(ReviewEntity entity) {
-        return Review.of(
-                null,
-                entity.getFachId(),
-                entity.getAntwortFachId(),
-                entity.getKorrektorFachId(),
-                entity.getBewertung(),
-                entity.getPunkte()
-        );
+        return new Review.ReviewBuilder()
+                .id(null)
+                .fachId(entity.getFachId())
+                .antwortFachId(entity.getAntwortFachId())
+                .korrektorFachId(entity.getKorrektorFachId())
+                .bewertung(entity.getBewertung())
+                .punkte(entity.getPunkte())
+                .build();
     }
 
     public ReviewEntity toEntity(Review review) {
-        return new ReviewEntity(
-                null,
-                review.getFachId(),
-                review.getAntwortFachId(),
-                review.getKorrektorId(),
-                review.getBewertung(),
-                review.getPunkte()
-        );
+        return new ReviewEntity.ReviewEntityBuilder()
+                .id(null)
+                .fachId(review.getFachId())
+                .antwortFachId(review.getAntwortFachId())
+                .korrektorFachId(review.getKorrektorFachId())
+                .bewertung(review.getBewertung())
+                .punkte(review.getPunkte())
+                .build();
     }
 }
