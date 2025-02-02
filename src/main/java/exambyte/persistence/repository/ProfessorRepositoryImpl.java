@@ -33,7 +33,11 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
             return existingProfessor.get();
         }
 
-        ProfessorEntity newProfessor = new ProfessorEntity(null, fachId, "N/A");
+        ProfessorEntity newProfessor = new ProfessorEntity.ProfessorEntityBuilder()
+                .id(null)
+                .fachId(fachId)
+                .name("")
+                .build();
         save(newProfessor);
         return newProfessor;
     }

@@ -36,7 +36,11 @@ public class ProfessorDBTest {
     @DisplayName("Ein Professor kann gespeichert und wieder geladen werden")
     void test_01() {
         // Arrange
-        Professor professor = Professor.of(null, null, "Dr. KekW");
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. KekW")
+                .build();
         ProfessorMapper professorMapper = new ProfessorMapper();
         ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 

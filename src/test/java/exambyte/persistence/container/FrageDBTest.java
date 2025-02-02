@@ -55,7 +55,12 @@ public class FrageDBTest {
     @DisplayName("Eine Frage kann gespeichert und wieder geladen werden, außerdem kann der Professor extrahiert werden")
     void test_01() {
         // Arrange
-        Professor professor = Professor.of(null, null, "Dr. Lowkey");
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. Lowkey")
+                .build();
+
         ProfessorMapper professorMapper = new ProfessorMapper();
         ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 
@@ -64,15 +69,30 @@ public class FrageDBTest {
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
         LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
-        Exam exam = Exam.of(null, null, "Test 1", professorEntity.getFachId(),
-                startTime, endTime, resultTime);
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professorEntity.getFachId())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
+
         ExamMapper examMapper = new ExamMapper();
         ExamEntity examEntity = examMapper.toEntity(exam);
 
         repository3.save(examEntity);
 
-        Frage frage = Frage.of(null, null, "Was ist Java?", 6, professorEntity.getFachId(),
-                exam.getFachId());
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("Was ist Java?")
+                .maxPunkte(6)
+                .professorUUID(professorEntity.getFachId())
+                .examUUID(exam.getFachId())
+                .build();
+
         FrageMapper frageMapper = new FrageMapper((FrageRepositoryImpl) repository);
         FrageEntity frageEntity = frageMapper.toEntity(frage);
 

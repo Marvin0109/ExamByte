@@ -36,7 +36,12 @@ public class StudentDBTest {
     @DisplayName("Ein Student kann gespeichert und wieder geladen werden")
     void test_01() {
         // Arrange
-        Student student = Student.of(null, null, "Max Mustermann");
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Max Mustermann")
+                .build();
+
         StudentMapper studentMapper = new StudentMapper();
         StudentEntity studentEntity = studentMapper.toEntity(student);
 

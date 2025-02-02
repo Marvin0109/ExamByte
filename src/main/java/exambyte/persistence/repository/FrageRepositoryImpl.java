@@ -43,7 +43,11 @@ public class FrageRepositoryImpl implements FrageRepository {
             return existingProfessor.get();
         }
 
-        ProfessorEntity newProfessor = new ProfessorEntity(null, profFachId, "N/A");
+        ProfessorEntity newProfessor = new ProfessorEntity.ProfessorEntityBuilder()
+                .id(null)
+                .fachId(profFachId)
+                .name("")
+                .build();
         springDataProfessorRepository.save(newProfessor);
         return newProfessor;
     }
@@ -55,8 +59,12 @@ public class FrageRepositoryImpl implements FrageRepository {
             return existingTest.get();
         }
 
-        // Erstmal so, ist auch an sich nicht korrekt
-        ExamEntity newTest = new ExamEntity(null, testFachId, "", null, null, null, null);
+        // Hier wird es zur Exception geworfen (s. ExamEntityBuilder.build())
+        ExamEntity newTest = new ExamEntity.ExamEntityBuilder()
+                .id(null)
+                .fachId(testFachId)
+                .title("")
+                .build();
         springDataExamRepository.save(newTest);
         return newTest;
     }

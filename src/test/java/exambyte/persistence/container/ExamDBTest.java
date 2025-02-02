@@ -81,35 +81,66 @@ public class ExamDBTest {
         ExamMapper examMapper = new ExamMapper();
         ReviewMapper reviewMapper = new ReviewMapper();
 
-        Professor professor = Professor.of(null, null, "Dr. K");
-        Korrektor korrektor = Korrektor.of(null, null, "W Korrektor");
-        Student student = Student.of(null, null, "Peter Griffin");
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. K")
+                .build();
+
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("W Korrektor")
+                .build();
+
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Peter Griffin")
+                .build();
 
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
         LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
-        Exam exam = Exam.of(null, null, "Test 1", professor.uuid(), startTime, endTime, resultTime);
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professor.uuid())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
 
-        Frage frage = Frage.of(
-                null,
-                null,
-                "JPA oder JDBC?",
-                7,
-                professor.uuid(),
-                exam.getFachId());
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("JPA oder JDBC?")
+                .maxPunkte(7)
+                .professorUUID(professor.uuid())
+                .examUUID(exam.getFachId())
+                .build();
 
         LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
         LocalDateTime lastChanges = LocalDateTime.of(2025, 6, 25, 13, 56);
-        Antwort antwort = Antwort.of(
-                null,
-                null,
-                "JDBC",
-                frage.getFachId(),
-                student.uuid(),
-                startSubmit,
-                lastChanges);
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortText("JDBC")
+                .frageFachId(frage.getFachId())
+                .studentFachId(student.uuid())
+                .antwortZeitpunkt(startSubmit)
+                .lastChangesZeitpunkt(lastChanges)
+                .build();
 
-        Review review = Review.of(null, null, antwort.getFachId(), korrektor.uuid(), "Bewertung", 0);
+        Review review = new Review.ReviewBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortFachId(antwort.getFachId())
+                .korrektorFachId(korrektor.uuid())
+                .bewertung("Bewertung")
+                .punkte(0)
+                .build();
 
         ProfessorEntity professorEntity = profMapper.toEntity(professor);
         KorrektorEntity korrektorEntity = korrektorMapper.toEntity(korrektor);

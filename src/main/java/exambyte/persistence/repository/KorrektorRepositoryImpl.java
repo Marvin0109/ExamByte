@@ -33,7 +33,11 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
             return existingKorrektor.get();
         }
 
-        KorrektorEntity newKorrektor = new KorrektorEntity(null, fachId, "N/A");
+        KorrektorEntity newKorrektor = new KorrektorEntity.KorrektorEntityBuilder()
+                .id(null)
+                .fachId(fachId)
+                .name("")
+                .build();
         save(newKorrektor);
         return newKorrektor;
     }
