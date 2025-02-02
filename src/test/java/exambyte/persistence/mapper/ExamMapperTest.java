@@ -59,7 +59,6 @@ public class ExamMapperTest {
     @DisplayName("ExamMapper test 'toDomain")
     public void test_02() {
         // Arrange
-        ExamMapper examMapper = new ExamMapper();
         ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
                 .id(null)
                 .fachId(null)
@@ -80,7 +79,7 @@ public class ExamMapperTest {
                 .build();
 
         // Act
-        Exam exam = examMapper.toDomain(examEntity);
+        Exam exam = ExamMapper.toDomain(examEntity);
         UUID examFachId = exam.getFachId();
         String examTitle = exam.getTitle();
 

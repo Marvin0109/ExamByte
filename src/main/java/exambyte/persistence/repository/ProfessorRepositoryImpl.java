@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.user.Professor;
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.service.ProfessorRepository;
+import exambyte.persistence.mapper.ProfessorMapper;
+import exambyte.domain.repository.ProfessorRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Repository
 public class ProfessorRepositoryImpl implements ProfessorRepository {
 
+    private final ProfessorMapper professorMapper = new ProfessorMapper();
     private final SpringDataProfessorRepository springDataProfessorRepository;
 
     public ProfessorRepositoryImpl(SpringDataProfessorRepository springDataProfessorRepository) {
@@ -17,28 +20,32 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public Optional<ProfessorEntity> findByFachId(UUID fachId) {
-        return springDataProfessorRepository.findByFachId(fachId);
+    public Optional<Professor> findByFachId(UUID fachId) {
+        Optional<ProfessorEntity> entity = springDataProfessorRepository.findByFachId(fachId);
+        return entity.map(ProfessorMapper::toDomain);
     }
 
     @Override
-    public void save(ProfessorEntity professorEntity) {
-        springDataProfessorRepository.save(professorEntity);
+    public void save(Professor professor) {
+        ProfessorEntity entity = professorMapper.toEntity(professor);
+        springDataProfessorRepository.save(entity);
     }
 
     public ProfessorEntity findByProfFachId(UUID fachId) {
-        Optional<ProfessorEntity> existingProfessor = findByFachId(fachId);
+        Optional<Professor> professor = findByFachId(fachId);
 
-        if (existingProfessor.isPresent()) {
-            return existingProfessor.get();
+        if (professor.isPresent()) {
+            return new ProfessorEntity.ProfessorEntityBuilder()
+                    .id(null)
+                    .fachId(fachId)
+                    .name(professor.get().getName())
+                    .build();
         }
 
-        ProfessorEntity newProfessor = new ProfessorEntity.ProfessorEntityBuilder()
+        return new ProfessorEntity.ProfessorEntityBuilder()
                 .id(null)
                 .fachId(fachId)
                 .name("")
                 .build();
-        save(newProfessor);
-        return newProfessor;
     }
 }

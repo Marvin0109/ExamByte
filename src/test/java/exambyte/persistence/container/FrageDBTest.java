@@ -3,19 +3,15 @@ package exambyte.persistence.container;
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.ExamEntity;
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.persistence.mapper.ExamMapper;
-import exambyte.persistence.mapper.FrageMapper;
-import exambyte.persistence.mapper.ProfessorMapper;
 import exambyte.persistence.repository.*;
 import exambyte.persistence.repository.ExamRepositoryImpl;
 import exambyte.persistence.repository.FrageRepositoryImpl;
 import exambyte.persistence.repository.ProfessorRepositoryImpl;
-import exambyte.service.ExamRepository;
-import exambyte.service.FrageRepository;
-import exambyte.service.ProfessorRepository;
+import exambyte.domain.repository.ExamRepository;
+import exambyte.domain.repository.FrageRepository;
+import exambyte.domain.repository.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,10 +60,7 @@ public class FrageDBTest {
                 .name("Dr. Lowkey")
                 .build();
 
-        ProfessorMapper professorMapper = new ProfessorMapper();
-        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
-
-        repository2.save(professorEntity);
+        repository2.save(professor);
 
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
@@ -76,43 +69,37 @@ public class FrageDBTest {
                 .id(null)
                 .fachId(null)
                 .title("Test 1")
-                .professorFachId(professorEntity.getFachId())
+                .professorFachId(professor.uuid())
                 .startTime(startTime)
                 .endTime(endTime)
                 .resultTime(resultTime)
                 .build();
 
-        ExamMapper examMapper = new ExamMapper();
-        ExamEntity examEntity = examMapper.toEntity(exam);
-
-        repository3.save(examEntity);
+        repository3.save(exam);
 
         Frage frage = new Frage.FrageBuilder()
                 .id(null)
                 .fachId(null)
                 .frageText("Was ist Java?")
                 .maxPunkte(6)
-                .professorUUID(professorEntity.getFachId())
+                .professorUUID(professor.uuid())
                 .examUUID(exam.getFachId())
                 .build();
 
-        FrageMapper frageMapper = new FrageMapper();
-        FrageEntity frageEntity = frageMapper.toEntity(frage);
-
         // Act
-        repository.save(frageEntity);
-        Optional<FrageEntity> geladen = frageRepository.findByFachId(frageEntity.getFachId());
-        ProfessorEntity extraction = ((FrageRepositoryImpl) repository).findByProfFachId(professorEntity.getFachId());
+        repository.save(frage);
+        Optional<FrageEntity> geladen = frageRepository.findByFachId(frage.getFachId());
+        ProfessorEntity extraction = ((FrageRepositoryImpl) repository).findByProfFachId(professor.uuid());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getFrageText()).isEqualTo("Was ist Java?");
         assertThat(geladen.get().getMaxPunkte()).isEqualTo(6);
-        assertThat(geladen.get().getFachId()).isEqualTo(frageEntity.getFachId());
+        assertThat(geladen.get().getFachId()).isEqualTo(frage.getFachId());
 
-        assertThat(extraction.getFachId()).isEqualTo(professorEntity.getFachId());
+        assertThat(extraction.getFachId()).isEqualTo(professor.uuid());
         assertThat(extraction.getName()).isEqualTo("Dr. Lowkey");
 
-        assertThat(exam.getFachId()).isEqualTo(frageEntity.getExamFachId());
+        assertThat(exam.getFachId()).isEqualTo(frage.getExamUUID());
     }
 }

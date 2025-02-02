@@ -1,9 +1,11 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.exam.Frage;
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
 import exambyte.persistence.entities.ExamEntity;
-import exambyte.service.FrageRepository;
+import exambyte.persistence.mapper.FrageMapper;
+import exambyte.domain.repository.FrageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,7 @@ import java.util.UUID;
 @Repository
 public class FrageRepositoryImpl implements FrageRepository {
 
+    private final FrageMapper frageMapper = new FrageMapper();
     private final SpringDataFrageRepository springDataFrageRepository;
     private final SpringDataProfessorRepository springDataProfessorRepository;
     private final SpringDataExamRepository springDataExamRepository;
@@ -27,13 +30,15 @@ public class FrageRepositoryImpl implements FrageRepository {
     }
 
     @Override
-    public Optional<FrageEntity> findByFachId(UUID fachId) {
-        return springDataFrageRepository.findByFachId(fachId);
+    public Optional<Frage> findByFachId(UUID fachId) {
+        Optional<FrageEntity> entity = springDataFrageRepository.findByFachId(fachId);
+        return entity.map(FrageMapper::toDomain);
     }
 
     @Override
-    public void save(FrageEntity frageEntity) {
-        springDataFrageRepository.save(frageEntity);
+    public void save(Frage frageEntity) {
+        FrageEntity entity = frageMapper.toEntity(frageEntity);
+        springDataFrageRepository.save(entity);
     }
 
     public ProfessorEntity findByProfFachId(UUID profFachId) {

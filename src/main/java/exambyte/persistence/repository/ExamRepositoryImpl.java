@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.exam.Exam;
 import exambyte.persistence.entities.ExamEntity;
-import exambyte.service.ExamRepository;
+import exambyte.persistence.mapper.ExamMapper;
+import exambyte.domain.repository.ExamRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Repository
 public class ExamRepositoryImpl implements ExamRepository {
 
+    private final ExamMapper examMapper = new ExamMapper();
     private final SpringDataExamRepository testRepository;
 
     public ExamRepositoryImpl(SpringDataExamRepository testRepository) {
@@ -17,12 +20,14 @@ public class ExamRepositoryImpl implements ExamRepository {
     }
 
     @Override
-    public Optional<ExamEntity> findByFachId(UUID fachId) {
-        return testRepository.findByFachId(fachId);
+    public Optional<Exam> findByFachId(UUID fachId) {
+        Optional<ExamEntity> entity = testRepository.findByFachId(fachId);
+        return entity.map(ExamMapper::toDomain);
     }
 
     @Override
-    public void save(ExamEntity examEntity) {
-        testRepository.save(examEntity);
+    public void save(Exam examEntity) {
+        ExamEntity entity = examMapper.toEntity(examEntity);
+        testRepository.save(entity);
     }
 }

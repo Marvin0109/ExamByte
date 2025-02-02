@@ -2,13 +2,12 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.persistence.entities.FrageEntity;
-import exambyte.persistence.repository.FrageRepositoryImpl;
 
 import java.util.UUID;
 
 public class FrageMapper {
 
-    public Frage toDomain(FrageEntity frageEntity) {
+    public static Frage toDomain(FrageEntity frageEntity) {
 
         UUID professorFachID = frageEntity.getProfessorFachId();
 

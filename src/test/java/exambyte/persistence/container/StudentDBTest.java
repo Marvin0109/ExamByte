@@ -2,10 +2,8 @@ package exambyte.persistence.container;
 
 import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.repository.SpringDataStudentRepository;
-import exambyte.persistence.entities.StudentEntity;
-import exambyte.persistence.mapper.StudentMapper;
 import exambyte.persistence.repository.StudentRepositoryImpl;
-import exambyte.service.StudentRepository;
+import exambyte.domain.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,16 +40,13 @@ public class StudentDBTest {
                 .name("Max Mustermann")
                 .build();
 
-        StudentMapper studentMapper = new StudentMapper();
-        StudentEntity studentEntity = studentMapper.toEntity(student);
-
         // Act
-        repository.save(studentEntity);
-        Optional<StudentEntity> geladen = repository.findByFachId(studentEntity.getFachId());
+        repository.save(student);
+        Optional<Student> geladen = repository.findByFachId(student.uuid());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getName()).isEqualTo("Max Mustermann");
-        assertThat(geladen.get().getFachId()).isEqualTo(student.uuid());
+        assertThat(geladen.get().uuid()).isEqualTo(student.uuid());
     }
 }

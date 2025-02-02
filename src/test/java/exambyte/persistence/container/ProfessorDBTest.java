@@ -1,11 +1,9 @@
 package exambyte.persistence.container;
 
 import exambyte.domain.aggregate.user.Professor;
-import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.persistence.mapper.ProfessorMapper;
 import exambyte.persistence.repository.ProfessorRepositoryImpl;
 import exambyte.persistence.repository.SpringDataProfessorRepository;
-import exambyte.service.ProfessorRepository;
+import exambyte.domain.repository.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,16 +39,14 @@ public class ProfessorDBTest {
                 .fachId(null)
                 .name("Dr. KekW")
                 .build();
-        ProfessorMapper professorMapper = new ProfessorMapper();
-        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
 
         // Act
-        repository.save(professorEntity);
-        Optional<ProfessorEntity> geladen = repository.findByFachId(professorEntity.getFachId());
+        repository.save(professor);
+        Optional<Professor> geladen = repository.findByFachId(professor.uuid());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getName()).isEqualTo("Dr. KekW");
-        assertThat(geladen.get().getFachId()).isEqualTo(professor.uuid());
+        assertThat(geladen.get().uuid()).isEqualTo(professor.uuid());
     }
 }

@@ -5,7 +5,7 @@ import exambyte.persistence.entities.ReviewEntity;
 
 public class ReviewMapper {
 
-    public Review toDomain(ReviewEntity entity) {
+    public static Review toDomain(ReviewEntity entity) {
         return new Review.ReviewBuilder()
                 .id(null)
                 .fachId(entity.getFachId())

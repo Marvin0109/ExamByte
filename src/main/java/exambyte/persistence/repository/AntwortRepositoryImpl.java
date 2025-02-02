@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.persistence.entities.AntwortEntity;
-import exambyte.service.AntwortRepository;
+import exambyte.persistence.mapper.AntwortMapper;
+import exambyte.domain.repository.AntwortRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Repository
 public class AntwortRepositoryImpl implements AntwortRepository {
 
+    private final AntwortMapper antwortMapper = new AntwortMapper();
     private final SpringDataAntwortRepository springDataAntwortRepository;
 
     public AntwortRepositoryImpl(SpringDataAntwortRepository springDataAntwortRepository) {
@@ -18,11 +21,13 @@ public class AntwortRepositoryImpl implements AntwortRepository {
 
     @Override
     public Optional<Antwort> findByFachId(UUID id) {
-        return springDataAntwortRepository.findByFachId(id);
+        Optional<AntwortEntity> entity = springDataAntwortRepository.findByFachId(id);
+        return entity.map(AntwortMapper::toDomain);
     }
 
     @Override
-    public void save(AntwortEntity entity) {
-        springDataAntwortRepository.save(entity);
+    public void save(Antwort antwort) {
+        AntwortEntity antwortEntity = antwortMapper.toEntity(antwort);
+        springDataAntwortRepository.save(antwortEntity);
     }
 }

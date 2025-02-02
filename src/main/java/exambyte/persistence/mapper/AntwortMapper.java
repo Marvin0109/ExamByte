@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public class AntwortMapper {
 
-    public Antwort toDomain(AntwortEntity antwortEntity) {
+    public static Antwort toDomain(AntwortEntity antwortEntity) {
 
         UUID frageFachId = antwortEntity.getFrageFachId();
         UUID studentFachID = antwortEntity.getStudentFachId();

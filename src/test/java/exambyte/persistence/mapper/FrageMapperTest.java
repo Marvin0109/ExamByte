@@ -55,10 +55,8 @@ public class FrageMapperTest {
                 .examFachId(examFachId)
                 .build();
 
-        FrageMapper frageMapper = new FrageMapper();
-
         // Act
-        Frage frage = frageMapper.toDomain(frageEntity);
+        Frage frage = FrageMapper.toDomain(frageEntity);
 
         assertThat(frage).isNotNull();
         assertThat(frage.getFachId()).isEqualTo(fachId);

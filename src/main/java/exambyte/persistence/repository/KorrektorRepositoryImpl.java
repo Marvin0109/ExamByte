@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.user.Korrektor;
 import exambyte.persistence.entities.KorrektorEntity;
-import exambyte.service.KorrektorRepository;
+import exambyte.persistence.mapper.KorrektorMapper;
+import exambyte.domain.repository.KorrektorRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Repository
 public class KorrektorRepositoryImpl implements KorrektorRepository {
 
+    private final KorrektorMapper korrektorMapper = new KorrektorMapper();
     private final SpringDataKorrektorRepository springDataKorrektorRepository;
 
     public KorrektorRepositoryImpl(SpringDataKorrektorRepository springDataKorrektorRepository) {
@@ -17,28 +20,32 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
     }
 
     @Override
-    public Optional<KorrektorEntity> findByFachId(UUID fachId) {
-        return springDataKorrektorRepository.findByFachId(fachId);
+    public Optional<Korrektor> findByFachId(UUID fachId) {
+        Optional<KorrektorEntity> entity = springDataKorrektorRepository.findByFachId(fachId);
+        return entity.map(KorrektorMapper::toDomain);
     }
 
     @Override
-    public void save(KorrektorEntity korrektorEntity) {
-        springDataKorrektorRepository.save(korrektorEntity);
+    public void save(Korrektor korrektor) {
+        KorrektorEntity entity = korrektorMapper.toEntity(korrektor);
+        springDataKorrektorRepository.save(entity);
     }
 
-    public KorrektorEntity findByKorrFachId(UUID fachId) {
-        Optional<KorrektorEntity> existingKorrektor = findByFachId(fachId);
+    public KorrektorEntity findByKorFachId(UUID fachId) {
+        Optional<Korrektor> korrektor = findByFachId(fachId);
 
-        if (existingKorrektor.isPresent()) {
-            return existingKorrektor.get();
+        if (korrektor.isPresent()) {
+            return new KorrektorEntity.KorrektorEntityBuilder()
+                    .id(null)
+                    .fachId(fachId)
+                    .name(korrektor.get().getName())
+                    .build();
         }
 
-        KorrektorEntity newKorrektor = new KorrektorEntity.KorrektorEntityBuilder()
+        return new KorrektorEntity.KorrektorEntityBuilder()
                 .id(null)
                 .fachId(fachId)
                 .name("")
                 .build();
-        save(newKorrektor);
-        return newKorrektor;
     }
 }

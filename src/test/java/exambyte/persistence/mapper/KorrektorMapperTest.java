@@ -37,7 +37,6 @@ public class KorrektorMapperTest {
     @DisplayName("KorrektorMapper test 'toDomain'")
     public void test_02() {
         // Arrange
-        KorrektorMapper korrektorMapper = new KorrektorMapper();
         KorrektorEntity korrektorEntity = new KorrektorEntity.KorrektorEntityBuilder()
                 .id(null)
                 .fachId(null)
@@ -45,7 +44,7 @@ public class KorrektorMapperTest {
                 .build();
 
         // Act
-        Korrektor korrektor = korrektorMapper.toDomain(korrektorEntity);
+        Korrektor korrektor = KorrektorMapper.toDomain(korrektorEntity);
         UUID korrektorFachId = korrektor.uuid();
         String korrektorName = korrektor.getName();
 

@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.entities.StudentEntity;
-import exambyte.service.StudentRepository;
+import exambyte.persistence.mapper.StudentMapper;
+import exambyte.domain.repository.StudentRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
 
+    private final StudentMapper studentMapper = new StudentMapper();
     private final SpringDataStudentRepository springDataStudentRepository;
 
     public StudentRepositoryImpl(SpringDataStudentRepository springDataStudentRepository) {
@@ -17,12 +20,14 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<StudentEntity> findByFachId(UUID fachId) {
-        return springDataStudentRepository.findByFachId(fachId);
+    public Optional<Student> findByFachId(UUID fachId) {
+        Optional<StudentEntity> entity = springDataStudentRepository.findByFachId(fachId);
+        return entity.map(StudentMapper::toDomain);
     }
 
     @Override
-    public void save(StudentEntity studentEntity) {
+    public void save(Student student) {
+        StudentEntity studentEntity = studentMapper.toEntity(student);
         springDataStudentRepository.save(studentEntity);
     }
 

@@ -1,7 +1,6 @@
-package exambyte.service;
+package exambyte.domain.repository;
 
 import exambyte.domain.aggregate.exam.Antwort;
-import exambyte.persistence.entities.AntwortEntity;
 
 import java.util.Optional;
 import java.util.UUID;

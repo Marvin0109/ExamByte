@@ -7,10 +7,8 @@ import exambyte.domain.aggregate.exam.Review;
 import exambyte.domain.aggregate.user.Korrektor;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.aggregate.user.Student;
-import exambyte.persistence.entities.*;
-import exambyte.persistence.mapper.*;
+import exambyte.domain.repository.*;
 import exambyte.persistence.repository.*;
-import exambyte.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,13 +71,7 @@ public class ExamDBTest {
     @DisplayName("Relationen der Entitäten testen")
     void test_01() {
         // Arrange
-        ProfessorMapper profMapper = new ProfessorMapper();
-        KorrektorMapper korrektorMapper = new KorrektorMapper();
-        StudentMapper studentMapper = new StudentMapper();
-        FrageMapper frageMapper = new FrageMapper();
-        AntwortMapper antwortMapper = new AntwortMapper();
-        ExamMapper examMapper = new ExamMapper();
-        ReviewMapper reviewMapper = new ReviewMapper();
+
 
         Professor professor = new Professor.ProfessorBuilder()
                 .id(null)
@@ -142,44 +134,36 @@ public class ExamDBTest {
                 .punkte(0)
                 .build();
 
-        ProfessorEntity professorEntity = profMapper.toEntity(professor);
-        KorrektorEntity korrektorEntity = korrektorMapper.toEntity(korrektor);
-        StudentEntity studentEntity = studentMapper.toEntity(student);
-        FrageEntity frageEntity = frageMapper.toEntity(frage);
-        AntwortEntity antwortEntity = antwortMapper.toEntity(antwort);
-        ExamEntity examEntity = examMapper.toEntity(exam);
-        ReviewEntity reviewEntity = reviewMapper.toEntity(review);
-
-        studRepository.save(studentEntity);
-        profRepository.save(professorEntity);
-        korRepository.save(korrektorEntity);
-        examRepository.save(examEntity);
-        frageRepository.save(frageEntity);
-        antwortRepository.save(antwortEntity);
-        revRepository.save(reviewEntity);
+        studRepository.save(student);
+        profRepository.save(professor);
+        korRepository.save(korrektor);
+        examRepository.save(exam);
+        frageRepository.save(frage);
+        antwortRepository.save(antwort);
+        revRepository.save(review);
 
         // Act
 
-        Optional<AntwortEntity> geladenAntwort = antRepository.findByFachId(antwortEntity.getFachId());
-        Optional<FrageEntity> geladenFrage = frageRepository.findByFachId(frageEntity.getFachId());
-        Optional<ProfessorEntity> geladenProf = profRepository.findByFachId(professorEntity.getFachId());
-        Optional<KorrektorEntity> geladenKor = korRepository.findByFachId(korrektorEntity.getFachId());
-        Optional<StudentEntity> geladenStud = studentRepository.findByFachId(studentEntity.getFachId());
-        Optional<ExamEntity> geladenExam = examRepository.findByFachId(examEntity.getFachId());
-        Optional<ReviewEntity> geladenReview = reviewRepository.findByFachId(reviewEntity.getFachId());
+        Optional<Antwort> geladenAntwort = antwortRepository.findByFachId(antwort.getFachId());
+        Optional<Frage> geladenFrage = frageRepository.findByFachId(frage.getFachId());
+        Optional<Professor> geladenProf = profRepository.findByFachId(professor.uuid());
+        Optional<Korrektor> geladenKor = korRepository.findByFachId(korrektor.uuid());
+        Optional<Student> geladenStud = studRepository.findByFachId(student.uuid());
+        Optional<Exam> geladenExam = examRepository.findByFachId(exam.getFachId());
+        Optional<Review> geladenReview = revRepository.findByFachId(review.getFachId());
 
         // Assert
 
         // Antwort
         assertThat(geladenAntwort).isPresent();
         assertThat(geladenAntwort.get().getAntwortText()).isEqualTo("JDBC");
-        assertThat(geladenAntwort.get().getFachId()).isEqualTo(antwortEntity.getFachId());
+        assertThat(geladenAntwort.get().getFachId()).isEqualTo(antwort.getFachId());
 
         // Frage
         assertThat(geladenFrage).isPresent();
         assertThat(geladenFrage.get().getFrageText()).isEqualTo("JPA oder JDBC?");
         assertThat(geladenFrage.get().getMaxPunkte()).isEqualTo(7);
-        assertThat(geladenFrage.get().getExamFachId()).isEqualTo(examEntity.getFachId());
+        assertThat(geladenFrage.get().getExamUUID()).isEqualTo(exam.getFachId());
 
         // Professor
         assertThat(geladenProf).isPresent();
@@ -196,13 +180,13 @@ public class ExamDBTest {
         // Exam
         assertThat(geladenExam).isPresent();
         assertThat(geladenExam.get().getTitle()).isEqualTo("Test 1");
-        assertThat(geladenExam.get().getStartZeitpunkt()).isEqualTo(startTime);
-        assertThat(geladenExam.get().getEndZeitpunkt()).isEqualTo(endTime);
-        assertThat(geladenExam.get().getResultZeitpunkt()).isEqualTo(resultTime);
+        assertThat(geladenExam.get().getStartTime()).isEqualTo(startTime);
+        assertThat(geladenExam.get().getEndTime()).isEqualTo(endTime);
+        assertThat(geladenExam.get().getResultTime()).isEqualTo(resultTime);
 
         // Review
         assertThat(geladenReview).isPresent();
-        assertThat(geladenReview.get().getFachId()).isEqualTo(reviewEntity.getFachId());
+        assertThat(geladenReview.get().getFachId()).isEqualTo(review.getFachId());
         assertThat(geladenReview.get().getKorrektorFachId()).isEqualTo(korrektor.uuid());
         assertThat(geladenReview.get().getBewertung()).isEqualTo("Bewertung");
         assertThat(geladenReview.get().getPunkte()).isEqualTo(0);

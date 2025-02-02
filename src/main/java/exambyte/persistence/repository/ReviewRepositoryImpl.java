@@ -1,7 +1,9 @@
 package exambyte.persistence.repository;
 
+import exambyte.domain.aggregate.exam.Review;
 import exambyte.persistence.entities.ReviewEntity;
-import exambyte.service.ReviewRepository;
+import exambyte.persistence.mapper.ReviewMapper;
+import exambyte.domain.repository.ReviewRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Repository
 public class ReviewRepositoryImpl implements ReviewRepository {
 
+    private final ReviewMapper reviewMapper = new ReviewMapper();
     private final SpringDataReviewRepository springDataReviewRepository;
 
     public ReviewRepositoryImpl(SpringDataReviewRepository springDataReviewRepository) {
@@ -17,8 +20,14 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public Optional<ReviewEntity> findByFachId(UUID fachId) { return springDataReviewRepository.findByFachId(fachId); }
+    public Optional<Review> findByFachId(UUID fachId) {
+        Optional<ReviewEntity> entity = springDataReviewRepository.findByFachId(fachId);
+        return entity.map(ReviewMapper::toDomain);
+    }
 
     @Override
-    public void save(ReviewEntity reviewEntity) { springDataReviewRepository.save(reviewEntity); }
+    public void save(Review review) {
+        ReviewEntity entity = reviewMapper.toEntity(review);
+        springDataReviewRepository.save(entity);
+    }
 }

@@ -5,7 +5,7 @@ import exambyte.persistence.entities.KorrektorEntity;
 
 public class KorrektorMapper {
 
-    public Korrektor toDomain(KorrektorEntity korrektorEntity) {
+    public static Korrektor toDomain(KorrektorEntity korrektorEntity) {
         return new Korrektor.KorrektorBuilder()
                 .id(null)
                 .fachId(korrektorEntity.getFachId())

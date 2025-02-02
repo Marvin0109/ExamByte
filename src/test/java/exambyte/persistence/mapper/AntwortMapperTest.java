@@ -66,10 +66,8 @@ public class AntwortMapperTest {
                 .lastChangesZeitpunkt(lastChangesZeit)
                 .build();
 
-        AntwortMapper antwortMapper = new AntwortMapper();
-
         // Act
-        Antwort antwort = antwortMapper.toDomain(antwortEntity);
+        Antwort antwort = AntwortMapper.toDomain(antwortEntity);
 
         // Assert
         assertThat(antwort).isNotNull();

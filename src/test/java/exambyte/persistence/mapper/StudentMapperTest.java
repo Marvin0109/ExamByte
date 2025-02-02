@@ -37,7 +37,6 @@ public class StudentMapperTest {
     @DisplayName("StudentMapper test 'toDomain'")
     public void test_02() {
         // Arrange
-        StudentMapper studentMapper = new StudentMapper();
         StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
                 .id(null)
                 .fachId(null)
@@ -45,7 +44,7 @@ public class StudentMapperTest {
                 .build();
 
         // Act
-        Student student = studentMapper.toDomain(studentEntity);
+        Student student = StudentMapper.toDomain(studentEntity);
         UUID studentFachId = student.uuid();
         String studentName = student.getName();
 

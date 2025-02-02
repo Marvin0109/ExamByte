@@ -5,7 +5,7 @@ import exambyte.persistence.entities.StudentEntity;
 
 public class StudentMapper {
 
-    public Student toDomain(StudentEntity studentEntity) {
+    public static Student toDomain(StudentEntity studentEntity) {
         return new Student.StudentBuilder()
                 .id(null)
                 .fachId(studentEntity.getFachId())
