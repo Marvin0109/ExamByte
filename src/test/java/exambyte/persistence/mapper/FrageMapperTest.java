@@ -3,7 +3,7 @@ package exambyte.persistence.mapper;
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.persistence.repository.FrageRepositoryImpl;
+import exambyte.persistence.repository.impl.FrageRepositoryImpl;
 import exambyte.persistence.repository.SpringDataExamRepository;
 import exambyte.persistence.repository.SpringDataFrageRepository;
 import exambyte.persistence.repository.SpringDataProfessorRepository;

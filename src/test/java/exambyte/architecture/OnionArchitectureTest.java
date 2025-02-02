@@ -7,13 +7,8 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.library.Architectures;
-import com.tngtech.archunit.library.GeneralCodingRules;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 
 /**
  * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
@@ -24,7 +19,7 @@ import static com.tngtech.archunit.library.Architectures.onionArchitecture;
  * (außerhalb von Testklassen) verwendet wird.
  */
 @AnalyzeClasses(packages = "exambyte")
-public class OnionArchitectureExam {
+public class OnionArchitectureTest {
 
     /**
      * Enthält die importierten Java-Klassen aus dem angegebenen Paket "exambyte".
@@ -48,7 +43,10 @@ public class OnionArchitectureExam {
                 .applicationServices("exambyte.application.service..")
                 .adapter("web", "exambyte.web..")
                 .adapter("persistence", "exambyte.persistence..")
-                .adapter("configuration", "exambyte.domain.config..", "exambyte.persistence.config..");
+                .adapter("configuration", "exambyte.domain.config..")
+                .adapter("service", "exambyte.service..")
+                .adapter("repositoryImpl", "exambyte.persistence.repository.impl..")
+                .adapter("serviceRepositoryApi", "exambyte.service.repository.api..");
         rule.check(klassen);
     }
 

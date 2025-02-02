@@ -1,7 +1,8 @@
-package exambyte.persistence.repository;
+package exambyte.persistence.repository.impl;
 
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.service.ProfessorRepository;
+import exambyte.persistence.repository.SpringDataProfessorRepository;
+import exambyte.service.repository.api.ProfessorRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

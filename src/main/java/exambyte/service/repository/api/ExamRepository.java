@@ -1,4 +1,4 @@
-package exambyte.service;
+package exambyte.service.repository.api;
 
 import exambyte.persistence.entities.ExamEntity;
 
