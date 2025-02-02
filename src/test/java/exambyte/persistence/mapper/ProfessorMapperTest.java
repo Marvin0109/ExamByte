@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.byLessThan;
 
 public class ProfessorMapperTest {
 
@@ -16,7 +17,11 @@ public class ProfessorMapperTest {
     public void test_01() {
         // Arrange
         ProfessorMapper profMapper = new ProfessorMapper();
-        Professor professor = Professor.of(null, null, "Dr. Scalper");
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. Scalper")
+                .build();
 
         // Act
         ProfessorEntity professorEntity = profMapper.toEntity(professor);
@@ -34,7 +39,11 @@ public class ProfessorMapperTest {
     public void test_02() {
         // Arrange
         ProfessorMapper profMapper = new ProfessorMapper();
-        ProfessorEntity professorEntity = new ProfessorEntity(null, null, "Dr. J");
+        ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. J")
+                .build();
 
         // Act
         Professor professor = profMapper.toDomain(professorEntity);

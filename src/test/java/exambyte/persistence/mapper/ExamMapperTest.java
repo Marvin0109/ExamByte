@@ -19,13 +19,25 @@ public class ExamMapperTest {
     public void test_01() {
         // Arrange
         ExamMapper examMapper = new ExamMapper();
-        Professor professor = Professor.of(null, null, "Dr. Scalper");
+    Professor professor = new Professor.ProfessorBuilder()
+            .id(null)
+            .fachId(null)
+            .name("Dr. Scalper")
+            .build();
 
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
         LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
-        Exam exam = Exam.of(null, null, "Test 1", professor.uuid(),
-                startTime, endTime, resultTime);
+
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professor.uuid())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
 
         // Act
         ExamEntity examEntity = examMapper.toEntity(exam);
@@ -48,16 +60,24 @@ public class ExamMapperTest {
     public void test_02() {
         // Arrange
         ExamMapper examMapper = new ExamMapper();
-        ProfessorEntity professorEntity = new ProfessorEntity(null, null, "Dr. F");
+        ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. F")
+                .build();
+
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
         LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
-        ExamEntity examEntity = new ExamEntity(
-                null,
-                null,
-                "Test 2",
-                professorEntity.getFachId(),
-                startTime, endTime, resultTime);
+        ExamEntity examEntity = new ExamEntity.ExamEntityBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 2")
+                .professorFachId(professorEntity.getFachId())
+                .startZeitpunkt(startTime)
+                .endZeitpunkt(endTime)
+                .resultZeitpunkt(resultTime)
+                .build();
 
         // Act
         Exam exam = examMapper.toDomain(examEntity);

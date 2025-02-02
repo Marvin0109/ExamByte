@@ -33,7 +33,14 @@ public class FrageMapperTest {
 
         UUID profFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
-        Frage frage = Frage.of(null, null, "Fragetext", 5, profFachId, examFachId);
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("Fragetext")
+                .maxPunkte(5)
+                .professorUUID(profFachId)
+                .examUUID(examFachId)
+                .build();
 
         // Act
         FrageEntity entity = frageMapper.toEntity(frage);
@@ -55,8 +62,20 @@ public class FrageMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID professorFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
-        FrageEntity frageEntity = new FrageEntity(null, fachId, "Fragetext", 5, professorFachId, examFachId);
-        ProfessorEntity mockProfessor = new ProfessorEntity(null, professorFachId, "Dr. Scalper");
+        FrageEntity frageEntity = new FrageEntity.FrageEntityBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("Fragetext")
+                .maxPunkte(5)
+                .professorFachId(professorFachId)
+                .examFachId(examFachId)
+                .build();
+
+        ProfessorEntity mockProfessor = new ProfessorEntity.ProfessorEntityBuilder()
+                .id(null)
+                .fachId(professorFachId)
+                .name("Dr. Scalper")
+                .build();
 
         when(mockFrageRepository.findByProfFachId(professorFachId)).thenReturn(mockProfessor);
 

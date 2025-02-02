@@ -16,7 +16,11 @@ public class StudentMapperTest {
     public void test_01() {
         // Arrange
         StudentMapper studentMapper = new StudentMapper();
-        Student student = Student.of(null, null, "Jim Bim");
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Jim Bim")
+                .build();
 
         // Act
         StudentEntity studentEntity = studentMapper.toEntity(student);
@@ -34,7 +38,11 @@ public class StudentMapperTest {
     public void test_02() {
         // Arrange
         StudentMapper studentMapper = new StudentMapper();
-        StudentEntity studentEntity = new StudentEntity(null, null, "John Tectone");
+        StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
+                .id(null)
+                .fachId(null)
+                .name("John Tectone")
+                .build();
 
         // Act
         Student student = studentMapper.toDomain(studentEntity);

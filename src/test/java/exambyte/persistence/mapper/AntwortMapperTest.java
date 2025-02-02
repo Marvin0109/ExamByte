@@ -19,14 +19,17 @@ public class AntwortMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
-        Antwort antwort = Antwort.of(
-                null,
-                fachId,
-                "Antworttext",
-                frageFachId,
-                studentFachId,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+        LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
+        LocalDateTime lastChangesZeit = LocalDateTime.of(2025, 1, 1, 12, 5);
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(fachId)
+                .antwortText("AntwortText")
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwortZeit)
+                .lastChangesZeitpunkt(lastChangesZeit)
+                .build();
 
         AntwortMapper antwortMapper = new AntwortMapper();
 
@@ -50,14 +53,18 @@ public class AntwortMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
-        AntwortEntity antwortEntity = new AntwortEntity(
-                null,
-                fachId,
-                "Antworttext",
-                frageFachId,
-                studentFachId,
-                LocalDateTime.now(),
-                LocalDateTime.now());
+        LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
+        LocalDateTime lastChangesZeit = LocalDateTime.of(2025, 1, 1, 12, 5);
+
+        AntwortEntity antwortEntity = new AntwortEntity.AntwortEntityBuilder()
+                .id(null)
+                .fachId(fachId)
+                .antwortText("AntwortText")
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwortZeit)
+                .lastChangesZeitpunkt(lastChangesZeit)
+                .build();
 
         AntwortMapper antwortMapper = new AntwortMapper();
 

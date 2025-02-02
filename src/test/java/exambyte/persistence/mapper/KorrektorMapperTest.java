@@ -16,7 +16,11 @@ public class KorrektorMapperTest {
     public void test_01() {
         // Arrange
         KorrektorMapper korrektorMapper = new KorrektorMapper();
-        Korrektor korrektor = Korrektor.of(null, null, "Korrektor1");
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Korrektor1")
+                .build();
 
         // Act
         KorrektorEntity korrektorEntity = korrektorMapper.toEntity(korrektor);
@@ -34,7 +38,11 @@ public class KorrektorMapperTest {
     public void test_02() {
         // Arrange
         KorrektorMapper korrektorMapper = new KorrektorMapper();
-        KorrektorEntity korrektorEntity = new KorrektorEntity(null, null, "Korrektor2");
+        KorrektorEntity korrektorEntity = new KorrektorEntity.KorrektorEntityBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Korrektor2")
+                .build();
 
         // Act
         Korrektor korrektor = korrektorMapper.toDomain(korrektorEntity);
