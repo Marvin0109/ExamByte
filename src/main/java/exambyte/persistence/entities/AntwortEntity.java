@@ -31,7 +31,7 @@ public class AntwortEntity {
     @Column("last_changes_zeitpunkt")
     private LocalDateTime lastChangesZeitpunkt;
 
-    public AntwortEntity(Long id, UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId,
+    private AntwortEntity(Long id, UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId,
                          LocalDateTime antwortZeitpunkt, LocalDateTime lastChangesZeitpunkt) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
@@ -81,5 +81,57 @@ public class AntwortEntity {
     public void updateAntwortText(String newAntwortText) {
         this.antwortText = newAntwortText;
         this.lastChangesZeitpunkt = LocalDateTime.now();
+    }
+
+    public static class AntwortEntityBuilder {
+        private Long id;
+        private UUID fachId;
+        private UUID frageFachId;
+        private String antwortText;
+        private UUID studentFachId;
+        private LocalDateTime antwortZeitpunkt;
+        private LocalDateTime lastChangesZeitpunkt;
+
+        public AntwortEntityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public AntwortEntityBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public AntwortEntityBuilder frageFachId(UUID frageFachId) {
+            this.frageFachId = frageFachId;
+            return this;
+        }
+
+        public AntwortEntityBuilder studentFachId(UUID studentFachId) {
+            this.studentFachId = studentFachId;
+            return this;
+        }
+
+        public AntwortEntityBuilder antwortText(String antwortText) {
+            this.antwortText = antwortText;
+            return this;
+        }
+
+        public AntwortEntityBuilder antwortZeitpunkt(LocalDateTime antwortZeitpunkt) {
+            this.antwortZeitpunkt = antwortZeitpunkt;
+            return this;
+        }
+
+        public AntwortEntityBuilder lastChangesZeitpunkt(LocalDateTime lastChangesZeitpunkt) {
+            this.lastChangesZeitpunkt = lastChangesZeitpunkt;
+            return this;
+        }
+
+        public AntwortEntity build() {
+            if (antwortText == null || frageFachId == null || studentFachId == null) {
+                throw new IllegalStateException("Alle erforderlichen Felder müssen gesetzt werden (exklusive der Id).");
+            }
+            return new AntwortEntity(id, fachId, antwortText, frageFachId, studentFachId, antwortZeitpunkt, lastChangesZeitpunkt);
+        }
     }
 }

@@ -18,7 +18,7 @@ public class KorrektorEntity {
     @Column("name")
     private final String name;
 
-    public KorrektorEntity(Long id, UUID fachId, String name) {
+    private KorrektorEntity(Long id, UUID fachId, String name) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.name = name;
         this.id = id;
@@ -34,5 +34,33 @@ public class KorrektorEntity {
 
     public String getName() {
         return name;
+    }
+
+    public static class KorrektorEntityBuilder {
+        private Long id;
+        private UUID fachId;
+        private String name;
+
+        public KorrektorEntityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public KorrektorEntityBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public KorrektorEntityBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public KorrektorEntity build() {
+            if (name == null || name.isEmpty() ) {
+                throw new IllegalArgumentException("Name darf nicht null oder leer sein.");
+            }
+            return new KorrektorEntity(id, fachId, name);
+        }
     }
 }

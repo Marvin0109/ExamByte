@@ -28,7 +28,7 @@ public class FrageEntity {
     @Column("max_punkte")
     private int maxPunkte;
 
-    public FrageEntity(Long id, UUID fachId, String frageText, int maxPunkte, UUID professorFachId, UUID examFachId) {
+    private FrageEntity(Long id, UUID fachId, String frageText, int maxPunkte, UUID professorFachId, UUID examFachId) {
         this.id = id;
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.frageText = frageText;
@@ -67,5 +67,51 @@ public class FrageEntity {
 
     public UUID getExamFachId() {
         return examFachId;
+    }
+
+    public static class FrageEntityBuilder {
+        private Long id;
+        private UUID fachId;
+        private String frageText;
+        private int maxPunkte;
+        private UUID professorFachId;
+        private UUID examFachId;
+
+        public FrageEntityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public FrageEntityBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public FrageEntityBuilder frageText(String frageText) {
+            this.frageText = frageText;
+            return this;
+        }
+
+        public FrageEntityBuilder maxPunkte(int maxPunkte) {
+            this.maxPunkte = maxPunkte;
+            return this;
+        }
+
+        public FrageEntityBuilder professorFachId(UUID professorFachId) {
+            this.professorFachId = professorFachId;
+            return this;
+        }
+
+        public FrageEntityBuilder examFachId(UUID examFachId) {
+            this.examFachId = examFachId;
+            return this;
+        }
+
+        public FrageEntity build() {
+            if (frageText == null || maxPunkte <= 0 || professorFachId == null || examFachId == null) {
+                throw new IllegalStateException("Alle Felder müssen gesetzt werden (außer die Id).");
+            }
+            return new FrageEntity(id, fachId, frageText, maxPunkte, professorFachId, examFachId);
+        }
     }
 }

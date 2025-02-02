@@ -18,7 +18,7 @@ public class ProfessorEntity {
     @Column("name")
     private final String name;
 
-    public ProfessorEntity(Long id, UUID fachId, String name) {
+    private ProfessorEntity(Long id, UUID fachId, String name) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.name = name;
@@ -34,6 +34,34 @@ public class ProfessorEntity {
 
     public String getName() {
         return name;
+    }
+
+    public static class ProfessorEntityBuilder {
+        private Long id;
+        private UUID fachId;
+        private String name;
+
+        public ProfessorEntityBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ProfessorEntityBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public ProfessorEntityBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ProfessorEntity build() {
+            if (name == null || name.isEmpty()) {
+                throw new IllegalArgumentException("Name darf nicht null oder leer sein.");
+            }
+            return new ProfessorEntity(id, fachId, name);
+        }
     }
 }
 
