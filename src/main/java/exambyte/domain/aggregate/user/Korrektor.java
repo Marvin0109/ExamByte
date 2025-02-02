@@ -1,7 +1,5 @@
 package exambyte.domain.aggregate.user;
 
-import org.springframework.data.annotation.Id;
-
 import java.util.UUID;
 
 public class Korrektor implements Person {
@@ -12,13 +10,8 @@ public class Korrektor implements Person {
 
     private Korrektor(Long id, UUID fachId, String name) {
         this.id = id;
-        this.fachId = fachId;
+        this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.name = name;
-    }
-
-    // Factory Methode
-    public static Korrektor of(Long id, UUID fachId, String name) {
-        return new Korrektor(id, fachId != null ? fachId : UUID.randomUUID(), name);
     }
 
     @Override
@@ -32,5 +25,30 @@ public class Korrektor implements Person {
     @Override
     public String getName() {
         return name;
+    }
+
+    public static class KorrektorBuilder {
+        private Long id;
+        private UUID fachId;
+        private String name;
+
+        public KorrektorBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public KorrektorBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public KorrektorBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Korrektor build() {
+            return new Korrektor(id, fachId, name);
+        }
     }
 }

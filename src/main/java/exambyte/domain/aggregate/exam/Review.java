@@ -13,16 +13,11 @@ public class Review {
 
     private Review(Long id, UUID fachId, UUID antwortFachId, UUID korrektorId, String bewertung, int punkte) {
         this.id = id;
-        this.fachId = fachId;
+        this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.antwortFachId = antwortFachId;
         this.korrektorId = korrektorId;
         this.bewertung = bewertung;
         this.punkte = punkte;
-    }
-
-    // Factory Methode
-    public static Review of(Long id, UUID fachId, UUID antwortFachId, UUID korrektorId, String bewertung, int punkte) {
-        return new Review(id, fachId != null ? fachId : UUID.randomUUID(), antwortFachId, korrektorId, bewertung, punkte);
     }
 
     public Long getId() {
@@ -55,5 +50,48 @@ public class Review {
 
     public void setPunkte(int punkte) {
         this.punkte = punkte;
+    }
+
+    public static class ReviewBuilder {
+        private Long id;
+        private UUID fachId;
+        private UUID antwortFachId;
+        private UUID korrektorId;
+        private String bewertung;
+        private int punkte;
+
+        public ReviewBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public ReviewBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public ReviewBuilder antwortFachId(UUID antwortFachId) {
+            this.antwortFachId = antwortFachId;
+            return this;
+        }
+
+        public ReviewBuilder korrektorId(UUID korrektorId) {
+            this.korrektorId = korrektorId;
+            return this;
+        }
+
+        public ReviewBuilder bewertung(String bewertung) {
+            this.bewertung = bewertung;
+            return this;
+        }
+
+        public ReviewBuilder punkte(int punkte) {
+            this.punkte = punkte;
+            return this;
+        }
+
+        public Review build() {
+            return new Review(id, fachId, antwortFachId, korrektorId, bewertung, punkte);
+        }
     }
 }

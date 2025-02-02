@@ -12,17 +12,12 @@ public class Frage {
     private final UUID examUUID;
 
     private Frage(Long id, UUID fachId,String frageText, int maxPunkte, UUID professorUUID, UUID examUUID) {
-        this.fachId = fachId;
+        this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
         this.professorUUID = professorUUID;
         this.examUUID = examUUID;
-    }
-
-    // Factory Methode
-    public static Frage of(Long id, UUID fachId, String frageText, int maxPunkte, UUID professorUUID, UUID testUUID) {
-        return new Frage(id, fachId != null ? fachId : UUID.randomUUID(), frageText, maxPunkte, professorUUID, testUUID);
     }
 
     public UUID getProfessorUUID() {
@@ -51,5 +46,48 @@ public class Frage {
 
     public void setMaxPunkte(int maxPunkte) {
         this.maxPunkte = maxPunkte;
+    }
+
+    public static class FrageBuilder {
+        private Long id;
+        private UUID fachId;
+        private String frageText;
+        private int maxPunkte;
+        private UUID professorUUID;
+        private UUID examUUID;
+
+        public FrageBuilder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public FrageBuilder fachId(UUID fachId) {
+            this.fachId = fachId;
+            return this;
+        }
+
+        public FrageBuilder frageText(String frageText) {
+            this.frageText = frageText;
+            return this;
+        }
+
+        public FrageBuilder maxPunkte(int maxPunkte) {
+            this.maxPunkte = maxPunkte;
+            return this;
+        }
+
+        public FrageBuilder professorUUID(UUID professorUUID) {
+            this.professorUUID = professorUUID;
+            return this;
+        }
+
+        public FrageBuilder examUUID(UUID examUUID) {
+            this.examUUID = examUUID;
+            return this;
+        }
+
+        public Frage build() {
+            return new Frage(id, fachId, frageText, maxPunkte, professorUUID, examUUID);
+        }
     }
 }
