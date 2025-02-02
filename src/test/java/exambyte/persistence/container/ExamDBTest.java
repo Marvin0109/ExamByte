@@ -10,8 +10,7 @@ import exambyte.domain.aggregate.user.Student;
 import exambyte.persistence.entities.*;
 import exambyte.persistence.mapper.*;
 import exambyte.persistence.repository.*;
-import exambyte.persistence.repository.impl.*;
-import exambyte.service.repository.api.*;
+import exambyte.service.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,7 +76,7 @@ public class ExamDBTest {
         ProfessorMapper profMapper = new ProfessorMapper();
         KorrektorMapper korrektorMapper = new KorrektorMapper();
         StudentMapper studentMapper = new StudentMapper();
-        FrageMapper frageMapper = new FrageMapper((FrageRepositoryImpl) frageRepository);
+        FrageMapper frageMapper = new FrageMapper();
         AntwortMapper antwortMapper = new AntwortMapper();
         ExamMapper examMapper = new ExamMapper();
         ReviewMapper reviewMapper = new ReviewMapper();

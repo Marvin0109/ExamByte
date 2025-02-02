@@ -1,8 +1,7 @@
-package exambyte.persistence.repository.impl;
+package exambyte.persistence.repository;
 
 import exambyte.persistence.entities.AntwortEntity;
-import exambyte.persistence.repository.SpringDataAntwortRepository;
-import exambyte.service.repository.api.AntwortRepository;
+import exambyte.service.AntwortRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -18,7 +17,7 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     }
 
     @Override
-    public Optional<AntwortEntity> findByFachId(UUID id) {
+    public Optional<Antwort> findByFachId(UUID id) {
         return springDataAntwortRepository.findByFachId(id);
     }
 

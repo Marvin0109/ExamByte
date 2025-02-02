@@ -1,8 +1,7 @@
-package exambyte.persistence.repository.impl;
+package exambyte.persistence.repository;
 
 import exambyte.persistence.entities.KorrektorEntity;
-import exambyte.persistence.repository.SpringDataKorrektorRepository;
-import exambyte.service.repository.api.KorrektorRepository;
+import exambyte.service.KorrektorRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

@@ -1,12 +1,9 @@
-package exambyte.persistence.repository.impl;
+package exambyte.persistence.repository;
 
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
 import exambyte.persistence.entities.ExamEntity;
-import exambyte.persistence.repository.SpringDataExamRepository;
-import exambyte.persistence.repository.SpringDataFrageRepository;
-import exambyte.persistence.repository.SpringDataProfessorRepository;
-import exambyte.service.repository.api.FrageRepository;
+import exambyte.service.FrageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

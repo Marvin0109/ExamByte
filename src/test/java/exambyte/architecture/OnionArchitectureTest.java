@@ -45,8 +45,7 @@ public class OnionArchitectureTest {
                 .adapter("persistence", "exambyte.persistence..")
                 .adapter("configuration", "exambyte.domain.config..")
                 .adapter("service", "exambyte.service..")
-                .adapter("repositoryImpl", "exambyte.persistence.repository.impl..")
-                .adapter("serviceRepositoryApi", "exambyte.service.repository.api..");
+                .adapter("repository", "exambyte.persistence.repository..");
         rule.check(klassen);
     }
 

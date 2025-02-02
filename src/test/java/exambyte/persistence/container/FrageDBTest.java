@@ -10,12 +10,12 @@ import exambyte.persistence.mapper.ExamMapper;
 import exambyte.persistence.mapper.FrageMapper;
 import exambyte.persistence.mapper.ProfessorMapper;
 import exambyte.persistence.repository.*;
-import exambyte.persistence.repository.impl.ExamRepositoryImpl;
-import exambyte.persistence.repository.impl.FrageRepositoryImpl;
-import exambyte.persistence.repository.impl.ProfessorRepositoryImpl;
-import exambyte.service.repository.api.ExamRepository;
-import exambyte.service.repository.api.FrageRepository;
-import exambyte.service.repository.api.ProfessorRepository;
+import exambyte.persistence.repository.ExamRepositoryImpl;
+import exambyte.persistence.repository.FrageRepositoryImpl;
+import exambyte.persistence.repository.ProfessorRepositoryImpl;
+import exambyte.service.ExamRepository;
+import exambyte.service.FrageRepository;
+import exambyte.service.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -96,7 +96,7 @@ public class FrageDBTest {
                 .examUUID(exam.getFachId())
                 .build();
 
-        FrageMapper frageMapper = new FrageMapper((FrageRepositoryImpl) repository);
+        FrageMapper frageMapper = new FrageMapper();
         FrageEntity frageEntity = frageMapper.toEntity(frage);
 
         // Act
