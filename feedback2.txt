@@ -1,3 +1,25 @@
-Feedback2 hier:
+Hallo,
 
-...
+das Feedback bezieht auf die Version vom 01.02. und richtet sich an die Bewertungsgrundlagen, die euch auch zur Verfüugung stehen.
+
+Die Modellierung eurer Domain-Objekte als Aggregagte scheint sinnvoll zu sein.
+Da ihr keine wirklichen Anwendungsfälle implementiert habt, lässt sich das aber nicht mit Sicherheit sagen.
+
+Der Architekturtest schlägt bei euch fehl. Das liegt daran, dass ihr das Package "exambyte.service.." nicht als Service/Adapter aufgeführt habt.
+Darüber hinaus habt ihr die Onion-Architektur eingehalten.
+
+Entsprechend des Schnittes eurer Aggregate habt ihr die Datenbank-Implementation mit DIP und Mapper gut umgesetzt.
+Die Tests hierzu sind sinnig, allerdings würdet ihr im Arrange-Schritt vom Builder-Pattern profitieren, vorallem wenn ihr weitere Tests hinzufügen wollt, da die Konstruktion eurer Objekte aufwendig ist.
+
+Die Authentifikation und Autorisierung mit Github oAuth stimmt und ist auch ausreichend getestet.
+
+Es ist sehr löblich, dass ihr einen Styleguide formuliert habt und euch auch daran gehalten habt.
+Mir gefällt auch, dass ihr euch eine To-Do-Liste überlegt habt.
+
+Was euch fehlt ist Umsetzung der Funktionalität, d.h. der eigentliche Betrieb der Anwendung und eine Dokumentation.
+Ich würde euch empfehlen, noch eine kurze Dokumentation zu verfassen, um dann darauf aufbauend mindestens einen Anwednungsfall vertikal umzusetzen.
+Hierfür bietet eurer Projekt eine solide Grundlage.
+
+Bei Fragen schreibt mir gerne auf rocketchat: romah100.
+
+Viel Erfolg! :)
