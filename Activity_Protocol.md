@@ -107,3 +107,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Vollständige Datenbank-Logik
 - Integrationstest + Unit Tests erstellt und laufen lassen
 - README Inhalt zu Activity_Protocol verschoben
+
+02.02.2025
+- Onion Architektur + Test
+- Bisschen toten Code wegschmeissen
+- Neue packages
+- Builder Pattern für Objekte
