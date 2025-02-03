@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface SpringDataFrageRepository extends CrudRepository<FrageEntity, Long> {
 
+    Collection<FrageEntity> findByExamFachId(UUID examFachId);
+
     Collection<FrageEntity> findAll();
 
     Optional<FrageEntity> findByFachId(UUID id);

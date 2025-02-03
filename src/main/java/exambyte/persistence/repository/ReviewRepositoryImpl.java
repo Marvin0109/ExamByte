@@ -30,4 +30,17 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         ReviewEntity entity = reviewMapper.toEntity(review);
         springDataReviewRepository.save(entity);
     }
+
+    @Override
+    public Review findByAntwortFachId(UUID fachId) {
+        Optional<ReviewEntity> entity = springDataReviewRepository.findByAntwortFachId(fachId);
+        return entity.map(reviewEntity -> new Review.ReviewBuilder()
+                .id(null)
+                .fachId(reviewEntity.getFachId())
+                .antwortFachId(reviewEntity.getAntwortFachId())
+                .korrektorFachId(reviewEntity.getKorrektorFachId())
+                .bewertung(reviewEntity.getBewertung())
+                .punkte(reviewEntity.getPunkte())
+                .build()).orElse(null);
+    }
 }

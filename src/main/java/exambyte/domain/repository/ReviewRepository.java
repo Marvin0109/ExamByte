@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface ReviewRepository {
 
+    Review findByAntwortFachId(UUID fachId);
+
     Optional<Review> findByFachId(UUID fachId);
 
     void save(Review review);

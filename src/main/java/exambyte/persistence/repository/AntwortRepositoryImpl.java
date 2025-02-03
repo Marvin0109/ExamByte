@@ -30,4 +30,19 @@ public class AntwortRepositoryImpl implements AntwortRepository {
         AntwortEntity antwortEntity = antwortMapper.toEntity(antwort);
         springDataAntwortRepository.save(antwortEntity);
     }
+
+    @Override
+    public Antwort findByFrageFachId(UUID id) {
+        Optional<AntwortEntity> entity = springDataAntwortRepository.findByFrageFachId(id);
+        return entity.map(antwortEntity -> new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(antwortEntity.getFachId())
+                .antwortText(antwortEntity.getAntwortText())
+                .frageFachId(antwortEntity.getFrageFachId())
+                .studentFachId(antwortEntity.getStudentFachId())
+                .antwortZeitpunkt(antwortEntity.getAntwortZeitpunkt())
+                .lastChangesZeitpunkt(antwortEntity.getLastChangesZeitpunkt())
+                .build()).orElse(null);
+
+    }
 }

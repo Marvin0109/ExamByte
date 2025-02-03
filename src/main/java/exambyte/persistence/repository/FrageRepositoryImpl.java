@@ -44,6 +44,13 @@ public class FrageRepositoryImpl implements FrageRepository {
         springDataFrageRepository.save(entity);
     }
 
+    @Override
+    public List<Frage> findByExamFachId(UUID examId) {
+        return springDataFrageRepository.findByExamFachId(examId).stream()
+                .map(FrageMapper::toDomain)
+                .toList();
+    }
+
     public ProfessorEntity findByProfFachId(UUID profFachId) {
         Optional<ProfessorEntity> existingProfessor = springDataProfessorRepository.findByFachId(profFachId);
 

@@ -18,12 +18,7 @@ public class FrageService {
     }
 
     public List<Frage> getFragenForExam(UUID examId) {
-        List<Frage> frageList = new ArrayList<>();
-        for (Frage frage : frageRepository.findAll()) {
-            if (frage.getExamUUID().equals(examId)) {
-                frageList.add(frage);
-            }
-        }
+        List<Frage> frageList = frageRepository.findByExamFachId(examId);
         if (frageList.isEmpty()) {
             throw new RuntimeException("Keine Fragen für das angegebene ExamId gefunden.");
         }

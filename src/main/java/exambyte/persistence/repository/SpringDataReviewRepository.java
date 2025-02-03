@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface SpringDataReviewRepository extends CrudRepository<ReviewEntity, Long> {
 
+    Optional<ReviewEntity> findByAntwortFachId(UUID id);
+
     Optional<ReviewEntity> findByFachId(UUID fachId);
 
     ReviewEntity save(ReviewEntity review);
