@@ -1,4 +1,4 @@
-<p style="text-align: center">
+<p align="center">
     <img src="src/main/resources/static/public/pictures/exambyteLogo.png" alt="ExamByte Logo" width="400">
 </p>
 
