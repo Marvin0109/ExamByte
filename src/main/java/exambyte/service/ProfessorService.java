@@ -24,4 +24,9 @@ public class ProfessorService {
         professorRepository.save(professor);
         return professor.uuid();
     }
+
+    public Professor getProfessorByName(String name) {
+        return professorRepository.findByName(name)
+                .orElseThrow(NichtVorhandenException::new);
+    }
 }

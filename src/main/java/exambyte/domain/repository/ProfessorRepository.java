@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public interface ProfessorRepository {
 
+    Optional<Professor> findByName(String name);
+
     Optional<Professor> findByFachId(UUID fachId);
 
     void save(Professor professor);

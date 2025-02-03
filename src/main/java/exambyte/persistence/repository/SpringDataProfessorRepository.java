@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface SpringDataProfessorRepository extends CrudRepository<ProfessorEntity, Long> {
 
+    Optional<ProfessorEntity> findByName(String name);
+
     Optional<ProfessorEntity> findByFachId(UUID fachId);
 
     ProfessorEntity save(ProfessorEntity professor);

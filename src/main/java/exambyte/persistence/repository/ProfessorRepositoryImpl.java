@@ -31,6 +31,12 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
         springDataProfessorRepository.save(entity);
     }
 
+    @Override
+    public Optional<Professor> findByName(String name) {
+        Optional<ProfessorEntity> entity = springDataProfessorRepository.findByName(name);
+        return entity.map(ProfessorMapper::toDomain);
+    }
+
     public ProfessorEntity findByProfFachId(UUID fachId) {
         Optional<Professor> professor = findByFachId(fachId);
 

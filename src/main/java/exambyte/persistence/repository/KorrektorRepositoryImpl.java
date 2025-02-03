@@ -5,6 +5,7 @@ import exambyte.persistence.entities.KorrektorEntity;
 import exambyte.persistence.mapper.KorrektorMapper;
 import exambyte.domain.repository.KorrektorRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +30,12 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
     public void save(Korrektor korrektor) {
         KorrektorEntity entity = korrektorMapper.toEntity(korrektor);
         springDataKorrektorRepository.save(entity);
+    }
+
+    @Override
+    public Optional<Korrektor> findByName(String name) {
+        Optional<KorrektorEntity> entity = springDataKorrektorRepository.findByName(name);
+        return entity.map(KorrektorMapper::toDomain);
     }
 
     public KorrektorEntity findByKorFachId(UUID fachId) {

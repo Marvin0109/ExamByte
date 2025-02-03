@@ -29,6 +29,11 @@ import java.util.Set;
 public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final DefaultOAuth2UserService defaultService = new DefaultOAuth2UserService();
+    private final UserCreationService userCreationService;
+
+    public AppUserService(UserCreationService userCreationService) {
+        this.userCreationService = userCreationService;
+    }
 
     /**
      * Lädt die Benutzerinformationen vom OAuth2-Provider und weist dem Benutzer, basierend auf seinem Login,
@@ -50,10 +55,24 @@ public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAut
 //        if ("Marvin0109".equals(originalUser.getAttribute("login"))) {
 //            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 //        }
-//        Wurde etwas geändert um es zu ermöglichen auch anderen Usern mit dessen GitHub Namen einzuloggen
+//        Wurde etwas geändert, um es zu ermöglichen auch anderen Usern mit dessen GitHub Namen einzuloggen
         String login = originalUser.getAttribute("login");
-        if ("Marvin0109".equals(login) || "muz70wuc".equals(login) || "IhrGitHubUsername".equals(login)) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        if (login != null) {
+            if ("Marvin0109".equals(login) || "muz70wuc".equals(login) || "IhrGitHubUsername".equals(login)) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
+
+            if ("IhrGitHubUsername".equals(login)) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
+            }
+
+            if ("IhrGitHubUsername".equals(login)) {
+                authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+            }
+
+            if (originalUser.getAttributes() != null && !originalUser.getAttributes().isEmpty()) {
+                userCreationService.createUser(originalUser, authorities);
+            }
         }
 
         return new DefaultOAuth2User(authorities, originalUser.getAttributes(), "id");

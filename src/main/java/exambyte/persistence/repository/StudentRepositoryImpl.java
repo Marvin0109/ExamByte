@@ -31,5 +31,9 @@ public class StudentRepositoryImpl implements StudentRepository {
         springDataStudentRepository.save(studentEntity);
     }
 
-
+    @Override
+    public Optional<Student> findByName(String name) {
+        Optional<StudentEntity> entity = springDataStudentRepository.findByName(name);
+        return entity.map(StudentMapper::toDomain);
+    }
 }

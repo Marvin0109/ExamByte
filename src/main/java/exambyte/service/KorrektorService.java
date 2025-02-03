@@ -24,4 +24,9 @@ public class KorrektorService {
         korrektorRepository.save(korrektor);
         return korrektor.uuid();
     }
+
+    public Korrektor getKorrektorByName(String name) {
+        return korrektorRepository.findByName(name)
+                .orElseThrow(NichtVorhandenException::new);
+    }
 }

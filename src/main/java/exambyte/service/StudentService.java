@@ -24,4 +24,9 @@ public class StudentService {
         studentRepository.save(student);
         return student.uuid();
     }
+
+    public Student getStudentByName(String name) {
+        return studentRepository.findByName(name)
+                .orElseThrow(NichtVorhandenException::new);
+    }
 }
