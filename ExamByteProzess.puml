@@ -1,0 +1,26 @@
+@startuml
+actor Administrator
+actor Student
+actor Korrektor
+
+component Testfragen
+component Antworten
+component ExamByte
+component Bewertung
+component Ergebnis
+component Gesamtübersicht
+
+Administrator --> Testfragen : erstellt
+Student --> Testfragen : greift auf
+Student --> Antworten : erstellt
+ExamByte --> Antworten : bewertet MC-Antworten
+Korrektor --> Antworten : bewertet
+Korrektor --> Bewertung : erstellt
+ExamByte --> Bewertung : erstellt
+Bewertung --> ExamByte : entnommen von
+ExamByte --> Ergebnis : veröffentlicht
+Student --> Ergebnis : blickt ein
+Testfragen --> ExamByte : entnommen von
+ExamByte --> Gesamtübersicht : erstellt
+Administrator --> Gesamtübersicht : bekommt
+@enduml
