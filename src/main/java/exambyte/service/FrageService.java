@@ -1,0 +1,37 @@
+package exambyte.service;
+
+import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.repository.FrageRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class FrageService {
+
+    private final FrageRepository frageRepository;
+
+    public FrageService(FrageRepository frageRepository) {
+        this.frageRepository = frageRepository;
+    }
+
+    public List<Frage> getFragenForExam(UUID examId) {
+        List<Frage> frageList = new ArrayList<>();
+        for (Frage frage : frageRepository.findAll()) {
+            if (frage.getExamUUID().equals(examId)) {
+                frageList.add(frage);
+            }
+        }
+        if (frageList.isEmpty()) {
+            throw new RuntimeException("Keine Fragen für das angegebene ExamId gefunden.");
+        }
+        return frageList;
+    }
+
+    public UUID addFrage(Frage frage) {
+        frageRepository.save(frage);
+        return frage.getFachId();
+    }
+}

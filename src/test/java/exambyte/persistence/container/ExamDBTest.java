@@ -59,7 +59,7 @@ public class ExamDBTest {
     @BeforeEach
     public void setUp() {
         antwortRepository = new AntwortRepositoryImpl(antRepository);
-        frageRepository = new FrageRepositoryImpl(professorRepository, frRepository, eRepository);
+        frageRepository = new FrageRepositoryImpl(professorRepository, frRepository);
         profRepository = new ProfessorRepositoryImpl(professorRepository);
         studRepository = new StudentRepositoryImpl(studentRepository);
         examRepository = new ExamRepositoryImpl(eRepository);

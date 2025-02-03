@@ -45,7 +45,7 @@ public class FrageDBTest {
 
     @BeforeEach
     void setUp() {
-        repository = new FrageRepositoryImpl(professorRepository, frageRepository, examRepository);
+        repository = new FrageRepositoryImpl(professorRepository, frageRepository);
         repository2 = new ProfessorRepositoryImpl(professorRepository);
         repository3 = new ExamRepositoryImpl(examRepository);
     }

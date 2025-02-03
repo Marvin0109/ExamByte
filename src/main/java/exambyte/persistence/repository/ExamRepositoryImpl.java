@@ -6,6 +6,7 @@ import exambyte.persistence.mapper.ExamMapper;
 import exambyte.domain.repository.ExamRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,6 +18,14 @@ public class ExamRepositoryImpl implements ExamRepository {
 
     public ExamRepositoryImpl(SpringDataExamRepository testRepository) {
         this.testRepository = testRepository;
+    }
+
+    @Override
+    public Collection<Exam> findAll() {
+        return testRepository.findAll()
+                .stream()
+                .map(ExamMapper::toDomain)
+                .toList();
     }
 
     @Override
