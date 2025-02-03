@@ -66,13 +66,13 @@ Administrator:innen.
 | Kodierrichtlinien für Java | Java Format nach Google-Java-Format, geprüft mit Hilfe von in der IDE eingebautem Google-Java-Format Plugin                                                                                                           |
 | Sprache (DE vs EN)         | Benennung von Dingen (Komponenten, Schnittstellen) in Diagrammen und Texten innerhalb dieser (deutschen) arc42-Architekturdokumentation in Deutsch. Objekte wie Rollen in Java auf deutsch, alles andere auf Englisch |
 
-Alles weitere an Konventionen: [Styleguide hier](docs/STYLEGUIDE.md)
+Alles Weitere an Konventionen: [Styleguide hier](STYLEGUIDE.md)
 
 ## 3 Kontextabgrenzung
 
 ### 3.1 Fachlicher Kontext
 
-![Exam Process Diagram](src/main/resources/static/public/pictures/ExamByteProzess.png)
+![Exam Process Diagram](../src/main/resources/static/public/pictures/ExamByteProzess.png)
 
 *Abbildung 1: Diagramm des Prüfungsprozesses*
 
