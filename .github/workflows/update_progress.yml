@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'TO_DO.md'  # Trigger nur, wenn sich die TO_DO.md ändert
+      - '../../docs/TO_DO.md'  # Trigger nur, wenn sich die TO_DO.md ändert
 
 jobs:
   update-progress:
