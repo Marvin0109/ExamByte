@@ -32,13 +32,13 @@
   - [ ] **Formularvalidierung**: Clientseitige Validierung (Pflichtfelder, Datentypen etc.).
 
 - **Dokumentation**
-  - [ ] **Arc42 Dokumentation**: Architektur-Dokumentation (Grundstruktur vorhanden, muss ergänzt werden).
+  - [x] **Arc42 Dokumentation**: Architektur-Dokumentation (Grundstruktur vorhanden, muss ergänzt werden).
   - [ ] **Code-Dokumentation**: Kommentare und JavaDoc für alle zentralen Klassen.
 
 ---
 
 ### Priorität: Mittel
-- [ ] **Java-Konventionen**: Sicherstellen, dass der Code durchgehend den Konventionen entspricht (Checkstyle verwenden).
+- [x] **Java-Konventionen**: Sicherstellen, dass der Code durchgehend den Konventionen entspricht (Checkstyle verwenden). (s. arc42 Konventionen)
 - [ ] **Unit-Tests für Logik**: Tests für zentrale Logik-Komponenten (z. B. Punktberechnung bei Tests).
 - [ ] **UI-Design verbessern**: Ansprechenderes Design (z. B. Farbgebung, Usability).
 
