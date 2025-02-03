@@ -1,6 +1,7 @@
-package exambyte.domain.config;
+package exambyte.application.config;
 
-import exambyte.domain.service.AppUserService;
+import exambyte.application.service.AppUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,13 +26,15 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    private final AppUserService appUserService;
-
     /**
      * Konstruktor für die {@link SecurityConfig}, der den {@link AppUserService} injiziert.
      *
-     * @param appUserService Der benutzerdefinierte {@link AppUserService}, der zur Authentifizierung der Benutzer verwendet wird.
+     * @param userService Der benutzerdefinierte {@link AppUserService}, der zur Authentifizierung der Benutzer verwendet wird.
      */
+
+    private final AppUserService appUserService;
+
+    @Autowired
     public SecurityConfig(AppUserService appUserService) {
         this.appUserService = appUserService;
     }

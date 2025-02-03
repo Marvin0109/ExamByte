@@ -7,6 +7,7 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.library.Architectures;
+import exambyte.application.config.SecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,14 +44,14 @@ public class OnionArchitectureTest {
                 .applicationServices("exambyte.application.service..")
                 .adapter("web", "exambyte.web..")
                 .adapter("persistence", "exambyte.persistence..")
-                .adapter("configuration", "exambyte.domain.config..")
-                .adapter("service", "exambyte.service..")
-                .adapter("repository", "exambyte.persistence.repository..");
+                .adapter("service", "exambyte.service..", "exambyte.application.service..", "exambyte.domain.service..")
+                .adapter("repository", "exambyte.persistence.repository..")
+                .adapter("configuration", "exambyte.application.config..");
         rule.check(klassen);
     }
 
     /**
-     * Diese Regel stellt sicher, dass keine Produktionskonfigurationsklassen wie {@link exambyte.domain.config.SecurityConfig}
+     * Diese Regel stellt sicher, dass keine Produktionskonfigurationsklassen wie {@link SecurityConfig}
      * in Testklassen verwendet werden.
      * Hinweis: Der Exam funktioniert nicht, da wir noch die Config Klassen als Testhilfsmittel verwenden.
      */

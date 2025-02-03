@@ -1,7 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.ExamByteApplication;
-import exambyte.domain.config.MethodSecurityConfig;
+import exambyte.application.config.MethodSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

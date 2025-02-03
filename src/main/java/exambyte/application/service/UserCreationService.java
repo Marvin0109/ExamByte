@@ -1,4 +1,4 @@
-package exambyte.domain.service;
+package exambyte.application.service;
 
 import exambyte.domain.aggregate.user.Korrektor;
 import exambyte.domain.aggregate.user.Professor;
@@ -29,15 +29,21 @@ public class UserCreationService {
         this.professorService = professorService;
     }
 
+    public boolean checkStudent(String username) {
+        return studentService.getStudentByName(username) != null;
+    }
+
+    public boolean checkKorrektor(String username) {
+        return korrektorService.getKorrektorByName(username) != null;
+    }
+
+    public boolean checkProfessor(String username) {
+        return professorService.getProfessorByName(username) != null;
+    }
+
     @Transactional
     public void createUser(OAuth2User user, Set<GrantedAuthority> authorities) {
-        String name = user.getAttribute("name");
-
-        if (studentService.getStudentByName(name) != null
-                || korrektorService.getKorrektorByName(name) != null
-                || professorService.getProfessorByName(name) != null) {
-            return;
-        }
+        String name = user.getAttribute("login");
 
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             createProfessor(name);
