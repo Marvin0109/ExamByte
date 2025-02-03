@@ -113,3 +113,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Bisschen toten Code wegschmeissen
 - Neue packages
 - Builder Pattern für Objekte
+
+03.02.2025
+- Service Klassen hinzugefügt
+- arc42 Dokumentation
+- README erneuert
+- Onion schlägt fehl wegen Abhängigkeiten zwischen application.config und application.service
