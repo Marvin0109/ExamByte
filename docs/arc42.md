@@ -1,5 +1,14 @@
 # ExamByte - Architektur-Dokumentation (arc42)
 
+## Metainformationen
+
+- **Titel**: ExamByte - Architektur-Dokumentation (arc42)
+- **Autor(en)**: Marvin0109
+- **Version**: 1.0
+- **Erstellt am**: 03. Februar 2025
+- **Zielgruppen**: Entwickler, Architekten, Tester, Benutzer
+- **Verwendete Werkzeuge**: PlantUML
+
 ## 1. Einführung und Ziele
 
 ### 1.1 Aufgabenstellung
@@ -53,11 +62,96 @@ Administrator:innen.
 
 | Konvention                 | Erläuterung                                                                                                                                                                                                           |
 |----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Architekturdokumentation   | Terminologie und Gliederung nach dem deutschen arc42-Template in der Version 6.0                                                                                                                                      |
+| Architekturdokumentation   | Dieses Dokument stellt die Architektur der Software dar und befindet sich in der Version 1.0, welche die erste vollständige und stabile Version ist.                                                                  |
 | Kodierrichtlinien für Java | Java Format nach Google-Java-Format, geprüft mit Hilfe von in der IDE eingebautem Google-Java-Format Plugin                                                                                                           |
 | Sprache (DE vs EN)         | Benennung von Dingen (Komponenten, Schnittstellen) in Diagrammen und Texten innerhalb dieser (deutschen) arc42-Architekturdokumentation in Deutsch. Objekte wie Rollen in Java auf deutsch, alles andere auf Englisch |
+
+Alles weitere an Konventionen: [Styleguide hier](docs/STYLEGUIDE.md)
 
 ## 3 Kontextabgrenzung
 
 ### 3.1 Fachlicher Kontext
+
+![Exam Process Diagram](src/main/resources/static/public/pictures/ExamByteProzess.png)
+
+*Abbildung 1: Diagramm des Prüfungsprozesses*
+
+## 4 Lösungssicht
+
+### 4.1 Architekturübersicht
+
+Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
+
+- **Frontend:** Web-App für Studierende, Korrektor:innen und Administrator:innen
+- **Backend:** REST-API mit Spring Boot
+- **Datenbank:** PostgreSQL für Test- und Benutzerverwaltung
+
+### 4.2 Hauptkomponenten
+
+- **Benutzermanagement:** Rollenverwaltung, GitHub-Login
+- **Testverwaltung:** Erstellung, Bearbeitung und Veröffentlichung von Tests
+- **Bewertungssystem:** Automatische MC-Bewertung, manuelle Freitextbewertung
+- **Ergebnisanzeige:** Visualisierung der Testergebnisse für alle Beteiligten
+
+## 5 Bausteinsicht
+
+- **Controller-Schicht** (Spring MVC): Bearbeitung von Anfragen
+- **Service-Schicht:** Geschäftslogik und Validierung+
+- **Datenbank-Schicht:** Speicherung und Abruf von Daten
+
+## 6 Laufzeitsicht
+
+### 6.1 Erstellung eines Tests
+
+1. Administrator:innen (besser gesagt: Professor:innen) erstellen einen Test.
+2. Sie fügen Fragen hinzu mit Fragetext und entscheiden, ob es sich um eine MC-Frage oder Freitextaufgabe handelt.
+3. Sie setzen die relevanten Zeiten fest (Startzeit, Frist, Veröffentlichung der Ergebnisse).
+4. Am Ende erhalten Sie eine Übersicht in Form einer CSV-Datei.
+
+### 6.2 Testdurchführung
+
+1. Studierende melden sich mit GitHub an.
+2. Sie öffnen einen aktiven Test.
+3. Sie beantworten die Fragen.
+4. Nach Ablauf der Testzeit wird die Bearbeitung gesperrt.
+5. Der Zulassungsstatus ist immer einsehbar und wird aktualisiert.
+
+### 6.3 Bewertung eines Tests
+
+1. MC-Fragen werden automatisch bewertet.
+2. Freitextantworten werden Korrektor:innen zugewiesen.
+3. Korrektor:innen bewerten die Antworten und geben Feedback.
+
+### 6.4 Zulassungsstatus
+
+Nach einer bestimmten Anzahl an Tests (12 Tests) wird der Zulassungsstatus aktualisiert und gibt bekannt, ob die 
+Zulassung erreicht wurde oder nicht.
+
+## 7 Verteilungssicht
+
+- **Server:** Webserver mit Spring Boot Backend
+- **Datenbank:** PostgreSQL-Datenbank
+- **Frontend:** Browserbasierte Webanwendung
+
+## 8 Qualitätsszenarien
+
+| Qualitätsziel  | Beispiel                                             |
+|----------------|------------------------------------------------------|
+| Sicherheit     | Nur angemeldete Benutzer können Tests durchführen    |
+| Skalierbarkeit | Mehrere Studierende können parallel Tests bearbeiten |
+| Verfügbarkeit  | Server muss während Tests online sein                |
+
+## 9 Risiken und technische Schulden
+
+- **Mögliche Risiken:**
+  - Überlastung der Server bei hoher Nutzerzahl.
+  - Sicherheit von GitHub OAuth-Anmeldedaten.
+
+## 10 Glossar
+
+| Begriff             | Bedeutung                                                                                                                         |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| MC                  | Multiple-Choice                                                                                                                   |
+| Administrator:innen | Da es sich um eine Anwendung zwischen Studierende und Professoren handelt, ist hier der Administrator:in mit Professor:in gemeint |
+| OAuth               | Offenes Authentifizierungsprotokoll                                                                                               |
 

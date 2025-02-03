@@ -1,3 +1,5 @@
 @startuml
 testdot
 @enduml
+
+'Pls install graphviz if error says: error dot executable does not exist

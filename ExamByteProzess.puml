@@ -3,24 +3,22 @@ actor Administrator
 actor Student
 actor Korrektor
 
-component Testfragen
-component Antworten
+usecase Testfragen
 component ExamByte
-component Bewertung
-component Ergebnis
-component Gesamtübersicht
+usecase Bewertung
+usecase Ergebnis
+usecase Gesamtübersicht
+usecase Antworten
 
 Administrator --> Testfragen : erstellt
-Student --> Testfragen : greift auf
 Student --> Antworten : erstellt
 ExamByte --> Antworten : bewertet MC-Antworten
 Korrektor --> Antworten : bewertet
 Korrektor --> Bewertung : erstellt
 ExamByte --> Bewertung : erstellt
-Bewertung --> ExamByte : entnommen von
 ExamByte --> Ergebnis : veröffentlicht
-Student --> Ergebnis : blickt ein
-Testfragen --> ExamByte : entnommen von
+Student --> Ergebnis : kann einsehen
+Testfragen --> ExamByte : gespeichert in
 ExamByte --> Gesamtübersicht : erstellt
-Administrator --> Gesamtübersicht : bekommt
+Gesamtübersicht --> Administrator : wird angezeigt
 @enduml
