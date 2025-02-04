@@ -32,6 +32,15 @@
 
       </li>
 
+      <!-- Link für Korrektor -->
+      <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
+
+        <a class="nav-link" href="/exams/examsKorrektor">
+          Tests korrigieren
+        </a>
+
+      </li>
+
       <li class="nav-item" th:classappend="${currentPath == '/contact'} ? 'active' : ''">
         <a class="nav-link" href="/contact">
           Contact
