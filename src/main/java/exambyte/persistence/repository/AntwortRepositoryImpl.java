@@ -26,6 +26,13 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     }
 
     @Override
+    public Optional<Antwort> findByStudentFachIdAndFachId(UUID studentFachId, UUID fachId) {
+        Optional<AntwortEntity> entity = springDataAntwortRepository
+                .findByStudentFachIdAndFachId(studentFachId, fachId);
+        return entity.map(AntwortMapper::toDomain);
+    }
+
+    @Override
     public void save(Antwort antwort) {
         AntwortEntity antwortEntity = antwortMapper.toEntity(antwort);
         springDataAntwortRepository.save(antwortEntity);

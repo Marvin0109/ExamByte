@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface SpringDataAntwortRepository extends CrudRepository<AntwortEntity, Long> {
 
     Optional<AntwortEntity> findByFrageFachId(UUID id);
-
+    Optional<AntwortEntity> findByStudentFachIdAndFachId(UUID studentId, UUID examId);
     Optional<AntwortEntity> findByFachId(UUID id);
 
     AntwortEntity save(AntwortEntity entity);

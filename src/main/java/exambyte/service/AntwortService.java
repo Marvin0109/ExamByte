@@ -24,4 +24,9 @@ public class AntwortService {
         antwortRepository.save(antwort);
         return antwort.getFachId();
     }
+    public Antwort findByStudentAndExam(UUID studentId, UUID examId) {
+        return antwortRepository.findByStudentFachIdAndFachId(studentId, examId)
+                .orElse(null);
+    }
+
 }
