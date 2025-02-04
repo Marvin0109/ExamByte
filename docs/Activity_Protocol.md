@@ -119,3 +119,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - arc42 Dokumentation
 - README erneuert
 - Onion schlägt fehl wegen Abhängigkeiten zwischen application.config und application.service
+
+04.02.2025
+- vier ExamHTMLS erstellt
+- passende Tests zu den ExamHTMLS erstellt
+- zusätzliche methode zu den AntwortKlassen hinzugefügt
+- ExamController erstellt (hat noch Bedarf zur Korrektur wie HTMLS kek)

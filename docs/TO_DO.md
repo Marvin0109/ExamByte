@@ -10,8 +10,8 @@
   - [x] Grundlegende Projektstruktur (Backend und Frontend integriert)
 
 - **Begonnene, aber unvollständige Funktionen:**
-  - [ ] Datenspeicherung von Test-Antworten (Backend-Logik teilweise implementiert)
-  - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber ohne Funktionalität)
+  - [ ] Datenspeicherung von Test-Antworten (Backend-Logik teilweise implementiert) *BEDARF ZUR VERBESSERUNG*
+  - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber ohne Funktionalität) *BEDARF ZUR VERBESSERUNG*
   - [ ] Testauswertungsseiten (Frontend noch unvollständig, Backend fehlt)
   - [ ] Datenvalidierung (Nur für wenige Eingaben implementiert)
 
@@ -21,14 +21,14 @@
 
 ### Priorität: Hoch
 - **Backend**
-  - [ ] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung).
+  - [ ] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung). *muss noch überprüft werden*
   - [x] **Datenbank-Tests**: Integrationstests für die Datenbankanbindung schreiben.
   - [x] **Mapper-Tests**: Unit-Tests für die Mapper Klassen schreiben.
   - [ ] **API-Routen**: Routen für den Zugriff auf gespeicherte Testergebnisse und Testfragen erstellen.
 
 - **Frontend**
-  - [ ] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
-  - [ ] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
+  - [x] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
+  - [x] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
   - [ ] **Formularvalidierung**: Clientseitige Validierung (Pflichtfelder, Datentypen etc.).
 
 - **Dokumentation**
@@ -46,7 +46,7 @@
 
 ### Priorität: Niedrig
 - [ ] **Optimierung**: Performance der Datenbank-Queries verbessern (nur bei Bedarf).
-- [ ] **Fehlerseiten**: Benutzerfreundliche Fehlerseiten (z. B. 404, 500).
+- [x] **Fehlerseiten**: Benutzerfreundliche Fehlerseiten (z. B. 404, 500).
 - [ ] **Deployment-Scripts**: Automatisierung von Build- und Deployment-Prozessen (CI/CD-Pipeline).
 
 ---
