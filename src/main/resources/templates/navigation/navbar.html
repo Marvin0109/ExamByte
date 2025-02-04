@@ -14,11 +14,24 @@
           <span class="sr-only" th:if="${currentPath == '/'}">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/exams">
-          Tests
+
+      <!-- Link für Studenten -->
+      <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
+
+        <a class="nav-link" href="/exams/examsStudierende">
+          Tests bearbeiten
         </a>
+
       </li>
+      <!-- Link für Professoren -->
+      <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+
+        <a class="nav-link" href="/exams/examsProfessoren">
+          Tests Erstellen
+        </a>
+
+      </li>
+
       <li class="nav-item" th:classappend="${currentPath == '/contact'} ? 'active' : ''">
         <a class="nav-link" href="/contact">
           Contact
