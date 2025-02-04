@@ -2,7 +2,6 @@ package exambyte.web.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -57,20 +56,6 @@ public class WebController {
         return "login";
     }
 
-    /**
-     * Zeigt die Prüfungsseite an, aber nur für Benutzer mit der Rolle "ROLE_ADMIN".
-     * Der Zugriff wird durch die {@link Secured}-Annotation geschützt.
-     *
-     * @param model Das Model, um Daten an die View zu übergeben.
-     * @return Der Name der View für die Prüfungsseite.
-     */
-    @GetMapping("/exams")
-    @Secured("ROLE_ADMIN")
-    public String exams(Model model, OAuth2AuthenticationToken auth) {
-        System.out.println(auth);
-        System.out.println("Entered Exams");
-        return "exams";
-    }
 
     /**
      * Verhindert das Caching der Anwort.
