@@ -8,7 +8,7 @@
   <meta name="author" content="">
   <link rel="icon" href="public/pictures/exambyteIcon.ico">
 
-  <title>Tests Korrigieren</title>
+  <title>Tests Bearbeiten</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -27,11 +27,20 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-  <h1>Tests korrigieren</h1>
+  <div class="container mt-5">
+    <h1 th:text="${exam.title}">Test</h1>
 
-  <br>
+    <form th:action="@{/exams/submit}" method="post">
+      <input type="hidden" name="examId" th:value="${exam.fachId}">
 
+      <div class="form-group">
+        <label>Frage 1: Beispiel?</label>
+        <input type="text" name="antwort1" class="form-control">
+      </div>
 
+      <button type="submit" class="btn btn-success">Abschicken</button>
+    </form>
+  </div>
 
 </main>
 

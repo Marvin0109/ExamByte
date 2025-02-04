@@ -8,7 +8,7 @@
         <meta name="author" content="">
         <link rel="icon" href="public/pictures/exambyteIcon.ico">
 
-        <title>Tests</title>
+        <title>Tests Erstellen</title>
 
         <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -27,10 +27,37 @@
 
         <main role="main" class="container mt-5 pt-5">
 
-            <h1>Tests erstellen</h1>
-            <p>Zugriff nur für Organisatoren. </p>
+            <div class="container mt-5">
+                <h1>Tests Erstellen</h1>
+                <form th:action="@{/exams/create}" method="post">
+                    <!-- Titel des Tests -->
+                    <div class="form-group">
+                        <label for="title">Titel des Tests</label>
+                        <input type="text" class="form-control" id="title" name="title" required>
+                    </div>
 
-            <br>
+                    <!-- Startzeit -->
+                    <div class="form-group">
+                        <label for="startTime">Startzeit</label>
+                        <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
+                    </div>
+
+                    <!-- Endzeit -->
+                    <div class="form-group">
+                        <label for="endTime">Endzeit</label>
+                        <input type="datetime-local" class="form-control" id="endTime" name="endTime" required>
+                    </div>
+
+                    <!-- Ergebniszeit -->
+                    <div class="form-group">
+                        <label for="resultTime">Ergebniszeit</label>
+                        <input type="datetime-local" class="form-control" id="resultTime" name="resultTime" required>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Test erstellen</button>
+                </form>
+            </div>
 
 
 
