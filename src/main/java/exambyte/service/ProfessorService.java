@@ -20,13 +20,16 @@ public class ProfessorService {
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    public UUID saveProfessor(Professor professor) {
+    public void saveProfessor(Professor professor) {
         professorRepository.save(professor);
-        return professor.uuid();
     }
 
     public Professor getProfessorByName(String name) {
         return professorRepository.findByName(name)
                 .orElseThrow(NichtVorhandenException::new);
+    }
+
+    public UUID getProfessorFachId(String name) {
+        return professorRepository.getFachId(name);
     }
 }

@@ -11,5 +11,7 @@ public interface StudentRepository {
 
     Optional<Student> findByFachId(UUID fachId);
 
+    UUID getFachId(String name);
+
     void save(Student student);
 }

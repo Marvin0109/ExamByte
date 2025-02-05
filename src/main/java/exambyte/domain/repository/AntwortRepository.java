@@ -10,7 +10,8 @@ public interface AntwortRepository {
     Antwort findByFrageFachId(UUID id);
 
     Optional<Antwort> findByFachId(UUID id);
-    Optional<Antwort> findByStudentFachIdAndFachId(UUID studentFachId, UUID fachId);
+
+    Optional<Antwort> findByStudentFachIdAndFrageFachId(UUID studentFachId, UUID examFachId);
 
     void save(Antwort antwort);
 

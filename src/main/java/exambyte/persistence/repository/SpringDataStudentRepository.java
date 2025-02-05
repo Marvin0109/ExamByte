@@ -12,5 +12,7 @@ public interface SpringDataStudentRepository extends CrudRepository<StudentEntit
 
     Optional<StudentEntity> findByFachId(UUID fachId);
 
+    UUID getFachId(String name);
+
     StudentEntity save(StudentEntity student);
 }

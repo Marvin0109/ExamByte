@@ -36,4 +36,9 @@ public class StudentRepositoryImpl implements StudentRepository {
         Optional<StudentEntity> entity = springDataStudentRepository.findByName(name);
         return entity.map(StudentMapper::toDomain);
     }
+
+    @Override
+    public UUID getFachId(String name) {
+        return springDataStudentRepository.getFachId(name);
+    }
 }

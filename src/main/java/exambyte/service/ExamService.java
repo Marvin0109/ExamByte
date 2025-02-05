@@ -25,8 +25,7 @@ public class ExamService {
                 orElseThrow(NichtVorhandenException::new);
     }
 
-    public UUID addExam(Exam exam) {
+    public void addExam(Exam exam) {
         examRepository.save(exam);
-        return exam.getFachId();
     }
 }

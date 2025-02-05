@@ -20,12 +20,11 @@ public class AntwortService {
         return antwortRepository.findByFrageFachId(frageFachId);
     }
 
-    public UUID addAntwort(Antwort antwort) {
+    public void addAntwort(Antwort antwort) {
         antwortRepository.save(antwort);
-        return antwort.getFachId();
     }
-    public Antwort findByStudentAndExam(UUID studentId, UUID examId) {
-        return antwortRepository.findByStudentFachIdAndFachId(studentId, examId)
+    public Antwort findByStudentAndFrage(UUID studentId, UUID examId) {
+        return antwortRepository.findByStudentFachIdAndFrageFachId(studentId, examId)
                 .orElse(null);
     }
 

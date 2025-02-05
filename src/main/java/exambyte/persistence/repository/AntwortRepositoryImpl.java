@@ -26,9 +26,9 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     }
 
     @Override
-    public Optional<Antwort> findByStudentFachIdAndFachId(UUID studentFachId, UUID fachId) {
+    public Optional<Antwort> findByStudentFachIdAndFrageFachId(UUID studentFachId, UUID fachId) {
         Optional<AntwortEntity> entity = springDataAntwortRepository
-                .findByStudentFachIdAndFachId(studentFachId, fachId);
+                .findByStudentFachIdAndFrageFachId(studentFachId, fachId);
         return entity.map(AntwortMapper::toDomain);
     }
 

@@ -20,13 +20,16 @@ public class StudentService {
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    public UUID saveStudent(Student student) {
+    public void saveStudent(Student student) {
         studentRepository.save(student);
-        return student.uuid();
     }
 
     public Student getStudentByName(String name) {
         return studentRepository.findByName(name)
                 .orElseThrow(NichtVorhandenException::new);
+    }
+
+    public UUID getStudentFachId(String name) {
+        return studentRepository.getFachId(name);
     }
 }
