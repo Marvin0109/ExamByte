@@ -38,8 +38,8 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public UUID getFachId(String name) {
-        return springDataProfessorRepository.getFachId(name);
+    public UUID findFachIdByName(String name) {
+        return springDataProfessorRepository.findFachIdByName(name);
     }
 
     public ProfessorEntity findByProfFachId(UUID fachId) {

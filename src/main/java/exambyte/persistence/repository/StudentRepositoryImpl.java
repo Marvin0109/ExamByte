@@ -38,7 +38,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public UUID getFachId(String name) {
-        return springDataStudentRepository.getFachId(name);
+    public UUID findFachIdByName(String name) {
+        return springDataStudentRepository.findFachIdByName(name);
     }
 }
