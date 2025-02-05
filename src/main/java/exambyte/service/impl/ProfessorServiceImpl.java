@@ -1,7 +1,9 @@
-package exambyte.service;
+package exambyte.service.impl;
 
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.repository.ProfessorRepository;
+import exambyte.service.NichtVorhandenException;
+import exambyte.service.interfaces.ProfessorService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

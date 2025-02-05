@@ -1,7 +1,9 @@
-package exambyte.service;
+package exambyte.service.impl;
 
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
+import exambyte.service.interfaces.ExamService;
+import exambyte.service.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

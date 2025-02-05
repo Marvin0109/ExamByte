@@ -1,7 +1,9 @@
-package exambyte.service;
+package exambyte.service.impl;
 
 import exambyte.domain.aggregate.user.Korrektor;
 import exambyte.domain.repository.KorrektorRepository;
+import exambyte.service.interfaces.KorrektorService;
+import exambyte.service.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
