@@ -1,59 +1,60 @@
 package exambyte.web.controllers;
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.aggregate.exam.Exam;
-import exambyte.service.AntwortService;
-import exambyte.service.ExamService;
+import exambyte.domain.aggregate.exam.Frage;
+import exambyte.service.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-@RestController
+@Controller
 @RequestMapping("/api/exams")
 public class ExamController {
+
     private final ExamService examService;
     private final AntwortService antwortService;
+    private final ProfessorService professorService;
+    private final StudentService studentService;
+    private final FrageService frageService;
 
-    public ExamController(ExamService examService, AntwortService antwortService) {
+    public ExamController(ExamService examService, AntwortService antwortService, ProfessorService professorService, StudentService studentService, FrageService frageService) {
         this.examService = examService;
         this.antwortService = antwortService;
+        this.professorService = professorService;
+        this.studentService = studentService;
+        this.frageService = frageService;
     }
-
-    /**
-     * Zeigt die Prüfungsseite an, aber nur für Benutzer mit der Rolle "ROLE_ADMIN".
-     * Der Zugriff wird durch die {@link Secured}-Annotation geschützt.
-     *
-     * @param model Das Model, um Daten an die View zu übergeben.
-     * @return Der Name der View für die Prüfungsseite.
-    @GetMapping("/exams")
-    @Secured("ROLE_ADMIN")
-    public String exams(Model model, OAuth2AuthenticationToken auth) {
-        System.out.println(auth);
-        System.out.println("Entered Exams");
-
-        model.addAttribute("exams", examService.alleExams());
-        return "exams";
-    }*/
 
     @GetMapping("/create")
-    public String showCreateExamForm() {
+    @Secured("ROLE_ADMIN")
+    public String showCreateExamForm(Model model, OAuth2AuthenticationToken auth) {
+        OAuth2User user = auth.getPrincipal();
+        model.addAttribute("name", user.getAttribute("login"));
         return "exams/examsProfessoren";
     }
+
     @PostMapping("/create")
+    @Secured("ROLE_ADMIN")
     public String createExam(
             @RequestParam String title,
             @RequestParam LocalDateTime startTime,
             @RequestParam LocalDateTime endTime,
             @RequestParam LocalDateTime resultTime,
-            Model model) {
+            Model model, OAuth2AuthenticationToken auth) {
 
-        UUID professorFachId = UUID.randomUUID();
+        String name = auth.getPrincipal().getAttribute("login");
+        UUID professorFachId = professorService.getProfessorFachId(name);
 
         Exam newExam = new Exam.ExamBuilder()
-                .fachId(UUID.randomUUID())
+                .fachId(null)
                 .title(title)
                 .professorFachId(professorFachId)
                 .startTime(startTime)
@@ -68,55 +69,75 @@ public class ExamController {
     }
 
     @GetMapping("/list")
+    @Secured("ROLE_STUDENT")
     public String listExams(Model model) {
         model.addAttribute("exams", examService.alleExams());
         return "exams/examsStudierende";
     }
 
-    @GetMapping("/start/{id}")
-    public String startExam(@PathVariable UUID id, OAuth2AuthenticationToken auth, Model model) {
-        Exam exam = examService.getExam(id);
-        UUID studentId = UUID.fromString(auth.getPrincipal().getAttribute("sub"));
+    @GetMapping("/start/{examFachId}")
+    @Secured("ROLE_STUDENT")
+    public String startExam(@PathVariable UUID examFachId, OAuth2AuthenticationToken auth, Model model) {
+        Exam exam = examService.getExam(examFachId);
+        OAuth2User user = auth.getPrincipal();
+        UUID studentFachId = studentService.getStudentFachId(user.getAttribute("login"));
+
+        List<Frage> fragen = frageService.getFragenForExam(examFachId);
 
         // Suche nach der bereits abgegebenen Antwort des Studierenden für diese Prüfung
-        Antwort existingAntwort = antwortService.findByStudentAndExam(studentId, id);
+        boolean alreadySubmitted = fragen.stream()
+                        .anyMatch(frage -> antwortService.findByStudentAndFrage(studentFachId, frage.getFachId()) != null);
 
         model.addAttribute("exam", exam);
-        model.addAttribute("antwort", existingAntwort); // Gibt die Antwort an das Formular weiter
+        model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular
+        model.addAttribute("name", user.getAttribute("login"));
         return "exams/examsDurchfuehren";
     }
 
 
     @PostMapping("/submit")
+    @Secured("ROLE_STUDENT")
     public String submitExam(
-            @RequestParam UUID examId,
-            @RequestParam String antwortText,
+            @RequestParam List<UUID> frageFachIds,
+            @RequestParam List<String> antwortTexte,
             OAuth2AuthenticationToken auth,
             Model model) {
 
-        // Holen des studentId aus dem Auth-Token (OAuth2)
-        UUID studentId = UUID.fromString(auth.getPrincipal().getAttribute("sub"));
+        OAuth2User user = auth.getPrincipal();
+        UUID studentFachId = studentService.getStudentFachId(user.getAttribute("login"));
 
-        // Prüfen, ob der Studierende bereits eine Antwort abgegeben hat
-        Antwort existingAntwort = antwortService.findByStudentAndExam(studentId, examId);
-        if (existingAntwort != null) {
-            model.addAttribute("message", "Du hast bereits eine Antwort für diese Prüfung abgegeben.");
+        if (frageFachIds.size() != antwortTexte.size()) {
+            model.addAttribute("message", "Fehler: Anzahl der Fragen und Antworten stimmt nicht überein.");
             return "redirect:/exams/list";
         }
 
-        // Erstellen einer neuen Antwort
-        Antwort antwort = new Antwort.AntwortBuilder()
-                .fachId(examId)
-                .antwortText(antwortText)
-                .frageFachId(examId)
-                .studentFachId(studentId)
-                .antwortZeitpunkt(LocalDateTime.now())
-                .build();
+        List<Antwort> neueAntworten = new ArrayList<>();
+        for (int i = 0; i < frageFachIds.size(); i++) {
+            UUID frageFachId = frageFachIds.get(i);
+            String antwortText = antwortTexte.get(i);
 
-        // Speichern der Antwort in der Datenbank
-        antwortService.addAntwort(antwort);
+            if (antwortService.findByStudentAndFrage(studentFachId, frageFachId) != null) {
+                model.addAttribute("message", "Du hast bereits eine Antwort für eine der Fragen abgegeben.");
+                return "redirect:/exams/list";
+            }
 
-        model.addAttribute("message", "Antwort erfolgreich eingereicht!");
+            Antwort antwort = new Antwort.AntwortBuilder()
+                    .fachId(null)
+                    .antwortText(antwortText)
+                    .frageFachId(frageFachId)
+                    .studentFachId(studentFachId)
+                    .antwortZeitpunkt(LocalDateTime.now())
+                    .lastChangesZeitpunkt(LocalDateTime.now())
+                    .build();
+
+            neueAntworten.add(antwort);
+        }
+
+        for (Antwort antwort : neueAntworten) {
+            antwortService.addAntwort(antwort);
+        }
+
+        model.addAttribute("message", "Alle Antworten erfolgreich eingereicht!");
         return "redirect:/exams/list";
     }
 }
