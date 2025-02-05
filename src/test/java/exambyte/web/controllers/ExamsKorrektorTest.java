@@ -1,19 +1,16 @@
 package exambyte.web.controllers;
 
-import exambyte.ExamByteApplication;
-import exambyte.application.service.AppUserService;
+import exambyte.application.service.AppUserServiceImpl;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
-import exambyte.service.*;
+import exambyte.service.impl.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -29,28 +26,28 @@ public class ExamsKorrektorTest {
     private MockMvc mvc;
 
     @MockBean
-    private AppUserService appUserService;
+    private AppUserServiceImpl appUserServiceImpl;
 
     @MockBean
-    private ExamService examService;
+    private ExamServiceImpl examServiceImpl;
 
     @MockBean
-    private AntwortService antwortService;
+    private AntwortServiceImpl antwortServiceImpl;
 
     @MockBean
-    private ProfessorService professorService;
+    private ProfessorServiceImpl professorServiceImpl;
 
     @MockBean
-    private StudentService studentService;
+    private StudentServiceImpl studentServiceImpl;
 
     @MockBean
-    private FrageService frageService;
+    private FrageServiceImpl frageServiceImpl;
 
     // Fehlender Controller für examsKorrektor!
 
     @Autowired
-    public ExamsKorrektorTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
+    public ExamsKorrektorTest(AppUserServiceImpl appUserServiceImpl) {
+        this.appUserServiceImpl = appUserServiceImpl;
     }
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")

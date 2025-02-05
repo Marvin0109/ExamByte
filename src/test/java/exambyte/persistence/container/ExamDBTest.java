@@ -72,7 +72,6 @@ public class ExamDBTest {
     void test_01() {
         // Arrange
 
-
         Professor professor = new Professor.ProfessorBuilder()
                 .id(null)
                 .fachId(null)

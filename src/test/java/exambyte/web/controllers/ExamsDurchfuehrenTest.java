@@ -1,10 +1,11 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.AppUserService;
+import exambyte.application.service.AppUserServiceImpl;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
 import exambyte.domain.aggregate.exam.Exam;
-import exambyte.service.*;
+import exambyte.service.impl.*;
+import exambyte.service.impl.ExamManagementServiceImpl;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,26 +32,29 @@ public class ExamsDurchfuehrenTest {
     private MockMvc mvc;
 
     @MockBean
-    private ExamService examService;
+    private ExamManagementServiceImpl examManagementServiceImpl;
 
     @MockBean
-    private AntwortService antwortService;
+    private ExamServiceImpl examServiceImpl;
 
     @MockBean
-    private ProfessorService professorService;
+    private AntwortServiceImpl antwortServiceImpl;
 
     @MockBean
-    private StudentService studentService;
+    private ProfessorServiceImpl professorServiceImpl;
 
     @MockBean
-    private FrageService frageService;
+    private StudentServiceImpl studentServiceImpl;
 
     @MockBean
-    private AppUserService appUserService;
+    private FrageServiceImpl frageServiceImpl;
+
+    @MockBean
+    private AppUserServiceImpl appUserServiceImpl;
 
     @Autowired
-    public ExamsDurchfuehrenTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
+    public ExamsDurchfuehrenTest(AppUserServiceImpl appUserServiceImpl) {
+        this.appUserServiceImpl = appUserServiceImpl;
     }
 
     @Test
@@ -81,7 +85,7 @@ public class ExamsDurchfuehrenTest {
                 .resultTime(resultTime)
                 .build();
 
-        when(examService.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
+        when(examServiceImpl.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
 
         mvc.perform(get("/api/exams/start/" + dummyExam.getFachId()))
                 .andExpect(status().isOk())

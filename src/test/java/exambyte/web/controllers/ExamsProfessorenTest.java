@@ -1,9 +1,9 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.AppUserService;
+import exambyte.application.service.AppUserServiceImpl;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
-import exambyte.service.*;
+import exambyte.service.impl.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,26 +27,26 @@ public class ExamsProfessorenTest {
     private MockMvc mvc;
 
     @MockBean
-    private AppUserService appUserService;
+    private AppUserServiceImpl appUserServiceImpl;
 
     @MockBean
-    private ExamService examService;
+    private ExamServiceImpl examServiceImpl;
 
     @MockBean
-    private AntwortService antwortService;
+    private AntwortServiceImpl antwortServiceImpl;
 
     @MockBean
-    private ProfessorService professorService;
+    private ProfessorServiceImpl professorServiceImpl;
 
     @MockBean
-    private StudentService studentService;
+    private StudentServiceImpl studentServiceImpl;
 
     @MockBean
-    private FrageService frageService;
+    private FrageServiceImpl frageServiceImpl;
 
     @Autowired
-    public ExamsProfessorenTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
+    public ExamsProfessorenTest(AppUserServiceImpl appUserServiceImpl) {
+        this.appUserServiceImpl = appUserServiceImpl;
     }
 
     @Test
