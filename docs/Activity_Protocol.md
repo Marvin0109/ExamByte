@@ -105,7 +105,7 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 
 01.02.2025
 - Vollständige Datenbank-Logik
-- Integrationstest + Unit Tests erstellt und laufen lassen
+- Integrationstest + Unit-Tests erstellt und laufen lassen
 - README Inhalt zu Activity_Protocol verschoben
 
 02.02.2025
@@ -124,4 +124,11 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - vier ExamHTMLS erstellt
 - passende Tests zu den ExamHTMLS erstellt
 - zusätzliche methode zu den AntwortKlassen hinzugefügt
-- ExamController erstellt (hat noch Bedarf zur Korrektur wie HTMLS kek)
+- ExamController erstellt (hat noch Bedarf zur Korrektur wie HTML kek)
+
+05.02.2025
+- Bean Dependency Fix in Tests
+- WebController umgeändert und Zugriffsrechte hinzugefügt
+- Richtige URL Angabe in ExamController Tests
+- Student Rolle von "ROLE_USER" → "ROLE_STUDENT" geändert
+- Methoden zur Extraktion der UUID anhand von Namen erstellt
