@@ -30,8 +30,8 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 
 2. **Projekt klonen & starten**
    ```sh
-   git clone https://github.com/dein-repo/exambyte.git
-   cd exambyte
+   git clone https://github.com/hhu-propra2-ws24/exambyte-chillex.git
+   cd yourDirectory/exambyte-chillex
    ./gradlew bootRun
    
 ## Dokumentation
