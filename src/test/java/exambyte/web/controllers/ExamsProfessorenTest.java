@@ -1,9 +1,9 @@
 package exambyte.web.controllers;
 
-import exambyte.ExamByteApplication;
 import exambyte.application.service.AppUserService;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
+import exambyte.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -19,9 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 @WebMvcTest(ExamController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-@ContextConfiguration(classes = ExamByteApplication.class)
 public class ExamsProfessorenTest {
 
     @Autowired
@@ -30,14 +29,30 @@ public class ExamsProfessorenTest {
     @MockBean
     private AppUserService appUserService;
 
+    @MockBean
+    private ExamService examService;
+
+    @MockBean
+    private AntwortService antwortService;
+
+    @MockBean
+    private ProfessorService professorService;
+
+    @MockBean
+    private StudentService studentService;
+
+    @MockBean
+    private FrageService frageService;
+
     @Autowired
     public ExamsProfessorenTest(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
+
     @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsProfessoren"))
+        MvcResult mvcResult = mvc.perform(get("/api/exams/create"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -45,10 +60,10 @@ public class ExamsProfessorenTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "ADMIN"})
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für Professoren sichtbar")
     void test_02() throws Exception {
-        mvc.perform(get("/exams/examsProfessoren"))
+        mvc.perform(get("/api/exams/create"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("name", "Marvin0109"));
     }

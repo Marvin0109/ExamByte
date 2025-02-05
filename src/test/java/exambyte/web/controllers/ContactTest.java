@@ -1,6 +1,5 @@
 package exambyte.web.controllers;
 
-import exambyte.ExamByteApplication;
 import exambyte.application.service.AppUserService;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -22,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WebController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-@ContextConfiguration(classes = ExamByteApplication.class)
 public class ContactTest {
 
     @Autowired
@@ -47,7 +44,7 @@ public class ContactTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "ADMIN"})
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "STUDENT", "REVIEWER", "ADMIN"})
     @DisplayName("Die contact Seite ist für authentifizierte User erreichbar")
     void test_02() throws Exception {
         mvc.perform(get("/contact"))

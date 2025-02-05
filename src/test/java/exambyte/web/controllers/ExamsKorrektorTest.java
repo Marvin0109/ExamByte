@@ -4,9 +4,11 @@ import exambyte.ExamByteApplication;
 import exambyte.application.service.AppUserService;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
+import exambyte.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 @WebMvcTest(ExamController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-@ContextConfiguration(classes = ExamByteApplication.class)
 public class ExamsKorrektorTest {
 
     @Autowired
@@ -29,6 +30,23 @@ public class ExamsKorrektorTest {
 
     @MockBean
     private AppUserService appUserService;
+
+    @MockBean
+    private ExamService examService;
+
+    @MockBean
+    private AntwortService antwortService;
+
+    @MockBean
+    private ProfessorService professorService;
+
+    @MockBean
+    private StudentService studentService;
+
+    @MockBean
+    private FrageService frageService;
+
+    // Fehlender Controller für examsKorrektor!
 
     @Autowired
     public ExamsKorrektorTest(AppUserService appUserService) {
@@ -46,7 +64,7 @@ public class ExamsKorrektorTest {
 
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "KORREKTOR"})
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für Korrektoren sichtbar")
     void test_02() throws Exception {
         mvc.perform(get("/exams/examsKorrektor"))

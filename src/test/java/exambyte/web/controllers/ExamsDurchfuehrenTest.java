@@ -1,9 +1,10 @@
 package exambyte.web.controllers;
 
-import exambyte.ExamByteApplication;
 import exambyte.application.service.AppUserService;
 import exambyte.application.config.MethodSecurityConfig;
 import exambyte.application.config.SecurityConfig;
+import exambyte.domain.aggregate.exam.Exam;
+import exambyte.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,34 +12,52 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ExamController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-@ContextConfiguration(classes = ExamByteApplication.class)
-public class ExamsDurchfuhrenTest {
+public class ExamsDurchfuehrenTest {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
+    private ExamService examService;
+
+    @MockBean
+    private AntwortService antwortService;
+
+    @MockBean
+    private ProfessorService professorService;
+
+    @MockBean
+    private StudentService studentService;
+
+    @MockBean
+    private FrageService frageService;
+
+    @MockBean
     private AppUserService appUserService;
 
     @Autowired
-    public ExamsDurchfuhrenTest(AppUserService appUserService) {
+    public ExamsDurchfuehrenTest(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
+
     @Test
     @DisplayName("Die Seite zum Durchführen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren"))
+        UUID examDummyFachId = UUID.randomUUID();
+        MvcResult mvcResult = mvc.perform(get("/api/exams/start/" + examDummyFachId))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -46,11 +65,28 @@ public class ExamsDurchfuhrenTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER","STUDENT"})
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT"})
     @DisplayName("Diese Seite ist für Studierende sichtbar")
     void test_02() throws Exception {
-        mvc.perform(get("/exams/examsDurchfuehren"))
+        LocalDateTime startTime = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime endTime = LocalDateTime.of(2020, 2, 28, 23, 59);
+        LocalDateTime resultTime = LocalDateTime.of(2020, 3, 31, 23, 59);
+        Exam dummyExam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Dummy Exam")
+                .professorFachId(UUID.randomUUID())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
+
+        when(examService.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
+
+        mvc.perform(get("/api/exams/start/" + dummyExam.getFachId()))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists("alreadySubmitted"))
+                .andExpect(model().attribute("exam", dummyExam))
                 .andExpect(model().attribute("name", "Marvin0109"));
     }
 }
