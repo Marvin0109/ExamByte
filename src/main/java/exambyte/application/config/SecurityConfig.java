@@ -1,5 +1,6 @@
 package exambyte.application.config;
 
+import exambyte.application.service.AppUserServiceImpl;
 import exambyte.application.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,23 +14,23 @@ import org.springframework.security.web.SecurityFilterChain;
  * der Authentifizierung und der Autorisierung von Benutzern sowie der Logout-Logik.
  *
  * - Die Konfiguration legt fest, welche URLs öffentlich zugänglich sind und welche eine Authentifizierung erfordern.
- * - Eine OAuth2-Login-Integration wird konfiguriert, bei der ein benutzerdefinierter {@link AppUserService} verwendet wird,
+ * - Eine OAuth2-Login-Integration wird konfiguriert, bei der ein benutzerdefinierter {@link AppUserServiceImpl} verwendet wird,
  *   um Benutzerinformationen zu laden.
  * - Die Logout-Logik wird so konfiguriert, dass nach dem Logout die Session invalidiert und bestimmte Cookies gelöscht werden.
  *
  * Hinweis: Es gibt ein bekanntes Problem mit der Logout-Funktionalität, bei dem der Browser geschlossen werden muss,
  * um den Login-Cookie zu löschen.
  *
- * @see AppUserService
+ * @see AppUserServiceImpl
  */
 
 @Configuration
 public class SecurityConfig {
 
     /**
-     * Konstruktor für die {@link SecurityConfig}, der den {@link AppUserService} injiziert.
+     * Konstruktor für die {@link SecurityConfig}, der den {@link AppUserServiceImpl} injiziert.
      *
-     * @param userService Der benutzerdefinierte {@link AppUserService}, der zur Authentifizierung der Benutzer verwendet wird.
+     * @param userService Der benutzerdefinierte {@link AppUserServiceImpl}, der zur Authentifizierung der Benutzer verwendet wird.
      */
 
     private final AppUserService appUserService;
@@ -44,7 +45,7 @@ public class SecurityConfig {
      *
      * - Bestimmte URLs (wie z.B. "/login" und "/public/**") sind ohne Authentifizierung zugänglich
      * - Alle anderen Anfragen erfordern eine Authentifizierung.
-     * - Die Oauth2-Login-Integration wird konfiguriert, um den {@link AppUserService} zu verwenden.
+     * - Die Oauth2-Login-Integration wird konfiguriert, um den {@link AppUserServiceImpl} zu verwenden.
      * - Die Logout-Logik wird konfiguriert, um die Sitzung zu invalidieren und Cookies zu löschen.
      *
      * @param chainBuilder Der {@link HttpSecurity}-Builder, der für die Sicherheitskonfiguration verwendet wird.

@@ -25,11 +25,11 @@ import java.util.Set;
  * @see DefaultOAuth2UserService
  */
 @Service
-public class AppUserService implements CustomOAuth2UserService {
+public class AppUserServiceImpl implements AppUserService {
 
   private final UserCreationService userCreationService;
 
-  public AppUserService(UserCreationService userCreationService) {
+  public AppUserServiceImpl(UserCreationService userCreationService) {
     this.userCreationService = userCreationService;
   }
 
@@ -44,16 +44,11 @@ public class AppUserService implements CustomOAuth2UserService {
    * @throws OAuth2AuthenticationException Wenn ein Fehler beim Laden der Benutzerdaten auftritt.
    */
   @Override
-  public OAuth2User loadUser(OAuth2UserRequest userRequest) {
+  public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     System.out.println("User Service called");
     OAuth2User originalUser = new DefaultOAuth2UserService().loadUser(userRequest);
     Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
     String login = originalUser.getAttribute("login");
-    //        if ("Marvin0109".equals(originalUser.getAttribute("login"))) {
-    //            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    //        }
-    //        Wurde etwas geändert, um es zu ermöglichen auch anderen Usern mit dessen GitHub Namen
-    //        einzuloggen
 
     // Es wird erstmal überprüft, ob schon der User in der DB gespeichert worden ist, wenn ja,
     // kriegt er nur die Rolle

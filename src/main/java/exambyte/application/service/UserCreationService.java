@@ -3,9 +3,9 @@ package exambyte.application.service;
 import exambyte.domain.aggregate.user.Korrektor;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.aggregate.user.Student;
-import exambyte.service.KorrektorService;
-import exambyte.service.ProfessorService;
-import exambyte.service.StudentService;
+import exambyte.service.impl.KorrektorServiceImpl;
+import exambyte.service.impl.ProfessorServiceImpl;
+import exambyte.service.impl.StudentServiceImpl;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,28 +17,28 @@ import java.util.Set;
 @Service
 public class UserCreationService {
 
-    private final StudentService studentService;
-    private final KorrektorService korrektorService;
-    private final ProfessorService professorService;
+    private final StudentServiceImpl studentServiceImpl;
+    private final KorrektorServiceImpl korrektorServiceImpl;
+    private final ProfessorServiceImpl professorServiceImpl;
 
-    public UserCreationService(StudentService studentService,
-                               KorrektorService korrektorService,
-                               ProfessorService professorService) {
-        this.studentService = studentService;
-        this.korrektorService = korrektorService;
-        this.professorService = professorService;
+    public UserCreationService(StudentServiceImpl studentServiceImpl,
+                               KorrektorServiceImpl korrektorServiceImpl,
+                               ProfessorServiceImpl professorServiceImpl) {
+        this.studentServiceImpl = studentServiceImpl;
+        this.korrektorServiceImpl = korrektorServiceImpl;
+        this.professorServiceImpl = professorServiceImpl;
     }
 
     public boolean checkStudent(String username) {
-        return studentService.getStudentByName(username) != null;
+        return studentServiceImpl.getStudentByName(username) != null;
     }
 
     public boolean checkKorrektor(String username) {
-        return korrektorService.getKorrektorByName(username) != null;
+        return korrektorServiceImpl.getKorrektorByName(username) != null;
     }
 
     public boolean checkProfessor(String username) {
-        return professorService.getProfessorByName(username) != null;
+        return professorServiceImpl.getProfessorByName(username) != null;
     }
 
     @Transactional
@@ -60,7 +60,7 @@ public class UserCreationService {
                 .fachId(null)
                 .name(name)
                 .build();
-        korrektorService.saveKorrektor(korrektor);
+        korrektorServiceImpl.saveKorrektor(korrektor);
     }
 
     private void createProfessor(String name) {
@@ -69,7 +69,7 @@ public class UserCreationService {
                 .fachId(null)
                 .name(name)
                 .build();
-        professorService.saveProfessor(professor);
+        professorServiceImpl.saveProfessor(professor);
     }
 
     private void createStudent(String name) {
@@ -78,6 +78,6 @@ public class UserCreationService {
                 .fachId(null)
                 .name(name)
                 .build();
-        studentService.saveStudent(student);
+        studentServiceImpl.saveStudent(student);
     }
 }
