@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class KorrektorService {
+public class KorrektorServiceImpl  implements KorrektorService {
 
     private final KorrektorRepository korrektorRepository;
 
-    public KorrektorService(KorrektorRepository korrektorRepository) {
+    public KorrektorServiceImpl(KorrektorRepository korrektorRepository) {
         this.korrektorRepository = korrektorRepository;
     }
 
@@ -20,9 +20,8 @@ public class KorrektorService {
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    public UUID saveKorrektor(Korrektor korrektor) {
+    public void saveKorrektor(Korrektor korrektor) {
         korrektorRepository.save(korrektor);
-        return korrektor.uuid();
     }
 
     public Korrektor getKorrektorByName(String name) {

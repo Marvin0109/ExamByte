@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class ReviewService {
+public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewServiceImpl(ReviewRepository reviewRepository) {
         this.reviewRepository = reviewRepository;
     }
 

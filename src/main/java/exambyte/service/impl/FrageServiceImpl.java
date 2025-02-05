@@ -4,16 +4,15 @@ import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.repository.FrageRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class FrageService {
+public class FrageServiceImpl implements FrageService {
 
     private final FrageRepository frageRepository;
 
-    public FrageService(FrageRepository frageRepository) {
+    public FrageServiceImpl(FrageRepository frageRepository) {
         this.frageRepository = frageRepository;
     }
 
@@ -25,8 +24,7 @@ public class FrageService {
         return frageList;
     }
 
-    public UUID addFrage(Frage frage) {
+    public void addFrage(Frage frage) {
         frageRepository.save(frage);
-        return frage.getFachId();
     }
 }

@@ -8,11 +8,11 @@ import java.util.UUID;
 
 
 @Service
-public class AntwortService {
+public class AntwortServiceImpl implements AntwortService {
 
     private final AntwortRepository antwortRepository;
 
-    public AntwortService(AntwortRepository antwortRepository) {
+    public AntwortServiceImpl(AntwortRepository antwortRepository) {
         this.antwortRepository = antwortRepository;
     }
 

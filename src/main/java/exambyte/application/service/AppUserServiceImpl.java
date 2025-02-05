@@ -25,9 +25,8 @@ import java.util.Set;
  * @see DefaultOAuth2UserService
  */
 @Service
-public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class AppUserService implements CustomOAuth2UserService {
 
-  private final DefaultOAuth2UserService defaultService = new DefaultOAuth2UserService();
   private final UserCreationService userCreationService;
 
   public AppUserService(UserCreationService userCreationService) {
@@ -45,9 +44,9 @@ public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAut
    * @throws OAuth2AuthenticationException Wenn ein Fehler beim Laden der Benutzerdaten auftritt.
    */
   @Override
-  public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+  public OAuth2User loadUser(OAuth2UserRequest userRequest) {
     System.out.println("User Service called");
-    OAuth2User originalUser = defaultService.loadUser(userRequest);
+    OAuth2User originalUser = new DefaultOAuth2UserService().loadUser(userRequest);
     Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
     String login = originalUser.getAttribute("login");
     //        if ("Marvin0109".equals(originalUser.getAttribute("login"))) {

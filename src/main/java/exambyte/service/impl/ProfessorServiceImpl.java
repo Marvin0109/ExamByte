@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class ProfessorService {
+public class ProfessorServiceImpl implements ProfessorService {
 
     private final ProfessorRepository professorRepository;
 
-    public ProfessorService(ProfessorRepository professorRepository) {
+    public ProfessorServiceImpl(ProfessorRepository professorRepository) {
         this.professorRepository = professorRepository;
     }
 
@@ -30,6 +30,6 @@ public class ProfessorService {
     }
 
     public UUID getProfessorFachId(String name) {
-        return professorRepository.getFachId(name);
+        return professorRepository.findFachIdByName(name);
     }
 }

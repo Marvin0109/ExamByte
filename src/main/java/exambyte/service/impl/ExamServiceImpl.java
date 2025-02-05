@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ExamService {
+public class ExamServiceImpl implements ExamService {
 
     private final ExamRepository examRepository;
 
-    public ExamService(ExamRepository examRepository) {
+    public ExamServiceImpl(ExamRepository examRepository) {
         this.examRepository = examRepository;
     }
 
