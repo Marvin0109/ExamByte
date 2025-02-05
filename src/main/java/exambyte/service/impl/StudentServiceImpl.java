@@ -3,7 +3,7 @@ package exambyte.service.impl;
 import exambyte.domain.aggregate.user.Student;
 import exambyte.domain.repository.StudentRepository;
 import exambyte.service.NichtVorhandenException;
-import exambyte.service.interfaces.StudentService;
+import exambyte.application.interfaces.StudentService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,20 +17,29 @@ public class StudentServiceImpl implements StudentService {
         this.studentRepository = studentRepository;
     }
 
+    @Override
     public Student getStudent(UUID fachId) {
         return studentRepository.findByFachId(fachId)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    public void saveStudent(Student student) {
+    @Override
+    public void saveStudent(String name) {
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name(name)
+                .build();
         studentRepository.save(student);
     }
 
+    @Override
     public Student getStudentByName(String name) {
         return studentRepository.findByName(name)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
+    @Override
     public UUID getStudentFachId(String name) {
         return studentRepository.findFachIdByName(name);
     }

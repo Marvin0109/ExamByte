@@ -2,7 +2,7 @@ package exambyte.service.impl;
 
 import exambyte.domain.aggregate.user.Korrektor;
 import exambyte.domain.repository.KorrektorRepository;
-import exambyte.service.interfaces.KorrektorService;
+import exambyte.application.interfaces.KorrektorService;
 import exambyte.service.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +17,24 @@ public class KorrektorServiceImpl  implements KorrektorService {
         this.korrektorRepository = korrektorRepository;
     }
 
+    @Override
     public Korrektor getKorrektor(UUID fachId) {
         return korrektorRepository.findByFachId(fachId)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    public void saveKorrektor(Korrektor korrektor) {
+    @Override
+    public void saveKorrektor(String name) {
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name(name)
+                .build();
+
         korrektorRepository.save(korrektor);
     }
 
+    @Override
     public Korrektor getKorrektorByName(String name) {
         return korrektorRepository.findByName(name)
                 .orElseThrow(NichtVorhandenException::new);

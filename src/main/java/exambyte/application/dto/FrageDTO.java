@@ -1,4 +1,4 @@
-package exambyte.service.dto;
+package exambyte.application.dto;
 
 import java.util.UUID;
 

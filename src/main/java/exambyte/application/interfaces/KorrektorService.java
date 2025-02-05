@@ -1,4 +1,4 @@
-package exambyte.service.interfaces;
+package exambyte.application.interfaces;
 
 import exambyte.domain.aggregate.user.Korrektor;
 
@@ -8,7 +8,7 @@ public interface KorrektorService {
 
     Korrektor getKorrektor(UUID fachId);
 
-    void saveKorrektor(Korrektor korrektor);
+    void saveKorrektor(String name);
 
     Korrektor getKorrektorByName(String name);
 }

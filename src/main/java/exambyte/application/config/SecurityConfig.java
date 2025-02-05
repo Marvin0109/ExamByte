@@ -1,7 +1,6 @@
 package exambyte.application.config;
 
 import exambyte.application.service.AppUserServiceImpl;
-import exambyte.application.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

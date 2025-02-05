@@ -1,4 +1,4 @@
-package exambyte.service.interfaces;
+package exambyte.application.interfaces;
 
 import exambyte.domain.aggregate.exam.Antwort;
 

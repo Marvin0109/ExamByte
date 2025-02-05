@@ -2,10 +2,11 @@ package exambyte.service.impl;
 
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
-import exambyte.service.interfaces.ExamService;
+import exambyte.application.interfaces.ExamService;
 import exambyte.service.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,16 +19,28 @@ public class ExamServiceImpl implements ExamService {
         this.examRepository = examRepository;
     }
 
+    @Override
     public List<Exam> alleExams() {
-        return examRepository.findAll().stream().sorted().toList();
+        return examRepository.findAll().stream().toList();
+
     }
 
+    @Override
     public Exam getExam(UUID fachId) {
-        return examRepository.findByFachId(fachId).
-                orElseThrow(NichtVorhandenException::new);
+        return examRepository.findByFachId(fachId)
+                .orElseThrow(NichtVorhandenException::new);
     }
 
-    public void addExam(Exam exam) {
+    @Override
+    public void addExam(Long id, UUID fachId, String title, UUID profFachId, LocalDateTime startTime,
+                        LocalDateTime endTime, LocalDateTime resultTime) {
+        Exam exam = new Exam.ExamBuilder()
+                .id(id)
+                .fachId(fachId)
+                .title(title)
+                .professorFachId(profFachId)
+                .startTime(startTime)
+                .endTime(endTime).resultTime(resultTime).build();
         examRepository.save(exam);
     }
 }

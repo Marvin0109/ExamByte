@@ -1,9 +1,11 @@
-package exambyte.service.impl;
+package exambyte.application.service;
 
+import exambyte.application.interfaces.*;
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.exam.Frage;
-import exambyte.service.interfaces.*;
+import exambyte.application.mgtinterface.ExamManagementService;
+import exambyte.domain.repository.ExamRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,41 +16,35 @@ import java.util.UUID;
 public class ExamManagementServiceImpl implements ExamManagementService {
 
     private final ExamService examService;
+    private final ExamRepository examRepository;
     private final AntwortService antwortService;
     private final FrageService frageService;
     private final StudentService studentService;
     private final ProfessorService professorService;
 
     public ExamManagementServiceImpl(ExamService examService, AntwortService antwortService, FrageService frageService,
-                                     StudentService studentService, ProfessorService professorService) {
+                                     StudentService studentService, ProfessorService professorService, ExamRepository examRepository) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
         this.studentService = studentService;
         this.professorService = professorService;
+        this.examRepository = examRepository;
     }
 
+    @Override
     public boolean createExam(String professorName, String title, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
         UUID professorFachId = professorService.getProfessorFachId(professorName);
-
-        Exam newExam = new Exam.ExamBuilder()
-                .id(null)
-                .fachId(null)
-                .title(title)
-                .professorFachId(professorFachId)
-                .startTime(startTime)
-                .endTime(endTime)
-                .resultTime(resultTime)
-                .build();
-
-        examService.addExam(newExam);
+        examService.addExam(null, null, title, professorFachId, startTime, endTime, resultTime);
         return true;
     }
 
+    @Override
     public List<Exam> getAllExams() {
-        return examService.alleExams();
+        return examService.alleExams();  // Hole Domain-Objekte
     }
 
+    @Override
     public boolean isExamAlreadySubmitted(UUID examFachId, String studentName) {
         UUID studentFachId = studentService.getStudentFachId(studentName);
         List<Frage> fragen = frageService.getFragenForExam(examFachId);
@@ -57,6 +53,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .anyMatch(frage -> antwortService.findByStudentAndFrage(studentFachId, frage.getFachId()) != null);
     }
 
+    @Override
     public boolean submitExam(String studentLogin, List<UUID> frageFachIds, List<String> antwortTexte) {
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
@@ -87,7 +84,9 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         return true;
     }
 
+    @Override
     public Exam getExam(UUID examFachId) {
-        return examService.getExam(examFachId);
+        return examRepository.findByFachId(examFachId)
+                .orElseThrow(() -> new RuntimeException("Exam not found"));
     }
 }

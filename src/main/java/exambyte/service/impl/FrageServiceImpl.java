@@ -2,7 +2,7 @@ package exambyte.service.impl;
 
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.repository.FrageRepository;
-import exambyte.service.interfaces.FrageService;
+import exambyte.application.interfaces.FrageService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +17,7 @@ public class FrageServiceImpl implements FrageService {
         this.frageRepository = frageRepository;
     }
 
+    @Override
     public List<Frage> getFragenForExam(UUID examId) {
         List<Frage> frageList = frageRepository.findByExamFachId(examId);
         if (frageList.isEmpty()) {
@@ -25,6 +26,7 @@ public class FrageServiceImpl implements FrageService {
         return frageList;
     }
 
+    @Override
     public void addFrage(Frage frage) {
         frageRepository.save(frage);
     }

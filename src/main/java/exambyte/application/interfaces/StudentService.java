@@ -1,4 +1,4 @@
-package exambyte.service.interfaces;
+package exambyte.application.interfaces;
 
 import exambyte.domain.aggregate.user.Student;
 
@@ -8,7 +8,7 @@ public interface StudentService {
 
     Student getStudent(UUID fachId);
 
-    void saveStudent(Student student);
+    void saveStudent(String name);
 
     Student getStudentByName(String name);
 

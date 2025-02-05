@@ -2,7 +2,7 @@ package exambyte.service.impl;
 
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.repository.AntwortRepository;
-import exambyte.service.interfaces.AntwortService;
+import exambyte.application.interfaces.AntwortService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,13 +17,17 @@ public class AntwortServiceImpl implements AntwortService {
         this.antwortRepository = antwortRepository;
     }
 
+    @Override
     public Antwort findByFrageFachId(UUID frageFachId) {
         return antwortRepository.findByFrageFachId(frageFachId);
     }
 
+    @Override
     public void addAntwort(Antwort antwort) {
         antwortRepository.save(antwort);
     }
+
+    @Override
     public Antwort findByStudentAndFrage(UUID studentId, UUID examId) {
         return antwortRepository.findByStudentFachIdAndFrageFachId(studentId, examId)
                 .orElse(null);

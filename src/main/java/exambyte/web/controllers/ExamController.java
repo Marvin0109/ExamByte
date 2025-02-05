@@ -1,6 +1,9 @@
 package exambyte.web.controllers;
+import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.ExamDTOMapper;
+import exambyte.application.mgtinterface.ExamManagementService;
 import exambyte.domain.aggregate.exam.Exam;
-import exambyte.service.interfaces.ExamManagementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,8 +21,9 @@ public class ExamController {
 
     private final ExamManagementService examManagementService;
 
+    @Autowired
     public ExamController(ExamManagementService examManagementService) {
-        this.examManagementService = examManagementService;
+       this.examManagementService = examManagementService;
     }
 
     @GetMapping("/create")
@@ -55,7 +59,8 @@ public class ExamController {
     @Secured("ROLE_STUDENT")
     public String listExams(Model model) {
         List<Exam> exams = examManagementService.getAllExams();
-        model.addAttribute("exams", exams);
+        List<ExamDTO> examDTOs = ExamDTOMapper.toExamDTOList(exams);
+        model.addAttribute("exams", examDTOs);
         return "exams/examsStudierende";
     }
 
@@ -65,8 +70,10 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         String studentName = user.getAttribute("login");
         boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(examFachId, user.getAttribute("login"));
+        Exam exam = examManagementService.getExam(examFachId);
+        ExamDTO examDTO = ExamDTOMapper.toDTO(exam);
 
-        model.addAttribute("exam", examManagementService.getExam(examFachId));
+        model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular
         model.addAttribute("name", studentName);
         return "exams/examsDurchfuehren";

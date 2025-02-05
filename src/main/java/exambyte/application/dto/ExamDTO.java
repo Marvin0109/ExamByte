@@ -1,4 +1,4 @@
-package exambyte.service.dto;
+package exambyte.application.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
