@@ -63,7 +63,7 @@ public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAut
     } else if (userCreationService.checkKorrektor(login)) {
       authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
     } else if (userCreationService.checkStudent(login)) {
-      authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+      authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
     } else {
       // Wenn der Benutzer noch nicht existiert, erstell ihn mit einer passenden Rolle
       if ("Marvin0109".equals(login) || "muz70wuc".equals(login)) {
@@ -71,7 +71,7 @@ public class AppUserService implements OAuth2UserService<OAuth2UserRequest, OAut
       } else if ("KorrektorName".equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
       } else {
-        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
       }
 
       // Neuen Benutzer in die DB speichern
