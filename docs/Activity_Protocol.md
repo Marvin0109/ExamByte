@@ -133,3 +133,7 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Student Rolle von "ROLE_USER" → "ROLE_STUDENT" geändert
 - Methoden zur Extraktion der UUID anhand von Namen erstellt
 - Onion Test geht nicht, nach vielen hin- und her Verschiebungen von Klassen und erstellen von DTO's half nichts
+
+06.02.2025
+- Onion Architektur aufrechterhalten
+- Container Tests und Mapper Tests angepasst
