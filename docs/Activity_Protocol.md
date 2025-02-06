@@ -137,3 +137,4 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 06.02.2025
 - Onion Architektur aufrechterhalten
 - Container Tests und Mapper Tests angepasst
+- Test für die Aggregate, Infrastructure geschrieben
