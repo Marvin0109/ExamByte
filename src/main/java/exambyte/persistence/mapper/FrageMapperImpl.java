@@ -1,13 +1,17 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.persistence.entities.FrageEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-public class FrageMapper {
+@Component
+public class FrageMapperImpl implements FrageMapper {
 
-    public static Frage toDomain(FrageEntity frageEntity) {
+    @Override
+    public Frage toDomain(FrageEntity frageEntity) {
 
         UUID professorFachID = frageEntity.getProfessorFachId();
 
@@ -21,6 +25,7 @@ public class FrageMapper {
                 .build();
     }
 
+    @Override
     public FrageEntity toEntity(Frage frage) {
 
         UUID profUUID = frage.getProfessorUUID();

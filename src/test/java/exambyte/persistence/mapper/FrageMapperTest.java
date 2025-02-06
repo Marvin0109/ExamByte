@@ -1,21 +1,27 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.persistence.entities.FrageEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 public class FrageMapperTest {
+
+    @Autowired
+    private FrageMapper frageMapper;
 
     @Test
     @DisplayName("FrageMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        FrageMapper frageMapper = new FrageMapper();
 
         UUID profFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
@@ -56,7 +62,7 @@ public class FrageMapperTest {
                 .build();
 
         // Act
-        Frage frage = FrageMapper.toDomain(frageEntity);
+        Frage frage = frageMapper.toDomain(frageEntity);
 
         assertThat(frage).isNotNull();
         assertThat(frage.getFachId()).isEqualTo(fachId);

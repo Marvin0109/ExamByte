@@ -1,18 +1,22 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Antwort;
+import exambyte.domain.entitymapper.AntwortMapper;
 import exambyte.persistence.entities.AntwortEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-public class AntwortMapper {
+@Component
+public class AntwortMapperImpl implements AntwortMapper {
 
-    public static Antwort toDomain(AntwortEntity antwortEntity) {
+    @Override
+    public Antwort toDomain(AntwortEntity antwortEntity) {
 
         UUID frageFachId = antwortEntity.getFrageFachId();
         UUID studentFachID = antwortEntity.getStudentFachId();
 
-    return new Antwort.AntwortBuilder()
+        return new Antwort.AntwortBuilder()
             .id(null)
             .fachId(antwortEntity.getFachId())
             .antwortText(antwortEntity.getAntwortText())
@@ -23,6 +27,7 @@ public class AntwortMapper {
             .build();
     }
 
+    @Override
     public AntwortEntity toEntity(Antwort antwort) {
         UUID frageFachId = antwort.getFrageFachId(); // LoD Verstoß
         UUID studentFachId = antwort.getStudentUUID();

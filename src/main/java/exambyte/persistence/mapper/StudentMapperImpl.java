@@ -1,11 +1,15 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Student;
+import exambyte.domain.entitymapper.StudentMapper;
 import exambyte.persistence.entities.StudentEntity;
+import org.springframework.stereotype.Component;
 
-public class StudentMapper {
+@Component
+public class StudentMapperImpl implements StudentMapper {
 
-    public static Student toDomain(StudentEntity studentEntity) {
+    @Override
+    public Student toDomain(StudentEntity studentEntity) {
         return new Student.StudentBuilder()
                 .id(null)
                 .fachId(studentEntity.getFachId())
@@ -13,6 +17,7 @@ public class StudentMapper {
                 .build();
     }
 
+    @Override
     public StudentEntity toEntity(Student student) {
         return new StudentEntity.StudentEntityBuilder()
                 .id(null)

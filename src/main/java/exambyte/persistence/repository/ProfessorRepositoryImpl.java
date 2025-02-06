@@ -1,8 +1,9 @@
 package exambyte.persistence.repository;
 
 import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.persistence.mapper.ProfessorMapper;
+import exambyte.persistence.mapper.ProfessorMapperImpl;
 import exambyte.domain.repository.ProfessorRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,17 +13,19 @@ import java.util.UUID;
 @Repository
 public class ProfessorRepositoryImpl implements ProfessorRepository {
 
-    private final ProfessorMapper professorMapper = new ProfessorMapper();
+    private final ProfessorMapper professorMapper;
     private final SpringDataProfessorRepository springDataProfessorRepository;
 
-    public ProfessorRepositoryImpl(SpringDataProfessorRepository springDataProfessorRepository) {
+    public ProfessorRepositoryImpl(SpringDataProfessorRepository springDataProfessorRepository,
+                                   ProfessorMapper professorMapper) {
         this.springDataProfessorRepository = springDataProfessorRepository;
+        this.professorMapper = professorMapper;
     }
 
     @Override
     public Optional<Professor> findByFachId(UUID fachId) {
         Optional<ProfessorEntity> entity = springDataProfessorRepository.findByFachId(fachId);
-        return entity.map(ProfessorMapper::toDomain);
+        return entity.map(professorMapper::toDomain);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     @Override
     public Optional<Professor> findByName(String name) {
         Optional<ProfessorEntity> entity = springDataProfessorRepository.findByName(name);
-        return entity.map(ProfessorMapper::toDomain);
+        return entity.map(professorMapper::toDomain);
     }
 
     @Override

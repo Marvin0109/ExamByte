@@ -1,11 +1,15 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Korrektor;
+import exambyte.domain.entitymapper.KorrektorMapper;
 import exambyte.persistence.entities.KorrektorEntity;
+import org.springframework.stereotype.Component;
 
-public class KorrektorMapper {
+@Component
+public class KorrektorMapperImpl implements KorrektorMapper {
 
-    public static Korrektor toDomain(KorrektorEntity korrektorEntity) {
+    @Override
+    public Korrektor toDomain(KorrektorEntity korrektorEntity) {
         return new Korrektor.KorrektorBuilder()
                 .id(null)
                 .fachId(korrektorEntity.getFachId())
@@ -13,6 +17,7 @@ public class KorrektorMapper {
                 .build();
     }
 
+    @Override
     public KorrektorEntity toEntity(Korrektor korrektor) {
         return new KorrektorEntity.KorrektorEntityBuilder()
                 .id(null)

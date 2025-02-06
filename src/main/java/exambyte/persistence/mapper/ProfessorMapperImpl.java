@@ -1,11 +1,15 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.persistence.entities.ProfessorEntity;
+import org.springframework.stereotype.Component;
 
-public class ProfessorMapper {
+@Component
+public class ProfessorMapperImpl implements ProfessorMapper {
 
-    public static Professor toDomain(ProfessorEntity professorEntity) {
+    @Override
+    public Professor toDomain(ProfessorEntity professorEntity) {
         return new Professor.ProfessorBuilder()
                 .id(null)
                 .fachId(professorEntity.getFachId())
@@ -13,6 +17,7 @@ public class ProfessorMapper {
                 .build();
     }
 
+    @Override
     public ProfessorEntity toEntity(Professor professor) {
         return new ProfessorEntity.ProfessorEntityBuilder()
                 .id(null)

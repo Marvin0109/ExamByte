@@ -3,6 +3,9 @@ package exambyte.persistence.container;
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.exam.Frage;
 import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.entitymapper.ExamMapper;
+import exambyte.domain.entitymapper.FrageMapper;
+import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
 import exambyte.persistence.repository.*;
@@ -32,12 +35,15 @@ public class FrageDBTest {
 
     @Autowired
     private SpringDataFrageRepository frageRepository;
+    private FrageMapper frageMapper;
 
     @Autowired
     private SpringDataProfessorRepository professorRepository;
+    private ProfessorMapper professorMapper;
 
     @Autowired
     private SpringDataExamRepository examRepository;
+    private ExamMapper examMapper;
 
     private FrageRepository repository;
     private ProfessorRepository repository2;
@@ -45,9 +51,9 @@ public class FrageDBTest {
 
     @BeforeEach
     void setUp() {
-        repository = new FrageRepositoryImpl(professorRepository, frageRepository);
-        repository2 = new ProfessorRepositoryImpl(professorRepository);
-        repository3 = new ExamRepositoryImpl(examRepository);
+        repository = new FrageRepositoryImpl(professorRepository, frageRepository, frageMapper);
+        repository2 = new ProfessorRepositoryImpl(professorRepository, professorMapper);
+        repository3 = new ExamRepositoryImpl(examRepository, examMapper);
     }
 
     @Test

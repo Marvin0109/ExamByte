@@ -1,8 +1,8 @@
 package exambyte.persistence.repository;
 
 import exambyte.domain.aggregate.exam.Review;
+import exambyte.domain.entitymapper.ReviewMapper;
 import exambyte.persistence.entities.ReviewEntity;
-import exambyte.persistence.mapper.ReviewMapper;
 import exambyte.domain.repository.ReviewRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,17 +12,18 @@ import java.util.UUID;
 @Repository
 public class ReviewRepositoryImpl implements ReviewRepository {
 
-    private final ReviewMapper reviewMapper = new ReviewMapper();
+    private final ReviewMapper reviewMapper;
     private final SpringDataReviewRepository springDataReviewRepository;
 
-    public ReviewRepositoryImpl(SpringDataReviewRepository springDataReviewRepository) {
+    public ReviewRepositoryImpl(SpringDataReviewRepository springDataReviewRepository, ReviewMapper reviewMapper) {
         this.springDataReviewRepository = springDataReviewRepository;
+        this.reviewMapper = reviewMapper;
     }
 
     @Override
     public Optional<Review> findByFachId(UUID fachId) {
         Optional<ReviewEntity> entity = springDataReviewRepository.findByFachId(fachId);
-        return entity.map(ReviewMapper::toDomain);
+        return entity.map(reviewMapper::toDomain);
     }
 
     @Override
@@ -34,13 +35,7 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     @Override
     public Review findByAntwortFachId(UUID fachId) {
         Optional<ReviewEntity> entity = springDataReviewRepository.findByAntwortFachId(fachId);
-        return entity.map(reviewEntity -> new Review.ReviewBuilder()
-                .id(null)
-                .fachId(reviewEntity.getFachId())
-                .antwortFachId(reviewEntity.getAntwortFachId())
-                .korrektorFachId(reviewEntity.getKorrektorFachId())
-                .bewertung(reviewEntity.getBewertung())
-                .punkte(reviewEntity.getPunkte())
-                .build()).orElse(null);
+        return entity.map(reviewMapper::toDomain)
+                .orElse(null);
     }
 }

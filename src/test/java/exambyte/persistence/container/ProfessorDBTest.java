@@ -1,6 +1,7 @@
 package exambyte.persistence.container;
 
 import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.persistence.repository.ProfessorRepositoryImpl;
 import exambyte.persistence.repository.SpringDataProfessorRepository;
 import exambyte.domain.repository.ProfessorRepository;
@@ -24,10 +25,11 @@ public class ProfessorDBTest {
     @Autowired
     private SpringDataProfessorRepository professorRepository;
     private ProfessorRepository repository;
+    private ProfessorMapper mapper;
 
     @BeforeEach
     void setUp() {
-        repository = new ProfessorRepositoryImpl(professorRepository);
+        repository = new ProfessorRepositoryImpl(professorRepository, mapper);
     }
 
     @Test

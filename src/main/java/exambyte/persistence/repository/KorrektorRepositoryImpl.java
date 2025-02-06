@@ -1,11 +1,10 @@
 package exambyte.persistence.repository;
 
 import exambyte.domain.aggregate.user.Korrektor;
+import exambyte.domain.entitymapper.KorrektorMapper;
 import exambyte.persistence.entities.KorrektorEntity;
-import exambyte.persistence.mapper.KorrektorMapper;
 import exambyte.domain.repository.KorrektorRepository;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.servlet.view.ContentNegotiatingViewResolver;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -13,17 +12,19 @@ import java.util.UUID;
 @Repository
 public class KorrektorRepositoryImpl implements KorrektorRepository {
 
-    private final KorrektorMapper korrektorMapper = new KorrektorMapper();
+    private final KorrektorMapper korrektorMapper;
     private final SpringDataKorrektorRepository springDataKorrektorRepository;
 
-    public KorrektorRepositoryImpl(SpringDataKorrektorRepository springDataKorrektorRepository) {
+    public KorrektorRepositoryImpl(SpringDataKorrektorRepository springDataKorrektorRepository,
+                                   KorrektorMapper korrektorMapper) {
         this.springDataKorrektorRepository = springDataKorrektorRepository;
+        this.korrektorMapper = korrektorMapper;
     }
 
     @Override
     public Optional<Korrektor> findByFachId(UUID fachId) {
         Optional<KorrektorEntity> entity = springDataKorrektorRepository.findByFachId(fachId);
-        return entity.map(KorrektorMapper::toDomain);
+        return entity.map(korrektorMapper::toDomain);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
     @Override
     public Optional<Korrektor> findByName(String name) {
         Optional<KorrektorEntity> entity = springDataKorrektorRepository.findByName(name);
-        return entity.map(KorrektorMapper::toDomain);
+        return entity.map(korrektorMapper::toDomain);
     }
 
     public KorrektorEntity findByKorFachId(UUID fachId) {

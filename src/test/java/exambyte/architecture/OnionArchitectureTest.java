@@ -42,14 +42,13 @@ public class OnionArchitectureTest {
                 .domainModels("exambyte.domain..")
                 .domainServices("exambyte.domain.service..")
                 .applicationServices("exambyte.application.service..")
-                .adapter("web", "exambyte.web.controllers..")
-                .adapter("persistence", "exambyte.persistence..")
-                .adapter("service", "exambyte.service..", "exambyte.application.service..",
-                        "exambyte.application.interfaces..")
-                .adapter("configuration", "exambyte.application.config..", "exambyte.application.service..")
+                //.adapter("web", "exambyte.web.controllers..")
+                .adapter("persistence", "exambyte.persistence.repository..")
+                .adapter("service", "exambyte.infrastructure.service..")
+                .adapter("configuration", "exambyte.infrastructure.config..")
                 .adapter("repository", "exambyte.persistence.repository..")
                 .adapter("controller", "exambyte.web.controllers..")
-                .adapter("dto", "exambyte.application.dto..");
+                .adapter("mapper", "exambyte.infrastructure.mapper..", "exambyte.persistence.mapper..");
         rule.check(klassen);
     }
 

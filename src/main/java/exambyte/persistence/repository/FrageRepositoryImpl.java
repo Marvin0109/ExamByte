@@ -1,9 +1,10 @@
 package exambyte.persistence.repository;
 
 import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.persistence.mapper.FrageMapper;
+import exambyte.persistence.mapper.FrageMapperImpl;
 import exambyte.domain.repository.FrageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -13,29 +14,30 @@ import java.util.*;
 @Repository
 public class FrageRepositoryImpl implements FrageRepository {
 
-    private final FrageMapper frageMapper = new FrageMapper();
+    private final FrageMapper frageMapper;
     private final SpringDataFrageRepository springDataFrageRepository;
     private final SpringDataProfessorRepository springDataProfessorRepository;
 
     @Autowired
     public FrageRepositoryImpl(SpringDataProfessorRepository springDataProfessorRepository,
-                               SpringDataFrageRepository springDataFrageRepository) {
+                               SpringDataFrageRepository springDataFrageRepository, FrageMapper frageMapper) {
         this.springDataProfessorRepository = springDataProfessorRepository;
         this.springDataFrageRepository = springDataFrageRepository;
+        this.frageMapper = frageMapper;
     }
 
     @Override
     public Collection<Frage> findAll() {
         return springDataFrageRepository.findAll()
                 .stream()
-                .map(FrageMapper::toDomain)
+                .map(frageMapper::toDomain)
                 .toList();
     }
 
     @Override
     public Optional<Frage> findByFachId(UUID fachId) {
         Optional<FrageEntity> entity = springDataFrageRepository.findByFachId(fachId);
-        return entity.map(FrageMapper::toDomain);
+        return entity.map(frageMapper::toDomain);
     }
 
     @Override
@@ -47,7 +49,7 @@ public class FrageRepositoryImpl implements FrageRepository {
     @Override
     public List<Frage> findByExamFachId(UUID examId) {
         return springDataFrageRepository.findByExamFachId(examId).stream()
-                .map(FrageMapper::toDomain)
+                .map(frageMapper::toDomain)
                 .toList();
     }
 

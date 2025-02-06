@@ -1,11 +1,15 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.entitymapper.ExamMapper;
 import exambyte.persistence.entities.ExamEntity;
+import org.springframework.stereotype.Component;
 
-public class ExamMapper {
+@Component
+public class ExamMapperImpl implements ExamMapper {
 
-    public static Exam toDomain(ExamEntity examEntity) {
+    @Override
+    public Exam toDomain(ExamEntity examEntity) {
         return new Exam.ExamBuilder()
                 .id(null)
                 .fachId(examEntity.getFachId())
@@ -17,6 +21,7 @@ public class ExamMapper {
                 .build();
     }
 
+    @Override
     public ExamEntity toEntity(Exam exam) {
     return new ExamEntity.ExamEntityBuilder()
             .id(null)

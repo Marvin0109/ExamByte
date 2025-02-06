@@ -1,11 +1,15 @@
 package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Review;
+import exambyte.domain.entitymapper.ReviewMapper;
 import exambyte.persistence.entities.ReviewEntity;
+import org.springframework.stereotype.Component;
 
-public class ReviewMapper {
+@Component
+public class ReviewMapperImpl implements ReviewMapper {
 
-    public static Review toDomain(ReviewEntity entity) {
+    @Override
+    public Review toDomain(ReviewEntity entity) {
         return new Review.ReviewBuilder()
                 .id(null)
                 .fachId(entity.getFachId())
@@ -16,6 +20,7 @@ public class ReviewMapper {
                 .build();
     }
 
+    @Override
     public ReviewEntity toEntity(Review review) {
         return new ReviewEntity.ReviewEntityBuilder()
                 .id(null)

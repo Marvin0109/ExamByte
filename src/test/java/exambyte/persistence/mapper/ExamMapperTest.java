@@ -2,24 +2,30 @@ package exambyte.persistence.mapper;
 
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.entitymapper.ExamMapper;
 import exambyte.persistence.entities.ExamEntity;
 import exambyte.persistence.entities.ProfessorEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 public class ExamMapperTest {
+
+    @Autowired
+    private ExamMapper examMapper;
 
     @Test
     @DisplayName("ExamMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        ExamMapper examMapper = new ExamMapper();
-    Professor professor = new Professor.ProfessorBuilder()
+        Professor professor = new Professor.ProfessorBuilder()
             .id(null)
             .fachId(null)
             .name("Dr. Scalper")
@@ -79,7 +85,7 @@ public class ExamMapperTest {
                 .build();
 
         // Act
-        Exam exam = ExamMapper.toDomain(examEntity);
+        Exam exam = examMapper.toDomain(examEntity);
         UUID examFachId = exam.getFachId();
         String examTitle = exam.getTitle();
 
