@@ -12,16 +12,14 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class KorrektorMapperTest {
-
-    @Autowired
-    private KorrektorMapper korrektorMapper;
 
     @Test
     @DisplayName("KorrektorMapper test 'toEntity'")
     public void test_01() {
         // Arrange
+        KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
+
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
                 .id(null)
                 .fachId(null)
@@ -43,6 +41,8 @@ public class KorrektorMapperTest {
     @DisplayName("KorrektorMapper test 'toDomain'")
     public void test_02() {
         // Arrange
+        KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
+
         KorrektorEntity korrektorEntity = new KorrektorEntity.KorrektorEntityBuilder()
                 .id(null)
                 .fachId(null)

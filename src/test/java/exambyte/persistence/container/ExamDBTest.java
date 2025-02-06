@@ -9,7 +9,7 @@ import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.aggregate.user.Student;
 import exambyte.domain.entitymapper.*;
 import exambyte.domain.repository.*;
-import exambyte.persistence.mapper.FrageMapperTest;
+import exambyte.persistence.mapper.*;
 import exambyte.persistence.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,31 +31,24 @@ public class ExamDBTest {
 
     @Autowired
     private SpringDataFrageRepository frRepository;
-    private FrageMapper frageMapper;
 
     @Autowired
     private SpringDataAntwortRepository antRepository;
-    private AntwortMapper antMapper;
 
     @Autowired
     private SpringDataProfessorRepository professorRepository;
-    private ProfessorMapper profMapper;
 
     @Autowired
     private SpringDataStudentRepository studentRepository;
-    private StudentMapper studentMapper;
 
     @Autowired
     private SpringDataKorrektorRepository korrektorRepository;
-    private KorrektorMapper korrektorMapper;
 
     @Autowired
     private SpringDataExamRepository eRepository;
-    private ExamMapper examMapper;
 
     @Autowired
     private SpringDataReviewRepository reviewRepository;
-    private ReviewMapper reviewMapper;
 
     private FrageRepository frageRepository;
     private AntwortRepository antwortRepository;
@@ -67,6 +60,14 @@ public class ExamDBTest {
 
     @BeforeEach
     public void setUp() {
+        AntwortMapper antMapper = new AntwortMapperImpl(); // Manuelle Instanziierung
+        FrageMapper frageMapper = new FrageMapperImpl(); // Manuelle Instanziierung
+        ProfessorMapper profMapper = new ProfessorMapperImpl(); // Manuelle Instanziierung
+        StudentMapper studentMapper = new StudentMapperImpl(); // Manuelle Instanziierung
+        KorrektorMapper korrektorMapper = new KorrektorMapperImpl(); // Manuelle Instanziierung
+        ExamMapper examMapper = new ExamMapperImpl(); // Manuelle Instanziierung
+        ReviewMapper reviewMapper = new ReviewMapperImpl(); // Manuelle Instanziierung
+
         antwortRepository = new AntwortRepositoryImpl(antRepository, antMapper);
         frageRepository = new FrageRepositoryImpl(professorRepository, frRepository, frageMapper);
         profRepository = new ProfessorRepositoryImpl(professorRepository, profMapper);

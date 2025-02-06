@@ -3,26 +3,28 @@ package exambyte.persistence.mapper;
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.entitymapper.AntwortMapper;
 import exambyte.persistence.entities.AntwortEntity;
+import exambyte.persistence.repository.SpringDataFrageRepository;
+import exambyte.persistence.repository.SpringDataProfessorRepository;
+import exambyte.persistence.repository.SpringDataStudentRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class AntwortMapperTest {
-
-    @Autowired
-    private AntwortMapper mapper;
 
     @Test
     @DisplayName("AntwortMapper test 'toEntity'")
     public void test_01() {
         // Arrange
+        AntwortMapper mapper = new AntwortMapperImpl();
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
@@ -55,6 +57,7 @@ public class AntwortMapperTest {
     @DisplayName("AntwortMapper test 'toDomain'")
     public void test_02() {
         // Arrange
+        AntwortMapper mapper = new AntwortMapperImpl();
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();

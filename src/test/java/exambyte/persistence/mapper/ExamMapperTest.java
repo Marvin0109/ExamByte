@@ -15,16 +15,14 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class ExamMapperTest {
-
-    @Autowired
-    private ExamMapper examMapper;
 
     @Test
     @DisplayName("ExamMapper test 'toEntity'")
     public void test_01() {
         // Arrange
+        ExamMapper mapper = new ExamMapperImpl();
+
         Professor professor = new Professor.ProfessorBuilder()
             .id(null)
             .fachId(null)
@@ -46,7 +44,7 @@ public class ExamMapperTest {
                 .build();
 
         // Act
-        ExamEntity examEntity = examMapper.toEntity(exam);
+        ExamEntity examEntity = mapper.toEntity(exam);
         UUID entityFachId = examEntity.getFachId();
         String entityTitle = examEntity.getTitle();
         UUID professorFachId = examEntity.getProfessorFachId();
@@ -65,6 +63,8 @@ public class ExamMapperTest {
     @DisplayName("ExamMapper test 'toDomain")
     public void test_02() {
         // Arrange
+        ExamMapper mapper = new ExamMapperImpl();
+
         ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
                 .id(null)
                 .fachId(null)
@@ -85,7 +85,7 @@ public class ExamMapperTest {
                 .build();
 
         // Act
-        Exam exam = examMapper.toDomain(examEntity);
+        Exam exam = mapper.toDomain(examEntity);
         UUID examFachId = exam.getFachId();
         String examTitle = exam.getTitle();
 

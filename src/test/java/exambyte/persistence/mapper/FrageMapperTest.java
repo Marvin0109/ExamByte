@@ -12,16 +12,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class FrageMapperTest {
-
-    @Autowired
-    private FrageMapper frageMapper;
 
     @Test
     @DisplayName("FrageMapper test 'toEntity'")
     public void test_01() {
         // Arrange
+        FrageMapper frageMapper = new FrageMapperImpl();
 
         UUID profFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
@@ -49,6 +46,8 @@ public class FrageMapperTest {
     @DisplayName("FrageMapper test 'toDomain'")
     public void test_02() {
         // Arrange
+        FrageMapper frageMapper = new FrageMapperImpl();
+
         UUID fachId = UUID.randomUUID();
         UUID professorFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();

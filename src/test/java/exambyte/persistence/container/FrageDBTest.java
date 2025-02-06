@@ -8,6 +8,9 @@ import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.persistence.entities.FrageEntity;
 import exambyte.persistence.entities.ProfessorEntity;
+import exambyte.persistence.mapper.ExamMapperImpl;
+import exambyte.persistence.mapper.FrageMapperImpl;
+import exambyte.persistence.mapper.ProfessorMapperImpl;
 import exambyte.persistence.repository.*;
 import exambyte.persistence.repository.ExamRepositoryImpl;
 import exambyte.persistence.repository.FrageRepositoryImpl;
@@ -35,15 +38,12 @@ public class FrageDBTest {
 
     @Autowired
     private SpringDataFrageRepository frageRepository;
-    private FrageMapper frageMapper;
 
     @Autowired
     private SpringDataProfessorRepository professorRepository;
-    private ProfessorMapper professorMapper;
 
     @Autowired
     private SpringDataExamRepository examRepository;
-    private ExamMapper examMapper;
 
     private FrageRepository repository;
     private ProfessorRepository repository2;
@@ -51,6 +51,10 @@ public class FrageDBTest {
 
     @BeforeEach
     void setUp() {
+        FrageMapper frageMapper = new FrageMapperImpl();
+        ProfessorMapper professorMapper = new ProfessorMapperImpl();
+        ExamMapper examMapper = new ExamMapperImpl();
+
         repository = new FrageRepositoryImpl(professorRepository, frageRepository, frageMapper);
         repository2 = new ProfessorRepositoryImpl(professorRepository, professorMapper);
         repository3 = new ExamRepositoryImpl(examRepository, examMapper);

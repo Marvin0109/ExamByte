@@ -12,16 +12,14 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
 public class StudentMapperTest {
-
-    @Autowired
-    private StudentMapper studentMapper;
 
     @Test
     @DisplayName("StudentMapper test 'toEntity'")
     public void test_01() {
         // Arrange
+        StudentMapper studentMapper = new StudentMapperImpl();
+
         Student student = new Student.StudentBuilder()
                 .id(null)
                 .fachId(null)
@@ -43,6 +41,8 @@ public class StudentMapperTest {
     @DisplayName("StudentMapper test 'toDomain'")
     public void test_02() {
         // Arrange
+        StudentMapper studentMapper = new StudentMapperImpl();
+
         StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
                 .id(null)
                 .fachId(null)
