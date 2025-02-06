@@ -5,7 +5,7 @@ das Feedback bezieht auf die Version vom 01.02. und richtet sich an die Bewertun
 Die Modellierung eurer Domain-Objekte als Aggregagte scheint sinnvoll zu sein.
 Da ihr keine wirklichen Anwendungsfälle implementiert habt, lässt sich das aber nicht mit Sicherheit sagen.
 
-Der Architekturtest schlägt bei euch fehl. Das liegt daran, dass ihr das Package "exambyte.service.." nicht als Service/Adapter aufgeführt habt.
+Der Architekturtest schlägt bei euch fehl. Das liegt daran, dass ihr das Package "exambyte.infrastructure.." nicht als Service/Adapter aufgeführt habt.
 Darüber hinaus habt ihr die Onion-Architektur eingehalten.
 
 Entsprechend des Schnittes eurer Aggregate habt ihr die Datenbank-Implementation mit DIP und Mapper gut umgesetzt.

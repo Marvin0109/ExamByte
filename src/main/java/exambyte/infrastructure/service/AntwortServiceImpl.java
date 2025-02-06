@@ -1,8 +1,8 @@
-package exambyte.service.impl;
+package exambyte.infrastructure.service;
 
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.repository.AntwortRepository;
-import exambyte.application.interfaces.AntwortService;
+import exambyte.domain.service.AntwortService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

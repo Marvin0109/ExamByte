@@ -1,4 +1,4 @@
-package exambyte.application.config;
+package exambyte.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;

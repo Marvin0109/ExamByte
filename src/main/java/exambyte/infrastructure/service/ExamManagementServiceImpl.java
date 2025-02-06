@@ -1,11 +1,11 @@
-package exambyte.application.service;
+package exambyte.infrastructure.service;
 
-import exambyte.application.interfaces.*;
 import exambyte.domain.aggregate.exam.Antwort;
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.aggregate.exam.Frage;
-import exambyte.application.mgtinterface.ExamManagementService;
+import exambyte.domain.service.ExamManagementService;
 import exambyte.domain.repository.ExamRepository;
+import exambyte.domain.service.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

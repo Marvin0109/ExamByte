@@ -1,6 +1,6 @@
-package exambyte.application.service;
+package exambyte.infrastructure.service;
 
-import exambyte.application.config.AppUserService;
+import exambyte.domain.config.AppUserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;

@@ -1,7 +1,7 @@
 package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.ExamDTOMapper;
-import exambyte.application.mgtinterface.ExamManagementService;
+import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.domain.service.ExamManagementService;
 import exambyte.domain.aggregate.exam.Exam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -20,10 +20,12 @@ import java.util.UUID;
 public class ExamController {
 
     private final ExamManagementService examManagementService;
+    private final ExamDTOMapper examDTOMapper;
 
     @Autowired
-    public ExamController(ExamManagementService examManagementService) {
+    public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper) {
        this.examManagementService = examManagementService;
+       this.examDTOMapper = examDTOMapper;
     }
 
     @GetMapping("/create")
@@ -59,7 +61,7 @@ public class ExamController {
     @Secured("ROLE_STUDENT")
     public String listExams(Model model) {
         List<Exam> exams = examManagementService.getAllExams();
-        List<ExamDTO> examDTOs = ExamDTOMapper.toExamDTOList(exams);
+        List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
         model.addAttribute("exams", examDTOs);
         return "exams/examsStudierende";
     }
@@ -71,7 +73,7 @@ public class ExamController {
         String studentName = user.getAttribute("login");
         boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(examFachId, user.getAttribute("login"));
         Exam exam = examManagementService.getExam(examFachId);
-        ExamDTO examDTO = ExamDTOMapper.toDTO(exam);
+        ExamDTO examDTO = examDTOMapper.toDTO(exam);
 
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular

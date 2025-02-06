@@ -1,9 +1,9 @@
-package exambyte.service.impl;
+package exambyte.infrastructure.service;
 
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
-import exambyte.application.interfaces.ExamService;
-import exambyte.service.NichtVorhandenException;
+import exambyte.domain.service.ExamService;
+import exambyte.infrastructure.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

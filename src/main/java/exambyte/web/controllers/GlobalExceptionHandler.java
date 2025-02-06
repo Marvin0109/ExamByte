@@ -1,4 +1,4 @@
-package exambyte.domain.exceptions;
+package exambyte.web.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;

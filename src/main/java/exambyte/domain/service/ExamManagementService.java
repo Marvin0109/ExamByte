@@ -1,6 +1,5 @@
-package exambyte.application.mgtinterface;
+package exambyte.domain.service;
 
-import exambyte.application.dto.ExamDTO;
 import exambyte.domain.aggregate.exam.Exam;
 
 import java.time.LocalDateTime;

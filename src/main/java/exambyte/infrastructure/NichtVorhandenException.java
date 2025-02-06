@@ -1,4 +1,4 @@
-package exambyte.service;
+package exambyte.infrastructure;
 
 public class NichtVorhandenException extends RuntimeException {
 }

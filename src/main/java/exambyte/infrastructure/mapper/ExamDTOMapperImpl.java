@@ -1,13 +1,18 @@
-package exambyte.application.dto;
+package exambyte.infrastructure.mapper;
 
+import exambyte.application.dto.ExamDTO;
 import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.mapper.ExamDTOMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ExamDTOMapper {
+@Component
+public class ExamDTOMapperImpl implements ExamDTOMapper {
 
-    public static ExamDTO toDTO(Exam exam) {
+    @Override
+    public ExamDTO toDTO(Exam exam) {
         return new ExamDTO(
                 exam.getId(),
                 exam.getFachId(),
@@ -18,9 +23,10 @@ public class ExamDTOMapper {
                 exam.getResultTime());
     }
 
-    public static List<ExamDTO> toExamDTOList(List<Exam> exams) {
+    @Override
+    public List<ExamDTO> toExamDTOList(List<Exam> exams) {
         return exams.stream()
-                .map(ExamDTOMapper::toDTO)
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 }

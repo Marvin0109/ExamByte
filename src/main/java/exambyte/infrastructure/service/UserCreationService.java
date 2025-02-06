@@ -1,8 +1,8 @@
-package exambyte.application.service;
+package exambyte.infrastructure.service;
 
-import exambyte.application.interfaces.KorrektorService;
-import exambyte.application.interfaces.ProfessorService;
-import exambyte.application.interfaces.StudentService;
+import exambyte.domain.service.KorrektorService;
+import exambyte.domain.service.ProfessorService;
+import exambyte.domain.service.StudentService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;

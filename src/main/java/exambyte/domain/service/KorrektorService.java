@@ -1,4 +1,4 @@
-package exambyte.application.interfaces;
+package exambyte.domain.service;
 
 import exambyte.domain.aggregate.user.Korrektor;
 
