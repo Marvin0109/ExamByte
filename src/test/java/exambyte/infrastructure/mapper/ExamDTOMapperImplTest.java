@@ -22,7 +22,7 @@ public class ExamDTOMapperImplTest {
         UUID profId = UUID.randomUUID();
 
         Exam exam = new Exam.ExamBuilder()
-                .id(1L)
+                .id(null)
                 .fachId(fachId)
                 .title("Test Exam")
                 .professorFachId(profId)
@@ -33,7 +33,7 @@ public class ExamDTOMapperImplTest {
 
         ExamDTO dto = mapper.toDTO(exam);
 
-        assertEquals(1L, dto.id());
+        assertNull(dto.id());
         assertEquals(fachId, dto.fachId());
         assertEquals("Test Exam", dto.title());
         assertEquals(profId, dto.professorFachId());
