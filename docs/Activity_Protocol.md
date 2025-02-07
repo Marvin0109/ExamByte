@@ -138,3 +138,7 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Onion Architektur aufrechterhalten
 - Container Tests und Mapper Tests angepasst
 - Test für die Aggregate, Infrastructure geschrieben
+
+07.02.2025
+- Oauth2 Login Fix
+- Tests Fix
