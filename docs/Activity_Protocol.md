@@ -143,3 +143,5 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Oauth2 Login Fix
 - Tests Fix
 - Rollenverteilung Fix
+- Restliche MapperDTO und Interfaces erstellt
+- Package Dokumentationen erstellt (javadoc)
