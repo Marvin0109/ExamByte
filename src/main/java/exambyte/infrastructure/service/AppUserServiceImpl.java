@@ -1,6 +1,5 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.config.Oauth2Service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -29,11 +28,9 @@ import java.util.Set;
 public class AppUserServiceImpl implements AppUserService {
 
   private final UserCreationService userCreationService;
-  private final Oauth2Service oauth2Service;
 
-  public AppUserServiceImpl(UserCreationService userCreationService, Oauth2Service oauth2Service) {
+  public AppUserServiceImpl(UserCreationService userCreationService) {
     this.userCreationService = userCreationService;
-    this.oauth2Service = oauth2Service;
   }
 
   /**
@@ -49,7 +46,8 @@ public class AppUserServiceImpl implements AppUserService {
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
     System.out.println("User Service called");
-    OAuth2User originalUser = oauth2Service.loadUser(userRequest);
+    OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+    OAuth2User originalUser = delegate.loadUser(userRequest);
     Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
     String login = originalUser.getAttribute("login");
 

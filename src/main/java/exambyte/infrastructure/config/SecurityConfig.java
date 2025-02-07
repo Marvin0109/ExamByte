@@ -2,7 +2,6 @@ package exambyte.infrastructure.config;
 
 import exambyte.infrastructure.service.AppUserService;
 import exambyte.infrastructure.service.AppUserServiceImpl;
-import exambyte.domain.config.Oauth2Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,11 +33,11 @@ public class SecurityConfig {
      * @param userService Der benutzerdefinierte {@link AppUserServiceImpl}, der zur Authentifizierung der Benutzer verwendet wird.
      */
 
-    private final Oauth2Service oauth2Service;
+    private final AppUserService appUserService;
 
     @Autowired
-    public SecurityConfig(Oauth2Service oauth2Service) {
-        this.oauth2Service = oauth2Service;
+    public SecurityConfig(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     /**
@@ -61,7 +60,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(config -> config.userInfoEndpoint(
-                        info -> info.userService(oauth2Service)
+                        info -> info.userService(appUserService)
                 ))
                 .logout(logout -> logout
                         .logoutUrl("/logout") // URL für Logout

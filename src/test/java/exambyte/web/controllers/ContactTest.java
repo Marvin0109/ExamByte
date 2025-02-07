@@ -1,8 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.domain.config.Oauth2Service;
 import exambyte.infrastructure.service.AppUserService;
-import exambyte.infrastructure.service.AppUserServiceImpl;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
@@ -28,11 +26,11 @@ public class ContactTest {
     private MockMvc mvc;
 
     @MockBean
-    private Oauth2Service oauth2Service;
+    private AppUserService appUserService;
 
     @Autowired
-    public ContactTest(Oauth2Service oauth2Service) {
-        this.oauth2Service = oauth2Service;
+    public ContactTest(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @Test

@@ -1,15 +1,12 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.domain.config.Oauth2Service;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.service.*;
-import exambyte.infrastructure.service.AppUserServiceImpl;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.domain.aggregate.exam.Exam;
 import exambyte.infrastructure.service.*;
-import exambyte.infrastructure.service.ExamManagementServiceImpl;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,14 +39,14 @@ public class ExamsDurchfuehrenTest {
     private ProfessorService professorService;
 
     @MockBean
-    private Oauth2Service oauth2Service;
+    private AppUserService appUserService;
 
     @MockBean
     private ExamDTOMapper examDTOMapper;
 
     @Autowired
-    public ExamsDurchfuehrenTest(Oauth2Service oauth2Service) {
-        this.oauth2Service = oauth2Service;
+    public ExamsDurchfuehrenTest(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @Test

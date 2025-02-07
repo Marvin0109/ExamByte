@@ -1,10 +1,10 @@
 package exambyte.web.controllers;
 
-import exambyte.domain.config.Oauth2Service;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
+import exambyte.infrastructure.service.AppUserService;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class ExamsStudierendeTest {
     private MockMvc mvc;
 
     @MockBean
-    private Oauth2Service oauth2Service;
+    private AppUserService appUserService;
 
     @MockBean
     private ExamDTOMapper examDTOMapper;
@@ -51,8 +51,8 @@ public class ExamsStudierendeTest {
     private FrageService frageService;
 
     @Autowired
-    public ExamsStudierendeTest(Oauth2Service oauth2Service) {
-        this.oauth2Service = oauth2Service;
+    public ExamsStudierendeTest(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @Test

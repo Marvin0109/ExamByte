@@ -44,8 +44,7 @@ public class OnionArchitectureTest {
                 .applicationServices("exambyte.application.service..")
                 //.adapter("web", "exambyte.web.controllers..")
                 .adapter("persistence", "exambyte.persistence.repository..")
-                .adapter("service", "exambyte.infrastructure.service..")
-                .adapter("configuration", "exambyte.infrastructure.config..")
+                .adapter("service", "exambyte.infrastructure.service..", "exambyte.infrastructure.config..")
                 .adapter("repository", "exambyte.persistence.repository..")
                 .adapter("controller", "exambyte.web.controllers..")
                 .adapter("mapper", "exambyte.infrastructure.mapper..", "exambyte.persistence.mapper..");

@@ -1,9 +1,7 @@
 package exambyte.web.controllers;
 
-import exambyte.domain.config.Oauth2Service;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.service.*;
-import exambyte.infrastructure.service.AppUserServiceImpl;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
@@ -30,7 +28,7 @@ public class ExamsProfessorenTest {
     private MockMvc mvc;
 
     @MockBean
-    private Oauth2Service oauth2Service;
+    private AppUserService appUserService;
 
     @MockBean
     private ExamService examService;
@@ -54,8 +52,8 @@ public class ExamsProfessorenTest {
     private ExamDTOMapper examDTOMapper;
 
     @Autowired
-    public ExamsProfessorenTest(Oauth2Service oauth2Service) {
-        this.oauth2Service = oauth2Service;
+    public ExamsProfessorenTest(AppUserService appUserService) {
+        this.appUserService = appUserService;
     }
 
     @Test
