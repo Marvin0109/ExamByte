@@ -142,3 +142,4 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 07.02.2025
 - Oauth2 Login Fix
 - Tests Fix
+- Rollenverteilung Fix
