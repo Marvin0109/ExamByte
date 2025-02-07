@@ -1,7 +1,5 @@
 package exambyte.application.dto;
 
-import exambyte.domain.aggregate.exam.Antwort;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

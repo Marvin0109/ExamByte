@@ -6,13 +6,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 /**
  * Diese Konfigurationsklasse aktiviert die Methodensicherheit in der Anwendung.
  *
- * Mit der Annotation {@link EnableMethodSecurity} wird es möglich, Sicherheitskontrollen
+ * <p>Mit der Annotation {@link EnableMethodSecurity} wird es möglich, Sicherheitskontrollen
  * auf Methodenebene zu definieren, wie z.B. die Verwendung von {@link org.springframework.security.access.annotation.Secured}
- * oder {@link org.springframework.security.access.prepost.PreAuthorize} für den Zugriffsschutz.
+ * oder {@link org.springframework.security.access.prepost.PreAuthorize} für den Zugriffsschutz.</p>
  *
  * @see EnableMethodSecurity
  */
-
 @Configuration
 @EnableMethodSecurity(securedEnabled = true)
 public class MethodSecurityConfig {

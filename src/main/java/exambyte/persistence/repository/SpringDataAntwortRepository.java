@@ -1,6 +1,5 @@
 package exambyte.persistence.repository;
 
-
 import exambyte.persistence.entities.AntwortEntity;
 import org.springframework.data.repository.CrudRepository;
 

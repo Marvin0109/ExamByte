@@ -10,47 +10,45 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Die Klasse konfiguriert die Sicherheitslinien für die Webanwendung, einschließlich
- * der Authentifizierung und der Autorisierung von Benutzern sowie der Logout-Logik.
+ * Diese Klasse konfiguriert die Sicherheitsrichtlinien für die Webanwendung,
+ * einschließlich Authentifizierung, Autorisierung und Logout-Logik.
  *
- * - Die Konfiguration legt fest, welche URLs öffentlich zugänglich sind und welche eine Authentifizierung erfordern.
- * - Eine OAuth2-Login-Integration wird konfiguriert, bei der ein benutzerdefinierter {@link AppUserServiceImpl} verwendet wird,
- *   um Benutzerinformationen zu laden.
- * - Die Logout-Logik wird so konfiguriert, dass nach dem Logout die Session invalidiert und bestimmte Cookies gelöscht werden.
+ * <p>Die Konfiguration legt fest, welche URLs öffentlich zugänglich sind und welche eine Authentifizierung erfordern.</p>
+ * <p>Die OAuth2-Login-Integration wird konfiguriert, wobei ein benutzerdefinierter {@link AppUserService} verwendet wird,
+ * um Benutzerinformationen zu laden. Die eigentliche Implementierung liegt in {@link AppUserServiceImpl}</p>
+ * <p>Die Logout-Logik wird so konfiguriert, dass nach dem Logout die Session invalidiert und bestimmte Cookies gelöscht werden.</p>
  *
- * Hinweis: Es gibt ein bekanntes Problem mit der Logout-Funktionalität, bei dem der Browser geschlossen werden muss,
- * um den Login-Cookie zu löschen.
+ * <p><b>Wichtiger Hinweis:</b> Es gibt ein bekanntes Problem mit der Logout-Funktionalität, bei dem der Browser geschlossen werden muss,
+ * um den Login-Cookie zu löschen.</p>
  *
  * @see AppUserServiceImpl
  */
-
 @Configuration
 public class SecurityConfig {
 
-    /**
-     * Konstruktor für die {@link SecurityConfig}, der den {@link AppUserServiceImpl} injiziert.
-     *
-     * @param userService Der benutzerdefinierte {@link AppUserServiceImpl}, der zur Authentifizierung der Benutzer verwendet wird.
-     */
-
     private final AppUserService appUserService;
 
+    /**
+     * Konstruktor für die {@link SecurityConfig}, der den {@link AppUserService} injiziert.
+     *
+     * @param appUserService Der benutzerdefinierte {@link AppUserService}, der zur Authentifizierung der Benutzer verwendet wird.
+     */
     @Autowired
     public SecurityConfig(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
 
     /**
-     * Die Methode konfiguriert die Sicherheitsfilterkette, um den Zugriff auf verschiedene URLs und die Authentifizierung zu regeln.
+     * Diese Methode konfiguriert die {@link SecurityFilterChain} für die Webanwendung,
+     * um den Zugriff auf URLs zu regeln und die Authentifizierung zu steuern.
      *
-     * - Bestimmte URLs (wie z.B. "/login" und "/public/**") sind ohne Authentifizierung zugänglich
-     * - Alle anderen Anfragen erfordern eine Authentifizierung.
-     * - Die Oauth2-Login-Integration wird konfiguriert, um den {@link AppUserServiceImpl} zu verwenden.
-     * - Die Logout-Logik wird konfiguriert, um die Sitzung zu invalidieren und Cookies zu löschen.
+     * <p>Bestimmte URLs (wie z.B. "/login" und "/public/**") sind ohne Authentifizierung zugänglich.</p>
+     * <p>Alle anderen Anfragen erfordern eine Authentifizierung, die durch eine OAuth2-Login-Integration bereitgestellt wird.</p>
+     * <p>Die Logout-Logik stellt sicher, dass die Session invalidiert und Cookies gelöscht werden.</p>
      *
-     * @param chainBuilder Der {@link HttpSecurity}-Builder, der für die Sicherheitskonfiguration verwendet wird.
+     * @param chainBuilder Der {@link HttpSecurity}-Builder, der verwendet wird, um die Sicherheitsrichtlinien zu konfigurieren.
      * @return Eine konfigurierte {@link SecurityFilterChain}-Instanz, die die Sicherheitsrichtlinien anwendet.
-     * @throws Exception Wenn ein Fehler bei der Konfiguration der Sicherheitsfilterkette auftritt.
+     * @throws Exception Falls ein Fehler bei der Konfiguration der Sicherheitsfilterkette auftritt.
      */
     @Bean
     public SecurityFilterChain configure(HttpSecurity chainBuilder) throws Exception {
