@@ -3,7 +3,6 @@ package exambyte.persistence.repository;
 import exambyte.domain.aggregate.user.Professor;
 import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.persistence.entities.ProfessorEntity;
-import exambyte.persistence.mapper.ProfessorMapperImpl;
 import exambyte.domain.repository.ProfessorRepository;
 import org.springframework.stereotype.Repository;
 
