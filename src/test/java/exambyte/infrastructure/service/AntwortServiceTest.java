@@ -1,30 +1,39 @@
-package exambyte.infrastructure.Service;
+package exambyte.domain.service;
 
 import exambyte.domain.aggregate.exam.Antwort;
+import exambyte.domain.entitymapper.AntwortMapper;
 import exambyte.domain.repository.AntwortRepository;
 import exambyte.infrastructure.service.AntwortServiceImpl;
-import org.junit.Test;
+import exambyte.persistence.mapper.AntwortMapperImpl;
+import exambyte.persistence.repository.AntwortRepositoryImpl;
+import exambyte.persistence.repository.SpringDataAntwortRepository;
+import org.junit.Ignore;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
-@SpringBootTest
 
-public class AntwortServiceImplTest {
+@Import(SpringDataAntwortRepository.class)
+public class AntwortServiceTest {
 
-    @MockBean
+    private SpringDataAntwortRepository antRepository;
     private AntwortRepository antwortRepository;
 
-    @Autowired
-    private AntwortServiceImpl antwortService;
+    @BeforeEach
+    void setUp() {
+        AntwortMapper antMapper = new AntwortMapperImpl();
+        antwortRepository = new AntwortRepositoryImpl(antRepository, antMapper);
+    }
 
-    // Successfully find answer by FrageFachId when it exists using @MockBean
+    private AntwortServiceImpl antwortServiceImpl;
+
     @Test
     @DisplayName("find_by_frage_fach_id_returns_answer_when_exists_with_mockbean")
     public void test_01() {
@@ -44,11 +53,11 @@ public class AntwortServiceImplTest {
 
         when(antwortRepository.findByFrageFachId(frageFachId)).thenReturn(expectedAntwort);
 
-        Antwort result = antwortService.findByFrageFachId(frageFachId);
+        Antwort result = antwortServiceImpl.findByFrageFachId(frageFachId);
 
         assertEquals(expectedAntwort, result);
     }
-    // Find answer by FrageFachId when no matching record exists
+
     @Test
     @DisplayName("find_by_frage_fach_id_returns_null_when_not_exists")
     public void test_02() {
@@ -56,7 +65,7 @@ public class AntwortServiceImplTest {
 
         when(antwortRepository.findByFrageFachId(nonExistentFrageFachId)).thenReturn(null);
 
-        Antwort result = antwortService.findByFrageFachId(nonExistentFrageFachId);
+        Antwort result = antwortServiceImpl.findByFrageFachId(nonExistentFrageFachId);
 
         assertNull(result);
     }
