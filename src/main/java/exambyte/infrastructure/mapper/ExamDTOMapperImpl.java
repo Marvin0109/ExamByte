@@ -6,7 +6,6 @@ import exambyte.domain.mapper.ExamDTOMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class ExamDTOMapperImpl implements ExamDTOMapper {
@@ -14,7 +13,7 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
     @Override
     public ExamDTO toDTO(Exam exam) {
         return new ExamDTO(
-                exam.getId(),
+                null,
                 exam.getFachId(),
                 exam.getTitle(),
                 exam.getProfessorFachId(),
@@ -27,6 +26,6 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
     public List<ExamDTO> toExamDTOList(List<Exam> exams) {
         return exams.stream()
                 .map(this::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
