@@ -16,8 +16,7 @@ import java.io.IOException; import java.net.URI;
  *
  * @see SpringApplication
  */
-
-@SpringBootApplication(scanBasePackages = {"exambyte"})
+@SpringBootApplication()
 public class ExamByteApplication {
 
 	/**

@@ -11,8 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class AntwortTest {
+
     @Test
-    @DisplayName("test_builder_creates_antwort_with_all_fields")
+    @DisplayName("AntwortBuilder Test")
     public void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
@@ -40,8 +41,9 @@ public class AntwortTest {
         assertEquals(antwortZeitpunkt, antwort.getAntwortZeitpunkt());
         assertEquals(lastChangesZeitpunkt, antwort.getLastChangesZeitpunkt());
     }
+
     @Test
-    @DisplayName("test_builder_creates_antwort_with_null_optional_fields")
+    @DisplayName("AntwortBuilder Test mit null Werte")
     public void test_02() {
         Long id = 1L;
         UUID frageFachId = UUID.randomUUID();

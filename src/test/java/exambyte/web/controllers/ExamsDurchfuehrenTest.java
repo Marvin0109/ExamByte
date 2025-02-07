@@ -1,5 +1,9 @@
 package exambyte.web.controllers;
 
+import exambyte.application.dto.ExamDTO;
+import exambyte.domain.config.Oauth2Service;
+import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.domain.service.*;
 import exambyte.infrastructure.service.AppUserServiceImpl;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
@@ -32,29 +36,20 @@ public class ExamsDurchfuehrenTest {
     private MockMvc mvc;
 
     @MockBean
-    private ExamManagementServiceImpl examManagementServiceImpl;
+    private ExamManagementService examManagementService;
 
     @MockBean
-    private ExamServiceImpl examServiceImpl;
+    private ProfessorService professorService;
 
     @MockBean
-    private AntwortServiceImpl antwortServiceImpl;
+    private Oauth2Service oauth2Service;
 
     @MockBean
-    private ProfessorServiceImpl professorServiceImpl;
-
-    @MockBean
-    private StudentServiceImpl studentServiceImpl;
-
-    @MockBean
-    private FrageServiceImpl frageServiceImpl;
-
-    @MockBean
-    private AppUserServiceImpl appUserServiceImpl;
+    private ExamDTOMapper examDTOMapper;
 
     @Autowired
-    public ExamsDurchfuehrenTest(AppUserServiceImpl appUserServiceImpl) {
-        this.appUserServiceImpl = appUserServiceImpl;
+    public ExamsDurchfuehrenTest(Oauth2Service oauth2Service) {
+        this.oauth2Service = oauth2Service;
     }
 
     @Test
@@ -75,6 +70,7 @@ public class ExamsDurchfuehrenTest {
         LocalDateTime startTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime endTime = LocalDateTime.of(2020, 2, 28, 23, 59);
         LocalDateTime resultTime = LocalDateTime.of(2020, 3, 31, 23, 59);
+
         Exam dummyExam = new Exam.ExamBuilder()
                 .id(null)
                 .fachId(null)
@@ -85,12 +81,22 @@ public class ExamsDurchfuehrenTest {
                 .resultTime(resultTime)
                 .build();
 
-        when(examServiceImpl.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
+        ExamDTO dummyDTO = new ExamDTO(
+                dummyExam.getId(),
+                dummyExam.getFachId(),
+                dummyExam.getTitle(),
+                dummyExam.getProfessorFachId(),
+                dummyExam.getStartTime(),
+                dummyExam.getEndTime(),
+                dummyExam.getResultTime());
 
-        mvc.perform(get("/api/exams/start/" + dummyExam.getFachId()))
+        when(examManagementService.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
+        when(examDTOMapper.toDTO(dummyExam)).thenReturn(dummyDTO);
+
+        mvc.perform(get("/api/exams/start/" + dummyDTO.fachId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("alreadySubmitted"))
-                .andExpect(model().attribute("exam", dummyExam))
+                .andExpect(model().attribute("exam", dummyDTO))
                 .andExpect(model().attribute("name", "Marvin0109"));
     }
 }

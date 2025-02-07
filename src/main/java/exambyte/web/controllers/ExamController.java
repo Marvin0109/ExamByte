@@ -3,6 +3,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.service.ExamManagementService;
 import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -21,11 +22,13 @@ public class ExamController {
 
     private final ExamManagementService examManagementService;
     private final ExamDTOMapper examDTOMapper;
+    private final ProfessorService professorService;
 
     @Autowired
-    public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper) {
+    public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper, ProfessorService professorService) {
        this.examManagementService = examManagementService;
        this.examDTOMapper = examDTOMapper;
+        this.professorService = professorService;
     }
 
     @GetMapping("/create")
@@ -49,8 +52,12 @@ public class ExamController {
 
         boolean success = examManagementService.createExam(name, title, startTime, endTime, resultTime);
 
+        UUID profFachId = professorService.getProfessorFachId(name);
+
         if (success) {
             model.addAttribute("message", "Test erfolgreich erstellt!");
+            ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
+            model.addAttribute("exam", examDTO);
         } else {
             model.addAttribute("message", "Fehler beim Erstellen der Prüfung.");
         }
@@ -80,7 +87,6 @@ public class ExamController {
         model.addAttribute("name", studentName);
         return "exams/examsDurchfuehren";
     }
-
 
     @PostMapping("/submit")
     @Secured("ROLE_STUDENT")

@@ -60,13 +60,13 @@ public class ExamDBTest {
 
     @BeforeEach
     public void setUp() {
-        AntwortMapper antMapper = new AntwortMapperImpl(); // Manuelle Instanziierung
-        FrageMapper frageMapper = new FrageMapperImpl(); // Manuelle Instanziierung
-        ProfessorMapper profMapper = new ProfessorMapperImpl(); // Manuelle Instanziierung
-        StudentMapper studentMapper = new StudentMapperImpl(); // Manuelle Instanziierung
-        KorrektorMapper korrektorMapper = new KorrektorMapperImpl(); // Manuelle Instanziierung
-        ExamMapper examMapper = new ExamMapperImpl(); // Manuelle Instanziierung
-        ReviewMapper reviewMapper = new ReviewMapperImpl(); // Manuelle Instanziierung
+        AntwortMapper antMapper = new AntwortMapperImpl();
+        FrageMapper frageMapper = new FrageMapperImpl();
+        ProfessorMapper profMapper = new ProfessorMapperImpl();
+        StudentMapper studentMapper = new StudentMapperImpl();
+        KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
+        ExamMapper examMapper = new ExamMapperImpl();
+        ReviewMapper reviewMapper = new ReviewMapperImpl();
 
         antwortRepository = new AntwortRepositoryImpl(antRepository, antMapper);
         frageRepository = new FrageRepositoryImpl(professorRepository, frRepository, frageMapper);

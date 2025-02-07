@@ -9,9 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 public class FrageTest {
 
-    // Create Frage instance with all valid parameters using builder pattern
     @Test
-    @DisplayName("create_frage_with_valid_parameters")
+    @DisplayName("FrageBuilder Test")
     public void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
@@ -37,9 +36,8 @@ public class FrageTest {
         assertEquals(examUUID, frage.getExamUUID());
     }
 
-    // Create Frage with null id
     @Test
-    @DisplayName("create_frage_with_null_id")
+    @DisplayName("FrageBuilder Test mit null ID")
     public void test_02() {
         UUID fachId = UUID.randomUUID();
         String frageText = "Test question";

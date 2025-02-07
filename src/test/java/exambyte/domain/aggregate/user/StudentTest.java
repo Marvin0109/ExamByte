@@ -9,9 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StudentTest {
 
-    // Create Student with all fields populated using builder pattern
     @Test
-    @DisplayName("create_student_with_all_fields")
+    @DisplayName("StudentBuilder Test")
     public void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
@@ -30,7 +29,7 @@ public class StudentTest {
 
     // Create Student with null id
     @Test
-    @DisplayName("create_student_with_null_id")
+    @DisplayName("StudentBuilder Test mit null Feldern")
     public void test_02() {
         UUID fachId = UUID.randomUUID();
         String name = "John Doe";

@@ -9,11 +9,11 @@ import java.util.UUID;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+
 public class ExamTest {
 
-    // Create exam with all required fields using builder pattern
     @Test
-    @DisplayName("create_exam_with_all_fields")
+    @DisplayName("Exam Builder Test")
     public void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
@@ -41,9 +41,9 @@ public class ExamTest {
         assertEquals(endTime, exam.getEndTime());
         assertEquals(resultTime, exam.getResultTime());
     }
-    // Create exam with null values for optional fields
+
     @Test
-    @DisplayName("create_exam_with_optional_fields_null")
+    @DisplayName("ExamBuilder Test mit null Feldern")
     public void test_02() {
         String title = "Math Exam";
         LocalDateTime startTime = LocalDateTime.now();

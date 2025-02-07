@@ -10,9 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 public class ReviewTest {
 
-    // Create Review object with all valid parameters using builder pattern
     @Test
-    @DisplayName("test_create_review_with_valid_parameters")
+    @DisplayName("ReviewBuilder Test")
     public void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
@@ -38,9 +37,8 @@ public class ReviewTest {
         assertEquals(punkte, review.getPunkte());
     }
 
-    // Create Review with null values for optional fields
     @Test
-    @DisplayName("test_create_review_with_null_optional_fields")
+    @DisplayName("ReviewBuilder Test mit null Feldern")
     public void test_02() {
         Long id = 1L;
         UUID antwortFachId = UUID.randomUUID();

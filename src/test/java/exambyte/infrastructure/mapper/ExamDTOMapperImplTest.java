@@ -11,9 +11,9 @@ import exambyte.domain.aggregate.exam.Exam;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExamDTOMapperImplTest {
-    // Single Exam object is correctly mapped to ExamDTO with all fields preserved
+
     @Test
-    @DisplayName("test_exam_maps_to_dto_with_all_fields")
+    @DisplayName("Test ExamDTOMapper 'toDTO'")
     public void test_01() {
         ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
 

@@ -1,9 +1,10 @@
 package exambyte.web.controllers;
 
-import exambyte.infrastructure.service.AppUserServiceImpl;
+import exambyte.domain.config.Oauth2Service;
+import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,22 +27,33 @@ public class ExamsStudierendeTest {
     private MockMvc mvc;
 
     @MockBean
-    private AppUserServiceImpl appUserServiceImpl;
+    private Oauth2Service oauth2Service;
 
     @MockBean
-    private ExamServiceImpl examServiceImpl;
+    private ExamDTOMapper examDTOMapper;
 
     @MockBean
-    private AntwortServiceImpl antwortServiceImpl;
+    private ExamManagementService examManagementService;
 
     @MockBean
-    private ProfessorServiceImpl professorServiceImpl;
+    private ExamService examService;
 
     @MockBean
-    private StudentServiceImpl studentServiceImpl;
+    private AntwortService antwortService;
 
     @MockBean
-    private FrageServiceImpl frageServiceImpl;
+    private ProfessorService professorService;
+
+    @MockBean
+    private StudentService studentService;
+
+    @MockBean
+    private FrageService frageService;
+
+    @Autowired
+    public ExamsStudierendeTest(Oauth2Service oauth2Service) {
+        this.oauth2Service = oauth2Service;
+    }
 
     @Test
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")

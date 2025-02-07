@@ -1,5 +1,8 @@
 package exambyte.web.controllers;
 
+import exambyte.domain.config.Oauth2Service;
+import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.domain.service.*;
 import exambyte.infrastructure.service.AppUserServiceImpl;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
@@ -18,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
 @WebMvcTest(ExamController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
 public class ExamsKorrektorTest {
@@ -26,29 +30,36 @@ public class ExamsKorrektorTest {
     private MockMvc mvc;
 
     @MockBean
-    private AppUserServiceImpl appUserServiceImpl;
+    private Oauth2Service oauth2Service;
 
     @MockBean
-    private ExamServiceImpl examServiceImpl;
+    private ExamService examService;
 
     @MockBean
-    private AntwortServiceImpl antwortServiceImpl;
+    private AntwortService antwortService;
 
     @MockBean
-    private ProfessorServiceImpl professorServiceImpl;
+    private ProfessorService professorService;
 
     @MockBean
-    private StudentServiceImpl studentServiceImpl;
+    private StudentService studentService;
 
     @MockBean
-    private FrageServiceImpl frageServiceImpl;
+    private FrageService frageService;
+
+    @MockBean
+    private ExamManagementService examManagementService;
+
+    @MockBean
+    private ExamDTOMapper examDTOMapper;
 
     // Fehlender Controller für examsKorrektor!
 
     @Autowired
-    public ExamsKorrektorTest(AppUserServiceImpl appUserServiceImpl) {
-        this.appUserServiceImpl = appUserServiceImpl;
+    public ExamsKorrektorTest(Oauth2Service oauth2Service) {
+        this.oauth2Service = oauth2Service;
     }
+
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
