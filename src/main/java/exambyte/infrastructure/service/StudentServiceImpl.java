@@ -6,6 +6,7 @@ import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.domain.service.StudentService;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,9 +35,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getStudentByName(String name) {
-        return studentRepository.findByName(name)
-                .orElseThrow(NichtVorhandenException::new);
+    public Optional<Student> getStudentByName(String name) {
+        return studentRepository.findByName(name);
     }
 
     @Override

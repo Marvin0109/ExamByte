@@ -6,6 +6,7 @@ import exambyte.domain.service.KorrektorService;
 import exambyte.infrastructure.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,8 +36,7 @@ public class KorrektorServiceImpl  implements KorrektorService {
     }
 
     @Override
-    public Korrektor getKorrektorByName(String name) {
-        return korrektorRepository.findByName(name)
-                .orElseThrow(NichtVorhandenException::new);
+    public Optional<Korrektor> getKorrektorByName(String name) {
+        return korrektorRepository.findByName(name);
     }
 }

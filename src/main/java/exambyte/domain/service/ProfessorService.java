@@ -2,6 +2,7 @@ package exambyte.domain.service;
 
 import exambyte.domain.aggregate.user.Professor;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProfessorService {
@@ -10,7 +11,7 @@ public interface ProfessorService {
 
     void saveProfessor(String name);
 
-    Professor getProfessorByName(String name);
+    Optional<Professor> getProfessorByName(String name);
 
     UUID getProfessorFachId(String name);
 }

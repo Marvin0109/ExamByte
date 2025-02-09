@@ -41,7 +41,7 @@ public class AppUserServiceImpl implements AppUserService {
    *
    * @param userRequest Die Anfrage, die Benutzerdaten vom OAuth2-Provider anfordert.
    * @return Ein {@link OAuth2User} Objekt, das die Benutzerinformationen und die zugewiesenen Rollen enthält.
-   * @throws OAuth2AuthenticationException Wenn ein Fehler beim Laden der Benutzerdaten auftritt.
+   * @throws OAuth2AuthenticationException Falls ein Fehler beim Laden der Benutzerdaten auftritt.
    */
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -53,22 +53,33 @@ public class AppUserServiceImpl implements AppUserService {
 
     // Es wird erstmal überprüft, ob schon der User in der DB gespeichert worden ist, wenn ja,
     // kriegt er nur die Rolle
+
+    boolean found = false;
+
     if (userCreationService.checkProfessor(login)) {
       authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-    } else if (userCreationService.checkKorrektor(login)) {
+      found = true;
+    }
+    if (userCreationService.checkKorrektor(login)) {
       authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
-    } else if (userCreationService.checkStudent(login)) {
+      found = true;
+    }
+    if (userCreationService.checkStudent(login)) {
       authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
-    } else {
-      // Wenn der Benutzer noch nicht existiert, erstell ihn mit einer passenden Rolle
+      found = true;
+    }
+
+    // Wenn der Benutzer noch nicht existiert, erstell ihn mit einer passenden Rolle
+    if (!found) {
       if ("Marvin0109".equals(login) || "muz70wuc".equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-      } else if ("KorrektorName".equals(login)) {
+      }
+      if ("Marvin0109".equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
-      } else {
+      }
+      if ("Marvin0109".equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
       }
-
       // Neuen Benutzer in die DB speichern
       userCreationService.createUser(originalUser, authorities);
     }

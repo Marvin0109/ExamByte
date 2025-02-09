@@ -27,15 +27,15 @@ public class UserCreationService {
     }
 
     public boolean checkStudent(String username) {
-        return studentService.getStudentByName(username) != null;
+        return studentService.getStudentByName(username).isPresent();
     }
 
     public boolean checkKorrektor(String username) {
-        return korrektorService.getKorrektorByName(username) != null;
+        return korrektorService.getKorrektorByName(username).isPresent();
     }
 
     public boolean checkProfessor(String username) {
-        return professorService.getProfessorByName(username) != null;
+        return professorService.getProfessorByName(username).isPresent();
     }
 
     @Transactional
@@ -44,9 +44,11 @@ public class UserCreationService {
 
         if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
             createProfessor(name);
-        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_REVIEWER"))) {
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_REVIEWER"))) {
             createKorrektor(name);
-        } else if (authorities.contains(new SimpleGrantedAuthority("ROLE_USER"))) {
+        }
+        if (authorities.contains(new SimpleGrantedAuthority("ROLE_STUDENT"))) {
             createStudent(name);
         }
     }
