@@ -7,6 +7,7 @@ plugins {
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
 	id 'com.github.spotbugs' version '6.1.1'
+	id 'jacoco'
 }
 
 group = 'exambyte.main'
@@ -33,6 +34,10 @@ spotbugs {
 	ignoreFailures = false
 	effort = Effort.DEFAULT
 	reportLevel = Confidence.valueOf("MEDIUM")
+}
+
+jacoco {
+	toolVersion = '0.8.12'
 }
 
 dependencies {
@@ -76,11 +81,23 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
 }
 
 tasks.withType(SpotBugsTask).configureEach {
 	reports {
 		xml.required = false
-		html.required = true  // Generiere einen HTML-Report
+		html.required = true
+	}
+}
+
+jacocoTestReport {
+	dependsOn test
+	description = "Generate Jacoco coverage reports after running tests."
+	reports {
+		html.required = true
+		xml.required = true
+		html.destination = file("${buildDir}/reports/jacoco/test")
+		xml.destination = file("${buildDir}/reports/jacoco/test-coverage.xml")
 	}
 }
