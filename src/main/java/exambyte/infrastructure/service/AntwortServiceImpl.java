@@ -18,6 +18,9 @@ public class AntwortServiceImpl implements AntwortService {
 
     @Override
     public Antwort findByFrageFachId(UUID frageFachId) {
+        if(frageFachId == null) {
+            throw new IllegalArgumentException("FrageFachId darf nicht null sein");
+        }
         return antwortRepository.findByFrageFachId(frageFachId);
     }
 
@@ -31,5 +34,4 @@ public class AntwortServiceImpl implements AntwortService {
         return antwortRepository.findByStudentFachIdAndFrageFachId(studentId, examId)
                 .orElse(null);
     }
-
 }
