@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/api/exams")
+@RequestMapping("/exams")
 public class ExamController {
 
     private final ExamManagementService examManagementService;
@@ -32,7 +32,7 @@ public class ExamController {
         this.professorService = professorService;
     }
 
-    @GetMapping("/create")
+    @GetMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String showCreateExamForm(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
@@ -40,7 +40,7 @@ public class ExamController {
         return "exams/examsProfessoren";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String createExam(
             @RequestParam String title,
@@ -66,7 +66,7 @@ public class ExamController {
         } else {
             model.addAttribute("message", "Fehler beim Erstellen der Prüfung.");
         }
-        return "redirect:/exams/create"; // Verhindert doppeltes Absenden
+        return "redirect:exams/examsProfessoren"; // Verhindert doppeltes Absenden
     }
 
     @GetMapping("/list")
@@ -75,7 +75,7 @@ public class ExamController {
         List<Exam> exams = examManagementService.getAllExams();
         List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
         model.addAttribute("exams", examDTOs);
-        return "exams/examsStudierende";
+        return "/exams/examsStudierende";
     }
 
     @GetMapping("/start/{examFachId}")
@@ -90,7 +90,7 @@ public class ExamController {
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular
         model.addAttribute("name", studentName);
-        return "exams/examsDurchfuehren";
+        return "/exams/examsDurchfuehren";
     }
 
     @PostMapping("/submit")
