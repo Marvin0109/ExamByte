@@ -4,17 +4,21 @@ import exambyte.application.dto.ExamDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.time.LocalDateTime;
 import exambyte.domain.aggregate.exam.Exam;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExamDTOMapperImplTest {
 
     @Test
     @DisplayName("Test ExamDTOMapper 'toDTO'")
-    public void test_01() {
+    void test_01() {
+        //Arrange
         ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
 
         LocalDateTime now = LocalDateTime.now();
@@ -31,8 +35,10 @@ public class ExamDTOMapperImplTest {
                 .resultTime(now.plusDays(1))
                 .build();
 
+        // Act
         ExamDTO dto = mapper.toDTO(exam);
 
+        // Assert
         assertNull(dto.id());
         assertEquals(fachId, dto.fachId());
         assertEquals("Test Exam", dto.title());
@@ -45,11 +51,55 @@ public class ExamDTOMapperImplTest {
     // Handling null Exam input in toDTO method
     @Test
     @DisplayName("test_null_exam_throws_exception")
-    public void test_02() {
+    void test_02() {
         ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
 
-        assertThrows(NullPointerException.class, () -> {
-            mapper.toDTO(null);
-        });
+        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
+    }
+
+    @Test
+    @DisplayName("toExamDTOList Test")
+    void test_03() {
+        // Arrange
+        ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
+
+        LocalDateTime now = LocalDateTime.now();
+        UUID fachId = UUID.randomUUID();
+        UUID fachId2 = UUID.randomUUID();
+        UUID profId = UUID.randomUUID();
+
+        Exam exam1 = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(fachId)
+                .title("Test Exam 1")
+                .professorFachId(profId)
+                .startTime(now)
+                .endTime(now.plusHours(2))
+                .resultTime(now.plusDays(1))
+                .build();
+
+        Exam exam2 = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(fachId2)
+                .title("Test Exam 2")
+                .professorFachId(profId)
+                .startTime(now)
+                .endTime(now.plusHours(2))
+                .resultTime(now.plusDays(1))
+                .build();
+
+        List<Exam> exams = Arrays.asList(exam1, exam2);
+
+        // Act
+        List<ExamDTO> examDTOList = mapper.toExamDTOList(exams);
+
+        // Assert
+        assertEquals(2, examDTOList.size());
+        assertThat(examDTOList.getFirst().fachId()).isEqualTo(fachId);
+        assertThat(examDTOList.getFirst().title()).isEqualTo("Test Exam 1");
+        assertThat(examDTOList.getFirst().professorFachId()).isEqualTo(profId);
+        assertThat(examDTOList.get(1).fachId()).isEqualTo(fachId2);
+        assertThat(examDTOList.get(1).title()).isEqualTo("Test Exam 2");
+        assertThat(examDTOList.get(1).professorFachId()).isEqualTo(profId);
     }
 }
