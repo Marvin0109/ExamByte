@@ -40,7 +40,7 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public UUID findFachIdByName(String name) {
+    public Optional<UUID> findFachIdByName(String name) {
         return springDataProfessorRepository.findFachIdByName(name);
     }
 

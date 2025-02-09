@@ -13,5 +13,5 @@ public interface ProfessorService {
 
     Optional<Professor> getProfessorByName(String name);
 
-    UUID getProfessorFachId(String name);
+    Optional<UUID> getProfessorFachId(String name);
 }

@@ -40,7 +40,7 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public UUID getProfessorFachId(String name) {
+    public Optional<UUID> getProfessorFachId(String name) {
         return professorRepository.findFachIdByName(name);
     }
 }

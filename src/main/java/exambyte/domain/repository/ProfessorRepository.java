@@ -11,7 +11,7 @@ public interface ProfessorRepository {
 
     Optional<Professor> findByFachId(UUID fachId);
 
-    UUID findFachIdByName(String name);
+    Optional<UUID> findFachIdByName(String name);
 
     void save(Professor professor);
 }

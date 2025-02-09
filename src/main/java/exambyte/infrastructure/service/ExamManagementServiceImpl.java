@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -34,8 +35,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public boolean createExam(String professorName, String title, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
-        UUID professorFachId = professorService.getProfessorFachId(professorName);
-        examService.addExam(null, null, title, professorFachId, startTime, endTime, resultTime);
+        UUID profFachId = null;
+        Optional<UUID> optionalFachID = professorService.getProfessorFachId(professorName);
+        if (optionalFachID.isPresent()) {
+            profFachId = optionalFachID.get();
+        }
+        examService.addExam(null, null, title, profFachId, startTime, endTime, resultTime);
         return true;
     }
 

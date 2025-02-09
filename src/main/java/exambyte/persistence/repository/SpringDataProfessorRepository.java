@@ -14,5 +14,5 @@ public interface SpringDataProfessorRepository extends CrudRepository<ProfessorE
 
     ProfessorEntity save(ProfessorEntity professor);
 
-    UUID findFachIdByName(String name);
+    Optional<UUID> findFachIdByName(String name);
 }

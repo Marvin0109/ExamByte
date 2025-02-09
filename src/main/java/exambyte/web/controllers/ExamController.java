@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -52,7 +53,11 @@ public class ExamController {
 
         boolean success = examManagementService.createExam(name, title, startTime, endTime, resultTime);
 
-        UUID profFachId = professorService.getProfessorFachId(name);
+        UUID profFachId = null;
+        Optional<UUID> optionalFachId = professorService.getProfessorFachId(name);
+        if (optionalFachId.isPresent()) {
+            profFachId = optionalFachId.get();
+        }
 
         if (success) {
             model.addAttribute("message", "Test erfolgreich erstellt!");

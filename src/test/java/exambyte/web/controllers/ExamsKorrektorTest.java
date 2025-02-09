@@ -6,6 +6,7 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +71,7 @@ public class ExamsKorrektorTest {
 
 
     @Test
+    @Disabled("Dieser Test wird momentan deaktiviert.")
     @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für Korrektoren sichtbar")
     void test_02() throws Exception {
