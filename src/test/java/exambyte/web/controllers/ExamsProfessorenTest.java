@@ -59,7 +59,7 @@ public class ExamsProfessorenTest {
     @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/api/exams/create"))
+        MvcResult mvcResult = mvc.perform(get("/exams/create"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -70,7 +70,7 @@ public class ExamsProfessorenTest {
     @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für Professoren sichtbar")
     void test_02() throws Exception {
-        mvc.perform(get("/api/exams/create"))
+        mvc.perform(get("/exams/examsProfessoren"))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("name", "Marvin0109"));
     }
