@@ -71,11 +71,11 @@ public class ExamsKorrektorTest {
 
 
     @Test
-    @Disabled("Dieser Test wird momentan deaktiviert.")
     @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für Korrektoren sichtbar")
     void test_02() throws Exception {
         mvc.perform(get("/exams/examsKorrektor"))
+                .andExpect(status().isOk())
                 .andExpect(model().attribute("name", "Marvin0109"));
     }
 }

@@ -59,7 +59,7 @@ public class ExamsProfessorenTest {
     @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/create"))
+        MvcResult mvcResult = mvc.perform(get("/exams/examsProfessoren"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())

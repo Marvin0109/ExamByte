@@ -69,9 +69,22 @@ public class ExamController {
         return "redirect:exams/examsProfessoren"; // Verhindert doppeltes Absenden
     }
 
-    @GetMapping("/list")
+    @GetMapping("/examsKorrektor")
+    @Secured("ROLE_REVIEWER")
+    public String listExams(Model model, OAuth2AuthenticationToken auth) {
+        OAuth2User user = auth.getPrincipal();
+        model.addAttribute("name", user.getAttribute("login"));
+        List<Exam> exams = examManagementService.getAllExams();
+        List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
+        model.addAttribute("exams", examDTOs);
+        return "/exams/examsKorrektor";
+    }
+
+    @GetMapping("/examStudierende")
     @Secured("ROLE_STUDENT")
-    public String listExams(Model model) {
+    public String listExams2(Model model, OAuth2AuthenticationToken auth) {
+        OAuth2User user = auth.getPrincipal();
+        model.addAttribute("name", user.getAttribute("login"));
         List<Exam> exams = examManagementService.getAllExams();
         List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
         model.addAttribute("exams", examDTOs);
