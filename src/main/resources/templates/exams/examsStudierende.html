@@ -22,42 +22,42 @@
 </head>
 
 <body>
-<!-- Navigation -->
-<header th:replace="~{navigation/navbar.html}"> </header>
+  <!-- Navigation -->
+  <header th:replace="~{navigation/navbar.html}"> </header>
 
-<main role="main" class="container mt-5 pt-5">
+  <main role="main" class="container mt-5 pt-5">
 
-  <div class="container mt-5">
-    <h1>Verfügbare Tests</h1>
-    <table class="table">
-      <thead>
-      <tr>
-        <th>Titel</th>
-        <th>Startzeit</th>
-        <th>Endzeit</th>
-        <th>Aktion</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="exam : ${exams}">
-        <td th:text="${exam.title}"></td>
-        <td th:text="${exam.startTime}"></td>
-        <td th:text="${exam.endTime}"></td>
-        <td>
-          <a th:href="@{/exams/start/{id}(id=${exam.fachId})}" class="btn btn-primary">Test starten</a>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="container mt-5">
+     <h1>Verfügbare Tests</h1>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Titel</th>
+         <th>Startzeit</th>
+         <th>Endzeit</th>
+          <th>Aktion</th>
+        </tr>
+       </thead>
+        <tbody>
+       <tr th:each="exam : ${exams}">
+          <td th:text="${exam.title}"></td>
+         <td th:text="${exam.startTime}"></td>
+          <td th:text="${exam.endTime}"></td>
+         <td>
+            <a th:href="@{/exams/examsDurchfuehren/{id}(id=${exam.fachId})}" class="btn btn-primary">Test starten</a>
+         </td>
+       </tr>
+        </tbody>
+     </table>
+   </div>
 
-</main>
+  </main>
 
-<!-- js Imports -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
-<script src="public/js/scripts.js"></script>
+  <!-- js Imports -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+  <script src="public/js/scripts.js"></script>
 
-</body>
+  </body>
 </html>

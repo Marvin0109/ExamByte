@@ -91,7 +91,7 @@ public class ExamController {
         return "/exams/examsStudierende";
     }
 
-    @GetMapping("/start/{examFachId}")
+    @GetMapping("/examsDurchfuehren/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String startExam(@PathVariable UUID examFachId, OAuth2AuthenticationToken auth, Model model) {
         OAuth2User user = auth.getPrincipal();

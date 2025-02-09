@@ -53,7 +53,7 @@ public class ExamsDurchfuehrenTest {
     @DisplayName("Die Seite zum Durchführen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
         UUID examDummyFachId = UUID.randomUUID();
-        MvcResult mvcResult = mvc.perform(get("/api/exams/start/" + examDummyFachId))
+        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren" + examDummyFachId))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -90,7 +90,7 @@ public class ExamsDurchfuehrenTest {
         when(examManagementService.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
         when(examDTOMapper.toDTO(dummyExam)).thenReturn(dummyDTO);
 
-        mvc.perform(get("/api/exams/start/" + dummyDTO.fachId()))
+        mvc.perform(get("/exams/examsDurchfuehren/" + dummyDTO.fachId()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("alreadySubmitted"))
                 .andExpect(model().attribute("exam", dummyDTO))

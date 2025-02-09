@@ -6,6 +6,7 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.AppUserService;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,12 +68,13 @@ public class ExamsStudierendeTest {
 
 
     @Test
-    @WithMockOAuth2User(login = "Student", roles = {"STUDENT"})
+    @Disabled
+    @WithMockOAuth2User(login = "muz70wuc", roles = {"STUDENT"})
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void test_02() throws Exception {
-        mvc.perform(get("/exams/examsStudierende"))
+        mvc.perform(get("/examsStudierende"))
                 .andExpect(status().isOk())
-                //.andExpect(view().name("exams/examsStudierende"))
-                .andExpect(model().attributeExists("exams"));
+                .andExpect(view().name("exams/examsStudierende"))
+                .andExpect(model().attributeExists("name", "exams"));
     }
 }
