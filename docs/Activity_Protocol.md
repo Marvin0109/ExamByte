@@ -145,3 +145,8 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Rollenverteilung Fix
 - Restliche MapperDTO und Interfaces erstellt
 - Package Dokumentationen erstellt (javadoc)
+
+09.02.2025
+- SpotBugs hinzugefügt
+- Rollenverteilung geändert (Entwickler können 3 Rollen gleichzeitig haben, temporäre Lösung)
+- NichtVorhandenException umgegangen durch Verwendung von Optional<T>

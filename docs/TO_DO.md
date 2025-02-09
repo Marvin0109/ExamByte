@@ -33,7 +33,7 @@
 
 - **Dokumentation**
   - [x] **Arc42 Dokumentation**: Architektur-Dokumentation (Grundstruktur vorhanden, muss ergänzt werden).
-  - [ ] **Code-Dokumentation**: Kommentare und JavaDoc für alle zentralen Klassen.
+  - [x] **Code-Dokumentation**: Kommentare und JavaDoc für alle zentralen Klassen.
 
 ---
 
@@ -61,7 +61,7 @@
 ---
 
 ## 4. Zusätzliche Notizen
-- Das Projekt ist zu etwa 70% abgeschlossen, aber die wichtigsten Funktionen für die Tests (Datenspeicherung, Anzeige der Ergebnisse) sind noch unvollständig.
+- Das Projekt ist zu etwa 80% abgeschlossen, aber die wichtigsten Funktionen für die Tests (Datenspeicherung, Anzeige der Ergebnisse) sind noch unvollständig.
 - Testabdeckung ist aktuell zu niedrig – mindestens 80% Codeabdeckung sollten angestrebt werden.
 - Aktuell genutzte Tools:
   - **Backend**: Java, Spring Boot/Data
