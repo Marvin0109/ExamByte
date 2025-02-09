@@ -1,7 +1,12 @@
+import com.github.spotbugs.snom.Confidence
+import com.github.spotbugs.snom.Effort
+import com.github.spotbugs.snom.SpotBugsTask
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.6'
+	id 'com.github.spotbugs' version '6.1.1'
 }
 
 group = 'exambyte.main'
@@ -23,6 +28,13 @@ repositories {
 	mavenCentral()
 }
 
+spotbugs {
+	toolVersion = '4.9.1'
+	ignoreFailures = false
+	effort = Effort.DEFAULT
+	reportLevel = Confidence.valueOf("MEDIUM")
+}
+
 dependencies {
 
 	// Web
@@ -39,9 +51,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.data:spring-data-jdbc'
 	runtimeOnly 'org.postgresql:postgresql'
-
-	// DDD
-	//implementation 'org.axonframework:axon-spring-boot-starter:4.10.1'
 
 	// DB Migration
 	implementation 'org.flywaydb:flyway-core:11.2.0'
@@ -67,4 +76,11 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+tasks.withType(SpotBugsTask).configureEach {
+	reports {
+		xml.required = false
+		html.required = true  // Generiere einen HTML-Report
+	}
 }
