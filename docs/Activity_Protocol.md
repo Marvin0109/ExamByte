@@ -151,3 +151,6 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Rollenverteilung geändert (Entwickler können 3 Rollen gleichzeitig haben, temporäre Lösung)
 - NichtVorhandenException umgegangen durch Verwendung von Optional<T
 - DTOMapper Tests
+- infrastructure.AntwortServiceImplTest
+- ExamControllerTests wurden fast vollständig behoben wie auch der Controller selbst (fehlt nur ein Test)
+- PowerMock dependencies hinzugefügt für spezifische Fälle

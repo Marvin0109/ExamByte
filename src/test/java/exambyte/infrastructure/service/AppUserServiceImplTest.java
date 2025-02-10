@@ -26,6 +26,7 @@ import java.util.*;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
+
 @Disabled //WORK IN PROGRESS
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({AppUserServiceImpl.class, DefaultOAuth2UserService.class})
