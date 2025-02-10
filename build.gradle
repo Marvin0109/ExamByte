@@ -70,6 +70,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:postgresql'
+	testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
+	testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
 
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
