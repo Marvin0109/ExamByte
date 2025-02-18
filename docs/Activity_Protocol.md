@@ -154,3 +154,8 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - infrastructure.AntwortServiceImplTest
 - ExamControllerTests wurden fast vollständig behoben wie auch der Controller selbst (fehlt nur ein Test)
 - PowerMock dependencies hinzugefügt für spezifische Fälle
+
+18.02.2025
+- Persistenz Package zu Infrastrukturschicht verschoben
+- domain.model.service und .impl erstellt für zukünftige Geschäftslogik
+- Onion Test angepasst
