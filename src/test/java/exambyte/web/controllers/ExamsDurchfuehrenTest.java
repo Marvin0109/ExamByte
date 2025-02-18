@@ -5,7 +5,7 @@ import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;

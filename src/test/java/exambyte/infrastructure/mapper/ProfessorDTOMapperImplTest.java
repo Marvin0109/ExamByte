@@ -1,7 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.model.aggregate.user.Professor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

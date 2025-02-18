@@ -1,7 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.mapper.ReviewDTOMapper;
 import org.springframework.stereotype.Component;
 

@@ -2,7 +2,7 @@ package exambyte.application.service;
 
 public class ExamByteService {
     public void processExamByte() {
-        // Beispielmethode, um die Schicht zu füllen
-        // Fürs erste diese Schicht leerlassen bitte
+        // Hier kommen Uses Cases rein, d.h. Aufrufe von Service Interfaces und Repository Interfaces
+        // die eigentliche Geschäftslogik gehört zu -> domain.model.impl
     }
 }

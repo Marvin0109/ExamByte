@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.time.LocalDateTime;
-import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

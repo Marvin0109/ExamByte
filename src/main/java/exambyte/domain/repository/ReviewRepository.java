@@ -1,6 +1,6 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.exam.Review;
 
 import java.util.Optional;
 import java.util.UUID;

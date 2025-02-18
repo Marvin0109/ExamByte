@@ -1,6 +1,6 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Korrektor;
 
 import java.util.Optional;
 import java.util.UUID;

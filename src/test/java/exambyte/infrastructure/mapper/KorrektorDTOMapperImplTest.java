@@ -1,7 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.KorrektorDTO;
-import exambyte.domain.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Korrektor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

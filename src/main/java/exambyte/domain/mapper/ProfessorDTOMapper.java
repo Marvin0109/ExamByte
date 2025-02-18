@@ -1,7 +1,7 @@
 package exambyte.domain.mapper;
 
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.domain.aggregate.user.Professor;
+import exambyte.domain.model.aggregate.user.Professor;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.mapper.ExamDTOMapper;
 import org.springframework.stereotype.Component;
 

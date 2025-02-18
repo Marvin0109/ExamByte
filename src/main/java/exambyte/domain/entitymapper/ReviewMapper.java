@@ -1,7 +1,7 @@
 package exambyte.domain.entitymapper;
 
-import exambyte.domain.aggregate.exam.Review;
-import exambyte.persistence.entities.ReviewEntity;
+import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.infrastructure.persistence.entities.ReviewEntity;
 
 public interface ReviewMapper {
 

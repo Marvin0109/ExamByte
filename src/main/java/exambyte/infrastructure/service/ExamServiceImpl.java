@@ -1,6 +1,6 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.ExamService;
 import exambyte.infrastructure.NichtVorhandenException;

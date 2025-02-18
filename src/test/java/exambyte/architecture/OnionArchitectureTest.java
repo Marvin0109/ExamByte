@@ -40,14 +40,14 @@ public class OnionArchitectureTest {
     public void onionArchitecture() throws Exception {
         ArchRule rule = Architectures.onionArchitecture()
                 .domainModels("exambyte.domain..")
-                .domainServices("exambyte.domain.service..")
+                .domainServices("exambyte.domain.model.impl..")
                 .applicationServices("exambyte.application.service..")
                 //.adapter("web", "exambyte.web.controllers..")
-                .adapter("persistence", "exambyte.persistence.repository..")
+                .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
                 .adapter("service", "exambyte.infrastructure.service..", "exambyte.infrastructure.config..")
-                .adapter("repository", "exambyte.persistence.repository..")
+                .adapter("repository", "exambyte.infrastructure.persistence.repository..")
                 .adapter("controller", "exambyte.web.controllers..")
-                .adapter("mapper", "exambyte.infrastructure.mapper..", "exambyte.persistence.mapper..");
+                .adapter("mapper", "exambyte.infrastructure.mapper..", "exambyte.infrastructure.persistence.mapper..");
         rule.check(klassen);
     }
 

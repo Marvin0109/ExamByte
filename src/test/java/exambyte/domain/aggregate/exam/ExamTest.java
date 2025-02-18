@@ -1,5 +1,6 @@
 package exambyte.domain.aggregate.exam;
 
+import exambyte.domain.model.aggregate.exam.Exam;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

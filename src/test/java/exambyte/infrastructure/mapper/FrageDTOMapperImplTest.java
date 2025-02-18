@@ -1,10 +1,9 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.FrageDTO;
-import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Frage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 import java.util.Arrays;
 import java.util.List;

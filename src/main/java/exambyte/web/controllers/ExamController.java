@@ -2,7 +2,7 @@ package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.service.ExamManagementService;
-import exambyte.domain.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

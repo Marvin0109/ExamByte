@@ -1,7 +1,7 @@
 package exambyte.domain.mapper;
 
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.exam.Review;
 
 import java.util.List;
 

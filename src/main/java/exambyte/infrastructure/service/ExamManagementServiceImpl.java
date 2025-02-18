@@ -1,8 +1,8 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.aggregate.exam.Antwort;
-import exambyte.domain.aggregate.exam.Exam;
-import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Antwort;
+import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.service.ExamManagementService;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;

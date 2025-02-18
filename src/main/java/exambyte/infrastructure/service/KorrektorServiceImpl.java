@@ -1,6 +1,6 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.repository.KorrektorRepository;
 import exambyte.domain.service.KorrektorService;
 import exambyte.infrastructure.NichtVorhandenException;

@@ -1,7 +1,7 @@
 package exambyte.domain.mapper;
 
 import exambyte.application.dto.KorrektorDTO;
-import exambyte.domain.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Korrektor;
 
 import java.util.List;
 

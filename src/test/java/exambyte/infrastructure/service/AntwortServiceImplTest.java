@@ -1,6 +1,6 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.aggregate.exam.Antwort;
+import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.repository.AntwortRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 

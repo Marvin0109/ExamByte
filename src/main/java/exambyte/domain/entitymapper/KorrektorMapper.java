@@ -1,7 +1,7 @@
 package exambyte.domain.entitymapper;
 
-import exambyte.domain.aggregate.user.Korrektor;
-import exambyte.persistence.entities.KorrektorEntity;
+import exambyte.domain.model.aggregate.user.Korrektor;
+import exambyte.infrastructure.persistence.entities.KorrektorEntity;
 
 public interface KorrektorMapper {
 

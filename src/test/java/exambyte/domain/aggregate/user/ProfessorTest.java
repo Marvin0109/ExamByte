@@ -1,5 +1,6 @@
 package exambyte.domain.aggregate.user;
 
+import exambyte.domain.model.aggregate.user.Professor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

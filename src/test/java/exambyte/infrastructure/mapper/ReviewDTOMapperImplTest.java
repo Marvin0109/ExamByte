@@ -1,7 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.exam.Review;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

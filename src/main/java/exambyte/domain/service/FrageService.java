@@ -1,6 +1,6 @@
 package exambyte.domain.service;
 
-import exambyte.domain.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Frage;
 
 import java.util.List;
 import java.util.UUID;

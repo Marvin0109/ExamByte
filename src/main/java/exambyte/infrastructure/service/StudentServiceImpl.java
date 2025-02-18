@@ -1,6 +1,6 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.aggregate.user.Student;
+import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.repository.StudentRepository;
 import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.domain.service.StudentService;

@@ -1,7 +1,7 @@
 package exambyte.domain.entitymapper;
 
-import exambyte.domain.aggregate.exam.Exam;
-import exambyte.persistence.entities.ExamEntity;
+import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.infrastructure.persistence.entities.ExamEntity;
 
 public interface ExamMapper {
 
