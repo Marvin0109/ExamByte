@@ -159,3 +159,7 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Persistenz Package zu Infrastrukturschicht verschoben
 - domain.model.service und .impl erstellt für zukünftige Geschäftslogik
 - Onion Test angepasst
+
+03.03.2025
+- Tests korrigiert, unnötige Imports gelöscht
+- AntwortServiceTest fix
