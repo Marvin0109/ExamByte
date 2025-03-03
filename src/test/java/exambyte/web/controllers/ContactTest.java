@@ -28,11 +28,6 @@ public class ContactTest {
     @MockBean
     private AppUserService appUserService;
 
-    @Autowired
-    public ContactTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
-    }
-
     @Test
     @DisplayName("Die contact Seite ist für nicht-authentifizierte User nicht erreichbar")
     void test_01() throws Exception {

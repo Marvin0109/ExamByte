@@ -44,11 +44,6 @@ public class ExamsDurchfuehrenTest {
     @MockBean
     private ExamDTOMapper examDTOMapper;
 
-    @Autowired
-    public ExamsDurchfuehrenTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
-    }
-
     @Test
     @DisplayName("Die Seite zum Durchführen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
@@ -94,6 +89,7 @@ public class ExamsDurchfuehrenTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("alreadySubmitted"))
                 .andExpect(model().attribute("exam", dummyDTO))
-                .andExpect(model().attribute("name", "Marvin0109"));
+                .andExpect(model().attribute("name", "Marvin0109"))
+                .andExpect(view().name("/exams/examsDurchfuehren"));
     }
 }

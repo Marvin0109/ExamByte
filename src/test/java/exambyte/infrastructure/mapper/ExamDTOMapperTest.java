@@ -1,6 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.domain.mapper.ExamDTOMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +14,14 @@ import exambyte.domain.model.aggregate.exam.Exam;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ExamDTOMapperImplTest {
+public class ExamDTOMapperTest {
+
+    private final ExamDTOMapper mapper = new ExamDTOMapperImpl();
 
     @Test
     @DisplayName("Test ExamDTOMapper 'toDTO'")
     void test_01() {
         //Arrange
-        ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
-
         LocalDateTime now = LocalDateTime.now();
         UUID fachId = UUID.randomUUID();
         UUID profId = UUID.randomUUID();
@@ -52,8 +53,6 @@ public class ExamDTOMapperImplTest {
     @Test
     @DisplayName("test_null_exam_throws_exception")
     void test_02() {
-        ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
-
         assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
     }
 
@@ -61,8 +60,6 @@ public class ExamDTOMapperImplTest {
     @DisplayName("toExamDTOList Test")
     void test_03() {
         // Arrange
-        ExamDTOMapperImpl mapper = new ExamDTOMapperImpl();
-
         LocalDateTime now = LocalDateTime.now();
         UUID fachId = UUID.randomUUID();
         UUID fachId2 = UUID.randomUUID();

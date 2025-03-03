@@ -1,12 +1,13 @@
 package exambyte.web.controllers;
 
+import exambyte.application.dto.ExamDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ExamController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
@@ -32,32 +35,13 @@ public class ExamsKorrektorTest {
     private AppUserService appUserService;
 
     @MockBean
-    private ExamService examService;
-
-    @MockBean
-    private AntwortService antwortService;
-
-    @MockBean
     private ProfessorService professorService;
-
-    @MockBean
-    private StudentService studentService;
-
-    @MockBean
-    private FrageService frageService;
 
     @MockBean
     private ExamManagementService examManagementService;
 
     @MockBean
     private ExamDTOMapper examDTOMapper;
-
-    // Fehlender Controller für examsKorrektor!
-
-    @Autowired
-    public ExamsKorrektorTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
-    }
 
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -69,13 +53,19 @@ public class ExamsKorrektorTest {
                 .contains("oauth2/authorization/github");
     }
 
-
     @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für Korrektoren sichtbar")
     void test_02() throws Exception {
+        when(examManagementService.getAllExams()).thenReturn(List.of());
+
+        List<Exam> exams = examManagementService.getAllExams();
+        List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
+
         mvc.perform(get("/exams/examsKorrektor"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("name", "Marvin0109"));
+                .andExpect(model().attribute("name", "Marvin0109"))
+                .andExpect(model().attribute("exams", examDTOs))
+                .andExpect(view().name("/exams/examsKorrektor"));
     }
 }

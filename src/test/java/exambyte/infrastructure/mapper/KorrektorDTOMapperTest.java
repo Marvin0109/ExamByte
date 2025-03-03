@@ -1,6 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.KorrektorDTO;
+import exambyte.domain.mapper.KorrektorDTOMapper;
 import exambyte.domain.model.aggregate.user.Korrektor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KorrektorDTOMapperImplTest {
+public class KorrektorDTOMapperTest {
+
+    private final KorrektorDTOMapper mapper = new KorrektorDTOMapperImpl();
 
     @Test
     @DisplayName("Test KorrektorDTOMapper 'toDTO'")
     void test_01() {
         // Arrange
-        KorrektorDTOMapperImpl mapper = new KorrektorDTOMapperImpl();
-
         UUID fachId = UUID.randomUUID();
 
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
@@ -40,8 +41,6 @@ public class KorrektorDTOMapperImplTest {
     @Test
     @DisplayName("test_null_korrektor_throws_exception")
     void test_02() {
-        StudentDTOMapperImpl mapper = new StudentDTOMapperImpl();
-
         assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
     }
 
@@ -49,8 +48,6 @@ public class KorrektorDTOMapperImplTest {
     @DisplayName("toKorrektorDTOList Test")
     void test_03() {
         // Arrange
-        KorrektorDTOMapperImpl mapper = new KorrektorDTOMapperImpl();
-
         UUID fachId1 = UUID.randomUUID();
         UUID fachId2 = UUID.randomUUID();
 

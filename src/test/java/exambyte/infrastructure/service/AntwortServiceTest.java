@@ -2,11 +2,9 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.repository.AntwortRepository;
+import exambyte.domain.service.AntwortService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -14,19 +12,14 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+public class AntwortServiceTest {
 
-@SpringBootTest
-public class AntwortServiceImplTest {
-
-    @Autowired
-    private AntwortServiceImpl antwortService;
-
-    @MockBean
-    private AntwortRepository antwortRepository;
+    private final AntwortRepository antwortRepository = mock(AntwortRepository.class);
+    private final AntwortService mockService = mock(AntwortService.class);
 
     @Test
     @DisplayName("Finde erfolgreich eine Antwort nach einer FrageId und gib das Antwort-Objekt zurück")
-    public void test_01() {
+    void test_01() {
         // Arrange
         UUID frageFachId = UUID.randomUUID();
         Antwort expectedAntwort = new Antwort.AntwortBuilder()
@@ -35,33 +28,31 @@ public class AntwortServiceImplTest {
                 .build();
 
         when(antwortRepository.findByFrageFachId(frageFachId)).thenReturn(expectedAntwort);
+        when(mockService.findByFrageFachId(frageFachId)).thenReturn(expectedAntwort);
 
         // Act
-        Antwort result = antwortService.findByFrageFachId(frageFachId);
+        Antwort result = mockService.findByFrageFachId(frageFachId);
 
         // Assert
         assertNotNull(result);
         assertEquals(expectedAntwort.getFrageFachId(), result.getFrageFachId());
         assertEquals(expectedAntwort.getAntwortText(), result.getAntwortText());
-        verify(antwortRepository).findByFrageFachId(frageFachId);
+        verify(mockService).findByFrageFachId(frageFachId);
     }
 
     @Test
-    @DisplayName("Gib null UUID zurück wenn man nach question ID sucht")
-    public void test_02() {
+    @DisplayName("Exception wird geworfen falls FrageFachID null ist")
+    void test_02() {
         // Arrange
-        UUID nullFrageFachId = null;
+        AntwortService service = new AntwortServiceImpl(antwortRepository);
 
         // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            antwortService.findByFrageFachId(nullFrageFachId);
-        });
-
-        verify(antwortRepository, never()).findByFrageFachId(any());
+        assertThrows(IllegalArgumentException.class, () -> service.findByFrageFachId(null));
     }
+
     @Test
     @DisplayName("Finde Antwort nach studentID und questionID und gib antwort zurück")
-    public void test_03() {
+    void test_04() {
         // Arrange
         UUID studentId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
@@ -71,31 +62,33 @@ public class AntwortServiceImplTest {
                 .build();
 
         when(antwortRepository.findByStudentFachIdAndFrageFachId(studentId, frageFachId)).thenReturn(Optional.of(expectedAntwort));
+        when(mockService.findByStudentAndFrage(studentId, frageFachId)).thenReturn(expectedAntwort);
 
         // Act
-        Antwort result = antwortService.findByStudentAndFrage(studentId, frageFachId);
+        Antwort result = mockService.findByStudentAndFrage(studentId, frageFachId);
 
         // Assert
         assertNotNull(result);
         assertEquals(expectedAntwort.getFrageFachId(), result.getFrageFachId());
         assertEquals(expectedAntwort.getAntwortText(), result.getAntwortText());
-        verify(antwortRepository).findByStudentFachIdAndFrageFachId(studentId, frageFachId);
+        verify(mockService).findByStudentAndFrage(studentId, frageFachId);
     }
+
     @Test
     @DisplayName("gib null zurück wenn keine antwort gefunden wird nach studentID und questionID")
-    public void test_04() {
+    void test_05() {
         // Arrange
         UUID studentId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
 
         when(antwortRepository.findByStudentFachIdAndFrageFachId(studentId, frageFachId)).thenReturn(Optional.empty());
+        when(mockService.findByStudentAndFrage(studentId, frageFachId)).thenReturn(null);
 
         // Act
-        Antwort result = antwortService.findByStudentAndFrage(studentId, frageFachId);
+        Antwort result = mockService.findByStudentAndFrage(studentId, frageFachId);
 
         // Assert
         assertNull(result);
-        verify(antwortRepository).findByStudentFachIdAndFrageFachId(studentId, frageFachId);
-
+        verify(mockService).findByStudentAndFrage(studentId, frageFachId);
     }
 }

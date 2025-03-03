@@ -1,6 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.AntwortDTO;
+import exambyte.domain.mapper.AntwortDTOMapper;
 import exambyte.domain.model.aggregate.exam.Antwort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,14 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AntwortDTOMapperImplTest {
+public class AntwortDTOMapperTest {
+
+    private final AntwortDTOMapper mapper = new AntwortDTOMapperImpl();
 
     @Test
     @DisplayName("Test AntwortDTOMapper 'toDTO'")
     void test_01() {
         // Arrange
-        AntwortDTOMapperImpl mapper = new AntwortDTOMapperImpl();
-
         UUID fachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
@@ -52,8 +53,6 @@ public class AntwortDTOMapperImplTest {
     @Test
     @DisplayName("test_null_antwort_throws_exception")
     void test_02() {
-        AntwortDTOMapperImpl mapper = new AntwortDTOMapperImpl();
-
         assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
     }
 
@@ -61,8 +60,6 @@ public class AntwortDTOMapperImplTest {
     @DisplayName("toAntwortDTOList Test")
     void test_03() {
         // Arrange
-        AntwortDTOMapperImpl mapper = new AntwortDTOMapperImpl();
-
         UUID fachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();

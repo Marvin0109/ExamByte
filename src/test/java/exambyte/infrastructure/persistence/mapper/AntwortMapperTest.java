@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.entitymapper.AntwortMapper;
 import exambyte.infrastructure.persistence.entities.AntwortEntity;
-import exambyte.infrastructure.persistence.mapper.AntwortMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +13,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AntwortMapperTest {
 
+    private final AntwortMapper mapper = new AntwortMapperImpl();
+
     @Test
     @DisplayName("AntwortMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        AntwortMapper mapper = new AntwortMapperImpl();
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
@@ -51,7 +51,6 @@ public class AntwortMapperTest {
     @DisplayName("AntwortMapper test 'toDomain'")
     public void test_02() {
         // Arrange
-        AntwortMapper mapper = new AntwortMapperImpl();
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();

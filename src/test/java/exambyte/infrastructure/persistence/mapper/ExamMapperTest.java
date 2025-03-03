@@ -5,7 +5,6 @@ import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.entitymapper.ExamMapper;
 import exambyte.infrastructure.persistence.entities.ExamEntity;
 import exambyte.infrastructure.persistence.entities.ProfessorEntity;
-import exambyte.infrastructure.persistence.mapper.ExamMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -16,12 +15,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class ExamMapperTest {
 
+    private final ExamMapper mapper = new ExamMapperImpl();
+
     @Test
     @DisplayName("ExamMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        ExamMapper mapper = new ExamMapperImpl();
-
         Professor professor = new Professor.ProfessorBuilder()
             .id(null)
             .fachId(null)
@@ -62,8 +61,6 @@ public class ExamMapperTest {
     @DisplayName("ExamMapper test 'toDomain")
     public void test_02() {
         // Arrange
-        ExamMapper mapper = new ExamMapperImpl();
-
         ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
                 .id(null)
                 .fachId(null)

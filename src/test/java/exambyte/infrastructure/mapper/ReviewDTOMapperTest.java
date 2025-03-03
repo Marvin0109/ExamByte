@@ -1,6 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ReviewDTO;
+import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.model.aggregate.exam.Review;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReviewDTOMapperImplTest {
+public class ReviewDTOMapperTest {
+
+    private final ReviewDTOMapper mapper = new ReviewDTOMapperImpl();
 
     @Test
     @DisplayName("Test ReviewDTOMapper 'toDTO'")
     void test_01() {
         // Arrange
-        ReviewDTOMapperImpl reviewDTOMapper = new ReviewDTOMapperImpl();
-
         UUID fachId = UUID.randomUUID();
         UUID antwortFachId = UUID.randomUUID();
         UUID korrektorFachId = UUID.randomUUID();
@@ -34,7 +35,7 @@ public class ReviewDTOMapperImplTest {
                 .build();
 
         // Act
-        ReviewDTO reviewDTO = reviewDTOMapper.toDTO(review);
+        ReviewDTO reviewDTO = mapper.toDTO(review);
 
         // Assert
         assertNull(reviewDTO.getId());
@@ -48,8 +49,6 @@ public class ReviewDTOMapperImplTest {
     @Test
     @DisplayName("test_null_review_throws_exception")
     void test_02() {
-        ReviewDTOMapperImpl mapper = new ReviewDTOMapperImpl();
-
         assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
     }
 
@@ -57,8 +56,6 @@ public class ReviewDTOMapperImplTest {
     @DisplayName("toReviewDTOList Test")
     void test_03() {
         // Arrange
-        ReviewDTOMapperImpl mapper = new ReviewDTOMapperImpl();
-
         UUID fachId1 = UUID.randomUUID();
         UUID antwortFachId1 = UUID.randomUUID();
         UUID korrektorFachId1 = UUID.randomUUID();

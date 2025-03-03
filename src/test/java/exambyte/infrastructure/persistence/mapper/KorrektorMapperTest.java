@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.entitymapper.KorrektorMapper;
 import exambyte.infrastructure.persistence.entities.KorrektorEntity;
-import exambyte.infrastructure.persistence.mapper.KorrektorMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class KorrektorMapperTest {
 
+    private final KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
+
     @Test
     @DisplayName("KorrektorMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
-
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
                 .id(null)
                 .fachId(null)
@@ -40,8 +39,6 @@ public class KorrektorMapperTest {
     @DisplayName("KorrektorMapper test 'toDomain'")
     public void test_02() {
         // Arrange
-        KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
-
         KorrektorEntity korrektorEntity = new KorrektorEntity.KorrektorEntityBuilder()
                 .id(null)
                 .fachId(null)

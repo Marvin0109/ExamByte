@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
-import exambyte.infrastructure.persistence.mapper.FrageMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FrageMapperTest {
 
+    private final FrageMapper mapper = new FrageMapperImpl();
+
     @Test
     @DisplayName("FrageMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        FrageMapper frageMapper = new FrageMapperImpl();
-
         UUID profFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
         Frage frage = new Frage.FrageBuilder()
@@ -31,7 +30,7 @@ public class FrageMapperTest {
                 .build();
 
         // Act
-        FrageEntity entity = frageMapper.toEntity(frage);
+        FrageEntity entity = mapper.toEntity(frage);
 
         // Assert
         assertThat(entity).isNotNull();
@@ -45,8 +44,6 @@ public class FrageMapperTest {
     @DisplayName("FrageMapper test 'toDomain'")
     public void test_02() {
         // Arrange
-        FrageMapper frageMapper = new FrageMapperImpl();
-
         UUID fachId = UUID.randomUUID();
         UUID professorFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
@@ -60,7 +57,7 @@ public class FrageMapperTest {
                 .build();
 
         // Act
-        Frage frage = frageMapper.toDomain(frageEntity);
+        Frage frage = mapper.toDomain(frageEntity);
 
         assertThat(frage).isNotNull();
         assertThat(frage.getFachId()).isEqualTo(fachId);

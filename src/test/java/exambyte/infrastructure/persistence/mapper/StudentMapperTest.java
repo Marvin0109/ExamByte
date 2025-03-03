@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.entitymapper.StudentMapper;
 import exambyte.infrastructure.persistence.entities.StudentEntity;
-import exambyte.infrastructure.persistence.mapper.StudentMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +12,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StudentMapperTest {
 
+    private final StudentMapper studentMapper = new StudentMapperImpl();
+
     @Test
     @DisplayName("StudentMapper test 'toEntity'")
     public void test_01() {
         // Arrange
-        StudentMapper studentMapper = new StudentMapperImpl();
-
         Student student = new Student.StudentBuilder()
                 .id(null)
                 .fachId(null)
@@ -40,8 +39,6 @@ public class StudentMapperTest {
     @DisplayName("StudentMapper test 'toDomain'")
     public void test_02() {
         // Arrange
-        StudentMapper studentMapper = new StudentMapperImpl();
-
         StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
                 .id(null)
                 .fachId(null)

@@ -29,7 +29,7 @@ public class ExamController {
     public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper, ProfessorService professorService) {
        this.examManagementService = examManagementService;
        this.examDTOMapper = examDTOMapper;
-        this.professorService = professorService;
+       this.professorService = professorService;
     }
 
     @GetMapping("/examsProfessoren")
@@ -37,16 +37,16 @@ public class ExamController {
     public String showCreateExamForm(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
-        return "exams/examsProfessoren";
+        return "/exams/examsProfessoren";
     }
 
     @PostMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String createExam(
-            @RequestParam String title,
-            @RequestParam LocalDateTime startTime,
-            @RequestParam LocalDateTime endTime,
-            @RequestParam LocalDateTime resultTime,
+            @RequestParam("title") String title,
+            @RequestParam("startTime") LocalDateTime startTime,
+            @RequestParam("endTime") LocalDateTime endTime,
+            @RequestParam("resultTime") LocalDateTime resultTime,
             Model model, OAuth2AuthenticationToken auth) {
 
         String name = auth.getPrincipal().getAttribute("login");
