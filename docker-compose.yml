@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   exambyteDB:
     image: postgres:15-alpine

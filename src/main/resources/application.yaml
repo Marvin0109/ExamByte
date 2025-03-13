@@ -12,6 +12,9 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
+  config:
+    import: optional:file:.env
+
   security:
     oauth2:
       client:
@@ -46,7 +49,3 @@ spring:
       - public
     locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
     baseline-on-migrate: true
-
-#axon:
-#  axonserver:
-#    servers: 127.0.0.1:8024
