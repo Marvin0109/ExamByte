@@ -163,3 +163,10 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 03.03.2025
 - Tests korrigiert, unnötige Imports gelöscht
 - AntwortServiceTest fix
+
+13.03.2025
+- .env erstellt
+- s. #1 Error
+
+16.03.2025
+- Jacoco Settings in build.gradle aktualisiert für Gradle 8.X.X
