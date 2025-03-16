@@ -170,3 +170,4 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 
 16.03.2025
 - Jacoco Settings in build.gradle aktualisiert für Gradle 8.X.X
+- Dotenv für Umgebungsvariablen
