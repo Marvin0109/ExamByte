@@ -77,6 +77,9 @@ dependencies {
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+	//Env
+	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+
 	// Development
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

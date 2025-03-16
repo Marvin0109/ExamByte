@@ -1,5 +1,6 @@
 package exambyte;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -53,6 +54,12 @@ public class ExamByteApplication {
 	 * @param args Kommandozeilenargumente
 	 */
 	public static void main(String[] args) {
+		// Lädt Umgebungsvariablen aus der .env-Datei
+		Dotenv dotenv = Dotenv.load();
+
+		System.setProperty("CLIENT_ID", dotenv.get("CLIENT_ID"));
+		System.setProperty("CLIENT_SECRET", dotenv.get("CLIENT_SECRET"));
+
 		// Starten der Spring Boot-Anwendung
 		SpringApplication.run(ExamByteApplication.class, args);
 		try {

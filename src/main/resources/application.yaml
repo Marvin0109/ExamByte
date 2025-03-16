@@ -12,9 +12,6 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
-  config:
-    import: optional:file:.env
-
   security:
     oauth2:
       client:
