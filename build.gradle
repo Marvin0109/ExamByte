@@ -38,6 +38,7 @@ spotbugs {
 
 jacoco {
 	toolVersion = '0.8.12'
+	reportsDirectory = layout.buildDirectory.dir('jacoco')
 }
 
 dependencies {
@@ -98,8 +99,7 @@ jacocoTestReport {
 	description = "Generate Jacoco coverage reports after running tests."
 	reports {
 		html.required = true
-		xml.required = true
-		html.destination = file("${buildDir}/reports/jacoco/test")
-		xml.destination = file("${buildDir}/reports/jacoco/test-coverage.xml")
+		xml.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
 	}
 }
