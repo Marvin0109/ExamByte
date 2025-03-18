@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException; import java.net.URI;
+import java.util.Objects;
 
 /**
  * Die Hauptklasse der Anwendung, die den Spring Boot Server startet und eine URL in einem Browser öffnet. ඞ
@@ -55,10 +56,7 @@ public class ExamByteApplication {
 	 */
 	public static void main(String[] args) {
 		// Lädt Umgebungsvariablen aus der .env-Datei
-		Dotenv dotenv = Dotenv.load();
-
-		System.setProperty("CLIENT_ID", dotenv.get("CLIENT_ID"));
-		System.setProperty("CLIENT_SECRET", dotenv.get("CLIENT_SECRET"));
+		SystemPropertyInitializer.init();
 
 		// Starten der Spring Boot-Anwendung
 		SpringApplication.run(ExamByteApplication.class, args);
