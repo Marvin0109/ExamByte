@@ -2,7 +2,7 @@
 
 **Autor**: Marvin0109
 **erstellt am**: 08.01.2025
-**letzte Änderung**: 31.01.2025
+**letzte Änderung**: 18.03.2025
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -52,6 +52,7 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 - **Spring Boot DevTools:** Wird für das automatische Neustarten und Debugging während der Entwicklung verwendet.
 - **Spring Boot Configuration Processor:** Wird zur Verarbeitung von Konfigurationswerten genutzt.
 - **Maven/Gradle:** Gradle wird als Build-Tool verwendet.
+- **Dotenv:** 3rd Party Tool für das Laden der Umgebungsvariablen aus einer .env Datei
 
 ### Entwicklungsumgebung
 - **IDE:** Wir verwenden IntelliJ IDEA, am besten die Ultimate-Edition, für die andere Versionen siehe zusätzliche
@@ -67,7 +68,6 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   gewährleisten.
   - Beispiel:
   ```yaml
-  version: '3'
   services:
     web:
       image: myapp:latest
@@ -129,8 +129,10 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 - Übersicht aller Typen mit Beispielen:
   - [Feature]: Neue Funktionen oder Features werden hinzugefügt.
     - Bsp: [Feature] Add user authentication module
+  - [Bug]: Bug Bericht erstellen mit **Issue Tracker**
+    - s. Issue Tracker
   - [BugFix]: Fehlerbehebungen, um bestehende Probleme zu lösen.
-    - Bsp: [BugFix] Fix login validation issue
+    - Bsp: [BugFix] Fix login validation issue. Closes #x
   - [Docs]: Änderungen an der Dokumentation oder das Hinzufügen von Dokumentationsdateien.
     - Bsp: [Docs] Update STYLEGUIDE with new setup instructions
   - [Refactor]: Codeänderungen, die die Struktur verbessern, ohne das Verhalten zu ändern.
@@ -140,6 +142,27 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   - [Chore]: Änderungen, die keine neue Funktionalität oder Fehlerbehebung betreffen, wie z. B. Konfigurationsänderungen
     oder das Hinzufügen von Tools.
     - Bsp: [Chore] Update dependencies
+
+### Issue Tracker
+1. **Issue erstellen auf GitHub**
+   - Gehe zu GitHub → Repository → Issues → New Issues
+   - Title: *Login button funktioniert nicht*
+   - Description: *Login button funktioniert nicht, wenn man ihn auf der Startseite anklickt.*
+   - Img: Verwende Bilder für bessere Nachvollziehbarkeit
+   - GitHub wird ein Ticket erstellen, mit dem man bei Commits referenzieren kann z.B.: #1
+
+2. **Committe zuert den Bug**
+   - Arbeite am Code und speichere deine Arbeit mit git add
+
+3. **Referenziere dem Issue**
+   - Erstelle einen Commit und referenziere es mit dem Issue #1
+   ```
+   git commit -m "[Bug]: Login Issue (#1)"
+   
+4. **Commit with fixed bug and closing issue**
+   - Nach dem Bugfix dann committen und dem Issue schließen.
+   ```
+   git commit -m "[BugFix]: Fix login button issue. Closes #1"
 
 ### Testing
 - Wir verwenden **jUnit**, **spring-security-test**, **archunit**, **spring-boot-starter-test** und **testcontainers**.
@@ -294,9 +317,6 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 - Generierte Text: https://www.loremipsum.de/
 
 ## Änderungen
-
-### Authentifizierung
-- Die Authentifizierung wird sich noch ändern
 
 ### Test
 - Mit dem Start der Geschäftslogik und Funktionalitäten sollten Tests **rechtzeitig** geschrieben werden!
