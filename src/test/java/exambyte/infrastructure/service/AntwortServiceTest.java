@@ -15,7 +15,7 @@ import static org.mockito.Mockito.*;
 public class AntwortServiceTest {
 
     private final AntwortRepository antwortRepository = mock(AntwortRepository.class);
-    private final AntwortService mockService = mock(AntwortService.class);
+    private final AntwortService service = new AntwortServiceImpl(antwortRepository);
 
     @Test
     @DisplayName("Finde erfolgreich eine Antwort nach einer FrageId und gib das Antwort-Objekt zurück")
@@ -28,25 +28,20 @@ public class AntwortServiceTest {
                 .build();
 
         when(antwortRepository.findByFrageFachId(frageFachId)).thenReturn(expectedAntwort);
-        when(mockService.findByFrageFachId(frageFachId)).thenReturn(expectedAntwort);
 
         // Act
-        Antwort result = mockService.findByFrageFachId(frageFachId);
+        Antwort result = service.findByFrageFachId(frageFachId);
 
         // Assert
         assertNotNull(result);
         assertEquals(expectedAntwort.getFrageFachId(), result.getFrageFachId());
         assertEquals(expectedAntwort.getAntwortText(), result.getAntwortText());
-        verify(mockService).findByFrageFachId(frageFachId);
+        verify(antwortRepository).findByFrageFachId(frageFachId);
     }
 
     @Test
     @DisplayName("Exception wird geworfen falls FrageFachID null ist")
     void test_02() {
-        // Arrange
-        AntwortService service = new AntwortServiceImpl(antwortRepository);
-
-        // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> service.findByFrageFachId(null));
     }
 
@@ -62,16 +57,15 @@ public class AntwortServiceTest {
                 .build();
 
         when(antwortRepository.findByStudentFachIdAndFrageFachId(studentId, frageFachId)).thenReturn(Optional.of(expectedAntwort));
-        when(mockService.findByStudentAndFrage(studentId, frageFachId)).thenReturn(expectedAntwort);
 
         // Act
-        Antwort result = mockService.findByStudentAndFrage(studentId, frageFachId);
+        Antwort result = service.findByStudentAndFrage(studentId, frageFachId);
 
         // Assert
         assertNotNull(result);
         assertEquals(expectedAntwort.getFrageFachId(), result.getFrageFachId());
         assertEquals(expectedAntwort.getAntwortText(), result.getAntwortText());
-        verify(mockService).findByStudentAndFrage(studentId, frageFachId);
+        verify(antwortRepository).findByStudentFachIdAndFrageFachId(studentId, frageFachId);
     }
 
     @Test
@@ -82,13 +76,12 @@ public class AntwortServiceTest {
         UUID frageFachId = UUID.randomUUID();
 
         when(antwortRepository.findByStudentFachIdAndFrageFachId(studentId, frageFachId)).thenReturn(Optional.empty());
-        when(mockService.findByStudentAndFrage(studentId, frageFachId)).thenReturn(null);
 
         // Act
-        Antwort result = mockService.findByStudentAndFrage(studentId, frageFachId);
+        Antwort result = service.findByStudentAndFrage(studentId, frageFachId);
 
         // Assert
-        assertNull(result);
-        verify(mockService).findByStudentAndFrage(studentId, frageFachId);
+        assertNull(result);;
+        verify(antwortRepository).findByStudentFachIdAndFrageFachId(studentId, frageFachId);
     }
 }
