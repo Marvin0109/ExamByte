@@ -171,3 +171,8 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 16.03.2025
 - Jacoco Settings in build.gradle aktualisiert für Gradle 8.X.X
 - Dotenv für Umgebungsvariablen
+
+29.03.2025
+- Weitere Service Tests erstellt
+- Dateipfade korrigiert in den HTML Exam Seiten
+- TestSystemPropertyInitializer erstellt und eingebunden für Testdurchläufe
