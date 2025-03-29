@@ -42,9 +42,10 @@ public class FrageServiceTest {
     @Test
     @DisplayName("Keine Fragen gefunden für ein Exam")
     void test_02() {
-        when(frageRepository.findByExamFachId(any())).thenReturn(List.of());
-        assertThrows(RuntimeException.class, () -> frageService.getFragenForExam(any()));
-        verify(frageRepository).findByExamFachId(any());
+        UUID examFachId = UUID.randomUUID();
+        when(frageRepository.findByExamFachId(examFachId)).thenReturn(List.of());
+        assertThrows(RuntimeException.class, () -> frageService.getFragenForExam(examFachId));
+        verify(frageRepository).findByExamFachId(examFachId);
     }
 
     @Test

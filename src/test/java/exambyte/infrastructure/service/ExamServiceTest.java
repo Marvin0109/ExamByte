@@ -59,9 +59,10 @@ public class ExamServiceTest {
     @Test
     @DisplayName("Ein Exam wurde nicht gefunden")
     void test_03() {
+        UUID examId = UUID.randomUUID();
         when(examRepository.findByFachId(any())).thenReturn(Optional.empty());
-        assertThrows(NichtVorhandenException.class, () -> service.getExam(any()));
-        verify(examRepository).findByFachId(any());
+        assertThrows(NichtVorhandenException.class, () -> service.getExam(examId));
+        verify(examRepository).findByFachId(examId);
     }
 
     @Test

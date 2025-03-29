@@ -40,9 +40,10 @@ public class ProfessorServiceTest {
     @Test
     @DisplayName("Ein Professor wurde nicht gefunden")
     void test_02() {
-        when(profRepo.findByFachId(any())).thenReturn(Optional.empty());
-        assertThrows(NichtVorhandenException.class, () -> service.getProfessor(any()));
-        verify(profRepo).findByFachId(any());
+        UUID profFachID = UUID.randomUUID();
+        when(profRepo.findByFachId(profFachID)).thenReturn(Optional.empty());
+        assertThrows(NichtVorhandenException.class, () -> service.getProfessor(profFachID));
+        verify(profRepo).findByFachId(profFachID);
     }
 
     @Test
