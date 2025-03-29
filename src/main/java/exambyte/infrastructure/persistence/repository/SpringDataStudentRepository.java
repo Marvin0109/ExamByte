@@ -1,6 +1,8 @@
 package exambyte.infrastructure.persistence.repository;
 
 import exambyte.infrastructure.persistence.entities.StudentEntity;
+import org.springframework.data.relational.core.sql.LockMode;
+import org.springframework.data.relational.repository.Lock;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
@@ -14,5 +16,6 @@ public interface SpringDataStudentRepository extends CrudRepository<StudentEntit
 
     UUID findFachIdByName(String name);
 
+    @Lock(LockMode.PESSIMISTIC_READ)
     StudentEntity save(StudentEntity student);
 }

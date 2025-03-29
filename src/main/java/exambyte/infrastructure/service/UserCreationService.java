@@ -3,6 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.service.KorrektorService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,13 +18,16 @@ public class UserCreationService {
     private final StudentService studentService;
     private final KorrektorService korrektorService;
     private final ProfessorService professorService;
+    private final UserCreationService self;
 
     public UserCreationService(StudentService studentService,
                                KorrektorService korrektorService,
-                               ProfessorService professorService) {
+                               ProfessorService professorService,
+                               @Lazy UserCreationService self) {
         this.studentService = studentService;
         this.korrektorService = korrektorService;
         this.professorService = professorService;
+        this.self = self;
     }
 
     public boolean checkStudent(String username) {
