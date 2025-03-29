@@ -51,6 +51,14 @@ public class OnionArchitectureTest {
         rule.check(klassen);
     }
 
+    // TODO: @Service Test
+
+    // TODO: @Repository Test
+
+    // TODO: @Controller Test
+
+    // TODO: private fields Test
+
     /**
      * Diese Regel stellt sicher, dass keine Produktionskonfigurationsklassen wie {@link SecurityConfig}
      * in Testklassen verwendet werden.
