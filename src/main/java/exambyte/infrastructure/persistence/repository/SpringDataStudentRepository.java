@@ -16,6 +16,5 @@ public interface SpringDataStudentRepository extends CrudRepository<StudentEntit
 
     UUID findFachIdByName(String name);
 
-    @Lock(LockMode.PESSIMISTIC_READ)
     StudentEntity save(StudentEntity student);
 }

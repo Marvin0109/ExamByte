@@ -14,7 +14,6 @@ public interface SpringDataProfessorRepository extends CrudRepository<ProfessorE
 
     Optional<ProfessorEntity> findByFachId(UUID fachId);
 
-    @Lock(LockMode.PESSIMISTIC_READ)
     ProfessorEntity save(ProfessorEntity professor);
 
     Optional<UUID> findFachIdByName(String name);

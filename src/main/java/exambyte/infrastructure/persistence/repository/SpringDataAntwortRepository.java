@@ -16,6 +16,5 @@ public interface SpringDataAntwortRepository extends CrudRepository<AntwortEntit
 
     Optional<AntwortEntity> findByFachId(UUID id);
 
-    @Lock(LockMode.PESSIMISTIC_READ)
     AntwortEntity save(AntwortEntity entity);
 }

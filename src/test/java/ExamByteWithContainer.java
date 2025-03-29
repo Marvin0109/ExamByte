@@ -6,9 +6,8 @@ import org.springframework.boot.SpringApplication;
 public class ExamByteWithContainer {
 
     public static void main(String[] args) {
-        TestSystemPropertyInitializer.init();
         SpringApplication.from(ExamByteApplication::main)
-                 .with(TestcontainerConfiguration.class)
+                .with(TestcontainerConfiguration.class)
                 .run(args);
     }
 }
