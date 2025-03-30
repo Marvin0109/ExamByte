@@ -8,7 +8,7 @@
   <meta name="author" content="">
   <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-  <title>Tests Bearbeiten</title>
+  <title>Exam</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -20,35 +20,19 @@
   <link href="/public/custom/index.css" rel="stylesheet">
   <link href="/public/custom/popup.css" rel="stylesheet">
 </head>
-
 <body>
 <!-- Navigation -->
 <header th:replace="~{navigation/navbar.html}"> </header>
 
 <main role="main" class="container mt-5 pt-5">
-
   <div class="container mt-5">
     <h1 th:text="${exam.title}">Test</h1>
 
-    <form th:action="@{/exams/submit}" method="post">
-      <input type="hidden" name="examId" th:value="${exam.fachId}">
-
-      <div class="form-group">
-        <label for="frage">Frage 1: Beispiel?</label>
-        <input type="text" name="antwort1" id="frage" class="form-control">
-      </div>
-
-      <button type="submit" class="btn btn-success">Abschicken</button>
-    </form>
+    <ol>
+      <li th:each="f : ${frage}" th:value="${f.frageText}">Frage Text</li>
+    </ol>
   </div>
-
 </main>
-
-<!-- js Imports -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
-<script src="/public/js/scripts.js"></script>
 
 </body>
 </html>
