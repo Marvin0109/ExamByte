@@ -176,3 +176,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Weitere Service Tests erstellt
 - Dateipfade korrigiert in den HTML Exam Seiten
 - TestSystemPropertyInitializer erstellt und eingebunden für Testdurchläufe
+
+30.03.2025
+- Spring Version von 3.3.5 auf 3.4.3 aktualisiert
+- DB Umgebungsvariablen gesetzt für Tests
+- UserCreationTest
+- AppUserServiceTest
