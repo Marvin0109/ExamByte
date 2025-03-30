@@ -11,8 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -27,34 +27,29 @@ public class ExamsStudierendeTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @MockitoBean
     private AppUserService appUserService;
 
-    @MockBean
+    @MockitoBean
     private ExamDTOMapper examDTOMapper;
 
-    @MockBean
+    @MockitoBean
     private ExamManagementService examManagementService;
 
-    @MockBean
+    @MockitoBean
     private ExamService examService;
 
-    @MockBean
+    @MockitoBean
     private AntwortService antwortService;
 
-    @MockBean
+    @MockitoBean
     private ProfessorService professorService;
 
-    @MockBean
+    @MockitoBean
     private StudentService studentService;
 
-    @MockBean
+    @MockitoBean
     private FrageService frageService;
-
-    @Autowired
-    public ExamsStudierendeTest(AppUserService appUserService) {
-        this.appUserService = appUserService;
-    }
 
     @Test
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -65,7 +60,6 @@ public class ExamsStudierendeTest {
         assertThat(mvcResult.getResponse().getRedirectedUrl())
                 .contains("oauth2/authorization/github");
     }
-
 
     @Test
     @Disabled

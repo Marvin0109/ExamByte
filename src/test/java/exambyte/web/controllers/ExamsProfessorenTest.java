@@ -10,11 +10,10 @@ import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.InstanceOf;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -23,7 +22,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.core.IsInstanceOf.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -36,19 +34,22 @@ public class ExamsProfessorenTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @MockitoBean
     private AppUserService appUserService;
 
-    @MockBean
+    @MockitoBean
     private ExamService examService;
 
-    @MockBean
+    @MockitoBean
     private ProfessorService professorService;
 
-    @MockBean
+    @MockitoBean
     private ExamManagementService examManagementService;
 
-    @MockBean
+    @MockitoBean
+    private FrageService frageService;
+
+    @MockitoBean
     private ExamDTOMapper examDTOMapper;
 
     @Test

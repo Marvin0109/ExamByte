@@ -1,8 +1,10 @@
 package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.service.ExamManagementService;
 import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.service.FrageService;
 import exambyte.domain.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -24,12 +26,14 @@ public class ExamController {
     private final ExamManagementService examManagementService;
     private final ExamDTOMapper examDTOMapper;
     private final ProfessorService professorService;
+    private final FrageService frageService;
 
     @Autowired
-    public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper, ProfessorService professorService) {
+    public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper, ProfessorService professorService, FrageService frageService) {
        this.examManagementService = examManagementService;
        this.examDTOMapper = examDTOMapper;
        this.professorService = professorService;
+       this.frageService = frageService;
     }
 
     @GetMapping("/examsProfessoren")
@@ -66,12 +70,12 @@ public class ExamController {
         } else {
             model.addAttribute("message", "Fehler beim Erstellen der Prüfung.");
         }
-        return "redirect:exams/examsProfessoren"; // Verhindert doppeltes Absenden
+        return "redirect:exams/examsProfessoren";
     }
 
     @GetMapping("/examsKorrektor")
     @Secured("ROLE_REVIEWER")
-    public String listExams(Model model, OAuth2AuthenticationToken auth) {
+    public String listExamsForReviewer(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         List<Exam> exams = examManagementService.getAllExams();
@@ -82,7 +86,7 @@ public class ExamController {
 
     @GetMapping("/examStudierende")
     @Secured("ROLE_STUDENT")
-    public String listExams2(Model model, OAuth2AuthenticationToken auth) {
+    public String listExamsForStudents(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         List<Exam> exams = examManagementService.getAllExams();
@@ -116,7 +120,8 @@ public class ExamController {
 
         OAuth2User user = auth.getPrincipal();
 
-        boolean success = examManagementService.submitExam(user.getAttribute("login"), frageFachIds, antwortTexte);
+        boolean success =
+        examManagementService.submitExam(user.getAttribute("login"), frageFachIds, antwortTexte);
 
         if (success) {
             model.addAttribute("message", "Alle Antworten erfolgreich eingereicht!");
@@ -124,5 +129,15 @@ public class ExamController {
             model.addAttribute("message", "Fehler beim Einreichen der Antworten.");
         }
         return "redirect:/exams/list";
+    }
+
+    @GetMapping("/showExam/{id}")
+    @Secured("ROLE_REVIEWER")
+    public String showExam(Model model, @PathVariable UUID id) {
+        Exam exam = examManagementService.getExam(id);
+        List<Frage> frage = frageService.getFragenForExam(id);
+        model.addAttribute("exam", exam);
+        model.addAttribute("frage", frage);
+        return "/exams/exam";
     }
 }
