@@ -48,14 +48,15 @@ public class AppUserServiceImpl implements AppUserService {
     System.out.println("User Service called");
     OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
     OAuth2User originalUser = delegate.loadUser(userRequest);
-    Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
-    String login = originalUser.getAttribute("login");
+    return addRole(originalUser);
+  }
 
-    // Es wird erstmal überprüft, ob schon der User in der DB gespeichert worden ist, wenn ja,
-    // kriegt er nur die Rolle
+  public synchronized OAuth2User addRole(OAuth2User originalUser) {
+      Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
+      String login = originalUser.getAttribute("login");
+      boolean found = false;
 
-    boolean found = false;
-
+    // Es wird nach bestehenden Benutzer in der DB gesucht
     if (userCreationService.checkProfessor(login)) {
       authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
       found = true;
