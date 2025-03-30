@@ -13,35 +13,35 @@ import java.util.UUID;
 public class ProfessorRepositoryImpl implements ProfessorRepository {
 
     private final ProfessorMapper professorMapper;
-    private final SpringDataProfessorRepository springDataProfessorRepository;
+    private final ProfessorDAO professorDAO;
 
-    public ProfessorRepositoryImpl(SpringDataProfessorRepository springDataProfessorRepository,
+    public ProfessorRepositoryImpl(ProfessorDAO professorDAO,
                                    ProfessorMapper professorMapper) {
-        this.springDataProfessorRepository = springDataProfessorRepository;
+        this.professorDAO = professorDAO;
         this.professorMapper = professorMapper;
     }
 
     @Override
     public Optional<Professor> findByFachId(UUID fachId) {
-        Optional<ProfessorEntity> entity = springDataProfessorRepository.findByFachId(fachId);
+        Optional<ProfessorEntity> entity = professorDAO.findByFachId(fachId);
         return entity.map(professorMapper::toDomain);
     }
 
     @Override
     public void save(Professor professor) {
         ProfessorEntity entity = professorMapper.toEntity(professor);
-        springDataProfessorRepository.save(entity);
+        professorDAO.save(entity);
     }
 
     @Override
     public Optional<Professor> findByName(String name) {
-        Optional<ProfessorEntity> entity = springDataProfessorRepository.findByName(name);
+        Optional<ProfessorEntity> entity = professorDAO.findByName(name);
         return entity.map(professorMapper::toDomain);
     }
 
     @Override
     public Optional<UUID> findFachIdByName(String name) {
-        return springDataProfessorRepository.findFachIdByName(name);
+        return professorDAO.findFachIdByName(name);
     }
 
     public ProfessorEntity findByProfFachId(UUID fachId) {

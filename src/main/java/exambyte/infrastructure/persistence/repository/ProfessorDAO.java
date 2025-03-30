@@ -1,14 +1,12 @@
 package exambyte.infrastructure.persistence.repository;
 
 import exambyte.infrastructure.persistence.entities.ProfessorEntity;
-import org.springframework.data.relational.core.sql.LockMode;
-import org.springframework.data.relational.repository.Lock;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataProfessorRepository extends CrudRepository<ProfessorEntity, Long> {
+public interface ProfessorDAO extends CrudRepository<ProfessorEntity, Long> {
 
     Optional<ProfessorEntity> findByName(String name);
 

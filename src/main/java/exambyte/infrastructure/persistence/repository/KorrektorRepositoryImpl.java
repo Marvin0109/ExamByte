@@ -13,29 +13,29 @@ import java.util.UUID;
 public class KorrektorRepositoryImpl implements KorrektorRepository {
 
     private final KorrektorMapper korrektorMapper;
-    private final SpringDataKorrektorRepository springDataKorrektorRepository;
+    private final KorrektorDAO korrektorDAO;
 
-    public KorrektorRepositoryImpl(SpringDataKorrektorRepository springDataKorrektorRepository,
+    public KorrektorRepositoryImpl(KorrektorDAO korrektorDAO,
                                    KorrektorMapper korrektorMapper) {
-        this.springDataKorrektorRepository = springDataKorrektorRepository;
+        this.korrektorDAO = korrektorDAO;
         this.korrektorMapper = korrektorMapper;
     }
 
     @Override
     public Optional<Korrektor> findByFachId(UUID fachId) {
-        Optional<KorrektorEntity> entity = springDataKorrektorRepository.findByFachId(fachId);
+        Optional<KorrektorEntity> entity = korrektorDAO.findByFachId(fachId);
         return entity.map(korrektorMapper::toDomain);
     }
 
     @Override
     public void save(Korrektor korrektor) {
         KorrektorEntity entity = korrektorMapper.toEntity(korrektor);
-        springDataKorrektorRepository.save(entity);
+        korrektorDAO.save(entity);
     }
 
     @Override
     public Optional<Korrektor> findByName(String name) {
-        Optional<KorrektorEntity> entity = springDataKorrektorRepository.findByName(name);
+        Optional<KorrektorEntity> entity = korrektorDAO.findByName(name);
         return entity.map(korrektorMapper::toDomain);
     }
 

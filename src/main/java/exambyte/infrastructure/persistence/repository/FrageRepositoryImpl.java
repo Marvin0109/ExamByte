@@ -14,20 +14,20 @@ import java.util.*;
 public class FrageRepositoryImpl implements FrageRepository {
 
     private final FrageMapper frageMapper;
-    private final SpringDataFrageRepository springDataFrageRepository;
-    private final SpringDataProfessorRepository springDataProfessorRepository;
+    private final FrageDAO frageDAO;
+    private final ProfessorDAO professorDAO;
 
     @Autowired
-    public FrageRepositoryImpl(SpringDataProfessorRepository springDataProfessorRepository,
-                               SpringDataFrageRepository springDataFrageRepository, FrageMapper frageMapper) {
-        this.springDataProfessorRepository = springDataProfessorRepository;
-        this.springDataFrageRepository = springDataFrageRepository;
+    public FrageRepositoryImpl(ProfessorDAO professorDAO,
+                               FrageDAO frageDAO, FrageMapper frageMapper) {
+        this.professorDAO = professorDAO;
+        this.frageDAO = frageDAO;
         this.frageMapper = frageMapper;
     }
 
     @Override
     public Collection<Frage> findAll() {
-        return springDataFrageRepository.findAll()
+        return frageDAO.findAll()
                 .stream()
                 .map(frageMapper::toDomain)
                 .toList();
@@ -35,25 +35,25 @@ public class FrageRepositoryImpl implements FrageRepository {
 
     @Override
     public Optional<Frage> findByFachId(UUID fachId) {
-        Optional<FrageEntity> entity = springDataFrageRepository.findByFachId(fachId);
+        Optional<FrageEntity> entity = frageDAO.findByFachId(fachId);
         return entity.map(frageMapper::toDomain);
     }
 
     @Override
     public void save(Frage frage) {
         FrageEntity entity = frageMapper.toEntity(frage);
-        springDataFrageRepository.save(entity);
+        frageDAO.save(entity);
     }
 
     @Override
     public List<Frage> findByExamFachId(UUID examId) {
-        return springDataFrageRepository.findByExamFachId(examId).stream()
+        return frageDAO.findByExamFachId(examId).stream()
                 .map(frageMapper::toDomain)
                 .toList();
     }
 
     public ProfessorEntity findByProfFachId(UUID profFachId) {
-        Optional<ProfessorEntity> existingProfessor = springDataProfessorRepository.findByFachId(profFachId);
+        Optional<ProfessorEntity> existingProfessor = professorDAO.findByFachId(profFachId);
 
         if (existingProfessor.isPresent()) {
             return existingProfessor.get();
@@ -64,7 +64,7 @@ public class FrageRepositoryImpl implements FrageRepository {
                 .fachId(profFachId)
                 .name("")
                 .build();
-        springDataProfessorRepository.save(newProfessor);
+        professorDAO.save(newProfessor);
         return newProfessor;
     }
 }

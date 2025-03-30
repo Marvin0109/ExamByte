@@ -4,7 +4,7 @@ import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.infrastructure.persistence.mapper.ProfessorMapperImpl;
 import exambyte.infrastructure.persistence.repository.ProfessorRepositoryImpl;
-import exambyte.infrastructure.persistence.repository.SpringDataProfessorRepository;
+import exambyte.infrastructure.persistence.repository.ProfessorDAO;
 import exambyte.domain.repository.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ProfessorDBTest {
 
     @Autowired
-    private SpringDataProfessorRepository professorRepository;
+    private ProfessorDAO professorRepository;
     private ProfessorRepository repository;
 
     @BeforeEach

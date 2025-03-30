@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataFrageRepository extends CrudRepository<FrageEntity, Long> {
+public interface FrageDAO extends CrudRepository<FrageEntity, Long> {
 
     Collection<FrageEntity> findByExamFachId(UUID examFachId);
 

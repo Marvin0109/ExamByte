@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataExamRepository extends CrudRepository<ExamEntity, Long> {
+public interface ExamDAO extends CrudRepository<ExamEntity, Long> {
 
     Collection<ExamEntity> findAll();
 

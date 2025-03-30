@@ -13,28 +13,28 @@ import java.util.UUID;
 public class ReviewRepositoryImpl implements ReviewRepository {
 
     private final ReviewMapper reviewMapper;
-    private final SpringDataReviewRepository springDataReviewRepository;
+    private final ReviewDAO reviewDAO;
 
-    public ReviewRepositoryImpl(SpringDataReviewRepository springDataReviewRepository, ReviewMapper reviewMapper) {
-        this.springDataReviewRepository = springDataReviewRepository;
+    public ReviewRepositoryImpl(ReviewDAO reviewDAO, ReviewMapper reviewMapper) {
+        this.reviewDAO = reviewDAO;
         this.reviewMapper = reviewMapper;
     }
 
     @Override
     public Optional<Review> findByFachId(UUID fachId) {
-        Optional<ReviewEntity> entity = springDataReviewRepository.findByFachId(fachId);
+        Optional<ReviewEntity> entity = reviewDAO.findByFachId(fachId);
         return entity.map(reviewMapper::toDomain);
     }
 
     @Override
     public void save(Review review) {
         ReviewEntity entity = reviewMapper.toEntity(review);
-        springDataReviewRepository.save(entity);
+        reviewDAO.save(entity);
     }
 
     @Override
     public Review findByAntwortFachId(UUID fachId) {
-        Optional<ReviewEntity> entity = springDataReviewRepository.findByAntwortFachId(fachId);
+        Optional<ReviewEntity> entity = reviewDAO.findByAntwortFachId(fachId);
         return entity.map(reviewMapper::toDomain)
                 .orElse(null);
     }

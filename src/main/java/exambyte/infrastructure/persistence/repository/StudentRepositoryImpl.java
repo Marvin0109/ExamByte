@@ -13,33 +13,33 @@ import java.util.UUID;
 public class StudentRepositoryImpl implements StudentRepository {
 
     private final StudentMapper studentMapper;
-    private final SpringDataStudentRepository springDataStudentRepository;
+    private final StudentDAO studentDAO;
 
-    public StudentRepositoryImpl(SpringDataStudentRepository springDataStudentRepository, StudentMapper studentMapper) {
-        this.springDataStudentRepository = springDataStudentRepository;
+    public StudentRepositoryImpl(StudentDAO studentDAO, StudentMapper studentMapper) {
+        this.studentDAO = studentDAO;
         this.studentMapper = studentMapper;
     }
 
     @Override
     public Optional<Student> findByFachId(UUID fachId) {
-        Optional<StudentEntity> entity = springDataStudentRepository.findByFachId(fachId);
+        Optional<StudentEntity> entity = studentDAO.findByFachId(fachId);
         return entity.map(studentMapper::toDomain);
     }
 
     @Override
     public void save(Student student) {
         StudentEntity studentEntity = studentMapper.toEntity(student);
-        springDataStudentRepository.save(studentEntity);
+        studentDAO.save(studentEntity);
     }
 
     @Override
     public Optional<Student> findByName(String name) {
-        Optional<StudentEntity> entity = springDataStudentRepository.findByName(name);
+        Optional<StudentEntity> entity = studentDAO.findByName(name);
         return entity.map(studentMapper::toDomain);
     }
 
     @Override
     public UUID findFachIdByName(String name) {
-        return springDataStudentRepository.findFachIdByName(name);
+        return studentDAO.findFachIdByName(name);
     }
 }

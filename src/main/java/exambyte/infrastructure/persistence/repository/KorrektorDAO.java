@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface SpringDataKorrektorRepository extends CrudRepository<KorrektorEntity, Long> {
+public interface KorrektorDAO extends CrudRepository<KorrektorEntity, Long> {
 
     Optional<KorrektorEntity> findByName(String name);
 

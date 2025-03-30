@@ -3,7 +3,7 @@ package exambyte.infrastructure.persistence.container;
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.entitymapper.StudentMapper;
 import exambyte.infrastructure.persistence.mapper.StudentMapperImpl;
-import exambyte.infrastructure.persistence.repository.SpringDataStudentRepository;
+import exambyte.infrastructure.persistence.repository.StudentDAO;
 import exambyte.infrastructure.persistence.repository.StudentRepositoryImpl;
 import exambyte.domain.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StudentDBTest {
 
     @Autowired
-    private SpringDataStudentRepository studentRepository;
+    private StudentDAO studentRepository;
     private StudentRepository repository;
 
     @BeforeEach

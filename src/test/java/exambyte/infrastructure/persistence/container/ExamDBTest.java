@@ -30,25 +30,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExamDBTest {
 
     @Autowired
-    private SpringDataFrageRepository frRepository;
+    private FrageDAO frRepository;
 
     @Autowired
-    private SpringDataAntwortRepository antRepository;
+    private AntwortDAO antRepository;
 
     @Autowired
-    private SpringDataProfessorRepository professorRepository;
+    private ProfessorDAO professorRepository;
 
     @Autowired
-    private SpringDataStudentRepository studentRepository;
+    private StudentDAO studentRepository;
 
     @Autowired
-    private SpringDataKorrektorRepository korrektorRepository;
+    private KorrektorDAO korrektorRepository;
 
     @Autowired
-    private SpringDataExamRepository eRepository;
+    private ExamDAO eRepository;
 
     @Autowired
-    private SpringDataReviewRepository reviewRepository;
+    private ReviewDAO reviewRepository;
 
     private FrageRepository frageRepository;
     private AntwortRepository antwortRepository;

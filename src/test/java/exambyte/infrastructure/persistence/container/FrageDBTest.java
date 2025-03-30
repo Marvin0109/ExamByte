@@ -34,13 +34,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FrageDBTest {
 
     @Autowired
-    private SpringDataFrageRepository frageRepository;
+    private FrageDAO frageRepository;
 
     @Autowired
-    private SpringDataProfessorRepository professorRepository;
+    private ProfessorDAO professorRepository;
 
     @Autowired
-    private SpringDataExamRepository examRepository;
+    private ExamDAO examRepository;
 
     private FrageRepository repository;
     private ProfessorRepository repository2;

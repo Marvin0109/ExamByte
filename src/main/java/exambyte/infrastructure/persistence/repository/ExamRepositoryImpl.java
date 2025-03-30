@@ -14,9 +14,9 @@ import java.util.UUID;
 public class ExamRepositoryImpl implements ExamRepository {
 
     private final ExamMapper examMapper;
-    private final SpringDataExamRepository testRepository;
+    private final ExamDAO testRepository;
 
-    public ExamRepositoryImpl(SpringDataExamRepository testRepository, ExamMapper examMapper) {
+    public ExamRepositoryImpl(ExamDAO testRepository, ExamMapper examMapper) {
         this.testRepository = testRepository;
         this.examMapper = examMapper;
     }
