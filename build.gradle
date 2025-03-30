@@ -88,7 +88,14 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 	finalizedBy jacocoTestReport
+
+	// For DB Tests
+	environment "DB_NAME", "test_db"
+	environment "DB_USERNAME", "test_user"
+	environment "DB_PASSWORD", "test_password"
 }
+
+
 
 tasks.withType(SpotBugsTask).configureEach {
 	reports {
