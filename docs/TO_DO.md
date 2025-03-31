@@ -1,7 +1,8 @@
 # Projekt: ExamByte
 
 ## 1. Aktueller Stand (Bestandsaufnahme)
-- **Evaluationsfrist:** 11.02.2025 
+- **Letzte Änderungen:** 31.03.2025
+- **Autor:** Marvin0109
 - **Status:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen) <!-- 70 -->
 - **Was funktioniert bereits:**
   - [x] HTML-Seiten Layout (Grundstruktur)
@@ -10,10 +11,10 @@
   - [x] Grundlegende Projektstruktur (Backend und Frontend integriert)
 
 - **Begonnene, aber unvollständige Funktionen:**
-  - [ ] Datenspeicherung von Test-Antworten (Backend-Logik teilweise implementiert) *BEDARF ZUR VERBESSERUNG*
-  - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber ohne Funktionalität) *BEDARF ZUR VERBESSERUNG*
+  - [ ] Datenspeicherung von Test-Antworten (Backend-Logik implementiert, noch unvollständig: Art der Testfragen speichern oder nicht?) *BEDARF ZUR VERBESSERUNG*
+  - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber unvollständig)
   - [ ] Testauswertungsseiten (Frontend noch unvollständig)
-  - [ ] Datenvalidierung
+  - [ ] Datenvalidierung (Form Objekte fehlen)
   
 ---
 
@@ -27,8 +28,8 @@
   - [ ] **API-Routen**: Routen für den Zugriff auf gespeicherte Testergebnisse und Testfragen erstellen.
 
 - **Frontend**
-  - [x] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
-  - [x] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
+  - [ ] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
+  - [ ] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
   - [ ] **Formularvalidierung**: Clientseitige Validierung (Pflichtfelder, Datentypen etc.).
 
 - **Dokumentation**
@@ -52,19 +53,20 @@
 ---
 
 ## 3. Nächste Schritte (Empfohlene Reihenfolge)
-1. **Datenspeicherung fertigstellen** (Backend + Tests).
-2. **Frontend für Testfragen und Antwort-Einsicht** implementieren.
-3. **Dokumentation (Arc42)** auf vollständigen Stand bringen.
-4. **Fehlende Tests** für Logik und Datenbank erstellen.
-5. **Design-Verbesserungen** umsetzen.
+1. [ ] **Datenspeicherung fertigstellen** (Backend + Tests).
+2. [ ] **Frontend für Testfragen und Antwort-Einsicht** implementieren.
+3. [x] **Dokumentation (Arc42)** auf vollständigen Stand bringen.
+4. [ ] **Fehlende Tests** für Logik und Datenbank erstellen.
+5. [ ] **Design-Verbesserungen** umsetzen.
 
 ---
 
 ## 4. Zusätzliche Notizen
-- Das Projekt ist zu etwa 80% abgeschlossen, aber die wichtigsten Funktionen für die Tests (Datenspeicherung, Anzeige der Ergebnisse) sind noch unvollständig.
-- Testabdeckung ist aktuell zu niedrig – mindestens 80% Codeabdeckung sollten angestrebt werden.
+- Das Projekt ist zu etwa 75% abgeschlossen, aber die wichtigsten Funktionen für die Tests (Datenspeicherung, Anzeige der Ergebnisse) sind noch unvollständig.
+- Testabdeckung ist aktuell zu niedrig (aktuell: 68%) – mindestens 80% Codeabdeckung sollten angestrebt werden.
 - Aktuell genutzte Tools:
   - **Backend**: Java, Spring Boot/Data
   - **Frontend**: HTML, CSS, JavaScript
   - **Datenbank**: PostgreSQL (bereits eingerichtet und verbunden)
   - **Build/Dependency Management**: Gradle
+  - **Laden aller Umgebungsvariablen**: Dotenv
