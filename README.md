@@ -23,16 +23,19 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 ## Installation & Nutzung
 
 1. **Voraussetzungen**
-    - Java & Spring Boot
+    - Java 21 & Spring Boot
     - GitHub-Account für Authentifizierung
-    - Konfigurationsdatei für Rollenverwaltung
+    - Konfigurationsdatei für Rollenverwaltung (?)
     - Docker für die Datenbank
+    - SSH Key für das einfachere klonen des Repository
 
-2. **Projekt klonen & starten**
+2. **Projekt klonen mit SSH**
    ```sh
-   git clone https://github.com/hhu-propra2-ws24/exambyte-chillex.git
+   git clone git@github.com:Marvin0109/ExamByte.git
    cd yourDirectory/exambyte-chillex
-   ./gradlew bootRun
+
+3. **Projekt starten**
+   ...
    
 ## Dokumentation
 
