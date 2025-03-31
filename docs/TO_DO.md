@@ -12,9 +12,9 @@
 - **Begonnene, aber unvollständige Funktionen:**
   - [ ] Datenspeicherung von Test-Antworten (Backend-Logik teilweise implementiert) *BEDARF ZUR VERBESSERUNG*
   - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber ohne Funktionalität) *BEDARF ZUR VERBESSERUNG*
-  - [ ] Testauswertungsseiten (Frontend noch unvollständig, Backend fehlt)
-  - [ ] Datenvalidierung (Nur für wenige Eingaben implementiert)
-
+  - [ ] Testauswertungsseiten (Frontend noch unvollständig)
+  - [ ] Datenvalidierung
+  
 ---
 
 ## 2. Offene Aufgaben (To-Do-Liste)
