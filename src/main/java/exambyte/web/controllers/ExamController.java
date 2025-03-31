@@ -44,6 +44,7 @@ public class ExamController {
         return "/exams/examsProfessoren";
     }
 
+    // TODO: Mit Thymeleaf Object besser arbeiten
     @PostMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String createExam(
@@ -110,6 +111,7 @@ public class ExamController {
         return "/exams/examsDurchfuehren";
     }
 
+    // TODO: Thymeleaf Object statt @RequestParam
     @PostMapping("/submit")
     @Secured("ROLE_STUDENT")
     public String submitExam(
@@ -131,6 +133,7 @@ public class ExamController {
         return "redirect:/exams/list";
     }
 
+    // TODO: unvollständig, Fragetypen fehlen (MC, SC und Freitext)
     @GetMapping("/showExam/{id}")
     @Secured("ROLE_REVIEWER")
     public String showExam(Model model, @PathVariable UUID id) {
