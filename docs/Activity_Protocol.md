@@ -182,3 +182,8 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - DB Umgebungsvariablen gesetzt für Tests
 - UserCreationTest
 - AppUserServiceTest
+
+01.04.2025
+- Zulassungslogik + Test
+- Maximal 12 Tests (s. ExamController)
+- Trennung der Domain Schicht und der Application + Tests Korrektur
