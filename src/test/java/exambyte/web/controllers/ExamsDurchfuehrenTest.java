@@ -1,12 +1,9 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.application.service.ExamManagementService;
-import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import org.junit.jupiter.api.DisplayName;
@@ -37,16 +34,7 @@ public class ExamsDurchfuehrenTest {
     private ExamManagementService examManagementService;
 
     @MockitoBean
-    private ProfessorService professorService;
-
-    @MockitoBean
     private AppUserService appUserService;
-
-    @MockitoBean
-    private FrageService frageService;
-
-    @MockitoBean
-    private ExamDTOMapper examDTOMapper;
 
     @Test
     @DisplayName("Die Seite zum Durchführen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -63,33 +51,23 @@ public class ExamsDurchfuehrenTest {
     @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT"})
     @DisplayName("Diese Seite ist für Studierende sichtbar")
     void test_02() throws Exception {
+        UUID fachID = UUID.randomUUID();
         LocalDateTime startTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime endTime = LocalDateTime.of(2020, 2, 28, 23, 59);
         LocalDateTime resultTime = LocalDateTime.of(2020, 3, 31, 23, 59);
 
-        Exam dummyExam = new Exam.ExamBuilder()
-                .id(null)
-                .fachId(null)
-                .title("Dummy Exam")
-                .professorFachId(UUID.randomUUID())
-                .startTime(startTime)
-                .endTime(endTime)
-                .resultTime(resultTime)
-                .build();
-
         ExamDTO dummyDTO = new ExamDTO(
-                dummyExam.getId(),
-                dummyExam.getFachId(),
-                dummyExam.getTitle(),
-                dummyExam.getProfessorFachId(),
-                dummyExam.getStartTime(),
-                dummyExam.getEndTime(),
-                dummyExam.getResultTime());
+                null,
+                fachID,
+                "Dummy Exam",
+                UUID.randomUUID(),
+                startTime,
+                endTime,
+                resultTime);
 
-        when(examManagementService.getExam(dummyExam.getFachId())).thenReturn(dummyExam);
-        when(examDTOMapper.toDTO(dummyExam)).thenReturn(dummyDTO);
+        when(examManagementService.getExam(dummyDTO.fachId())).thenReturn(dummyDTO);
 
-        mvc.perform(get("/exams/examsDurchfuehren/" + dummyDTO.fachId()))
+        mvc.perform(get("/exams/examsDurchfuehren/{id}", fachID))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("alreadySubmitted"))
                 .andExpect(model().attribute("exam", dummyDTO))

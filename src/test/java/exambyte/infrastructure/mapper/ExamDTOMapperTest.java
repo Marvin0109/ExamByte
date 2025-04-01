@@ -99,4 +99,27 @@ public class ExamDTOMapperTest {
         assertThat(examDTOList.get(1).title()).isEqualTo("Test Exam 2");
         assertThat(examDTOList.get(1).professorFachId()).isEqualTo(profId);
     }
+
+    @Test
+    @DisplayName("toDomain Test")
+    void test_04() {
+        // Arrange
+        UUID fachId = UUID.randomUUID();
+        UUID profFachId = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 1, 1);
+        LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 2);
+        LocalDateTime resultTime = LocalDateTime.of(2020, 1, 1, 1, 3);
+        ExamDTO dto = new ExamDTO(null, fachId, "Exam 1", profFachId, start, end, resultTime);
+
+        // Act
+        Exam exam = mapper.toDomain(dto);
+
+        // Assert
+        assertEquals(fachId, exam.getFachId());
+        assertEquals("Exam 1", exam.getTitle());
+        assertEquals(profFachId, exam.getProfessorFachId());
+        assertEquals(start, exam.getStartTime());
+        assertEquals(end, exam.getEndTime());
+        assertEquals(resultTime, exam.getResultTime());
+    }
 }

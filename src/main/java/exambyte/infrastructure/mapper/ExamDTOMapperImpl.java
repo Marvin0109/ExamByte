@@ -29,7 +29,6 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
                 .toList();
     }
 
-    // TODO: Test schreiben
     @Override
     public Exam toDomain(ExamDTO examDTO) {
         return new Exam.ExamBuilder()

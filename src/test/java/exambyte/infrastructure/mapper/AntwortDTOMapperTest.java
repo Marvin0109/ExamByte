@@ -111,4 +111,35 @@ public class AntwortDTOMapperTest {
         assertEquals(antwortTime2, dto.getLast().getAntwortZeitpunkt());
         assertEquals(lastChangesTime2, dto.getLast().getLastChangesZeitpunkt());
     }
+
+    @Test
+    @DisplayName("toDomain Test")
+    void test_04() {
+        // Arrange
+        UUID fachId = UUID.randomUUID();
+        UUID studentFachId = UUID.randomUUID();
+        UUID frageFachId = UUID.randomUUID();
+        LocalDateTime antwortTime = LocalDateTime.now();
+        LocalDateTime lastChangesTime = LocalDateTime.now();
+
+        AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
+                .fachId(fachId)
+                .antwortText("Antwort")
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwortTime)
+                .lastChangesZeitpunkt(lastChangesTime)
+                .build();
+
+        // Act
+        Antwort antwort = mapper.toDomain(dto);
+
+        // Assert
+        assertEquals(fachId, antwort.getFachId());
+        assertEquals(studentFachId, antwort.getStudentUUID());
+        assertEquals(frageFachId, antwort.getFrageFachId());
+        assertEquals(antwortTime, antwort.getAntwortZeitpunkt());
+        assertEquals(lastChangesTime, antwort.getLastChangesZeitpunkt());
+        assertEquals("Antwort", antwort.getAntwortText());
+    }
 }

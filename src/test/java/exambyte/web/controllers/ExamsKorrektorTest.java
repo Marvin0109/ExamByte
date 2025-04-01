@@ -1,10 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.application.service.ExamManagementService;
-import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
@@ -36,16 +33,7 @@ public class ExamsKorrektorTest {
     private AppUserService appUserService;
 
     @MockitoBean
-    private ProfessorService professorService;
-
-    @MockitoBean
     private ExamManagementService examManagementService;
-
-    @MockitoBean
-    private FrageService frageService;
-
-    @MockitoBean
-    private ExamDTOMapper examDTOMapper;
 
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -63,8 +51,7 @@ public class ExamsKorrektorTest {
     void test_02() throws Exception {
         when(examManagementService.getAllExams()).thenReturn(List.of());
 
-        List<Exam> exams = examManagementService.getAllExams();
-        List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
+        List<ExamDTO> examDTOs = examManagementService.getAllExams();
 
         mvc.perform(get("/exams/examsKorrektor"))
                 .andExpect(status().isOk())
