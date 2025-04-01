@@ -12,6 +12,5 @@ public interface ExamService {
 
     Exam getExam(UUID fachId);
 
-    void addExam(Long id, UUID fachId, String title, UUID profFachId, LocalDateTime startTime,
-                 LocalDateTime endTime, LocalDateTime resultTime);
+    void addExam(Exam exam);
 }

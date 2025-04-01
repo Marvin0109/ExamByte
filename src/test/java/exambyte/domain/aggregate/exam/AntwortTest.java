@@ -53,12 +53,9 @@ public class AntwortTest {
 
         Antwort antwort = new Antwort.AntwortBuilder()
                 .id(id)
-                .fachId(null)
-                .antwortText(null)
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(null)
                 .build();
 
         assertEquals(id, antwort.getId());

@@ -32,15 +32,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void addExam(Long id, UUID fachId, String title, UUID profFachId, LocalDateTime startTime,
-                        LocalDateTime endTime, LocalDateTime resultTime) {
-        Exam exam = new Exam.ExamBuilder()
-                .id(id)
-                .fachId(fachId)
-                .title(title)
-                .professorFachId(profFachId)
-                .startTime(startTime)
-                .endTime(endTime).resultTime(resultTime).build();
+    public void addExam(Exam exam) {
         examRepository.save(exam);
     }
 }

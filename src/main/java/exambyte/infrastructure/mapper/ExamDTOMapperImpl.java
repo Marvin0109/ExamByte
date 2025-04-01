@@ -28,4 +28,17 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
                 .map(this::toDTO)
                 .toList();
     }
+
+    // TODO: Test schreiben
+    @Override
+    public Exam toDomain(ExamDTO examDTO) {
+        return new Exam.ExamBuilder()
+                .fachId(examDTO.fachId())
+                .title(examDTO.title())
+                .professorFachId(examDTO.professorFachId())
+                .startTime(examDTO.startTime())
+                .endTime(examDTO.endTime())
+                .resultTime(examDTO.resultTime())
+                .build();
+    }
 }

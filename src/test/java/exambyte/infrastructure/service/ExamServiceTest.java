@@ -76,8 +76,16 @@ public class ExamServiceTest {
         LocalDateTime endTime = LocalDateTime.of(2025, 1, 1, 1, 0);
         LocalDateTime resultTime = LocalDateTime.of(2025, 2, 1, 1, 0);
 
+        Exam exam = new Exam.ExamBuilder()
+                .fachId(fachId)
+                .title(title)
+                .professorFachId(profFachId)
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime).build();
+
         // Act
-        service.addExam(null, fachId, title, profFachId, startTime, endTime, resultTime);
+        service.addExam(exam);
 
         // Assert
         verify(examRepository).save(any(Exam.class));

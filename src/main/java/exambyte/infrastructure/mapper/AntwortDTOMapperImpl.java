@@ -29,4 +29,17 @@ public class AntwortDTOMapperImpl implements AntwortDTOMapper {
                 .map(this::toDTO)
                 .toList();
     }
+
+    // TODO: Testen
+    @Override
+    public Antwort toDomain(AntwortDTO dto) {
+        return new Antwort.AntwortBuilder()
+                .fachId(dto.getFachId())
+                .antwortText(dto.getAntwortText())
+                .frageFachId(dto.getFrageFachId())
+                .studentFachId(dto.getStudentFachId())
+                .antwortZeitpunkt(dto.getAntwortZeitpunkt())
+                .lastChangesZeitpunkt(dto.getLastChangesZeitpunkt())
+                .build();
+    }
 }

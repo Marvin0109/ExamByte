@@ -1,11 +1,7 @@
 package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
-import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.service.ExamManagementService;
-import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.service.FrageService;
-import exambyte.domain.service.ProfessorService;
+import exambyte.application.dto.FrageDTO;
+import exambyte.application.service.ExamManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -24,16 +20,10 @@ import java.util.UUID;
 public class ExamController {
 
     private final ExamManagementService examManagementService;
-    private final ExamDTOMapper examDTOMapper;
-    private final ProfessorService professorService;
-    private final FrageService frageService;
 
     @Autowired
-    public ExamController(ExamManagementService examManagementService, ExamDTOMapper examDTOMapper, ProfessorService professorService, FrageService frageService) {
+    public ExamController(ExamManagementService examManagementService) {
        this.examManagementService = examManagementService;
-       this.examDTOMapper = examDTOMapper;
-       this.professorService = professorService;
-       this.frageService = frageService;
     }
 
     @GetMapping("/examsProfessoren")
@@ -58,15 +48,15 @@ public class ExamController {
 
         boolean success = examManagementService.createExam(name, title, startTime, endTime, resultTime);
 
-        UUID profFachId = null;
-        Optional<UUID> optionalFachId = professorService.getProfessorFachId(name);
-        if (optionalFachId.isPresent()) {
-            profFachId = optionalFachId.get();
-        }
+        Optional<UUID> optionalFachId = examManagementService.getProfFachIDByName(name);
+
+        // If Present nicht zu gebrauchen, wird schon in ExamManagementService geprüft
+        //noinspection OptionalGetWithoutIsPresent
+        UUID profFachID = optionalFachId.get();
 
         if (success) {
             model.addAttribute("message", "Test erfolgreich erstellt!");
-            ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
+            ExamDTO examDTO = new ExamDTO(null, null, title, profFachID , startTime, endTime, resultTime);
             model.addAttribute("exam", examDTO);
         } else {
             model.addAttribute("message", "Fehler beim Erstellen der Prüfung.");
@@ -79,8 +69,7 @@ public class ExamController {
     public String listExamsForReviewer(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
-        List<Exam> exams = examManagementService.getAllExams();
-        List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
+        List<ExamDTO> examDTOs = examManagementService.getAllExams();
         model.addAttribute("exams", examDTOs);
         return "/exams/examsKorrektor";
     }
@@ -90,8 +79,7 @@ public class ExamController {
     public String listExamsForStudents(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
-        List<Exam> exams = examManagementService.getAllExams();
-        List<ExamDTO> examDTOs = examDTOMapper.toExamDTOList(exams);
+        List<ExamDTO> examDTOs = examManagementService.getAllExams();
         model.addAttribute("exams", examDTOs);
         return "/exams/examsStudierende";
     }
@@ -102,8 +90,7 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         String studentName = user.getAttribute("login");
         boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(examFachId, user.getAttribute("login"));
-        Exam exam = examManagementService.getExam(examFachId);
-        ExamDTO examDTO = examDTOMapper.toDTO(exam);
+        ExamDTO examDTO = examManagementService.getExam(examFachId);
 
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular
@@ -137,10 +124,10 @@ public class ExamController {
     @GetMapping("/showExam/{id}")
     @Secured("ROLE_REVIEWER")
     public String showExam(Model model, @PathVariable UUID id) {
-        Exam exam = examManagementService.getExam(id);
-        List<Frage> frage = frageService.getFragenForExam(id);
+        ExamDTO exam = examManagementService.getExam(id);
+        List<FrageDTO> fragen = examManagementService.getFragenForExam(id);
         model.addAttribute("exam", exam);
-        model.addAttribute("frage", frage);
+        model.addAttribute("frage", fragen);
         return "/exams/exam";
     }
 }

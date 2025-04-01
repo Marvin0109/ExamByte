@@ -9,5 +9,7 @@ public interface AntwortDTOMapper {
 
     AntwortDTO toDTO(Antwort antwort);
 
+    Antwort toDomain(AntwortDTO dto);
+
     List<AntwortDTO> toAntwortDTOList(List<Antwort> antworten);
 }

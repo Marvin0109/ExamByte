@@ -9,5 +9,7 @@ public interface ExamDTOMapper {
 
     ExamDTO toDTO(Exam exam);
 
+    Exam toDomain(ExamDTO dto);
+
     List<ExamDTO> toExamDTOList(List<Exam> exams);
 }
