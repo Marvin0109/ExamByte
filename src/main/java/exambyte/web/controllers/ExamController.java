@@ -93,7 +93,7 @@ public class ExamController {
         ExamDTO examDTO = examManagementService.getExam(examFachId);
 
         model.addAttribute("exam", examDTO);
-        model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular
+        model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular, false wenn Anzahl an Exams (12) erreicht ist
         model.addAttribute("name", studentName);
         return "/exams/examsDurchfuehren";
     }

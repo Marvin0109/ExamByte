@@ -52,9 +52,13 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             profFachId = optionalFachID.get();
         }
 
-        ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
-        examService.addExam(examDTOMapper.toDomain(examDTO));
-        return true;
+        if (examRepository.findAll().size() < 12) {
+            ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
+            examService.addExam(examDTOMapper.toDomain(examDTO));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
