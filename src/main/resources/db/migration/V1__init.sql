@@ -32,6 +32,8 @@ create table exam(
     foreign key(professor_fach_id) references professor(fach_id)
 );
 
+create type frage_type as enum ('MC', 'SC', 'FREITEXT');
+
 create table frage(
     id                      serial primary key,
     frage_text              TEXT,
@@ -39,6 +41,7 @@ create table frage(
     exam_fach_id            uuid,
     fach_id                 uuid default gen_random_uuid() not null,
     max_punkte              int,
+    type                    frage_type,
     foreign key(professor_fach_id) references professor(fach_id),
     foreign key(exam_fach_id) references exam(fach_id),
     constraint unique_fach_id_frage unique(fach_id)
@@ -67,4 +70,13 @@ create table review(
     foreign key (antwort_fach_id) references antwort(fach_id),
     foreign key (korrektor_fach_id) references korrektor(fach_id),
     constraint unique_fach_id_review unique(fach_id)
+);
+
+create table correct_answers(
+    id                      serial primary key,
+    fach_id                 uuid default gen_random_uuid() not null,
+    frage_id                uuid not null,
+    richtige_antwort        TEXT,
+    foreign key (frage_id) references frage(fach_id),
+    constraint unique_fach_id_correct_answers unique(fach_id)
 );

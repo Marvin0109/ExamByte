@@ -9,6 +9,7 @@ import exambyte.domain.mapper.FrageDTOMapper;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.web.form.helper.QuestionType;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -100,6 +101,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                     .build();
 
             antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
+
+            // TODO: Wenn SC oder MC, dann ReviewService.automatischeBewertung() verwenden
         }
 
         return true;
@@ -121,4 +124,16 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         return Optional.of(professorService.getProfessorFachId(name)
                 .orElseThrow(NichtVorhandenException::new));
     }
+
+    @Override
+    public boolean createFrage(QuestionType type, FrageDTO frageDTO) {
+        // TODO: Frage mit Fragetyp speichern
+    }
+
+    @Override
+    public UUID getExamByStartTime(LocalDateTime startTime) {
+        return examRepository.findByStartTime(startTime)
+                .orElseThrow(NichtVorhandenException::new);
+    }
+
 }

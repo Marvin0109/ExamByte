@@ -4,6 +4,8 @@ import exambyte.application.dto.FrageDTO;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.form.ExamForm;
+import exambyte.web.form.FrageForm;
+import exambyte.web.form.helper.QuestionType;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -35,6 +37,7 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         model.addAttribute("examForm", new ExamForm());
+        model.addAttribute("frageForm", new FrageForm());
         return "/exams/examsProfessoren";
     }
 
@@ -42,6 +45,7 @@ public class ExamController {
     @Secured("ROLE_ADMIN")
     public String createExam(
             @Valid @ModelAttribute ExamForm form,
+            @Valid @ModelAttribute FrageForm frageForm,
             Model model,
             OAuth2AuthenticationToken auth,
             BindingResult bindingResult,
@@ -62,11 +66,25 @@ public class ExamController {
             .getProfFachIDByName(name)
             .orElseThrow(NichtVorhandenException::new);
 
+    UUID examUUID =
+            examManagementService.getExamByStartTime(form.getStart());
+
         if (success) {
+            List<FrageForm> frageForms = form.getFragen();
+
+            for (FrageForm frageForm1 : frageForms) {
+                String frageText = frageForm1.getFrageText();
+                int maxPunkte = frageForm1.getMaxPunkte();
+                QuestionType frageTyp = frageForm1.getType();
+
+                examManagementService.createFrage(frageTyp, new FrageDTO(null, null, frageText, maxPunkte, profFachID, examUUID));
+            }
+
             redirectAttributes.addFlashAttribute("message","Test erfolgreich erstellt!");
             redirectAttributes.addFlashAttribute("exam", new ExamDTO(
                     null, null, form.getTitle(), profFachID, form.getStart(), form.getEnd(), form.getResult()
             ));
+
         } else {
             redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Prüfung.");
         }

@@ -2,6 +2,7 @@ package exambyte.application.service;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
+import exambyte.web.form.helper.QuestionType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,4 +25,8 @@ public interface ExamManagementService {
     List<FrageDTO> getFragenForExam(UUID examFachId);
 
     Optional<UUID> getProfFachIDByName(String name);
+
+    boolean createFrage(QuestionType type, FrageDTO frageDTO);
+
+    UUID getExamByStartTime(LocalDateTime startTime);
 }

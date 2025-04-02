@@ -1,9 +1,13 @@
 package exambyte.web.form;
 
+import exambyte.domain.model.aggregate.exam.Frage;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExamForm {
 
@@ -18,6 +22,9 @@ public class ExamForm {
 
     @NotNull(message = "Ergebniszeit muss gesetzt werden!")
     private LocalDateTime result;
+
+    @Valid
+    private List<FrageForm> fragen = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -49,5 +56,13 @@ public class ExamForm {
 
     public void setResult(LocalDateTime result) {
         this.result = result;
+    }
+
+    public List<FrageForm> getFragen() {
+        return fragen;
+    }
+
+    public void setFragen(List<FrageForm> fragen) {
+        this.fragen = fragen;
     }
 }

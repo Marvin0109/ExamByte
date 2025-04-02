@@ -6,6 +6,7 @@ import exambyte.infrastructure.persistence.entities.ExamEntity;
 import exambyte.domain.repository.ExamRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,16 +15,16 @@ import java.util.UUID;
 public class ExamRepositoryImpl implements ExamRepository {
 
     private final ExamMapper examMapper;
-    private final ExamDAO testRepository;
+    private final ExamDAO repository;
 
     public ExamRepositoryImpl(ExamDAO testRepository, ExamMapper examMapper) {
-        this.testRepository = testRepository;
+        this.repository = testRepository;
         this.examMapper = examMapper;
     }
 
     @Override
     public Collection<Exam> findAll() {
-        return testRepository.findAll()
+        return repository.findAll()
                 .stream()
                 .map(examMapper::toDomain)
                 .toList();
@@ -31,13 +32,18 @@ public class ExamRepositoryImpl implements ExamRepository {
 
     @Override
     public Optional<Exam> findByFachId(UUID fachId) {
-        Optional<ExamEntity> entity = testRepository.findByFachId(fachId);
+        Optional<ExamEntity> entity = repository.findByFachId(fachId);
         return entity.map(examMapper::toDomain);
     }
 
     @Override
     public void save(Exam examEntity) {
         ExamEntity entity = examMapper.toEntity(examEntity);
-        testRepository.save(entity);
+        repository.save(entity);
+    }
+
+    @Override
+    public Optional<UUID> findByStartTime(LocalDateTime startTime) {
+        return repository.findByStartTime(startTime);
     }
 }
