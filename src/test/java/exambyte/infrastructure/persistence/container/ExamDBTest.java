@@ -1,9 +1,6 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.model.aggregate.exam.Antwort;
-import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.exam.*;
 import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Student;
@@ -18,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.K;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,8 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
 public class ExamDBTest {
-
-    // TODO: KorrekteAntwortDBTest
 
     @Autowired
     private FrageDAO frRepository;
@@ -52,6 +49,9 @@ public class ExamDBTest {
     @Autowired
     private ReviewDAO reviewRepository;
 
+    @Autowired
+    private KorrekteAntwortenDAO korrekteAntwortenRepository;
+
     private FrageRepository frageRepository;
     private AntwortRepository antwortRepository;
     private ProfessorRepository profRepository;
@@ -59,6 +59,7 @@ public class ExamDBTest {
     private ExamRepository examRepository;
     private KorrektorRepository korRepository;
     private ReviewRepository revRepository;
+    private KorrekteAntwortenRepository korrekteAntwRepository;
 
     @BeforeEach
     public void setUp() {
@@ -69,6 +70,7 @@ public class ExamDBTest {
         KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
         ExamMapper examMapper = new ExamMapperImpl();
         ReviewMapper reviewMapper = new ReviewMapperImpl();
+        KorrekteAntwortenMapper korrekteAntwortenMapper = new KorrekteAntwortenMapperImpl();
 
         antwortRepository = new AntwortRepositoryImpl(antRepository, antMapper);
         frageRepository = new FrageRepositoryImpl(professorRepository, frRepository, frageMapper);
@@ -77,6 +79,7 @@ public class ExamDBTest {
         examRepository = new ExamRepositoryImpl(eRepository, examMapper);
         korRepository = new KorrektorRepositoryImpl(korrektorRepository, korrektorMapper);
         revRepository = new ReviewRepositoryImpl(reviewRepository, reviewMapper);
+        korrekteAntwRepository = new KorrekteAntwortenRepositoryImpl(korrekteAntwortenRepository, korrekteAntwortenMapper);
     }
 
     @Test
@@ -124,6 +127,13 @@ public class ExamDBTest {
                 .examUUID(exam.getFachId())
                 .build();
 
+        KorrekteAntworten korrekteAntworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(null)
+                .fachId(null)
+                .frageFachId(frage.getFachId())
+                .korrekteAntworten("JDBC")
+                .build();
+
         LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
         LocalDateTime lastChanges = LocalDateTime.of(2025, 6, 25, 13, 56);
         Antwort antwort = new Antwort.AntwortBuilder()
@@ -152,6 +162,7 @@ public class ExamDBTest {
         frageRepository.save(frage);
         antwortRepository.save(antwort);
         revRepository.save(review);
+        korrekteAntwRepository.save(korrekteAntworten);
 
         // Act
 
@@ -162,6 +173,7 @@ public class ExamDBTest {
         Optional<Student> geladenStud = studRepository.findByFachId(student.uuid());
         Optional<Exam> geladenExam = examRepository.findByFachId(exam.getFachId());
         Optional<Review> geladenReview = revRepository.findByFachId(review.getFachId());
+        Optional<KorrekteAntworten> geladenKorrekteAntworten = korrekteAntwRepository.findByFachId(korrekteAntworten.getFachId());
 
         // Assert
 
@@ -175,6 +187,12 @@ public class ExamDBTest {
         assertThat(geladenFrage.get().getFrageText()).isEqualTo("JPA oder JDBC?");
         assertThat(geladenFrage.get().getMaxPunkte()).isEqualTo(7);
         assertThat(geladenFrage.get().getExamUUID()).isEqualTo(exam.getFachId());
+
+        // KorrekteAntworten
+        assertThat(geladenKorrekteAntworten).isPresent();
+        assertThat(geladenKorrekteAntworten.get().getFachId()).isEqualTo(korrekteAntworten.getFachId());
+        assertThat(geladenKorrekteAntworten.get().getFrageFachId()).isEqualTo(frage.getFachId());
+        assertThat(geladenKorrekteAntworten.get().getKorrekteAntworten()).contains("JDBC");
 
         // Professor
         assertThat(geladenProf).isPresent();

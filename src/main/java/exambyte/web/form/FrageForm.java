@@ -1,9 +1,7 @@
 package exambyte.web.form;
 
 import exambyte.web.form.helper.QuestionType;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 import java.util.List;
 
@@ -18,7 +16,7 @@ public class FrageForm {
     @Min(value = 1, message = "Punkte dürfen nicht negativ sein!")
     private int maxPunkte;
 
-    @NotBlank(message = "Der Fragetyp muss ausgesucht werden!")
+    @NotNull(message = "Der Fragetyp muss ausgesucht werden!")
     private QuestionType type;
 
     // Falls SC oder MC, mögliche Antworten
@@ -30,7 +28,7 @@ public class FrageForm {
     private String correctAnswer;
 
     // MC, Liste korrekter Antworten
-    @NotBlank(message = "Die Liste der richtigen Antworten darf nicht leer sein!")
+    @NotEmpty(message = "Die Liste der richtigen Antworten darf nicht leer sein!")
     @Size(min = 2, message = "Es muss mindestens zwei richtige Antworten angegeben werden!")
     private List<String> correctAnswers;
 

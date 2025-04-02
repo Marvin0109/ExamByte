@@ -31,4 +31,11 @@ public class KorrekteAntwortenRepositoryImpl implements KorrekteAntwortenReposit
         KorrekteAntwortenEntity entity = mapper.toEntity(antwort);
         dao.save(entity);
     }
+
+    @Override
+    public Optional<KorrekteAntworten> findByFachId(UUID fachId) {
+        Optional<KorrekteAntwortenEntity> entity = dao.findByFachID(fachId);
+        return entity.map(mapper::toDomain);
+    }
+
 }

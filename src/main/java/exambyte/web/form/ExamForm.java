@@ -1,6 +1,5 @@
 package exambyte.web.form;
 
-import exambyte.domain.model.aggregate.exam.Frage;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

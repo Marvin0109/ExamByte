@@ -5,8 +5,6 @@ import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
 import exambyte.infrastructure.persistence.entities.KorrekteAntwortenEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class KorrekteAntwortenMapperImpl implements KorrekteAntwortenMapper {
 
@@ -25,6 +23,6 @@ public class KorrekteAntwortenMapperImpl implements KorrekteAntwortenMapper {
         antworten.getId(),
         antworten.getFachId(),
         antworten.getFrageFachId(),
-        List.of(antworten.getKorrekteAntworten()));
+        antworten.getKorrekteAntworten());
     }
 }

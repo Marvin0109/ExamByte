@@ -1,5 +1,46 @@
 package exambyte.domain.aggregate.exam;
 
+import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
+
 public class KorrekteAntwortTest {
-    // TODO
+
+    @Test
+    @DisplayName("KorrekteAntwortenBuilder Test")
+    public void test_01() {
+        Long id = 1L;
+        UUID fachId = UUID.randomUUID();
+        UUID frageFachID = UUID.randomUUID();
+        String korrekteAntworten = "Lösung 1, Lösung 2";
+
+        KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(id)
+                .fachId(fachId)
+                .frageFachId(frageFachID)
+                .korrekteAntworten(korrekteAntworten)
+                .build();
+
+        assertEquals(id, domain.getId());
+        assertEquals(fachId, domain.getFachId());
+        assertEquals(frageFachID, domain.getFrageFachId());
+        assertThat(domain.getKorrekteAntworten()).contains(korrekteAntworten);
+    }
+
+    @Test
+    @DisplayName("KorrekteAntwortenBuilder mit null Werte (FachID wird bei null generiert)")
+    public void test_02() {
+        KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .build();
+
+        assertNull(domain.getId());
+        assertNotNull(domain.getFachId());
+        assertNull(domain.getFrageFachId());
+        assertNull(domain.getKorrekteAntworten());
+    }
 }

@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface KorrekteAntwortenRepository {
+
+    Optional<KorrekteAntworten> findByFachId(UUID fachId);
+
     Optional<KorrekteAntworten> findByFrageFachID(UUID frageFachID);
 
     void save(KorrekteAntworten antworten);

@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface KorrekteAntwortenDAO extends CrudRepository<KorrekteAntwortenEntity, Long> {
 
+    Optional<KorrekteAntwortenEntity> findByFachID(UUID fachId);
+
     Optional<KorrekteAntwortenEntity> findByFrageFachID(UUID frageFachID);
 
     KorrekteAntwortenEntity save(KorrekteAntwortenEntity entity);
