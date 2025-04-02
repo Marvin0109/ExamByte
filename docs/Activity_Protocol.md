@@ -187,3 +187,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Zulassungslogik + Test
 - Maximal 12 Tests (s. ExamController)
 - Trennung der Domain Schicht und der Application + Tests Korrektur
+
+02.04.2025
+- Das Speichern von MC/SC Lösungen hinzugefügt (KorrekteAntworten)
+- Automatisierte MC/SC Bewertungslogik erstellt
+- Testanpassungen
+- ExamProfessoren erweitert (Fragen können durch einen Klick hinzugefügt werden, funktioniert aber noch nicht so richtig)
