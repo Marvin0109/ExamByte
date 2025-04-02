@@ -1,5 +1,7 @@
 package exambyte.domain.service;
 
+import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+
 public interface KorrekteAntwortenService {
-    // TODO
+    void addKorrekteAntwort(KorrekteAntworten korrekteAntwort);
 }

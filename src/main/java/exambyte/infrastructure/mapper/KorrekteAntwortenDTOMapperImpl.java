@@ -17,9 +17,9 @@ public class KorrekteAntwortenDTOMapperImpl implements KorrekteAntwortenDTOMappe
     @Override
     public KorrekteAntworten toDomain(KorrekteAntwortenDTO dto) {
         return new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .fachId(dto.fachID())
-                .frageFachId(dto.frageFachID())
-                .korrekteAntworten(dto.korrekteAntworten())
+                .fachId(dto.getFachID())
+                .frageFachId(dto.getFrageFachID())
+                .korrekteAntworten(dto.getAntworten())
                 .build();
     }
 }

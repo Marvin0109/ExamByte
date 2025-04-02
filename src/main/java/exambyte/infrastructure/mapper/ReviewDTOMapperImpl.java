@@ -27,4 +27,15 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
                 .map(this::toDTO)
                 .toList();
     }
+
+    @Override
+    public Review toDomain(ReviewDTO dto) {
+        return new Review.ReviewBuilder()
+                .fachId(dto.getFachId())
+                .antwortFachId(dto.getAntwortFachId())
+                .korrektorFachId(dto.getKorrektorId())
+                .bewertung(dto.getBewertung())
+                .punkte(dto.getPunkte())
+                .build();
+    }
 }

@@ -10,4 +10,6 @@ public interface ReviewDTOMapper {
     ReviewDTO toDTO(Review review);
 
     List<ReviewDTO> toReviewDTOList(List<Review> reviews);
+
+    Review toDomain(ReviewDTO dto);
 }

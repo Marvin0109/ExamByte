@@ -33,9 +33,9 @@
     <form th:action="@{/exams/submit}" method="post">
       <input type="hidden" name="examId" th:value="${exam.fachId}">
 
-      <div class="form-group">
-        <label for="frage">Frage 1: Beispiel?</label>
-        <input type="text" name="antwort1" id="frage" class="form-control">
+      <div th:each="frage, iterStat : ${fragen}" class="form-group">
+        <label th:for="'frage' + ${iterStat.index}" th:text="'Frage ' + (${iterStat.index} + 1) + ': ' + ${frage.frageText}"></label>
+        <input type="text" th:name="'antworten[' + ${iterStat.index} + ']'" th:id="'frage' + ${iterStat.index}" class="form-control">
       </div>
 
       <button type="submit" class="btn btn-success">Abschicken</button>

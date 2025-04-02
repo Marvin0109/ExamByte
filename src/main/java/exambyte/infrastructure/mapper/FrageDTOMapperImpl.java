@@ -27,4 +27,16 @@ public class FrageDTOMapperImpl implements FrageDTOMapper {
                 .map(this::toDTO)
                 .toList();
     }
+
+    @Override
+    public Frage toDomain(FrageDTO dto) {
+        return new Frage.FrageBuilder()
+                .id(null)
+                .fachId(dto.getFachId())
+                .frageText(dto.getFrageText())
+                .maxPunkte(dto.getMaxPunkte())
+                .professorUUID(dto.getProfessorUUID())
+                .examUUID(dto.getExamUUID())
+                .build();
+    }
 }

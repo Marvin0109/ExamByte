@@ -3,9 +3,12 @@ package exambyte.application.service;
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.domain.mapper.AntwortDTOMapper;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.mapper.FrageDTOMapper;
+import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
@@ -26,14 +29,17 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final FrageService frageService;
     private final StudentService studentService;
     private final ProfessorService professorService;
+    private final KorrekteAntwortenService korrekteAntwortenService;
     private final ExamDTOMapper examDTOMapper;
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
+    private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
 
     public ExamManagementServiceImpl(ExamService examService, AntwortService antwortService, FrageService frageService,
                                      StudentService studentService, ProfessorService professorService,
                                      ExamRepository examRepository, ExamDTOMapper examDTOMapper,
-                                     FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper) {
+                                     FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper,
+                                     KorrekteAntwortenService korrekteAntwortenService, KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
@@ -43,6 +49,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.examDTOMapper = examDTOMapper;
         this.frageDTOMapper = frageDTOMapper;
         this.antwortDTOMapper = antwortDTOMapper;
+        this.korrekteAntwortenService = korrekteAntwortenService;
+        this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
     }
 
     @Override
@@ -102,7 +110,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
             antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
 
-            // TODO: Wenn SC oder MC, dann ReviewService.automatischeBewertung() verwenden
+            // TODO: Wenn SC oder MC, dann AutomaticReviewService.automatischeBewertung() verwenden
         }
 
         return true;
@@ -126,8 +134,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public boolean createFrage(QuestionType type, FrageDTO frageDTO) {
-        // TODO: Frage mit Fragetyp speichern
+    public void createFrage(FrageDTO frageDTO) {
+        frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
+    }
+
+    @Override
+    public void createChoiceFrage(FrageDTO frageDTO, KorrekteAntwortenDTO korrekteAntwortenDTO) {
+        UUID frageFachID = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
+        korrekteAntwortenDTO.setFrageFachID(frageFachID);
+        korrekteAntwortenService.addKorrekteAntwort(korrekteAntwortenDTOMapper.toDomain(korrekteAntwortenDTO));
     }
 
     @Override
@@ -135,5 +150,4 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         return examRepository.findByStartTime(startTime)
                 .orElseThrow(NichtVorhandenException::new);
     }
-
 }

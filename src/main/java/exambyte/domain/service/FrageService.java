@@ -9,5 +9,5 @@ public interface FrageService {
 
     List<Frage> getFragenForExam(UUID examId);
 
-    void addFrage(Frage frage);
+    UUID addFrage(Frage frage);
 }

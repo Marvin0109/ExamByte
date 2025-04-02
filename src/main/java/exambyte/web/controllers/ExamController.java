@@ -1,6 +1,7 @@
 package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.form.ExamForm;
@@ -59,14 +60,15 @@ public class ExamController {
 
         String name = auth.getPrincipal().getAttribute("login");
 
-        boolean success = examManagementService.createExam(name, form.getTitle(), form.getStart(), form.getEnd(), form.getResult());
+        boolean success = examManagementService.createExam(name, form.getTitle(), form.getStart(),
+                form.getEnd(), form.getResult());
 
-    UUID profFachID =
+        UUID profFachID =
         examManagementService
             .getProfFachIDByName(name)
             .orElseThrow(NichtVorhandenException::new);
 
-    UUID examUUID =
+        UUID examUUID =
             examManagementService.getExamByStartTime(form.getStart());
 
         if (success) {
@@ -77,7 +79,24 @@ public class ExamController {
                 int maxPunkte = frageForm1.getMaxPunkte();
                 QuestionType frageTyp = frageForm1.getType();
 
-                examManagementService.createFrage(frageTyp, new FrageDTO(null, null, frageText, maxPunkte, profFachID, examUUID));
+                String correctAnswer = frageForm1.getCorrectAnswer();
+                List<String> correctAnswers = frageForm1.getCorrectAnswers();
+
+                if (frageTyp.equals(QuestionType.FREITEXT)) {
+                    examManagementService.createFrage(new FrageDTO(null, null, frageText,
+                            maxPunkte, profFachID, examUUID));
+                }
+                if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
+                    examManagementService.createChoiceFrage(new FrageDTO(null, null, frageText,
+                                    maxPunkte, profFachID, examUUID),
+                            new KorrekteAntwortenDTO(null, null, null, correctAnswer));
+                }
+                if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
+                    examManagementService.createChoiceFrage(new FrageDTO(null, null, frageText,
+                                    maxPunkte, profFachID, examUUID),
+                            new KorrekteAntwortenDTO(null, null, null,
+                                    String.join(", ", correctAnswers)));
+                }
             }
 
             redirectAttributes.addFlashAttribute("message","Test erfolgreich erstellt!");
@@ -118,14 +137,16 @@ public class ExamController {
         String studentName = user.getAttribute("login");
         boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(examFachId, user.getAttribute("login"));
         ExamDTO examDTO = examManagementService.getExam(examFachId);
+        List<FrageDTO> fragen = examManagementService.getFragenForExam(examFachId);
+
 
         model.addAttribute("exam", examDTO);
+        model.addAttribute("fragen", fragen);
         model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular, false wenn Anzahl an Exams (12) erreicht ist
         model.addAttribute("name", studentName);
         return "/exams/examsDurchfuehren";
     }
 
-    // TODO: Thymeleaf Object statt @RequestParam
     @PostMapping("/submit")
     @Secured("ROLE_STUDENT")
     public String submitExam(

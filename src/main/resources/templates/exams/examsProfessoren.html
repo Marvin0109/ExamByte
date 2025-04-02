@@ -41,7 +41,7 @@
                     <div class="form-group">
                         <label for="startTime">Startzeit</label>
                         <input type="datetime-local" class="form-control" id="startTime" th:field="*{start}" required>
-                        <span class="text-danger" th:if:="${#fields.hasErrors('start')}" th:errors="*{start}"></span>
+                        <span class="text-danger" th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></span>
                     </div>
 
                     <!-- Endzeit -->
@@ -59,76 +59,146 @@
                     </div>
 
                     <!-- Fragen -->
-
                     <div class="form-group" th:each="frageForm, iterStat : ${examForm.fragen}">
                         <label for="frageText_${iterStat.index}">Frage</label>
-                        <input type="text" class="form-control" id="frageText_${iterStat.index}"
-                               th:field="*{fragen[__${iterStat.index}__].frageText}" placeholder="Frage eingeben" required>
+                        <textarea class="form-control" id="frageText_${iterStat.index}" rows="20"
+                                  th:field="*{fragen[__${iterStat.index}__].frageText}" placeholder="Frage eingeben" required></textarea>
                         <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].frageText')}"
-                        th:errors="*{fragen[__${iterStat.index}__].frageText}"></span>>
+                        th:errors="*{fragen[__${iterStat.index}__].frageText}"></span>
 
                         <label for="maxPunkte_${iterStat.index}">Maximale Punkte</label>
                         <input type="number" class="form-control" id="maxPunkte_${iterStat.index}"
                                th:field="*{fragen[__${iterStat.index}__].maxPunkte}" min="1" required>
                         <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].maxPunkte')}"
-                        th:errors="*{fragen[__${iterStat.index}__].maxPunkte}"></span>>}">
+                        th:errors="*{fragen[__${iterStat.index}__].maxPunkte}"></span>
 
                         <!-- Fragetyp auswählen -->
                         <label>Frage Typ</label><br>
 
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="type_SC_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].type}" value="SC" required>
+                            <input class="form-check-input" type="radio" id="type_SC_${iterStat.index}" name="type_${iterStat.index}"
+                                   th:field="*{fragen[__${iterStat.index}__].type}" value="SC"
+                                   data-index="${iterStat.index}"
+                                   onClick="toggleQuestionFields(this)" required>
                             <label class="form-check-label" for="type_SC_${iterStat.index}">Single Choice (SC)</label>
                         </div>
 
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="type_MC_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].type}" value="MC">
+                                   th:field="*{fragen[__${iterStat.index}__].type}" value="MC"
+                                   data-index="${iterStat.index}"
+                                   onClick="toggleQuestionFields(this)" required>
                             <label class="form-check-label" for="type_MC_${iterStat.index}">Multiple Choice (MC)</label>
                         </div>
 
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="type_FREITEXT_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].type}" value="FREITEXT">
+                                   th:field="*{fragen[__${iterStat.index}__].type}" value="FREITEXT"
+                                   data-index="${iterStat.index}"
+                                   onClick="toggleQuestionFields(this)" required>
                             <label class="form-check-label" for="type_FREITEXT_${iterStat.index}">Freitext</label>
                         </div>
                         <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].type')}"
                               th:errors="*{fragen[__${iterStat.index}__].type}"></span>
 
+
+
                         <!-- Dynamische Felder für Antworten (nur für SC und MC) -->
-                        <div th:if="${frageForm.type == 'SC' or frageForm.type == 'MC'}">
-                            <label for="choices">Antwortmöglichkeiten</label>
-                            <input type="text" class="form-control" id="choices"
-                                   th:field="*{fragen[__${iterStat.index}__].choices}"
-                                   placeholder="Antwortmöglichkeiten eingeben" required/>
+                        <div th:id="|choicesContainer_${iterStat.index}|" style="display: none;">
+                            <label th:for="|choices_${iterStat.index}|">Antwortmöglichkeiten</label>
+                            <label>
+                                <input type="text" class="form-control" th:id="|choices_${iterStat.index}|"
+                                       th:field="*{fragen[__${iterStat.index}__].choices}" placeholder="Antwortmöglichkeiten eingeben"/>
+                            </label>
                             <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].choices')}"
                                   th:errors="*{fragen[__${iterStat.index}__].choices}"></span>
                         </div>
 
-                        <div th:if="${frageForm.type == 'MC'}">
-                            <label for="correctAnswers_${iterStat.index}">Richtige Antworten:</label>
-                            <input type="text" class="form-control" id="correctAnswers_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].correctAnswers}"
-                                   placeholder="Richtige Antwort(en) eingeben"/>
+                        <div th:id="|correctAnswer_SC_${iterStat.index}|" style="display: none;">
+                            <label th:for="|correctAnswer_${iterStat.index}|">Richtige Antwort:</label>
+                            <label>
+                                <input type="text" class="form-control" th:id="|correctAnswer_${iterStat.index}|"
+                                       th:field="*{fragen[__${iterStat.index}__].correctAnswer}" placeholder="Richtige Antwort eingeben"/>
+                            </label>
+                            <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].correctAnswer')}"
+                                  th:errors="*{fragen[__${iterStat.index}__].correctAnswer}"></span>
+                        </div>
+
+                        <div th:id="|correctAnswers_MC_${iterStat.index}|" style="display: none;">
+                            <label th:for="|correctAnswers_${iterStat.index}|">Richtige Antworten:</label>
+                            <label>
+                                <input type="text" class="form-control" th:id="|correctAnswers_${iterStat.index}|"
+                                       th:field="*{fragen[__${iterStat.index}__].correctAnswers}" placeholder="Richtige Antwort(en) eingeben"/>
+                            </label>
                             <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].correctAnswers')}"
                                   th:errors="*{fragen[__${iterStat.index}__].correctAnswers}"></span>
                         </div>
 
-                        <div th:if="${frageForm.type == 'SC'}">
-                            <label for="correctAnswer_${iterStat.index}">Richtige Antwort:</label>
-                            <input type="text" class="form-control" id="correctAnswer_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].correctAnswer}"
-                                   placeholder="Richtige Antwort eingeben"/>
-                            <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].correctAnswer')}"
-                                  th:errors="*{fragen[__${iterStat.index}__].correctAnswer}"></span>
-                        </div>
-                    </div>
+                    <!-- Neue Frage hinzufügen -->
+                    <button type="button" class="btn btn-success" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary">Test erstellen</button>
                 </form>
             </div>
+
+                    <div id="questionTemplate" style="display: none;">
+                        <div class="form-group question-block">
+                            <label>Frage</label>
+                            <label>
+                                <textarea class="form-control question-text" rows="20" placeholder="Frage eingeben" required></textarea>
+                            </label>
+
+                            <label>Maximale Punkte</label>
+                            <label>
+                                <input type="number" class="form-control max-points" min="1" required>
+                            </label>
+
+                            <label>Frage Typ</label><br>
+                            <div class="form-check form-check-inline">
+                                <label>
+                                    <input class="form-check-input question-type" type="radio" value="SC" required>
+                                </label>
+                                <label class="form-check-label">Single Choice (SC)</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label>
+                                    <input class="form-check-input question-type" type="radio" value="MC" required>
+                                </label>
+                                <label class="form-check-label">Multiple Choice (MC)</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label>
+                                    <input class="form-check-input question-type" type="radio" value="FREITEXT" required>
+                                </label>
+                                <label class="form-check-label">Freitext</label>
+                            </div>
+
+                            <div class="choices-container" style="display: none;">
+                                <label>Antwortmöglichkeiten</label>
+                                <label>
+                                    <input type="text" class="form-control choices">
+                                </label>
+                            </div>
+
+                            <div class="correct-answer-sc" style="display: none;">
+                                <label>Richtige Antwort</label>
+                                <label>
+                                    <input type="text" class="form-control correct-answer">
+                                </label>
+                            </div>
+
+                            <div class="correct-answers-mc" style="display: none;">
+                                <label>Richtige Antworten</label>
+                                <label>
+                                    <input type="text" class="form-control correct-answers">
+                                </label>
+                            </div>
+
+                            <button type="button" class="btn btn-success" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
+                            <button type="button" class="btn btn-danger" onclick="removeQuestion(this)">Frage entfernen</button>
+                        </div>
+                    </div>
 
             <span th:text="${message}"></span>
 
@@ -139,5 +209,61 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
         <script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
         <script src="/public/js/scripts.js"></script>
+
+        <script>
+            function toggleQuestionFields(radio) {
+                const index = radio.getAttribute('data-index');
+                let choicesContainer = document.getElementById(`choicesContainer_${index}`);
+                let correctAnswerSC = document.getElementById(`correctAnswer_SC_${index}`);
+                let correctAnswersMC = document.getElementById(`correctAnswers_MC_${index}`);
+
+                if (radio.value === 'SC') {
+                    // Zeige das SC Feld und verstecke die anderen
+                    if (correctAnswerSC) correctAnswerSC.style.display = 'block';
+                    if (correctAnswersMC) correctAnswersMC.style.display = 'none';
+                } else if (radio.value === 'MC') {
+                    // Zeige das MC Feld und verstecke das SC-Feld
+                    if (correctAnswerSC) correctAnswerSC.style.display = 'none';
+                    if (correctAnswersMC) correctAnswersMC.style.display = 'block';
+                } else {
+                    // Alle Felder ausblenden, wenn kein Typ ausgewählt ist
+                    if (correctAnswerSC) correctAnswerSC.style.display = 'none';
+                    if (correctAnswersMC) correctAnswersMC.style.display = 'none';
+                }
+            }
+        </script>
+
+        <script>
+            let questionCount = 0;
+
+            function addNewQuestion() {
+                questionCount++;
+                let template = document.getElementById("questionTemplate");
+                let newQuestion = template.cloneNode(true);
+                newQuestion.style.display = "block";
+                newQuestion.id = `question_${questionCount}`;
+
+                // Aktualisiere die IDs und Namen der Elemente, damit sie einzigartig sind
+                newQuestion.querySelector(".question-text").name = `fragen[${questionCount}].frageText`;
+                newQuestion.querySelector(".max-points").name = `fragen[${questionCount}].maxPunkte`;
+
+                let radios = newQuestion.querySelectorAll(".question-type");
+                radios.forEach((radio) => {
+                    radio.name = `fragen[${questionCount}].type`;
+                    radio.setAttribute("data-index", questionCount);
+                    radio.setAttribute("onclick", "toggleQuestionFields(this)");
+                });
+
+                newQuestion.querySelector(".choices").name = `fragen[${questionCount}].choices`;
+                newQuestion.querySelector(".correct-answer").name = `fragen[${questionCount}].correctAnswer`;
+                newQuestion.querySelector(".correct-answers").name = `fragen[${questionCount}].correctAnswers`;
+
+                document.querySelector("form").appendChild(newQuestion);
+            }
+
+            function removeQuestion(button) {
+                button.parentElement.remove();
+            }
+        </script>
     </body>
 </html>

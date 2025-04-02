@@ -24,6 +24,5 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review getReviewByAntwortFachId(UUID antwortFachId) {
         return reviewRepository.findByAntwortFachId(antwortFachId);
-
     }
 }

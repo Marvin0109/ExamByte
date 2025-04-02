@@ -10,4 +10,6 @@ public interface FrageDTOMapper {
     FrageDTO toDTO(Frage frage);
 
     List<FrageDTO> toFrageDTOList(List<Frage> fragen);
+
+    Frage toDomain(FrageDTO frageDTO);
 }
