@@ -2,17 +2,20 @@ package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.service.ExamManagementService;
+import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.web.form.ExamForm;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -31,37 +34,43 @@ public class ExamController {
     public String showCreateExamForm(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
+        model.addAttribute("examForm", new ExamForm());
         return "/exams/examsProfessoren";
     }
 
-    // TODO: Mit Thymeleaf Object besser arbeiten
     @PostMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String createExam(
-            @RequestParam("title") String title,
-            @RequestParam("startTime") LocalDateTime startTime,
-            @RequestParam("endTime") LocalDateTime endTime,
-            @RequestParam("resultTime") LocalDateTime resultTime,
-            Model model, OAuth2AuthenticationToken auth) {
+            @Valid @ModelAttribute ExamForm form,
+            Model model,
+            OAuth2AuthenticationToken auth,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("message",
+                    "Fehlerhafte Eingabe: " + bindingResult.getAllErrors().toString());
+            return "/exams/examsProfessoren";
+        }
 
         String name = auth.getPrincipal().getAttribute("login");
 
-        boolean success = examManagementService.createExam(name, title, startTime, endTime, resultTime);
+        boolean success = examManagementService.createExam(name, form.getTitle(), form.getStart(), form.getEnd(), form.getResult());
 
-        Optional<UUID> optionalFachId = examManagementService.getProfFachIDByName(name);
-
-        // If Present nicht zu gebrauchen, wird schon in ExamManagementService geprüft
-        //noinspection OptionalGetWithoutIsPresent
-        UUID profFachID = optionalFachId.get();
+    UUID profFachID =
+        examManagementService
+            .getProfFachIDByName(name)
+            .orElseThrow(NichtVorhandenException::new);
 
         if (success) {
-            model.addAttribute("message", "Test erfolgreich erstellt!");
-            ExamDTO examDTO = new ExamDTO(null, null, title, profFachID , startTime, endTime, resultTime);
-            model.addAttribute("exam", examDTO);
+            redirectAttributes.addFlashAttribute("message","Test erfolgreich erstellt!");
+            redirectAttributes.addFlashAttribute("exam", new ExamDTO(
+                    null, null, form.getTitle(), profFachID, form.getStart(), form.getEnd(), form.getResult()
+            ));
         } else {
-            model.addAttribute("message", "Fehler beim Erstellen der Prüfung.");
+            redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Prüfung.");
         }
-        return "redirect:exams/examsProfessoren";
+        return "redirect:/exams/examsProfessoren";
     }
 
     @GetMapping("/examsKorrektor")

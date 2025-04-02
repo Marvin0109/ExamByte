@@ -29,29 +29,33 @@
 
             <div class="container mt-5">
                 <h1>Tests Erstellen</h1>
-                <form th:action="@{/exams/examsProfessoren}" method="post">
+                <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}">
                     <!-- Titel des Tests -->
                     <div class="form-group">
                         <label for="title">Titel des Tests</label>
-                        <input type="text" class="form-control" id="title" name="title" required>
+                        <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                        <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
                     </div>
 
                     <!-- Startzeit -->
                     <div class="form-group">
                         <label for="startTime">Startzeit</label>
-                        <input type="datetime-local" class="form-control" id="startTime" name="startTime" required>
+                        <input type="datetime-local" class="form-control" id="startTime" th:field="*{start}" required>
+                        <span class="text-danger" th:if:="${#fields.hasErrors('start')}" th:errors="*{start}"></span>
                     </div>
 
                     <!-- Endzeit -->
                     <div class="form-group">
                         <label for="endTime">Endzeit</label>
-                        <input type="datetime-local" class="form-control" id="endTime" name="endTime" required>
+                        <input type="datetime-local" class="form-control" id="endTime" th:field="*{end}" required>
+                        <span class="text-danger" th:if="${#fields.hasErrors('end')}" th:errors="*{end}"></span>
                     </div>
 
                     <!-- Ergebniszeit -->
                     <div class="form-group">
                         <label for="resultTime">Ergebniszeit</label>
-                        <input type="datetime-local" class="form-control" id="resultTime" name="resultTime" required>
+                        <input type="datetime-local" class="form-control" id="resultTime" th:field="*{result}" required>
+                        <span class="text-danger" th:if="${#fields.hasErrors('result')}" th:errors="*{result}"></span>
                     </div>
 
                     <!-- Einfügen der Fragen hier -->
