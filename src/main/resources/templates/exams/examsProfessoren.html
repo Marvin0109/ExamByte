@@ -18,7 +18,6 @@
 
         <!-- Custom styles for this template -->
         <link href="/public/custom/index.css" rel="stylesheet">
-        <link href="/public/custom/popup.css" rel="stylesheet">
     </head>
 
     <body>
@@ -29,7 +28,7 @@
 
             <div class="container mt-5">
                 <h1>Tests Erstellen</h1>
-                <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}">
+                <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}" id="exam">
                     <!-- Titel des Tests -->
                     <div class="form-group">
                         <label for="title">Titel des Tests</label>
@@ -57,148 +56,90 @@
                         <input type="datetime-local" class="form-control" id="resultTime" th:field="*{result}" required>
                         <span class="text-danger" th:if="${#fields.hasErrors('result')}" th:errors="*{result}"></span>
                     </div>
-
-                    <!-- Fragen -->
-                    <div class="form-group" th:each="frageForm, iterStat : ${examForm.fragen}">
-                        <label for="frageText_${iterStat.index}">Frage</label>
-                        <textarea class="form-control" id="frageText_${iterStat.index}" rows="20"
-                                  th:field="*{fragen[__${iterStat.index}__].frageText}" placeholder="Frage eingeben" required></textarea>
-                        <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].frageText')}"
-                        th:errors="*{fragen[__${iterStat.index}__].frageText}"></span>
-
-                        <label for="maxPunkte_${iterStat.index}">Maximale Punkte</label>
-                        <input type="number" class="form-control" id="maxPunkte_${iterStat.index}"
-                               th:field="*{fragen[__${iterStat.index}__].maxPunkte}" min="1" required>
-                        <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].maxPunkte')}"
-                        th:errors="*{fragen[__${iterStat.index}__].maxPunkte}"></span>
-
-                        <!-- Fragetyp auswählen -->
-                        <label>Frage Typ</label><br>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="type_SC_${iterStat.index}" name="type_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].type}" value="SC"
-                                   data-index="${iterStat.index}"
-                                   onClick="toggleQuestionFields(this)" required>
-                            <label class="form-check-label" for="type_SC_${iterStat.index}">Single Choice (SC)</label>
-                        </div>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="type_MC_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].type}" value="MC"
-                                   data-index="${iterStat.index}"
-                                   onClick="toggleQuestionFields(this)" required>
-                            <label class="form-check-label" for="type_MC_${iterStat.index}">Multiple Choice (MC)</label>
-                        </div>
-
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="type_FREITEXT_${iterStat.index}"
-                                   th:field="*{fragen[__${iterStat.index}__].type}" value="FREITEXT"
-                                   data-index="${iterStat.index}"
-                                   onClick="toggleQuestionFields(this)" required>
-                            <label class="form-check-label" for="type_FREITEXT_${iterStat.index}">Freitext</label>
-                        </div>
-                        <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].type')}"
-                              th:errors="*{fragen[__${iterStat.index}__].type}"></span>
-
-
-
-                        <!-- Dynamische Felder für Antworten (nur für SC und MC) -->
-                        <div th:id="|choicesContainer_${iterStat.index}|" style="display: none;">
-                            <label th:for="|choices_${iterStat.index}|">Antwortmöglichkeiten</label>
-                            <label>
-                                <input type="text" class="form-control" th:id="|choices_${iterStat.index}|"
-                                       th:field="*{fragen[__${iterStat.index}__].choices}" placeholder="Antwortmöglichkeiten eingeben"/>
-                            </label>
-                            <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].choices')}"
-                                  th:errors="*{fragen[__${iterStat.index}__].choices}"></span>
-                        </div>
-
-                        <div th:id="|correctAnswer_SC_${iterStat.index}|" style="display: none;">
-                            <label th:for="|correctAnswer_${iterStat.index}|">Richtige Antwort:</label>
-                            <label>
-                                <input type="text" class="form-control" th:id="|correctAnswer_${iterStat.index}|"
-                                       th:field="*{fragen[__${iterStat.index}__].correctAnswer}" placeholder="Richtige Antwort eingeben"/>
-                            </label>
-                            <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].correctAnswer')}"
-                                  th:errors="*{fragen[__${iterStat.index}__].correctAnswer}"></span>
-                        </div>
-
-                        <div th:id="|correctAnswers_MC_${iterStat.index}|" style="display: none;">
-                            <label th:for="|correctAnswers_${iterStat.index}|">Richtige Antworten:</label>
-                            <label>
-                                <input type="text" class="form-control" th:id="|correctAnswers_${iterStat.index}|"
-                                       th:field="*{fragen[__${iterStat.index}__].correctAnswers}" placeholder="Richtige Antwort(en) eingeben"/>
-                            </label>
-                            <span class="text-danger" th:if="${#fields.hasErrors('fragen[__${iterStat.index}__].correctAnswers')}"
-                                  th:errors="*{fragen[__${iterStat.index}__].correctAnswers}"></span>
-                        </div>
-
-                    <!-- Neue Frage hinzufügen -->
-                    <button type="button" class="btn btn-success" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
+                    <br>
 
                     <!-- Submit Button -->
                     <button type="submit" class="btn btn-primary">Test erstellen</button>
+
+
+                        <!-- Frage einfügen Vorlage -->
+                        <div id="questionTemplate" style="display: none;">
+                            <div class="form-group question-block">
+
+                                <label>Frage Typ</label><br>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="SC_{{questionIndex}}">Single Choice (SC)</label>
+                                    <input class="form-check-input" type="radio" id="SC_{{questionIndex}}" name="questionType_{{questionIndex}}"
+                                           value="SC" required>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="MC_{{questionIndex}}">Multiple Choice (MC)</label>
+                                    <input class="form-check-input" type="radio" id="MC_{{questionIndex}}" name="questionType_{{questionIndex}}"
+                                           value="MC" required>
+                                </div>
+
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label" for="FREITEXT_{{questionIndex}}">Freitext</label>
+                                    <input class="form-check-input" type="radio" id="FREITEXT_{{questionIndex}}" name="questionType_{{questionIndex}}"
+                                           value="FREITEXT" required>
+                                </div>
+                                <!-- Error hier -->
+
+                                <!-- Dynamische Felder -->
+
+                                <!-- Freitext Aufgabe -->
+                                <div id="freitext_question_{{questionIndex}}" style="display : none;">
+                                    <label for="frageText_{{questionIndex}}">Frage</label>
+                                    <textarea class="form-control question-text" rows="20" placeholder="Frage eingeben"
+                                              id="frageText_{{questionIndex}}"
+                                              required></textarea>
+                                    <!-- Error hier -->
+                                    <label for="maxPunkte_{{questionIndex}}">Maximale Punkte</label>
+                                    <input type="number" class="form-control max-points" min="1" id="maxPunkte_{{questionIndex}}" required>
+                                    <!-- Error hier -->
+                                </div>
+
+                                <!-- SC/MC Frage Eingabe -->
+                                <div id="SCMC-question_{{questionIndex}}" style="display: none;">
+                                    <label for="frageTextSCMC_{{questionIndex}}">Frage</label>
+                                    <input type="text" class="form-control" id="frageTextSCMC_{{questionIndex}}" placeholder="Frage eingeben" required>
+                                    <!-- Error hier -->
+                                    <label for="maxPunkteSCMC_{{questionIndex}}">Maximale Punkte</label>
+                                    <input type="number" class="form-control max-points" min="1" id="maxPunkteSCMC_{{questionIndex}}" required>
+                                    <!-- Error hier -->
+                                </div>
+
+                                <!-- Antwortmöglichkeiten für MC und SC -->
+                                <div id="choicesContainer_{{questionIndex}}" style="display: none;">
+                                    <label for="choices_{{questionIndex}}">Antwortmöglichkeiten</label>
+                                    <input type="text" class="form-control" id="choices_{{questionIndex}}"
+                                           placeholder="Antwortmöglichkeiten eingeben"/>
+                                    <!-- Error hier -->
+                                </div>
+
+                                <!-- SC Lösung -->
+                                <div id="correctAnswer_SC_{{questionIndex}}" style="display: none;">
+                                    <label for="correctAnswer_{{questionIndex}}">Richtige Antwort:</label>
+                                    <input type="text" class="form-control" id="correctAnswer_{{questionIndex}}"
+                                           placeholder="Richtige Antwort eingeben"/>
+                                    <!-- Error -->
+                                </div>
+
+                                <!-- MC Lösungen -->
+                                <div id="correctAnswers_MC_{{questionIndex}}" style="display: none;">
+                                    <label for="correctAnswers_{{questionIndex}}">Richtige Antworten:</label>
+                                    <input type="text" class="form-control" id="correctAnswers_{{questionIndex}}"
+                                           placeholder="Richtige Antwort(en) eingeben"/>
+                                    <!-- Error hier -->
+                                </div>
+                                <button type="button" class="btn btn-danger" onclick="removeQuestion(this)">Frage entfernen</button>
+                            </div>
+                        </div>
+                    <button type="button" class="btn btn-success" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
                 </form>
             </div>
 
-                    <div id="questionTemplate" style="display: none;">
-                        <div class="form-group question-block">
-                            <label>Frage</label>
-                            <label>
-                                <textarea class="form-control question-text" rows="20" placeholder="Frage eingeben" required></textarea>
-                            </label>
-
-                            <label>Maximale Punkte</label>
-                            <label>
-                                <input type="number" class="form-control max-points" min="1" required>
-                            </label>
-
-                            <label>Frage Typ</label><br>
-                            <div class="form-check form-check-inline">
-                                <label>
-                                    <input class="form-check-input question-type" type="radio" value="SC" required>
-                                </label>
-                                <label class="form-check-label">Single Choice (SC)</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <label>
-                                    <input class="form-check-input question-type" type="radio" value="MC" required>
-                                </label>
-                                <label class="form-check-label">Multiple Choice (MC)</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <label>
-                                    <input class="form-check-input question-type" type="radio" value="FREITEXT" required>
-                                </label>
-                                <label class="form-check-label">Freitext</label>
-                            </div>
-
-                            <div class="choices-container" style="display: none;">
-                                <label>Antwortmöglichkeiten</label>
-                                <label>
-                                    <input type="text" class="form-control choices">
-                                </label>
-                            </div>
-
-                            <div class="correct-answer-sc" style="display: none;">
-                                <label>Richtige Antwort</label>
-                                <label>
-                                    <input type="text" class="form-control correct-answer">
-                                </label>
-                            </div>
-
-                            <div class="correct-answers-mc" style="display: none;">
-                                <label>Richtige Antworten</label>
-                                <label>
-                                    <input type="text" class="form-control correct-answers">
-                                </label>
-                            </div>
-
-                            <button type="button" class="btn btn-success" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
-                            <button type="button" class="btn btn-danger" onclick="removeQuestion(this)">Frage entfernen</button>
-                        </div>
-                    </div>
 
             <span th:text="${message}"></span>
 
@@ -208,61 +149,190 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
         <script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
-        <script src="/public/js/scripts.js"></script>
 
         <script>
-            function toggleQuestionFields(radio) {
-                const index = radio.getAttribute('data-index');
-                let choicesContainer = document.getElementById(`choicesContainer_${index}`);
-                let correctAnswerSC = document.getElementById(`correctAnswer_SC_${index}`);
-                let correctAnswersMC = document.getElementById(`correctAnswers_MC_${index}`);
-
-                if (radio.value === 'SC') {
-                    // Zeige das SC Feld und verstecke die anderen
-                    if (correctAnswerSC) correctAnswerSC.style.display = 'block';
-                    if (correctAnswersMC) correctAnswersMC.style.display = 'none';
-                } else if (radio.value === 'MC') {
-                    // Zeige das MC Feld und verstecke das SC-Feld
-                    if (correctAnswerSC) correctAnswerSC.style.display = 'none';
-                    if (correctAnswersMC) correctAnswersMC.style.display = 'block';
-                } else {
-                    // Alle Felder ausblenden, wenn kein Typ ausgewählt ist
-                    if (correctAnswerSC) correctAnswerSC.style.display = 'none';
-                    if (correctAnswersMC) correctAnswersMC.style.display = 'none';
-                }
-            }
-        </script>
-
-        <script>
-            let questionCount = 0;
+            let questionIndex = 0;
+            let lastIndex = 0;
+            let radioHandlers = {};
 
             function addNewQuestion() {
-                questionCount++;
-                let template = document.getElementById("questionTemplate");
-                let newQuestion = template.cloneNode(true);
+                const template = document.getElementById("questionTemplate");
+                if (!template) {
+                    console.error("Template nicht gefunden!");
+                    return; // Wenn das Template nicht gefunden wird, abbrechen
+                }
+
+                const currentIndex = questionIndex;
+
+                const newQuestion = template.cloneNode(true);
                 newQuestion.style.display = "block";
-                newQuestion.id = `question_${questionCount}`;
 
-                // Aktualisiere die IDs und Namen der Elemente, damit sie einzigartig sind
-                newQuestion.querySelector(".question-text").name = `fragen[${questionCount}].frageText`;
-                newQuestion.querySelector(".max-points").name = `fragen[${questionCount}].maxPunkte`;
-
-                let radios = newQuestion.querySelectorAll(".question-type");
-                radios.forEach((radio) => {
-                    radio.name = `fragen[${questionCount}].type`;
-                    radio.setAttribute("data-index", questionCount);
-                    radio.setAttribute("onclick", "toggleQuestionFields(this)");
+                newQuestion.querySelectorAll('[id]').forEach(function (el) {
+                    let newId = el.id.replace("{{questionIndex}}", currentIndex);
+                    el.id = newId;
+                    console.log("Neue ID gesetzt für Element: ", newId);
                 });
 
-                newQuestion.querySelector(".choices").name = `fragen[${questionCount}].choices`;
-                newQuestion.querySelector(".correct-answer").name = `fragen[${questionCount}].correctAnswer`;
-                newQuestion.querySelector(".correct-answers").name = `fragen[${questionCount}].correctAnswers`;
+                newQuestion.querySelectorAll('label[for]').forEach(function (el) {
+                    let newFor = el.getAttribute('for').replace("{{questionIndex}}", currentIndex.toString());
+                    el.setAttribute('for', newFor);
+                    console.log("Neues 'for' Attribut gesetzt für label: ", newFor);
+                });
 
-                document.querySelector("form").appendChild(newQuestion);
+                newQuestion.querySelectorAll('textarea[id]').forEach(function (el) {
+                    let newId = el.id.replace("{{questionIndex}}", currentIndex);
+                    el.id = newId;  // Hier die 'id' des Textareas anpassen
+                    console.log("Neue ID gesetzt für textarea: ", newId);
+                });
+
+                newQuestion.querySelectorAll('input[id]').forEach(function (el) {
+                    let newId = el.id.replace("{{questionIndex}}", currentIndex);
+                    el.id = newId;
+                    console.log("Neue ID gesetzt für input: ", newId);
+                });
+
+                newQuestion.querySelectorAll(`input[type="radio"]`).forEach((radio) => {
+                    radio.name = "questionType_" + questionIndex;
+                });
+
+                let radios = newQuestion.querySelectorAll('input[type ="radio"]');
+                radios.forEach((radio) => {
+                    let handler = createRadioHandler(radio, questionIndex);
+                    radioHandlers[questionIndex] = handler;
+                    radio.addEventListener("click", handler);
+                    console.log("Add Event at:" + questionIndex);
+                });
+
+                questionIndex++;
+
+                document.querySelector("#exam").appendChild(newQuestion);
             }
 
             function removeQuestion(button) {
-                button.parentElement.remove();
+                const questionElement = button.parentElement;
+                let questionIndexToRemove = Array.from(questionElement.parentElement.children).indexOf(questionElement);
+
+                lastIndex = questionIndex - 1;
+
+                reindexQuestions(questionIndexToRemove, lastIndex);
+
+                questionElement.remove();
+
+                questionIndex--;
+                if (questionIndex < 0) {
+                    questionIndex = 0;
+                }
+            }
+
+            function toggleQuestionFields(radio, localQuestionIndex) {
+                console.log("toggleQuestionFields aufgerufen mit:", radio.value, localQuestionIndex);
+
+                let choicesContainer = document.getElementById('choicesContainer_' + localQuestionIndex);
+                let correctAnswerSC = document.getElementById('correctAnswer_SC_' + localQuestionIndex);
+                let correctAnswersMC = document.getElementById('correctAnswers_MC_' + localQuestionIndex);
+                let frageText = document.getElementById('freitext_question_' + localQuestionIndex);
+                let scmcQuestion = document.getElementById('SCMC-question_' + localQuestionIndex);
+
+                console.log("Gefundene Elemente:", {
+                    choicesContainer,
+                    correctAnswerSC,
+                    correctAnswersMC,
+                    frageText,
+                    scmcQuestion
+                });
+
+                if (!choicesContainer || !correctAnswerSC || !correctAnswersMC || !frageText || !scmcQuestion) {
+                    console.warn("Mindestens ein Element wurde nicht gefunden! Überprüfe die IDs.");
+                    return;
+                }
+
+                choicesContainer.style.display = 'none';
+                correctAnswerSC.style.display = 'none';
+                correctAnswersMC.style.display = 'none';
+                frageText.style.display = 'none';
+                scmcQuestion.style.display = 'none';
+
+                if (radio.value === 'SC') {
+                    // SC spezifische Felder anzeigen
+                    scmcQuestion.style.display = 'block';
+                    choicesContainer.style.display = 'block';
+                    correctAnswerSC.style.display = 'block';
+                } else if (radio.value === 'MC') {
+                    // Zeige das MC Feld
+                    scmcQuestion.style.display = 'block';
+                    choicesContainer.style.display = 'block';
+                    correctAnswersMC.style.display = 'block';
+                } else if (radio.value === 'FREITEXT') {
+                    // Zeige Freitext Felder
+                    frageText.style.display = 'block';
+                }
+            }
+
+            function reindexQuestions(startIndex, lastIndex) {
+                const questions = document.querySelectorAll('#exam .question-block');
+                const lastQuestion = questions[questions.length - 1];
+
+                // Alle Radio Events löschen
+                Object.keys(radioHandlers).forEach(radio => {
+                    let handler = document.getElementById(radio.id);
+                    if (handler) {
+                        let handler = radioHandlers[radio.id];
+                        radio.removeEventListener("click", handler);
+                        console.log("Remove Event at Index:", radio);
+                    }
+                });
+
+                questions.forEach((question, index) => {
+                    if (index >= startIndex && index < questions.length - 2) {
+                        question.querySelectorAll('[id]').forEach(function (el) {
+                            let newId = el.id.replace(/_[^_]+$/, "_" + String(index));  // Ersetze die alte Indexnummer mit dem neuen
+                            el.id = newId;
+                            console.log("Reindex Element:", newId);
+                        });
+
+                        question.querySelectorAll('label[for]').forEach(function (el) {
+                            let newFor = el.getAttribute('for').replace(/_[^_]+$/, "_" + String(index));  // Ändere das 'for' Attribut
+                            el.setAttribute('for', newFor);
+                            console.log("Reindex label:", newFor);
+                        });
+
+                        question.querySelectorAll('textarea[id]').forEach(function (el) {
+                            let newId = el.id.replace(/_[^_]+$/, "_" + String(index));
+                            el.id = newId;  // Hier die 'id' des Textareas anpassen
+                            console.log("Reindex textarea: ", newId);
+                        });
+
+                        question.querySelectorAll('input[id]').forEach(function (el) {
+                            let newId = el.id.replace(/_[^_]+$/, "_" + String(index));
+                            el.id = newId;
+                            console.log("Reindex input: ", newId);
+                        });
+
+                        question.querySelectorAll(`input[type="radio"]`).forEach((radio) => {
+                            radio.name = "questionType_" + index;
+                        });
+
+                        let radio1 = question.querySelectorAll('input[type ="radio"]');
+                        radio1.forEach((radio) => {
+                            let handler = createRadioHandler(radio, index);
+                            radioHandlers[index] = handler;
+                            radio.addEventListener("click", handler)
+                            console.log("Reindex radio at Index:" + index);
+                        });
+                        }
+                    })
+
+            }
+
+            function handleRadioClick(radio, currentIndex) {
+                console.log("Radio-Klick für Frage " + currentIndex);
+                toggleQuestionFields(radio, currentIndex);
+            }
+
+            function createRadioHandler(radio, currentIndex) {
+                return function () {
+                    handleRadioClick(radio, currentIndex);
+                }
             }
         </script>
     </body>

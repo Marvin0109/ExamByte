@@ -54,21 +54,24 @@
       <li class="nav-item">
         <a class="nav-link" th:href="@{/oauth2/authorization/github}">Login mit GitHub</a>
       </li>
+
       <li class="nav-item" th:if="${#authentication.name != 'anonymousUser'}">
-        <form th:action="@{/logout}" method="post" style="display: inline;">
+        <form th:action="@{/force-logout}" method="post" style="display: inline;">
           <button class="btn btn-link nav-link" type="submit">Logout</button>
         </form>
       </li>
       <!-- Hier kommen weitere links hinzu (li navbar-nav mr-auto und a...)//-->
     </ul>
+    <!--
     <form class="form-inline mt-2 mt-md-0 d-flex" method="get" action="">
                         <span class="input-group-text" id="search-icon">
-                            <i class="fas fa-search"></i> <!-- Font Awesome Lupe -->
+                            <i class="fas fa-search"></i> Font Awesome Lupe
                         </span>
-      <!-- Suchfeld -->
+       Suchfeld
       <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <!-- Submit-Button -->
+       Submit-Button
       <button class="btn btn-outline-success my-2 my-sm-0 ml-2" type="submit">Search</button>
     </form>
+    -->
   </div>
 </nav>
