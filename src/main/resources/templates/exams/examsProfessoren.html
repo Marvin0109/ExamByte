@@ -273,12 +273,13 @@
                 const lastQuestion = questions[questions.length - 1];
 
                 // Alle Radio Events löschen
-                Object.keys(radioHandlers).forEach(radio => {
-                    let handler = document.getElementById(radio.id);
-                    if (handler) {
-                        let handler = radioHandlers[radio.id];
+                Object.keys(radioHandlers).forEach(function(radioIndex) {
+                    // Check if the radio handler exists before attempting to remove it
+                    const handler = radioHandlers[radioIndex];
+                    const radio = document.querySelector('input[name="questionType_${radioIndex}"]');
+                    if (radio && handler) {
                         radio.removeEventListener("click", handler);
-                        console.log("Remove Event at Index:", radio);
+                        console.log("Remove Event at Index:", radioIndex);
                     }
                 });
 
@@ -314,6 +315,7 @@
 
                         let radio1 = question.querySelectorAll('input[type ="radio"]');
                         radio1.forEach((radio) => {
+                            // Create the new handler for the radio button
                             let handler = createRadioHandler(radio, index);
                             radioHandlers[index] = handler;
                             radio.addEventListener("click", handler)
