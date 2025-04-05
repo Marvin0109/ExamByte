@@ -193,3 +193,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Automatisierte MC/SC Bewertungslogik erstellt
 - Testanpassungen
 - ExamProfessoren erweitert (Fragen können durch einen Klick hinzugefügt werden, funktioniert aber noch nicht so richtig)
+
+03.04.2025
+- DOM hinzugefügt (Fehlerhaft)
+
+05.04.2025
+- Indexing ist nicht richtig, s. Issue #2
