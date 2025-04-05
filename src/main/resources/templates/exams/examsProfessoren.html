@@ -152,8 +152,32 @@
 
         <script>
             let questionIndex = 0;
-            let lastIndex = 0;
-            let radioHandlers = {};
+            const radioHandlers = {};
+
+            // Global object to track event handlers
+            var _eventHandlers = {};
+
+            // Function to add event listener and track it in _eventHandlers
+            const addListener = (node, event, handler, capture = false) => {
+                if (!(event in _eventHandlers)) {
+                    _eventHandlers[event] = [];
+                }
+                // Track the listener for later removal
+                _eventHandlers[event].push({node: node, handler: handler, capture: capture});
+                node.addEventListener(event, handler, capture);
+            };
+
+            // Function to remove all listener fpr a given event type from a specific node
+            const removeAllListener = (targetNode, event) => {
+                _eventHandlers[event]
+                    .filter(({ node }) => node === targetNode)
+                    .forEach(({ node, handler, capture }) => node.removeEventListener(event, handler, capture));
+
+                // Update _eventHandlers to reflect that the event listener have been removed
+                _eventHandlers[event] = _eventHandlers[event].filter(
+                    ({ node }) => node !== targetNode
+                );
+            };
 
             function addNewQuestion() {
                 const template = document.getElementById("questionTemplate");
@@ -192,29 +216,43 @@
                 });
 
                 newQuestion.querySelectorAll(`input[type="radio"]`).forEach((radio) => {
-                    radio.name = "questionType_" + questionIndex;
+                    radio.name = "questionType_" + currentIndex;
                 });
 
-                let radios = newQuestion.querySelectorAll('input[type ="radio"]');
-                radios.forEach((radio) => {
-                    let handler = createRadioHandler(radio, questionIndex);
-                    radioHandlers[questionIndex] = handler;
-                    radio.addEventListener("click", handler);
-                    console.log("Add Event at:" + questionIndex);
+                newQuestion.querySelectorAll('input[type ="radio"]').forEach((radio) => {
+                    radio.name = "questionType_" + currentIndex;
+                    const handler = createRadioHandler(radio, currentIndex);
+                    radioHandlers[currentIndex] = handler;
+                    addListener(radio, "click", handler); // Add listener using the new approach
+                    console.log("Add Event at:" + currentIndex);
                 });
 
                 questionIndex++;
 
                 document.querySelector("#exam").appendChild(newQuestion);
+
+                // Debugging: Log the elements to verify they exist
+                console.log("New question added with index:", currentIndex);
+                const newQuestionElement = document.querySelector(`#freitext_question_${currentIndex}`);
+                console.log("Freitext Question element:", newQuestionElement);
+                const choicesContainer = document.querySelector(`#choicesContainer_${currentIndex}`);
+                console.log("Choices Container element:", choicesContainer);
+                const correctAnswerSC = document.querySelector(`#correctAnswer_SC_${currentIndex}`);
+                console.log("Correct Answer SC element:", correctAnswerSC);
+                const correctAnswersMC = document.querySelector(`#correctAnswers_MC_${currentIndex}`);
+                console.log("Correct Answers MC element:", correctAnswersMC);
             }
 
             function removeQuestion(button) {
                 const questionElement = button.parentElement;
                 let questionIndexToRemove = Array.from(questionElement.parentElement.children).indexOf(questionElement);
 
-                lastIndex = questionIndex - 1;
+                if (radioHandlers[questionIndexToRemove]) {
+                    delete radioHandlers[questionIndexToRemove];
+                    console.log("Deleted handler for question index: " + questionIndexToRemove);
+                }
 
-                reindexQuestions(questionIndexToRemove, lastIndex);
+                reindexQuestions(questionIndexToRemove);
 
                 questionElement.remove();
 
@@ -241,11 +279,6 @@
                     scmcQuestion
                 });
 
-                if (!choicesContainer || !correctAnswerSC || !correctAnswersMC || !frageText || !scmcQuestion) {
-                    console.warn("Mindestens ein Element wurde nicht gefunden! Überprüfe die IDs.");
-                    return;
-                }
-
                 choicesContainer.style.display = 'none';
                 correctAnswerSC.style.display = 'none';
                 correctAnswersMC.style.display = 'none';
@@ -268,23 +301,19 @@
                 }
             }
 
-            function reindexQuestions(startIndex, lastIndex) {
+            function reindexQuestions(startIndex) {
                 const questions = document.querySelectorAll('#exam .question-block');
-                const lastQuestion = questions[questions.length - 1];
 
-                // Alle Radio Events löschen
-                Object.keys(radioHandlers).forEach(function(radioIndex) {
-                    // Check if the radio handler exists before attempting to remove it
-                    const handler = radioHandlers[radioIndex];
-                    const radio = document.querySelector('input[name="questionType_${radioIndex}"]');
-                    if (radio && handler) {
-                        radio.removeEventListener("click", handler);
-                        console.log("Remove Event at Index:", radioIndex);
+                questions.forEach((question, index) => {
+                    if (index >= startIndex) {
+                        question.querySelectorAll('input[type="radio"]').forEach((radio) => {
+                            removeAllListener(radio, "click");
+                        });
                     }
                 });
 
                 questions.forEach((question, index) => {
-                    if (index >= startIndex && index < questions.length - 2) {
+                    if (index >= startIndex && index < questions.length - 1) {
                         question.querySelectorAll('[id]').forEach(function (el) {
                             let newId = el.id.replace(/_[^_]+$/, "_" + String(index));  // Ersetze die alte Indexnummer mit dem neuen
                             el.id = newId;
@@ -313,16 +342,16 @@
                             radio.name = "questionType_" + index;
                         });
 
-                        let radio1 = question.querySelectorAll('input[type ="radio"]');
-                        radio1.forEach((radio) => {
-                            // Create the new handler for the radio button
-                            let handler = createRadioHandler(radio, index);
+                        question.querySelectorAll('input[type ="radio"]').forEach((radio) => {
+                            radio.name = "questionType_" + index;
+                            const handler = createRadioHandler(radio, index);
                             radioHandlers[index] = handler;
-                            radio.addEventListener("click", handler)
+                            addListener(radio, "click", handler); // Add listener for the new index
                             console.log("Reindex radio at Index:" + index);
                         });
                         }
-                    })
+                    });
+                questionIndex = questions.length;
 
             }
 
@@ -332,7 +361,7 @@
             }
 
             function createRadioHandler(radio, currentIndex) {
-                return function () {
+                return function handleClick() {
                     handleRadioClick(radio, currentIndex);
                 }
             }
