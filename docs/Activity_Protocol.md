@@ -199,3 +199,9 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 
 05.04.2025
 - Indexing ist nicht richtig, s. Issue #2
+
+06.04.2025
+- Funktion entfernt, wo man zwischen z.B. 5 Fragen paar Fragen löschen kann (zu komplizierte Implementierung)
+- Lösung: Immer die letzte Frage kann gelöscht werden
+- Zukünftiges Feature: Delete All Button
+- JavaScript Code in addQuestion.js
