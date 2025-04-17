@@ -205,3 +205,8 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Lösung: Immer die letzte Frage kann gelöscht werden
 - Zukünftiges Feature: Delete All Button
 - JavaScript Code in addQuestion.js
+
+17.04.2025
+- Für MC/SC mehr Antwortmöglichkeiten verfügbar (für jetzt 6 Optionen), auch für die Lösungen
+- Übergabe der Fragedaten als JSON Objekt + Testanpassungen
+- Löschen von FrageForm
