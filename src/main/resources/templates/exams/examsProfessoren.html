@@ -26,123 +26,130 @@
 
         <main role="main" class="container mt-5 pt-5">
 
-            <div class="container mt-5">
-                <h1>Tests Erstellen</h1>
-                <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}" id="exam">
-                    <!-- Titel des Tests -->
-                    <div class="form-group">
-                        <label for="title">Titel des Tests</label>
-                        <input type="text" class="form-control" id="title" th:field="*{title}" required>
-                        <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-                    </div>
+        <div class="container mt-5">
+            <h1>Tests Erstellen</h1>
+            <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}" id="examForm">
+                <!-- Titel des Tests -->
+                <div class="form-group">
+                    <label for="title">Titel des Tests</label>
+                    <input type="text" class="form-control" id="title" th:field="*{title}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                </div>
 
-                    <!-- Startzeit -->
-                    <div class="form-group">
-                        <label for="startTime">Startzeit</label>
-                        <input type="datetime-local" class="form-control" id="startTime" th:field="*{start}" required>
-                        <span class="text-danger" th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></span>
-                    </div>
+                <!-- Startzeit -->
+                <div class="form-group">
+                    <label for="startTime">Startzeit</label>
+                    <input type="datetime-local" class="form-control" id="startTime" th:field="*{start}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('start')}" th:errors="*{start}"></span>
+                </div>
 
-                    <!-- Endzeit -->
-                    <div class="form-group">
-                        <label for="endTime">Endzeit</label>
-                        <input type="datetime-local" class="form-control" id="endTime" th:field="*{end}" required>
-                        <span class="text-danger" th:if="${#fields.hasErrors('end')}" th:errors="*{end}"></span>
-                    </div>
+                <!-- Endzeit -->
+                <div class="form-group">
+                    <label for="endTime">Endzeit</label>
+                    <input type="datetime-local" class="form-control" id="endTime" th:field="*{end}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('end')}" th:errors="*{end}"></span>
+                </div>
 
-                    <!-- Ergebniszeit -->
-                    <div class="form-group">
-                        <label for="resultTime">Ergebniszeit</label>
-                        <input type="datetime-local" class="form-control" id="resultTime" th:field="*{result}" required>
-                        <span class="text-danger" th:if="${#fields.hasErrors('result')}" th:errors="*{result}"></span>
-                    </div>
-                    <br>
+                <!-- Ergebniszeit -->
+                <div class="form-group">
+                    <label for="resultTime">Ergebniszeit</label>
+                    <input type="datetime-local" class="form-control" id="resultTime" th:field="*{result}" required>
+                    <span class="text-danger" th:if="${#fields.hasErrors('result')}" th:errors="*{result}"></span>
+                </div>
+                <br>
 
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Test erstellen</button>
+                <!-- Verstecktes Feld für die Fragen-Daten -->
+                <input type="hidden" id="examData" name="examData" />
 
+                <!-- Submit Button -->
+                <button type="button" class="btn btn-primary" onclick="submitExamForm()">Test erstellen</button>
 
-                        <!-- Frage einfügen Vorlage -->
-                        <div id="questionTemplate" style="display: none;">
-                            <div class="form-group question-block">
-
-                                <label>Frage Typ</label><br>
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="SC_{{questionIndex}}">Single Choice (SC)</label>
-                                    <input class="form-check-input" type="radio" id="SC_{{questionIndex}}" name="questionType_{{questionIndex}}"
-                                           value="SC" required>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="MC_{{questionIndex}}">Multiple Choice (MC)</label>
-                                    <input class="form-check-input" type="radio" id="MC_{{questionIndex}}" name="questionType_{{questionIndex}}"
-                                           value="MC" required>
-                                </div>
-
-                                <div class="form-check form-check-inline">
-                                    <label class="form-check-label" for="FREITEXT_{{questionIndex}}">Freitext</label>
-                                    <input class="form-check-input" type="radio" id="FREITEXT_{{questionIndex}}" name="questionType_{{questionIndex}}"
-                                           value="FREITEXT" required>
-                                </div>
-                                <!-- Error hier -->
-
-                                <!-- Dynamische Felder -->
-
-                                <!-- Freitext Aufgabe -->
-                                <div id="freitext_question_{{questionIndex}}" style="display : none;">
-                                    <label for="frageText_{{questionIndex}}">Frage</label>
-                                    <textarea class="form-control question-text" rows="20" placeholder="Frage eingeben"
-                                              id="frageText_{{questionIndex}}"
-                                              required></textarea>
-                                    <!-- Error hier -->
-                                    <label for="maxPunkte_{{questionIndex}}">Maximale Punkte</label>
-                                    <input type="number" class="form-control max-points" min="1" id="maxPunkte_{{questionIndex}}" required>
-                                    <!-- Error hier -->
-                                </div>
-
-                                <!-- SC/MC Frage Eingabe -->
-                                <div id="SCMC-question_{{questionIndex}}" style="display: none;">
-                                    <label for="frageTextSCMC_{{questionIndex}}">Frage</label>
-                                    <input type="text" class="form-control" id="frageTextSCMC_{{questionIndex}}" placeholder="Frage eingeben" required>
-                                    <!-- Error hier -->
-                                    <label for="maxPunkteSCMC_{{questionIndex}}">Maximale Punkte</label>
-                                    <input type="number" class="form-control max-points" min="1" id="maxPunkteSCMC_{{questionIndex}}" required>
-                                    <!-- Error hier -->
-                                </div>
-
-                                <!-- Antwortmöglichkeiten für MC und SC -->
-                                <div id="choicesContainer_{{questionIndex}}" style="display: none;">
-                                    <label for="choices_{{questionIndex}}">Antwortmöglichkeiten</label>
-                                    <textarea class="form-control" id="choices_{{questionIndex}}" rows="6"
-                                           placeholder="Antwortmöglichkeit 1&#10;Antwortmöglichkeit 2&#10;..."></textarea>
-                                    <!-- Error hier -->
-                                </div>
-
-                                <!-- SC Lösung -->
-                                <div id="correctAnswer_SC_{{questionIndex}}" style="display: none;">
-                                    <label for="correctAnswer_{{questionIndex}}">Richtige Antwort:</label>
-                                    <input type="text" class="form-control" id="correctAnswer_{{questionIndex}}"
-                                           placeholder="Richtige Antwort eingeben"/>
-                                    <!-- Error -->
-                                </div>
-
-                                <!-- MC Lösungen -->
-                                <div id="correctAnswers_MC_{{questionIndex}}" style="display: none;">
-                                    <label for="correctAnswers_{{questionIndex}}">Richtige Antworten:</label>
-                                    <textarea class="form-control" id="correctAnswers_{{questionIndex}}" rows="6"
-                                           placeholder="Lösung 1&#10;Lösung 2&#10;..."></textarea>
-                                    <!-- Error hier -->
-                                </div>
-                                <br>
-                                <button type="button" class="btn btn-danger remove-question" style="display: none;" onclick="removeQuestion(this)">Frage entfernen</button>
+                    <!-- Frage einfügen Vorlage -->
+                    <div id="questionTemplate" style="display: none;">
+                        <div class="form-group question-block">
+                            <label>Frage Typ</label><br>
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label" for="SC_{{questionIndex}}">Single Choice (SC)</label>
+                                <input class="form-check-input" type="radio" id="SC_{{questionIndex}}" name="questionType_{{questionIndex}}"
+                                       value="SC" required>
                             </div>
+
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label" for="MC_{{questionIndex}}">Multiple Choice (MC)</label>
+                                <input class="form-check-input" type="radio" id="MC_{{questionIndex}}" name="questionType_{{questionIndex}}"
+                                       value="MC" required>
+                            </div>
+
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label" for="FREITEXT_{{questionIndex}}">Freitext</label>
+                                <input class="form-check-input" type="radio" id="FREITEXT_{{questionIndex}}" name="questionType_{{questionIndex}}"
+                                       value="FREITEXT" required>
+                            </div>
+                            <!-- Error hier -->
+
+                            <!-- Dynamische Felder -->
+
+                            <!-- Freitext Aufgabe -->
+                            <div id="freitext_question_{{questionIndex}}" style="display : none;">
+                                <label for="frageText_{{questionIndex}}">Frage</label>
+                                <textarea class="form-control question-text" rows="20" placeholder="Frage eingeben"
+                                      id="frageText_{{questionIndex}}"
+                                      name="frageText_{{questionIndex}}"
+                                      required></textarea>
+                                <!-- Error hier -->
+                                <label for="maxPunkte_{{questionIndex}}">Maximale Punkte</label>
+                                <input type="number" class="form-control max-points" min="1" id="maxPunkte_{{questionIndex}}" required
+                                    name="maxPunkte_{{questionIndex}}">
+                                <!-- Error hier -->
+                            </div>
+
+                            <!-- SC/MC Frage Eingabe -->
+                            <div id="SCMC-question_{{questionIndex}}" style="display: none;">
+                                <label for="frageTextSCMC_{{questionIndex}}">Frage</label>
+                                <input type="text" class="form-control" id="frageTextSCMC_{{questionIndex}}" placeholder="Frage eingeben" required
+                                    name="frageTextSCMC_{{questionIndex}}">
+                                <!-- Error hier -->
+                                <label for="maxPunkteSCMC_{{questionIndex}}">Maximale Punkte</label>
+                                <input type="number" class="form-control max-points" min="1" id="maxPunkteSCMC_{{questionIndex}}" required
+                                    name="maxPunkteSCMC_{{questionIndex}}">
+                                <!-- Error hier -->
+                            </div>
+
+                            <!-- Antwortmöglichkeiten für MC und SC -->
+                            <div id="choicesContainer_{{questionIndex}}" style="display: none;">
+                                <label for="choices_{{questionIndex}}">Antwortmöglichkeiten</label>
+                                <textarea class="form-control" id="choices_{{questionIndex}}" rows="6"
+                                      placeholder="Antwortmöglichkeit 1&#10;Antwortmöglichkeit 2&#10;..."
+                                      name="choices_{{questionIndex}}"></textarea>
+                                <!-- Error hier -->
+                            </div>
+
+                            <!-- SC Lösung -->
+                            <div id="correctAnswer_SC_{{questionIndex}}" style="display: none;">
+                                <label for="correctAnswer_{{questionIndex}}">Richtige Antwort:</label>
+                                <input type="text" class="form-control" id="correctAnswer_{{questionIndex}}"
+                                    placeholder="Richtige Antwort eingeben"
+                                    name="correctAnswer_{{questionIndex}}"/>
+                                <!-- Error -->
+                            </div>
+
+                            <!-- MC Lösungen -->
+                            <div id="correctAnswers_MC_{{questionIndex}}" style="display: none;">
+                                <label for="correctAnswers_{{questionIndex}}">Richtige Antworten:</label>
+                                <textarea class="form-control" id="correctAnswers_{{questionIndex}}" rows="6"
+                                    placeholder="Lösung 1&#10;Lösung 2&#10;..."
+                                    name="correctAnswers_{{questionIndex}}"></textarea>
+                                <!-- Error hier -->
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-danger remove-question" style="display: none;" onclick="removeQuestion(this)">Frage entfernen</button>
                         </div>
-                    <button type="button" class="btn btn-success" id="addQuestionButton" style="display: inline-block" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
-                </form>
-            </div>
+                    </div>
+                <button type="button" class="btn btn-success" id="addQuestionButton" style="display: inline-block" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
+            </form>
+        </div>
 
-
-            <span th:text="${message}"></span>
+        <span th:text="${message}"></span>
 
         </main>
 

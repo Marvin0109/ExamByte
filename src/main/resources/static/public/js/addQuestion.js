@@ -65,11 +65,17 @@ function addNewQuestion() {
         console.log("Neue ID gesetzt für input: ", newId);
     });
 
+    newQuestion.querySelectorAll('input[name], textarea[name]').forEach(function (el) {
+        let newName = el.getAttribute('name').replace("{{questionIndex}}", currentIndex.toString());
+        el.setAttribute('name', newName);
+        console.log("Neue ID gesetzt für name: ", newName);
+    });
+
     newQuestion.querySelectorAll(`input[type="radio"]`).forEach((radio) => {
         radio.name = "questionType_" + currentIndex;
     });
 
-    newQuestion.querySelectorAll('input[type ="radio"]').forEach((radio) => {
+    newQuestion.querySelectorAll('input[type="radio"]').forEach((radio) => {
         radio.name = "questionType_" + currentIndex;
         const handler = createRadioHandler(radio, currentIndex);
         radioHandlers.set(radio, handler);
@@ -160,4 +166,96 @@ function createRadioHandler(radio, currentIndex) {
     return function handleClick() {
         handleRadioClick(radio, currentIndex);
     }
+}
+
+function extractExamData() {
+    const questions = document.querySelectorAll('.question-block');
+    const data = [];
+
+    questions.forEach((questionBlock, index) => {
+        const questionObj = {
+            index: index,
+            type: null,
+            questionText: null,
+            maxPunkte: null,
+            choices: [],
+            correctAnswer: null,
+            correctAnswers: [],
+            freeTextAnswer: null
+        };
+
+        // Frage-Text extrahieren (wenn vorhanden)
+        const freitextEl = questionBlock.querySelector(`#freitext_question_${index}`);
+        if (freitextEl && freitextEl.style.display !== 'none') {
+            questionObj.questionText = freitextEl.querySelector('textarea')?.value || '';
+
+            const punkteValue = freitextEl.querySelector(`#maxPunkte_${index}`)?.value || '';
+            questionObj.maxPunkte = punkteValue ? parseInt(punkteValue, 10) : 0; // Fallback auf 0, falls kein Wert vorhanden
+        } else {
+            // SC/MC Fragetext
+            const scmcEl = questionBlock.querySelector(`#SCMC-question_${index}`);
+            const punkte = questionBlock.querySelector('#maxPunkteSCMC_${index}');
+            if (scmcEl) {
+                questionObj.questionText = scmcEl.querySelector('textarea')?.value || '';
+
+                // Punktzahl für SC/MC-Frage extrahieren
+                const punkteValue = scmcEl.querySelector(`#maxPunkteSCMC_${index}`)?.value || '';
+                questionObj.maxPunkte = punkteValue ? parseInt(punkteValue, 10) : 0; // Fallback auf 0, falls kein Wert vorhanden
+            }
+        }
+
+        // Frage-Typ bestimmen
+        const selectedRadio = questionBlock.querySelector(`input[name="questionType_${index}"]:checked`);
+        if (selectedRadio) {
+            questionObj.type = selectedRadio.value;
+        }
+
+        // Antwortmöglichkeiten extrahieren (für SC und MC)
+        const choicesContainer = questionBlock.querySelector(`#choicesContainer_${index}`);
+        if (choicesContainer && choicesContainer.style.display !== 'none') {
+            const choices = choicesContainer.querySelectorAll('input[type="text"]');
+            choices.forEach(input => {
+                questionObj.choices.push(input.value);
+            });
+        }
+
+        // Richtige Antwort für SC
+        const correctSC = questionBlock.querySelector(`#correctAnswer_SC_${index}`);
+        if (correctSC && correctSC.style.display !== 'none') {
+            const selected = correctSC.querySelector('select')?.value;
+            questionObj.correctAnswer = selected;
+        }
+
+        // Richtige Antworten für MC (Mehrfachauswahl)
+        const correctMC = questionBlock.querySelector(`#correctAnswers_MC_${index}`);
+        if (correctMC && correctMC.style.display !== 'none') {
+            const checkboxes = correctMC.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach((checkbox, i) => {
+                if (checkbox.checked) {
+                    questionObj.correctAnswers.push(i); // oder checkbox.value
+                }
+            });
+        }
+
+        // Freitext-Antwort (wenn Nutzer was geschrieben hat)
+        if (freitextEl && freitextEl.style.display !== 'none') {
+            const answer = freitextEl.querySelector('textarea')?.value || '';
+            questionObj.freeTextAnswer = answer;
+        }
+
+        data.push(questionObj);
+    });
+
+    return data;
+}
+
+function submitExamForm() {
+    // Extrahieren der Fragen-Daten
+    const formData = extractExamData();
+
+    // Setzen der extrahierten Daten in das versteckte Feld
+    document.getElementById('examData').value = JSON.stringify(formData);
+
+    // Formular abschicken
+    document.getElementById('examForm').submit();
 }

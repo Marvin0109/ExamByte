@@ -4,8 +4,9 @@ import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.web.form.ExamData;
 import exambyte.web.form.ExamForm;
-import exambyte.web.form.FrageForm;
+import exambyte.web.form.QuestionData;
 import exambyte.web.form.helper.QuestionType;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         model.addAttribute("examForm", new ExamForm());
-        model.addAttribute("frageForm", new FrageForm());
         return "/exams/examsProfessoren";
     }
 
@@ -46,7 +46,7 @@ public class ExamController {
     @Secured("ROLE_ADMIN")
     public String createExam(
             @Valid @ModelAttribute ExamForm form,
-            @Valid @ModelAttribute FrageForm frageForm,
+            @RequestBody ExamData examData, // Empfang der Exam-Daten aus JSON (da sind nur Fragedaten drin)
             Model model,
             OAuth2AuthenticationToken auth,
             BindingResult bindingResult,
@@ -72,30 +72,26 @@ public class ExamController {
             examManagementService.getExamByStartTime(form.getStart());
 
         if (success) {
-            List<FrageForm> frageForms = form.getFragen();
-
-            for (FrageForm frageForm1 : frageForms) {
-                String frageText = frageForm1.getFrageText();
-                int maxPunkte = frageForm1.getMaxPunkte();
-                QuestionType frageTyp = frageForm1.getType();
-
-                String correctAnswer = frageForm1.getCorrectAnswer();
-                List<String> correctAnswers = frageForm1.getCorrectAnswers();
+            for(QuestionData question : examData.getQuestions()) {
+                String frageText = question.getQuestionText();
+                QuestionType frageTyp = QuestionType.valueOf(question.getType());
+                int maxPunkte = question.getPunkte();
 
                 if (frageTyp.equals(QuestionType.FREITEXT)) {
                     examManagementService.createFrage(new FrageDTO(null, null, frageText,
                             maxPunkte, profFachID, examUUID));
-                }
-                if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
-                    examManagementService.createChoiceFrage(new FrageDTO(null, null, frageText,
-                                    maxPunkte, profFachID, examUUID),
-                            new KorrekteAntwortenDTO(null, null, null, correctAnswer));
-                }
-                if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
-                    examManagementService.createChoiceFrage(new FrageDTO(null, null, frageText,
-                                    maxPunkte, profFachID, examUUID),
-                            new KorrekteAntwortenDTO(null, null, null,
-                                    String.join(", ", correctAnswers)));
+                } else if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
+                    String correctAnswer = question.getCorrectAnswer();
+                    String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
+                    FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
+                    examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
+                            f.getFachId(), correctAnswer));
+                } else if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
+                    List<String> correctAnswers = question.getCorrectAnswers();
+                    String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
+                    FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
+                    examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
+                            String.join(",", correctAnswers)));
                 }
             }
 

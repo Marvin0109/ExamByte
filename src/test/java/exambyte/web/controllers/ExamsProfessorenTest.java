@@ -8,18 +8,19 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
+import exambyte.web.form.ExamData;
 import exambyte.web.form.ExamForm;
-import exambyte.web.form.FrageForm;
-import exambyte.web.form.helper.QuestionType;
-import org.junit.jupiter.api.Disabled;
+import exambyte.web.form.QuestionData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,9 +28,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.InstanceOfAssertFactories.array;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -79,7 +78,6 @@ public class ExamsProfessorenTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("name", "Marvin0109"))
                 .andExpect(model().attributeExists("examForm"))
-                .andExpect(model().attributeExists("frageForm"))
                 .andExpect(view().name("/exams/examsProfessoren"));
     }
 
@@ -97,20 +95,16 @@ public class ExamsProfessorenTest {
         examForm.setEnd(LocalDateTime.now().plusDays(1));
         examForm.setResult(LocalDateTime.now().plusDays(2));
 
-        FrageForm frageForm = new FrageForm();
-        frageForm.setTitle("Test");
-        frageForm.setFrageText("Frage 1");
-        frageForm.setType(QuestionType.FREITEXT);
-        frageForm.setMaxPunkte(2);
-        frageForm.setChoices(List.of("Choice 1", "Choice 2", "Choice 3"));
-        frageForm.setCorrectAnswer("Correct");
-        frageForm.setCorrectAnswers(List.of("Correct 1", "Correct 2"));
+        QuestionData questionData1 = new QuestionData();
+        QuestionData questionData2 = new QuestionData();
 
-        examForm.setFragen(List.of(frageForm));
+        ExamData examData = new ExamData();
+        examData.setQuestions(List.of(questionData1, questionData2));
 
         mvc.perform(post("/exams/examsProfessoren")
                         .flashAttr("examForm", examForm)
-                        .flashAttr("frageForm", frageForm)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(examForm))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/exams/examsProfessoren"))
@@ -134,23 +128,24 @@ public class ExamsProfessorenTest {
         examForm.setEnd(LocalDateTime.now().plusDays(1));
         examForm.setResult(LocalDateTime.now().plusDays(2));
 
-        FrageForm frageForm = new FrageForm();
-        frageForm.setTitle("Test");
-        frageForm.setFrageText("Frage 1");
-        frageForm.setType(QuestionType.FREITEXT);
-        frageForm.setMaxPunkte(2);
-        frageForm.setChoices(List.of("Choice 1", "Choice 2", "Choice 3"));
-        frageForm.setCorrectAnswer("Correct");
-        frageForm.setCorrectAnswers(List.of("Correct 1", "Correct 2"));
+        QuestionData questionData1 = new QuestionData();
+        questionData1.setQuestionText("Was ist 2+2?");
+        questionData1.setType("FREITEXT");
+        questionData1.setPunkte(5);
+        questionData1.setChoices(List.of());
+        questionData1.setCorrectAnswer("");
+        questionData1.setCorrectAnswers(List.of());
 
-        examForm.setFragen(List.of(frageForm));
+        ExamData examData = new ExamData();
+        examData.setQuestions(List.of(questionData1));
 
         ExamDTO exam = new ExamDTO(null, null, examForm.getTitle(), profFachID.get(), examForm.getStart(),
                 examForm.getEnd(), examForm.getResult());
 
         mvc.perform(post("/exams/examsProfessoren")
                         .flashAttr("examForm", examForm)
-                        .flashAttr("frageForm", frageForm)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(examData))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/exams/examsProfessoren"))
