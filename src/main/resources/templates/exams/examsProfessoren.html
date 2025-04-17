@@ -113,8 +113,8 @@
                                 <!-- Antwortmöglichkeiten für MC und SC -->
                                 <div id="choicesContainer_{{questionIndex}}" style="display: none;">
                                     <label for="choices_{{questionIndex}}">Antwortmöglichkeiten</label>
-                                    <input type="text" class="form-control" id="choices_{{questionIndex}}"
-                                           placeholder="Antwortmöglichkeiten eingeben"/>
+                                    <textarea class="form-control" id="choices_{{questionIndex}}" rows="6"
+                                           placeholder="Antwortmöglichkeit 1&#10;Antwortmöglichkeit 2&#10;..."></textarea>
                                     <!-- Error hier -->
                                 </div>
 
@@ -129,10 +129,11 @@
                                 <!-- MC Lösungen -->
                                 <div id="correctAnswers_MC_{{questionIndex}}" style="display: none;">
                                     <label for="correctAnswers_{{questionIndex}}">Richtige Antworten:</label>
-                                    <input type="text" class="form-control" id="correctAnswers_{{questionIndex}}"
-                                           placeholder="Richtige Antwort(en) eingeben"/>
+                                    <textarea class="form-control" id="correctAnswers_{{questionIndex}}" rows="6"
+                                           placeholder="Lösung 1&#10;Lösung 2&#10;..."></textarea>
                                     <!-- Error hier -->
                                 </div>
+                                <br>
                                 <button type="button" class="btn btn-danger remove-question" style="display: none;" onclick="removeQuestion(this)">Frage entfernen</button>
                             </div>
                         </div>
