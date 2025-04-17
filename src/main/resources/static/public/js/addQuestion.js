@@ -85,7 +85,7 @@ function addNewQuestion() {
 
     questionIndex++;
 
-    document.querySelector("#exam").appendChild(newQuestion);
+    document.querySelector("#examForm").appendChild(newQuestion);
 
     updateQuestionButtons();
 }
@@ -194,7 +194,7 @@ function extractExamData() {
         } else {
             // SC/MC Fragetext
             const scmcEl = questionBlock.querySelector(`#SCMC-question_${index}`);
-            const punkte = questionBlock.querySelector('#maxPunkteSCMC_${index}');
+            const punkte = questionBlock.querySelector(`#maxPunkteSCMC_${index}`);
             if (scmcEl) {
                 questionObj.questionText = scmcEl.querySelector('textarea')?.value || '';
 

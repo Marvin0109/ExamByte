@@ -47,9 +47,9 @@ public class ExamController {
     public String createExam(
             @Valid @ModelAttribute ExamForm form,
             @RequestBody ExamData examData, // Empfang der Exam-Daten aus JSON (da sind nur Fragedaten drin)
+            BindingResult bindingResult,
             Model model,
             OAuth2AuthenticationToken auth,
-            BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
