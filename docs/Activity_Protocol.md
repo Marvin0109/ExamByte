@@ -210,3 +210,7 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 - Für MC/SC mehr Antwortmöglichkeiten verfügbar (für jetzt 6 Optionen), auch für die Lösungen
 - Übergabe der Fragedaten als JSON Objekt + Testanpassungen
 - Löschen von FrageForm
+
+18.04.2025
+- JSON von Model getrennt, zwei Forms erstellt und Tests angepasst
+- `BindingResult` geht immer noch nicht, WhiteErrorPage
