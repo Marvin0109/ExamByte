@@ -3,6 +3,7 @@ package exambyte.web.form;
 import java.util.List;
 
 public class QuestionData {
+    private int index;
     private String questionText;
     private String type;
     private int punkte;
@@ -34,6 +35,10 @@ public class QuestionData {
         return correctAnswers;
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     public void setQuestionText(String questionText) {
         this.questionText = questionText;
     }
@@ -56,5 +61,9 @@ public class QuestionData {
 
     public void setCorrectAnswers(List<String> correctAnswers) {
         this.correctAnswers = correctAnswers;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

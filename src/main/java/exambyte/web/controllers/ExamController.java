@@ -1,4 +1,6 @@
 package exambyte.web.controllers;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
@@ -27,10 +29,13 @@ import java.util.UUID;
 public class ExamController {
 
     private final ExamManagementService examManagementService;
+    private final ObjectMapper objectMapper;
+    private UUID examUUID = null;
 
     @Autowired
-    public ExamController(ExamManagementService examManagementService) {
+    public ExamController(ExamManagementService examManagementService, ObjectMapper objectMapper) {
        this.examManagementService = examManagementService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/examsProfessoren")
@@ -46,16 +51,15 @@ public class ExamController {
     @Secured("ROLE_ADMIN")
     public String createExam(
             @Valid @ModelAttribute ExamForm form,
-            @RequestBody ExamData examData, // Empfang der Exam-Daten aus JSON (da sind nur Fragedaten drin)
-            BindingResult bindingResult,
-            Model model,
             OAuth2AuthenticationToken auth,
+            Model model,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message",
-                    "Fehlerhafte Eingabe: " + bindingResult.getAllErrors().toString());
-            return "/exams/examsProfessoren";
+            redirectAttributes.addFlashAttribute("message", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+            return "redirect:/examsProfessoren";
         }
 
         String name = auth.getPrincipal().getAttribute("login");
@@ -68,41 +72,83 @@ public class ExamController {
             .getProfFachIDByName(name)
             .orElseThrow(NichtVorhandenException::new);
 
-        UUID examUUID =
+        examUUID =
             examManagementService.getExamByStartTime(form.getStart());
 
         if (success) {
-            for(QuestionData question : examData.getQuestions()) {
-                String frageText = question.getQuestionText();
-                QuestionType frageTyp = QuestionType.valueOf(question.getType());
-                int maxPunkte = question.getPunkte();
-
-                if (frageTyp.equals(QuestionType.FREITEXT)) {
-                    examManagementService.createFrage(new FrageDTO(null, null, frageText,
-                            maxPunkte, profFachID, examUUID));
-                } else if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
-                    String correctAnswer = question.getCorrectAnswer();
-                    String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
-                    FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
-                    examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
-                            f.getFachId(), correctAnswer));
-                } else if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
-                    List<String> correctAnswers = question.getCorrectAnswers();
-                    String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
-                    FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
-                    examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
-                            String.join(",", correctAnswers)));
-                }
-            }
-
             redirectAttributes.addFlashAttribute("message","Test erfolgreich erstellt!");
+            redirectAttributes.addFlashAttribute("messageType", "success");
             redirectAttributes.addFlashAttribute("exam", new ExamDTO(
                     null, null, form.getTitle(), profFachID, form.getStart(), form.getEnd(), form.getResult()
             ));
 
         } else {
             redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Prüfung.");
+            redirectAttributes.addFlashAttribute("messageType", "danger");
         }
+        return "redirect:/exams/examsProfessoren";
+    }
+
+    @PostMapping("/examsProfessoren/questions")
+    @Secured("ROLE_ADMIN")
+    public String createQuestion(
+            @RequestParam("examData") String examData,
+            OAuth2AuthenticationToken auth,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        List<QuestionData> questions = null;
+
+        try {
+            ExamData examDataObj = mapper.readValue(examData, ExamData.class);
+            questions = examDataObj.getQuestions();
+        } catch (JsonProcessingException e) {
+            // Fehlerbehandlung, wenn das JSON nicht korrekt ist
+            redirectAttributes.addFlashAttribute("message", "Fehler beim Verarbeiten der Fragen.");
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+            return "redirect:/exams/examsProfessoren";
+        }
+
+        String name = auth.getPrincipal().getAttribute("login");
+
+        UUID profFachID =
+                examManagementService
+                        .getProfFachIDByName(name)
+                        .orElseThrow(NichtVorhandenException::new);
+
+        for(QuestionData question : questions) {
+            String frageText = question.getQuestionText();
+            QuestionType frageTyp = QuestionType.valueOf(question.getType());
+            int maxPunkte = question.getPunkte();
+
+            if (frageTyp.equals(QuestionType.FREITEXT)) {
+                examManagementService.createFrage(new FrageDTO(null, null, frageText,
+                        maxPunkte, profFachID, examUUID));
+            } else if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
+                String correctAnswer = question.getCorrectAnswer();
+                String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
+                FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
+                examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
+                        f.getFachId(), correctAnswer));
+            } else if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
+                List<String> correctAnswers = question.getCorrectAnswers();
+                String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
+                FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
+                examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
+                        String.join(",", correctAnswers)));
+            }
+        }
+        redirectAttributes.addFlashAttribute("message", "Fragen erfolgreich erstellt!");
+        redirectAttributes.addFlashAttribute("messageType", "success");
+        return "redirect:/exams/examsProfessoren";
+    }
+
+    @PostMapping("/examsProfessoren/success")
+    @Secured("ROLE_ADMIN")
+    public String testSuccessMessage(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("message", "It's working!");
+        redirectAttributes.addFlashAttribute("messageType", "success");
         return "redirect:/exams/examsProfessoren";
     }
 

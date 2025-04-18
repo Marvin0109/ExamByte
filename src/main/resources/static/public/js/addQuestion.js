@@ -17,7 +17,7 @@ const addListener = (node, event, handler, capture = false) => {
     }
 };
 
-// Function to remove all listener for a given event type from a specific node
+// Function to remove all listeners for a given event type from a specific node
 function removeAllListener(targetNode, event, specificHandler = null) {
     const handlers = _eventHandlers[event];
     if (handlers) {
@@ -85,7 +85,7 @@ function addNewQuestion() {
 
     questionIndex++;
 
-    document.querySelector("#examForm").appendChild(newQuestion);
+    document.querySelector("#questionForm").appendChild(newQuestion);
 
     updateQuestionButtons();
 }
@@ -139,20 +139,28 @@ function toggleQuestionFields(radio, localQuestionIndex) {
 }
 
 function updateQuestionButtons() {
-    const questions = document.querySelectorAll('.question-block');
-    const removeButtons = document.querySelectorAll('.remove-question');
+    const form = document.querySelector('#questionForm');
+    const questions = form.querySelectorAll('.question-block');
+    const removeButtons = form.querySelectorAll('.remove-question');
+    const submitButtons = form.querySelectorAll('.submit-questions');
 
     // Entferne den "remove"-Button von allen Fragen, bevor er neu positioniert wird
     removeButtons.forEach(button => {
         button.style.display = "none"; // Setze alle entfernen Buttons auf unsichtbar
     });
 
+    submitButtons.forEach(button => {
+        button.style.display = "none";
+    });
+
     // Wenn Fragen existieren, dann zeige den Button nur für die letzte Frage
     if (questions.length > 0) {
         const lastQuestion = questions[questions.length - 1];
         const removeButton = lastQuestion.querySelector('.remove-question');
-        if (removeButton) {
+        const submitButton = lastQuestion.querySelector('.submit-questions')
+        if (removeButton && submitButton) {
             removeButton.style.display = "inline-block";  // "remove"-Button nur für die letzte Frage anzeigen
+            submitButton.style.display = "inline-block";
         }
     }
 }
@@ -249,7 +257,7 @@ function extractExamData() {
     return data;
 }
 
-function submitExamForm() {
+function submitQuestionForm() {
     // Extrahieren der Fragen-Daten
     const formData = extractExamData();
 
@@ -257,5 +265,13 @@ function submitExamForm() {
     document.getElementById('examData').value = JSON.stringify(formData);
 
     // Formular abschicken
-    document.getElementById('examForm').submit();
+    document.getElementById('questionForm').submit();
 }
+
+setTimeout(function () {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+        alert.classList.remove('show');
+        alert.classList.add('fade');
+    }
+}, 5000); // 5000ms = 5 Sekunden
