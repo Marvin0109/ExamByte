@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,13 +30,11 @@ import java.util.UUID;
 public class ExamController {
 
     private final ExamManagementService examManagementService;
-    private final ObjectMapper objectMapper;
     private UUID examUUID = null;
 
     @Autowired
-    public ExamController(ExamManagementService examManagementService, ObjectMapper objectMapper) {
+    public ExamController(ExamManagementService examManagementService) {
        this.examManagementService = examManagementService;
-        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/examsProfessoren")
@@ -50,16 +49,15 @@ public class ExamController {
     @PostMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String createExam(
-            @Valid @ModelAttribute ExamForm form,
+            @Valid @ModelAttribute("examForm") ExamForm form,
             OAuth2AuthenticationToken auth,
-            Model model,
             BindingResult bindingResult,
+            Model model,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("message", bindingResult.getAllErrors());
-            redirectAttributes.addFlashAttribute("messageType", "danger");
-            return "redirect:/examsProfessoren";
+            model.addAttribute("examForm", form);
+            return "exams/examsProfessoren";
         }
 
         String name = auth.getPrincipal().getAttribute("login");
