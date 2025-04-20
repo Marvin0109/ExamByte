@@ -1,5 +1,6 @@
 package exambyte.web.controllers;
 
+import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.service.AppUserService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
@@ -14,7 +15,12 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -24,6 +30,9 @@ public class ContactTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockitoBean
+    private ExamManagementService examManagementService;
 
     @MockitoBean
     private AppUserService appUserService;
@@ -42,8 +51,14 @@ public class ContactTest {
     @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "STUDENT", "REVIEWER", "ADMIN"})
     @DisplayName("Die contact Seite ist für authentifizierte User erreichbar")
     void test_02() throws Exception {
+        UUID randomUUID = UUID.randomUUID();
+        when(examManagementService.getProfFachIDByName("Marvin0109")).thenReturn(Optional.of(randomUUID));
+
         mvc.perform(get("/contact"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("name", "Marvin0109"));
+                .andExpect(view().name("contact"))
+                .andExpect(model().attribute("name", "Marvin0109"))
+                .andExpect(model().attribute("fachID", randomUUID.toString()))
+                .andExpect(model().attributeExists("currentPath"));
     }
 }
