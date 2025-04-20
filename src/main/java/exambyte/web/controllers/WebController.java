@@ -1,5 +1,6 @@
 package exambyte.web.controllers;
 
+import exambyte.application.service.ExamManagementService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 public class WebController {
+
+    private final ExamManagementService examManagementService;
+
+    public WebController(ExamManagementService examManagementService) {
+        this.examManagementService = examManagementService;
+    }
 
     /**
      * Zeigt die Startseite an und fügt die aktuelle URL zur Ansicht hinzu.
@@ -41,7 +48,10 @@ public class WebController {
     @GetMapping("/contact")
     public String contact(Model model, HttpServletRequest request, OAuth2AuthenticationToken auth) {
         System.out.println(auth);
+        String name = auth.getPrincipal().getAttribute("name");
+        String fachID = examManagementService.getProfFachIDByName(name).toString();
         model.addAttribute("name", auth.getPrincipal().getAttribute("login"));
+        model.addAttribute("fachID", fachID);
         model.addAttribute("currentPath", request.getRequestURI());
         return "contact";
     }
