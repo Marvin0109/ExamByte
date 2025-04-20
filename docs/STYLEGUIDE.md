@@ -2,7 +2,7 @@
 
 **Autor**: Marvin0109
 **erstellt am**: 08.01.2025
-**letzte Änderung**: 18.03.2025
+**letzte Änderung**: 20.04.2025
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -321,6 +321,70 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 ### Test
 - Mit dem Start der Geschäftslogik und Funktionalitäten sollten Tests **rechtzeitig** geschrieben werden!
 
+## Fun Facts
+Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
+Hier die Statistik vom 20.04.2025:
+```
+$ cloc .
+
+github.com/AlDanial/cloc v 2.04  T=0.41 s (1607.8 files/s, 140049.1 lines/s)
+
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+HTML                           369           1334             59          14455
+CSS                             13           1310             53          10706
+JavaScript                       9           1982           2186           8208
+Java                           182           1809            693           6865
+XML                             64             21              0           6102
+Markdown                         6            183              2            650
+Text                             4             20              0            218
+Bourne Shell                     2             34            125            117
+Maven                            1              9              9             88
+Gradle                           2             20              8             86
+YAML                             3             10              0             84
+SQL                              1              8              0             74
+DOS Batch                        1             21              2             71
+PlantUML                         2              3              1             25
+Properties                       3              0              1             11
+-------------------------------------------------------------------------------
+SUM:                           662           6764           3139          47760
+-------------------------------------------------------------------------------
+
+$ cloc src/main/java/
+
+ 128 text files.
+     128 unique files.                                          
+       0 files ignored.
+
+github.com/AlDanial/cloc v 2.04  T=0.05 s (2437.5 files/s, 94319.7 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Java                           128           1019            352           3582
+-------------------------------------------------------------------------------
+SUM:                           128           1019            352           3582
+-------------------------------------------------------------------------------
+
+$ cloc src/test/java/
+
+54 text files.
+      54 unique files.                              
+       0 files ignored.
+
+github.com/AlDanial/cloc v 2.04  T=0.05 s (1152.2 files/s, 94185.5 lines/s)
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Java                            54            790            341           3283
+-------------------------------------------------------------------------------
+SUM:                            54            790            341           3283
+-------------------------------------------------------------------------------
+```
+
+**3582** Zeilen Produktivcode und **3283** Zeilen Testcode, fast ein **1:1 Test zu Code** Verhältnis!
+Testabdeckung zu dem Zeitpunkt laut Jacoco ~ **74 %**.
+
 ## Schlussbemerkung
 - Randbemerkung: Die Gruppe startete mit 5 Teilnehmern, von denen **3** ausgestiegen sind.
 
@@ -329,3 +393,8 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 - Danke an muz70wuc für die Mitarbeit, der Typ ist echt **GOATED**.
 
 ![Based Tectone Gif](https://cdn.7tv.app/emote/01G39QQWC80004KFXXGTW7Q4XE/4x.webp)
+
+- Nach der ersten Klausur bliebt nur noch ich als letzter Entwickler übrig. Ist nicht einfach alles alleine zu entwickeln,
+aber mit Geduld und Konzentration geht's
+
+![Beepo Hopium](https://cdn.7tv.app/emote/01F7Z8X2K80005DMJNB0FWZDZH/4x.avif)
