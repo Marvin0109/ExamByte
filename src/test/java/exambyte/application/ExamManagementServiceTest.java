@@ -10,6 +10,7 @@ import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
+import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.infrastructure.mapper.AntwortDTOMapperImpl;
 import exambyte.infrastructure.mapper.ExamDTOMapperImpl;
 import exambyte.infrastructure.mapper.FrageDTOMapperImpl;
@@ -23,7 +24,9 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class ExamManagementServiceTest {
@@ -60,31 +63,165 @@ public class ExamManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Das Erstellen eines Exams ist erfolgreich")
+    @DisplayName("Das erstellen eines Exams ist erfolgreich")
     void test_01() {
         // Arrange
-        String profName = "Professor";
-        UUID profFachID = UUID.randomUUID();
+        String profName = "Prof 1";
         String title = "Exam 1";
+        UUID id = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 0);
-        LocalDateTime result = LocalDateTime.of(2020, 1, 1, 2, 0);
+        LocalDateTime result = LocalDateTime.of(2020, 1, 1, 1, 0);
 
         Collection<Exam> exams = new ArrayList<>();
-        exams.add(new Exam.ExamBuilder().professorFachId(profFachID).title(title).startTime(start)
-                .endTime(end).resultTime(result).build());
+        exams.add(new Exam.ExamBuilder()
+                .title(title)
+                .startTime(start)
+                .endTime(end)
+                .resultTime(result)
+                .professorFachId(id)
+                .build());
 
-        when(professorService.getProfessorFachId(profName)).thenReturn(Optional.of(profFachID));
+        ExamDTO dto = new ExamDTO(null, null, title, id, start, end, result);
+
+        when(professorService.getProfessorFachIdByName(profName)).thenReturn(Optional.of(id));
         when(examRepository.findAll()).thenReturn(exams);
 
         // Act
-        examManagementService.createExam(profName, title, start, end, result);
+        boolean success = examManagementService.createExam(profName, title, start, end, result);
 
         // Assert
-        verify(professorService).getProfessorFachId(profName);
-        verify(examRepository).findAll();
-        verify(examDTOMapper).toDomain(any(ExamDTO.class));
+        assertThat(success).isTrue();
+        assertThat(examRepository.findAll()).hasSize(1);
+        verify(professorService).getProfessorFachIdByName(profName);
+        verify(examDTOMapper).toDomain(dto);
+        verify(examService).addExam(any());
     }
 
-    // TODO: Teste die restlichen Methoden
+    @Test
+    @DisplayName("Das erstellen eines Exams ist nicht erfolgreich")
+    void test_02() {
+        // Arrange
+        String profName = "Prof 1";
+        String title = "Exam ";
+        UUID id = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 0);
+        LocalDateTime result = LocalDateTime.of(2020, 1, 1, 1, 0);
+
+        Collection<Exam> exams = new ArrayList<>();
+        for (int i = 1; i < 13; i++) {
+            exams.add(new Exam.ExamBuilder()
+                    .title(title + i)
+                    .startTime(start)
+                    .endTime(end)
+                    .resultTime(result)
+                    .professorFachId(id)
+                    .build());
+        }
+
+        when(professorService.getProfessorFachIdByName(profName)).thenReturn(Optional.of(id));
+        when(examRepository.findAll()).thenReturn(exams);
+
+        // Act
+        boolean success = examManagementService.createExam(profName, title, start, end, result);
+
+        // Assert
+        assertThat(success).isFalse();
+        assertThat(examRepository.findAll()).hasSize(12);
+        verify(professorService).getProfessorFachIdByName(profName);
+    }
+
+    // TODO
+    @Test
+    @DisplayName("isExamAlreadySubmitted Test")
+    void test_03() {}
+
+    // TODO
+    @Test
+    @DisplayName("submitExam Test")
+    void test_04() {}
+
+    // TODO
+    @Test
+    @DisplayName("Exam erfolgreich gefunden")
+    void test_05() {
+        // Arrange
+        String title = "Titel 1";
+        UUID examId = UUID.randomUUID();
+        UUID profId = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 0);
+        LocalDateTime result = LocalDateTime.of(2020, 1, 1, 1, 0);
+        Exam exam = new Exam.ExamBuilder()
+                .fachId(examId)
+                .startTime(start)
+                .endTime(end)
+                .resultTime(result)
+                .professorFachId(profId)
+                .build();
+
+        ExamDTO examDTO = new ExamDTO(null, examId, title, profId, start, end, result);
+
+        when(examRepository.findByFachId(examId)).thenReturn(Optional.of(exam));
+        when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
+
+        // Act
+        ExamDTO resultDTO = examManagementService.getExam(examId);
+
+        // Assert
+        assertThat(resultDTO).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Exam nicht erfolgreich gefunden")
+    void test_06() {
+        // Arrange
+        UUID examId = UUID.randomUUID();
+
+        when(examRepository.findByFachId(examId)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
+            examManagementService.getExam(examId);
+        });
+        assertEquals("Exam not found", ex.getMessage());
+    }
+
+    @Test
+    @DisplayName("Ein Exam wird erfolgreich gefunden nach der Startzeit")
+    void test_07() {
+        // Arrange
+        UUID examId = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
+
+        when(examRepository.findByStartTime(start)).thenReturn(Optional.of(examId));
+
+        // Act
+        UUID result = examManagementService.getExamByStartTime(start);
+
+        // Assert
+        assertThat(result).isNotNull();
+        assertThat(result).isEqualTo(examId);
+    }
+
+    @Test
+    @DisplayName("Ein Exam wurde nicht gefunden mit der gegebenen Startzeit")
+    void test_08() {
+        // Arrange
+        UUID examId = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
+
+        when(examRepository.findByStartTime(start)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        assertThrows(NichtVorhandenException.class, () -> {
+            examManagementService.getExamByStartTime(start);
+        });
+    }
+
+    // TODO
+    @Test
+    @DisplayName("createChoiceFrage Test")
+    void test_09() {}
 }
