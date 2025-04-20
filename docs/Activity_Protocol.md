@@ -214,3 +214,10 @@ Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rüc
 18.04.2025
 - JSON von Model getrennt, zwei Forms erstellt und Tests angepasst
 - `BindingResult` geht immer noch nicht, WhiteErrorPage
+
+20.04.2025
+- `BindingResult` wurde gefixt (Lösung: `@Valid` in Kombination mit `@ModelAttribute`) -> `@ModelAttribute` entfernt,
+war eh nicht zu gebrauchen
+- ExamManagementServiceTest erstellt, noch nicht vollständig
+- Feature: Auf der Contact Page ist die eigene FachID zu sehen.
+- Alles Weitere den **Commits** zu entnehmen
