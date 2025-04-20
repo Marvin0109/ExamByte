@@ -49,15 +49,14 @@ public class ExamController {
     @PostMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
     public String createExam(
-            @Valid @ModelAttribute("examForm") ExamForm form,
-            OAuth2AuthenticationToken auth,
+            @Valid ExamForm form,
             BindingResult bindingResult,
             Model model,
+            OAuth2AuthenticationToken auth,
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("examForm", form);
-            return "exams/examsProfessoren";
+            return "/exams/examsProfessoren";
         }
 
         String name = auth.getPrincipal().getAttribute("login");

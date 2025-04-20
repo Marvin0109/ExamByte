@@ -32,28 +32,36 @@
                 <div class="form-group">
                     <label for="title">Titel des Tests</label>
                     <input type="text" class="form-control" id="title" th:field="*{title}">
-                    <small class="text-danger" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title Error</small>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('title')}"
+                           th:errors="*{title}">Title Error</small>
                 </div>
 
                 <!-- Startzeit -->
                 <div class="form-group">
                     <label for="startTime">Startzeit</label>
                     <input type="datetime-local" class="form-control" id="startTime" th:field="*{start}">
-                    <small class="text-danger" th:if="${#fields.hasErrors('start')}" th:errors="*{start}">Starttime Error</small>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('start')}"
+                           th:errors="*{start}">Starttime Error</small>
                 </div>
 
                 <!-- Endzeit -->
                 <div class="form-group">
                     <label for="endTime">Endzeit</label>
                     <input type="datetime-local" class="form-control" id="endTime" th:field="*{end}">
-                    <small class="text-danger" th:if="${#fields.hasErrors('end')}" th:errors="*{end}">Endtime Error</small>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('end')}"
+                           th:errors="*{end}">Endtime Error</small>
                 </div>
 
                 <!-- Ergebniszeit -->
                 <div class="form-group">
                     <label for="resultTime">Ergebniszeit</label>
                     <input type="datetime-local" class="form-control" id="resultTime" th:field="*{result}">
-                    <small class="text-danger" th:if="${#fields.hasErrors('result')}" th:errors="*{result}">Resulttime Error</small>
+                    <small class="text-danger"
+                           th:if="${#fields.hasErrors('result')}"
+                           th:errors="*{result}">Resulttime Error</small>
                 </div>
                 <br>
 
