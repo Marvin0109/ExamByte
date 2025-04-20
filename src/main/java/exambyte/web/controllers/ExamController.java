@@ -64,13 +64,10 @@ public class ExamController {
         boolean success = examManagementService.createExam(name, form.getTitle(), form.getStart(),
                 form.getEnd(), form.getResult());
 
-        UUID profFachID =
-        examManagementService
-            .getProfFachIDByName(name)
-            .orElseThrow(NichtVorhandenException::new);
+        UUID profFachID = examManagementService.getProfFachIDByName(name)
+                .orElseThrow(NichtVorhandenException::new);
 
-        examUUID =
-            examManagementService.getExamByStartTime(form.getStart());
+        examUUID = examManagementService.getExamByStartTime(form.getStart());
 
         if (success) {
             redirectAttributes.addFlashAttribute("message","Test erfolgreich erstellt!");
@@ -109,8 +106,7 @@ public class ExamController {
 
         String name = auth.getPrincipal().getAttribute("login");
 
-        UUID profFachID =
-                examManagementService
+        UUID profFachID = examManagementService
                         .getProfFachIDByName(name)
                         .orElseThrow(NichtVorhandenException::new);
 

@@ -56,7 +56,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     @Override
     public boolean createExam(String professorName, String title, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
         UUID profFachId = null;
-        Optional<UUID> optionalFachID = professorService.getProfessorFachId(professorName);
+        Optional<UUID> optionalFachID = professorService.getProfessorFachIdByName(professorName);
         if (optionalFachID.isPresent()) {
             profFachId = optionalFachID.get();
         }
@@ -129,8 +129,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public Optional<UUID> getProfFachIDByName(String name) {
-        return Optional.of(professorService.getProfessorFachId(name)
-                .orElseThrow(NichtVorhandenException::new));
+        return professorService.getProfessorFachIdByName(name);
     }
 
     @Override

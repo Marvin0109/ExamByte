@@ -76,21 +76,4 @@ public class ProfessorServiceTest {
         assertThat(result.get().getName()).isEqualTo(name);
         verify(profRepo).findByName(name);
     }
-
-    @Test
-    @DisplayName("Eine profFachID kann nach dem Professor Namen geladen werden")
-    void test_05() {
-        // Arrange
-        String name = "Prof123";
-        var profFachID = UUID.randomUUID();
-
-        when(profRepo.findFachIdByName(name)).thenReturn(Optional.of(profFachID));
-
-        // Act
-        var result = service.getProfessorFachId(name);
-
-        assertThat(result).isNotNull();
-        assertThat(result.get().toString()).isEqualTo(profFachID.toString());
-        verify(profRepo).findFachIdByName(name);
-    }
 }

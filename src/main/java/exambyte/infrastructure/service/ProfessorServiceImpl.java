@@ -40,7 +40,10 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Optional<UUID> getProfessorFachId(String name) {
-        return professorRepository.findFachIdByName(name);
+    public Optional<UUID> getProfessorFachIdByName(String name) {
+        System.out.println(name);
+        Optional<Professor> professor = professorRepository.findByName(name);
+        System.out.println(professor.isPresent());
+        return professor.map(Professor::uuid);
     }
 }

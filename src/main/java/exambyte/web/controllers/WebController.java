@@ -48,8 +48,8 @@ public class WebController {
     @GetMapping("/contact")
     public String contact(Model model, HttpServletRequest request, OAuth2AuthenticationToken auth) {
         System.out.println(auth);
-        String name = auth.getPrincipal().getAttribute("name");
-        String fachID = examManagementService.getProfFachIDByName(name).toString();
+        String name = auth.getPrincipal().getAttribute("login");
+        String fachID = examManagementService.getProfFachIDByName(name).get().toString();
         model.addAttribute("name", auth.getPrincipal().getAttribute("login"));
         model.addAttribute("fachID", fachID);
         model.addAttribute("currentPath", request.getRequestURI());

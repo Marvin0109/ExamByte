@@ -14,11 +14,9 @@ public class ProfessorEntity {
 
     @Column("fach_id")
     private final UUID fachId;
-
-    @Column("name")
     private final String name;
 
-    private ProfessorEntity(Long id, UUID fachId, String name) {
+    public ProfessorEntity(Long id, UUID fachId, String name) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.name = name;

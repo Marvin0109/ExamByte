@@ -13,6 +13,4 @@ public interface ProfessorDAO extends CrudRepository<ProfessorEntity, Long> {
     Optional<ProfessorEntity> findByFachId(UUID fachId);
 
     ProfessorEntity save(ProfessorEntity professor);
-
-    Optional<UUID> findFachIdByName(String name);
 }
