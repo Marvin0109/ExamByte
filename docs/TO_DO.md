@@ -1,7 +1,7 @@
 # Projekt: ExamByte
 
 ## 1. Aktueller Stand (Bestandsaufnahme)
-- **Letzte Änderungen:** 31.03.2025
+- **Letzte Änderungen:** 21.04.2025
 - **Autor:** Marvin0109
 - **Status:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen) <!-- 70 -->
 - **Was funktioniert bereits:**
@@ -11,10 +11,10 @@
   - [x] Grundlegende Projektstruktur (Backend und Frontend integriert)
 
 - **Begonnene, aber unvollständige Funktionen:**
-  - [ ] Datenspeicherung von Test-Antworten (Backend-Logik implementiert, noch unvollständig: Art der Testfragen speichern oder nicht?) *BEDARF ZUR VERBESSERUNG*
-  - [ ] Testfragen-Erstellungsseiten (HTML vorhanden, aber unvollständig)
+  - [x] Datenspeicherung von Test-Antworten (Backend-Logik implementiert, noch unvollständig: Art der Testfragen speichern oder nicht?) *BEDARF ZUR VERBESSERUNG*
+  - [x] Testfragen-Erstellungsseiten (HTML vorhanden, als auch JavaScript)
   - [ ] Testauswertungsseiten (Frontend noch unvollständig)
-  - [ ] Datenvalidierung (Form Objekte fehlen)
+  - [x] Datenvalidierung (Form Objekte fehlen) *Grad nur für das erstellen von Tests und Fragen*
   
 ---
 
@@ -29,6 +29,7 @@
 
 - **Frontend**
   - [ ] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
+  - [x] **Tests erstellen**: HTML und JavaScript für die dynamische Erstellung von Tests und Fragen
   - [ ] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
   - [ ] **Formularvalidierung**: Clientseitige Validierung (Pflichtfelder, Datentypen etc.).
 
@@ -57,7 +58,8 @@
 2. [ ] **Frontend für Testfragen und Antwort-Einsicht** implementieren.
 3. [x] **Dokumentation (Arc42)** auf vollständigen Stand bringen.
 4. [ ] **Fehlende Tests** für Logik und Datenbank erstellen.
-5. [ ] **Design-Verbesserungen** umsetzen.
+5. [ ] **Konsistenz und Threads** für die gesamte Anwendung
+6. [ ] **Design-Verbesserungen** umsetzen.
 
 ---
 
