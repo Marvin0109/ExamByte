@@ -1,7 +1,7 @@
 # Projekt: ExamByte
 
 ## 1. Aktueller Stand (Bestandsaufnahme)
-- **Letzte Änderungen:** 21.04.2025
+- **Letzte Änderungen:** 22.04.2025
 - **Autor:** Marvin0109
 - **Status:** ![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen) <!-- 70 -->
 - **Was funktioniert bereits:**
