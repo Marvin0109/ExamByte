@@ -65,10 +65,11 @@
 
 ## 4. Zusätzliche Notizen
 - Das Projekt ist zu etwa 75% abgeschlossen, aber die wichtigsten Funktionen für die Tests (Datenspeicherung, Anzeige der Ergebnisse) sind noch unvollständig.
-- Testabdeckung ist aktuell zu niedrig (aktuell: 68%) – mindestens 80% Codeabdeckung sollten angestrebt werden.
+- Testabdeckung ist aktuell zu niedrig (aktuell: 74%) – mindestens 80% Codeabdeckung sollten angestrebt werden.
 - Aktuell genutzte Tools:
-  - **Backend**: Java, Spring Boot/Data
+  - **Backend**: Java, Spring Boot, Spring Data JDBC
   - **Frontend**: HTML, CSS, JavaScript
   - **Datenbank**: PostgreSQL (bereits eingerichtet und verbunden)
   - **Build/Dependency Management**: Gradle
   - **Laden aller Umgebungsvariablen**: Dotenv
+  - Mehr Informationen in der [arc42](arc42.md)
