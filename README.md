@@ -40,3 +40,7 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 ## Dokumentation
 
 Die ausführliche Architektur-Dokumentation findest du [hier](docs/arc42.md).
+
+## Hinweis
+
+Das Projekt ist zurzeit pausiert worden (nicht genug Zeit fürs Projekt während laufendem Semester).
