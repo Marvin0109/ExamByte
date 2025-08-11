@@ -221,3 +221,9 @@ war eh nicht zu gebrauchen
 - ExamManagementServiceTest erstellt, noch nicht vollständig
 - Feature: Auf der Contact Page ist die eigene FachID zu sehen.
 - Alles Weitere den **Commits** zu entnehmen
+
+11.08.2025
+- Löschen von Daten eingebunden (noch nicht vollständig)
+- TODO-Markierungen gesetzt
+- TO_DO aktualisiert
+- scripts/update_progress.sh gelöscht
