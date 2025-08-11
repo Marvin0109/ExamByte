@@ -19,5 +19,8 @@ public class KorrekteAntwortenServiceImpl implements KorrekteAntwortenService {
         repository.save(korrekteAntwort);
     }
 
-    // TODO: deleteAll()
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }

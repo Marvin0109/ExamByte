@@ -10,5 +10,5 @@ public interface ReviewService {
 
     Review getReviewByAntwortFachId(UUID antwortFachId);
 
-    // TODO: deleteAll()
+    void deleteAll();
 }

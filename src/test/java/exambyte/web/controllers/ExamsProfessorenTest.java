@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -183,9 +184,15 @@ public class ExamsProfessorenTest {
                 .andExpect(flash().attribute("messageType", "danger"));
     }
 
-    // TODO
     @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
     @DisplayName("Das löschen aller Exam Daten ist erfolgreich")
-    void test_07() throws Exception {}
+    void test_07() throws Exception {
+        mvc.perform(post("/exams/examsProfessoren/reset")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/exams/examsProfessoren"));
+
+        verify(examManagementService).reset();
+    }
 }

@@ -32,5 +32,8 @@ public class FrageServiceImpl implements FrageService {
         return frage.getFachId();
     }
 
-    // TODO: deleteAll()
+    @Override
+    public void deleteAll() {
+        frageRepository.deleteAll();
+    }
 }

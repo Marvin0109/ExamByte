@@ -14,7 +14,7 @@ public interface ExamService {
 
     void addExam(Exam exam);
 
-    // TODO: deleteByFachId()
+    void deleteByFachId(UUID fachId);
 
     void deleteAll();
 }

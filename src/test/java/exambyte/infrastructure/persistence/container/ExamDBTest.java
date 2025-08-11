@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,37 +28,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ExamDBTest {
 
     @Autowired
-    private FrageDAO frRepository;
+    private FrageDAO frageDAO;
 
     @Autowired
-    private AntwortDAO antRepository;
+    private AntwortDAO antwortDAO;
 
     @Autowired
-    private ProfessorDAO professorRepository;
+    private ProfessorDAO professorDAO;
 
     @Autowired
-    private StudentDAO studentRepository;
+    private StudentDAO studentDAO;
 
     @Autowired
-    private KorrektorDAO korrektorRepository;
+    private KorrektorDAO korrektorDAO;
 
     @Autowired
-    private ExamDAO eRepository;
+    private ExamDAO examDAO;
 
     @Autowired
-    private ReviewDAO reviewRepository;
+    private ReviewDAO reviewDAO;
 
     @Autowired
-    private KorrekteAntwortenDAO korrekteAntwortenRepository;
+    private KorrekteAntwortenDAO korrekteAntwortenDAO;
 
     private FrageRepository frageRepository;
     private AntwortRepository antwortRepository;
-    private ProfessorRepository profRepository;
-    private StudentRepository studRepository;
+    private ProfessorRepository professorRepository;
+    private StudentRepository studentRepository;
     private ExamRepository examRepository;
-    private KorrektorRepository korRepository;
-    private ReviewRepository revRepository;
-    private KorrekteAntwortenRepository korrekteAntwRepository;
+    private KorrektorRepository korrektorRepository;
+    private ReviewRepository reviewRepository;
+    private KorrekteAntwortenRepository korrekteAntwortenRepository;
 
     @BeforeEach
     public void setUp() {
@@ -70,21 +71,20 @@ public class ExamDBTest {
         ReviewMapper reviewMapper = new ReviewMapperImpl();
         KorrekteAntwortenMapper korrekteAntwortenMapper = new KorrekteAntwortenMapperImpl();
 
-        antwortRepository = new AntwortRepositoryImpl(antRepository, antMapper);
-        frageRepository = new FrageRepositoryImpl(professorRepository, frRepository, frageMapper);
-        profRepository = new ProfessorRepositoryImpl(professorRepository, profMapper);
-        studRepository = new StudentRepositoryImpl(studentRepository, studentMapper);
-        examRepository = new ExamRepositoryImpl(eRepository, examMapper);
-        korRepository = new KorrektorRepositoryImpl(korrektorRepository, korrektorMapper);
-        revRepository = new ReviewRepositoryImpl(reviewRepository, reviewMapper);
-        korrekteAntwRepository = new KorrekteAntwortenRepositoryImpl(korrekteAntwortenRepository, korrekteAntwortenMapper);
+        antwortRepository = new AntwortRepositoryImpl(antwortDAO, antMapper);
+        frageRepository = new FrageRepositoryImpl(professorDAO, frageDAO, frageMapper);
+        professorRepository = new ProfessorRepositoryImpl(professorDAO, profMapper);
+        studentRepository = new StudentRepositoryImpl(studentDAO, studentMapper);
+        examRepository = new ExamRepositoryImpl(examDAO, examMapper);
+        korrektorRepository = new KorrektorRepositoryImpl(korrektorDAO, korrektorMapper);
+        reviewRepository = new ReviewRepositoryImpl(reviewDAO, reviewMapper);
+        korrekteAntwortenRepository = new KorrekteAntwortenRepositoryImpl(korrekteAntwortenDAO, korrekteAntwortenMapper);
     }
 
     @Test
     @DisplayName("Relationen der Entitäten testen")
     void test_01() {
         // Arrange
-
         Professor professor = new Professor.ProfessorBuilder()
                 .id(null)
                 .fachId(null)
@@ -153,25 +153,25 @@ public class ExamDBTest {
                 .punkte(0)
                 .build();
 
-        studRepository.save(student);
-        profRepository.save(professor);
-        korRepository.save(korrektor);
+        studentRepository.save(student);
+        professorRepository.save(professor);
+        korrektorRepository.save(korrektor);
         examRepository.save(exam);
         frageRepository.save(frage);
         antwortRepository.save(antwort);
-        revRepository.save(review);
-        korrekteAntwRepository.save(korrekteAntworten);
+        reviewRepository.save(review);
+        korrekteAntwortenRepository.save(korrekteAntworten);
 
         // Act
 
         Optional<Antwort> geladenAntwort = antwortRepository.findByFachId(antwort.getFachId());
         Optional<Frage> geladenFrage = frageRepository.findByFachId(frage.getFachId());
-        Optional<Professor> geladenProf = profRepository.findByFachId(professor.uuid());
-        Optional<Korrektor> geladenKor = korRepository.findByFachId(korrektor.uuid());
-        Optional<Student> geladenStud = studRepository.findByFachId(student.uuid());
+        Optional<Professor> geladenProf = professorRepository.findByFachId(professor.uuid());
+        Optional<Korrektor> geladenKor = korrektorRepository.findByFachId(korrektor.uuid());
+        Optional<Student> geladenStud = studentRepository.findByFachId(student.uuid());
         Optional<Exam> geladenExam = examRepository.findByFachId(exam.getFachId());
-        Optional<Review> geladenReview = revRepository.findByFachId(review.getFachId());
-        Optional<KorrekteAntworten> geladenKorrekteAntworten = korrekteAntwRepository.findByFachId(korrekteAntworten.getFachId());
+        Optional<Review> geladenReview = reviewRepository.findByFachId(review.getFachId());
+        Optional<KorrekteAntworten> geladenKorrekteAntworten = korrekteAntwortenRepository.findByFachId(korrekteAntworten.getFachId());
 
         // Assert
 
@@ -219,11 +219,100 @@ public class ExamDBTest {
         assertThat(geladenReview.get().getPunkte()).isEqualTo(0);
     }
 
-    // TODO
     @Test
     @DisplayName("Teste deleteAll/ Alle Daten in der Tabelle löschen")
     void test_02() {
+        // Arrange
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. K")
+                .build();
 
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("W Korrektor")
+                .build();
+
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Peter Griffin")
+                .build();
+
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professor.uuid())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
+
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("JPA oder JDBC?")
+                .maxPunkte(7)
+                .professorUUID(professor.uuid())
+                .examUUID(exam.getFachId())
+                .build();
+
+        KorrekteAntworten korrekteAntworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(null)
+                .fachId(null)
+                .frageFachId(frage.getFachId())
+                .korrekteAntworten("JDBC")
+                .build();
+
+        LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
+        LocalDateTime lastChanges = LocalDateTime.of(2025, 6, 25, 13, 56);
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortText("JDBC")
+                .frageFachId(frage.getFachId())
+                .studentFachId(student.uuid())
+                .antwortZeitpunkt(startSubmit)
+                .lastChangesZeitpunkt(lastChanges)
+                .build();
+
+        Review review = new Review.ReviewBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortFachId(antwort.getFachId())
+                .korrektorFachId(korrektor.uuid())
+                .bewertung("Bewertung")
+                .punkte(0)
+                .build();
+
+        studentRepository.save(student);
+        professorRepository.save(professor);
+        korrektorRepository.save(korrektor);
+        examRepository.save(exam);
+        frageRepository.save(frage);
+        antwortRepository.save(antwort);
+        reviewRepository.save(review);
+        korrekteAntwortenRepository.save(korrekteAntworten);
+
+        // Act (Reihenfolge wichtig!)
+        reviewRepository.deleteAll();
+        antwortRepository.deleteAll();
+        korrekteAntwortenRepository.deleteAll();
+        frageRepository.deleteAll();
+        examRepository.deleteAll();
+
+        // Assert
+        assertThat(examRepository.findAll()).isEmpty();
+        assertThat(frageRepository.findAll()).isEmpty();
+        assertThat(reviewRepository.findByFachId(review.getFachId())).isEmpty();
+        assertThat(korrekteAntwortenRepository.findByFachId(korrekteAntworten.getFachId())).isEmpty();
+        assertThat(antwortRepository.findByFachId(antwort.getFachId())).isEmpty();
     }
 
     @Test
@@ -296,34 +385,114 @@ public class ExamDBTest {
                 .punkte(0)
                 .build();
 
-        studRepository.save(student);
-        profRepository.save(professor);
-        korRepository.save(korrektor);
+        studentRepository.save(student);
+        professorRepository.save(professor);
+        korrektorRepository.save(korrektor);
         examRepository.save(exam);
         frageRepository.save(frage);
         antwortRepository.save(antwort);
-        revRepository.save(review);
-        korrekteAntwRepository.save(korrekteAntworten);
+        reviewRepository.save(review);
+        korrekteAntwortenRepository.save(korrekteAntworten);
 
         // Act
         examRepository.deleteByFachId(exam.getFachId());
 
         // Assert – abhängige Daten weg
         assertThat(frageRepository.findByFachId(frage.getFachId())).isEmpty();
-        assertThat(revRepository.findByFachId(review.getFachId())).isEmpty();
-        assertThat(korrekteAntwRepository.findByFachId(korrekteAntworten.getFachId())).isEmpty();
+        assertThat(reviewRepository.findByFachId(review.getFachId())).isEmpty();
+        assertThat(korrekteAntwortenRepository.findByFachId(korrekteAntworten.getFachId())).isEmpty();
         assertThat(examRepository.findByFachId(exam.getFachId())).isEmpty();
 
         // Assert – unabhängige Entities noch vorhanden
-        assertThat(profRepository.findByFachId(professor.uuid())).isPresent();
-        assertThat(studRepository.findByFachId(student.uuid())).isPresent();
-        assertThat(korRepository.findByFachId(korrektor.uuid())).isPresent();
+        assertThat(professorRepository.findByFachId(professor.uuid())).isPresent();
+        assertThat(studentRepository.findByFachId(student.uuid())).isPresent();
+        assertThat(korrektorRepository.findByFachId(korrektor.uuid())).isPresent();
     }
 
-    // TODO
     @Test
     @DisplayName("Suche Exam nach Startzeit")
     void test_04() {
+        // Arrange
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. K")
+                .build();
 
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("W Korrektor")
+                .build();
+
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Peter Griffin")
+                .build();
+
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professor.uuid())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
+
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("JPA oder JDBC?")
+                .maxPunkte(7)
+                .professorUUID(professor.uuid())
+                .examUUID(exam.getFachId())
+                .build();
+
+        KorrekteAntworten korrekteAntworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(null)
+                .fachId(null)
+                .frageFachId(frage.getFachId())
+                .korrekteAntworten("JDBC")
+                .build();
+
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortText("JDBC")
+                .frageFachId(frage.getFachId())
+                .studentFachId(student.uuid())
+                .antwortZeitpunkt(LocalDateTime.now())
+                .lastChangesZeitpunkt(LocalDateTime.now())
+                .build();
+
+        Review review = new Review.ReviewBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortFachId(antwort.getFachId())
+                .korrektorFachId(korrektor.uuid())
+                .bewertung("Bewertung")
+                .punkte(0)
+                .build();
+
+        studentRepository.save(student);
+        professorRepository.save(professor);
+        korrektorRepository.save(korrektor);
+        examRepository.save(exam);
+        frageRepository.save(frage);
+        antwortRepository.save(antwort);
+        reviewRepository.save(review);
+        korrekteAntwortenRepository.save(korrekteAntworten);
+
+        // Act
+        Optional<UUID> geladen = examRepository.findByStartTime(startTime);
+
+        // Assert
+        assertThat(geladen.isPresent()).isTrue();
+        assertThat(geladen.get()).isEqualTo(exam.getFachId());
     }
 }

@@ -6,7 +6,6 @@ import exambyte.domain.service.ExamService;
 import exambyte.infrastructure.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,5 +40,8 @@ public class ExamServiceImpl implements ExamService {
         examRepository.deleteAll();
     }
 
-    // TODO: deleteByFachId()
+    @Override
+    public void deleteByFachId(UUID fachId) {
+        examRepository.deleteByFachId(fachId);
+    }
 }

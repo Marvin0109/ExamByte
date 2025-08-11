@@ -32,6 +32,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final StudentService studentService;
     private final ProfessorService professorService;
     private final KorrekteAntwortenService korrekteAntwortenService;
+    private final ReviewService reviewService;
     private final ExamDTOMapper examDTOMapper;
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
@@ -41,7 +42,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      StudentService studentService, ProfessorService professorService,
                                      ExamRepository examRepository, ExamDTOMapper examDTOMapper,
                                      FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper,
-                                     KorrekteAntwortenService korrekteAntwortenService, KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper) {
+                                     KorrekteAntwortenService korrekteAntwortenService, KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
+                                     ReviewService reviewService) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
@@ -53,6 +55,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.antwortDTOMapper = antwortDTOMapper;
         this.korrekteAntwortenService = korrekteAntwortenService;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
+        this.reviewService = reviewService;
     }
 
     @Override
@@ -152,15 +155,17 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    // TODO
     @Override
     public void deleteByFachId(UUID uuid) {
-
+        examRepository.deleteByFachId(uuid);
     }
 
-    // TODO
     @Override
     public void reset() {
-
+        reviewService.deleteAll();
+        antwortService.deleteAll();
+        korrekteAntwortenService.deleteAll();
+        frageService.deleteAll();
+        examRepository.deleteAll();
     }
 }

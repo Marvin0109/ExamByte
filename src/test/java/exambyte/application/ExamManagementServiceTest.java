@@ -21,6 +21,7 @@ import org.flywaydb.core.internal.jdbc.JdbcTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.InOrder;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -44,6 +45,7 @@ public class ExamManagementServiceTest {
     private AntwortDTOMapper antwortDTOMapper;
     private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private ExamManagementService examManagementService;
+    private ReviewService reviewService;
 
     @BeforeEach
     void setUp() {
@@ -54,13 +56,14 @@ public class ExamManagementServiceTest {
         studentService = mock(StudentServiceImpl.class);
         professorService = mock(ProfessorServiceImpl.class);
         korrekteAntwortenService = mock(KorrekteAntwortenServiceImpl.class);
+        reviewService = mock(ReviewServiceImpl.class);
         examDTOMapper = mock(ExamDTOMapperImpl.class);
         frageDTOMapper = mock(FrageDTOMapperImpl.class);
         antwortDTOMapper = mock(AntwortDTOMapperImpl.class);
         korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
         examManagementService = new ExamManagementServiceImpl(examService, antwortService, frageService, studentService,
                 professorService, examRepository, examDTOMapper, frageDTOMapper, antwortDTOMapper, korrekteAntwortenService,
-                korrekteAntwortenDTOMapper);
+                korrekteAntwortenDTOMapper, reviewService);
     }
 
     @Test
@@ -225,13 +228,46 @@ public class ExamManagementServiceTest {
     @DisplayName("createChoiceFrage Test")
     void test_09() {}
 
-    // TODO
     @Test
     @DisplayName("deleteByFachId Test")
-    void test_10() {}
+    void test_10() {
+        // Arrange
+        UUID id = UUID.randomUUID();
 
-    // TODO
+        // Act
+        examManagementService.deleteByFachId(id);
+
+        // Assert
+        verify(examRepository).deleteByFachId(id);
+    }
+
     @Test
     @DisplayName("reset Test")
-    void test_11() {}
+    void test_11() {
+        // Act
+        examManagementService.reset();
+
+        // Assert
+        InOrder inOrder = inOrder(
+                reviewService,
+                antwortService,
+                korrekteAntwortenService,
+                frageService,
+                examRepository
+        );
+
+        inOrder.verify(reviewService).deleteAll();
+        inOrder.verify(antwortService).deleteAll();
+        inOrder.verify(korrekteAntwortenService).deleteAll();
+        inOrder.verify(frageService).deleteAll();
+        inOrder.verify(examRepository).deleteAll();
+
+        verifyNoMoreInteractions(
+                reviewService,
+                antwortService,
+                korrekteAntwortenService,
+                frageService,
+                examRepository
+        );
+    }
 }

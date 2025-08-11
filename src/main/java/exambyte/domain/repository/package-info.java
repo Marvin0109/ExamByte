@@ -20,5 +20,4 @@
  *     <li>Stellt sicher, dass der Rest der Anwendung keine direkte Abhängigkeit zur Datenbank hat, sondern über die Domänenschicht interagiert.</li>
  * </ul>
  */
-// TODO: Besser mit DTO's arbeiten statt mit Fachdomänen
 package exambyte.domain.repository;

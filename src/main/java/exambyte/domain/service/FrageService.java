@@ -11,5 +11,5 @@ public interface FrageService {
 
     UUID addFrage(Frage frage);
 
-    // TODO: deleteAll()
+    void deleteAll();
 }

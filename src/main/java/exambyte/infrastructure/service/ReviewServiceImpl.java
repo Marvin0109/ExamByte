@@ -26,5 +26,8 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewRepository.findByAntwortFachId(antwortFachId);
     }
 
-    // TODO: deleteAll()
+    @Override
+    public void deleteAll() {
+        reviewRepository.deleteAll();
+    }
 }
