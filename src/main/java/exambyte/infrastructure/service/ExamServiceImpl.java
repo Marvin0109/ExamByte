@@ -40,4 +40,6 @@ public class ExamServiceImpl implements ExamService {
     public void deleteAll() {
         examRepository.deleteAll();
     }
+
+    // TODO: deleteByFachId()
 }

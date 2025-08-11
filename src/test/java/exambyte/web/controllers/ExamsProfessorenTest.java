@@ -182,4 +182,10 @@ public class ExamsProfessorenTest {
                 .andExpect(flash().attribute("message", "Fehler beim Verarbeiten der Fragen."))
                 .andExpect(flash().attribute("messageType", "danger"));
     }
+
+    // TODO
+    @Test
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @DisplayName("Das löschen aller Exam Daten ist erfolgreich")
+    void test_07() throws Exception {}
 }

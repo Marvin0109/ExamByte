@@ -152,6 +152,7 @@ public class ExamController {
         return "redirect:/exams/examsProfessoren";
     }
 
+    // TODO: HTML ausbauen für Exam Liste
     @GetMapping("/examsKorrektor")
     @Secured("ROLE_REVIEWER")
     public String listExamsForReviewer(Model model, OAuth2AuthenticationToken auth) {
@@ -162,6 +163,7 @@ public class ExamController {
         return "/exams/examsKorrektor";
     }
 
+    // TODO: HTML ausbauen für Exam Liste
     @GetMapping("/examStudierende")
     @Secured("ROLE_STUDENT")
     public String listExamsForStudents(Model model, OAuth2AuthenticationToken auth) {
@@ -172,6 +174,7 @@ public class ExamController {
         return "/exams/examsStudierende";
     }
 
+    // TODO: Durchführen von Exams implementieren in HTML
     @GetMapping("/examsDurchfuehren/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String startExam(@PathVariable UUID examFachId, OAuth2AuthenticationToken auth, Model model) {

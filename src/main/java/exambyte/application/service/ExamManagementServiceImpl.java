@@ -152,8 +152,13 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .orElseThrow(NichtVorhandenException::new);
     }
 
-    // TODO: deleteByFachId einbauen
+    // TODO
+    @Override
+    public void deleteByFachId(UUID uuid) {
 
+    }
+
+    // TODO
     @Override
     public void reset() {
 

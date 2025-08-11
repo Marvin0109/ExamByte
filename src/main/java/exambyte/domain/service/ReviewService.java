@@ -9,4 +9,6 @@ public interface ReviewService {
     void addReview(Review review);
 
     Review getReviewByAntwortFachId(UUID antwortFachId);
+
+    // TODO: deleteAll()
 }

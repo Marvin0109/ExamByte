@@ -143,7 +143,6 @@ public class ExamManagementServiceTest {
     @DisplayName("submitExam Test")
     void test_04() {}
 
-    // TODO
     @Test
     @DisplayName("Exam erfolgreich gefunden")
     void test_05() {
@@ -225,4 +224,14 @@ public class ExamManagementServiceTest {
     @Test
     @DisplayName("createChoiceFrage Test")
     void test_09() {}
+
+    // TODO
+    @Test
+    @DisplayName("deleteByFachId Test")
+    void test_10() {}
+
+    // TODO
+    @Test
+    @DisplayName("reset Test")
+    void test_11() {}
 }

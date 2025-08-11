@@ -109,4 +109,11 @@ public class FrageDBTest {
 
         assertThat(exam.getFachId()).isEqualTo(frage.getExamUUID());
     }
+
+    // TODO
+    @Test
+    @DisplayName("Teste deleteAll")
+    void test_02() {
+
+    }
 }

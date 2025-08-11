@@ -18,4 +18,6 @@ public class KorrekteAntwortenServiceImpl implements KorrekteAntwortenService {
     public void addKorrekteAntwort(KorrekteAntworten korrekteAntwort) {
         repository.save(korrekteAntwort);
     }
+
+    // TODO: deleteAll()
 }

@@ -221,13 +221,13 @@ public class ExamDBTest {
 
     // TODO
     @Test
-    @DisplayName("Teste deleteAll")
+    @DisplayName("Teste deleteAll/ Alle Daten in der Tabelle löschen")
     void test_02() {
 
     }
 
     @Test
-    @DisplayName("Cascade Delete bei Exam")
+    @DisplayName("deleteByFachId (Delete on cascade Test)")
     void test_03() {
         // Arrange
         Professor professor = new Professor.ProfessorBuilder()
@@ -318,5 +318,12 @@ public class ExamDBTest {
         assertThat(profRepository.findByFachId(professor.uuid())).isPresent();
         assertThat(studRepository.findByFachId(student.uuid())).isPresent();
         assertThat(korRepository.findByFachId(korrektor.uuid())).isPresent();
+    }
+
+    // TODO
+    @Test
+    @DisplayName("Suche Exam nach Startzeit")
+    void test_04() {
+
     }
 }

@@ -31,4 +31,6 @@ public class FrageServiceImpl implements FrageService {
         frageRepository.save(frage);
         return frage.getFachId();
     }
+
+    // TODO: deleteAll()
 }

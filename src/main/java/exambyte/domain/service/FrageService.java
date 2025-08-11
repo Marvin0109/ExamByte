@@ -10,4 +10,6 @@ public interface FrageService {
     List<Frage> getFragenForExam(UUID examId);
 
     UUID addFrage(Frage frage);
+
+    // TODO: deleteAll()
 }

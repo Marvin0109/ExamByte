@@ -32,5 +32,7 @@ public interface ExamManagementService {
 
     UUID getExamByStartTime(LocalDateTime startTime);
 
+    void deleteByFachId(UUID examFachId);
+
     void reset();
 }

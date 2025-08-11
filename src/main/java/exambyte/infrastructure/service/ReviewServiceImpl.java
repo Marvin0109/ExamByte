@@ -25,4 +25,6 @@ public class ReviewServiceImpl implements ReviewService {
     public Review getReviewByAntwortFachId(UUID antwortFachId) {
         return reviewRepository.findByAntwortFachId(antwortFachId);
     }
+
+    // TODO: deleteAll()
 }
