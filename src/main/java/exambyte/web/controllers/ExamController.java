@@ -145,6 +145,13 @@ public class ExamController {
         return "redirect:/exams/examsProfessoren";
     }
 
+    @PostMapping("/examsProfessoren/reset")
+    @Secured("ROLE_ADMIN")
+    public String resetExamData() {
+        examManagementService.reset();
+        return "redirect:/exams/examsProfessoren";
+    }
+
     @GetMapping("/examsKorrektor")
     @Secured("ROLE_REVIEWER")
     public String listExamsForReviewer(Model model, OAuth2AuthenticationToken auth) {

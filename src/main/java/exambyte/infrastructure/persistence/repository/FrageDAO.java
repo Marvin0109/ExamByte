@@ -16,4 +16,6 @@ public interface FrageDAO extends CrudRepository<FrageEntity, Long> {
     Optional<FrageEntity> findByFachId(UUID id);
 
     FrageEntity save(FrageEntity frageEntity);
+
+    void deleteAll();
 }

@@ -13,4 +13,6 @@ public interface KorrekteAntwortenDAO extends CrudRepository<KorrekteAntwortenEn
     Optional<KorrekteAntwortenEntity> findByFrageFachID(UUID frageFachID);
 
     KorrekteAntwortenEntity save(KorrekteAntwortenEntity entity);
+
+    void deleteAll();
 }

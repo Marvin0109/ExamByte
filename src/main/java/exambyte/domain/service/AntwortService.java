@@ -11,4 +11,6 @@ public interface AntwortService {
     void addAntwort(Antwort antwort);
 
     Antwort findByStudentAndFrage(UUID studentId, UUID frageId);
+
+    void deleteAll();
 }

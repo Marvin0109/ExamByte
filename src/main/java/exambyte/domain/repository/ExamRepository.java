@@ -16,4 +16,8 @@ public interface ExamRepository {
     void save(Exam test);
 
     Optional<UUID> findByStartTime(LocalDateTime startTime);
+
+    void deleteByFachId(UUID id);
+
+    void deleteAll();
 }

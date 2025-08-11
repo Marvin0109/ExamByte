@@ -38,4 +38,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
         return entity.map(reviewMapper::toDomain)
                 .orElse(null);
     }
+
+    @Override
+    public void deleteAll() {
+        reviewDAO.deleteAll();
+    }
 }

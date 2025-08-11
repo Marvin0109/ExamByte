@@ -13,7 +13,9 @@ import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.form.helper.QuestionType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -148,5 +150,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     public UUID getExamByStartTime(LocalDateTime startTime) {
         return examRepository.findByStartTime(startTime)
                 .orElseThrow(NichtVorhandenException::new);
+    }
+
+    // TODO: deleteByFachId einbauen
+
+    @Override
+    public void reset() {
+
     }
 }

@@ -38,4 +38,8 @@ public class KorrekteAntwortenRepositoryImpl implements KorrekteAntwortenReposit
         return entity.map(mapper::toDomain);
     }
 
+    @Override
+    public void deleteAll() {
+        dao.deleteAll();
+    }
 }

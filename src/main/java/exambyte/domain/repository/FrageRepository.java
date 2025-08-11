@@ -16,4 +16,6 @@ public interface FrageRepository {
     List<Frage> findByExamFachId(UUID examFachId);
 
     void save(Frage frage);
+
+    void deleteAll();
 }

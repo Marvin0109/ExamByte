@@ -12,4 +12,6 @@ public interface KorrekteAntwortenRepository {
     Optional<KorrekteAntworten> findByFrageFachID(UUID frageFachID);
 
     void save(KorrekteAntworten antworten);
+
+    void deleteAll();
 }

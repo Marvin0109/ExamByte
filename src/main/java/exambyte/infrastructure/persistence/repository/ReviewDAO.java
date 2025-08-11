@@ -13,4 +13,6 @@ public interface ReviewDAO extends CrudRepository<ReviewEntity, Long> {
     Optional<ReviewEntity> findByFachId(UUID fachId);
 
     ReviewEntity save(ReviewEntity review);
+
+    void deleteAll();
 }

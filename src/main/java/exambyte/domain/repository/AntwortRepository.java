@@ -15,4 +15,5 @@ public interface AntwortRepository {
 
     void save(Antwort antwort);
 
+    void deleteAll();
 }

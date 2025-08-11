@@ -12,4 +12,6 @@ public interface ReviewRepository {
     Optional<Review> findByFachId(UUID fachId);
 
     void save(Review review);
+
+    void deleteAll();
 }

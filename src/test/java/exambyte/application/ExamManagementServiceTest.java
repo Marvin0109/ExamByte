@@ -17,6 +17,7 @@ import exambyte.infrastructure.mapper.FrageDTOMapperImpl;
 import exambyte.infrastructure.mapper.KorrekteAntwortenDTOMapperImpl;
 import exambyte.infrastructure.persistence.repository.ExamRepositoryImpl;
 import exambyte.infrastructure.service.*;
+import org.flywaydb.core.internal.jdbc.JdbcTemplate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

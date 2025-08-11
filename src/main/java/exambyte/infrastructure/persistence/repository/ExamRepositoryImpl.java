@@ -46,4 +46,14 @@ public class ExamRepositoryImpl implements ExamRepository {
     public Optional<UUID> findByStartTime(LocalDateTime startTime) {
         return repository.findByStartTime(startTime);
     }
+
+    @Override
+    public void deleteByFachId(UUID id) {
+        repository.deleteByFachId(id);
+    }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }

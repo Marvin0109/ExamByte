@@ -15,11 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
-import org.testcontainers.shaded.org.checkerframework.checker.units.qual.K;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -219,5 +217,106 @@ public class ExamDBTest {
         assertThat(geladenReview.get().getKorrektorFachId()).isEqualTo(korrektor.uuid());
         assertThat(geladenReview.get().getBewertung()).isEqualTo("Bewertung");
         assertThat(geladenReview.get().getPunkte()).isEqualTo(0);
+    }
+
+    // TODO
+    @Test
+    @DisplayName("Teste deleteAll")
+    void test_02() {
+
+    }
+
+    @Test
+    @DisplayName("Cascade Delete bei Exam")
+    void test_03() {
+        // Arrange
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. K")
+                .build();
+
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("W Korrektor")
+                .build();
+
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Peter Griffin")
+                .build();
+
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professor.uuid())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
+
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("JPA oder JDBC?")
+                .maxPunkte(7)
+                .professorUUID(professor.uuid())
+                .examUUID(exam.getFachId())
+                .build();
+
+        KorrekteAntworten korrekteAntworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(null)
+                .fachId(null)
+                .frageFachId(frage.getFachId())
+                .korrekteAntworten("JDBC")
+                .build();
+
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortText("JDBC")
+                .frageFachId(frage.getFachId())
+                .studentFachId(student.uuid())
+                .antwortZeitpunkt(LocalDateTime.now())
+                .lastChangesZeitpunkt(LocalDateTime.now())
+                .build();
+
+        Review review = new Review.ReviewBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortFachId(antwort.getFachId())
+                .korrektorFachId(korrektor.uuid())
+                .bewertung("Bewertung")
+                .punkte(0)
+                .build();
+
+        studRepository.save(student);
+        profRepository.save(professor);
+        korRepository.save(korrektor);
+        examRepository.save(exam);
+        frageRepository.save(frage);
+        antwortRepository.save(antwort);
+        revRepository.save(review);
+        korrekteAntwRepository.save(korrekteAntworten);
+
+        // Act
+        examRepository.deleteByFachId(exam.getFachId());
+
+        // Assert – abhängige Daten weg
+        assertThat(frageRepository.findByFachId(frage.getFachId())).isEmpty();
+        assertThat(revRepository.findByFachId(review.getFachId())).isEmpty();
+        assertThat(korrekteAntwRepository.findByFachId(korrekteAntworten.getFachId())).isEmpty();
+        assertThat(examRepository.findByFachId(exam.getFachId())).isEmpty();
+
+        // Assert – unabhängige Entities noch vorhanden
+        assertThat(profRepository.findByFachId(professor.uuid())).isPresent();
+        assertThat(studRepository.findByFachId(student.uuid())).isPresent();
+        assertThat(korRepository.findByFachId(korrektor.uuid())).isPresent();
     }
 }

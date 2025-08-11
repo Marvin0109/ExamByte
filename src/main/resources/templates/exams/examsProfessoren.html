@@ -146,6 +146,9 @@
                     </div>
                     <br>
                     <button type="button" class="btn btn-primary" id="addQuestionButton" style="display: inline-block" onclick="addNewQuestion()">Neue Frage hinzufügen</button>
+                    <form th:action="@{/exams/examsProfessoren/reset}" method="post">
+                        <button type="submit" class="btn btn-primary" id="deleteAll" style="display: inline-block">Reset</button>
+                    </form>
                     <br>
                     <!-- Verstecktes Feld für die Fragen-Daten -->
                     <input type="hidden" id="examData" name="examData" />

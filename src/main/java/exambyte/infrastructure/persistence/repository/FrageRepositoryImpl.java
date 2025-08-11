@@ -67,4 +67,9 @@ public class FrageRepositoryImpl implements FrageRepository {
         professorDAO.save(newProfessor);
         return newProfessor;
     }
+
+    @Override
+    public void deleteAll() {
+        frageDAO.deleteAll();
+    }
 }

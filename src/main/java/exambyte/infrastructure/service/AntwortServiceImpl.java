@@ -34,4 +34,9 @@ public class AntwortServiceImpl implements AntwortService {
         return antwortRepository.findByStudentFachIdAndFrageFachId(studentId, examId)
                 .orElse(null);
     }
+
+    @Override
+    public void deleteAll() {
+        antwortRepository.deleteAll();
+    }
 }

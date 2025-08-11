@@ -45,4 +45,9 @@ public class AntwortRepositoryImpl implements AntwortRepository {
         return entity.map(antwortMapper::toDomain)
                 .orElse(null);
     }
+
+    @Override
+    public void deleteAll() {
+        antwortDAO.deleteAll();
+    }
 }

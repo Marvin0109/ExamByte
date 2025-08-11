@@ -13,4 +13,6 @@ public interface ExamService {
     Exam getExam(UUID fachId);
 
     void addExam(Exam exam);
+
+    void deleteAll();
 }

@@ -31,4 +31,6 @@ public interface ExamManagementService {
     void createChoiceFrage(FrageDTO frageDTO, KorrekteAntwortenDTO korrekteAntwortenDTO);
 
     UUID getExamByStartTime(LocalDateTime startTime);
+
+    void reset();
 }
