@@ -227,3 +227,8 @@ war eh nicht zu gebrauchen
 - TODO-Markierungen gesetzt
 - TO_DO aktualisiert
 - scripts/update_progress.sh gelöscht
+
+12.08.2025
+- DOM-Event gelöscht → hat mehr Probleme verursacht als geholfen
+- CSV-Export implementiert, muss noch getestet werden
+- Formular erstellt für Exam-Erstellung, Tests nötig
