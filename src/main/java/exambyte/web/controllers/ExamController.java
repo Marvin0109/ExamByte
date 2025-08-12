@@ -1,15 +1,15 @@
 package exambyte.web.controllers;
-import com.fasterxml.jackson.core.JsonProcessingException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
-import exambyte.web.form.ExamData;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.QuestionData;
 import exambyte.web.form.helper.QuestionType;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -18,19 +18,24 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
+import static org.unbescape.csv.CsvEscape.escapeCsv;
 
 @Controller
 @RequestMapping("/exams")
 public class ExamController {
 
     private final ExamManagementService examManagementService;
-    private UUID examUUID = null;
 
     @Autowired
     public ExamController(ExamManagementService examManagementService) {
@@ -41,8 +46,23 @@ public class ExamController {
     @Secured("ROLE_ADMIN")
     public String showCreateExamForm(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
+
+        ExamForm examForm = new ExamForm();
+
+        for (int i = 0; i < 6; i++) {
+            QuestionData q = new QuestionData();
+            q.setIndex(i);
+            q.setQuestionText("");
+            q.setType("");
+            q.setPunkte(0);
+            q.setChoices(new ArrayList<>());
+            q.setCorrectAnswers(new ArrayList<>());
+            examForm.getQuestions().add(q);
+        }
+
         model.addAttribute("name", user.getAttribute("login"));
-        model.addAttribute("examForm", new ExamForm());
+        model.addAttribute("examForm", examForm);
+
         return "/exams/examsProfessoren";
     }
 
@@ -61,79 +81,50 @@ public class ExamController {
 
         String name = auth.getPrincipal().getAttribute("login");
 
-        boolean success = examManagementService.createExam(name, form.getTitle(), form.getStart(),
-                form.getEnd(), form.getResult());
+        boolean success = examManagementService.createExam(
+                name,
+                form.getTitle(),
+                form.getStart(),
+                form.getEnd(),
+                form.getResult()
+        );
 
-        UUID profFachID = examManagementService.getProfFachIDByName(name)
-                .orElseThrow(NichtVorhandenException::new);
-
-        examUUID = examManagementService.getExamByStartTime(form.getStart());
-
-        if (success) {
-            redirectAttributes.addFlashAttribute("message","Test erfolgreich erstellt!");
-            redirectAttributes.addFlashAttribute("messageType", "success");
-            redirectAttributes.addFlashAttribute("exam", new ExamDTO(
-                    null, null, form.getTitle(), profFachID, form.getStart(), form.getEnd(), form.getResult()
-            ));
-
-        } else {
+        if (!success) {
             redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Prüfung.");
-            redirectAttributes.addFlashAttribute("messageType", "danger");
-        }
-        return "redirect:/exams/examsProfessoren";
-    }
-
-    @PostMapping("/examsProfessoren/questions")
-    @Secured("ROLE_ADMIN")
-    public String createQuestion(
-            @RequestParam("examData") String examData,
-            OAuth2AuthenticationToken auth,
-            Model model,
-            RedirectAttributes redirectAttributes) {
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<QuestionData> questions = null;
-
-        try {
-            ExamData examDataObj = mapper.readValue(examData, ExamData.class);
-            questions = examDataObj.getQuestions();
-        } catch (JsonProcessingException e) {
-            // Fehlerbehandlung, wenn das JSON nicht korrekt ist
-            redirectAttributes.addFlashAttribute("message", "Fehler beim Verarbeiten der Fragen.");
             redirectAttributes.addFlashAttribute("messageType", "danger");
             return "redirect:/exams/examsProfessoren";
         }
 
-        String name = auth.getPrincipal().getAttribute("login");
+        UUID profFachID = examManagementService.getProfFachIDByName(name)
+                .orElseThrow(NichtVorhandenException::new);
 
-        UUID profFachID = examManagementService
-                        .getProfFachIDByName(name)
-                        .orElseThrow(NichtVorhandenException::new);
+        UUID examUUID = examManagementService.getExamByStartTime(form.getStart());
 
-        for(QuestionData question : questions) {
-            String frageText = question.getQuestionText();
-            QuestionType frageTyp = QuestionType.valueOf(question.getType());
-            int maxPunkte = question.getPunkte();
+        for (QuestionData q : form.getQuestions()) {
+            String frageText = q.getQuestionText();
+            QuestionType frageTyp = QuestionType.valueOf(q.getType());
+            int maxPunkte = q.getPunkte();
 
             if (frageTyp.equals(QuestionType.FREITEXT)) {
                 examManagementService.createFrage(new FrageDTO(null, null, frageText,
                         maxPunkte, profFachID, examUUID));
             } else if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
-                String correctAnswer = question.getCorrectAnswer();
-                String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
-                FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
+                String correctAnswer = q.getCorrectAnswer();
+                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, profFachID, examUUID);
                 examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
                         f.getFachId(), correctAnswer));
             } else if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
-                List<String> correctAnswers = question.getCorrectAnswers();
-                String frageTextWithChoices = frageText + "\n || \n" + String.join(" ", question.getChoices());
-                FrageDTO f = new FrageDTO(null, null, frageTextWithChoices, maxPunkte, profFachID, examUUID);
+                List<String> correctAnswers = q.getCorrectAnswers();
+                String correctAnswersAsString = correctAnswers.getFirst();
+                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, profFachID, examUUID);
                 examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
-                        String.join(",", correctAnswers)));
+                        correctAnswersAsString));
             }
         }
-        redirectAttributes.addFlashAttribute("message", "Fragen erfolgreich erstellt!");
+
+        redirectAttributes.addFlashAttribute("message", "Prüfung und Fragen erfolgreich erstellt!");
         redirectAttributes.addFlashAttribute("messageType", "success");
+
         return "redirect:/exams/examsProfessoren";
     }
 
@@ -150,6 +141,59 @@ public class ExamController {
     public String resetExamData() {
         examManagementService.reset();
         return "redirect:/exams/examsProfessoren";
+    }
+
+    @PostMapping("/examsProfessoren/export")
+    @Secured("ROLE_ADMIN")
+    public String exportExamFormCsv(
+            @Valid ExamForm form,
+            BindingResult bindingResult,
+            Model model,
+            HttpServletResponse response) throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("examForm", form);
+            return "exams/examsProfessoren";
+        }
+
+        // CSV Response vorbereiten
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"exam_form_export.csv\"");
+
+        PrintWriter writer = response.getWriter();
+
+        // Beispiel Header (z.B. für Fragen)
+        writer.println("FrageIndex,Fragetitel,Fragetext,Typ,Punkte,Korrekte Antwort(en),Antwortmöglichkeiten");
+
+        for (QuestionData q : form.getQuestions()) {
+            String choices = "";
+            if (q.getChoices() != null) {
+                // Optionen als Zeilenumbruch-getrennte Liste oder Komma-getrennt
+                choices = String.join(" | ", q.getChoices());
+            }
+
+            String correctAnswers = "";
+            if (q.getCorrectAnswers() != null && !q.getCorrectAnswers().isEmpty()) {
+                correctAnswers = String.join(" | ", q.getCorrectAnswers());
+            } else if (q.getCorrectAnswer() != null) {
+                correctAnswers = q.getCorrectAnswer();
+            }
+
+            // CSV-Eintrag (escapeCsv solltest du noch implementieren)
+            writer.printf("%d,%s,%s,%s,%d,%s,%s%n",
+                    q.getIndex(),
+                    escapeCsv(q.getTitle()),
+                    escapeCsv(q.getQuestionText()),
+                    q.getType(),
+                    q.getPunkte(),
+                    escapeCsv(correctAnswers),
+                    escapeCsv(choices)
+            );
+        }
+
+        writer.flush();
+
+        return null;
     }
 
     // TODO: HTML ausbauen für Exam Liste

@@ -1,10 +1,13 @@
 package exambyte.web.form;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExamForm {
 
@@ -22,6 +25,9 @@ public class ExamForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @NotNull(message = "Ergebniszeit muss gesetzt werden!")
     private LocalDateTime result;
+
+    @Valid
+    private List<QuestionData> questions = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -53,6 +59,14 @@ public class ExamForm {
 
     public void setResult(LocalDateTime result) {
         this.result = result;
+    }
+
+    public List<QuestionData> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<QuestionData> questions) {
+        this.questions = questions;
     }
 
     // Validierungsmethode
