@@ -109,7 +109,7 @@ public class ExamController {
 
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
-            QuestionType frageTyp = QuestionType.valueOf(q.getType().trim());
+            QuestionTypeWeb frageTyp = QuestionTypeWeb.valueOf(q.getType().trim());
             int maxPunkte = q.getPunkte();
 
             if (frageTyp.equals(QuestionTypeWeb.FREITEXT)) {
@@ -188,7 +188,7 @@ public class ExamController {
             }
 
             // CSV-Eintrag (escapeCsv solltest du noch implementieren)
-            writer.printf("%d,%s,%s,%d,%s,%s%n",
+            writer.printf("%s,%s,%s,%s,%s,%s%n",
                     q.getIndex(),
                     escapeCsv(q.getQuestionText()),
                     q.getType(),

@@ -13,7 +13,7 @@ public class QuestionData {
     private String type;
 
     @Min(value = 1, message = "Punkte müssen mehr als 0 sein")
-    private Integer punkte;
+    private int punkte;
 
     private String choices;
     private String correctAnswer;
