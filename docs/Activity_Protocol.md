@@ -232,3 +232,9 @@ war eh nicht zu gebrauchen
 - DOM-Event gelöscht → hat mehr Probleme verursacht als geholfen
 - CSV-Export implementiert, muss noch getestet werden
 - Formular erstellt für Exam-Erstellung, Tests nötig
+
+14.08.2025
+- Enum in jede Schicht deklariert
+- Tests angepasst für Fragetypen
+- Speichern von Tests mit Fragen erfolgreich!
+- CSV ist noch verbuggt
