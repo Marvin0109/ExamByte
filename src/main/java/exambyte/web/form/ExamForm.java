@@ -14,20 +14,19 @@ public class ExamForm {
     @NotBlank(message = "Titel darf nicht leer sein!")
     private String title;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull(message = "Startzeit muss gesetzt werden!")
     private LocalDateTime start;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull(message = "Frist muss gesetzt werden!")
     private LocalDateTime end;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @NotNull(message = "Ergebniszeit muss gesetzt werden!")
     private LocalDateTime result;
 
-    @Valid
-    private List<QuestionData> questions = new ArrayList<>();
+    private List<@Valid QuestionData> questions = new ArrayList<>();
 
     public String getTitle() {
         return title;

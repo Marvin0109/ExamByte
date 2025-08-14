@@ -4,7 +4,6 @@ import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
-import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.domain.mapper.AntwortDTOMapper;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.mapper.FrageDTOMapper;
@@ -12,10 +11,7 @@ import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
-import exambyte.web.form.helper.QuestionType;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;

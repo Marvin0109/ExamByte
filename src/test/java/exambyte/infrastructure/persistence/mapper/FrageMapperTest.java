@@ -1,7 +1,9 @@
 package exambyte.infrastructure.persistence.mapper;
 
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.entitymapper.FrageMapper;
+import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,7 @@ public class FrageMapperTest {
                 .fachId(null)
                 .frageText("Fragetext")
                 .maxPunkte(5)
+                .type(QuestionType.FREITEXT)
                 .professorUUID(profFachId)
                 .examUUID(examFachId)
                 .build();
@@ -36,6 +39,7 @@ public class FrageMapperTest {
         assertThat(entity).isNotNull();
         assertThat(entity.getFrageText()).isEqualTo("Fragetext");
         assertThat(entity.getMaxPunkte()).isEqualTo(5);
+        assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREITEXT);
         assertThat(entity.getProfessorFachId()).isEqualTo(profFachId);
         assertThat(entity.getExamFachId()).isEqualTo(examFachId);
     }
@@ -52,6 +56,7 @@ public class FrageMapperTest {
                 .fachId(fachId)
                 .frageText("Fragetext")
                 .maxPunkte(5)
+                .type(QuestionTypeEntity.FREITEXT)
                 .professorFachId(professorFachId)
                 .examFachId(examFachId)
                 .build();
@@ -62,6 +67,7 @@ public class FrageMapperTest {
         assertThat(frage).isNotNull();
         assertThat(frage.getFachId()).isEqualTo(fachId);
         assertThat(frage.getFrageText()).isEqualTo("Fragetext");
+        assertThat(frage.getType()).isEqualTo(QuestionType.FREITEXT);
         assertThat(frage.getMaxPunkte()).isEqualTo(5);
         assertThat(frage.getProfessorUUID()).isEqualTo(professorFachId);
     }

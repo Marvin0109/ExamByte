@@ -1,5 +1,6 @@
 package exambyte.infrastructure.persistence.entities;
 
+import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
@@ -19,6 +20,9 @@ public class FrageEntity {
     @Column("fach_id")
     private final UUID fachId;
 
+    @Column("type")
+    private final QuestionTypeEntity type;
+
     @Column("professor_fach_id")
     private final UUID professorFachId;
 
@@ -28,11 +32,13 @@ public class FrageEntity {
     @Column("max_punkte")
     private int maxPunkte;
 
-    private FrageEntity(Long id, UUID fachId, String frageText, int maxPunkte, UUID professorFachId, UUID examFachId) {
+    private FrageEntity(Long id, UUID fachId, String frageText, int maxPunkte, QuestionTypeEntity type,
+                        UUID professorFachId, UUID examFachId) {
         this.id = id;
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
+        this.type = type;
         this.professorFachId = professorFachId;
         this.examFachId = examFachId;
     }
@@ -61,6 +67,10 @@ public class FrageEntity {
         this.maxPunkte = maxPunkte;
     }
 
+    public QuestionTypeEntity getType() {
+        return type;
+    }
+
     public UUID getProfessorFachId() {
         return professorFachId;
     }
@@ -74,6 +84,7 @@ public class FrageEntity {
         private UUID fachId;
         private String frageText;
         private int maxPunkte;
+        private QuestionTypeEntity type;
         private UUID professorFachId;
         private UUID examFachId;
 
@@ -97,6 +108,11 @@ public class FrageEntity {
             return this;
         }
 
+        public FrageEntityBuilder type(QuestionTypeEntity type) {
+            this.type = type;
+            return this;
+        }
+
         public FrageEntityBuilder professorFachId(UUID professorFachId) {
             this.professorFachId = professorFachId;
             return this;
@@ -111,7 +127,7 @@ public class FrageEntity {
             if (frageText == null || maxPunkte <= 0 || professorFachId == null || examFachId == null) {
                 throw new IllegalStateException("Alle Felder müssen gesetzt werden (außer die Id).");
             }
-            return new FrageEntity(id, fachId, frageText, maxPunkte, professorFachId, examFachId);
+            return new FrageEntity(id, fachId, frageText, maxPunkte, type, professorFachId, examFachId);
         }
     }
 }

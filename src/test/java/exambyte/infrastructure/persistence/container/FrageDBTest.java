@@ -6,6 +6,7 @@ import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.entitymapper.ExamMapper;
 import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.domain.entitymapper.ProfessorMapper;
+import exambyte.domain.model.common.QuestionType;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
 import exambyte.infrastructure.persistence.entities.ProfessorEntity;
 import exambyte.infrastructure.persistence.mapper.ExamMapperImpl;
@@ -34,17 +35,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FrageDBTest {
 
     @Autowired
-    private FrageDAO frageRepository;
+    private FrageDAO frageDAO;
 
     @Autowired
-    private ProfessorDAO professorRepository;
+    private ProfessorDAO professorDAO;
 
     @Autowired
-    private ExamDAO examRepository;
+    private ExamDAO examDAO;
 
-    private FrageRepository repository;
-    private ProfessorRepository repository2;
-    private ExamRepository repository3;
+    private FrageRepository frageRepository;
+    private ProfessorRepository professorRepository;
+    private ExamRepository examRepository;
 
     @BeforeEach
     void setUp() {
@@ -52,9 +53,9 @@ public class FrageDBTest {
         ProfessorMapper professorMapper = new ProfessorMapperImpl();
         ExamMapper examMapper = new ExamMapperImpl();
 
-        repository = new FrageRepositoryImpl(professorRepository, frageRepository, frageMapper);
-        repository2 = new ProfessorRepositoryImpl(professorRepository, professorMapper);
-        repository3 = new ExamRepositoryImpl(examRepository, examMapper);
+        frageRepository = new FrageRepositoryImpl(professorDAO, frageDAO, frageMapper);
+        professorRepository = new ProfessorRepositoryImpl(professorDAO, professorMapper);
+        examRepository = new ExamRepositoryImpl(examDAO, examMapper);
     }
 
     @Test
@@ -67,7 +68,7 @@ public class FrageDBTest {
                 .name("Dr. Lowkey")
                 .build();
 
-        repository2.save(professor);
+        professorRepository.save(professor);
 
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
@@ -82,26 +83,28 @@ public class FrageDBTest {
                 .resultTime(resultTime)
                 .build();
 
-        repository3.save(exam);
+        examRepository.save(exam);
 
         Frage frage = new Frage.FrageBuilder()
                 .id(null)
                 .fachId(null)
                 .frageText("Was ist Java?")
                 .maxPunkte(6)
+                .type(QuestionType.FREITEXT)
                 .professorUUID(professor.uuid())
                 .examUUID(exam.getFachId())
                 .build();
 
         // Act
-        repository.save(frage);
-        Optional<FrageEntity> geladen = frageRepository.findByFachId(frage.getFachId());
-        ProfessorEntity extraction = ((FrageRepositoryImpl) repository).findByProfFachId(professor.uuid());
+        frageRepository.save(frage);
+        Optional<Frage> geladen = frageRepository.findByFachId(frage.getFachId());
+        ProfessorEntity extraction = ((FrageRepositoryImpl) frageRepository).findByProfFachId(professor.uuid());
 
         // Assert
         assertThat(geladen.isPresent()).isTrue();
         assertThat(geladen.get().getFrageText()).isEqualTo("Was ist Java?");
         assertThat(geladen.get().getMaxPunkte()).isEqualTo(6);
+        assertThat(geladen.get().getType()).isEqualTo(QuestionType.FREITEXT);
         assertThat(geladen.get().getFachId()).isEqualTo(frage.getFachId());
 
         assertThat(extraction.getFachId()).isEqualTo(professor.uuid());

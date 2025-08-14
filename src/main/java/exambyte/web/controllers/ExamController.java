@@ -1,14 +1,15 @@
 package exambyte.web.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.QuestionData;
-import exambyte.web.form.helper.QuestionType;
+import exambyte.domain.model.common.QuestionType;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.unbescape.csv.CsvEscape.escapeCsv;
 
@@ -55,8 +53,9 @@ public class ExamController {
             q.setQuestionText("");
             q.setType("");
             q.setPunkte(0);
-            q.setChoices(new ArrayList<>());
-            q.setCorrectAnswers(new ArrayList<>());
+            q.setChoices("");
+            q.setCorrectAnswers("");
+            q.setCorrectAnswer("");
             examForm.getQuestions().add(q);
         }
 
@@ -76,7 +75,9 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            return "/exams/examsProfessoren";
+            redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Fragen.");
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+            return "redirect:/exams/examsProfessoren";
         }
 
         String name = auth.getPrincipal().getAttribute("login");
@@ -100,25 +101,32 @@ public class ExamController {
 
         UUID examUUID = examManagementService.getExamByStartTime(form.getStart());
 
+        if (form.getQuestions().size() < 6){
+            redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Fragen.");
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+            return "redirect:/exams/examsProfessoren";
+        }
+
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
-            QuestionType frageTyp = QuestionType.valueOf(q.getType());
+            QuestionType frageTyp = QuestionType.valueOf(q.getType().trim());
             int maxPunkte = q.getPunkte();
 
-            if (frageTyp.equals(QuestionType.FREITEXT)) {
+            if (frageTyp.equals(QuestionTypeWeb.FREITEXT)) {
                 examManagementService.createFrage(new FrageDTO(null, null, frageText,
-                        maxPunkte, profFachID, examUUID));
-            } else if (frageTyp.equals(QuestionType.SINGLE_CHOICE)) {
+                        maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()), profFachID, examUUID));
+            } else if (frageTyp.equals(QuestionTypeWeb.SC)) {
                 String correctAnswer = q.getCorrectAnswer();
-                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, profFachID, examUUID);
+                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
+                        profFachID, examUUID);
                 examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
                         f.getFachId(), correctAnswer));
-            } else if (frageTyp.equals(QuestionType.MULTIPLE_CHOICE)) {
-                List<String> correctAnswers = q.getCorrectAnswers();
-                String correctAnswersAsString = correctAnswers.getFirst();
-                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, profFachID, examUUID);
+            } else if (frageTyp.equals(QuestionTypeWeb.MC)) {
+                String correctAnswers = q.getCorrectAnswers();
+                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
+                        profFachID, examUUID);
                 examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
-                        correctAnswersAsString));
+                        correctAnswers));
             }
         }
 
@@ -180,9 +188,8 @@ public class ExamController {
             }
 
             // CSV-Eintrag (escapeCsv solltest du noch implementieren)
-            writer.printf("%d,%s,%s,%s,%d,%s,%s%n",
+            writer.printf("%d,%s,%s,%d,%s,%s%n",
                     q.getIndex(),
-                    escapeCsv(q.getTitle()),
                     escapeCsv(q.getQuestionText()),
                     q.getType(),
                     q.getPunkte(),

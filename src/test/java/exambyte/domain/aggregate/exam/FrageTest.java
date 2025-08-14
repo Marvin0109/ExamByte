@@ -1,5 +1,6 @@
 package exambyte.domain.aggregate.exam;
 
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.model.aggregate.exam.Frage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ public class FrageTest {
         UUID fachId = UUID.randomUUID();
         String frageText = "Test question";
         int maxPunkte = 10;
+        QuestionType type = QuestionType.FREITEXT;
         UUID professorUUID = UUID.randomUUID();
         UUID examUUID = UUID.randomUUID();
 
@@ -25,6 +27,7 @@ public class FrageTest {
                 .fachId(fachId)
                 .frageText(frageText)
                 .maxPunkte(maxPunkte)
+                .type(type)
                 .professorUUID(professorUUID)
                 .examUUID(examUUID)
                 .build();
@@ -33,6 +36,7 @@ public class FrageTest {
         assertEquals(fachId, frage.getFachId());
         assertEquals(frageText, frage.getFrageText());
         assertEquals(maxPunkte, frage.getMaxPunkte());
+        assertEquals(type, frage.getType());
         assertEquals(professorUUID, frage.getProfessorUUID());
         assertEquals(examUUID, frage.getExamUUID());
     }
@@ -43,6 +47,7 @@ public class FrageTest {
         UUID fachId = UUID.randomUUID();
         String frageText = "Test question";
         int maxPunkte = 10;
+        QuestionType type = QuestionType.FREITEXT;
         UUID professorUUID = UUID.randomUUID();
         UUID examUUID = UUID.randomUUID();
 
@@ -51,6 +56,7 @@ public class FrageTest {
                 .fachId(fachId)
                 .frageText(frageText)
                 .maxPunkte(maxPunkte)
+                .type(type)
                 .professorUUID(professorUUID)
                 .examUUID(examUUID)
                 .build();
@@ -59,6 +65,7 @@ public class FrageTest {
         assertEquals(fachId, frage.getFachId());
         assertEquals(frageText, frage.getFrageText());
         assertEquals(maxPunkte, frage.getMaxPunkte());
+        assertEquals(type, frage.getType());
         assertEquals(professorUUID, frage.getProfessorUUID());
         assertEquals(examUUID, frage.getExamUUID());
     }

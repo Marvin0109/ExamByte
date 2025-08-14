@@ -1,5 +1,7 @@
 package exambyte.application.dto;
 
+import exambyte.application.common.QuestionTypeDTO;
+
 import java.util.UUID;
 
 public class FrageDTO {
@@ -10,14 +12,16 @@ public class FrageDTO {
     private int maxPunkte;
     private final UUID professorUUID;
     private final UUID examUUID;
+    private final QuestionTypeDTO type;
 
-    public FrageDTO(Long id, UUID fachId, String frageText, int maxPunkte, UUID professorUUID, UUID examUUID) {
+    public FrageDTO(Long id, UUID fachId, String frageText, int maxPunkte, QuestionTypeDTO type, UUID professorUUID, UUID examUUID) {
         this.id = id;
         this.fachId = fachId;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
         this.professorUUID = professorUUID;
         this.examUUID = examUUID;
+        this.type = type;
     }
 
     public Long getId() {
@@ -46,5 +50,9 @@ public class FrageDTO {
 
     public UUID getExamUUID() {
         return examUUID;
+    }
+
+    public QuestionTypeDTO getType() {
+        return type;
     }
 }

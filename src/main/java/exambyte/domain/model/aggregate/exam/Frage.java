@@ -1,5 +1,7 @@
 package exambyte.domain.model.aggregate.exam;
 
+import exambyte.domain.model.common.QuestionType;
+
 import java.util.UUID;
 
 public class Frage {
@@ -8,14 +10,16 @@ public class Frage {
     private final UUID fachId;
     private final String frageText;
     private int maxPunkte;
+    private final QuestionType type;
     private final UUID professorUUID;
     private final UUID examUUID;
 
-    private Frage(Long id, UUID fachId,String frageText, int maxPunkte, UUID professorUUID, UUID examUUID) {
+    private Frage(Long id, UUID fachId,String frageText, int maxPunkte, QuestionType type, UUID professorUUID, UUID examUUID) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.id = id;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
+        this.type = type;
         this.professorUUID = professorUUID;
         this.examUUID = examUUID;
     }
@@ -44,6 +48,8 @@ public class Frage {
         return maxPunkte;
     }
 
+    public QuestionType getType() { return type; }
+
     public void setMaxPunkte(int maxPunkte) {
         this.maxPunkte = maxPunkte;
     }
@@ -53,6 +59,7 @@ public class Frage {
         private UUID fachId;
         private String frageText;
         private int maxPunkte;
+        private QuestionType type;
         private UUID professorUUID;
         private UUID examUUID;
 
@@ -76,6 +83,11 @@ public class Frage {
             return this;
         }
 
+        public FrageBuilder type(QuestionType type) {
+            this.type = type;
+            return this;
+        }
+
         public FrageBuilder professorUUID(UUID professorUUID) {
             this.professorUUID = professorUUID;
             return this;
@@ -87,7 +99,7 @@ public class Frage {
         }
 
         public Frage build() {
-            return new Frage(id, fachId, frageText, maxPunkte, professorUUID, examUUID);
+            return new Frage(id, fachId, frageText, maxPunkte, type, professorUUID, examUUID);
         }
     }
 }

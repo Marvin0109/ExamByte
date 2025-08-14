@@ -1,5 +1,6 @@
 package exambyte.infrastructure.persistence.container;
 
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.model.aggregate.exam.*;
 import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.model.aggregate.user.Professor;
@@ -121,6 +122,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageText("JPA oder JDBC?")
                 .maxPunkte(7)
+                .type(QuestionType.FREITEXT)
                 .professorUUID(professor.uuid())
                 .examUUID(exam.getFachId())
                 .build();
@@ -184,6 +186,7 @@ public class ExamDBTest {
         assertThat(geladenFrage).isPresent();
         assertThat(geladenFrage.get().getFrageText()).isEqualTo("JPA oder JDBC?");
         assertThat(geladenFrage.get().getMaxPunkte()).isEqualTo(7);
+        assertThat(geladenFrage.get().getType()).isEqualTo(QuestionType.FREITEXT);
         assertThat(geladenFrage.get().getExamUUID()).isEqualTo(exam.getFachId());
 
         // KorrekteAntworten
@@ -259,6 +262,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageText("JPA oder JDBC?")
                 .maxPunkte(7)
+                .type(QuestionType.SC)
                 .professorUUID(professor.uuid())
                 .examUUID(exam.getFachId())
                 .build();
@@ -355,6 +359,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageText("JPA oder JDBC?")
                 .maxPunkte(7)
+                .type(QuestionType.MC)
                 .professorUUID(professor.uuid())
                 .examUUID(exam.getFachId())
                 .build();
@@ -449,6 +454,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageText("JPA oder JDBC?")
                 .maxPunkte(7)
+                .type(QuestionType.SC)
                 .professorUUID(professor.uuid())
                 .examUUID(exam.getFachId())
                 .build();

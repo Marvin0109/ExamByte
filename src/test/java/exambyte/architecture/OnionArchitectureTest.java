@@ -90,7 +90,12 @@ public class OnionArchitectureTest {
 
     @ArchTest
     ArchRule domainClassesHasPrivateFields = fields()
-            .that().areDeclaredInClassesThat().resideInAPackage("..domain..")
+            .that()
+            .areDeclaredInClassesThat()
+            .resideInAPackage("..domain..")
+            .and()
+            .areDeclaredInClassesThat()
+            .resideOutsideOfPackage("..common..")
             .should()
             .bePrivate();
 }

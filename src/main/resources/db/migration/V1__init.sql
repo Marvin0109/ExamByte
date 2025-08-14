@@ -32,8 +32,6 @@ create table exam(
     foreign key(professor_fach_id) references professor(fach_id)
 );
 
-create type frage_type as enum ('MC', 'SC', 'FREITEXT');
-
 create table frage(
     id                      serial primary key,
     frage_text              TEXT,
@@ -41,7 +39,7 @@ create table frage(
     exam_fach_id            uuid,
     fach_id                 uuid,
     max_punkte              int,
-    type                    frage_type,
+    type                    TEXT,
     foreign key(professor_fach_id) references professor(fach_id),
     foreign key(exam_fach_id) references exam(fach_id) on delete cascade,
     constraint unique_fach_id_frage unique(fach_id)

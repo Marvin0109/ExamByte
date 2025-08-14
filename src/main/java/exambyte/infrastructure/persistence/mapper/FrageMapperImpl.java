@@ -2,6 +2,8 @@ package exambyte.infrastructure.persistence.mapper;
 
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.entitymapper.FrageMapper;
+import exambyte.domain.model.common.QuestionType;
+import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ public class FrageMapperImpl implements FrageMapper {
                 .fachId(frageEntity.getFachId())
                 .frageText(frageEntity.getFrageText())
                 .maxPunkte(frageEntity.getMaxPunkte())
+                .type(QuestionType.valueOf(frageEntity.getType().name()))
                 .professorUUID(professorFachID)
                 .examUUID(frageEntity.getExamFachId())
                 .build();
@@ -35,6 +38,7 @@ public class FrageMapperImpl implements FrageMapper {
                 .fachId(frage.getFachId())
                 .frageText(frage.getFrageText())
                 .maxPunkte(frage.getMaxPunkte())
+                .type(QuestionTypeEntity.valueOf(frage.getType().name()))
                 .professorFachId(profUUID)
                 .examFachId(frage.getExamUUID())
                 .build();

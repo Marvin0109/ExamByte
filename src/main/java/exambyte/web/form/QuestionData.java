@@ -3,40 +3,27 @@ package exambyte.web.form;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.List;
-
 public class QuestionData {
-    private int index;
 
-    @NotBlank(message = "Titel darf nicht leer sein!")
-    private String title;
+    private int index;
 
     @NotBlank(message = "Fragetext darf nicht leer sein!")
     private String questionText;
 
     private String type;
 
-    @Min(value = 0, message = "Punkte müssen mehr als 0 sein")
-    private int punkte;
+    @Min(value = 1, message = "Punkte müssen mehr als 0 sein")
+    private Integer punkte;
 
-    private List<String> choices;
+    private String choices;
     private String correctAnswer;
-    private List<String> correctAnswers;
+    private String correctAnswers;
 
     public int getIndex() {
         return index;
     }
-
     public void setIndex(int index) {
         this.index = index;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getQuestionText() {
@@ -63,11 +50,11 @@ public class QuestionData {
         this.punkte = punkte;
     }
 
-    public List<String> getChoices() {
+    public String getChoices() {
         return choices;
     }
 
-    public void setChoices(List<String> choices) {
+    public void setChoices(String choices) {
         this.choices = choices;
     }
 
@@ -79,11 +66,11 @@ public class QuestionData {
         this.correctAnswer = correctAnswer;
     }
 
-    public List<String> getCorrectAnswers() {
+    public String getCorrectAnswers() {
         return correctAnswers;
     }
 
-    public void setCorrectAnswers(List<String> correctAnswers) {
+    public void setCorrectAnswers(String correctAnswers) {
         this.correctAnswers = correctAnswers;
     }
 }

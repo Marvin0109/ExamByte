@@ -1,8 +1,10 @@
 package exambyte.infrastructure.mapper;
 
+import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.mapper.FrageDTOMapper;
+import exambyte.domain.model.common.QuestionType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class FrageDTOMapperImpl implements FrageDTOMapper {
                 frage.getFachId(),
                 frage.getFrageText(),
                 frage.getMaxPunkte(),
+                QuestionTypeDTO.valueOf(frage.getType().name()),
                 frage.getProfessorUUID(),
                 frage.getExamUUID());
     }
@@ -35,6 +38,7 @@ public class FrageDTOMapperImpl implements FrageDTOMapper {
                 .fachId(dto.getFachId())
                 .frageText(dto.getFrageText())
                 .maxPunkte(dto.getMaxPunkte())
+                .type(QuestionType.valueOf(dto.getType().name()))
                 .professorUUID(dto.getProfessorUUID())
                 .examUUID(dto.getExamUUID())
                 .build();
