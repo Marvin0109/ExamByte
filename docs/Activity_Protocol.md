@@ -238,3 +238,7 @@ war eh nicht zu gebrauchen
 - Tests angepasst für Fragetypen
 - Speichern von Tests mit Fragen erfolgreich!
 - CSV ist noch verbuggt
+
+08.09.2025
+- Das Speichern von Antwortmöglichkeiten hinzugefügt + Testanpassungen
+- Das Anzeigen von Tests mit Fragen für die Bearbeitung von Exams funktioniert
