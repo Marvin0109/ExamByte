@@ -41,6 +41,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public UUID getStudentFachId(String name) {
-        return studentRepository.findFachIdByName(name);
+        Optional<UUID> loadedFachID = studentRepository.findFachIdByName(name);
+        return loadedFachID.orElse(null);
     }
 }

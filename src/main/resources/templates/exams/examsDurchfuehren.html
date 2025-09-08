@@ -27,20 +27,37 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-  <div class="container mt-5">
-    <h1 th:text="${exam.title}">Test</h1>
+    <form th:action="@{/exams/submit}" th:object="${exam}" method="post">
+        <h1 th:text="*{title}">Testtitel</h1>
 
-    <form th:action="@{/exams/submit}" method="post">
-      <input type="hidden" name="examId" th:value="${exam.fachId}">
+        <div th:each="frage, iterStat : *{questions}" class="mb-4">
+            <label th:text="'Frage ' + (${iterStat.index}+1) + ': ' + ${frage.questionText}"></label>
 
-      <div th:each="frage, iterStat : ${fragen}" class="form-group">
-        <label th:for="'frage' + ${iterStat.index}" th:text="'Frage ' + (${iterStat.index} + 1) + ': ' + ${frage.frageText}"></label>
-        <input type="text" th:name="'antworten[' + ${iterStat.index} + ']'" th:id="'frage' + ${iterStat.index}" class="form-control">
-      </div>
+            <!-- Multiple Choice -->
+            <div th:if="${frage.type == 'MC'}">
+                <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                    <input type="checkbox" th:name="'antworten[' + ${iterStat.index} + ']'" th:value="${antwort}"/>
+                    <span th:text="${antwort}"></span>
+                </div>
+            </div>
 
-      <button type="submit" class="btn btn-success">Abschicken</button>
+            <!-- Single Choice -->
+            <div th:if="${frage.type == 'SC'}">
+                <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                    <input type="radio" th:name="'antworten[' + ${iterStat.index} + ']'" th:value="${antwort}"/>
+                    <span th:text="${antwort}"></span>
+                </div>
+            </div>
+
+            <!-- Freitext -->
+            <div th:if="${frage.type == 'FREITEXT'}">
+                <textarea th:name="'antworten[' + ${iterStat.index} + ']'" class="form-control" rows="6"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Test abschicken</button>
     </form>
-  </div>
+
 
 </main>
 

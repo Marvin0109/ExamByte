@@ -132,6 +132,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageFachId(frage.getFachId())
                 .korrekteAntworten("JDBC")
+                .antwort_optionen("JPA\nJDBC")
                 .build();
 
         LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
@@ -194,6 +195,7 @@ public class ExamDBTest {
         assertThat(geladenKorrekteAntworten.get().getFachId()).isEqualTo(korrekteAntworten.getFachId());
         assertThat(geladenKorrekteAntworten.get().getFrageFachId()).isEqualTo(frage.getFachId());
         assertThat(geladenKorrekteAntworten.get().getKorrekteAntworten()).contains("JDBC");
+        assertThat(geladenKorrekteAntworten.get().getAntwort_optionen()).contains("JPA\nJDBC");
 
         // Professor
         assertThat(geladenProf).isPresent();
@@ -272,6 +274,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageFachId(frage.getFachId())
                 .korrekteAntworten("JDBC")
+                .antwort_optionen("JPA\nJDBC")
                 .build();
 
         LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
@@ -369,6 +372,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageFachId(frage.getFachId())
                 .korrekteAntworten("JDBC")
+                .antwort_optionen("JPA\nJDBC")
                 .build();
 
         Antwort antwort = new Antwort.AntwortBuilder()
@@ -464,6 +468,7 @@ public class ExamDBTest {
                 .fachId(null)
                 .frageFachId(frage.getFachId())
                 .korrekteAntworten("JDBC")
+                .antwort_optionen("JPA\nJDBC")
                 .build();
 
         Antwort antwort = new Antwort.AntwortBuilder()

@@ -11,7 +11,8 @@ public class KorrekteAntwortenDTOMapperImpl implements KorrekteAntwortenDTOMappe
     @Override
     public KorrekteAntwortenDTO toDTO(KorrekteAntworten antworten) {
         return new KorrekteAntwortenDTO(antworten.getId(), antworten.getFachId(),
-                antworten.getFrageFachId(), antworten.getKorrekteAntworten());
+                antworten.getFrageFachId(), antworten.getKorrekteAntworten(),
+                antworten.getAntwort_optionen());
     }
 
     @Override
@@ -20,6 +21,7 @@ public class KorrekteAntwortenDTOMapperImpl implements KorrekteAntwortenDTOMappe
                 .fachId(dto.getFachID())
                 .frageFachId(dto.getFrageFachID())
                 .korrekteAntworten(dto.getAntworten())
+                .antwort_optionen(dto.getAntwort_optionen())
                 .build();
     }
 }

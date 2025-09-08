@@ -20,8 +20,7 @@ public interface ExamDAO extends CrudRepository<ExamEntity, Long> {
 
     ExamEntity save(ExamEntity test);
 
-    @Query("SELECT fach_id FROM exam WHERE start_time = :start")
-    Optional<UUID> findByStartTime(@Param("start") LocalDateTime startTime);
+    Optional<ExamEntity> findByStartZeitpunkt(LocalDateTime startTime);
 
     @Transactional
     @Modifying

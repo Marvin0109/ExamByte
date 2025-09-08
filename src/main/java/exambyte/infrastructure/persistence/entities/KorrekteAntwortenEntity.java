@@ -21,11 +21,15 @@ public class KorrekteAntwortenEntity {
     @Column("richtige_antwort")
     private final String richtigeAntwort;
 
-    public KorrekteAntwortenEntity(Long id, UUID fachID, UUID frageFachID, String richtigeAntwort) {
+    @Column("antwort_optionen")
+    private final String antwort_optionen;
+
+    public KorrekteAntwortenEntity(Long id, UUID fachID, UUID frageFachID, String richtigeAntwort, String antwort_optionen) {
         this.id = id;
         this.fachID = fachID != null ? fachID : UUID.randomUUID();
         this.frageFachID = frageFachID;
         this.richtigeAntwort = richtigeAntwort;
+        this.antwort_optionen = antwort_optionen;
     }
 
     public Long getId() {
@@ -43,4 +47,6 @@ public class KorrekteAntwortenEntity {
     public String getRichtigeAntwort() {
         return richtigeAntwort;
     }
+
+    public String getAntwort_optionen() { return antwort_optionen; }
 }

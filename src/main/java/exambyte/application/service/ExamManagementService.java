@@ -30,6 +30,8 @@ public interface ExamManagementService {
 
     void createChoiceFrage(FrageDTO frageDTO, KorrekteAntwortenDTO korrekteAntwortenDTO);
 
+    String getChoiceForFrage(UUID frageFachId);
+
     UUID getExamByStartTime(LocalDateTime startTime);
 
     void deleteByFachId(UUID examFachId);

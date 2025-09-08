@@ -39,7 +39,9 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public UUID findFachIdByName(String name) {
-        return studentDAO.findFachIdByName(name);
+    public Optional<UUID> findFachIdByName(String name) {
+        StudentEntity loaded =  studentDAO.findFachIdByName(name).orElse(null);
+        if (loaded != null) return Optional.of(loaded.getFachId());
+        return Optional.empty();
     }
 }

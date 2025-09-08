@@ -44,7 +44,9 @@ public class ExamRepositoryImpl implements ExamRepository {
 
     @Override
     public Optional<UUID> findByStartTime(LocalDateTime startTime) {
-        return repository.findByStartTime(startTime);
+        ExamEntity loaded =  repository.findByStartZeitpunkt(startTime).orElse(null);
+        if (loaded != null) return Optional.of(loaded.getFachId());
+        return Optional.empty();
     }
 
     @Override

@@ -6,6 +6,7 @@ import exambyte.domain.repository.KorrekteAntwortenRepository;
 import exambyte.infrastructure.persistence.entities.KorrekteAntwortenEntity;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,9 +22,9 @@ public class KorrekteAntwortenRepositoryImpl implements KorrekteAntwortenReposit
     }
 
     @Override
-    public Optional<KorrekteAntworten> findByFrageFachID(UUID frageFachID) {
-        Optional<KorrekteAntwortenEntity> entity = dao.findByFrageFachID(frageFachID);
-        return entity.map(mapper::toDomain);
+    public List<KorrekteAntworten> findByFrageFachID(UUID frageFachID) {
+        List<KorrekteAntwortenEntity> entityList = dao.findByFrageFachID(frageFachID).stream().toList();
+        return entityList.stream().map(mapper::toDomain).toList();
     }
 
     @Override

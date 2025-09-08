@@ -75,6 +75,7 @@ create table correct_answers(
     fach_id                 uuid,
     frage_id                uuid not null,
     richtige_antwort        TEXT,
+    antwort_optionen        TEXT,
     foreign key (frage_id) references frage(fach_id) on delete cascade,
     constraint unique_fach_id_correct_answers unique(fach_id)
 );

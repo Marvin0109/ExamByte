@@ -82,7 +82,7 @@ public class StudentServiceTest {
         // Arrange
         UUID studentFachId = UUID.randomUUID();
 
-        when(studentRepository.findFachIdByName("new_student")).thenReturn(studentFachId);
+        when(studentRepository.findFachIdByName("new_student")).thenReturn(Optional.of(studentFachId));
 
         // Act
         var result = studentService.getStudentFachId("new_student");

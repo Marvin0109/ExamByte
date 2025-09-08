@@ -9,7 +9,6 @@ import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.QuestionData;
-import exambyte.domain.model.common.QuestionType;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -120,13 +120,13 @@ public class ExamController {
                 FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
                         profFachID, examUUID);
                 examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
-                        f.getFachId(), correctAnswer));
+                        f.getFachId(), correctAnswer, q.getChoices()));
             } else if (frageTyp.equals(QuestionTypeWeb.MC)) {
                 String correctAnswers = q.getCorrectAnswers();
                 FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
                         profFachID, examUUID);
                 examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
-                        correctAnswers));
+                        correctAnswers, q.getChoices()));
             }
         }
 
@@ -215,7 +215,7 @@ public class ExamController {
     }
 
     // TODO: HTML ausbauen für Exam Liste
-    @GetMapping("/examStudierende")
+    @GetMapping("/examsStudierende")
     @Secured("ROLE_STUDENT")
     public String listExamsForStudents(Model model, OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
@@ -228,16 +228,39 @@ public class ExamController {
     // TODO: Durchführen von Exams implementieren in HTML
     @GetMapping("/examsDurchfuehren/{examFachId}")
     @Secured("ROLE_STUDENT")
-    public String startExam(@PathVariable UUID examFachId, OAuth2AuthenticationToken auth, Model model) {
+    public String startExam(@PathVariable("examFachId") String examFachId, OAuth2AuthenticationToken auth, Model model) {
         OAuth2User user = auth.getPrincipal();
         String studentName = user.getAttribute("login");
-        boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(examFachId, user.getAttribute("login"));
-        ExamDTO examDTO = examManagementService.getExam(examFachId);
-        List<FrageDTO> fragen = examManagementService.getFragenForExam(examFachId);
+        boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(UUID.fromString(examFachId), user.getAttribute("login"));
+        ExamDTO examDTO = examManagementService.getExam(UUID.fromString(examFachId));
+        List<FrageDTO> fragen = examManagementService.getFragenForExam(UUID.fromString(examFachId));
 
+        ExamForm form = new ExamForm();
+        form.setStart(examDTO.startTime());
+        form.setEnd(examDTO.endTime());
+        form.setEnd(examDTO.endTime());
+        form.setTitle(examDTO.title());
+        int index = 0;
 
-        model.addAttribute("exam", examDTO);
-        model.addAttribute("fragen", fragen);
+        List<QuestionData> questions = new ArrayList<>();
+
+        for (FrageDTO frage : fragen) {
+            QuestionData questionData = new QuestionData();
+            questionData.setIndex(index);
+            questionData.setQuestionText(frage.getFrageText());
+            questionData.setPunkte(frage.getMaxPunkte());
+            questionData.setType(frage.getType().toString());
+            if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
+                String choice = examManagementService.getChoiceForFrage(frage.getFachId());
+                questionData.setChoices(choice.replace("\n", ","));
+                System.out.println(questionData.getChoices());
+            }
+            questions.add(questionData);
+        }
+
+        form.setQuestions(questions);
+
+        model.addAttribute("exam", form);
         model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular, false wenn Anzahl an Exams (12) erreicht ist
         model.addAttribute("name", studentName);
         return "/exams/examsDurchfuehren";

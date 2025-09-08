@@ -26,12 +26,14 @@ public class KorrekteAntwortDTOMapperTest {
         // Arrange
         UUID fachID = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
-        String korrekteAntworten = "Lösung 1, Lösung 2";
+        String korrekteAntworten = "Lösung 1\nLösung 2";
+        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .fachId(fachID)
                 .frageFachId(frageFachID)
                 .korrekteAntworten(korrekteAntworten)
+                .antwort_optionen(antwort_optionen)
                 .build();
 
         // Act
@@ -41,6 +43,7 @@ public class KorrekteAntwortDTOMapperTest {
         assertThat(dto.getFachID()).isEqualTo(fachID);
         assertThat(dto.getFrageFachID()).isEqualTo(frageFachID);
         assertThat(dto.getAntworten()).contains(korrekteAntworten);
+        assertThat(dto.getAntwort_optionen()).contains(antwort_optionen);
     }
 
     @Test
@@ -49,9 +52,14 @@ public class KorrekteAntwortDTOMapperTest {
         // Arrange
         UUID fachID = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
-        String korrekteAntworten = "Lösung 1, Lösung 2";
+        String korrekteAntworten = "Lösung 1\nLösung 2";
+        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
 
-        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null, fachID, frageFachID, korrekteAntworten);
+        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null,
+                fachID,
+                frageFachID,
+                korrekteAntworten,
+                antwort_optionen);
 
         // Act
         KorrekteAntworten result = mapper.toDomain(dto);
@@ -60,5 +68,6 @@ public class KorrekteAntwortDTOMapperTest {
         assertThat(result.getFachId()).isEqualTo(fachID);
         assertThat(result.getFrageFachId()).isEqualTo(frageFachID);
         assertThat(result.getKorrekteAntworten()).contains(korrekteAntworten);
+        assertThat(result.getAntwort_optionen()).contains(antwort_optionen);
     }
 }

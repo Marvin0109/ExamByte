@@ -5,6 +5,9 @@ import exambyte.domain.repository.KorrekteAntwortenRepository;
 import exambyte.domain.service.KorrekteAntwortenService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 public class KorrekteAntwortenServiceImpl implements KorrekteAntwortenService {
 
@@ -17,6 +20,11 @@ public class KorrekteAntwortenServiceImpl implements KorrekteAntwortenService {
     @Override
     public void addKorrekteAntwort(KorrekteAntworten korrekteAntwort) {
         repository.save(korrekteAntwort);
+    }
+
+    @Override
+    public List<KorrekteAntworten> findKorrekteAntwort(UUID frageFachId) {
+        return repository.findByFrageFachID(frageFachId).stream().toList();
     }
 
     @Override

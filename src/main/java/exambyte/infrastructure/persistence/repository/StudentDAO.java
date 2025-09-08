@@ -12,7 +12,7 @@ public interface StudentDAO extends CrudRepository<StudentEntity, Long> {
 
     Optional<StudentEntity> findByFachId(UUID fachId);
 
-    UUID findFachIdByName(String name);
+    Optional<StudentEntity> findFachIdByName(String name);
 
     StudentEntity save(StudentEntity student);
 }

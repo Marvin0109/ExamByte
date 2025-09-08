@@ -40,11 +40,13 @@
        </thead>
         <tbody>
        <tr th:each="exam : ${exams}">
-          <td th:text="${exam.title}"></td>
-         <td th:text="${exam.startTime}"></td>
-          <td th:text="${exam.endTime}"></td>
+           <td th:text="${exam.title}"></td>
+           <td th:text="${exam.startTime}"></td>
+           <td th:text="${exam.endTime}"></td>
+           <td th:text="${exam.resultTime}"></td>
          <td>
-            <a th:href="@{/exams/examsDurchfuehren/{id}(id=${exam.fachId})}" class="btn btn-primary">Test starten</a>
+            <a th:href="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" class="btn btn-primary">Test starten</a>
+            <!-- hier weitere Aktionen: Ergebnis, CSV Export -->
          </td>
        </tr>
         </tbody>
