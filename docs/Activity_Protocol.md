@@ -242,3 +242,6 @@ war eh nicht zu gebrauchen
 08.09.2025
 - Das Speichern von Antwortmöglichkeiten hinzugefügt + Testanpassungen
 - Das Anzeigen von Tests mit Fragen für die Bearbeitung von Exams funktioniert
+
+09.09.2025
+- Laden der Exams, Anzeigen des Exams auf examsDurchfuehren.html
