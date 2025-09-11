@@ -274,4 +274,9 @@ public class ExamManagementServiceTest {
                 examRepository
         );
     }
+
+    // TODO
+    @Test
+    @DisplayName("submitExam Test")
+    void test_12() {}
 }

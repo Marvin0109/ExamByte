@@ -88,55 +88,60 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public boolean submitExam(String studentLogin, Map<String, String[]> antworten, UUID examFachId) {
-        UUID studentFachId = studentService.getStudentFachId(studentLogin);
+        try {
+            UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
-        for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
-            try {
-                UUID frageFachId = UUID.fromString(entry.getKey());
-                String antwortText = String.join(" ", entry.getValue());
+            for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
+                try {
+                    UUID frageFachId = UUID.fromString(entry.getKey());
+                    String antwortText = String.join(" ", entry.getValue());
 
-                AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
-                        .antwortText(antwortText)
-                        .frageFachId(frageFachId)
-                        .studentFachId(studentFachId)
-                        .antwortZeitpunkt(LocalDateTime.now())
-                        .lastChangesZeitpunkt(LocalDateTime.now())
-                        .build();
+                    AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
+                            .antwortText(antwortText)
+                            .frageFachId(frageFachId)
+                            .studentFachId(studentFachId)
+                            .antwortZeitpunkt(LocalDateTime.now())
+                            .lastChangesZeitpunkt(LocalDateTime.now())
+                            .build();
 
-                antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
-            } catch (IllegalArgumentException e) {
-                // Key war keine UUID, z.B. CSRF oder andere hidden fields → einfach ignorieren
-                continue;
+                    antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
+                } catch (IllegalArgumentException e) {
+                    // Key war keine UUID, z.B. CSRF oder andere hidden fields → einfach ignorieren
+                    continue;
+                }
             }
+
+            List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
+                    .map(frageDTOMapper::toDTO)
+                    .toList();
+
+            List<AntwortDTO> antwortDTOList = new ArrayList<>();
+
+            for (FrageDTO frageDTO : fragenDTOList) {
+                antwortDTOList.add(antwortDTOMapper.toDTO(
+                        antwortService.findByStudentAndFrage(studentFachId, frageDTO.getFachId()))
+                );
+            }
+
+            // Jetzt die MC-Liste und SC-Liste erstellen
+            ReviewData reviewDataMC = new ReviewData(fragenDTOList, antwortDTOList,
+                    korrekteAntwortenDTOMapper, korrekteAntwortenService);
+            ReviewData reviewDataSC = new ReviewData(fragenDTOList, antwortDTOList,
+                    korrekteAntwortenDTOMapper, korrekteAntwortenService);
+
+            reviewDataMC.filterToType(QuestionTypeDTO.MC);
+            reviewDataSC.filterToType(QuestionTypeDTO.SC);
+
+            automaticReviewService.automatischeReviewMC(reviewDataMC.getFragen(), reviewDataMC.getAntworten(),
+                    reviewDataMC.getKorrekteAntworten(), studentFachId);
+            automaticReviewService.automatischeReviewSC(reviewDataSC.getFragen(), reviewDataSC.getAntworten(),
+                    reviewDataSC.getKorrekteAntworten(), studentFachId);
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
         }
-
-        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
-                .map(frageDTOMapper::toDTO)
-                .toList();
-
-        List<AntwortDTO> antwortDTOList = new ArrayList<>();
-
-        for (FrageDTO frageDTO : fragenDTOList) {
-            antwortDTOList.add(antwortDTOMapper.toDTO(
-                    antwortService.findByStudentAndFrage(studentFachId, frageDTO.getFachId()))
-            );
-        }
-
-        // Jetzt die MC-Liste und SC-Liste erstellen
-        ReviewData reviewDataMC = new ReviewData(fragenDTOList, antwortDTOList,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-        ReviewData reviewDataSC = new ReviewData(fragenDTOList, antwortDTOList,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-
-        reviewDataMC.filterToType(QuestionTypeDTO.MC);
-        reviewDataSC.filterToType(QuestionTypeDTO.SC);
-
-        automaticReviewService.automatischeReviewMC(reviewDataMC.getFragen(), reviewDataMC.getAntworten(),
-                reviewDataMC.getKorrekteAntworten(), studentFachId);
-        automaticReviewService.automatischeReviewSC(reviewDataSC.getFragen(), reviewDataSC.getAntworten(),
-                reviewDataSC.getKorrekteAntworten(), studentFachId);
-
-        return true;
     }
 
     @Override

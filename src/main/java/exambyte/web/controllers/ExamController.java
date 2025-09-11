@@ -274,7 +274,7 @@ public class ExamController {
             @PathVariable("examFachId") String examFachId,
             @RequestParam Map<String, String[]> antworten,
             OAuth2AuthenticationToken auth,
-            Model model) {
+            RedirectAttributes redirectAttributes) {
 
         OAuth2User user = auth.getPrincipal();
 
@@ -285,11 +285,13 @@ public class ExamController {
         examManagementService.submitExam(user.getAttribute("login"), antworten, UUID.fromString(examFachId));
 
         if (success) {
-            model.addAttribute("message", "Alle Antworten erfolgreich eingereicht!");
+            redirectAttributes.addFlashAttribute("message",
+                    "Alle Antworten erfolgreich eingereicht!");
         } else {
-            model.addAttribute("message", "Fehler beim Einreichen der Antworten.");
+            redirectAttributes.addFlashAttribute("message",
+                    "Fehler beim Einreichen der Antworten.");
         }
-        return "redirect:/exams/list";
+        return "redirect:/exams/examsStudierende";
     }
 
     // TODO: unvollständig, Fragetypen fehlen (MC, SC und Freitext)

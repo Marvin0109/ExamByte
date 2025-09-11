@@ -4,6 +4,7 @@ import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.model.impl.ZulassungService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ZulassungServiceTest {
 
     @Test
-    @DisplayName("berechneErreichtePunkte Test")
+    @DisplayName("berechneErreichtePunkte Test (angenommen, MC und SC Bewertung sei korrekt implementiert worden")
     void test_01() {
         // Arrange
         ZulassungService zulassungService = new ZulassungService();
@@ -72,6 +73,7 @@ public class ZulassungServiceTest {
                 .maxPunkte(10)
                 .professorUUID(profFachID)
                 .examUUID(exam1.getFachId())
+                .type(QuestionType.FREITEXT)
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
@@ -80,6 +82,7 @@ public class ZulassungServiceTest {
                 .maxPunkte(5)
                 .professorUUID(profFachID)
                 .examUUID(exam1.getFachId())
+                .type(QuestionType.MC)
                 .build();
 
         Frage frage3 = new Frage.FrageBuilder()
@@ -88,6 +91,7 @@ public class ZulassungServiceTest {
                 .maxPunkte(8)
                 .professorUUID(profFachID)
                 .examUUID(exam2.getFachId())
+                .type(QuestionType.SC)
                 .build();
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
@@ -141,7 +145,7 @@ public class ZulassungServiceTest {
                 .punkte(8)
                 .build();
 
-        List<Exam> exams = List.of(exam1, exam2);
+        List<Exam> exams = List.of(exam1, exam2); // Exam1: Frage 1, Frage 2; Exam2: Frage 3
         List<Frage> fragen = List.of(frage1, frage2, frage3);
         List<Antwort> antworten = List.of(antwort1, antwort2, antwort3);
         List<Review> bewertungen = List.of(review1, review2, review3);
@@ -151,12 +155,12 @@ public class ZulassungServiceTest {
 
         // Assert
         assertThat(result).hasSize(2);
-        assertThat(result.getFirst()).isEqualTo(8);
-        assertThat(result.getLast()).isEqualTo(8);
+        assertThat(result.getFirst()).isEqualTo(8); // review1 + review2 = 4 + 4 = 8
+        assertThat(result.getLast()).isEqualTo(8); // review3
     }
 
     @Test
-    @DisplayName("Zulassung Test (keine Zulassung erhalten)")
+    @DisplayName("Zulassung Test (keine Zulassung erhalten); Zulassung erst ab 50% der Punkte pro Test")
     void test_02() {
         // Arrange
         ZulassungService zulassungService = new ZulassungService();
@@ -234,6 +238,7 @@ public class ZulassungServiceTest {
                 .maxPunkte(10)
                 .professorUUID(profFachID)
                 .examUUID(exam1.getFachId())
+                .type(QuestionType.FREITEXT)
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
@@ -242,6 +247,7 @@ public class ZulassungServiceTest {
                 .maxPunkte(5)
                 .professorUUID(profFachID)
                 .examUUID(exam1.getFachId())
+                .type(QuestionType.FREITEXT)
                 .build();
 
         Frage frage3 = new Frage.FrageBuilder()
@@ -250,6 +256,7 @@ public class ZulassungServiceTest {
                 .maxPunkte(8)
                 .professorUUID(profFachID)
                 .examUUID(exam2.getFachId())
+                .type(QuestionType.FREITEXT)
                 .build();
 
         List<Exam> exams = List.of(exam1, exam2);

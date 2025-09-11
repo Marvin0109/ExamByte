@@ -17,8 +17,8 @@ public class KorrekteAntwortTest {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
-        String korrekteAntworten = "Lösung 1, Lösung 2";
-        String antwort_optionen = "Lösung 1, Lösung 2, Lösung 3";
+        String korrekteAntworten = "Lösung 1\nLösung 2";
+        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .id(id)
