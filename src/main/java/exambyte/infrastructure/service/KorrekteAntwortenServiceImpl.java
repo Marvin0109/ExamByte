@@ -23,8 +23,8 @@ public class KorrekteAntwortenServiceImpl implements KorrekteAntwortenService {
     }
 
     @Override
-    public List<KorrekteAntworten> findKorrekteAntwort(UUID frageFachId) {
-        return repository.findByFrageFachID(frageFachId).stream().toList();
+    public KorrekteAntworten findKorrekteAntwort(UUID frageFachId) {
+        return repository.findByFrageFachID(frageFachId).orElse(null);
     }
 
     @Override

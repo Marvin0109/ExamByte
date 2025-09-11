@@ -22,9 +22,10 @@ public class KorrekteAntwortenRepositoryImpl implements KorrekteAntwortenReposit
     }
 
     @Override
-    public List<KorrekteAntworten> findByFrageFachID(UUID frageFachID) {
+    // TODO: überarbeiten und List entfernen
+    public Optional<KorrekteAntworten> findByFrageFachID(UUID frageFachID) {
         List<KorrekteAntwortenEntity> entityList = dao.findByFrageFachID(frageFachID).stream().toList();
-        return entityList.stream().map(mapper::toDomain).toList();
+        return entityList.stream().map(mapper::toDomain).findFirst();
     }
 
     @Override

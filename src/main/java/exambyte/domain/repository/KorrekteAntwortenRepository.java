@@ -10,7 +10,7 @@ public interface KorrekteAntwortenRepository {
 
     Optional<KorrekteAntworten> findByFachId(UUID fachId);
 
-    List<KorrekteAntworten> findByFrageFachID(UUID frageFachID);
+    Optional<KorrekteAntworten> findByFrageFachID(UUID frageFachID);
 
     void save(KorrekteAntworten antworten);
 

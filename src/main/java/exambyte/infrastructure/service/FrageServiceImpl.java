@@ -6,6 +6,7 @@ import exambyte.domain.service.FrageService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,6 +31,11 @@ public class FrageServiceImpl implements FrageService {
     public UUID addFrage(Frage frage) {
         frageRepository.save(frage);
         return frage.getFachId();
+    }
+
+    @Override
+    public Optional<Frage> getFrage(UUID frageId) {
+        return frageRepository.findByFachId(frageId);
     }
 
     @Override

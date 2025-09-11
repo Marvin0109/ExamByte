@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.unbescape.csv.CsvEscape.escapeCsv;
@@ -214,7 +215,6 @@ public class ExamController {
         return "/exams/examsKorrektor";
     }
 
-    // TODO: HTML ausbauen für Exam Liste
     @GetMapping("/examsStudierende")
     @Secured("ROLE_STUDENT")
     public String listExamsForStudents(Model model, OAuth2AuthenticationToken auth) {
@@ -240,6 +240,7 @@ public class ExamController {
         form.setEnd(examDTO.endTime());
         form.setEnd(examDTO.endTime());
         form.setTitle(examDTO.title());
+        form.setFachId(UUID.fromString(examFachId));
         int index = 0;
 
         List<QuestionData> questions = new ArrayList<>();
@@ -250,6 +251,7 @@ public class ExamController {
             questionData.setQuestionText(frage.getFrageText());
             questionData.setPunkte(frage.getMaxPunkte());
             questionData.setType(frage.getType().toString());
+            questionData.setFachId(frage.getFachId());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
                 String choice = examManagementService.getChoiceForFrage(frage.getFachId());
                 questionData.setChoices(choice.replace("\n", ","));
@@ -266,18 +268,21 @@ public class ExamController {
         return "/exams/examsDurchfuehren";
     }
 
-    @PostMapping("/submit")
+    @PostMapping("/submit/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String submitExam(
-            @RequestParam List<UUID> frageFachIds,
-            @RequestParam List<String> antwortTexte,
+            @PathVariable("examFachId") String examFachId,
+            @RequestParam Map<String, String[]> antworten,
             OAuth2AuthenticationToken auth,
             Model model) {
 
         OAuth2User user = auth.getPrincipal();
 
+        // CSRF-Parameter entfernen
+        antworten.remove("_csrf");
+
         boolean success =
-        examManagementService.submitExam(user.getAttribute("login"), frageFachIds, antwortTexte);
+        examManagementService.submitExam(user.getAttribute("login"), antworten, UUID.fromString(examFachId));
 
         if (success) {
             model.addAttribute("message", "Alle Antworten erfolgreich eingereicht!");

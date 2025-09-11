@@ -1,5 +1,6 @@
 package exambyte.application.service;
 
+import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
@@ -14,10 +15,7 @@ import exambyte.infrastructure.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
@@ -30,6 +28,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final ProfessorService professorService;
     private final KorrekteAntwortenService korrekteAntwortenService;
     private final ReviewService reviewService;
+    private final AutomaticReviewService automaticReviewService;
     private final ExamDTOMapper examDTOMapper;
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
@@ -40,7 +39,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ExamRepository examRepository, ExamDTOMapper examDTOMapper,
                                      FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper,
                                      KorrekteAntwortenService korrekteAntwortenService, KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
-                                     ReviewService reviewService) {
+                                     ReviewService reviewService, AutomaticReviewService automaticReviewService) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
@@ -53,6 +52,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.korrekteAntwortenService = korrekteAntwortenService;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
         this.reviewService = reviewService;
+        this.automaticReviewService = automaticReviewService;
     }
 
     @Override
@@ -87,33 +87,54 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public boolean submitExam(String studentLogin, List<UUID> frageFachIds, List<String> antwortTexte) {
+    public boolean submitExam(String studentLogin, Map<String, String[]> antworten, UUID examFachId) {
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
-        if (frageFachIds.size() != antwortTexte.size()) {
-            return false;
-        }
+        for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
+            try {
+                UUID frageFachId = UUID.fromString(entry.getKey());
+                String antwortText = String.join(" ", entry.getValue());
 
-        for (int i = 0; i < frageFachIds.size(); i++) {
-            UUID frageFachId = frageFachIds.get(i);
-            String antwortText = antwortTexte.get(i);
+                AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
+                        .antwortText(antwortText)
+                        .frageFachId(frageFachId)
+                        .studentFachId(studentFachId)
+                        .antwortZeitpunkt(LocalDateTime.now())
+                        .lastChangesZeitpunkt(LocalDateTime.now())
+                        .build();
 
-            if (antwortService.findByStudentAndFrage(studentFachId, frageFachId) != null) {
-                return false;
+                antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
+            } catch (IllegalArgumentException e) {
+                // Key war keine UUID, z.B. CSRF oder andere hidden fields → einfach ignorieren
+                continue;
             }
-
-            AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
-                    .antwortText(antwortText)
-                    .frageFachId(frageFachId)
-                    .studentFachId(studentFachId)
-                    .antwortZeitpunkt(LocalDateTime.now())
-                    .lastChangesZeitpunkt(LocalDateTime.now())
-                    .build();
-
-            antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
-
-            // TODO: Wenn SC oder MC, dann AutomaticReviewService.automatischeBewertung() verwenden
         }
+
+        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
+                .map(frageDTOMapper::toDTO)
+                .toList();
+
+        List<AntwortDTO> antwortDTOList = new ArrayList<>();
+
+        for (FrageDTO frageDTO : fragenDTOList) {
+            antwortDTOList.add(antwortDTOMapper.toDTO(
+                    antwortService.findByStudentAndFrage(studentFachId, frageDTO.getFachId()))
+            );
+        }
+
+        // Jetzt die MC-Liste und SC-Liste erstellen
+        ReviewData reviewDataMC = new ReviewData(fragenDTOList, antwortDTOList,
+                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+        ReviewData reviewDataSC = new ReviewData(fragenDTOList, antwortDTOList,
+                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+
+        reviewDataMC.filterToType(QuestionTypeDTO.MC);
+        reviewDataSC.filterToType(QuestionTypeDTO.SC);
+
+        automaticReviewService.automatischeReviewMC(reviewDataMC.getFragen(), reviewDataMC.getAntworten(),
+                reviewDataMC.getKorrekteAntworten(), studentFachId);
+        automaticReviewService.automatischeReviewSC(reviewDataSC.getFragen(), reviewDataSC.getAntworten(),
+                reviewDataSC.getKorrekteAntworten(), studentFachId);
 
         return true;
     }
@@ -148,11 +169,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public String getChoiceForFrage(UUID frageFachId) {
-         return korrekteAntwortenService.findKorrekteAntwort(frageFachId).stream()
-                .map(korrekteAntwortenDTOMapper::toDTO)
-                .map(KorrekteAntwortenDTO::getAntwort_optionen)
-                .findFirst()
-                .orElse("");
+         return korrekteAntwortenService.findKorrekteAntwort(frageFachId).getAntwort_optionen();
     }
 
     @Override

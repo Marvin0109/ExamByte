@@ -6,6 +6,7 @@ import exambyte.application.dto.KorrekteAntwortenDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public interface ExamManagementService {
 
     boolean isExamAlreadySubmitted(UUID examFachId, String studentName);
 
-    boolean submitExam(String studentLogin, List<UUID> frageFachIds, List<String> antwortTexte);
+    boolean submitExam(String studentLogin, Map<String, String[]> antworten, UUID examFachId);
 
     ExamDTO getExam(UUID examFachId);
 

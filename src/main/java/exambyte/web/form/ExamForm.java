@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ExamForm {
 
@@ -27,6 +28,8 @@ public class ExamForm {
     private LocalDateTime result;
 
     private List<@Valid QuestionData> questions = new ArrayList<>();
+
+    private UUID fachId;
 
     public String getTitle() {
         return title;
@@ -66,6 +69,14 @@ public class ExamForm {
 
     public void setQuestions(List<QuestionData> questions) {
         this.questions = questions;
+    }
+
+    public UUID getFachId() {
+        return fachId;
+    }
+
+    public void setFachId(UUID fachId) {
+        this.fachId = fachId;
     }
 
     // Validierungsmethode

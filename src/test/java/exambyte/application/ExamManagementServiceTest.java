@@ -1,6 +1,8 @@
 package exambyte.application;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.service.AutomaticReviewService;
+import exambyte.application.service.AutomaticReviewServiceImpl;
 import exambyte.application.service.ExamManagementService;
 import exambyte.application.service.ExamManagementServiceImpl;
 import exambyte.domain.mapper.AntwortDTOMapper;
@@ -46,6 +48,7 @@ public class ExamManagementServiceTest {
     private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private ExamManagementService examManagementService;
     private ReviewService reviewService;
+    private AutomaticReviewService automaticReviewService;
 
     @BeforeEach
     void setUp() {
@@ -57,13 +60,14 @@ public class ExamManagementServiceTest {
         professorService = mock(ProfessorServiceImpl.class);
         korrekteAntwortenService = mock(KorrekteAntwortenServiceImpl.class);
         reviewService = mock(ReviewServiceImpl.class);
+        automaticReviewService = mock(AutomaticReviewServiceImpl.class);
         examDTOMapper = mock(ExamDTOMapperImpl.class);
         frageDTOMapper = mock(FrageDTOMapperImpl.class);
         antwortDTOMapper = mock(AntwortDTOMapperImpl.class);
         korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
         examManagementService = new ExamManagementServiceImpl(examService, antwortService, frageService, studentService,
                 professorService, examRepository, examDTOMapper, frageDTOMapper, antwortDTOMapper, korrekteAntwortenService,
-                korrekteAntwortenDTOMapper, reviewService);
+                korrekteAntwortenDTOMapper, reviewService, automaticReviewService);
     }
 
     @Test

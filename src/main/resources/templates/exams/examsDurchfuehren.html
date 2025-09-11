@@ -27,16 +27,21 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <form th:action="@{/exams/submit}" th:object="${exam}" method="post">
-        <h1 th:text="*{title}">Testtitel</h1>
+    <form th:action="@{/exams/submit/{examFachId}(examFachId=${exam.fachId})}" method="post">
 
-        <div th:each="frage, iterStat : *{questions}" class="mb-4">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <h1 th:text="${exam.title}">Testtitel</h1>
+
+        <div th:each="frage, iterStat : ${exam.questions}" class="mb-4">
+            <input type="hidden" th:name="frageFachIds" th:value="${frage.fachId}"/>
+
             <label th:text="'Frage ' + (${iterStat.index}+1) + ': ' + ${frage.questionText}"></label>
 
             <!-- Multiple Choice -->
             <div th:if="${frage.type == 'MC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                    <input type="checkbox" th:name="'antworten[' + ${iterStat.index} + ']'" th:value="${antwort}"/>
+                    <input type="checkbox" th:name="'antworten[' + ${frage.fachId} + ']'" th:value="${antwort}"/>
                     <span th:text="${antwort}"></span>
                 </div>
             </div>
@@ -44,14 +49,14 @@
             <!-- Single Choice -->
             <div th:if="${frage.type == 'SC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                    <input type="radio" th:name="'antworten[' + ${iterStat.index} + ']'" th:value="${antwort}"/>
+                    <input type="radio" th:name="'antworten[' + ${frage.fachId} + ']'" th:value="${antwort}"/>
                     <span th:text="${antwort}"></span>
                 </div>
             </div>
 
             <!-- Freitext -->
             <div th:if="${frage.type == 'FREITEXT'}">
-                <textarea th:name="'antworten[' + ${iterStat.index} + ']'" class="form-control" rows="6"></textarea>
+                <textarea th:name="'antworten[' + ${frage.fachId} + ']'" class="form-control" rows="6"></textarea>
             </div>
         </div>
 

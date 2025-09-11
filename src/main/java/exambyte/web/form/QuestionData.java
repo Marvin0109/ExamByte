@@ -3,6 +3,8 @@ package exambyte.web.form;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.UUID;
+
 public class QuestionData {
 
     private int index;
@@ -18,6 +20,8 @@ public class QuestionData {
     private String choices;
     private String correctAnswer;
     private String correctAnswers;
+
+    private UUID fachId;
 
     public int getIndex() {
         return index;
@@ -48,6 +52,14 @@ public class QuestionData {
 
     public void setPunkte(int punkte) {
         this.punkte = punkte;
+    }
+
+    public void setFachId(UUID fachId) {
+        this.fachId = fachId;
+    }
+
+    public UUID getFachId() {
+        return fachId;
     }
 
     public String getChoices() {
