@@ -245,3 +245,6 @@ war eh nicht zu gebrauchen
 
 09.09.2025
 - Laden der Exams, Anzeigen des Exams auf examsDurchfuehren.html
+
+11.09.2025
+- SubmitExam Test geschrieben, weitere TODOs hinzugefügt (s. ExamManagementServiceTest)
