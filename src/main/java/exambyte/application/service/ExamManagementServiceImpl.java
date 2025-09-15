@@ -1,14 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
-import exambyte.domain.mapper.AntwortDTOMapper;
-import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.mapper.FrageDTOMapper;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
+import exambyte.application.dto.*;
+import exambyte.domain.mapper.*;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
@@ -16,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
@@ -33,12 +28,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
+    private final ReviewDTOMapper reviewDTOMapper;
 
     public ExamManagementServiceImpl(ExamService examService, AntwortService antwortService, FrageService frageService,
                                      StudentService studentService, ProfessorService professorService,
                                      ExamRepository examRepository, ExamDTOMapper examDTOMapper,
                                      FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper,
-                                     KorrekteAntwortenService korrekteAntwortenService, KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
+                                     KorrekteAntwortenService korrekteAntwortenService,
+                                     KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
+                                     ReviewDTOMapper reviewDTOMapper,
                                      ReviewService reviewService, AutomaticReviewService automaticReviewService) {
         this.examService = examService;
         this.antwortService = antwortService;
@@ -51,12 +49,14 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.antwortDTOMapper = antwortDTOMapper;
         this.korrekteAntwortenService = korrekteAntwortenService;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
+        this.reviewDTOMapper = reviewDTOMapper;
         this.reviewService = reviewService;
         this.automaticReviewService = automaticReviewService;
     }
 
     @Override
-    public boolean createExam(String professorName, String title, LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
+    public boolean createExam(String professorName, String title, LocalDateTime startTime,
+                              LocalDateTime endTime, LocalDateTime resultTime) {
         UUID profFachId = null;
         Optional<UUID> optionalFachID = professorService.getProfessorFachIdByName(professorName);
         if (optionalFachID.isPresent()) {
@@ -74,7 +74,10 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public List<ExamDTO> getAllExams() {
-        return examDTOMapper.toExamDTOList(examService.alleExams());
+        return examService.alleExams().stream()
+                .map(examDTOMapper::toDTO)
+                .sorted(Comparator.comparing(ExamDTO::startTime))
+                .toList();
     }
 
     @Override
@@ -195,5 +198,61 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         korrekteAntwortenService.deleteAll();
         frageService.deleteAll();
         examRepository.deleteAll();
+    }
+
+    @Override
+    public List<VersuchDTO> getAllAttempts(UUID examFachId, String studentLogin) {
+        UUID studentFachId = studentService.getStudentFachId(studentLogin);
+
+        // Alle Fragen des Exams und deren Maximalpunkte
+        Map<UUID, FrageDTO> frageMap = frageService.getFragenForExam(examFachId).stream()
+                .map(frageDTOMapper::toDTO)
+                .collect(Collectors.toMap(FrageDTO::getFachId, f -> f));
+
+        // Gesamt-MaxPunkte für MC/SC
+        double gesamtMaxPunkte = frageMap.values().stream()
+                .filter(f -> f.getType() == QuestionTypeDTO.MC || f.getType() == QuestionTypeDTO.SC)
+                .mapToDouble(FrageDTO::getMaxPunkte)
+                .sum();
+
+        // Alle Antworten des Studenten für dieses Exam
+        List<AntwortDTO> alleAntworten = frageMap.keySet().stream()
+                .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
+                .filter(Objects::nonNull)
+                .map(antwortDTOMapper::toDTO)
+                .toList();
+
+        // Nach lastChangesZeitpunkt gruppieren
+        Map<LocalDateTime, List<AntwortDTO>> gruppiert =
+                alleAntworten.stream()
+                        .collect(Collectors.groupingBy(
+                                AntwortDTO::getLastChangesZeitpunkt,
+                                TreeMap::new,
+                                Collectors.toList()
+                        ));
+
+        List<VersuchDTO> result = new ArrayList<>();
+
+        for (var entry : gruppiert.entrySet()) {
+            LocalDateTime zeitpunkt = entry.getKey();
+            List<AntwortDTO> antworten = entry.getValue();
+
+            // erreichte Punkte dieses Versuchs
+            double erreichte = 0.0;
+            for (AntwortDTO a : antworten) {
+                FrageDTO frage = frageMap.get(a.getFrageFachId());
+                if (frage.getType() == QuestionTypeDTO.MC || frage.getType() == QuestionTypeDTO.SC) {
+                    ReviewDTO review = reviewDTOMapper.toDTO(reviewService.getReviewByAntwortFachId(a.getFachId()));
+                    if (review != null) {
+                        erreichte += review.getPunkte();
+                    }
+                }
+            }
+
+            double prozent = gesamtMaxPunkte > 0 ? (erreichte / gesamtMaxPunkte) * 100.0 : 0.0;
+            result.add(new VersuchDTO(zeitpunkt, erreichte, gesamtMaxPunkte, prozent));
+        }
+
+        return result;
     }
 }

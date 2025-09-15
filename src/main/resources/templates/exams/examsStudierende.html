@@ -27,31 +27,19 @@
 
   <main role="main" class="container mt-5 pt-5">
 
-    <div class="container mt-5">
-     <h1>Verfügbare Tests</h1>
-      <table class="table">
-        <thead>
-        <tr>
-          <th>Titel</th>
-         <th>Startzeit</th>
-         <th>Endzeit</th>
-          <th>Aktion</th>
-        </tr>
-       </thead>
-        <tbody>
-       <tr th:each="exam : ${exams}">
-           <td th:text="${exam.title}"></td>
-           <td th:text="${exam.startTime}"></td>
-           <td th:text="${exam.endTime}"></td>
-           <td th:text="${exam.resultTime}"></td>
-         <td>
-            <a th:href="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" class="btn btn-primary">Test starten</a>
-            <!-- hier weitere Aktionen: Ergebnis, CSV Export -->
-         </td>
-       </tr>
-        </tbody>
-     </table>
-   </div>
+      <!-- Flash Message anzeigen -->
+      <div th:if="${message}" class="alert"
+           th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+          <span th:text="${message}"></span>
+      </div>
+
+      <ul class="list-group">
+          <li class="list-group-item" th:each="exam : ${exams}">
+              <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}"
+                 th:text="${exam.title}">
+              </a>
+          </li>
+      </ul>
 
   </main>
 

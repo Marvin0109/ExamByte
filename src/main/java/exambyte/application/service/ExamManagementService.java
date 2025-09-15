@@ -1,8 +1,6 @@
 package exambyte.application.service;
 
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,4 +36,6 @@ public interface ExamManagementService {
     void deleteByFachId(UUID examFachId);
 
     void reset();
+
+    List<VersuchDTO> getAllAttempts(UUID examFachId, String studentLogin);
 }

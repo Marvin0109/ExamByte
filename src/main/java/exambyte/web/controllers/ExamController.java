@@ -4,6 +4,7 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.VersuchDTO;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.common.QuestionTypeWeb;
@@ -23,10 +24,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static org.unbescape.csv.CsvEscape.escapeCsv;
 
@@ -225,13 +227,60 @@ public class ExamController {
         return "/exams/examsStudierende";
     }
 
-    // TODO: Durchführen von Exams implementieren in HTML
+    @GetMapping("/examsDurchfuehren/{examFachId}/menu")
+    @Secured("ROLE_STUDENT")
+    public String examMenu(@PathVariable("examFachId") String examFachId, Model model, OAuth2AuthenticationToken auth) {
+        OAuth2User user = auth.getPrincipal();
+        String studentLogin = user.getAttribute("login");
+        ExamDTO examDTO = examManagementService.getExam(UUID.fromString(examFachId));
+        boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(
+                UUID.fromString(examFachId),
+                studentLogin
+        );
+
+        if (alreadySubmitted) {
+            List<VersuchDTO> allAttempts = examManagementService.getAllAttempts(
+                    UUID.fromString(examFachId), studentLogin
+            );
+            model.addAttribute("attempts", allAttempts);
+        } else {
+            model.addAttribute("attempts", Collections.emptyList());
+        }
+
+        String fristAnzeige = "";
+        boolean timeLeft = false;
+
+        LocalDateTime now = LocalDateTime.now();
+        if (now.isAfter(examDTO.endTime())) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
+            String endTimeFormatted = examDTO.endTime().format(formatter);
+
+            fristAnzeige = "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
+                    "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
+        } else {
+            Duration diff = Duration.between(examDTO.startTime(), examDTO.endTime());
+
+            long days = diff.toDays();
+            long hours = diff.toHours();
+
+            fristAnzeige = days + " d " + hours + " h";
+            timeLeft = true;
+        }
+
+        model.addAttribute("exam", examDTO);
+        model.addAttribute("alreadySubmitted", alreadySubmitted);
+        model.addAttribute("timeLeft", fristAnzeige);
+        model.addAttribute("timeLeftBool", timeLeft);
+
+        return "/exams/examMenu";
+    }
+
     @GetMapping("/examsDurchfuehren/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String startExam(@PathVariable("examFachId") String examFachId, OAuth2AuthenticationToken auth, Model model) {
         OAuth2User user = auth.getPrincipal();
         String studentName = user.getAttribute("login");
-        boolean alreadySubmitted = examManagementService.isExamAlreadySubmitted(UUID.fromString(examFachId), user.getAttribute("login"));
+
         ExamDTO examDTO = examManagementService.getExam(UUID.fromString(examFachId));
         List<FrageDTO> fragen = examManagementService.getFragenForExam(UUID.fromString(examFachId));
 
@@ -263,7 +312,6 @@ public class ExamController {
         form.setQuestions(questions);
 
         model.addAttribute("exam", form);
-        model.addAttribute("alreadySubmitted", alreadySubmitted); // Gibt die True oder False ans Formular, false wenn Anzahl an Exams (12) erreicht ist
         model.addAttribute("name", studentName);
         return "/exams/examsDurchfuehren";
     }
@@ -287,9 +335,11 @@ public class ExamController {
         if (success) {
             redirectAttributes.addFlashAttribute("message",
                     "Alle Antworten erfolgreich eingereicht!");
+            redirectAttributes.addFlashAttribute("success", true);
         } else {
             redirectAttributes.addFlashAttribute("message",
                     "Fehler beim Einreichen der Antworten.");
+            redirectAttributes.addFlashAttribute("success", false);
         }
         return "redirect:/exams/examsStudierende";
     }
