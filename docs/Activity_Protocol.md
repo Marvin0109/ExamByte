@@ -248,3 +248,7 @@ war eh nicht zu gebrauchen
 
 11.09.2025
 - SubmitExam Test geschrieben, weitere TODOs hinzugefügt (s. ExamManagementServiceTest)
+
+15.09.2025
+- Informationen zu den jeweiligen Tests und Optionen sind jetzt auf eine extra Menü Seite implementiert worden
+- 
