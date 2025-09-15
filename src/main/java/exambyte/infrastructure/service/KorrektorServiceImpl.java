@@ -26,13 +26,24 @@ public class KorrektorServiceImpl  implements KorrektorService {
 
     @Override
     public void saveKorrektor(String name) {
-        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+        if (name.equals("Automatischer Korrektor")) {
+            UUID automatic = UUID.fromString("11111111-1111-1111-1111-111111111111");
+            Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                    .id(null)
+                    .fachId(automatic)
+                    .name(name)
+                    .build();
+
+            korrektorRepository.save(korrektor);
+        } else {
+            Korrektor korrektor = new Korrektor.KorrektorBuilder()
                 .id(null)
                 .fachId(null)
                 .name(name)
                 .build();
 
-        korrektorRepository.save(korrektor);
+            korrektorRepository.save(korrektor);
+        }
     }
 
     @Override

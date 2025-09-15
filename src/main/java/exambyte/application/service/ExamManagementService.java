@@ -38,4 +38,6 @@ public interface ExamManagementService {
     void reset();
 
     List<VersuchDTO> getAllAttempts(UUID examFachId, String studentLogin);
+
+    void saveAutomaticReviewer();
 }

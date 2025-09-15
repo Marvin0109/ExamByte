@@ -6,6 +6,7 @@ import exambyte.domain.mapper.*;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.persistence.entities.KorrektorEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final FrageService frageService;
     private final StudentService studentService;
     private final ProfessorService professorService;
+    private final KorrektorService korrektorService;
     private final KorrekteAntwortenService korrekteAntwortenService;
     private final ReviewService reviewService;
     private final AutomaticReviewService automaticReviewService;
@@ -32,6 +34,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     public ExamManagementServiceImpl(ExamService examService, AntwortService antwortService, FrageService frageService,
                                      StudentService studentService, ProfessorService professorService,
+                                     KorrektorService korrektorService,
                                      ExamRepository examRepository, ExamDTOMapper examDTOMapper,
                                      FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper,
                                      KorrekteAntwortenService korrekteAntwortenService,
@@ -43,6 +46,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.frageService = frageService;
         this.studentService = studentService;
         this.professorService = professorService;
+        this.korrektorService = korrektorService;
         this.examRepository = examRepository;
         this.examDTOMapper = examDTOMapper;
         this.frageDTOMapper = frageDTOMapper;
@@ -96,10 +100,20 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
             for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
                 try {
+                    System.out.println(entry.getKey());
                     UUID frageFachId = UUID.fromString(entry.getKey());
-                    String antwortText = String.join(" ", entry.getValue());
+                    Object value = entry.getValue();
+                    String antwortText = "";
+
+                    if (value instanceof String[]) {
+                        antwortText = String.join(",", (String[]) value); // Mehrere Checkboxen
+                    } else {
+                        antwortText = value.toString(); // Single Choice oder Freitext
+                    }
+
 
                     AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
+                            .fachId(null)
                             .antwortText(antwortText)
                             .frageFachId(frageFachId)
                             .studentFachId(studentFachId)
@@ -109,10 +123,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
                     antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
                 } catch (IllegalArgumentException e) {
-                    // Key war keine UUID, z.B. CSRF oder andere hidden fields → einfach ignorieren
-                    continue;
+                    e.printStackTrace();
+                    return false;
                 }
             }
+
+            //TODO: Es werden nicht zu alle MC/SC Fragen automatisch Reviews erstellt
 
             List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
                     .map(frageDTOMapper::toDTO)
@@ -143,6 +159,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -241,7 +258,9 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             double erreichte = 0.0;
             for (AntwortDTO a : antworten) {
                 FrageDTO frage = frageMap.get(a.getFrageFachId());
-                if (frage.getType() == QuestionTypeDTO.MC || frage.getType() == QuestionTypeDTO.SC) {
+                if (frage.getType().equals(QuestionTypeDTO.MC) || frage.getType().equals(QuestionTypeDTO.SC) &&
+                !frage.getType().equals(QuestionTypeDTO.FREITEXT)) {
+                    System.out.println(frage.getType().toString());
                     ReviewDTO review = reviewDTOMapper.toDTO(reviewService.getReviewByAntwortFachId(a.getFachId()));
                     if (review != null) {
                         erreichte += review.getPunkte();
@@ -254,5 +273,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         }
 
         return result;
+    }
+
+    @Override
+    public void saveAutomaticReviewer() {
+        if (korrektorService.getKorrektorByName("Automatischer Korrektor").isEmpty()) {
+            korrektorService.saveKorrektor("Automatischer Korrektor");
+        }
     }
 }

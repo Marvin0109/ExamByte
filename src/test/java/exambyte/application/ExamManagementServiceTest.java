@@ -1,22 +1,24 @@
 package exambyte.application;
 
+import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.service.AutomaticReviewService;
 import exambyte.application.service.AutomaticReviewServiceImpl;
 import exambyte.application.service.ExamManagementService;
 import exambyte.application.service.ExamManagementServiceImpl;
-import exambyte.domain.mapper.AntwortDTOMapper;
-import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.mapper.FrageDTOMapper;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
+import exambyte.domain.mapper.*;
+import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
-import exambyte.infrastructure.mapper.AntwortDTOMapperImpl;
-import exambyte.infrastructure.mapper.ExamDTOMapperImpl;
-import exambyte.infrastructure.mapper.FrageDTOMapperImpl;
-import exambyte.infrastructure.mapper.KorrekteAntwortenDTOMapperImpl;
+import exambyte.infrastructure.mapper.*;
 import exambyte.infrastructure.persistence.repository.ExamRepositoryImpl;
 import exambyte.infrastructure.service.*;
 import org.flywaydb.core.internal.jdbc.JdbcTemplate;
@@ -29,8 +31,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class ExamManagementServiceTest {
@@ -41,11 +42,13 @@ public class ExamManagementServiceTest {
     private FrageService frageService;
     private StudentService studentService;
     private ProfessorService professorService;
+    private KorrektorService korrektorService;
     private KorrekteAntwortenService korrekteAntwortenService;
     private ExamDTOMapper examDTOMapper;
     private FrageDTOMapper frageDTOMapper;
     private AntwortDTOMapper antwortDTOMapper;
     private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
+    private ReviewDTOMapper reviewDTOMapper;
     private ExamManagementService examManagementService;
     private ReviewService reviewService;
     private AutomaticReviewService automaticReviewService;
@@ -58,16 +61,19 @@ public class ExamManagementServiceTest {
         frageService = mock(FrageServiceImpl.class);
         studentService = mock(StudentServiceImpl.class);
         professorService = mock(ProfessorServiceImpl.class);
+        korrektorService = mock(KorrektorServiceImpl.class);
         korrekteAntwortenService = mock(KorrekteAntwortenServiceImpl.class);
         reviewService = mock(ReviewServiceImpl.class);
         automaticReviewService = mock(AutomaticReviewServiceImpl.class);
         examDTOMapper = mock(ExamDTOMapperImpl.class);
         frageDTOMapper = mock(FrageDTOMapperImpl.class);
         antwortDTOMapper = mock(AntwortDTOMapperImpl.class);
+        reviewDTOMapper = mock(ReviewDTOMapperImpl.class);
         korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
         examManagementService = new ExamManagementServiceImpl(examService, antwortService, frageService, studentService,
-                professorService, examRepository, examDTOMapper, frageDTOMapper, antwortDTOMapper, korrekteAntwortenService,
-                korrekteAntwortenDTOMapper, reviewService, automaticReviewService);
+                professorService, korrektorService, examRepository, examDTOMapper, frageDTOMapper, antwortDTOMapper,
+                korrekteAntwortenService, korrekteAntwortenDTOMapper, reviewDTOMapper, reviewService,
+                automaticReviewService);
     }
 
     @Test
@@ -275,8 +281,114 @@ public class ExamManagementServiceTest {
         );
     }
 
-    // TODO
     @Test
     @DisplayName("submitExam Test")
-    void test_12() {}
+    void test_12() {
+        // Arrange
+        String studentLogin = "Marvin0109";
+        UUID studentFachId = UUID.randomUUID();
+        UUID professorFachId = UUID.randomUUID();
+        Map<String, String[]> antworten = new HashMap<>();
+        UUID examFachId = UUID.randomUUID();
+        UUID frageFachId1 = UUID.randomUUID();
+        UUID frageFachId2 = UUID.randomUUID();
+
+        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime lastChangesZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
+
+        Frage frage1 = new Frage.FrageBuilder()
+                .fachId(frageFachId1)
+                .frageText("Fragetext1")
+                .maxPunkte(10)
+                .type(QuestionType.SC)
+                .professorUUID(professorFachId)
+                .examUUID(examFachId)
+                .build();
+
+        Frage frage2 = new Frage.FrageBuilder()
+                .fachId(frageFachId2)
+                .frageText("Fragetext2")
+                .maxPunkte(5)
+                .type(QuestionType.MC)
+                .professorUUID(professorFachId)
+                .examUUID(examFachId)
+                .build();
+
+        FrageDTO frageDTO1 = new FrageDTO(
+                null,
+                frage1.getFachId(),
+                frage1.getFrageText(),
+                frage1.getMaxPunkte(),
+                QuestionTypeDTO.valueOf(frage1.getType().toString()),
+                frage1.getProfessorUUID(),
+                frage1.getExamUUID());
+
+        FrageDTO frageDTO2 = new FrageDTO(
+                null,
+                frage2.getFachId(),
+                frage2.getFrageText(),
+                frage2.getMaxPunkte(),
+                QuestionTypeDTO.valueOf(frage2.getType().toString()),
+                frage2.getProfessorUUID(),
+                frage2.getExamUUID());
+
+        Antwort antwort1 = new Antwort.AntwortBuilder()
+                .antwortText("Antwort 1")
+                .frageFachId(frageFachId1)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwortZeitpunkt)
+                .lastChangesZeitpunkt(lastChangesZeitpunkt)
+                .build();
+
+        Antwort antwort2 = new Antwort.AntwortBuilder()
+                .antwortText("Antwort 1 Antwort 2")
+                .frageFachId(frageFachId2)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwortZeitpunkt)
+                .lastChangesZeitpunkt(lastChangesZeitpunkt)
+                .build();
+
+        AntwortDTO antwortDTO1 = new AntwortDTO.AntwortDTOBuilder()
+                .fachId(antwort1.getFachId())
+                .antwortText(antwort1.getAntwortText())
+                .frageFachId(antwort1.getFrageFachId())
+                .studentFachId(antwort1.getStudentUUID())
+                .antwortZeitpunkt(antwort1.getAntwortZeitpunkt())
+                .lastChangesZeitpunkt(antwort1.getLastChangesZeitpunkt())
+                .build();
+
+        AntwortDTO antwortDTO2 = new AntwortDTO.AntwortDTOBuilder()
+                .fachId(antwort2.getFachId())
+                .antwortText(antwort2.getAntwortText())
+                .frageFachId(antwort2.getFrageFachId())
+                .studentFachId(antwort2.getStudentUUID())
+                .antwortZeitpunkt(antwort2.getAntwortZeitpunkt())
+                .lastChangesZeitpunkt(antwort2.getLastChangesZeitpunkt())
+                .build();
+
+        antworten.put(frageFachId1.toString(), new String[]{"Antwort 1"});
+        antworten.put(frageFachId2.toString(), new String[]{"Antwort 1, Antwort 2"});
+
+        when(studentService.getStudentFachId(studentLogin)).thenReturn(studentFachId);
+        when(antwortDTOMapper.toDomain(antwortDTO1)).thenReturn(antwort1);
+        when(antwortDTOMapper.toDomain(antwortDTO2)).thenReturn(antwort2);
+        when(antwortDTOMapper.toDTO(antwort1)).thenReturn(antwortDTO1);
+        when(antwortDTOMapper.toDTO(antwort2)).thenReturn(antwortDTO2);
+        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage1, frage2));
+        when(frageDTOMapper.toDTO(frage1)).thenReturn(frageDTO1);
+        when(frageDTOMapper.toDTO(frage2)).thenReturn(frageDTO2);
+        when(antwortService.findByStudentAndFrage(studentFachId, frageFachId1)).thenReturn(antwort1);
+        when(antwortService.findByStudentAndFrage(studentFachId, frageFachId2)).thenReturn(antwort2);
+
+        // Act
+        boolean result = examManagementService.submitExam(studentLogin, antworten, examFachId);
+
+        // Assert
+        assertTrue(result);
+
+        verify(automaticReviewService).automatischeReviewMC(any(), any(), any(), eq(studentFachId));
+        verify(automaticReviewService).automatischeReviewSC(any(), any(), any(), eq(studentFachId));
+
+        verify(antwortService, times(2)).addAntwort(any());
+    }
 }

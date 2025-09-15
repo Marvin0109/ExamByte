@@ -42,8 +42,11 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
                     String richtigeAntwort = korrekteAntwort.get().getAntworten();
                     boolean isCorrect = studentAntwort.get().getAntwortText().equals(richtigeAntwort);
 
-                    ReviewDTO review = new ReviewDTO(null, null, studentAntwort.get().getFachId(),
-                            null, "Lösung: " + richtigeAntwort, isCorrect ? 1 : 0);
+                    // UUID für automatische Review
+                    UUID automaticKorrektor = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+                    ReviewDTO review = new ReviewDTO(null, UUID.randomUUID(), studentAntwort.get().getFachId(),
+                            automaticKorrektor, "Lösung: " + richtigeAntwort, isCorrect ? 1 : 0);
                     
                     reviewDTOList.add(review);
                     reviewService.addReview(reviewDTOMapper.toDomain(review));
@@ -81,8 +84,11 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
 
                     String richtigeAntwortenText = String.join(", ", richtigeAntworten);
 
-                    ReviewDTO review = new ReviewDTO(null, null, studentAntwort.get().getFachId(),
-                            null, "Lösung: " + richtigeAntwortenText, points);
+                    // UUID für automatische Review
+                    UUID automaticKorrektor = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+                    ReviewDTO review = new ReviewDTO(null, UUID.randomUUID(), studentAntwort.get().getFachId(),
+                            automaticKorrektor, "Lösung: " + richtigeAntwortenText, points);
                     reviewDTOList.add(review);
                     reviewService.addReview(reviewDTOMapper.toDomain(review));
                 }

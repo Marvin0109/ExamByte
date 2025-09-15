@@ -33,6 +33,8 @@ public class WebController {
      */
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
+        //TODO: Erstmal hier für jetzt den automatischen Korrektor in die DB speichern
+        examManagementService.saveAutomaticReviewer();
         model.addAttribute("currentPath", request.getRequestURI());
         return "index";
     }

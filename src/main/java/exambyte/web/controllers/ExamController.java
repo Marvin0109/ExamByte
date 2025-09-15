@@ -258,7 +258,7 @@ public class ExamController {
             fristAnzeige = "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
                     "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
         } else {
-            Duration diff = Duration.between(examDTO.startTime(), examDTO.endTime());
+            Duration diff = Duration.between(LocalDateTime.now(), examDTO.endTime());
 
             long days = diff.toDays();
             long hours = diff.toHours();

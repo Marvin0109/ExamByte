@@ -34,14 +34,13 @@
         <h1 th:text="${exam.title}">Testtitel</h1>
 
         <div th:each="frage, iterStat : ${exam.questions}" class="mb-4">
-            <input type="hidden" th:name="frageFachIds" th:value="${frage.fachId}"/>
 
             <label th:text="'Frage ' + (${iterStat.index}+1) + ': ' + ${frage.questionText}"></label>
 
             <!-- Multiple Choice -->
             <div th:if="${frage.type == 'MC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                    <input type="checkbox" th:name="'antworten[' + ${frage.fachId} + ']'" th:value="${antwort}"/>
+                    <input type="checkbox" th:name="${frage.fachId}" th:value="${antwort}"/>
                     <span th:text="${antwort}"></span>
                 </div>
             </div>
@@ -49,14 +48,14 @@
             <!-- Single Choice -->
             <div th:if="${frage.type == 'SC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                    <input type="radio" th:name="'antworten[' + ${frage.fachId} + ']'" th:value="${antwort}"/>
+                    <input type="radio" th:name="${frage.fachId}" th:value="${antwort}"/>
                     <span th:text="${antwort}"></span>
                 </div>
             </div>
 
             <!-- Freitext -->
             <div th:if="${frage.type == 'FREITEXT'}">
-                <textarea th:name="'antworten[' + ${frage.fachId} + ']'" class="form-control" rows="6"></textarea>
+                <textarea th:name="${frage.fachId}" class="form-control" rows="6"></textarea>
             </div>
         </div>
 
