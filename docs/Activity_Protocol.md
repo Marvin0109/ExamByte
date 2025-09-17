@@ -253,3 +253,7 @@ war eh nicht zu gebrauchen
 - Informationen zu den jeweiligen Tests und Optionen sind jetzt auf eine extra Menü Seite implementiert worden
 - Automatischen Korrektor initialisiert
 - Automatische Bewertungen muss noch behoben werden, s. TODO
+
+17.09.2025
+- Tests geschrieben für Automatisierte Bewertungen
+- Bugs: s. Issues
