@@ -6,12 +6,12 @@ import exambyte.domain.mapper.*;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
-import exambyte.infrastructure.persistence.entities.KorrektorEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
@@ -93,75 +93,90 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .anyMatch(frage -> antwortService.findByStudentAndFrage(studentFachId, frage.getFachId()) != null);
     }
 
+    /**
+     * Speichert die Antworten eines Studenten zu einem Exam und erstellt automatische
+     * Reviews für Single-Choice- und Multiple-Choice-Fragen.
+     *
+     * @param studentLogin Login-Name des Studenten
+     * @param antworten    Map<FrageFachId, Antworten[]> – alle vom Frontend gesendeten Antworten
+     * @param examFachId   Fach-ID des Exams
+     * @return true, wenn alle Antworten und Reviews erfolgreich gespeichert wurden
+     */
     @Override
     public boolean submitExam(String studentLogin, Map<String, String[]> antworten, UUID examFachId) {
-        try {
-            UUID studentFachId = studentService.getStudentFachId(studentLogin);
+        // 1. Student ermitteln
+        UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
-            for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
-                try {
-                    System.out.println(entry.getKey());
-                    UUID frageFachId = UUID.fromString(entry.getKey());
-                    Object value = entry.getValue();
-                    String antwortText = "";
+        // 2. Eingehende Antworten des Studenten speichern
+        for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
+            String frageKey = entry.getKey();
+            Object value = entry.getValue();
 
-                    if (value instanceof String[]) {
-                        antwortText = String.join(",", (String[]) value); // Mehrere Checkboxen
-                    } else {
-                        antwortText = value.toString(); // Single Choice oder Freitext
-                    }
+            try {
+                // Key der Map muss eine UUID (Frage-Fach-ID) sein
+                UUID frageFachId = UUID.fromString(frageKey);
 
-
-                    AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
-                            .fachId(null)
-                            .antwortText(antwortText)
-                            .frageFachId(frageFachId)
-                            .studentFachId(studentFachId)
-                            .antwortZeitpunkt(LocalDateTime.now())
-                            .lastChangesZeitpunkt(LocalDateTime.now())
-                            .build();
-
-                    antwortService.addAntwort(antwortDTOMapper.toDomain(antwortDTO));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                    return false;
+                String[] rawValues;
+                if (value instanceof String[]) {
+                    rawValues = (String[]) value;
+                } else if (value instanceof String) {
+                    rawValues = new String[]{ (String) value };
+                } else {
+                    rawValues = new String[]{};
                 }
+
+                String antwortText = String.join(",", rawValues);
+
+                AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
+                        .fachId(null)
+                        .frageFachId(frageFachId)
+                        .studentFachId(studentFachId)
+                        .antwortText(antwortText)
+                        .antwortZeitpunkt(LocalDateTime.now())
+                        .lastChangesZeitpunkt(LocalDateTime.now())
+                        .build();
+
+                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
+
+            } catch (IllegalArgumentException ex) {
+                // Falls ein Key keine gültige UUID ist → Eingabe ignorieren, weiter mit nächster Frage
+                System.out.println("WARNUNG: Ungültige FrageFachId in SubmitExam: "
+                        + frageKey + " (" + ex.getMessage() + ")");
             }
-
-            //TODO: Es werden nicht zu alle MC/SC Fragen automatisch Reviews erstellt
-
-            List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
-                    .map(frageDTOMapper::toDTO)
-                    .toList();
-
-            List<AntwortDTO> antwortDTOList = new ArrayList<>();
-
-            for (FrageDTO frageDTO : fragenDTOList) {
-                antwortDTOList.add(antwortDTOMapper.toDTO(
-                        antwortService.findByStudentAndFrage(studentFachId, frageDTO.getFachId()))
-                );
-            }
-
-            // Jetzt die MC-Liste und SC-Liste erstellen
-            ReviewData reviewDataMC = new ReviewData(fragenDTOList, antwortDTOList,
-                    korrekteAntwortenDTOMapper, korrekteAntwortenService);
-            ReviewData reviewDataSC = new ReviewData(fragenDTOList, antwortDTOList,
-                    korrekteAntwortenDTOMapper, korrekteAntwortenService);
-
-            reviewDataMC.filterToType(QuestionTypeDTO.MC);
-            reviewDataSC.filterToType(QuestionTypeDTO.SC);
-
-            automaticReviewService.automatischeReviewMC(reviewDataMC.getFragen(), reviewDataMC.getAntworten(),
-                    reviewDataMC.getKorrekteAntworten(), studentFachId);
-            automaticReviewService.automatischeReviewSC(reviewDataSC.getFragen(), reviewDataSC.getAntworten(),
-                    reviewDataSC.getKorrekteAntworten(), studentFachId);
-
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
         }
+
+        // 3. Alle Fragen dieses Exams abrufen
+        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
+                .map(frageDTOMapper::toDTO)
+                .toList();
+
+        // 4. Alle gespeicherten Antworten des Studenten für dieses Exam abrufen
+        List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
+                .map(f -> antwortDTOMapper.toDTO(
+                        antwortService.findByStudentAndFrage(studentFachId, f.getFachId())))
+                .filter(Objects::nonNull)
+                .toList();
+
+        // 5. ReviewData-Objekte für MC und SC vorbereiten
+        ReviewData mcData = new ReviewData(fragenDTOList, antwortDTOList,
+                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+        ReviewData scData = new ReviewData(fragenDTOList, antwortDTOList,
+                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+
+        mcData.filterToType(QuestionTypeDTO.MC);
+        scData.filterToType(QuestionTypeDTO.SC);
+
+        // 6. Automatische Reviews erzeugen
+        List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
+                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId);
+        List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
+                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId);
+
+        // 7. Reviews speichern
+        Stream.concat(reviewsMC.stream(), reviewsSC.stream())
+                .forEach(r -> reviewService.addReview(reviewDTOMapper.toDomain(r)));
+
+        return true;
     }
 
     @Override
@@ -258,8 +273,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             double erreichte = 0.0;
             for (AntwortDTO a : antworten) {
                 FrageDTO frage = frageMap.get(a.getFrageFachId());
-                if (frage.getType().equals(QuestionTypeDTO.MC) || frage.getType().equals(QuestionTypeDTO.SC) &&
-                !frage.getType().equals(QuestionTypeDTO.FREITEXT)) {
+                if ((frage.getType().equals(QuestionTypeDTO.MC) || frage.getType().equals(QuestionTypeDTO.SC))
+                        && !frage.getType().equals(QuestionTypeDTO.FREITEXT)) {
                     System.out.println(frage.getType().toString());
                     ReviewDTO review = reviewDTOMapper.toDTO(reviewService.getReviewByAntwortFachId(a.getFachId()));
                     if (review != null) {
