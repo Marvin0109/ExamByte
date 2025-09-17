@@ -176,6 +176,8 @@ public class ExamDBTest {
         Optional<Review> geladenReview = reviewRepository.findByFachId(review.getFachId());
         Optional<KorrekteAntworten> geladenKorrekteAntworten = korrekteAntwortenRepository.findByFachId(korrekteAntworten.getFachId());
 
+        Review geladenReviewUeberAntwort = reviewRepository.findByAntwortFachId(antwort.getFachId());
+
         // Assert
 
         // Antwort
@@ -222,6 +224,9 @@ public class ExamDBTest {
         assertThat(geladenReview.get().getKorrektorFachId()).isEqualTo(korrektor.uuid());
         assertThat(geladenReview.get().getBewertung()).isEqualTo("Bewertung");
         assertThat(geladenReview.get().getPunkte()).isEqualTo(0);
+
+        // Review über Antwort FachId
+        assertThat(geladenReviewUeberAntwort).isNotNull();
     }
 
     @Test

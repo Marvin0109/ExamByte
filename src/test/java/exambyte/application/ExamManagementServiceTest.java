@@ -1,19 +1,13 @@
 package exambyte.application;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.*;
 import exambyte.application.service.AutomaticReviewService;
 import exambyte.application.service.AutomaticReviewServiceImpl;
 import exambyte.application.service.ExamManagementService;
 import exambyte.application.service.ExamManagementServiceImpl;
 import exambyte.domain.mapper.*;
-import exambyte.domain.model.aggregate.exam.Antwort;
-import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+import exambyte.domain.model.aggregate.exam.*;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
@@ -26,9 +20,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.A;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -151,14 +147,9 @@ public class ExamManagementServiceTest {
     @DisplayName("isExamAlreadySubmitted Test")
     void test_03() {}
 
-    // TODO
-    @Test
-    @DisplayName("submitExam Test")
-    void test_04() {}
-
     @Test
     @DisplayName("Exam erfolgreich gefunden")
-    void test_05() {
+    void test_04() {
         // Arrange
         String title = "Titel 1";
         UUID examId = UUID.randomUUID();
@@ -188,7 +179,7 @@ public class ExamManagementServiceTest {
 
     @Test
     @DisplayName("Exam nicht erfolgreich gefunden")
-    void test_06() {
+    void test_05() {
         // Arrange
         UUID examId = UUID.randomUUID();
 
@@ -203,7 +194,7 @@ public class ExamManagementServiceTest {
 
     @Test
     @DisplayName("Ein Exam wird erfolgreich gefunden nach der Startzeit")
-    void test_07() {
+    void test_06() {
         // Arrange
         UUID examId = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
@@ -220,7 +211,7 @@ public class ExamManagementServiceTest {
 
     @Test
     @DisplayName("Ein Exam wurde nicht gefunden mit der gegebenen Startzeit")
-    void test_08() {
+    void test_07() {
         // Arrange
         UUID examId = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
@@ -236,11 +227,11 @@ public class ExamManagementServiceTest {
     // TODO
     @Test
     @DisplayName("createChoiceFrage Test")
-    void test_09() {}
+    void test_08() {}
 
     @Test
     @DisplayName("deleteByFachId Test")
-    void test_10() {
+    void test_09() {
         // Arrange
         UUID id = UUID.randomUUID();
 
@@ -253,7 +244,7 @@ public class ExamManagementServiceTest {
 
     @Test
     @DisplayName("reset Test")
-    void test_11() {
+    void test_10() {
         // Act
         examManagementService.reset();
 
@@ -283,7 +274,7 @@ public class ExamManagementServiceTest {
 
     @Test
     @DisplayName("submitExam Test")
-    void test_12() {
+    void test_11() {
         // Arrange
         String studentLogin = "Marvin0109";
         UUID studentFachId = UUID.randomUUID();
@@ -390,5 +381,83 @@ public class ExamManagementServiceTest {
         verify(automaticReviewService).automatischeReviewSC(any(), any(), any(), eq(studentFachId));
 
         verify(antwortService, times(2)).addAntwort(any());
+    }
+
+    @Test
+    @DisplayName("getAllAttempts ist erfolgreich")
+    void test_12() {
+        // Arrange
+        UUID studentLogin = UUID.randomUUID();
+        UUID studentFachId = UUID.randomUUID();
+        UUID frageFachId = UUID.randomUUID();
+        UUID examFachId = UUID.randomUUID();
+        UUID antwortFachId = UUID.randomUUID();
+        UUID korrektorFachId = UUID.randomUUID();
+        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime lastChangesZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
+
+        Frage frage = new Frage.FrageBuilder()
+                .fachId(frageFachId)
+                .examUUID(examFachId)
+                .maxPunkte(5)
+                .type(QuestionType.MC)
+                .frageText("Testfrage")
+                .professorUUID(UUID.randomUUID())
+                .build();
+
+        FrageDTO frageDTO = new FrageDTO(
+                null,
+                frageFachId,
+                "Testfrage",
+                5,
+                QuestionTypeDTO.MC,
+                UUID.randomUUID(),
+                examFachId);
+
+        AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
+                .fachId(antwortFachId)
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortText("Antwort")
+                .antwortZeitpunkt(antwortZeitpunkt)
+                .lastChangesZeitpunkt(lastChangesZeitpunkt)
+                .build();
+
+        Antwort antwortDomain = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(antwortFachId)
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortText("Antwort")
+                .antwortZeitpunkt(antwortZeitpunkt)
+                .lastChangesZeitpunkt(lastChangesZeitpunkt)
+                .build();
+
+        Review review = new Review.ReviewBuilder()
+                .fachId(UUID.randomUUID())
+                .antwortFachId(antwortFachId)
+                .korrektorFachId(korrektorFachId)
+                .bewertung("Gut")
+                .punkte(5)
+                .build();
+
+        ReviewDTO reviewDTO = new ReviewDTO(null, UUID.randomUUID(), antwortFachId, korrektorFachId, "Gut", 5);
+
+        // Stubs
+        when(studentService.getStudentFachId(anyString())).thenReturn(studentFachId);
+        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
+        when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
+        when(antwortService.findByStudentAndFrage(studentFachId, frageFachId)).thenReturn(antwortDomain);
+        when(antwortDTOMapper.toDTO(antwortDomain)).thenReturn(antwortDTO);
+        when(reviewService.getReviewByAntwortFachId(antwortFachId)).thenReturn(review);
+        when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
+
+        // Act
+        List<VersuchDTO> attempts = examManagementService.getAllAttempts(examFachId, "testStudent");
+
+        // Assert
+        assertThat(attempts).isNotNull();
+        assertThat(attempts).hasSize(1);
+        assertThat(attempts.get(0).erreichtePunkte()).isEqualTo(5);
     }
 }
