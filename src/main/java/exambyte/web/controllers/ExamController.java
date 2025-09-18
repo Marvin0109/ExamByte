@@ -154,6 +154,7 @@ public class ExamController {
         return "redirect:/exams/examsProfessoren";
     }
 
+    // TODO: Braucht überarbeitung
     @PostMapping("/examsProfessoren/export")
     @Secured("ROLE_ADMIN")
     public String exportExamFormCsv(
@@ -316,6 +317,7 @@ public class ExamController {
         return "/exams/examsDurchfuehren";
     }
 
+    // TODO: Eine zweite RequestParam implementieren für die Freitextantworten
     @PostMapping("/submit/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String submitExam(
@@ -326,6 +328,7 @@ public class ExamController {
 
         OAuth2User user = auth.getPrincipal();
 
+        // TODO: Nötig? Sidequest für später
         // CSRF-Parameter entfernen
         antworten.remove("_csrf");
 
@@ -344,7 +347,6 @@ public class ExamController {
         return "redirect:/exams/examsStudierende";
     }
 
-    // TODO: unvollständig, Fragetypen fehlen (MC, SC und Freitext)
     @GetMapping("/showExam/{id}")
     @Secured("ROLE_REVIEWER")
     public String showExam(Model model, @PathVariable UUID id) {
