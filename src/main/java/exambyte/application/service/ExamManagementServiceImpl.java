@@ -116,6 +116,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 // Key der Map muss eine UUID (Frage-Fach-ID) sein
                 UUID frageFachId = UUID.fromString(frageKey);
 
+                // TODO: Nicht mehr nötig, wegen dem zweiten RequestParam für Freitext
                 String[] rawValues;
                 if (value instanceof String[]) {
                     rawValues = (String[]) value;
@@ -248,6 +249,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .sum();
 
         // Alle Antworten des Studenten für dieses Exam
+        // TODO: Was ist mit Freitextaufgaben, wo es noch keine Reviews zu gibt?
         List<AntwortDTO> alleAntworten = frageMap.keySet().stream()
                 .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
                 .filter(Objects::nonNull)
