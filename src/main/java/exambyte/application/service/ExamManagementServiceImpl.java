@@ -6,6 +6,7 @@ import exambyte.domain.mapper.*;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
 
+    @Autowired
     public ExamManagementServiceImpl(ExamService examService, AntwortService antwortService, FrageService frageService,
                                      StudentService studentService, ProfessorService professorService,
                                      KorrektorService korrektorService,
@@ -169,9 +171,11 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
         // 6. Automatische Reviews erzeugen
         List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
-                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId);
+                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId,
+                reviewService);
         List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
-                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId);
+                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId,
+                reviewService);
 
         // 7. Reviews speichern
         Stream.concat(reviewsMC.stream(), reviewsSC.stream())

@@ -377,8 +377,8 @@ public class ExamManagementServiceTest {
         // Assert
         assertTrue(result);
 
-        verify(automaticReviewService).automatischeReviewMC(any(), any(), any(), eq(studentFachId));
-        verify(automaticReviewService).automatischeReviewSC(any(), any(), any(), eq(studentFachId));
+        verify(automaticReviewService).automatischeReviewMC(any(), any(), any(), eq(studentFachId), any());
+        verify(automaticReviewService).automatischeReviewSC(any(), any(), any(), eq(studentFachId), any());
 
         verify(antwortService, times(2)).addAntwort(any());
     }

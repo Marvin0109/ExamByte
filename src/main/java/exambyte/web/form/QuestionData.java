@@ -63,11 +63,11 @@ public class QuestionData {
     }
 
     public String getChoices() {
-        return choices;
+        return new String(choices);
     }
 
     public void setChoices(String choices) {
-        this.choices = choices;
+        this.choices = new String(choices);
     }
 
     public String getCorrectAnswer() {
@@ -79,10 +79,10 @@ public class QuestionData {
     }
 
     public String getCorrectAnswers() {
-        return correctAnswers;
+        return new String(correctAnswers);
     }
 
     public void setCorrectAnswers(String correctAnswers) {
-        this.correctAnswers = correctAnswers;
+        this.correctAnswers = new String(correctAnswers);
     }
 }

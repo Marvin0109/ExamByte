@@ -64,11 +64,11 @@ public class ExamForm {
     }
 
     public List<QuestionData> getQuestions() {
-        return questions;
+    return new ArrayList<>(questions);
     }
 
     public void setQuestions(List<QuestionData> questions) {
-        this.questions = questions;
+    this.questions = new ArrayList<>(questions);
     }
 
     public UUID getFachId() {

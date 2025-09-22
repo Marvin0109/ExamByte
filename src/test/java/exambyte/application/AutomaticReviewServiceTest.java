@@ -40,7 +40,7 @@ public class AutomaticReviewServiceTest {
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(reviewService, reviewDTOMapper);
+        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(reviewDTOMapper);
         FrageDTO frage1 = new FrageDTO(
                 null,
                 UUID.randomUUID(),
@@ -107,7 +107,8 @@ public class AutomaticReviewServiceTest {
                 scFragen,
                 antwortDTOList,
                 korrekteAntwortenList,
-                studentUUID
+                studentUUID,
+                reviewService
         );
 
         // Assert
@@ -125,7 +126,7 @@ public class AutomaticReviewServiceTest {
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(reviewService, reviewDTOMapper);
+        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(reviewDTOMapper);
         FrageDTO frage1 = new FrageDTO(
                 null,
                 UUID.randomUUID(),
@@ -191,7 +192,8 @@ public class AutomaticReviewServiceTest {
                 scFragen,
                 antwortDTOList,
                 korrekteAntwortenList,
-                studentUUID
+                studentUUID,
+                reviewService
         );
 
         // Assert

@@ -13,17 +13,16 @@ import java.util.*;
 @Service
 public class AutomaticReviewServiceImpl implements AutomaticReviewService {
 
-    private final ReviewService reviewService;
     private final ReviewDTOMapper reviewDTOMapper;
 
-    public AutomaticReviewServiceImpl(ReviewService reviewService, ReviewDTOMapper reviewDTOMapper) {
-        this.reviewService = reviewService;
+    public AutomaticReviewServiceImpl(ReviewDTOMapper reviewDTOMapper) {
         this.reviewDTOMapper = reviewDTOMapper;
     }
 
     @Override
     public List<ReviewDTO> automatischeReviewSC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
-                                                List<KorrekteAntwortenDTO> korrekteAntworten, UUID studentUUID) {
+                                                List<KorrekteAntwortenDTO> korrekteAntworten, UUID studentUUID,
+                                                ReviewService reviewService) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
@@ -58,7 +57,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
 
     @Override
     public List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen, List<AntwortDTO> antworten, List<KorrekteAntwortenDTO> answers,
-                                                UUID studentUUID) {
+                                                UUID studentUUID, ReviewService reviewService) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
