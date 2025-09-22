@@ -31,12 +31,12 @@ repositories {
 	mavenCentral()
 }
 
-spotbugs {
-	toolVersion = '4.9.1'
-	ignoreFailures = false
-	effort = Effort.DEFAULT
-	reportLevel = Confidence.valueOf("MEDIUM")
-}
+//spotbugs {
+//	toolVersion = '4.9.1'
+//	ignoreFailures = false
+//	effort = Effort.DEFAULT
+//	reportLevel = Confidence.valueOf("MEDIUM")
+//}
 
 jacoco {
 	toolVersion = '0.8.12'
