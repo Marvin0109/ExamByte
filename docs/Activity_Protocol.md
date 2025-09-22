@@ -257,3 +257,8 @@ war eh nicht zu gebrauchen
 17.09.2025
 - Tests geschrieben für Automatisierte Bewertungen
 - Bugs: s. Issues
+
+22.09.2025
+- Das Bearbeiten eines Tests erfolgt! (Prüfung auf Korrektheit folgt)
+- Spotbugs erstmal ausgeschaltet
+- Continuos Integration aufgestellt
