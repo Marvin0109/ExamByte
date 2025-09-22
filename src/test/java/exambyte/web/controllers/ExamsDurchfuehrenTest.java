@@ -69,7 +69,6 @@ public class ExamsDurchfuehrenTest {
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", fachID))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("alreadySubmitted"))
                 .andExpect(model().attributeExists("exam"))
                 .andExpect(model().attribute("name", "Marvin0109"))
                 .andExpect(view().name("/exams/examsDurchfuehren"));

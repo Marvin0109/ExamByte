@@ -279,7 +279,7 @@ public class ExamManagementServiceTest {
         String studentLogin = "Marvin0109";
         UUID studentFachId = UUID.randomUUID();
         UUID professorFachId = UUID.randomUUID();
-        Map<String, String[]> antworten = new HashMap<>();
+        Map<String, List<String>> antworten = new HashMap<>();
         UUID examFachId = UUID.randomUUID();
         UUID frageFachId1 = UUID.randomUUID();
         UUID frageFachId2 = UUID.randomUUID();
@@ -357,8 +357,11 @@ public class ExamManagementServiceTest {
                 .lastChangesZeitpunkt(antwort2.getLastChangesZeitpunkt())
                 .build();
 
-        antworten.put(frageFachId1.toString(), new String[]{"Antwort 1"});
-        antworten.put(frageFachId2.toString(), new String[]{"Antwort 1, Antwort 2"});
+        List<String> list1 = List.of("Antwort 1");
+        List<String> list2 = List.of("Antwort 1, Antwort 2");
+
+        antworten.put(frageFachId1.toString(), list1);
+        antworten.put(frageFachId2.toString(), list2);
 
         when(studentService.getStudentFachId(studentLogin)).thenReturn(studentFachId);
         when(antwortDTOMapper.toDomain(antwortDTO1)).thenReturn(antwort1);

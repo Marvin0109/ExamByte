@@ -63,7 +63,7 @@ public class QuestionData {
     }
 
     public String getChoices() {
-        return new String(choices);
+        return choices != null ? choices : "";
     }
 
     public void setChoices(String choices) {
@@ -71,7 +71,7 @@ public class QuestionData {
     }
 
     public String getCorrectAnswer() {
-        return correctAnswer;
+        return correctAnswer != null ? correctAnswer : "";
     }
 
     public void setCorrectAnswer(String correctAnswer) {
@@ -79,7 +79,7 @@ public class QuestionData {
     }
 
     public String getCorrectAnswers() {
-        return new String(correctAnswers);
+        return correctAnswers != null ? correctAnswers : "";
     }
 
     public void setCorrectAnswers(String correctAnswers) {

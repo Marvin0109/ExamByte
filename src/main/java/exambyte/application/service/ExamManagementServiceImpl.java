@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -105,30 +106,20 @@ public class ExamManagementServiceImpl implements ExamManagementService {
      * @return true, wenn alle Antworten und Reviews erfolgreich gespeichert wurden
      */
     @Override
-    public boolean submitExam(String studentLogin, Map<String, String[]> antworten, UUID examFachId) {
+    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId) {
         // 1. Student ermitteln
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
         // 2. Eingehende Antworten des Studenten speichern
-        for (Map.Entry<String, String[]> entry : antworten.entrySet()) {
+        for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
             String frageKey = entry.getKey();
-            Object value = entry.getValue();
+            List<String> value = entry.getValue();
 
             try {
                 // Key der Map muss eine UUID (Frage-Fach-ID) sein
                 UUID frageFachId = UUID.fromString(frageKey);
 
-                // TODO: Nicht mehr nötig, wegen dem zweiten RequestParam für Freitext
-                String[] rawValues;
-                if (value instanceof String[]) {
-                    rawValues = (String[]) value;
-                } else if (value instanceof String) {
-                    rawValues = new String[]{ (String) value };
-                } else {
-                    rawValues = new String[]{};
-                }
-
-                String antwortText = String.join(",", rawValues);
+                String antwortText = String.join("\n", value);
 
                 AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
                         .fachId(null)
@@ -239,6 +230,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public List<VersuchDTO> getAllAttempts(UUID examFachId, String studentLogin) {
+        System.out.println("Attempt Service Called");
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
         // Alle Fragen des Exams und deren Maximalpunkte
@@ -246,14 +238,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .map(frageDTOMapper::toDTO)
                 .collect(Collectors.toMap(FrageDTO::getFachId, f -> f));
 
-        // Gesamt-MaxPunkte für MC/SC
+        // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
-                .filter(f -> f.getType() == QuestionTypeDTO.MC || f.getType() == QuestionTypeDTO.SC)
                 .mapToDouble(FrageDTO::getMaxPunkte)
                 .sum();
 
         // Alle Antworten des Studenten für dieses Exam
-        // TODO: Was ist mit Freitextaufgaben, wo es noch keine Reviews zu gibt?
         List<AntwortDTO> alleAntworten = frageMap.keySet().stream()
                 .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
                 .filter(Objects::nonNull)
@@ -264,7 +254,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         Map<LocalDateTime, List<AntwortDTO>> gruppiert =
                 alleAntworten.stream()
                         .collect(Collectors.groupingBy(
-                                AntwortDTO::getLastChangesZeitpunkt,
+                                antwort -> antwort.getLastChangesZeitpunkt().truncatedTo(ChronoUnit.MINUTES),
                                 TreeMap::new,
                                 Collectors.toList()
                         ));
@@ -279,13 +269,14 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             double erreichte = 0.0;
             for (AntwortDTO a : antworten) {
                 FrageDTO frage = frageMap.get(a.getFrageFachId());
-                if ((frage.getType().equals(QuestionTypeDTO.MC) || frage.getType().equals(QuestionTypeDTO.SC))
-                        && !frage.getType().equals(QuestionTypeDTO.FREITEXT)) {
+                if (frage.getType().equals(QuestionTypeDTO.MC) || frage.getType().equals(QuestionTypeDTO.SC)) {
                     System.out.println(frage.getType().toString());
                     ReviewDTO review = reviewDTOMapper.toDTO(reviewService.getReviewByAntwortFachId(a.getFachId()));
                     if (review != null) {
                         erreichte += review.getPunkte();
                     }
+                } else if (frage.getType().equals(QuestionTypeDTO.FREITEXT)) {
+                    erreichte += 0.0;
                 }
             }
 

@@ -64,7 +64,7 @@ public class ExamForm {
     }
 
     public List<QuestionData> getQuestions() {
-    return new ArrayList<>(questions);
+        return questions;
     }
 
     public void setQuestions(List<QuestionData> questions) {

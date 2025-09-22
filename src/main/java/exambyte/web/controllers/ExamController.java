@@ -10,6 +10,7 @@ import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.QuestionData;
+import exambyte.web.form.SubmitForm;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -80,6 +80,10 @@ public class ExamController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Fragen.");
             redirectAttributes.addFlashAttribute("messageType", "danger");
+            bindingResult.getAllErrors().forEach(error -> {
+                System.out.println("Fehler: " + error.getDefaultMessage());
+            });
+
             return "redirect:/exams/examsProfessoren";
         }
 
@@ -104,8 +108,10 @@ public class ExamController {
 
         UUID examUUID = examManagementService.getExamByStartTime(form.getStart());
 
+        System.out.println(form.getQuestions().size());
+
         if (form.getQuestions().size() < 6){
-            redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Fragen.");
+            redirectAttributes.addFlashAttribute("message", "Weniger Fragen als sonst.");
             redirectAttributes.addFlashAttribute("messageType", "danger");
             return "redirect:/exams/examsProfessoren";
         }
@@ -312,28 +318,28 @@ public class ExamController {
 
         form.setQuestions(questions);
 
+        SubmitForm submitForm = new SubmitForm();
+
         model.addAttribute("exam", form);
         model.addAttribute("name", studentName);
+        model.addAttribute("submitForm", submitForm);
         return "/exams/examsDurchfuehren";
     }
 
-    // TODO: Eine zweite RequestParam implementieren für die Freitextantworten
     @PostMapping("/submit/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String submitExam(
             @PathVariable("examFachId") String examFachId,
-            @RequestParam Map<String, String[]> antworten,
+            @ModelAttribute SubmitForm antworten,
             OAuth2AuthenticationToken auth,
             RedirectAttributes redirectAttributes) {
 
         OAuth2User user = auth.getPrincipal();
 
-        // TODO: Nötig? Sidequest für später
-        // CSRF-Parameter entfernen
-        antworten.remove("_csrf");
+        System.out.println("Antworten List: " + antworten.getAnswers().toString());
 
         boolean success =
-        examManagementService.submitExam(user.getAttribute("login"), antworten, UUID.fromString(examFachId));
+        examManagementService.submitExam(user.getAttribute("login"), antworten.getAnswers(), UUID.fromString(examFachId));
 
         if (success) {
             redirectAttributes.addFlashAttribute("message",

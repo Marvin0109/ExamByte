@@ -27,7 +27,7 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <form th:action="@{/exams/submit/{examFachId}(examFachId=${exam.fachId})}" method="post">
+    <form th:action="@{/exams/submit/{examFachId}(examFachId=${exam.fachId})}" method="post" th:object="${submitForm}">
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
@@ -40,22 +40,30 @@
             <!-- Multiple Choice -->
             <div th:if="${frage.type == 'MC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                    <input type="checkbox" th:name="${frage.fachId}" th:value="${antwort}"/>
-                    <span th:text="${antwort}"></span>
+                    <input type="checkbox"
+                           th:name="${frage.fachId}"
+                           th:field="*{answers[__${frage.fachId}__]}"
+                           th:value="${antwort}"/>
+                    <label th:text="${antwort}" class="form-check-label"></label>
                 </div>
             </div>
 
             <!-- Single Choice -->
             <div th:if="${frage.type == 'SC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                    <input type="radio" th:name="${frage.fachId}" th:value="${antwort}"/>
-                    <span th:text="${antwort}"></span>
+                    <input type="radio"
+                           th:name="${frage.fachId}"
+                           th:field="*{answers[__${frage.fachId}__]}"
+                           th:value="${antwort}"/>
+                    <label th:text="${antwort}" class="form-check-label"></label>
                 </div>
             </div>
 
             <!-- Freitext -->
             <div th:if="${frage.type == 'FREITEXT'}">
-                <textarea th:name="${frage.fachId}" class="form-control" rows="6"></textarea>
+                <textarea th:name="${frage.fachId}"
+                          th:field="*{answers[__${frage.fachId}__]}"
+                          class="form-control" rows="6"></textarea>
             </div>
         </div>
 

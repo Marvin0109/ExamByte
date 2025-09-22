@@ -48,7 +48,6 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
                             automaticKorrektor, "Lösung: " + richtigeAntwort, isCorrect ? frageDTO.getMaxPunkte() : 0);
                     
                     reviewDTOList.add(review);
-                    reviewService.addReview(reviewDTOMapper.toDomain(review));
                 }
             }
         }
@@ -97,7 +96,6 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
                     ReviewDTO review = new ReviewDTO(null, UUID.randomUUID(), studentAntwort.get().getFachId(),
                             automaticKorrektor, "Lösung: " + richtigeAntwortenText, points);
                     reviewDTOList.add(review);
-                    reviewService.addReview(reviewDTOMapper.toDomain(review));
                 }
             }
         }

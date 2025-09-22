@@ -17,7 +17,7 @@ public interface ExamManagementService {
 
     boolean isExamAlreadySubmitted(UUID examFachId, String studentName);
 
-    boolean submitExam(String studentLogin, Map<String, String[]> antworten, UUID examFachId);
+    boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId);
 
     ExamDTO getExam(UUID examFachId);
 

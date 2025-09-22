@@ -63,13 +63,12 @@ public class ExamsStudierendeTest {
     }
 
     @Test
-    @Disabled
     @WithMockOAuth2User(login = "muz70wuc", roles = {"STUDENT"})
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void test_02() throws Exception {
-        mvc.perform(get("/examsStudierende"))
+        mvc.perform(get("/exams/examsStudierende"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("exams/examsStudierende"))
+                .andExpect(view().name("/exams/examsStudierende"))
                 .andExpect(model().attributeExists("name", "exams"));
     }
 }
