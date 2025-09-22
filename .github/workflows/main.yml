@@ -14,4 +14,4 @@ jobs:
         with: 
           java-version: 21
       - name: Run Gradle
-        run:  ./gradlew checkout
+        run:  ./gradlew check
