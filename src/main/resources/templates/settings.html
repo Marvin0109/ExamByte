@@ -27,6 +27,12 @@
 <main role="main" class="container mt-5 pt-5">
     <h1>Einstellungen</h1>
 
+    <!-- Flash Message anzeigen -->
+    <div th:if="${message}" class="alert"
+         th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+
     <div class="container">
         <div class="row mb-2">
             <div class="col-3 fw-bold">Daten</div>

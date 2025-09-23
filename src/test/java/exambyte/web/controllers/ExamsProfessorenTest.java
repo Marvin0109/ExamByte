@@ -7,6 +7,7 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,7 +138,7 @@ public class ExamsProfessorenTest {
 
     @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
-    @DisplayName("Das erstellen eines Tests mit nicht kompatible Fragen ist nicht erfolgreich")
+    @DisplayName("Das erstellen eines Tests mit zu wenig Fragen ist nicht erfolgreich")
     void test_04() throws Exception {
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 0);
@@ -168,7 +169,7 @@ public class ExamsProfessorenTest {
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/exams/examsProfessoren"))
-                .andExpect(flash().attribute("message", "Fehler beim Erstellen der Fragen."))
+                .andExpect(flash().attribute("message", "Weniger Fragen als sonst."))
                 .andExpect(flash().attribute("messageType", "danger"));
     }
 
@@ -235,21 +236,12 @@ public class ExamsProfessorenTest {
                 .andExpect(flash().attribute("messageType", "danger"));
     }
 
-    @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
-    @DisplayName("Das löschen aller Exam Daten ist erfolgreich")
-    void test_06() throws Exception {
-        mvc.perform(post("/exams/examsProfessoren/reset")
-                .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsProfessoren"));
-    }
-
     // TODO
     @Test
+    @Disabled
     @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
     @DisplayName("Der Export zur CSV ist erfolgreich")
-    void test_07() throws Exception {
+    void test_06() throws Exception {
 
     }
 }

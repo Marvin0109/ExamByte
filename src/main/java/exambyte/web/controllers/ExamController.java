@@ -145,14 +145,6 @@ public class ExamController {
         return "redirect:/exams/examsProfessoren";
     }
 
-    @PostMapping("/examsProfessoren/success")
-    @Secured("ROLE_ADMIN")
-    public String testSuccessMessage(RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("message", "It's working!");
-        redirectAttributes.addFlashAttribute("messageType", "success");
-        return "redirect:/exams/examsProfessoren";
-    }
-
     // TODO: Braucht überarbeitung
     @PostMapping("/examsProfessoren/export")
     @Secured("ROLE_ADMIN")

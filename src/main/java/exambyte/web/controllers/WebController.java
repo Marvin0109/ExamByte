@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * Diese Klasse verwaltet die verschiedenen HTTP-Request-Handler für die Webanwendung,
@@ -61,14 +62,16 @@ public class WebController {
 
     @GetMapping("/settings")
     @Secured("ROLE_ADMIN")
-    public String showSettings(Model model) {
+    public String showSettings() {
         return "settings";
     }
 
     @PostMapping("/settings/reset")
     @Secured("ROLE_ADMIN")
-    public String resetExamData() {
+    public String resetExamData(RedirectAttributes redirectAttributes) {
         examManagementService.reset();
+        redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
+        redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/settings";
     }
 
