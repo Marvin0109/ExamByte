@@ -60,6 +60,11 @@
           <button class="btn btn-link nav-link" type="submit">Logout</button>
         </form>
       </li>
+
+      <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+        <a class="nav-link" href="/settings">
+            Einstellungen
+        </a>
       <!-- Hier kommen weitere links hinzu (li navbar-nav mr-auto und a...)//-->
     </ul>
     <!--

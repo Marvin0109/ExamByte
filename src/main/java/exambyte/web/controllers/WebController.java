@@ -3,6 +3,7 @@ package exambyte.web.controllers;
 import exambyte.application.service.ExamManagementService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,19 @@ public class WebController {
         model.addAttribute("fachID", fachID);
         model.addAttribute("currentPath", request.getRequestURI());
         return "contact";
+    }
+
+    @GetMapping("/settings")
+    @Secured("ROLE_ADMIN")
+    public String showSettings(Model model) {
+        return "settings";
+    }
+
+    @PostMapping("/settings/reset")
+    @Secured("ROLE_ADMIN")
+    public String resetExamData() {
+        examManagementService.reset();
+        return "redirect:/settings";
     }
 
     /**

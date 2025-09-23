@@ -40,12 +40,27 @@
         </div>
 
         <div class="d-flex gap-2">
-            <form th:if="${timeLeftBool}" th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" method="get">
+            <form th:if="${timeLeftBool and !alreadySubmitted}"
+                  th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" method="get">
                 <button type="submit" class="btn btn-primary">Test starten</button>
             </form>
 
-            <form th:if="${alreadySubmitted}" th:action="@{/exams/continue/{examFachId}(examFachId=${exam.fachId})}" method="get">
-                <button type="submit" class="btn btn-secondary">Test fortsetzen</button>
+            <form th:if="${timeLeftBool and alreadySubmitted}"
+                  th:action="@{/exams/continue/{examFachId}(examFachId=${exam.fachId})}" method="get">
+                <button type="submit" class="btn btn-secondary">Test neu starten</button>
+            </form>
+
+            <form th:action="@{/exams/startWithData/{examFachId}(examFachId=${exam.fachId})}" method="get">
+                <!-- Der Button wird nur angezeigt, wenn beide Bedingungen zutreffen -->
+                <button th:if="${timeLeftBool and alreadySubmitted and checkboxChecked}"
+                        type="submit" class="btn btn-secondary">
+                    Test fortsetzen
+                </button>
+
+                <label>
+                    <input type="checkbox" name="checkboxChecked" th:checked="${checkboxChecked}"/>
+                    Meine letzten Antworten laden.
+                </label>
             </form>
         </div>
     </div>
@@ -80,6 +95,13 @@
 
     <div class="container">
         <div class="row mb-2">
+            <div class="col-3 fw-bold">Autor-UUID</div>
+            <div class="col-9">
+                <span th:text="${authorID}"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2">
             <div class="col-3 fw-bold">Informationen zum Test</div>
             <div class="col-9">
                 Mit den Tests wollen wir sichergehen, dass nur diejenigen die Klausur mitschreiben,
@@ -113,7 +135,7 @@
         <div class="row mb-2">
             <div class="col-3 fw-bold">Fragen</div>
             <div class="col-9">
-                Bei Fragen bitte das Kontaktformular verwenden (zukünftiges Feature).
+                Bei Fragen bitte das Kontaktformular verwenden mit Angabe des Empfängers UUID (zukünftiges Feature).
             </div>
         </div>
     </div>

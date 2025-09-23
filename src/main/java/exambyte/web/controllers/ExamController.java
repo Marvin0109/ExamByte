@@ -153,13 +153,6 @@ public class ExamController {
         return "redirect:/exams/examsProfessoren";
     }
 
-    @PostMapping("/examsProfessoren/reset")
-    @Secured("ROLE_ADMIN")
-    public String resetExamData() {
-        examManagementService.reset();
-        return "redirect:/exams/examsProfessoren";
-    }
-
     // TODO: Braucht überarbeitung
     @PostMapping("/examsProfessoren/export")
     @Secured("ROLE_ADMIN")
@@ -236,7 +229,9 @@ public class ExamController {
 
     @GetMapping("/examsDurchfuehren/{examFachId}/menu")
     @Secured("ROLE_STUDENT")
-    public String examMenu(@PathVariable("examFachId") String examFachId, Model model, OAuth2AuthenticationToken auth) {
+    public String examMenu(@PathVariable("examFachId") String examFachId,
+                           Model model,
+                           OAuth2AuthenticationToken auth) {
         OAuth2User user = auth.getPrincipal();
         String studentLogin = user.getAttribute("login");
         ExamDTO examDTO = examManagementService.getExam(UUID.fromString(examFachId));
@@ -244,6 +239,9 @@ public class ExamController {
                 UUID.fromString(examFachId),
                 studentLogin
         );
+
+        UUID author = examDTO.professorFachId();
+        String authorIDString = author.toString();
 
         if (alreadySubmitted) {
             List<VersuchDTO> allAttempts = examManagementService.getAllAttempts(
@@ -255,6 +253,9 @@ public class ExamController {
         }
 
         String fristAnzeige = "";
+        String tageAnzeige = "";
+        String stundenAnzeige = "";
+        String minutenAnzeige = "";
         boolean timeLeft = false;
 
         LocalDateTime now = LocalDateTime.now();
@@ -268,9 +269,37 @@ public class ExamController {
             Duration diff = Duration.between(LocalDateTime.now(), examDTO.endTime());
 
             long days = diff.toDays();
-            long hours = diff.toHours();
+            long hours = diff.toHours() % 24;
+            long minutes = diff.toMinutes() % 60;
 
-            fristAnzeige = days + " d " + hours + " h";
+            if (days == 1) {
+                tageAnzeige = days + " Tag";
+            } else if (days > 1) {
+                tageAnzeige = days + " Tage";
+            }
+
+            if (hours == 1) {
+                stundenAnzeige = hours + " Stunde";
+            } else if (hours > 1) {
+                stundenAnzeige = hours + " Stunden";
+            }
+
+            if (minutes == 1) {
+                minutenAnzeige = minutes + " Minute";
+            } else if (minutes > 1) {
+                minutenAnzeige = minutes + " Minuten";
+            }
+
+            if (!tageAnzeige.isEmpty()) {
+                fristAnzeige += tageAnzeige + " ";
+            }
+            if (!stundenAnzeige.isEmpty()) {
+                fristAnzeige += stundenAnzeige + " ";
+            }
+            if (!minutenAnzeige.isEmpty()) {
+                fristAnzeige += minutenAnzeige;
+            }
+
             timeLeft = true;
         }
 
@@ -278,7 +307,8 @@ public class ExamController {
         model.addAttribute("alreadySubmitted", alreadySubmitted);
         model.addAttribute("timeLeft", fristAnzeige);
         model.addAttribute("timeLeftBool", timeLeft);
-
+        model.addAttribute("checkboxChecked", false);
+        model.addAttribute("authorID", authorIDString);
         return "/exams/examMenu";
     }
 

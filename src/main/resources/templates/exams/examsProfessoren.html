@@ -207,12 +207,7 @@
 
     <br>
     <button type="submit" class="btn btn-primary">Test speichern</button>
-    </form>
-
-    <form method="post" th:action="@{/exams/examsProfessoren/reset}">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <button type="submit" class="btn btn-primary">Reset Data</button>
-    </form>
+</form>
 
     <form th:object="${examForm}" method="post" th:action="@{/exams/examsProfessoren/export}">
         <button type="submit">CSV Vorschau herunterladen</button>
