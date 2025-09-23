@@ -1,7 +1,7 @@
 # TODO für ExamByte
 
 ## Metadaten
-**Letzte Änderungen:** 11.08.2025
+**Letzte Änderungen:** 23.09.2025
 **Autor:** Marvin0109
   
 ---
@@ -10,13 +10,16 @@
 
 ### Priorität: Hoch
 - **Backend**
-  - [ ] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung).
-  - [ ] **Datenbank-Tests**: Löschung von Daten testen
+  - [X] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung).
+  - [X] **Datenbank-Tests**: Löschung von Daten testen
 
 - **Frontend**
-  - [ ] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
+  - [X] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
   - [ ] **CSV-Export**: Formular exportieren
   - [ ] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
+  - [ ] **Korrektor korrigiert**: Das korrigieren der Freitextantworten implementieren
+  - [ ] **Neuer Testdurchlauf mit alten/ohne Antworten**
+  - [ ] **Zulassung testen**
 
 - **Dokumentation**
   - [ ] **Arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
@@ -33,12 +36,12 @@
 
 ### Priorität: Niedrig
 - [ ] **Optimierung**: Performance der Datenbank-Queries verbessern (nur bei Bedarf).
-- [ ] **Deployment-Scripts**: Automatisierung von Build- und Deployment-Prozessen (CI/CD-Pipeline).
+- [X] **Deployment-Scripts**: Automatisierung von Build-Prozessen (CI).
 
 ---
 
 ## 2. Nächste Schritte (Empfohlene Reihenfolge)
-1. [ ] **Datenspeicherung fertigstellen** (Backend + Tests).
+1. [X] **Datenspeicherung fertigstellen** (Backend + Tests).
 2. [ ] **Frontend für Testfragen und Antwort-Einsicht** implementieren.
 3. [ ] **Geschäftslogik** implementieren/zu Ende bringen
 4. [ ] **Dokumentation (Arc42)** aktualisieren
@@ -49,7 +52,8 @@
 
 ## 3. Zusätzliche Notizen
 (Stand: 22.04.2025)
-- Testabdeckung ist aktuell zu niedrig (aktuell: 74%) – mindestens 80% Codeabdeckung sollten angestrebt werden.
+- Testabdeckung ist aktuell schon im akzeptierenden Zustand (aktuell: 79%) – 
+mindestens 80% Codeabdeckung sollten angestrebt werden.
 - Aktuell genutzte Tools:
   - **Backend**: Java, Spring Boot, Spring Data JDBC
   - **Frontend**: HTML, CSS, JavaScript

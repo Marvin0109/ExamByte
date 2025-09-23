@@ -2,7 +2,7 @@
 
 **Autor**: Marvin0109
 **erstellt am**: 08.01.2025
-**letzte Änderung**: 20.04.2025
+**letzte Änderung**: 23.09.2025
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -307,7 +307,6 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 ## Ressourcen
 
 ### Bilder, GIFS, Videos, usw.
-- **Keine** 18+ Inhalte oder sonstiges (Das ist keine Seite für **Coomers**).
 - Memes **erlaubt**.
 - Emotes: https://old.7tv.app/emotes
 - *Hinweis*: Übertreibung nicht notwendig.
@@ -327,63 +326,63 @@ Hier die Statistik vom 20.04.2025:
 ```
 $ cloc .
 
-github.com/AlDanial/cloc v 2.04  T=0.41 s (1607.8 files/s, 140049.1 lines/s)
-
+github.com/AlDanial/cloc v 2.06  T=0.45 s (1564.1 files/s, 135535.3 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-HTML                           369           1334             59          14455
+HTML                           406           1592             88          16263
 CSS                             13           1310             53          10706
-JavaScript                       9           1982           2186           8208
-Java                           182           1809            693           6865
-XML                             64             21              0           6102
-Markdown                         6            183              2            650
-Text                             4             20              0            218
-Bourne Shell                     2             34            125            117
+Java                           189           2072            727           8268
+JavaScript                       8           1934           2167           7998
+XML                             68             21              0           6258
+Markdown                         6            205              2            733
+Text                             4             20              0            223
+Bourne Shell                     1             28            118            105
+YAML                             4             13              0             98
 Maven                            1              9              9             88
-Gradle                           2             20              8             86
-YAML                             3             10              0             84
-SQL                              1              8              0             74
+SQL                              1              7              0             74
 DOS Batch                        1             21              2             71
+Gradle                           2             20             24             70
 PlantUML                         2              3              1             25
 Properties                       3              0              1             11
 -------------------------------------------------------------------------------
-SUM:                           662           6764           3139          47760
+SUM:                           709           7255           3192          50991
 -------------------------------------------------------------------------------
 
 $ cloc src/main/java/
 
- 128 text files.
-     128 unique files.                                          
+  133 text files.
+     133 unique files.                                          
        0 files ignored.
 
-github.com/AlDanial/cloc v 2.04  T=0.05 s (2437.5 files/s, 94319.7 lines/s)
+github.com/AlDanial/cloc v 2.06  T=0.06 s (2286.6 files/s, 97173.7 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           128           1019            352           3582
+Java                           133           1158            382           4112
 -------------------------------------------------------------------------------
-SUM:                           128           1019            352           3582
+SUM:                           133           1158            382           4112
 -------------------------------------------------------------------------------
 
 $ cloc src/test/java/
 
-54 text files.
-      54 unique files.                              
-       0 files ignored.
+57 text files.
+      56 unique files.                              
+       1 file ignored.
 
-github.com/AlDanial/cloc v 2.04  T=0.05 s (1152.2 files/s, 94185.5 lines/s)
+github.com/AlDanial/cloc v 2.06  T=0.05 s (1093.5 files/s, 105734.8 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            54            790            341           3283
+Java                            56            914            345           4156
 -------------------------------------------------------------------------------
-SUM:                            54            790            341           3283
+SUM:                            56            914            345           4156
 -------------------------------------------------------------------------------
 ```
 
-**3582** Zeilen Produktivcode und **3283** Zeilen Testcode, fast ein **1:1 Test zu Code** Verhältnis!
-Testabdeckung zu dem Zeitpunkt laut Jacoco ~ **74 %**.
+## JacocoTestReport
+
+![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-23-09-2025.jpg)
 
 ## Schlussbemerkung
 - Randbemerkung: Die Gruppe startete mit 5 Teilnehmern, von denen **3** ausgestiegen sind.

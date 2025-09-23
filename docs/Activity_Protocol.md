@@ -1,5 +1,5 @@
 # Aktueller Stand
-![Fortschritt](https://img.shields.io/badge/Fortschritt-70%25-brightgreen)
+![Fortschritt](https://img.shields.io/badge/Fortschritt-80%25-brightgreen)
 
 Weitere Details zum Projekt und den Aufgaben findest du in der TO_DO.md.
 Hinweis: Aktuell aktive Teilnehmer sind leider nur zwei, vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
@@ -262,3 +262,8 @@ war eh nicht zu gebrauchen
 - Das Bearbeiten eines Tests erfolgt! (Prüfung auf Korrektheit folgt)
 - Spotbugs erstmal ausgeschaltet
 - Continuos Integration aufgestellt
+
+23.09.2025
+- Tests angepasst aufgrund der Änderung vom 22.09.2025
+- Aktivstatus der Links für alle Navigationsitems hinzugefügt + getestet
+- Die anderen Dokumente aktualisiert (s. [Styleguide](STYLEGUIDE.md) und [Todo](TO_DO.md))
