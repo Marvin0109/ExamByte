@@ -47,8 +47,8 @@ public class ContactTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "STUDENT", "REVIEWER", "ADMIN"})
-    @DisplayName("Die contact Seite ist für authentifizierte User erreichbar")
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT", "REVIEWER", "ADMIN"})
+    @DisplayName("Die contact Seite ist für authentifizierte User erreichbar, die eine höhere Rolle haben als USER")
     void test_02() throws Exception {
         UUID randomUUID = UUID.randomUUID();
         when(examManagementService.getProfFachIDByName("Marvin0109")).thenReturn(Optional.of(randomUUID));

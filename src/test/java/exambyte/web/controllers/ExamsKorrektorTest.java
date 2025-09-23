@@ -57,6 +57,7 @@ public class ExamsKorrektorTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("name", "Marvin0109"))
                 .andExpect(model().attribute("exams", examDTOs))
+                .andExpect(model().attributeExists("currentPath"))
                 .andExpect(view().name("/exams/examsKorrektor"));
     }
 }

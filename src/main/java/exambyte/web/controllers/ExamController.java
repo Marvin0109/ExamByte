@@ -11,6 +11,7 @@ import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.QuestionData;
 import exambyte.web.form.SubmitForm;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,10 @@ public class ExamController {
 
     @GetMapping("/examsProfessoren")
     @Secured("ROLE_ADMIN")
-    public String showCreateExamForm(Model model, OAuth2AuthenticationToken auth) {
+    public String showCreateExamForm(
+            Model model,
+            OAuth2AuthenticationToken auth,
+            HttpServletRequest request) {
         OAuth2User user = auth.getPrincipal();
 
         ExamForm examForm = new ExamForm();
@@ -64,7 +68,7 @@ public class ExamController {
 
         model.addAttribute("name", user.getAttribute("login"));
         model.addAttribute("examForm", examForm);
-
+        model.addAttribute("currentPath", request.getRequestURI());
         return "/exams/examsProfessoren";
     }
 
@@ -201,21 +205,29 @@ public class ExamController {
     // TODO: HTML ausbauen für Exam Liste
     @GetMapping("/examsKorrektor")
     @Secured("ROLE_REVIEWER")
-    public String listExamsForReviewer(Model model, OAuth2AuthenticationToken auth) {
+    public String listExamsForReviewer(
+            Model model,
+            OAuth2AuthenticationToken auth,
+            HttpServletRequest request) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         List<ExamDTO> examDTOs = examManagementService.getAllExams();
         model.addAttribute("exams", examDTOs);
+        model.addAttribute("currentPath", request.getRequestURI());
         return "/exams/examsKorrektor";
     }
 
     @GetMapping("/examsStudierende")
     @Secured("ROLE_STUDENT")
-    public String listExamsForStudents(Model model, OAuth2AuthenticationToken auth) {
+    public String listExamsForStudents(
+            Model model,
+            OAuth2AuthenticationToken auth,
+            HttpServletRequest request) {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         List<ExamDTO> examDTOs = examManagementService.getAllExams();
         model.addAttribute("exams", examDTOs);
+        model.addAttribute("currentPath", request.getRequestURI());
         return "/exams/examsStudierende";
     }
 

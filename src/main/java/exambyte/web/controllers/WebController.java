@@ -35,7 +35,6 @@ public class WebController {
      */
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
-        //TODO: Erstmal hier für jetzt den automatischen Korrektor in die DB speichern
         examManagementService.saveAutomaticReviewer();
         model.addAttribute("currentPath", request.getRequestURI());
         return "index";
@@ -50,6 +49,7 @@ public class WebController {
      * @return Der Name der View für die Kontaktseite.
      */
     @GetMapping("/contact")
+    @Secured({"ROLE_STUDENT", "ROLE_REVIEWER", "ROLE_ADMIN"})
     public String contact(Model model, HttpServletRequest request, OAuth2AuthenticationToken auth) {
         System.out.println(auth);
         String name = auth.getPrincipal().getAttribute("login");
@@ -62,7 +62,8 @@ public class WebController {
 
     @GetMapping("/settings")
     @Secured("ROLE_ADMIN")
-    public String showSettings() {
+    public String showSettings(Model model, HttpServletRequest request) {
+        model.addAttribute("currentPath", request.getRequestURI());
         return "settings";
     }
 

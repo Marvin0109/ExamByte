@@ -69,6 +69,7 @@ public class ExamsStudierendeTest {
         mvc.perform(get("/exams/examsStudierende"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("/exams/examsStudierende"))
+                .andExpect(model().attributeExists("currentPath"))
                 .andExpect(model().attributeExists("name", "exams"));
     }
 }

@@ -45,6 +45,7 @@ public class SettingsTest {
     void test_02() throws Exception {
         mvc.perform(get("/settings"))
                 .andExpect(status().isOk())
+                .andExpect(model().attributeExists("currentPath"))
                 .andExpect(view().name("settings"));
     }
 

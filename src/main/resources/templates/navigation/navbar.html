@@ -16,32 +16,39 @@
       </li>
 
       <!-- Link für Studenten -->
-      <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
+      <li class="nav-item" th:classappend="${currentPath == '/exams/examsStudierende'} ? 'active' : ''"
+          th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
 
         <a class="nav-link" href="/exams/examsStudierende">
           Tests bearbeiten
+          <span class="sr-only" th:if="${currentPath == '/exams/examsStudierende'}">(current)</span>
         </a>
 
       </li>
       <!-- Link für Professoren -->
-      <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <li class="nav-item" th:classappend="${currentPath == '/exams/examsProfessoren'} ? 'active' : ''"
+          th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
         <a class="nav-link" href="/exams/examsProfessoren">
           Tests Erstellen
+          <span class="sr-only" th:if="${currentPath == '/exams/examsProfessoren'}">(current)</span>
         </a>
 
       </li>
 
       <!-- Link für Korrektor -->
-      <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
+      <li class="nav-item" th:classappend="${currentPath == '/exams/examsKorrektor'} ? 'active' : ''"
+          th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
 
         <a class="nav-link" href="/exams/examsKorrektor">
           Tests korrigieren
+          <span class="sr-only" th:if="${currentPath == '/exams/examsKorrektor'}">(current)</span>
         </a>
 
       </li>
 
-      <li class="nav-item" th:classappend="${currentPath == '/contact'} ? 'active' : ''">
+      <li class="nav-item" th:classappend="${currentPath == '/contact'} ? 'active' : ''"
+          th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}">
         <a class="nav-link" href="/contact">
           Contact
           <span class="sr-only" th:if="${currentPath == '/contact'}">(current)</span>
@@ -61,9 +68,11 @@
         </form>
       </li>
 
-      <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+      <li class="nav-item" th:classappend="${currentPath == '/settings'} ? 'active' : ''"
+          th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
         <a class="nav-link" href="/settings">
             Einstellungen
+            <span class="sr-only" th:if="${currentPath == '/settings'}">(current)</span>
         </a>
       <!-- Hier kommen weitere links hinzu (li navbar-nav mr-auto und a...)//-->
     </ul>
