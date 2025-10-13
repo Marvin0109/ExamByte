@@ -150,6 +150,7 @@ public class ExamController {
     }
 
     // TODO: Braucht überarbeitung
+    // TODO: CSV-Export nur für Testergebnisse
     @PostMapping("/examsProfessoren/export")
     @Secured("ROLE_ADMIN")
     public String exportExamFormCsv(
@@ -331,6 +332,8 @@ public class ExamController {
         form.setEnd(examDTO.endTime());
         form.setTitle(examDTO.title());
         form.setFachId(UUID.fromString(examFachId));
+
+        // TODO: Index wird nicht erhöht?
         int index = 0;
 
         List<QuestionData> questions = new ArrayList<>();
@@ -387,6 +390,7 @@ public class ExamController {
         return "redirect:/exams/examsStudierende";
     }
 
+    // TOOD: Das korrigieren der Freitextantworten ausbauen
     @GetMapping("/showExam/{id}")
     @Secured("ROLE_REVIEWER")
     public String showExam(Model model, @PathVariable UUID id) {
