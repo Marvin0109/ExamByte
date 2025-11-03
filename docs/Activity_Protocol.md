@@ -267,3 +267,6 @@ war eh nicht zu gebrauchen
 - Tests angepasst aufgrund der Änderung vom 22.09.2025
 - Aktivstatus der Links für alle Navigationsitems hinzugefügt + getestet
 - Die anderen Dokumente aktualisiert (s. [Styleguide](STYLEGUIDE.md) und [Todo](TO_DO.md))
+
+03.11.2025
+- arc42, README aktualisiert
