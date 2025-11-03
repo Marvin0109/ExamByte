@@ -3,10 +3,11 @@
 ## Metainformationen
 
 - **Titel**: ExamByte - Architektur-Dokumentation (arc42)
-- **Autor(en)**: Marvin0109
+- **Autor**: Marvin0109
 - **Version**: 1.0
 - **Erstellt am**: 03. Februar 2025
-- **Zielgruppen**: Entwickler, Architekten, Tester, Benutzer
+- **Aktualisiert am**: 03. November 2025
+- **Zielgruppen**: Entwickler, Benutzer
 - **Verwendete Werkzeuge**: PlantUML
 
 ## 1. Einführung und Ziele
@@ -22,7 +23,7 @@ Administrator:innen.
 
 - **Benutzerfreundlich:** Einfache Bedienung für Studierende, Korrektor:innen und Administrator:innen
 - **Sicherheit:** Nutzung von GitHub-Authentifizierung zur sicheren Anmeldung.
-- **Automatisierung:** Automatische Bewertung von Multiple-Choice-Aufgaben.
+- **Automatisierung:** Automatische Bewertung von Multiple-Choice-/Single-Choice-Aufgaben.
 - **Skalierbarkeit:** Unterstützung mehrerer gleichzeitiger Prüfungen und Nutzer:innen.
 - **Nachvollziehbarkeit:** Klare Statusübersicht über Testergebnisse und Zulassung.
 
@@ -42,21 +43,21 @@ Administrator:innen.
 | Randbedingung                | Erläuterung                                                                                                                                          |
 |------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Hardwareausstattung          | Betrieb der Anwendung auf PC und Notebooks (solange keine zu alte Hardware im Betrieb kommt läuft die Anwendung auf jedem PC/Notebook)               |
-| Betrieb auf Betriebssystemen | Jegliche Linux Distro oder auch Windows erwünscht                                                                                                    |
+| Betrieb auf Betriebssystemen | Jegliche Linux Distro oder auch Windows mit WSL erwünscht                                                                                            |
 | Implementierung in Java      | Anwendung wurde im Java-lastigen Semester entwickelt. Entwicklung unter Version Java 21. Die Anwendung soll auch auf neuere Versionen laufen können. |
 | Fremdsoftware frei verfügbar | Für die Authentifizierung ist die GitHub OAuth App nötig, welche kostenlos ist für den Eigengebrauch.                                                |
 
 ### 2.2 Organisatorisch
 
-| Randbedingung                          | Erläuterung                                                                                                                                                                                     |
-|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Team                                   | muz70wuc und Marvin0109                                                                                                                                                                         |
-| Zeitplan                               | Beginn der Entwicklung Anfang November 2024                                                                                                                                                     |
-| Vorgehensmodell                        | Entwicklung risikogetrieben, iterativ und inkrementell. Zur Dokumentation der Architektur kommt arc42 zum Einsatz.                                                                              |
-| Entwicklungswerkzeuge                  | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse in Activity_Protocol.md gesammelt worden. Erstellung der Java-Quelltexte in IntelliJ Ultimate. |
-| Konfigurations- und Versionsverwaltung | Git bei GitHub                                                                                                                                                                                  |
-| Testwerkzeuge und -prozesse            | JUnit im Annotationsstil sowohl für inhaltliche Richtigkeit als auch für Integrationstests. Testcontainer für Datenbanktests.                                                                   |
-| Veröffentlichung als Open Source       | N/A                                                                                                                                                                                             |
+| Randbedingung                    | Erläuterung                                                                                                                                                                                                                                                                                                                                      |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Team                             | muz70wuc und Marvin0109                                                                                                                                                                                                                                                                                                                          |
+| Zeitplan                         | Beginn der Entwicklung Anfang November 2024                                                                                                                                                                                                                                                                                                      |
+| Vorgehensmodell                  | Das Projekt wurde parallel zur Vorlesung *Programmierpraktikum 2* entwickelt. Methoden wie *Domain Storytelling* wurden erst im Laufe der Veranstaltung eingeführt und standen daher zu Projektbeginn **nicht** zur Verfügung, was Auswirkungen hatte auf die Entwicklungszeit. <br/> Zur Dokumentation der Architektur kommt arc42 zum Einsatz. |
+| Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](Activity_Protocol.md) gesammelt worden. Erstellung der Java-Quelltexte in IntelliJ Ultimate.                                                                                                                      |
+| Versionsverwaltung               | Git, GitHub                                                                                                                                                                                                                                                                                                                                      |
+| Testwerkzeuge und -prozesse      | JUnit, Integrationstests, WebMvcTests und Testcontainer für Datenbanktests.                                                                                                                                                                                                                                                                      |
+| Veröffentlichung als Open Source | N/A                                                                                                                                                                                                                                                                                                                                              |
 
 ### 2.3 Konventionen
 
@@ -90,13 +91,13 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 
 - **Benutzermanagement:** Rollenverwaltung, GitHub-Login
 - **Testverwaltung:** Erstellung, Bearbeitung und Veröffentlichung von Tests
-- **Bewertungssystem:** Automatische MC-Bewertung, manuelle Freitextbewertung
+- **Bewertungssystem:** Automatische MC-/SC-Bewertung, manuelle Freitextbewertung
 - **Ergebnisanzeige:** Visualisierung der Testergebnisse für alle Beteiligten
 
 ## 5 Bausteinsicht
 
 - **Controller-Schicht** (Spring MVC): Bearbeitung von Anfragen
-- **Service-Schicht:** Geschäftslogik und Validierung+
+- **Service-Schicht:** Geschäftslogik und Validierung
 - **Datenbank-Schicht:** Speicherung und Abruf von Daten
 
 ## 6 Laufzeitsicht
@@ -104,9 +105,9 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 ### 6.1 Erstellung eines Tests
 
 1. Administrator:innen (besser gesagt: Professor:innen) erstellen einen Test.
-2. Sie fügen Fragen hinzu mit Fragetext und entscheiden, ob es sich um eine MC-Frage oder Freitextaufgabe handelt.
+2. Sie füllen das Testformular aus mit Fragestellungen, Antwortmöglichkeiten, Punkte, ...
 3. Sie setzen die relevanten Zeiten fest (Startzeit, Frist, Veröffentlichung der Ergebnisse).
-4. Am Ende erhalten Sie eine Übersicht in Form einer CSV-Datei.
+4. Am Ende erhalten Sie eine Übersicht in Form einer CSV-Datei. (**STILL IN PROGRESS**)
 
 ### 6.2 Testdurchführung
 
@@ -118,7 +119,7 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 
 ### 6.3 Bewertung eines Tests
 
-1. MC-Fragen werden automatisch bewertet.
+1. MC-/SC-Fragen werden automatisch bewertet.
 2. Freitextantworten werden Korrektor:innen zugewiesen.
 3. Korrektor:innen bewerten die Antworten und geben Feedback.
 
@@ -135,11 +136,11 @@ Zulassung erreicht wurde oder nicht.
 
 ## 8 Qualitätsszenarien
 
-| Qualitätsziel  | Beispiel                                             |
-|----------------|------------------------------------------------------|
-| Sicherheit     | Nur angemeldete Benutzer können Tests durchführen    |
-| Skalierbarkeit | Mehrere Studierende können parallel Tests bearbeiten |
-| Verfügbarkeit  | Server muss während Tests online sein                |
+| Qualitätsziel  | Beispiel                                                                     |
+|----------------|------------------------------------------------------------------------------|
+| Sicherheit     | Nur angemeldete Benutzer können Tests durchführen                            |
+| Skalierbarkeit | Mehrere Studierende können parallel Tests bearbeiten (**STILL IN PROGRESS**) |
+| Verfügbarkeit  | Server muss während Tests online sein                                        |
 
 ## 9 Risiken und technische Schulden
 
@@ -154,4 +155,5 @@ Zulassung erreicht wurde oder nicht.
 | MC                  | Multiple-Choice                                                                                                                   |
 | Administrator:innen | Da es sich um eine Anwendung zwischen Studierende und Professoren handelt, ist hier der Administrator:in mit Professor:in gemeint |
 | OAuth               | Offenes Authentifizierungsprotokoll                                                                                               |
+| SC                  | Single-Choice                                                                                                                     |
 
