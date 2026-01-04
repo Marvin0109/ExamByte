@@ -270,3 +270,9 @@ war eh nicht zu gebrauchen
 
 03.11.2025
 - arc42, README aktualisiert
+
+04.01.2026
+- Docker Version auf 29.1.3 aktualisiert
+- Issue: Testcontainer meckert, dass es noch Zugriff auf API Version 1.32 zugreifen tut, obwohl Docker 1.52 hat
+- Fix: https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version
+- TestSystemPropertyInitializer gelöscht (redundant)

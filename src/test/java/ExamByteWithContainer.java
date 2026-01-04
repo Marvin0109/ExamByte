@@ -1,5 +1,4 @@
 import exambyte.ExamByteApplication;
-import exambyte.application.TestSystemPropertyInitializer;
 import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
 import org.springframework.boot.SpringApplication;
 
