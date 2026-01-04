@@ -62,7 +62,7 @@ public class ExamByteApplication {
 		SpringApplication.run(ExamByteApplication.class, args);
 		try {
 			// Die URL, die beim Starten der Anwendung geöffnet werden soll
-			URI uri = new URI("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+			URI uri = new URI("http://localhost:8080/");
 			openInBrowser(uri);
 		} catch (Exception e) {
 			System.err.println("Ungültige URI: " + e.getMessage());
