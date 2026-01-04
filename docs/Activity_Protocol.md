@@ -276,3 +276,6 @@ war eh nicht zu gebrauchen
 - Issue: Testcontainer meckert, dass es noch Zugriff auf API Version 1.32 zugreifen tut, obwohl Docker 1.52 hat
 - Fix: https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version
 - TestSystemPropertyInitializer gelöscht (redundant)
+- Es wird nur noch der letzte Versuch mit Punkten in Prozent angezeigt (bei jedem neuen Testdurchlauf werden die alten
+Antworten und Bewertungen gelöscht)
+- Restliche Tests kommen noch!
