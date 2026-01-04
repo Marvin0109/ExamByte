@@ -37,7 +37,9 @@ public interface ExamManagementService {
 
     void reset();
 
-    List<VersuchDTO> getAllAttempts(UUID examFachId, String studentLogin);
+    void removeOldAnswers(UUID examFachId, String name);
+
+    List<VersuchDTO> getSubmission(UUID examFachId, String studentLogin);
 
     void saveAutomaticReviewer();
 }

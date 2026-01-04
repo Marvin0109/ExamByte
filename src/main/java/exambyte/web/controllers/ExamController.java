@@ -125,21 +125,26 @@ public class ExamController {
             QuestionTypeWeb frageTyp = QuestionTypeWeb.valueOf(q.getType().trim());
             int maxPunkte = q.getPunkte();
 
-            if (frageTyp.equals(QuestionTypeWeb.FREITEXT)) {
-                examManagementService.createFrage(new FrageDTO(null, null, frageText,
-                        maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()), profFachID, examUUID));
-            } else if (frageTyp.equals(QuestionTypeWeb.SC)) {
-                String correctAnswer = q.getCorrectAnswer();
-                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
-                        profFachID, examUUID);
-                examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null,
-                        f.getFachId(), correctAnswer, q.getChoices()));
-            } else if (frageTyp.equals(QuestionTypeWeb.MC)) {
-                String correctAnswers = q.getCorrectAnswers();
-                FrageDTO f = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
-                        profFachID, examUUID);
-                examManagementService.createChoiceFrage(f, new KorrekteAntwortenDTO(null, null, f.getFachId(),
-                        correctAnswers, q.getChoices()));
+            switch(frageTyp) {
+                case QuestionTypeWeb.FREITEXT:
+                    examManagementService.createFrage(new FrageDTO(null, null, frageText,
+                            maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()), profFachID, examUUID));
+                    break;
+                case QuestionTypeWeb.SC:
+                    String correctAnswer = q.getCorrectAnswer();
+                    FrageDTO f1 = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
+                            profFachID, examUUID);
+                    examManagementService.createChoiceFrage(f1, new KorrekteAntwortenDTO(null, null,
+                            f1.getFachId(), correctAnswer, q.getChoices()));
+                    break;
+                case QuestionTypeWeb.MC:
+                    String correctAnswers = q.getCorrectAnswers();
+                    FrageDTO f2 = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
+                            profFachID, examUUID);
+                    examManagementService.createChoiceFrage(f2, new KorrekteAntwortenDTO(null, null, f2.getFachId(),
+                            correctAnswers, q.getChoices()));
+                    break;
+                default:
             }
         }
 
@@ -249,7 +254,7 @@ public class ExamController {
         String authorIDString = author.toString();
 
         if (alreadySubmitted) {
-            List<VersuchDTO> allAttempts = examManagementService.getAllAttempts(
+            List<VersuchDTO> allAttempts = examManagementService.getSubmission(
                     UUID.fromString(examFachId), studentLogin
             );
             model.addAttribute("attempts", allAttempts);
@@ -374,6 +379,14 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
 
         System.out.println("Antworten List: " + antworten.getAnswers().toString());
+
+        boolean submitted = examManagementService.isExamAlreadySubmitted(UUID.fromString(examFachId),
+                user.getAttribute("login"));
+
+        if (submitted) {
+            examManagementService.removeOldAnswers(UUID.fromString(examFachId), user.getAttribute("login"));
+            System.out.println("Deleting old answers and reviews");
+        }
 
         boolean success =
         examManagementService.submitExam(user.getAttribute("login"), antworten.getAnswers(), UUID.fromString(examFachId));

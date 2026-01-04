@@ -3,6 +3,7 @@ package exambyte.application.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.domain.mapper.*;
+import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -229,7 +229,38 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public List<VersuchDTO> getAllAttempts(UUID examFachId, String studentLogin) {
+    public void removeOldAnswers(UUID examFachId, String name) {
+        UUID studentFachID = studentService.getStudentFachId(name);
+
+        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
+                .map(frageDTOMapper::toDTO)
+                .toList();
+
+        List<UUID> antwortenToDelete = new ArrayList<>();
+        for (FrageDTO frageDTO : fragenDTOList) {
+            antwortenToDelete.add(
+                        antwortService.findByStudentAndFrage(studentFachID, frageDTO.getFachId())
+                    .getFachId());
+        }
+
+        List<UUID> reviewsToDelete = new ArrayList<>();
+        for (UUID id : antwortenToDelete) {
+            if (reviewService.getReviewByAntwortFachId(id) != null) {
+                reviewsToDelete.add(reviewService.getReviewByAntwortFachId(id).getFachId());
+            }
+        }
+
+        for (UUID id : antwortenToDelete) {
+            antwortService.deleteAnswer(id);
+        }
+
+        for (UUID id : reviewsToDelete) {
+            reviewService.deleteReview(id);
+        }
+    }
+
+    @Override
+    public List<VersuchDTO> getSubmission(UUID examFachId, String studentLogin) {
         System.out.println("Attempt Service Called");
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
@@ -250,41 +281,37 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .map(antwortDTOMapper::toDTO)
                 .toList();
 
-        // Nach lastChangesZeitpunkt gruppieren
-        Map<LocalDateTime, List<AntwortDTO>> gruppiert =
-                alleAntworten.stream()
-                        .collect(Collectors.groupingBy(
-                                antwort -> antwort.getLastChangesZeitpunkt().truncatedTo(ChronoUnit.MINUTES),
-                                TreeMap::new,
-                                Collectors.toList()
-                        ));
+        double erreichtePunkte = 0.0;
 
-        List<VersuchDTO> result = new ArrayList<>();
-
-        for (var entry : gruppiert.entrySet()) {
-            LocalDateTime zeitpunkt = entry.getKey();
-            List<AntwortDTO> antworten = entry.getValue();
-
-            // erreichte Punkte dieses Versuchs
-            double erreichte = 0.0;
-            for (AntwortDTO a : antworten) {
-                FrageDTO frage = frageMap.get(a.getFrageFachId());
-                if (frage.getType().equals(QuestionTypeDTO.MC) || frage.getType().equals(QuestionTypeDTO.SC)) {
-                    System.out.println(frage.getType().toString());
-                    ReviewDTO review = reviewDTOMapper.toDTO(reviewService.getReviewByAntwortFachId(a.getFachId()));
-                    if (review != null) {
-                        erreichte += review.getPunkte();
-                    }
-                } else if (frage.getType().equals(QuestionTypeDTO.FREITEXT)) {
-                    erreichte += 0.0;
-                }
+        for (AntwortDTO antwortDTO : alleAntworten) {
+            FrageDTO frage = frageMap.get(antwortDTO.getFrageFachId());
+            if (frage == null) {
+                continue;
             }
 
-            double prozent = gesamtMaxPunkte > 0 ? (erreichte / gesamtMaxPunkte) * 100.0 : 0.0;
-            result.add(new VersuchDTO(zeitpunkt, erreichte, gesamtMaxPunkte, prozent));
+            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.getFachId());
+            if (review != null) {
+                erreichtePunkte += review.getPunkte();
+            }
         }
 
-        return result;
+        double prozent = gesamtMaxPunkte > 0
+                ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
+                : 0.0;
+
+        LocalDateTime zeitpunkt = alleAntworten.stream()
+                .map(AntwortDTO::getLastChangesZeitpunkt)
+                .max(LocalDateTime::compareTo)
+                .orElse(LocalDateTime.now());
+
+        VersuchDTO versuch = new VersuchDTO(
+                zeitpunkt,
+                erreichtePunkte,
+                gesamtMaxPunkte,
+                prozent
+        );
+
+        return List.of(versuch);
     }
 
     @Override

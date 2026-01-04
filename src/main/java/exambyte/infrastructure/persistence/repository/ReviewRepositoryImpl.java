@@ -43,4 +43,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     public void deleteAll() {
         reviewDAO.deleteAll();
     }
+
+    @Override
+    public void deleteReview(UUID id) {
+        reviewDAO.deleteByFachId(id);
+    }
 }

@@ -387,10 +387,9 @@ public class ExamManagementServiceTest {
     }
 
     @Test
-    @DisplayName("getAllAttempts ist erfolgreich")
+    @DisplayName("getSubmission ist erfolgreich")
     void test_12() {
         // Arrange
-        UUID studentLogin = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
@@ -456,11 +455,13 @@ public class ExamManagementServiceTest {
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
         // Act
-        List<VersuchDTO> attempts = examManagementService.getAllAttempts(examFachId, "testStudent");
+        List<VersuchDTO> attempts = examManagementService.getSubmission(examFachId, "testStudent");
 
         // Assert
         assertThat(attempts).isNotNull();
         assertThat(attempts).hasSize(1);
-        assertThat(attempts.get(0).erreichtePunkte()).isEqualTo(5);
+        assertThat(attempts.getFirst().erreichtePunkte()).isEqualTo(5);
+        assertThat(attempts.getFirst().maxPunkte()).isEqualTo(5);
+        assertThat(attempts.getFirst().prozent()).isEqualTo(100.0);
     }
 }

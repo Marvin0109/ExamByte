@@ -46,7 +46,7 @@
             </form>
 
             <form th:if="${timeLeftBool and alreadySubmitted}"
-                  th:action="@{/exams/continue/{examFachId}(examFachId=${exam.fachId})}" method="get">
+                  th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" method="get">
                 <button type="submit" class="btn btn-secondary">Test neu starten</button>
             </form>
 
@@ -71,20 +71,13 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Versuch</th>
-                <th>Zuletzt bearbeitet</th>
+                <th>Bearbeitungszeitpunkt</th>
                 <th>Punkte (%)</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="attempt, iterStat : ${attempts}">
-                <!-- fortlaufende Nummer: Versuch 1, Versuch 2, ... -->
-                <td th:text="'Versuch ' + ${iterStat.index + 1}"></td>
-
-                <!-- hier dein lastChangesZeitpunkt, ggf. mit Datumsformat -->
+            <tr th:each="attempt : ${attempts}">
                 <td th:text="${#temporals.format(attempt.lastChanges, 'dd.MM.yyyy HH:mm')}"></td>
-
-                <!-- Platzhalter für Prozent, bleibt erstmal leer -->
                 <td th:text="${#numbers.formatDecimal(attempt.prozent, 1, 2)} + ' %'"></td>
             </tr>
             </tbody>
@@ -109,7 +102,7 @@
                 nachvollziehbare Freitextantworten zu formulieren. Sie können <strong>beliebig viele Versuche</strong>
                 durchführen. Wird während der Bearbeitung des Tests zu einer anderen Seite navigiert, wird der Versuch
                 <strong>nicht gespeichert!</strong> Beim erneuten Durchlauf des Tests werden die alten Antworten
-                angezeigt.
+                angezeigt, wenn die Option ausgewählt wurde.
             </div>
         </div>
 

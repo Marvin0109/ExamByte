@@ -14,4 +14,6 @@ public interface ReviewRepository {
     void save(Review review);
 
     void deleteAll();
+
+    void deleteReview(UUID id);
 }

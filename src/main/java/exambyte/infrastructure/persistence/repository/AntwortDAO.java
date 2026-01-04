@@ -4,6 +4,7 @@ import exambyte.infrastructure.persistence.entities.AntwortEntity;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -20,4 +21,9 @@ public interface AntwortDAO extends CrudRepository<AntwortEntity, Long> {
     AntwortEntity save(AntwortEntity entity);
 
     void deleteAll();
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM antwort a WHERE a.fach_id = :fachId")
+    void deleteByFachId(@Param("fachId") UUID fachId);
 }

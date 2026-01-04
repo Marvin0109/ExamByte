@@ -11,4 +11,6 @@ public interface ReviewService {
     Review getReviewByAntwortFachId(UUID antwortFachId);
 
     void deleteAll();
+
+    void deleteReview(UUID id);
 }

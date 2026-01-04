@@ -39,4 +39,9 @@ public class AntwortServiceImpl implements AntwortService {
     public void deleteAll() {
         antwortRepository.deleteAll();
     }
+
+    @Override
+    public void deleteAnswer(UUID id) {
+        antwortRepository.deleteAnswer(id);
+    }
 }

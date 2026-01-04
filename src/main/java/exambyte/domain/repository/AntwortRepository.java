@@ -16,4 +16,6 @@ public interface AntwortRepository {
     void save(Antwort antwort);
 
     void deleteAll();
+
+    void deleteAnswer(UUID fachId);
 }

@@ -424,8 +424,98 @@ public class ExamDBTest {
     }
 
     @Test
-    @DisplayName("Suche Exam nach Startzeit")
+    @DisplayName("Delete Antwort nach FachId und Review nach FachId")
     void test_04() {
+        // Arrange
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. K")
+                .build();
+
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("W Korrektor")
+                .build();
+
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Peter Griffin")
+                .build();
+
+        LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
+        LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
+        LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);
+        Exam exam = new Exam.ExamBuilder()
+                .id(null)
+                .fachId(null)
+                .title("Test 1")
+                .professorFachId(professor.uuid())
+                .startTime(startTime)
+                .endTime(endTime)
+                .resultTime(resultTime)
+                .build();
+
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(null)
+                .frageText("JPA oder JDBC?")
+                .maxPunkte(7)
+                .type(QuestionType.MC)
+                .professorUUID(professor.uuid())
+                .examUUID(exam.getFachId())
+                .build();
+
+        KorrekteAntworten korrekteAntworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(null)
+                .fachId(null)
+                .frageFachId(frage.getFachId())
+                .korrekteAntworten("JDBC")
+                .antwort_optionen("JPA\nJDBC")
+                .build();
+
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortText("JDBC")
+                .frageFachId(frage.getFachId())
+                .studentFachId(student.uuid())
+                .antwortZeitpunkt(LocalDateTime.now())
+                .lastChangesZeitpunkt(LocalDateTime.now())
+                .build();
+
+        Review review = new Review.ReviewBuilder()
+                .id(null)
+                .fachId(null)
+                .antwortFachId(antwort.getFachId())
+                .korrektorFachId(korrektor.uuid())
+                .bewertung("Bewertung")
+                .punkte(0)
+                .build();
+
+        studentRepository.save(student);
+        professorRepository.save(professor);
+        korrektorRepository.save(korrektor);
+        examRepository.save(exam);
+        frageRepository.save(frage);
+        antwortRepository.save(antwort);
+        reviewRepository.save(review);
+        korrekteAntwortenRepository.save(korrekteAntworten);
+
+        // Act
+        antwortRepository.deleteAnswer(antwort.getFachId());
+        reviewRepository.deleteReview(review.getFachId());
+
+        // Assert
+        assertThat(antwortRepository.findByFachId(antwort.getFachId())).isEmpty();
+        assertThat(reviewRepository.findByFachId(review.getFachId())).isEmpty();
+    }
+
+    @Test
+    @DisplayName("Suche Exam nach Startzeit")
+    void test_05() {
         // Arrange
         Professor professor = new Professor.ProfessorBuilder()
                 .id(null)

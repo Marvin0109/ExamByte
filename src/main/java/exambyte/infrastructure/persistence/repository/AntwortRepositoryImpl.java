@@ -50,4 +50,9 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     public void deleteAll() {
         antwortDAO.deleteAll();
     }
+
+    @Override
+    public void deleteAnswer(UUID id) {
+        antwortDAO.deleteByFachId(id);
+    }
 }
