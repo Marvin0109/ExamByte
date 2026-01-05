@@ -12,35 +12,35 @@ import java.util.UUID;
 @Repository
 public class StudentRepositoryImpl implements StudentRepository {
 
-    private final StudentMapper studentMapper;
-    private final StudentDAO studentDAO;
+    private final StudentMapper mapper;
+    private final StudentDAO dao;
 
     public StudentRepositoryImpl(StudentDAO studentDAO, StudentMapper studentMapper) {
-        this.studentDAO = studentDAO;
-        this.studentMapper = studentMapper;
+        this.dao = studentDAO;
+        this.mapper = studentMapper;
     }
 
     @Override
     public Optional<Student> findByFachId(UUID fachId) {
-        Optional<StudentEntity> entity = studentDAO.findByFachId(fachId);
-        return entity.map(studentMapper::toDomain);
+        Optional<StudentEntity> entity = dao.findByFachId(fachId);
+        return entity.map(mapper::toDomain);
     }
 
     @Override
     public void save(Student student) {
-        StudentEntity studentEntity = studentMapper.toEntity(student);
-        studentDAO.save(studentEntity);
+        StudentEntity studentEntity = mapper.toEntity(student);
+        dao.save(studentEntity);
     }
 
     @Override
     public Optional<Student> findByName(String name) {
-        Optional<StudentEntity> entity = studentDAO.findByName(name);
-        return entity.map(studentMapper::toDomain);
+        Optional<StudentEntity> entity = dao.findByName(name);
+        return entity.map(mapper::toDomain);
     }
 
     @Override
     public Optional<UUID> findFachIdByName(String name) {
-        StudentEntity loaded =  studentDAO.findFachIdByName(name).orElse(null);
+        StudentEntity loaded =  dao.findFachIdByName(name).orElse(null);
         if (loaded != null) return Optional.of(loaded.getFachId());
         return Optional.empty();
     }

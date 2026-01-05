@@ -7,31 +7,25 @@ import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 public class FrageMapperImpl implements FrageMapper {
 
     @Override
-    public Frage toDomain(FrageEntity frageEntity) {
-
-        UUID professorFachID = frageEntity.getProfessorFachId();
+    public Frage toDomain(FrageEntity entity) {
 
         return new Frage.FrageBuilder()
                 .id(null)
-                .fachId(frageEntity.getFachId())
-                .frageText(frageEntity.getFrageText())
-                .maxPunkte(frageEntity.getMaxPunkte())
-                .type(QuestionType.valueOf(frageEntity.getType().name()))
-                .professorUUID(professorFachID)
-                .examUUID(frageEntity.getExamFachId())
+                .fachId(entity.getFachId())
+                .frageText(entity.getFrageText())
+                .maxPunkte(entity.getMaxPunkte())
+                .type(QuestionType.valueOf(entity.getType().name()))
+                .professorUUID(entity.getProfessorFachId())
+                .examUUID(entity.getExamFachId())
                 .build();
     }
 
     @Override
     public FrageEntity toEntity(Frage frage) {
-
-        UUID profUUID = frage.getProfessorUUID();
 
         return new FrageEntity.FrageEntityBuilder()
                 .id(null)
@@ -39,7 +33,7 @@ public class FrageMapperImpl implements FrageMapper {
                 .frageText(frage.getFrageText())
                 .maxPunkte(frage.getMaxPunkte())
                 .type(QuestionTypeEntity.valueOf(frage.getType().name()))
-                .professorFachId(profUUID)
+                .professorFachId(frage.getProfessorUUID())
                 .examFachId(frage.getExamUUID())
                 .build();
     }

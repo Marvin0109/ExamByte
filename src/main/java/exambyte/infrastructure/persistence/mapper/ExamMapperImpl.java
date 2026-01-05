@@ -9,15 +9,15 @@ import org.springframework.stereotype.Component;
 public class ExamMapperImpl implements ExamMapper {
 
     @Override
-    public Exam toDomain(ExamEntity examEntity) {
+    public Exam toDomain(ExamEntity entity) {
         return new Exam.ExamBuilder()
                 .id(null)
-                .fachId(examEntity.getFachId())
-                .title(examEntity.getTitle())
-                .professorFachId(examEntity.getProfessorFachId())
-                .startTime(examEntity.getStartZeitpunkt())
-                .endTime(examEntity.getEndZeitpunkt())
-                .resultTime(examEntity.getResultZeitpunkt())
+                .fachId(entity.getFachId())
+                .title(entity.getTitle())
+                .professorFachId(entity.getProfessorFachId())
+                .startTime(entity.getStartZeitpunkt())
+                .endTime(entity.getEndZeitpunkt())
+                .resultTime(entity.getResultZeitpunkt())
                 .build();
     }
 

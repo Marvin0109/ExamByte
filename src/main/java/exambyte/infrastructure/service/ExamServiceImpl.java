@@ -12,36 +12,36 @@ import java.util.UUID;
 @Service
 public class ExamServiceImpl implements ExamService {
 
-    private final ExamRepository examRepository;
+    private final ExamRepository repository;
 
     public ExamServiceImpl(ExamRepository examRepository) {
-        this.examRepository = examRepository;
+        this.repository = examRepository;
     }
 
     @Override
     public List<Exam> alleExams() {
-        return examRepository.findAll().stream().toList();
+        return repository.findAll().stream().toList();
 
     }
 
     @Override
     public Exam getExam(UUID fachId) {
-        return examRepository.findByFachId(fachId)
+        return repository.findByFachId(fachId)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
     @Override
     public void addExam(Exam exam) {
-        examRepository.save(exam);
+        repository.save(exam);
     }
 
     @Override
     public void deleteAll() {
-        examRepository.deleteAll();
+        repository.deleteAll();
     }
 
     @Override
     public void deleteByFachId(UUID fachId) {
-        examRepository.deleteByFachId(fachId);
+        repository.deleteByFachId(fachId);
     }
 }

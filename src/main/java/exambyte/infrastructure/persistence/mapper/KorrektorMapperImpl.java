@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class KorrektorMapperImpl implements KorrektorMapper {
 
     @Override
-    public Korrektor toDomain(KorrektorEntity korrektorEntity) {
+    public Korrektor toDomain(KorrektorEntity entity) {
         return new Korrektor.KorrektorBuilder()
                 .id(null)
-                .fachId(korrektorEntity.getFachId())
-                .name(korrektorEntity.getName())
+                .fachId(entity.getFachId())
+                .name(entity.getName())
                 .build();
     }
 

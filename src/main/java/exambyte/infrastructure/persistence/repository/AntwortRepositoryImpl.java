@@ -12,47 +12,47 @@ import java.util.UUID;
 @Repository
 public class AntwortRepositoryImpl implements AntwortRepository {
 
-    private final AntwortMapper antwortMapper;
-    private final AntwortDAO antwortDAO;
+    private final AntwortMapper mapper;
+    private final AntwortDAO dao;
 
     public AntwortRepositoryImpl(AntwortDAO antwortDAO, AntwortMapper antwortMapper) {
-        this.antwortDAO = antwortDAO;
-        this.antwortMapper = antwortMapper;
+        this.dao = antwortDAO;
+        this.mapper = antwortMapper;
     }
 
     @Override
     public Optional<Antwort> findByFachId(UUID id) {
-        Optional<AntwortEntity> entity = antwortDAO.findByFachId(id);
-        return entity.map(antwortMapper::toDomain);
+        Optional<AntwortEntity> entity = dao.findByFachId(id);
+        return entity.map(mapper::toDomain);
     }
 
     @Override
     public Optional<Antwort> findByStudentFachIdAndFrageFachId(UUID studentFachId, UUID fachId) {
-        Optional<AntwortEntity> entity = antwortDAO
+        Optional<AntwortEntity> entity = dao
                 .findByStudentFachIdAndFrageFachId(studentFachId, fachId);
-        return entity.map(antwortMapper::toDomain);
+        return entity.map(mapper::toDomain);
     }
 
     @Override
     public void save(Antwort antwort) {
-        AntwortEntity antwortEntity = antwortMapper.toEntity(antwort);
-        antwortDAO.save(antwortEntity);
+        AntwortEntity antwortEntity = mapper.toEntity(antwort);
+        dao.save(antwortEntity);
     }
 
     @Override
     public Antwort findByFrageFachId(UUID id) {
-        Optional<AntwortEntity> entity = antwortDAO.findByFrageFachId(id);
-        return entity.map(antwortMapper::toDomain)
+        Optional<AntwortEntity> entity = dao.findByFrageFachId(id);
+        return entity.map(mapper::toDomain)
                 .orElse(null);
     }
 
     @Override
     public void deleteAll() {
-        antwortDAO.deleteAll();
+        dao.deleteAll();
     }
 
     @Override
     public void deleteAnswer(UUID id) {
-        antwortDAO.deleteByFachId(id);
+        dao.deleteByFachId(id);
     }
 }

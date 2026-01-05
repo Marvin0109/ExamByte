@@ -12,15 +12,15 @@ import java.util.UUID;
 @Service
 public class FrageServiceImpl implements FrageService {
 
-    private final FrageRepository frageRepository;
+    private final FrageRepository repository;
 
     public FrageServiceImpl(FrageRepository frageRepository) {
-        this.frageRepository = frageRepository;
+        this.repository = frageRepository;
     }
 
     @Override
     public List<Frage> getFragenForExam(UUID examId) {
-        List<Frage> frageList = frageRepository.findByExamFachId(examId);
+        List<Frage> frageList = repository.findByExamFachId(examId);
         if (frageList.isEmpty()) {
             throw new RuntimeException("Keine Fragen für das angegebene ExamId gefunden.");
         }
@@ -29,17 +29,17 @@ public class FrageServiceImpl implements FrageService {
 
     @Override
     public UUID addFrage(Frage frage) {
-        frageRepository.save(frage);
+        repository.save(frage);
         return frage.getFachId();
     }
 
     @Override
     public Optional<Frage> getFrage(UUID frageId) {
-        return frageRepository.findByFachId(frageId);
+        return repository.findByFachId(frageId);
     }
 
     @Override
     public void deleteAll() {
-        frageRepository.deleteAll();
+        repository.deleteAll();
     }
 }

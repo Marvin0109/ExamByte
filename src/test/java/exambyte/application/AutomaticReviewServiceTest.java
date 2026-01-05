@@ -23,13 +23,13 @@ import static org.mockito.Mockito.mock;
 
 public class AutomaticReviewServiceTest {
 
-    private ReviewService reviewService;
-    private ReviewDTOMapper reviewDTOMapper;
+    private ReviewService service;
+    private ReviewDTOMapper mapper;
 
     @BeforeEach
     void setUp() {
-        reviewService = mock(ReviewServiceImpl.class);
-        reviewDTOMapper = mock(ReviewDTOMapper.class);
+        service = mock(ReviewServiceImpl.class);
+        mapper = mock(ReviewDTOMapper.class);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class AutomaticReviewServiceTest {
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(reviewDTOMapper);
+        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(mapper);
         FrageDTO frage1 = new FrageDTO(
                 null,
                 UUID.randomUUID(),
@@ -108,7 +108,7 @@ public class AutomaticReviewServiceTest {
                 antwortDTOList,
                 korrekteAntwortenList,
                 studentUUID,
-                reviewService
+                service
         );
 
         // Assert
@@ -126,7 +126,7 @@ public class AutomaticReviewServiceTest {
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(reviewDTOMapper);
+        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(mapper);
         FrageDTO frage1 = new FrageDTO(
                 null,
                 UUID.randomUUID(),
@@ -193,7 +193,7 @@ public class AutomaticReviewServiceTest {
                 antwortDTOList,
                 korrekteAntwortenList,
                 studentUUID,
-                reviewService
+                service
         );
 
         // Assert

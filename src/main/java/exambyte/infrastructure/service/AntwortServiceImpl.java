@@ -10,38 +10,38 @@ import java.util.UUID;
 @Service
 public class AntwortServiceImpl implements AntwortService {
 
-    private final AntwortRepository antwortRepository;
+    private final AntwortRepository repository;
 
     public AntwortServiceImpl(AntwortRepository antwortRepository) {
-        this.antwortRepository = antwortRepository;
+        this.repository = antwortRepository;
     }
 
     @Override
     public Antwort findByFrageFachId(UUID frageFachId) {
         if(frageFachId == null) {
-            throw new IllegalArgumentException("FrageFachId darf nicht null sein");
+            throw new IllegalArgumentException("FrageFachId is null!");
         }
-        return antwortRepository.findByFrageFachId(frageFachId);
+        return repository.findByFrageFachId(frageFachId);
     }
 
     @Override
     public void addAntwort(Antwort antwort) {
-        antwortRepository.save(antwort);
+        repository.save(antwort);
     }
 
     @Override
     public Antwort findByStudentAndFrage(UUID studentId, UUID examId) {
-        return antwortRepository.findByStudentFachIdAndFrageFachId(studentId, examId)
+        return repository.findByStudentFachIdAndFrageFachId(studentId, examId)
                 .orElse(null);
     }
 
     @Override
     public void deleteAll() {
-        antwortRepository.deleteAll();
+        repository.deleteAll();
     }
 
     @Override
     public void deleteAnswer(UUID id) {
-        antwortRepository.deleteAnswer(id);
+        repository.deleteAnswer(id);
     }
 }

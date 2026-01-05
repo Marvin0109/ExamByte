@@ -11,6 +11,7 @@ public class KorrekteAntwortenMapperImpl implements KorrekteAntwortenMapper {
     @Override
     public KorrekteAntworten toDomain(KorrekteAntwortenEntity entity) {
         return new KorrekteAntworten.KorrekteAntwortenBuilder()
+                .id(null)
                 .fachId(entity.getFachID())
                 .frageFachId(entity.getFrageFachID())
                 .korrekteAntworten(entity.getRichtigeAntwort())
@@ -21,7 +22,7 @@ public class KorrekteAntwortenMapperImpl implements KorrekteAntwortenMapper {
     @Override
     public KorrekteAntwortenEntity toEntity(KorrekteAntworten antworten) {
     return new KorrekteAntwortenEntity(
-        antworten.getId(),
+        null,
         antworten.getFachId(),
         antworten.getFrageFachId(),
         antworten.getKorrekteAntworten(),

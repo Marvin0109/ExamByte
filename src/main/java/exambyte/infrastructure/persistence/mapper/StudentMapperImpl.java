@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class StudentMapperImpl implements StudentMapper {
 
     @Override
-    public Student toDomain(StudentEntity studentEntity) {
+    public Student toDomain(StudentEntity entity) {
         return new Student.StudentBuilder()
                 .id(null)
-                .fachId(studentEntity.getFachId())
-                .name(studentEntity.getName())
+                .fachId(entity.getFachId())
+                .name(entity.getName())
                 .build();
     }
 

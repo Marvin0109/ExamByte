@@ -5,39 +5,32 @@ import exambyte.domain.entitymapper.AntwortMapper;
 import exambyte.infrastructure.persistence.entities.AntwortEntity;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 public class AntwortMapperImpl implements AntwortMapper {
 
     @Override
-    public Antwort toDomain(AntwortEntity antwortEntity) {
-
-        UUID frageFachId = antwortEntity.getFrageFachId();
-        UUID studentFachID = antwortEntity.getStudentFachId();
+    public Antwort toDomain(AntwortEntity entity) {
 
         return new Antwort.AntwortBuilder()
             .id(null)
-            .fachId(antwortEntity.getFachId())
-            .antwortText(antwortEntity.getAntwortText())
-            .frageFachId(frageFachId)
-            .studentFachId(studentFachID)
-            .antwortZeitpunkt(antwortEntity.getAntwortZeitpunkt())
-            .lastChangesZeitpunkt(antwortEntity.getLastChangesZeitpunkt())
+            .fachId(entity.getFachId())
+            .antwortText(entity.getAntwortText())
+            .frageFachId(entity.getFrageFachId())
+            .studentFachId(entity.getStudentFachId())
+            .antwortZeitpunkt(entity.getAntwortZeitpunkt())
+            .lastChangesZeitpunkt(entity.getLastChangesZeitpunkt())
             .build();
     }
 
     @Override
     public AntwortEntity toEntity(Antwort antwort) {
-        UUID frageFachId = antwort.getFrageFachId(); // LoD Verstoß
-        UUID studentFachId = antwort.getStudentUUID();
 
         return new AntwortEntity.AntwortEntityBuilder()
                 .id(null)
                 .fachId(antwort.getFachId())
                 .antwortText(antwort.getAntwortText())
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
+                .frageFachId(antwort.getFrageFachId())
+                .studentFachId(antwort.getStudentUUID())
                 .antwortZeitpunkt(antwort.getAntwortZeitpunkt())
                 .lastChangesZeitpunkt(antwort.getLastChangesZeitpunkt())
                 .build();

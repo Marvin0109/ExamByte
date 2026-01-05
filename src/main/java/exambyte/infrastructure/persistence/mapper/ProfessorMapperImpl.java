@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class ProfessorMapperImpl implements ProfessorMapper {
 
     @Override
-    public Professor toDomain(ProfessorEntity professorEntity) {
+    public Professor toDomain(ProfessorEntity entity) {
         return new Professor.ProfessorBuilder()
                 .id(null)
-                .fachId(professorEntity.getFachId())
-                .name(professorEntity.getName())
+                .fachId(entity.getFachId())
+                .name(entity.getName())
                 .build();
     }
 

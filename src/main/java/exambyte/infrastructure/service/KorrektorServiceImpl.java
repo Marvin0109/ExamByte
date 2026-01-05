@@ -12,15 +12,15 @@ import java.util.UUID;
 @Service
 public class KorrektorServiceImpl  implements KorrektorService {
 
-    private final KorrektorRepository korrektorRepository;
+    private final KorrektorRepository repository;
 
     public KorrektorServiceImpl(KorrektorRepository korrektorRepository) {
-        this.korrektorRepository = korrektorRepository;
+        this.repository = korrektorRepository;
     }
 
     @Override
     public Korrektor getKorrektor(UUID fachId) {
-        return korrektorRepository.findByFachId(fachId)
+        return repository.findByFachId(fachId)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
@@ -34,7 +34,7 @@ public class KorrektorServiceImpl  implements KorrektorService {
                     .name(name)
                     .build();
 
-            korrektorRepository.save(korrektor);
+            repository.save(korrektor);
         } else {
             Korrektor korrektor = new Korrektor.KorrektorBuilder()
                 .id(null)
@@ -42,12 +42,12 @@ public class KorrektorServiceImpl  implements KorrektorService {
                 .name(name)
                 .build();
 
-            korrektorRepository.save(korrektor);
+            repository.save(korrektor);
         }
     }
 
     @Override
     public Optional<Korrektor> getKorrektorByName(String name) {
-        return korrektorRepository.findByName(name);
+        return repository.findByName(name);
     }
 }

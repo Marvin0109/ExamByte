@@ -18,11 +18,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 /**
  * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
- * Einige Tests sind noch in Arbeit oder funktionieren nicht vollständig.
- *
- * Hinweis: Der Exam 'noFieldInjectionInProductionCode' ist momentan in "Work in progress" und wurde noch nicht
- * vollständig implementiert. Er wird dazu verwendet, um sicherzustellen, dass keine Feldinjektionen in Produktionscode
- * (außerhalb von Testklassen) verwendet wird.
  */
 @AnalyzeClasses(packages = "exambyte")
 public class OnionArchitectureTest {

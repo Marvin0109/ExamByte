@@ -12,15 +12,15 @@ import java.util.UUID;
 @Service
 public class ProfessorServiceImpl implements ProfessorService {
 
-    private final ProfessorRepository professorRepository;
+    private final ProfessorRepository repository;
 
     public ProfessorServiceImpl(ProfessorRepository professorRepository) {
-        this.professorRepository = professorRepository;
+        this.repository = professorRepository;
     }
 
     @Override
     public Professor getProfessor(UUID fachId) {
-        return professorRepository.findByFachId(fachId)
+        return repository.findByFachId(fachId)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
@@ -31,17 +31,17 @@ public class ProfessorServiceImpl implements ProfessorService {
                 .fachId(null)
                 .name(name)
                 .build();
-        professorRepository.save(professor);
+        repository.save(professor);
     }
 
     @Override
     public Optional<Professor> getProfessorByName(String name) {
-        return professorRepository.findByName(name);
+        return repository.findByName(name);
     }
 
     @Override
     public Optional<UUID> getProfessorFachIdByName(String name) {
-        Optional<Professor> professor = professorRepository.findByName(name);
+        Optional<Professor> professor = repository.findByName(name);
         return professor.map(Professor::uuid);
     }
 }

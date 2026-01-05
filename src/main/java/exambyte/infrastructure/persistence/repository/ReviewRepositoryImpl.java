@@ -12,40 +12,40 @@ import java.util.UUID;
 @Repository
 public class ReviewRepositoryImpl implements ReviewRepository {
 
-    private final ReviewMapper reviewMapper;
-    private final ReviewDAO reviewDAO;
+    private final ReviewMapper mapper;
+    private final ReviewDAO dao;
 
     public ReviewRepositoryImpl(ReviewDAO reviewDAO, ReviewMapper reviewMapper) {
-        this.reviewDAO = reviewDAO;
-        this.reviewMapper = reviewMapper;
+        this.dao = reviewDAO;
+        this.mapper = reviewMapper;
     }
 
     @Override
     public Optional<Review> findByFachId(UUID fachId) {
-        Optional<ReviewEntity> entity = reviewDAO.findByFachId(fachId);
-        return entity.map(reviewMapper::toDomain);
+        Optional<ReviewEntity> entity = dao.findByFachId(fachId);
+        return entity.map(mapper::toDomain);
     }
 
     @Override
     public void save(Review review) {
-        ReviewEntity entity = reviewMapper.toEntity(review);
-        reviewDAO.save(entity);
+        ReviewEntity entity = mapper.toEntity(review);
+        dao.save(entity);
     }
 
     @Override
     public Review findByAntwortFachId(UUID fachId) {
-        Optional<ReviewEntity> entity = reviewDAO.findByAntwortFachId(fachId);
-        return entity.map(reviewMapper::toDomain)
+        Optional<ReviewEntity> entity = dao.findByAntwortFachId(fachId);
+        return entity.map(mapper::toDomain)
                 .orElse(null);
     }
 
     @Override
     public void deleteAll() {
-        reviewDAO.deleteAll();
+        dao.deleteAll();
     }
 
     @Override
     public void deleteReview(UUID id) {
-        reviewDAO.deleteByFachId(id);
+        dao.deleteByFachId(id);
     }
 }
