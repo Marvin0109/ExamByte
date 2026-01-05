@@ -39,28 +39,33 @@
             </button>
         </div>
 
-        <div class="d-flex gap-2">
+        <div class="d-flex">
             <form th:if="${timeLeftBool and !alreadySubmitted}"
                   th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" method="get">
                 <button type="submit" class="btn btn-primary">Test starten</button>
             </form>
+        </div>
 
-            <form th:if="${timeLeftBool and alreadySubmitted}"
-                  th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" method="get">
-                <button type="submit" class="btn btn-secondary">Test neu starten</button>
+        <div class="d-flex"
+             th:if="${timeLeftBool and alreadySubmitted}">
+
+            <form method="get"
+                  th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}"
+                  style="margin-right: 1rem;">
+                <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
+                <button type="submit" class="btn btn-secondary">
+                    Test neu starten
+                </button>
             </form>
 
-            <form th:action="@{/exams/startWithData/{examFachId}(examFachId=${exam.fachId})}" method="get">
-                <!-- Der Button wird nur angezeigt, wenn beide Bedingungen zutreffen -->
-                <button th:if="${timeLeftBool and alreadySubmitted and checkboxChecked}"
-                        type="submit" class="btn btn-secondary">
-                    Test fortsetzen
-                </button>
+            <p>
 
-                <label>
-                    <input type="checkbox" name="checkboxChecked" th:checked="${checkboxChecked}"/>
-                    Meine letzten Antworten laden.
-                </label>
+            <form method="get"
+                  th:action="@{/exams/startWithData/{examFachId}(examFachId=${exam.fachId})}">
+                <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
+                <button type="submit" class="btn btn-outline-secondary">
+                    Letzter Versuch ändern
+                </button>
             </form>
         </div>
     </div>
@@ -111,7 +116,7 @@
             <div class="col-9">
                 Nach dem Beenden des Tests werden die Ankreuzaufgaben automatisch bewertet, die Freitextaufgaben
                 werden erst nach der Bearbeitungsfrist des Tests manuell korrigiert. Die endgültigen Ergebnisse werden hier
-                ganz unten angezeigt nach der Korrekturfrist.
+                ganz angezeigt nach der Korrekturfrist.
             </div>
         </div>
 
@@ -121,7 +126,8 @@
                 Es gibt <strong>keine Toleranz</strong> bei Verstößen gegen die gute wissenschaftliche Praxis,
                 dazu gehört die Übernahme von Text oder Code aus Internetquellen oder von anderen Personen
                 ohne Quellenangabe. Wenn Quellen (außerhalb des Kursmaterials) zitiert oder paraphrasiert werden,
-                müssen diese angegeben werden. Dies gilt insbesondere für generative KIs.
+                müssen diese angegeben werden. Dies gilt insbesondere für generative KIs. Kommt es zum Plagiat, wird
+                der Test als <strong>nicht bestanden</strong> bewertet!
             </div>
         </div>
 
@@ -136,4 +142,6 @@
 </main>
 
 </body>
+
+
 </html>
