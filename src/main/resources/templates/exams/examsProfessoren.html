@@ -31,8 +31,24 @@
         <span th:text="${message}"></span>
     </div>
 
+    <h1>Test Generator</h1>
+
+    <div class="alert alert-info" role="alert">
+        Willkommen!
+        <p>
+            Hier auf der Seite werden die Tests erstellt. Nach dem Ausfüllen aller Fragen und Antworten sowie Fristen
+            geben Sie bitte den Test ab und wird ab dem von Ihnen gesetzten Startzeitpunkt bearbeitbar sein.
+        </p>
+        <p>
+            <strong>
+                Hinweis: Mit Kommas werden in Multiple Choice und Single Choice Fragen mehrere Optionen erzeugt, also
+                bitte die Antwortoptionen sowie Lösungen ohne Kommas als Ein-Zeiler erstellen, danke!
+            </strong>
+        </p>
+    </div>
+
     <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}">
-        <h2>Test Daten</h2>
+        <h2>Test Metadaten</h2>
 
         <label>Titel:</label>
         <input type="text" th:field="*{title}" class="form-control">
@@ -215,10 +231,13 @@
         <button type="submit" class="btn btn-primary">Test speichern</button>
     </form>
 
-        <form th:object="${examForm}" method="post" th:action="@{/exams/examsProfessoren/export}">
-            <button type="submit">CSV Vorschau herunterladen</button>
-        </form>
+    <form th:object="${examForm}" method="post" th:action="@{/exams/examsProfessoren/export}">
+        <button type="submit">Speichern und Exportieren</button>
+    </form>
 </main>
+
+<!-- Navigation -->
+<header th:replace="~{navigation/navbarDown.html}"> </header>
 
 <!-- js Imports -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

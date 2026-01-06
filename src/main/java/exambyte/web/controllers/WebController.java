@@ -2,7 +2,6 @@ package exambyte.web.controllers;
 
 import exambyte.application.service.ExamManagementService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -74,30 +73,6 @@ public class WebController {
         redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/settings";
-    }
-
-    /**
-     * Zeigt die Login-Seite an.
-     *
-     * @return Der Name der View für die Login-Seite.
-     */
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    // TODO: relevant?
-
-    /**
-     * Verhindert das Caching der Anwort.
-     * Wird für sicherheitsrelevante Seiten verwendet.
-     *
-     * @param response Das {@link HttpServletResponse}-Objekt, um die Cache-Header zu setzen.
-     */
-    private void preventCaching(HttpServletResponse response) {
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Expires", "0");
     }
 
     /**

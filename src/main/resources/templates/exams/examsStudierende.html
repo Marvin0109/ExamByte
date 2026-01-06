@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <script type="module" id="truffle-injected" data-runtime="bkkjeefjfjcfdfifddmkdmcpmaakmelp" src="chrome-extension://bkkjeefjfjcfdfifddmkdmcpmaakmelp/./injected-script/index.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
@@ -20,34 +19,36 @@
   <link href="/public/custom/index.css" rel="stylesheet">
   <link href="/public/custom/popup.css" rel="stylesheet">
 </head>
+    <body>
+      <!-- Navigation -->
+      <header th:replace="~{navigation/navbar.html}"> </header>
 
-<body>
-  <!-- Navigation -->
-  <header th:replace="~{navigation/navbar.html}"> </header>
+      <main role="main" class="container mt-5 pt-5">
 
-  <main role="main" class="container mt-5 pt-5">
+          <!-- Flash Message anzeigen -->
+          <div th:if="${message}" class="alert"
+               th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+              <span th:text="${message}"></span>
+          </div>
 
-      <!-- Flash Message anzeigen -->
-      <div th:if="${message}" class="alert"
-           th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
-          <span th:text="${message}"></span>
-      </div>
+          <ul class="list-group">
+              <li class="list-group-item" th:each="exam : ${exams}">
+                  <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}"
+                     th:text="${exam.title}">
+                  </a>
+              </li>
+          </ul>
 
-      <ul class="list-group">
-          <li class="list-group-item" th:each="exam : ${exams}">
-              <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}"
-                 th:text="${exam.title}">
-              </a>
-          </li>
-      </ul>
+      </main>
 
-  </main>
+      <!-- Navigation -->
+      <header th:replace="~{navigation/navbarDown.html}"> </header>
 
-  <!-- js Imports -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-  <script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
-  <script src="/public/js/scripts.js"></script>
+      <!-- js Imports -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+      <script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+      <script src="/public/js/scripts.js"></script>
 
-  </body>
+    </body>
 </html>
