@@ -102,7 +102,7 @@ public class ExamController {
         );
 
         if (!success) {
-            redirectAttributes.addFlashAttribute("message", "Fehler beim Erstellen der Prüfung.");
+            redirectAttributes.addFlashAttribute("message", "Maximale Kapazität an Tests erreicht!");
             redirectAttributes.addFlashAttribute("messageType", "danger");
             return "redirect:/exams/examsProfessoren";
         }
