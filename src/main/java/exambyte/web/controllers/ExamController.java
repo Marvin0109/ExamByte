@@ -268,9 +268,13 @@ public class ExamController {
         String minutenAnzeige = "";
         boolean timeLeft = false;
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
         LocalDateTime now = LocalDateTime.now();
-        if (now.isAfter(examDTO.endTime())) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
+        if (now.isBefore(examDTO.startTime())) {
+            String startTimeFormatted = examDTO.startTime().format(formatter);
+
+            fristAnzeige = "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
+        } else if (now.isAfter(examDTO.endTime())) {
             String endTimeFormatted = examDTO.endTime().format(formatter);
 
             fristAnzeige = "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
