@@ -232,6 +232,8 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
         List<ExamDTO> examDTOs = examManagementService.getAllExams();
+        LocalDateTime now = LocalDateTime.now();
+        model.addAttribute("timeNow", now);
         model.addAttribute("exams", examDTOs);
         model.addAttribute("currentPath", request.getRequestURI());
         return "/exams/examsStudierende";

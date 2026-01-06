@@ -7,7 +7,7 @@
   <meta name="author" content="">
   <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-  <title>Tests Bearbeiten</title>
+  <title>Tests bearbeiten</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -25,19 +25,60 @@
 
       <main role="main" class="container mt-5 pt-5">
 
+          <h1> Tests </h1>
+
+          <div class="alert alert-info" role="alert">
+              <p>
+                  Hier sind alle Tests aufgelistet, und je nach Frist sind die bereit zur Bearbeitung. Der
+                  Zulassungsstatus wird auch hier angezeigt und aktualisiert.
+              </p>
+              <p>
+                  <strong>
+                      Hinweis: Die Zulassung erhält man erst, wenn man in jedem Test mind. 50 % der zu erreichten Punkte
+                      hat, ist dies nicht erfüllt, hat man den Kurs nicht bestanden!
+                  </strong>
+              </p>
+          </div>
+
           <!-- Flash Message anzeigen -->
           <div th:if="${message}" class="alert"
                th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
               <span th:text="${message}"></span>
           </div>
 
-          <ul class="list-group">
-              <li class="list-group-item" th:each="exam : ${exams}">
-                  <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}"
-                     th:text="${exam.title}">
-                  </a>
-              </li>
-          </ul>
+          <table class="table">
+              <thead>
+              <tr>
+                  <th>Test</th>
+                  <th>Status</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="exam : ${exams}">
+                  <td>
+                      <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}" th:text="${exam.title}">
+                      </a>
+                  </td>
+                  <td>
+                      <!-- Status-Logik basierend auf den Zeitpunkten -->
+                      <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                          <span th:case="true">Startet bald</span>
+                          <span th:case="false">
+                            <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                                <span th:case="true">Online</span>
+                                <span th:case="false">
+                                    <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                        <span th:case="true">In Bearbeitung</span>
+                                        <span th:case="false">Beendet</span>
+                                    </span>
+                                </span>
+                            </span>
+                          </span>
+                      </span>
+                  </td>
+              </tr>
+              </tbody>
+          </table>
 
       </main>
 
