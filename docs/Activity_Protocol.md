@@ -464,3 +464,11 @@ Anwendung), vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
 - Navigationsleiste zusätzlich unten eingefügt
 - Exam-Übersicht optimiert (Statusanzeige + Tabelle)
 - `Activity_Protocol` umgeschrieben
+
+---
+
+### 07.01.2026
+**Bereich**: Frontend / Web / UX / Test
+- Bewertungsübersicht vorerst implementiert
+- Bewertungsstatus von manueller Korrekturen pro Exam eingebunden
+- Angefangene Tests, weitere folgen
