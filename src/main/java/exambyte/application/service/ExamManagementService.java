@@ -42,4 +42,6 @@ public interface ExamManagementService {
     List<VersuchDTO> getSubmission(UUID examFachId, String studentLogin);
 
     void saveAutomaticReviewer();
+
+    double reviewCoverage(UUID examFachId);
 }

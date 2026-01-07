@@ -28,9 +28,50 @@
 
   <h1>Tests korrigieren</h1>
 
-  <ul>
-    <li th:each="exam : ${exams}">
-  </ul>
+  <div th:if="${message}" class="alert"
+       th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+    <span th:text="${message}"></span>
+  </div>
+
+  <table class="table">
+      <thead>
+          <tr>
+              <th>Test</th>
+              <th>Prüfungsstatus</th>
+              <th>Bewertungsstatus</th>
+          </tr>
+      </thead>
+      <tbody>
+      <tr th:each="covItem : ${reviewCoverage}">
+          <td>
+              <a th:href="@{/exams/showExam/{examFachId}(examFachId=${covItem.exam.fachId})}"
+                 th:text="${covItem.exam.title}">
+              </a>
+          </td>
+
+          <td>
+              <span th:switch="${timeNow.isBefore(covItem.exam.startTime)}">
+                  <span th:case="true">Startet bald</span>
+                  <span th:case="false">
+                    <span th:switch="${timeNow.isBefore(covItem.exam.endTime)}">
+                        <span th:case="true">Prüfung läuft</span>
+                        <span th:case="false">
+                            <span th:switch="${timeNow.isBefore(covItem.exam.resultTime)}">
+                                <span th:case="true">Online</span>
+                                <span th:case="false">Beendet</span>
+                            </span>
+                        </span>
+                    </span>
+                  </span>
+              </span>
+          </td>
+
+          <td>
+              <span th:text="${#numbers.formatDecimal(covItem.reviewCoverage, 1, 2)} + ' %'"></span>
+          </td>
+      </tr>
+      </tbody>
+  </table>
 
 </main>
 

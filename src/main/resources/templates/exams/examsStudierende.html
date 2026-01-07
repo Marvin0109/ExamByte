@@ -40,7 +40,6 @@
               </p>
           </div>
 
-          <!-- Flash Message anzeigen -->
           <div th:if="${message}" class="alert"
                th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
               <span th:text="${message}"></span>
@@ -48,10 +47,10 @@
 
           <table class="table">
               <thead>
-              <tr>
-                  <th>Test</th>
-                  <th>Status</th>
-              </tr>
+                  <tr>
+                      <th>Test</th>
+                      <th>Status</th>
+                  </tr>
               </thead>
               <tbody>
               <tr th:each="exam : ${exams}">
@@ -60,7 +59,6 @@
                       </a>
                   </td>
                   <td>
-                      <!-- Status-Logik basierend auf den Zeitpunkten -->
                       <span th:switch="${timeNow.isBefore(exam.startTime)}">
                           <span th:case="true">Startet bald</span>
                           <span th:case="false">

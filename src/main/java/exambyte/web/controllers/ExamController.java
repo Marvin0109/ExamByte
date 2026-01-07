@@ -10,6 +10,7 @@ import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.QuestionData;
+import exambyte.web.form.ReviewCoverageForm;
 import exambyte.web.form.SubmitForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -208,17 +209,33 @@ public class ExamController {
         return null;
     }
 
-    // TODO: HTML ausbauen für Exam Liste
     @GetMapping("/examsKorrektor")
     @Secured("ROLE_REVIEWER")
     public String listExamsForReviewer(
             Model model,
             OAuth2AuthenticationToken auth,
             HttpServletRequest request) {
+
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
+
         List<ExamDTO> examDTOs = examManagementService.getAllExams();
-        model.addAttribute("exams", examDTOs);
+        LocalDateTime now = LocalDateTime.now();
+
+        List<Double> reviewCoverageList = new ArrayList<>();
+        for (ExamDTO examDTO : examDTOs) {
+            reviewCoverageList.add(examManagementService.reviewCoverage(examDTO.fachId()));
+        }
+
+        List<ReviewCoverageForm> covList = new ArrayList<>();
+
+        for (int i = 0; i < examDTOs.size(); i++) {
+            ReviewCoverageForm rcf = new ReviewCoverageForm(examDTOs.get(i), reviewCoverageList.get(i));
+            covList.add(rcf);
+        }
+
+        model.addAttribute("reviewCoverage", covList);
+        model.addAttribute("timeNow", now);
         model.addAttribute("currentPath", request.getRequestURI());
         return "/exams/examsKorrektor";
     }
@@ -229,10 +246,13 @@ public class ExamController {
             Model model,
             OAuth2AuthenticationToken auth,
             HttpServletRequest request) {
+
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
+
         List<ExamDTO> examDTOs = examManagementService.getAllExams();
         LocalDateTime now = LocalDateTime.now();
+
         model.addAttribute("timeNow", now);
         model.addAttribute("exams", examDTOs);
         model.addAttribute("currentPath", request.getRequestURI());
@@ -330,7 +350,8 @@ public class ExamController {
 
     @GetMapping("/examsDurchfuehren/{examFachId}")
     @Secured("ROLE_STUDENT")
-    public String startExam(@PathVariable("examFachId") String examFachId, OAuth2AuthenticationToken auth, Model model) {
+    public String startExam(@PathVariable("examFachId") String examFachId,
+                            OAuth2AuthenticationToken auth, Model model) {
         OAuth2User user = auth.getPrincipal();
         String studentName = user.getAttribute("login");
 

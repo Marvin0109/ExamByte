@@ -464,4 +464,11 @@ public class ExamManagementServiceTest {
         assertThat(attempts.getFirst().maxPunkte()).isEqualTo(5);
         assertThat(attempts.getFirst().prozent()).isEqualTo(100.0);
     }
+
+    // TODO
+    @Test
+    @DisplayName("Laden des Bewertungsstatus ist erfolgreich (reviewCoverage)")
+    void test_13() {
+
+    }
 }

@@ -3,7 +3,10 @@ package exambyte.application.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.domain.mapper.*;
+import exambyte.domain.model.aggregate.exam.Antwort;
+import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.NichtVorhandenException;
@@ -19,7 +22,10 @@ import java.util.stream.Stream;
 public class ExamManagementServiceImpl implements ExamManagementService {
 
     private final ExamService examService;
+
+    //TODO: Use examService instead of examRepository!
     private final ExamRepository examRepository;
+
     private final AntwortService antwortService;
     private final FrageService frageService;
     private final StudentService studentService;
@@ -261,7 +267,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public List<VersuchDTO> getSubmission(UUID examFachId, String studentLogin) {
-        System.out.println("Attempt Service Called");
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
         // Alle Fragen des Exams und deren Maximalpunkte
@@ -319,5 +324,38 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         if (korrektorService.getKorrektorByName("Automatischer Korrektor").isEmpty()) {
             korrektorService.saveKorrektor("Automatischer Korrektor");
         }
+    }
+
+    @Override
+    public double reviewCoverage(UUID examFachId) {
+        List<Frage> fragen = frageService.getFragenForExam(examFachId);
+        List<FrageDTO> frageDTOList = fragen.stream()
+                .filter(frage -> QuestionType.FREITEXT == frage.getType())
+                .map(frageDTOMapper::toDTO)
+                .toList();
+
+        List<AntwortDTO> antworten = new ArrayList<>();
+
+        for (FrageDTO frageDTO : frageDTOList) {
+            Antwort antwort = antwortService.findByFrageFachId(frageDTO.getFachId());
+            if (antwort != null) {
+                antworten.add(antwortDTOMapper.toDTO(antwort));
+            }
+        }
+
+        List<ReviewDTO> reviewsTotal = new ArrayList<>();
+
+        for (AntwortDTO antwortDTO : antworten) {
+            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.getFachId());
+            if (review != null) {
+                reviewsTotal.add(reviewDTOMapper.toDTO(review));
+            }
+        }
+
+        double coverage = antworten.isEmpty()
+                ? 0.0
+                : (double) reviewsTotal.size() / antworten.size() * 100;
+
+        return Math.round(coverage * 100.0) / 100.0;
     }
 }
