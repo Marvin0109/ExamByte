@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ExamService {
 
-    List<Exam> alleExams();
+    List<Exam> allExams();
 
     Exam getExam(UUID fachId);
 

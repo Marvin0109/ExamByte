@@ -19,9 +19,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public List<Exam> alleExams() {
+    public List<Exam> allExams() {
         return repository.findAll().stream().toList();
-
     }
 
     @Override

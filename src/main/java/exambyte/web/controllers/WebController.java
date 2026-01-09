@@ -10,12 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-/**
- * Diese Klasse verwaltet die verschiedenen HTTP-Request-Handler für die Webanwendung,
- * einschließlich der Anzeige von Seiten wie der Startseite, Kontaktseite und Prüfungsliste.
- * Sie implementiert auch Sicherheitslogik, z.B. für den geschützen Zugriff auf die Prüfungsseite
- * und das erzwungene Abmelden.
- */
 @Controller
 public class WebController {
 
@@ -25,13 +19,6 @@ public class WebController {
         this.examManagementService = examManagementService;
     }
 
-    /**
-     * Zeigt die Startseite an und fügt die aktuelle URL zur Ansicht hinzu.
-     *
-     * @param model Das Model, um Daten an die View zu übergeben.
-     * @param request Das {@link HttpServletRequest}-Objekt, um die aktuelle URL zu ermitteln.
-     * @return Der Name der View für die Startseite.
-     */
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
         examManagementService.saveAutomaticReviewer();
@@ -39,20 +26,12 @@ public class WebController {
         return "index";
     }
 
-    /**
-     * Zeigt die Kontaktseite an und fügt den Namen des authentifizierten Benutzers sowie die aktuelle URL zur Ansicht hinzu.
-     *
-     * @param model Das Model, um Daten an die View zu übergeben.
-     * @param request Das {@link HttpServletRequest}-Objekt, um die aktuelle URL zu ermitteln.
-     * @param auth Das {@link OAuth2AuthenticationToken}-Objekt, das Informationen zum authentifizierten Benutzer enthält.
-     * @return Der Name der View für die Kontaktseite.
-     */
     @GetMapping("/contact")
     @Secured({"ROLE_STUDENT", "ROLE_REVIEWER", "ROLE_ADMIN"})
     public String contact(Model model, HttpServletRequest request, OAuth2AuthenticationToken auth) {
-        System.out.println(auth);
         String name = auth.getPrincipal().getAttribute("login");
         String fachID = examManagementService.getProfFachIDByName(name).get().toString();
+
         model.addAttribute("name", auth.getPrincipal().getAttribute("login"));
         model.addAttribute("fachID", fachID);
         model.addAttribute("currentPath", request.getRequestURI());
@@ -70,6 +49,7 @@ public class WebController {
     @Secured("ROLE_ADMIN")
     public String resetExamData(RedirectAttributes redirectAttributes) {
         examManagementService.reset();
+
         redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
         redirectAttributes.addFlashAttribute("success", true);
         return "redirect:/settings";

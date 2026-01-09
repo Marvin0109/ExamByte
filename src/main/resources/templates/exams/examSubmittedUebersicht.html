@@ -25,13 +25,65 @@
 <header th:replace="~{navigation/navbar.html}"> </header>
 
 <main role="main" class="container mt-5 pt-5">
-  <div class="container mt-5">
-    <h1 th:text="${exam.title}">Test</h1>
 
-    <ol>
-      <li th:each="f : ${frage}" th:value="${f.frageText}">Frage Text</li>
-    </ol>
-  </div>
+    <div th:if="${message}" class="alert"
+         th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+      <span th:text="${message}"></span>
+    </div>
+
+    <div class="alert alert-info" role="alert">
+      <p>
+        Hier werden alle Studenten aufgelistet, die erfolgreich die Prüfung bearbeitet haben.
+      </p>
+      <p>
+        Noch nicht korrigierte Lösungen werden in der Tabelle vorangestellt.
+      </p>
+    </div>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Prüfling</th>
+      <th>Abgabezeit</th>
+      <th>Bewertungsstatus</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="submitInfo: ${submitInfoList}">
+      <td>
+        <a th:href="@{/exams/showSubmit/{examFachId}/{studentFachId}
+                        (examFachId=${exam.fachId},
+                        studentFachId=${submitInfo.fachId})
+                    }"
+           th:text="${submitInfo.name}">
+        </a>
+      </td>
+
+      <td>
+          <span th:switch="${timeNow.isBefore(exam.startTime)}">
+              <span th:case="true">Startet bald</span>
+              <span th:case="false">
+                <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                    <span th:case="true">Prüfung läuft</span>
+                    <span th:case="false">
+                        <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                            <span th:case="true">Korrektur läuft</span>
+                            <span th:case="false">Beendet</span>
+                        </span>
+                    </span>
+                </span>
+              </span>
+          </span>
+      </td>
+
+      <td>
+        <span th:text="${submitInfo.reviewStatus ? '✔' : '✘'}"
+              th:style="${submitInfo.reviewStatus ? 'color:green;' : 'color:red;'}">
+        </span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
 </main>
 
 <!-- Navigation -->

@@ -18,7 +18,7 @@ public class AntwortServiceImpl implements AntwortService {
 
     @Override
     public Antwort findByFrageFachId(UUID frageFachId) {
-        if(frageFachId == null) {
+        if (frageFachId == null) {
             throw new IllegalArgumentException("FrageFachId is null!");
         }
         return repository.findByFrageFachId(frageFachId);

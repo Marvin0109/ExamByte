@@ -44,7 +44,7 @@
       <tbody>
       <tr th:each="covItem : ${reviewCoverage}">
           <td>
-              <a th:href="@{/exams/showExam/{examFachId}(examFachId=${covItem.exam.fachId})}"
+              <a th:href="@{/exams/showExamSubmits/{examFachId}(examFachId=${covItem.exam.fachId})}"
                  th:text="${covItem.exam.title}">
               </a>
           </td>
@@ -57,7 +57,7 @@
                         <span th:case="true">Prüfung läuft</span>
                         <span th:case="false">
                             <span th:switch="${timeNow.isBefore(covItem.exam.resultTime)}">
-                                <span th:case="true">Online</span>
+                                <span th:case="true">Korrektur läuft</span>
                                 <span th:case="false">Beendet</span>
                             </span>
                         </span>

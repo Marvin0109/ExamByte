@@ -27,7 +27,7 @@
 
     <!-- Flash Message anzeigen -->
     <div th:if="${message}" class="alert"
-         th:classappend="${messageType} ? 'alert-success' : 'alert-danger'" role="alert">
+         th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
         <span th:text="${message}"></span>
     </div>
 
@@ -41,8 +41,11 @@
         </p>
         <p>
             <strong>
-                Hinweis: Mit Kommas werden in Multiple Choice und Single Choice Fragen mehrere Optionen erzeugt, also
+                1. Hinweis: Mit Kommas werden in Multiple Choice und Single Choice Fragen mehrere Optionen erzeugt, also
                 bitte die Antwortoptionen sowie Lösungen ohne Kommas als Ein-Zeiler erstellen, danke!
+
+                2. Hinweis: Das ganze Zulassungsszenario ist da drauf ausgelegt, dass es keine zwei oder mehr Tests am
+                selben Zeitpunkt starten!
             </strong>
         </p>
     </div>

@@ -7,8 +7,6 @@ import java.util.UUID;
 
 public class QuestionData {
 
-    private int index;
-
     @NotBlank(message = "Fragetext darf nicht leer sein!")
     private String questionText;
 
@@ -22,13 +20,6 @@ public class QuestionData {
     private String correctAnswers;
 
     private UUID fachId;
-
-    public int getIndex() {
-        return index;
-    }
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
     public String getQuestionText() {
         return questionText;
