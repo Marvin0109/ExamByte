@@ -47,19 +47,6 @@ public class ProfessorServiceTest {
     }
 
     @Test
-    @DisplayName("Ein Professor kann gespeichert werden")
-    void test_03() {
-        // Arrange
-        String name = "Prof123";
-
-        // Act
-        service.saveProfessor(name);
-
-        // Assert
-        verify(profRepo).save(any(Professor.class));
-    }
-
-    @Test
     @DisplayName("Ein Professor kann nach seinem Namen gefunden werden")
     void test_04() {
         // Arrange

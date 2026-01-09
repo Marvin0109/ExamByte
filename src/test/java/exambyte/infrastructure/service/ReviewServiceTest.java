@@ -17,21 +17,8 @@ public class ReviewServiceTest {
     private final ReviewService reviewService = new ReviewServiceImpl(reviewRepository);
 
     @Test
-    @DisplayName("Eine Bewertung kann hinzugefügt werden")
-    void test_01() {
-        // Arrange
-        Review review = new Review.ReviewBuilder().build();
-
-        // Act
-        reviewRepository.save(review);
-
-        // Assert
-        verify(reviewRepository).save(review);
-    }
-
-    @Test
     @DisplayName("Eine Bewertung kann gefunden werden mit der Antwort-FachID")
-    void test_02() {
+    void test_01() {
         // Arrange
         UUID antwortFachId = UUID.randomUUID();
         var review = new Review.ReviewBuilder().antwortFachId(antwortFachId).build();

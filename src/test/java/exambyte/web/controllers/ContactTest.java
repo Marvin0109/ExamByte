@@ -55,9 +55,9 @@ public class ContactTest {
 
         mvc.perform(get("/contact"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("contact"))
                 .andExpect(model().attribute("name", "Marvin0109"))
                 .andExpect(model().attribute("fachID", randomUUID.toString()))
-                .andExpect(model().attributeExists("currentPath"));
+                .andExpect(model().attributeExists("currentPath"))
+                .andExpect(view().name("contact"));
     }
 }
