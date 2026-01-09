@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface ExamManagementService {
 
-    boolean createExam(String profName, String title,
+    String createExam(String profName, String title,
                        LocalDateTime startDate, LocalDateTime endDate, LocalDateTime resultTime);
 
     List<ExamDTO> getAllExams();
@@ -39,9 +39,17 @@ public interface ExamManagementService {
 
     void removeOldAnswers(UUID examFachId, String name);
 
-    List<VersuchDTO> getSubmission(UUID examFachId, String studentLogin);
+    VersuchDTO getSubmission(UUID examFachId, String studentLogin);
 
     void saveAutomaticReviewer();
 
     double reviewCoverage(UUID examFachId);
+
+    List<StudentDTO> getStudentSubmittedExam(UUID examFachId);
+
+    boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student);
+
+    List<FrageDTO> getFreitextFragen(UUID examFachId);
+
+    List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId);
 }

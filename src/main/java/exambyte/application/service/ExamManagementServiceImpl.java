@@ -3,17 +3,15 @@ package exambyte.application.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.domain.mapper.*;
-import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.*;
-import exambyte.infrastructure.NichtVorhandenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,10 +20,6 @@ import java.util.stream.Stream;
 public class ExamManagementServiceImpl implements ExamManagementService {
 
     private final ExamService examService;
-
-    //TODO: Use examService instead of examRepository!
-    private final ExamRepository examRepository;
-
     private final AntwortService antwortService;
     private final FrageService frageService;
     private final StudentService studentService;
@@ -34,60 +28,84 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final KorrekteAntwortenService korrekteAntwortenService;
     private final ReviewService reviewService;
     private final AutomaticReviewService automaticReviewService;
+
     private final ExamDTOMapper examDTOMapper;
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
+    private final StudentDTOMapper studentDTOMapper;
 
     @Autowired
-    public ExamManagementServiceImpl(ExamService examService, AntwortService antwortService, FrageService frageService,
-                                     StudentService studentService, ProfessorService professorService,
+    public ExamManagementServiceImpl(ExamService examService,
+                                     AntwortService antwortService,
+                                     FrageService frageService,
+                                     StudentService studentService,
+                                     ProfessorService professorService,
                                      KorrektorService korrektorService,
-                                     ExamRepository examRepository, ExamDTOMapper examDTOMapper,
-                                     FrageDTOMapper frageDTOMapper, AntwortDTOMapper antwortDTOMapper,
+                                     ReviewService reviewService,
+                                     AutomaticReviewService automaticReviewService,
                                      KorrekteAntwortenService korrekteAntwortenService,
+                                     ExamDTOMapper examDTOMapper,
+                                     FrageDTOMapper frageDTOMapper,
+                                     AntwortDTOMapper antwortDTOMapper,
                                      KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
                                      ReviewDTOMapper reviewDTOMapper,
-                                     ReviewService reviewService, AutomaticReviewService automaticReviewService) {
+                                     StudentDTOMapper studentDTOMapper) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
         this.studentService = studentService;
         this.professorService = professorService;
         this.korrektorService = korrektorService;
-        this.examRepository = examRepository;
+        this.korrekteAntwortenService = korrekteAntwortenService;
+        this.reviewService = reviewService;
+        this.automaticReviewService = automaticReviewService;
+
         this.examDTOMapper = examDTOMapper;
         this.frageDTOMapper = frageDTOMapper;
         this.antwortDTOMapper = antwortDTOMapper;
-        this.korrekteAntwortenService = korrekteAntwortenService;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
         this.reviewDTOMapper = reviewDTOMapper;
-        this.reviewService = reviewService;
-        this.automaticReviewService = automaticReviewService;
+        this.studentDTOMapper = studentDTOMapper;
     }
 
     @Override
-    public boolean createExam(String professorName, String title, LocalDateTime startTime,
-                              LocalDateTime endTime, LocalDateTime resultTime) {
+    public String createExam(String professorName,
+                              String title,
+                              LocalDateTime startTime,
+                              LocalDateTime endTime,
+                              LocalDateTime resultTime) {
+
         UUID profFachId = null;
         Optional<UUID> optionalFachID = professorService.getProfessorFachIdByName(professorName);
         if (optionalFachID.isPresent()) {
             profFachId = optionalFachID.get();
         }
 
-        if (examRepository.findAll().size() < 12) {
-            ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
-            examService.addExam(examDTOMapper.toDomain(examDTO));
-            return true;
-        } else {
-            return false;
+        int examCount = examService.allExams().size();
+
+        if (examCount >= 12) {
+            return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
         }
+
+        boolean startTimeExists = examService.allExams().stream()
+                .map(examDTOMapper::toDTO)
+                .anyMatch(e -> e.startTime().truncatedTo(ChronoUnit.MINUTES)
+                        .equals(startTime.truncatedTo(ChronoUnit.MINUTES)));
+
+        if (startTimeExists) {
+            return "Ein Exam mit der selben Startzeit ist schon vorhanden!";
+        }
+
+        ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
+        examService.addExam(examDTOMapper.toDomain(examDTO));
+        return "";
     }
 
     @Override
     public List<ExamDTO> getAllExams() {
-        return examService.alleExams().stream()
+        return examService.allExams().stream()
                 .map(examDTOMapper::toDTO)
                 .sorted(Comparator.comparing(ExamDTO::startTime))
                 .toList();
@@ -183,8 +201,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public ExamDTO getExam(UUID examFachId) {
-        return examDTOMapper.toDTO(examRepository.findByFachId(examFachId)
-                .orElseThrow(() -> new RuntimeException("Exam not found")));
+        return examDTOMapper.toDTO(examService.getExam(examFachId));
     }
 
     @Override
@@ -216,13 +233,23 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public UUID getExamByStartTime(LocalDateTime startTime) {
-        return examRepository.findByStartTime(startTime)
-                .orElseThrow(NichtVorhandenException::new);
+        List<ExamDTO> examList = examService.allExams().stream()
+                .map(examDTOMapper::toDTO)
+                .toList();
+
+        for (ExamDTO examDTO : examList) {
+            if (startTime.truncatedTo(ChronoUnit.MINUTES)
+                    .equals(examDTO.startTime().truncatedTo(ChronoUnit.MINUTES))) {
+                return examDTO.fachId();
+            }
+        }
+
+        return null;
     }
 
     @Override
     public void deleteByFachId(UUID uuid) {
-        examRepository.deleteByFachId(uuid);
+        examService.deleteByFachId(uuid);
     }
 
     @Override
@@ -231,7 +258,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         antwortService.deleteAll();
         korrekteAntwortenService.deleteAll();
         frageService.deleteAll();
-        examRepository.deleteAll();
+        examService.deleteAll();
     }
 
     @Override
@@ -266,7 +293,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public List<VersuchDTO> getSubmission(UUID examFachId, String studentLogin) {
+    public VersuchDTO getSubmission(UUID examFachId, String studentLogin) {
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
         // Alle Fragen des Exams und deren Maximalpunkte
@@ -309,14 +336,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 
-        VersuchDTO versuch = new VersuchDTO(
+        return new VersuchDTO(
                 zeitpunkt,
                 erreichtePunkte,
                 gesamtMaxPunkte,
                 prozent
         );
-
-        return List.of(versuch);
     }
 
     @Override
@@ -328,20 +353,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public double reviewCoverage(UUID examFachId) {
-        List<Frage> fragen = frageService.getFragenForExam(examFachId);
-        List<FrageDTO> frageDTOList = fragen.stream()
-                .filter(frage -> QuestionType.FREITEXT == frage.getType())
-                .map(frageDTOMapper::toDTO)
-                .toList();
-
-        List<AntwortDTO> antworten = new ArrayList<>();
-
-        for (FrageDTO frageDTO : frageDTOList) {
-            Antwort antwort = antwortService.findByFrageFachId(frageDTO.getFachId());
-            if (antwort != null) {
-                antworten.add(antwortDTOMapper.toDTO(antwort));
-            }
-        }
+        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
 
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
@@ -352,10 +364,62 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             }
         }
 
+        System.out.println(reviewsTotal.size());
+        System.out.println(antworten.size());
+
         double coverage = antworten.isEmpty()
                 ? 0.0
                 : (double) reviewsTotal.size() / antworten.size() * 100;
 
         return Math.round(coverage * 100.0) / 100.0;
+    }
+
+    @Override
+    public List<StudentDTO> getStudentSubmittedExam(UUID examFachId) {
+
+        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
+
+        return antworten.stream()
+                .map(AntwortDTO::getStudentFachId)
+                .map(studentService::getStudent)
+                .map(studentDTOMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student) {
+        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
+
+        List<UUID> studentAntwortList = antworten.stream()
+                .filter(a -> a.getStudentFachId().equals(student.fachId()))
+                .map(AntwortDTO::getFachId)
+                .toList();
+
+        for (UUID uuid : studentAntwortList) {
+            if (reviewService.getReviewByAntwortFachId(uuid) == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
+        List<Frage> fragen = frageService.getFragenForExam(examFachId);
+
+        return fragen.stream()
+                .filter(frage -> QuestionType.FREITEXT == frage.getType())
+                .map(frageDTOMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
+        return getFreitextFragen(examFachId).stream()
+                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.getFachId()))
+                .filter(Objects::nonNull)
+                .map(antwortDTOMapper::toDTO)
+                .toList();
     }
 }
