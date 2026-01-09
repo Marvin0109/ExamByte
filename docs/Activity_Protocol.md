@@ -472,3 +472,12 @@ Anwendung), vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
 - Bewertungsübersicht vorerst implementiert
 - Bewertungsstatus von manueller Korrekturen pro Exam eingebunden
 - Angefangene Tests, weitere folgen
+
+---
+
+### 08.01.2026 - 09.01.2026
+**Bereich**: Web / Test / Refactoring
+- Bewertungsübersicht getestet
+- Testcode aufgeräumt, angepasst, neue geschrieben
+- ExamController von Logik getrennt (Logik in `ExamControllerHelper.java`)
+- Weitere Klassen aufgeräumt in Hinsicht auf Codequalität
