@@ -43,7 +43,7 @@
                            th:name="${frage.fachId}"
                            th:field="*{answers[__${frage.fachId}__]}"
                            th:value="${antwort}"/>
-                    <label th:text="${antwort}" class="form-check-label"></label>
+                    <label th:text="${antwort.replace('-', ',')}" class="form-check-label"></label>
                 </div>
             </div>
 
@@ -54,7 +54,7 @@
                            th:name="${frage.fachId}"
                            th:field="*{answers[__${frage.fachId}__]}"
                            th:value="${antwort}"/>
-                    <label th:text="${antwort}" class="form-check-label"></label>
+                    <label th:text="${antwort.replace('-', ',')}" class="form-check-label"></label>
                 </div>
             </div>
 
