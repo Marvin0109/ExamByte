@@ -481,3 +481,10 @@ Anwendung), vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
 - Testcode aufgeräumt, angepasst, neue geschrieben
 - ExamController von Logik getrennt (Logik in `ExamControllerHelper.java`)
 - Weitere Klassen aufgeräumt in Hinsicht auf Codequalität
+
+---
+
+### 10.01.2026
+**Bereich**: Web / Frontend / Architektur / Test / Bugs
+- Bug gefixt, wo mehrere Studenten aufgelistet werden bei Korrekturübersicht eines Exams
+- Tests angepasst in Hinsicht auf Architekturanpassungen
