@@ -39,58 +39,67 @@ public class OnionArchitectureTest {
     @DisplayName("Die ExamByte Anwendung hat eine Onion Architektur")
     public void onionArchitecture() throws Exception {
         ArchRule rule = Architectures.onionArchitecture()
-                .domainModels("exambyte.domain..")
-                .domainServices("exambyte.domain.model.impl..")
-                .applicationServices("exambyte.application.service..")
-                //.adapter("web", "exambyte.web.controllers..")
-                .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
-                .adapter("service", "exambyte.infrastructure.service..", "exambyte.infrastructure.config..")
-                .adapter("repository", "exambyte.infrastructure.persistence.repository..")
-                .adapter("controller", "exambyte.web.controllers..")
-                .adapter("mapper", "exambyte.infrastructure.mapper..", "exambyte.infrastructure.persistence.mapper..");
+            .domainModels("exambyte.domain..")
+            .domainServices("exambyte.domain.model.impl..")
+            .applicationServices("exambyte.application.service..")
+            .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
+            .adapter("service", "exambyte.infrastructure.service..",
+                    "exambyte.infrastructure.config..", "exambyte.web.service..")
+            .adapter("repository", "exambyte.infrastructure.persistence.repository..")
+            .adapter("controller", "exambyte.web.controllers..")
+            .adapter("mapper", "exambyte.infrastructure.mapper..",
+                    "exambyte.infrastructure.persistence.mapper..");
         rule.check(klassen);
     }
 
     @ArchTest
     ArchRule allClassesInInfrastructureServiceShouldBeAnnotatedWithService = classes()
-            .that()
-            .resideInAPackage("..infrastructure.service..")
-            .and().haveSimpleNameEndingWith("Impl")
-            .should()
-            .beAnnotatedWith(Service.class);
+        .that()
+        .resideInAPackage("..infrastructure.service..")
+        .and().haveSimpleNameEndingWith("Impl")
+        .should()
+        .beAnnotatedWith(Service.class);
 
     @ArchTest
     ArchRule allClassesInApplicationServiceShouldBeAnnotatedWithService = classes()
-            .that()
-            .resideInAPackage("..application.service..")
-            .and().haveSimpleNameEndingWith("Impl")
-            .should()
-            .beAnnotatedWith(Service.class);
+        .that()
+        .resideInAPackage("..application.service..")
+        .and().haveSimpleNameEndingWith("Impl")
+        .should()
+        .beAnnotatedWith(Service.class);
+
+    @ArchTest
+    ArchRule allClassesInWebServiceShouldBeAnnotatedWithService = classes()
+        .that()
+        .resideInAPackage("..web.service..")
+        .and().haveSimpleNameEndingWith("Impl")
+        .should()
+        .beAnnotatedWith(Service.class);
 
     @ArchTest
     ArchRule allClassesInPersistenceRepositoryShouldBeAnnotatedWithRepository = classes()
-            .that()
-            .resideInAPackage("..persistence.repository..")
-            .and().haveSimpleNameEndingWith("Impl")
-            .should()
-            .beAnnotatedWith(Repository.class);
+        .that()
+        .resideInAPackage("..persistence.repository..")
+        .and().haveSimpleNameEndingWith("Impl")
+        .should()
+        .beAnnotatedWith(Repository.class);
 
     @ArchTest
     ArchRule allControllerInWebControllersShouldBeAnnotatedWithController = classes()
-            .that()
-            .resideInAPackage("..web.controllers..")
-            .and().haveSimpleNameEndingWith("Controller")
-            .should()
-            .beAnnotatedWith(Controller.class);
+        .that()
+        .resideInAPackage("..web.controllers..")
+        .and().haveSimpleNameEndingWith("Controller")
+        .should()
+        .beAnnotatedWith(Controller.class);
 
     @ArchTest
     ArchRule domainClassesHasPrivateFields = fields()
-            .that()
-            .areDeclaredInClassesThat()
-            .resideInAPackage("..domain..")
-            .and()
-            .areDeclaredInClassesThat()
-            .resideOutsideOfPackage("..common..")
-            .should()
-            .bePrivate();
+        .that()
+        .areDeclaredInClassesThat()
+        .resideInAPackage("..domain..")
+        .and()
+        .areDeclaredInClassesThat()
+        .resideOutsideOfPackage("..common..")
+        .should()
+        .bePrivate();
 }

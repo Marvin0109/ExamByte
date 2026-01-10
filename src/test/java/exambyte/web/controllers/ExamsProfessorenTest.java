@@ -1,11 +1,11 @@
 package exambyte.web.controllers;
 
-import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.ExamForm;
+import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +14,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-
-import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
@@ -36,7 +34,7 @@ public class ExamsProfessorenTest {
     private AppUserService appUserService;
 
     @MockitoBean
-    private ExamControllerHelper helper;
+    private ExamControllerService service;
 
     @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -55,7 +53,7 @@ public class ExamsProfessorenTest {
     void showCreateExamForm_02() throws Exception {
 
         ExamForm form = new ExamForm();
-        when(helper.createExamForm()).thenReturn(form);
+        when(service.createExamForm()).thenReturn(form);
 
         mvc.perform(get("/exams/examsProfessoren"))
             .andExpect(status().isOk())
@@ -70,7 +68,7 @@ public class ExamsProfessorenTest {
     @DisplayName("Das erstellen eines Tests ist erfolgreich")
     void createExam_01() throws Exception {
 
-        when(helper.createExam(any(ExamForm.class), eq("Marvin0109"))).thenReturn("");
+        when(service.createExam(any(ExamForm.class), eq("Marvin0109"))).thenReturn("");
 
         mvc.perform(post("/exams/examsProfessoren")
             .with(csrf())
@@ -197,7 +195,7 @@ public class ExamsProfessorenTest {
     @DisplayName("Ein Exam mit der selben Startzeit existiert bereits / Maximale Kapazität ist überschritten worden")
     void createExam_04() throws Exception {
 
-        when(helper.createExam(any(ExamForm.class), eq("Marvin0109"))).thenReturn("Error Nachricht");
+        when(service.createExam(any(ExamForm.class), eq("Marvin0109"))).thenReturn("Error Nachricht");
 
         mvc.perform(post("/exams/examsProfessoren")
                 .with(csrf())

@@ -1,13 +1,12 @@
-package exambyte.web.controllers;
+package exambyte.web.service;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
+import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamManagementService;
 import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.common.QuestionTypeWeb;
-import exambyte.web.form.ExamForm;
-import exambyte.web.form.QuestionData;
-import exambyte.web.form.ReviewCoverageForm;
+import exambyte.web.form.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -16,14 +15,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
-public class ExamControllerHelper {
+public class ExamControllerServiceImpl implements ExamControllerService {
 
     private final ExamManagementService service;
 
-    public ExamControllerHelper(ExamManagementService service) {
+    public ExamControllerServiceImpl(ExamManagementService service) {
         this.service = service;
     }
 
+    @Override
     public ExamForm createExamForm() {
         ExamForm examForm = new ExamForm();
 
@@ -41,6 +41,7 @@ public class ExamControllerHelper {
         return examForm;
     }
 
+    @Override
     public ExamForm fillExamForm(UUID examUUID) {
         ExamDTO examDTO = service.getExam(examUUID);
         List<FrageDTO> fragen = service.getFragenForExam(examUUID);
@@ -73,10 +74,12 @@ public class ExamControllerHelper {
         return form;
     }
 
+    @Override
     public UUID getExamUUIDByStartTime(LocalDateTime startTime) {
         return service.getExamByStartTime(startTime);
     }
 
+    @Override
     public String createExam(ExamForm form, String name) {
         return service.createExam(
                 name,
@@ -87,22 +90,27 @@ public class ExamControllerHelper {
         );
     }
 
-    public ExamDTO getExamByUUID(UUID uuid) {
-        return service.getExam(uuid);
+    @Override
+    public ExamDTO getExamByUUID(UUID examUUID) {
+        return service.getExam(examUUID);
     }
 
+    @Override
     public List<ExamDTO> getAllExams() {
         return service.getAllExams();
     }
 
+    @Override
     public List<FrageDTO> getFragenForExam(UUID examUUID) {
         return service.getFragenForExam(examUUID);
     }
 
+    @Override
     public boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin) {
         return service.isExamAlreadySubmitted(examUUID, studentLogin);
     }
 
+    @Override
     public UUID getProfUUID(String name) {
         Optional<UUID> profUUID = service.getProfFachIDByName(name);
         if (profUUID.isPresent()) {
@@ -112,6 +120,7 @@ public class ExamControllerHelper {
         }
     }
 
+    @Override
     public void createQuestions(ExamForm form, UUID profFachID, UUID examUUID) {
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
@@ -142,10 +151,12 @@ public class ExamControllerHelper {
         }
     }
 
+    @Override
     public VersuchDTO getAttempt(UUID examUUID, String studentLogin) {
         return service.getSubmission(examUUID, studentLogin);
     }
 
+    @Override
     public List<ReviewCoverageForm> getReviewCoverage(List<ExamDTO> examDTOList) {
         List<Double> reviewCoverageList = new ArrayList<>();
         for (ExamDTO examDTO : examDTOList) {
@@ -162,6 +173,7 @@ public class ExamControllerHelper {
         return covList;
     }
 
+    @Override
     public ExamTimeInfo getExamTimeInfo(ExamDTO examDTO) {
         String fristAnzeige = "";
         String tageAnzeige = "";
@@ -221,14 +233,17 @@ public class ExamControllerHelper {
         return new ExamTimeInfo(fristAnzeige, timeLeft);
     }
 
+    @Override
     public void removeOldAnswersAndReviews(UUID examUUID, String name) {
         service.removeOldAnswers(examUUID, name);
     }
 
+    @Override
     public boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUID) {
         return service.submitExam(name, answers, examUUID);
     }
 
+    @Override
     public List<SubmitInfo> getSubmitInfo(UUID examUUID) {
         List<StudentDTO> students = service.getStudentSubmittedExam(examUUID);
         List<SubmitInfo> submitInfoList = new ArrayList<>();

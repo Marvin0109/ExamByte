@@ -5,6 +5,7 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
+import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ExamsKorrektorTest {
     private AppUserService appUserService;
 
     @MockitoBean
-    private ExamControllerHelper helper;
+    private ExamControllerService service;
 
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -81,7 +82,7 @@ public class ExamsKorrektorTest {
         ExamDTO examDTO = mock(ExamDTO.class);
         when(examDTO.endTime()).thenReturn(LocalDateTime.now().plusDays(1));
 
-        when(helper.getExamByUUID(examFachId)).thenReturn(examDTO);
+        when(service.getExamByUUID(examFachId)).thenReturn(examDTO);
 
         mvc.perform(get("/exams/showExamSubmits/{examFachId}", examFachId))
                 .andExpect(status().is3xxRedirection())
@@ -100,8 +101,8 @@ public class ExamsKorrektorTest {
         ExamDTO examDTO = mock(ExamDTO.class);
         when(examDTO.endTime()).thenReturn(LocalDateTime.now().minusDays(1));
 
-        when(helper.getExamByUUID(examFachId)).thenReturn(examDTO);
-        when(helper.getSubmitInfo(examFachId)).thenReturn(List.of());
+        when(service.getExamByUUID(examFachId)).thenReturn(examDTO);
+        when(service.getSubmitInfo(examFachId)).thenReturn(List.of());
 
         mvc.perform(get("/exams/showExamSubmits/{examFachId}", examFachId))
                 .andExpect(status().isOk())

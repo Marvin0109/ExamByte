@@ -2,13 +2,14 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.VersuchDTO;
-import exambyte.domain.service.*;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.infrastructure.service.AppUserService;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.ExamForm;
+import exambyte.web.form.ExamTimeInfo;
 import exambyte.web.form.SubmitForm;
+import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class ExamsStudierendeTest {
     private AppUserService appUserService;
 
     @MockitoBean
-    private ExamControllerHelper helper;
+    private ExamControllerService service;
 
     @Test
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -58,7 +59,7 @@ public class ExamsStudierendeTest {
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void listExamsForStudents_02() throws Exception {
 
-        when(helper.getAllExams()).thenReturn(List.of());
+        when(service.getAllExams()).thenReturn(List.of());
 
         mvc.perform(get("/exams/examsStudierende"))
             .andExpect(status().isOk())
@@ -89,9 +90,9 @@ public class ExamsStudierendeTest {
         ExamTimeInfo examTimeInfo = new ExamTimeInfo("Anzeige", true);
         ExamDTO examDTO = mock(ExamDTO.class);
 
-        when(helper.getExamByUUID(examFachId)).thenReturn(examDTO);
-        when(helper.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
-        when(helper.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
+        when(service.getExamByUUID(examFachId)).thenReturn(examDTO);
+        when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
+        when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
         when(examDTO.professorFachId()).thenReturn(UUID.randomUUID());
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
@@ -114,12 +115,12 @@ public class ExamsStudierendeTest {
         ExamDTO examDTO = mock(ExamDTO.class);
         VersuchDTO versuchDTO = mock(VersuchDTO.class);
 
-        when(helper.getExamByUUID(examFachId)).thenReturn(examDTO);
-        when(helper.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(true);
-        when(helper.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
+        when(service.getExamByUUID(examFachId)).thenReturn(examDTO);
+        when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(true);
+        when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
         when(examDTO.professorFachId()).thenReturn(UUID.randomUUID());
 
-        when(helper.getAttempt(examFachId, "Marvin0109")).thenReturn(versuchDTO);
+        when(service.getAttempt(examFachId, "Marvin0109")).thenReturn(versuchDTO);
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
@@ -149,7 +150,7 @@ public class ExamsStudierendeTest {
         UUID examFachId = UUID.randomUUID();
         ExamForm form = mock(ExamForm.class);
 
-        when(helper.fillExamForm(examFachId)).thenReturn(form);
+        when(service.fillExamForm(examFachId)).thenReturn(form);
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", examFachId))
             .andExpect(status().isOk())
@@ -182,8 +183,8 @@ public class ExamsStudierendeTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
-        when(helper.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
-        when(helper.submitExam(eq("Marvin0109"), any(), eq(examFachId))).thenReturn(false);
+        when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
+        when(service.submitExam(eq("Marvin0109"), any(), eq(examFachId))).thenReturn(false);
 
         mvc.perform(post("/exams/submit/{examFachId}", examFachId)
                 .flashAttr("antworten", form)
@@ -193,8 +194,8 @@ public class ExamsStudierendeTest {
             .andExpect(flash().attribute("message", "Fehler beim Einreichen der Antworten."))
             .andExpect(flash().attribute("success", false));
 
-        verify(helper).examIsAlreadySubmitted(examFachId, "Marvin0109");
-        verify(helper).submitExam(eq("Marvin0109"), any(), eq(examFachId));
+        verify(service).examIsAlreadySubmitted(examFachId, "Marvin0109");
+        verify(service).submitExam(eq("Marvin0109"), any(), eq(examFachId));
     }
 
     @Test
@@ -211,8 +212,8 @@ public class ExamsStudierendeTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
-        when(helper.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
-        when(helper.submitExam(eq("Marvin0109"), any(), eq(examFachId))).thenReturn(true);
+        when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
+        when(service.submitExam(eq("Marvin0109"), any(), eq(examFachId))).thenReturn(true);
 
         mvc.perform(post("/exams/submit/{examFachId}", examFachId)
                         .flashAttr("antworten", form)
@@ -222,8 +223,8 @@ public class ExamsStudierendeTest {
                 .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
                 .andExpect(flash().attribute("success", true));
 
-        verify(helper).examIsAlreadySubmitted(examFachId, "Marvin0109");
-        verify(helper).submitExam(eq("Marvin0109"), any(), eq(examFachId));
+        verify(service).examIsAlreadySubmitted(examFachId, "Marvin0109");
+        verify(service).submitExam(eq("Marvin0109"), any(), eq(examFachId));
     }
 
     @Test
@@ -235,8 +236,8 @@ public class ExamsStudierendeTest {
         UUID frageId2 = UUID.randomUUID();
         UUID frageId3 = UUID.randomUUID();
 
-        when(helper.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
-        when(helper.submitExam(eq("Marvin0109"), any(), eq(examFachId))).thenReturn(true);
+        when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
+        when(service.submitExam(eq("Marvin0109"), any(), eq(examFachId))).thenReturn(true);
 
         mvc.perform(post("/exams/submit/{examFachId}", examFachId)
                 .with(csrf())

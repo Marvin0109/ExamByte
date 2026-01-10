@@ -2,9 +2,8 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.VersuchDTO;
-import exambyte.web.form.ExamForm;
-import exambyte.web.form.ReviewCoverageForm;
-import exambyte.web.form.SubmitForm;
+import exambyte.web.form.*;
+import exambyte.application.service.ExamControllerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
@@ -23,10 +22,10 @@ import java.util.*;
 @RequestMapping("/exams")
 public class ExamController {
 
-    private final ExamControllerHelper helper;
+    private final ExamControllerService service;
 
-    public  ExamController(ExamControllerHelper helper) {
-        this.helper =  helper;
+    public  ExamController(ExamControllerService service) {
+        this.service =  service;
     }
 
     @GetMapping("/examsProfessoren")
@@ -38,7 +37,7 @@ public class ExamController {
 
         OAuth2User user = auth.getPrincipal();
 
-        ExamForm examForm = helper.createExamForm();
+        ExamForm examForm = service.createExamForm();
 
         model.addAttribute("name", user.getAttribute("login"));
         model.addAttribute("examForm", examForm);
@@ -75,7 +74,7 @@ public class ExamController {
 
         String name = auth.getPrincipal().getAttribute("login");
 
-        String message = helper.createExam(form, name);
+        String message = service.createExam(form, name);
 
         if (!message.isEmpty()) {
             redirectAttributes.addFlashAttribute(
@@ -86,10 +85,10 @@ public class ExamController {
             return "redirect:/exams/examsProfessoren";
         }
 
-        UUID profFachID = helper.getProfUUID(name);
-        UUID examUUID = helper.getExamUUIDByStartTime(form.getStart());
+        UUID profFachID = service.getProfUUID(name);
+        UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
-        helper.createQuestions(form, examUUID, profFachID);
+        service.createQuestions(form, examUUID, profFachID);
 
         redirectAttributes.addFlashAttribute(
                 "message",
@@ -109,10 +108,10 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         model.addAttribute("name", user.getAttribute("login"));
 
-        List<ExamDTO> examDTOs = helper.getAllExams();
+        List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
 
-        List<ReviewCoverageForm> covList = helper.getReviewCoverage(examDTOs);
+        List<ReviewCoverageForm> covList = service.getReviewCoverage(examDTOs);
 
         model.addAttribute("reviewCoverage", covList);
         model.addAttribute("timeNow", now);
@@ -127,7 +126,7 @@ public class ExamController {
             @PathVariable UUID examFachId,
             RedirectAttributes redirectAttributes) {
 
-        ExamDTO examDTO = helper.getExamByUUID(examFachId);
+        ExamDTO examDTO = service.getExamByUUID(examFachId);
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isBefore(examDTO.endTime())) {
@@ -137,7 +136,7 @@ public class ExamController {
             return "redirect:/exams/examsKorrektor";
         }
 
-        List<SubmitInfo> submitInfoList = helper.getSubmitInfo(examFachId);
+        List<SubmitInfo> submitInfoList = service.getSubmitInfo(examFachId);
 
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", examDTO);
@@ -166,7 +165,7 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         String studentName = user.getAttribute("login");
 
-        List<ExamDTO> examDTOs = helper.getAllExams();
+        List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
 
         model.addAttribute("timeNow", now);
@@ -185,18 +184,18 @@ public class ExamController {
 
         OAuth2User user = auth.getPrincipal();
         String studentLogin = user.getAttribute("login");
-        ExamDTO examDTO = helper.getExamByUUID(examFachId);
-        boolean alreadySubmitted = helper.examIsAlreadySubmitted(examFachId, studentLogin);
+        ExamDTO examDTO = service.getExamByUUID(examFachId);
+        boolean alreadySubmitted = service.examIsAlreadySubmitted(examFachId, studentLogin);
 
         UUID author = examDTO.professorFachId();
         String authorIDString = author.toString();
 
         if (alreadySubmitted) {
-            VersuchDTO attempt = helper.getAttempt(examFachId, studentLogin);
+            VersuchDTO attempt = service.getAttempt(examFachId, studentLogin);
             model.addAttribute("attempt", attempt);
         }
 
-        ExamTimeInfo examTimeInfo = helper.getExamTimeInfo(examDTO);
+        ExamTimeInfo examTimeInfo = service.getExamTimeInfo(examDTO);
 
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted);
@@ -214,7 +213,7 @@ public class ExamController {
             @PathVariable UUID examFachId,
             Model model) {
 
-        ExamForm form = helper.fillExamForm(examFachId);
+        ExamForm form = service.fillExamForm(examFachId);
 
         SubmitForm submitForm = new SubmitForm();
 
@@ -234,13 +233,13 @@ public class ExamController {
         OAuth2User user = auth.getPrincipal();
         String name =  user.getAttribute("login");
 
-        boolean submitted = helper.examIsAlreadySubmitted(examFachId, name);
+        boolean submitted = service.examIsAlreadySubmitted(examFachId, name);
 
         if (submitted) {
-            helper.removeOldAnswersAndReviews(examFachId, name);
+            service.removeOldAnswersAndReviews(examFachId, name);
         }
 
-        boolean success = helper.submitExam(name, antworten.getAnswers(), examFachId);
+        boolean success = service.submitExam(name, antworten.getAnswers(), examFachId);
 
         if (success) {
             redirectAttributes.addFlashAttribute(

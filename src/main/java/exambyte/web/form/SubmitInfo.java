@@ -1,4 +1,4 @@
-package exambyte.web.controllers;
+package exambyte.web.form;
 
 import java.util.UUID;
 
