@@ -1,6 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.ExamManagementService;
+import exambyte.application.service.ExamControllerService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,15 +22,15 @@ public class IndexTest {
     private MockMvc mvc;
 
     @MockitoBean
-    private ExamManagementService examManagementService;
+    private ExamControllerService service;
 
     @Test
     @DisplayName("Startseite ist öffentlich erreichbar")
     @WithMockUser
     void test_01() throws Exception {
         mvc.perform(get("/"))
-                .andExpect(view().name("index"))
-                .andExpect(model().attributeExists("currentPath"))
-                .andExpect(status().isOk());
+            .andExpect(view().name("index"))
+            .andExpect(model().attributeExists("currentPath"))
+            .andExpect(status().isOk());
     }
 }

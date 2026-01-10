@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Service
@@ -63,8 +64,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             questionData.setFachId(frage.getFachId());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
                 String choice = service.getChoiceForFrage(frage.getFachId());
-                questionData.setChoices(choice.replace("\n", ","));
-                System.out.println(questionData.getChoices());
+                List<String> choiceList = Arrays.stream(choice.split("\n"))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .map(s -> s.replace(",", "-"))
+                        .toList();
+                questionData.setChoices(String.join(",", choiceList));
             }
             questions.add(questionData);
         }
@@ -108,16 +113,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin) {
         return service.isExamAlreadySubmitted(examUUID, studentLogin);
-    }
-
-    @Override
-    public UUID getProfUUID(String name) {
-        Optional<UUID> profUUID = service.getProfFachIDByName(name);
-        if (profUUID.isPresent()) {
-            return profUUID.get();
-        } else {
-            throw new NichtVorhandenException();
-        }
     }
 
     @Override
@@ -193,7 +188,8 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             fristAnzeige = "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
                     "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
         } else {
-            Duration diff = Duration.between(LocalDateTime.now(), examDTO.endTime());
+            Duration diff = Duration.between(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                    examDTO.endTime().truncatedTo(ChronoUnit.MINUTES));
 
             long days = diff.toDays();
             long hours = diff.toHours() % 24;
@@ -257,5 +253,20 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         }
 
         return  submitInfoList;
+    }
+
+    @Override
+    public void saveAutomaticReviewer() {
+        service.saveAutomaticReviewer();
+    }
+
+    @Override
+    public Optional<UUID> getProfFachIDByName(String name) {
+        return service.getProfFachIDByName(name);
+    }
+
+    @Override
+    public void reset() {
+        service.reset();
     }
 }

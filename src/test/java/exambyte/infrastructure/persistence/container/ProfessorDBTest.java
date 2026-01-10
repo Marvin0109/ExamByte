@@ -52,4 +52,23 @@ public class ProfessorDBTest {
         assertThat(geladen.get().getName()).isEqualTo("Dr. KekW");
         assertThat(geladen.get().uuid()).isEqualTo(professor.uuid());
     }
+
+    @Test
+    @DisplayName("Die FachId eines Professor kann nach dem Namen gefunden werden")
+    void test_02() {
+        // Arrange
+        Professor professor = new Professor.ProfessorBuilder()
+                .id(null)
+                .fachId(null)
+                .name("Dr. KekW")
+                .build();
+
+        // Act
+        repository.save(professor);
+        Optional<Professor> fachId = repository.findByName("Dr. KekW");
+
+        // Assert
+        assertThat(fachId.isPresent()).isTrue();
+        assertThat(fachId.get().uuid()).isEqualTo(professor.uuid());
+    }
 }

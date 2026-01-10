@@ -58,7 +58,7 @@ public class QuestionData {
     }
 
     public void setChoices(String choices) {
-        this.choices = new String(choices);
+        this.choices = choices;
     }
 
     public String getCorrectAnswer() {
@@ -74,6 +74,6 @@ public class QuestionData {
     }
 
     public void setCorrectAnswers(String correctAnswers) {
-        this.correctAnswers = new String(correctAnswers);
+        this.correctAnswers = correctAnswers;
     }
 }

@@ -1,6 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.ExamManagementService;
+import exambyte.application.service.ExamControllerService;
 import exambyte.infrastructure.service.AppUserService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
@@ -31,7 +31,7 @@ public class ContactTest {
     private MockMvc mvc;
 
     @MockitoBean
-    private ExamManagementService examManagementService;
+    private ExamControllerService service;
 
     @MockitoBean
     private AppUserService appUserService;
@@ -40,10 +40,10 @@ public class ContactTest {
     @DisplayName("Die contact Seite ist für nicht-authentifizierte User nicht erreichbar")
     void test_01() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/contact"))
-                .andExpect(status().is3xxRedirection())
-                .andReturn();
+            .andExpect(status().is3xxRedirection())
+            .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
-                .contains("oauth2/authorization/github");
+            .contains("oauth2/authorization/github");
     }
 
     @Test
@@ -51,13 +51,13 @@ public class ContactTest {
     @DisplayName("Die contact Seite ist für authentifizierte User erreichbar, die eine höhere Rolle haben als USER")
     void test_02() throws Exception {
         UUID randomUUID = UUID.randomUUID();
-        when(examManagementService.getProfFachIDByName("Marvin0109")).thenReturn(Optional.of(randomUUID));
+        when(service.getProfFachIDByName("Marvin0109")).thenReturn(Optional.of(randomUUID));
 
         mvc.perform(get("/contact"))
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("name", "Marvin0109"))
-                .andExpect(model().attribute("fachID", randomUUID.toString()))
-                .andExpect(model().attributeExists("currentPath"))
-                .andExpect(view().name("contact"));
+            .andExpect(status().isOk())
+            .andExpect(model().attribute("name", "Marvin0109"))
+            .andExpect(model().attribute("fachID", randomUUID.toString()))
+            .andExpect(model().attributeExists("currentPath"))
+            .andExpect(view().name("contact"));
     }
 }

@@ -8,6 +8,7 @@ import exambyte.application.service.ExamManagementService;
 import exambyte.application.service.ExamManagementServiceImpl;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.*;
+import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.*;
 import exambyte.infrastructure.mapper.*;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -905,5 +907,81 @@ public class ExamManagementServiceTest {
 
         // 2 Fragen: MC und Freitextaufgaben, aber von den Freitextaufgaben haben alle eine Bewertung
         assertThat(coverage).isEqualTo(100.0);
+    }
+
+    @Test
+    @DisplayName("Freitextantworten aller Studenten wird erfolgreich gefunden und nach Namen gruppiert")
+    void getStudentSubmittedExam_01() {
+        // Arrange
+        UUID studentFachId = UUID.randomUUID();
+        UUID examFachId = UUID.randomUUID();
+        UUID antwortFachId = UUID.randomUUID();
+        UUID frageFachId = UUID.randomUUID();
+        UUID profFachId = UUID.randomUUID();
+        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2026, 1, 1, 0, 0);
+
+        Student student = new Student.StudentBuilder()
+                .id(null)
+                .fachId(studentFachId)
+                .name("Marvin0109")
+                .build();
+
+        Frage frage = new Frage.FrageBuilder()
+                .id(null)
+                .fachId(frageFachId)
+                .frageText("F1")
+                .maxPunkte(10)
+                .type(QuestionType.FREITEXT)
+                .professorUUID(profFachId)
+                .examUUID(examFachId)
+                .build();
+
+        FrageDTO frageDTO = new FrageDTO(
+                null,
+                frageFachId,
+                "F1",
+                10,
+                QuestionTypeDTO.FREITEXT,
+                profFachId,
+                examFachId
+        );
+
+        StudentDTO studentDTO = new StudentDTO(null, studentFachId, "Marvin0109");
+
+        Antwort antwort1 = new Antwort.AntwortBuilder()
+                .id(null)
+                .fachId(antwortFachId)
+                .antwortText("Antwort 1")
+                .frageFachId(frageFachId)
+                .studentFachId(studentFachId)
+                .antwortZeitpunkt(antwortZeitpunkt)
+                .lastChangesZeitpunkt(antwortZeitpunkt)
+                .build();
+
+        AntwortDTO antwort1DTO = new AntwortDTO.AntwortDTOBuilder()
+            .id(null)
+            .fachId(antwortFachId)
+            .antwortText("Antwort 1")
+            .frageFachId(frageFachId)
+            .studentFachId(studentFachId)
+            .antwortZeitpunkt(antwortZeitpunkt)
+            .lastChangesZeitpunkt(antwortZeitpunkt)
+            .build();
+
+        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
+        when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
+
+        when(antwortService.findByFrageFachId(frageFachId)).thenReturn(antwort1);
+        when(antwortDTOMapper.toDTO(antwort1)).thenReturn(antwort1DTO);
+
+        when(studentService.getStudent(studentFachId)).thenReturn(student);
+        when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
+
+        // Act
+        List<StudentDTO> result = examManagementService.getStudentSubmittedExam(examFachId);
+
+        // Assert
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.getFirst()).isEqualTo(studentDTO);
     }
 }

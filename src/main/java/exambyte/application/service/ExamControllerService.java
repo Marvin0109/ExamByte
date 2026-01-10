@@ -11,6 +11,7 @@ import exambyte.web.form.SubmitInfo;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ExamControllerService {
@@ -31,8 +32,6 @@ public interface ExamControllerService {
 
     boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin);
 
-    UUID getProfUUID(String name);
-
     void createQuestions(ExamForm form, UUID profFachID, UUID examUUID);
 
     VersuchDTO getAttempt(UUID examUUID, String studentLogin);
@@ -46,4 +45,10 @@ public interface ExamControllerService {
     boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUiD);
 
     List<SubmitInfo> getSubmitInfo(UUID examUUID);
+
+    void saveAutomaticReviewer();
+
+    Optional<UUID> getProfFachIDByName(String name);
+
+    void reset();
 }

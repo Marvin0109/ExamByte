@@ -146,13 +146,13 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 String antwortText = String.join("\n", value);
 
                 AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
-                        .fachId(null)
-                        .frageFachId(frageFachId)
-                        .studentFachId(studentFachId)
-                        .antwortText(antwortText)
-                        .antwortZeitpunkt(LocalDateTime.now())
-                        .lastChangesZeitpunkt(LocalDateTime.now())
-                        .build();
+                    .fachId(null)
+                    .frageFachId(frageFachId)
+                    .studentFachId(studentFachId)
+                    .antwortText(antwortText)
+                    .antwortZeitpunkt(LocalDateTime.now())
+                    .lastChangesZeitpunkt(LocalDateTime.now())
+                    .build();
 
                 antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
 
@@ -380,10 +380,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
 
         return antworten.stream()
-                .map(AntwortDTO::getStudentFachId)
-                .map(studentService::getStudent)
-                .map(studentDTOMapper::toDTO)
-                .toList();
+            .collect(Collectors.toMap(
+                    AntwortDTO::getStudentFachId,
+                    a -> studentService.getStudent(a.getStudentFachId()),
+                    (existing, duplicate) -> existing
+            ))
+            .values()
+            .stream()
+            .map(studentDTOMapper::toDTO)
+            .toList();
     }
 
     @Override
