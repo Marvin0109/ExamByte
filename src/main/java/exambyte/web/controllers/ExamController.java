@@ -36,10 +36,11 @@ public class ExamController {
             HttpServletRequest request) {
 
         OAuth2User user = auth.getPrincipal();
+        String name = user.getAttribute("login");
 
         ExamForm examForm = service.createExamForm();
 
-        model.addAttribute("name", user.getAttribute("login"));
+        model.addAttribute("name", name);
         model.addAttribute("examForm", examForm);
         model.addAttribute("currentPath", request.getRequestURI());
         return "/exams/examsProfessoren";
@@ -73,6 +74,11 @@ public class ExamController {
         }
 
         String name = auth.getPrincipal().getAttribute("login");
+        Optional<UUID> profFachID = service.getProfFachIDByName(name);
+        UUID fachId = null;
+        if (profFachID.isPresent()) {
+            fachId = profFachID.get();
+        }
 
         String message = service.createExam(form, name);
 
@@ -85,10 +91,9 @@ public class ExamController {
             return "redirect:/exams/examsProfessoren";
         }
 
-        UUID profFachID = service.getProfUUID(name);
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
-        service.createQuestions(form, examUUID, profFachID);
+        service.createQuestions(form, fachId, examUUID);
 
         redirectAttributes.addFlashAttribute(
                 "message",
