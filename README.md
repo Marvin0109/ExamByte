@@ -23,8 +23,8 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 ## Installation & Nutzung
 
 1. **Voraussetzungen**
-    - Java 21 & Spring Boot
-    - GitHub-Account für Authentifizierung
+    - Java 21
+    - Github-Account für Authentifizierung
     - Docker für die Datenbank
     - SSH Key für das einfachere klonen des Repository
 
