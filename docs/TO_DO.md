@@ -17,7 +17,7 @@
   - [ ] **Zulassungslogik**: Der Zulassungsstatus muss ins Frontend integriert werden
 
 - **Dokumentation**
-  - [ ] **Arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
+  - [X] **Arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
  
 - **Authentifizierung**
   - [ ] **Rollenverteilung**: Feature einführen, wo man seine Rollen aktivieren kann nach Bedarf
@@ -39,7 +39,7 @@
 ---
 
 ## 2. Nächste Schritte (Empfohlene Reihenfolge)
-1. [ ] acr42-Doc aktualisieren
+1. [X] acr42-Doc aktualisieren
 2. [ ] Logik-Test vervollständigen für vorhandenen Quellcode
 3. [ ] Korrektur der Freitextantworten einführen + Test
 4. [ ] Zulassungslogik + Test
