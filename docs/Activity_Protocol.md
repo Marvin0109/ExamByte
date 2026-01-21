@@ -5,8 +5,6 @@
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
----
-
 ## Aktivitätsprotokoll
 
 ### 07.11.24
