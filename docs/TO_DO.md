@@ -1,63 +1,48 @@
 # TODO für ExamByte
 
-## Metadaten
-**Letzte Änderungen:** 23.09.2025
-**Autor:** Marvin0109
-  
----
+> **Autor:** Marvin0109
+> **Datum:** 21.01.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
 ### Priorität: Hoch
-- **Backend**
-  - [X] **Datenspeicherung**: Antworten aus Formularen extrahieren und in der Datenbank speichern (inkl. Validierung).
-  - [X] **Datenbank-Tests**: Löschung von Daten testen
+- **Testing**
+  - [ ] **Logik-Tests**: Restliche Logik Tests müssen implementiert werden, s. Jacoco Test Report
 
 - **Frontend**
-  - [X] **Testfragen-Seiten**: HTML und JavaScript für die dynamische Anzeige von Fragen.
   - [ ] **CSV-Export**: Formular exportieren
   - [ ] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
-  - [ ] **Korrektor korrigiert**: Das korrigieren der Freitextantworten implementieren
-  - [ ] **Neuer Testdurchlauf mit alten/ohne Antworten**
-  - [ ] **Zulassung testen**
+  - [ ] **Korrektor korrigiert**: Das korrigieren der Freitextantworten entwickeln
+  - [ ] **Neuer Testdurchlauf**: Implementierung von Testdurchläufen mit alten Antworten 
+  - [ ] **Zulassungslogik**: Der Zulassungsstatus muss ins Frontend integriert werden
 
 - **Dokumentation**
   - [ ] **Arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
+ 
+- **Authentifizierung**
+  - [ ] **Rollenverteilung**: Feature einführen, wo man seine Rollen aktivieren kann nach Bedarf
 
 ---
 
 ### Priorität: Mittel
 - [ ] **Java-Konventionen**: Sicherstellen, dass der Code durchgehend den Konventionen entspricht (s. Styleguide)
-- [ ] **Unit-Tests für Logik**: Tests für zentrale Logik-Komponenten (z. B. Punktberechnung bei Tests).
-- [ ] **UI-Design verbessern**: Ansprechenderes Design (z. B. Farbgebung, Usability).
-- [ ] **Threading**: Anwendung erweitern auf parallele Ausführungen von Usern
+- [ ] **Accessiblity**: Überprüfung auf Accessibility nötig
+- [ ] **Codequalität**: Refaktorisierung nötig
 
 ---
 
 ### Priorität: Niedrig
-- [ ] **Optimierung**: Performance der Datenbank-Queries verbessern (nur bei Bedarf).
-- [X] **Deployment-Scripts**: Automatisierung von Build-Prozessen (CI).
+- [ ] **Optimierung**: Performance der Datenbank-Queries verbessern
+- [ ] **CD**: Code Deployment einrichten
+- [ ] **Threading**: Anwendung erweitern auf parallele Ausführungen von Usern
 
 ---
 
 ## 2. Nächste Schritte (Empfohlene Reihenfolge)
-1. [X] **Datenspeicherung fertigstellen** (Backend + Tests).
-2. [ ] **Frontend für Testfragen und Antwort-Einsicht** implementieren.
-3. [ ] **Geschäftslogik** implementieren/zu Ende bringen
-4. [ ] **Dokumentation (Arc42)** aktualisieren
-5. [ ] **Konsistenz und Threads** für die gesamte Anwendung
-6. [ ] **Design-Verbesserungen** umsetzen.
-
----
-
-## 3. Zusätzliche Notizen
-(Stand: 22.04.2025)
-- Testabdeckung ist aktuell schon im akzeptierenden Zustand (aktuell: 79%) – 
-mindestens 80% Codeabdeckung sollten angestrebt werden.
-- Aktuell genutzte Tools:
-  - **Backend**: Java, Spring Boot, Spring Data JDBC
-  - **Frontend**: HTML, CSS, JavaScript
-  - **Datenbank**: PostgreSQL (bereits eingerichtet und verbunden)
-  - **Build/Dependency Management**: Gradle
-  - **Laden aller Umgebungsvariablen**: Dotenv
-  - Mehr Informationen in der [arc42](arc42.md)
+1. [ ] acr42-Doc aktualisieren
+2. [ ] Logik-Test vervollständigen für vorhandenen Quellcode
+3. [ ] Korrektur der Freitextantworten einführen + Test
+4. [ ] Zulassungslogik + Test
+5. [ ] Neuer Testdurchlauf mit alten Anworten umsetzen + Test
+6. [ ] Einsicht auf Testergebnisse + CSV Export einführen + Test
+7. [ ] Rollenverteilung-Feature
