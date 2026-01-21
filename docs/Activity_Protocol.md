@@ -1,15 +1,13 @@
 # Aktueller Stand
 
-Weitere Details zum Projekt und den Aufgaben findest du in der TO_DO.md.
+>**Autor:** Marvin0109,
+>**Aktualisiert am: 21.01.2026
 
-*Hinweis*: Aktuell aktive Teilnehmer sind leider nur zwei (seit dem 11.02.25 ist Marvin0109 der alleinige Entwickler der 
-Anwendung), vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
+*Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
 ---
 
 ## Aktivitätsprotokoll
-
-
 
 ### 07.11.24
 
@@ -488,3 +486,11 @@ Anwendung), vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
 **Bereich**: Web / Frontend / Architektur / Test / Bugs
 - Bug gefixt, wo mehrere Studenten aufgelistet werden bei Korrekturübersicht eines Exams
 - Tests angepasst in Hinsicht auf Architekturanpassungen
+
+---
+
+### 21.01.2026
+**Bereich**: Dokumentation
+- arc42-Dokumentation überarbeitet
+- TO_DO aktualisiert
+- Activity_Protocol aktualisiert
