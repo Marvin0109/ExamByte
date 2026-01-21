@@ -2,23 +2,20 @@
 actor Administrator
 actor Student
 actor Korrektor
+database PostgreSQL
 
-usecase Testfragen
-component ExamByte
-usecase Bewertung
-usecase Ergebnis
-usecase Gesamtübersicht
-usecase Antworten
+cloud {
+    ["Github OAuth2"]
+}
 
-Administrator --> Testfragen : erstellt
-Student --> Antworten : erstellt
-ExamByte --> Antworten : bewertet MC-Antworten
-Korrektor --> Antworten : bewertet
-Korrektor --> Bewertung : erstellt
-ExamByte --> Bewertung : erstellt
-ExamByte --> Ergebnis : veröffentlicht
-Student --> Ergebnis : kann einsehen
-Testfragen --> ExamByte : gespeichert in
-ExamByte --> Gesamtübersicht : erstellt
-Gesamtübersicht --> Administrator : wird angezeigt
+component "ExamByte"
+
+
+Administrator --> "ExamByte" : Test erstellen, Übersicht einsehen
+Student --> "ExamByte" : Tests bearbeiten
+Korrektor --> "ExamByte" : Tests bewerten
+"ExamByte" --> PostgreSQL : Daten speichern / abrufen
+Student --> ["Github OAuth2"] : Anmeldung
+Korrektor --> ["Github OAuth2"] : Anmeldung
+Administrator --> ["Github OAuth2"] : Anmeldung
 @enduml
