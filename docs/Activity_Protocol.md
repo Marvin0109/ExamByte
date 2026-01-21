@@ -258,7 +258,7 @@ Anwendung), vom Rest kam keine Rückmeldung trotz mehrmaliger Nachfragen.
 ---
 
 ### 03.03.2025
-**Bereich**:
+**Bereich**: Tests / Infrastruktur
 - Tests korrigiert
 - Unnötige Imports entfernt
 - `AntwortServiceTest` gefixt
