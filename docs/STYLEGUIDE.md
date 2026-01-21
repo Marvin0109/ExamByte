@@ -1,17 +1,18 @@
 # Projekt-Styleguide
 
-**Autor**: Marvin0109
-**erstellt am**: 08.01.2025
-**letzte Änderung**: 23.09.2025
+>**Autor**: Marvin0109,
+>**erstellt am**: 08.01.2025,
+>**aktualisiert am**: 21.01.2026
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
-Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berücksichtigt die Bedürfnisse unseres Projekts.
+Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktuell jedoch von einer Person gepflegt und angepasst, die das Projekt privat weiterführt.
 
 ## Allgemeine Regeln
 
 ### Sprache
-- Wir programmieren hauptsächlich in **Java** und **HTML**, **SQL**, **CSS** als auch **JavaScript** werden verwendet.
+- Wir programmieren hauptsächlich in **Java** und verwenden **HTML** für die Weboberfläche.  
+  Für die Datenhaltung kommt die **PostgreSQL-Datenbank** zum Einsatz.
 - Alle Kommentare und Dokumentationen sind auf **Deutsch** zu schreiben.
 
 ### Dateinamen
@@ -35,24 +36,23 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 ## Technologien und Versionen
 
 ### Java-Version
-- Wir verwenden **Java 21** für das gesamte Projekt. Alle Teammitglieder sollten sicherstellen, 
-  dass sie diese Version oder eine kompatible Version von Java verwenden.
+- Das Projekt verwendet **Java 21**. Es wird empfohlen, diese Version oder eine kompatible Version zu verwenden, 
+  um sicherzustellen, dass der Code korrekt kompiliert und ausgeführt werden kann.
 
 ### Frameworks und Bibliotheken
-- **Spring Boot:** Version **3.3.5** 
-  (Spring Boot wird als zentrales Framework für die Erstellung der Webanwendung verwendet)
-- **Spring Security:** Version **5.x.x**
-  (Wird für die Sicherheitsaspekte der Anwendung verwendet, inklusive OAuth2-Client)
-- **Thymeleaf:** Version **3.x.x**
-  (Wird für das Template-Rendering in Verbindung mit Spring Boot verwendet)
-- **JUnit:** Version **5.x.x**
-  (Wird für Unit-Tests verwendet)
-- **ArchUnit:** Version **1.3.0**
-  (Für Architekturtests, um die Einhaltung der Architekturregeln zu überprüfen)
-- **Spring Boot DevTools:** Wird für das automatische Neustarten und Debugging während der Entwicklung verwendet.
-- **Spring Boot Configuration Processor:** Wird zur Verarbeitung von Konfigurationswerten genutzt.
-- **Maven/Gradle:** Gradle wird als Build-Tool verwendet.
-- **Dotenv:** 3rd Party Tool für das Laden der Umgebungsvariablen aus einer .env Datei
+- **Spring Boot:** Version **3.4.3**  
+  (Zentrales Framework für die Erstellung der Webanwendung)
+- **Spring Security:** (Für Sicherheitsaspekte, inkl. OAuth2-Client)
+- **Thymeleaf:** (Template-Rendering mit Spring Boot)
+- **JUnit:** (Unit-Tests)
+- **ArchUnit:** Version **1.3.0**  
+  (Architekturtests zur Einhaltung der Regeln)
+- **Testcontainers:** (Ermöglicht Integrationstests mit realen Datenbanken in Containern)
+- **Gradle:** Version **8.x**  
+  (Build-Tool)
+- **Dotenv:** (Lädt Umgebungsvariablen aus einer `.env` Datei)
+- **Flyway:** Version **11.2.0**
+  (Datenbank-Migrations-Tool)
 
 ### Entwicklungsumgebung
 - **IDE:** Wir verwenden IntelliJ IDEA, am besten die Ultimate-Edition, für die andere Versionen siehe zusätzliche
@@ -61,8 +61,6 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 ### Docker
 - **Docker Desktop:** Wir verwenden **Docker Desktop** für das Erstellen, Testen und Ausführen von 
   Docker-Containern während der Entwicklung.
-- **Docker Compose:** Wir setzen **Docker Compose** ein, um mehrere Docker-Container in einer definierten Umgebung zu 
-  orchestrieren (z.B. für die Datenbank und die Webanwendung).
 - **Dockerfiles und YAML:** Dockerfiles werden für das Erstellen von Docker-Images verwendet. In **docker-compose.yml**
   definieren wir die Container-Konfigurationen und Verknüpfungen, um eine konsistente Entwicklungsumgebung zu 
   gewährleisten.
@@ -115,12 +113,13 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
 
 - Nach Bedarf auch *@link* und *@see* verwenden im Beschreibungstext für Verweise auf Variablen, Klassen oder sonstiges.
 - Testklassen auch dokumentieren bei Bedarf
+- Notwendig sind die JavaDoc-Annotationen nicht
 
 ## Versionierung
 
 ### Branch-Namen
 - Aktuell: Nur 'main'
-- Für zukünftige Erweiterungen: Branches nach [Feature], [BugFix], etc. benennen.
+- Für mögliche Erweiterungen: Branches nach [feature], [bugfix], etc. benennen.
   - Beispiel: `feature/user-login`, `bugfix/login-error`.
 
 ### Commit-Messages
@@ -165,16 +164,20 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
    git commit -m "[BugFix]: Fix login button issue. Closes #1"
 
 ### Testing
-- Wir verwenden **jUnit**, **spring-security-test**, **archunit**, **spring-boot-starter-test** und **testcontainers**.
+- Wir verwenden **JUnit**, **spring-security-test**, **ArchUnit**, **spring-boot-starter-test** und **Testcontainers**.
 
 ### Namenskonventionen für Tests
-- Testmethoden beginnen mit test_.
+- Testmethoden werden nach den zu Testenden Methoden benannt.
   - Beispiel: 
   ```java
-  void test_03() { ... }
+  void multiplicationSuccess_03() { ... }
+- Im Namen soll auch sehr kurz erwähnt werden, welche Logik getestet wird
+  - Beispiel: 
+  ```java
+  void login_unauthorized_01() { ... }
 
 ### Dokumentation der Tests
-- Wir verwenden **@DisplayName** für eine **sehr kurze** Beschreibung der jeweiligen Testfälle
+- Wir verwenden **@DisplayName** für eine **kurze** Beschreibung der jeweiligen Testfälle, falls der Methodenname nicht mehr ausreichen tut
   - Beispiel:
   ```java
   @Test
@@ -182,14 +185,14 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   void test_01() { ... }
 
 ### Codeabdeckung
-- Ziel: **80 % der Funktionen** sollen durch Tests abgedeckt werden.
+- Ziel: **80 % der Funktionen** sollen durch Tests abgedeckt werden als auch die Logik sollte bei **80 %** Test-Abdeckung sein.
 
 ## Tools
 
 ### Versionskontrolle
 - Git-Workflow
 - Authorized OAuth App ExamByte owned by 'Marvin0109' (Nach Bedarf kann man selber eine erstellen und sie 
-  anbinden ans Projekt, wichtig hier sind die Umgebungsvariablen zu setzen)
+  anbinden ans Projekt, wichtig hier sind die Umgebungsvariablen zu setzen in einer eigenen `.env`)
 
 ### Build-Tool
 - Gradle
@@ -216,7 +219,7 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   </div>
 
 ### Tags
-- Geschlossene Tags: Schließe Tags korrekt nach **Bedarf**.
+- **Geschlossene Tags:** Alle HTML-Tags, die ein End-Tag benötigen, müssen korrekt geschlossen werden.
 
 ### Attribute
 - Alle Attribute in **Kleinbuchstaben** schreiben.
@@ -245,19 +248,19 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   </nav>
   
 ### Accessibility
-- Nutze 'alt'-Attribute bei Bildern für Screenreader.
+- Nutze `alt`-Attribute bei Bildern für Screenreader.
 - Vermeide rein dekorative Inhalte ohne Kontext.
-- Formulare sollten immer ein '<label>' enthalten, das mit einem 'for'-Attribut auf das Eingabefeld verweist.
+- Formulare sollten immer ein `<label>` enthalten, das mit einem `for`-Attribut auf das Eingabefeld verweist.
 
 ### Externe Ressourcen
 - Lade CSS- und JavaScript-Dateien am richtigen Ort:
-  - CSS: Im '<head>'-Tag.
-  - JavaScript: Am Ende des '<body>'-Tag
+  - CSS: Im `<head>`-Tag.
+  - JavaScript: Am Ende des `<body>`-Tag
 
 ## Thymeleaf-Regeln
 
 ### Verwendung von Platzhaltern
-- Nutze die **Thymeleaf-Ausdruckssyntax** '${}' für Variablen.
+- Nutze die **Thymeleaf-Ausdruckssyntax** `${}` für Variablen.
 - Vermeide es, reinen HTML-Code mit serverseitigen Werten zu mischen, wenn es durch Thymeleaf-Ausdrücke gelöst werden 
   kann.
   - Beispiel:
@@ -265,14 +268,14 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   <p th:text="${user.name}">Benutzername</p>
 
 ### Attribute
-- Verwende Thymeleaf-spezifische Attribute wie 'th:text', 'th:href', 'th:if', 'th:each' für dynamische Inhalte.
-- Die 'th:*'-Attribute sollten anstelle der statischen HTML-Attribute stehen.
+- Verwende Thymeleaf-spezifische Attribute wie `th:text`, `th:href`, `th:if`, `th:each` für dynamische Inhalte.
+- Die `th:*`-Attribute sollten anstelle der statischen HTML-Attribute stehen.
   - Beispiel:
   ```html
   <a th:href="@{/profile}" href="#">Profil</a>
 
 ### Schleifen und Bedingungen
-- Nutze 'th:each' für Schleifen und 'th:if' oder 'th:unless' für Bedingungen.
+- Nutze `th:each` für Schleifen und `th:if` oder `th:unless` für Bedingungen.
   - Beispiel:
   ```html
   <ul>
@@ -285,10 +288,12 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   <p th:unless="${user.loggedIn}">Bitte einloggen.</p>
   
 ### Standardwerte
-- Nutze 'th:utext' oder 'th:text' mit einem Default-Wert, falls der Platzhalter 'null' ist.
+- Nutze `th:text` mit einem Default-Wert, falls der Platzhalter `null` ist.
   - Beispiel:
   ```html
   <p th:text="${user.name ?: 'Gast'}">Gast</p>
+
+- **Niemals** `th:utext` verwenden! Es rendert den Inhalt **ungefiltert**, was ein Sicherheitsrisiko ist.
 
 ### HTML-Kommentare
 - Thymeleaf biete eigene Kommentar-Syntax, die beim Rendern entfernt wird:
@@ -301,24 +306,18 @@ Er ist für unser aktuelles Team von 2 aktiven Entwicklern geschrieben und berü
   ergänzt werden.
 
 ### Strukturierte Templates
-- Error-Pages in 'templates.error'
-- Webseiten in 'templates' **zurzeit**
+- Error-Pages in `templates.error`
+- Webseiten in `templates`
 
 ## Ressourcen
 
 ### Bilder, GIFS, Videos, usw.
 - Memes **erlaubt**.
 - Emotes: https://old.7tv.app/emotes
-- *Hinweis*: Übertreibung nicht notwendig.
-- Alle Ressourcen unter 'resources.static.public' speichern.
+- Alle Ressourcen im Ordner `resources.static.public` ablegen.
 
 ### Text
-- Generierte Text: https://www.loremipsum.de/
-
-## Änderungen
-
-### Test
-- Mit dem Start der Geschäftslogik und Funktionalitäten sollten Tests **rechtzeitig** geschrieben werden!
+- Textfiller: https://www.loremipsum.de/
 
 ## Fun Facts
 Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
@@ -385,15 +384,6 @@ SUM:                            56            914            345           4156
 ![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-23-09-2025.jpg)
 
 ## Schlussbemerkung
-- Randbemerkung: Die Gruppe startete mit 5 Teilnehmern, von denen **3** ausgestiegen sind.
-
-![Caught Gif](https://cdn.7tv.app/emote/01H0SQNM9R0005HNCSM10SYJEQ/2x.webp)
-
-- Danke an muz70wuc für die Mitarbeit, der Typ ist echt **GOATED**.
-
-![Based Tectone Gif](https://cdn.7tv.app/emote/01G39QQWC80004KFXXGTW7Q4XE/4x.webp)
-
-- Nach der ersten Klausur bliebt nur noch ich als letzter Entwickler übrig. Ist nicht einfach alles alleine zu entwickeln,
-aber mit Geduld und Konzentration geht's
-
-![Beepo Hopium](https://cdn.7tv.app/emote/01F7Z8X2K80005DMJNB0FWZDZH/4x.avif)
+- Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeiteten schließlich nur noch ich als alleiniger Entwickler weiter.
+- Vielen Dank an alle ursprünglichen Teammitglieder für ihre Unterstützung und Beiträge.
+- Die Weiterentwicklung des Projekts wird derzeit von mir allein durchgeführt. Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich fortzuführen.
