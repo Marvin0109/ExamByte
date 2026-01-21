@@ -76,7 +76,9 @@ Alles Weitere an Konventionen: [Styleguide hier](STYLEGUIDE.md)
 
 ![Exam Process Diagram](../src/main/resources/static/public/pictures/ExamByteProzess.png)
 
-*Abbildung 1: Diagramm des Prüfungsprozesses*
+*Abbildung 1: Kontextabgrenzungsdiagramm von ExamByte*
+
+Das Diagramm zeigt ExamByte im Zentrum, die externen Akteure (Studierende, Korrektor:innen, Administrator:innen) sowie externe Systeme (Github OAuth2, PostgreSQL) und deren Interaktionen.
 
 ## 4 Lösungssicht
 
