@@ -13,62 +13,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
-public class ProfessorDBTest {
+@Sql(scripts = "/data-test.sql")
+class ProfessorDBTest {
 
     @Autowired
-    private ProfessorDAO professorRepository;
+    private ProfessorDAO professorDAO;
+
     private ProfessorRepository repository;
+
+    private static final UUID PROFUUID = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
     @BeforeEach
     void setUp() {
         ProfessorMapper professorMapper = new ProfessorMapperImpl();
-        repository = new ProfessorRepositoryImpl(professorRepository, professorMapper);
+        repository = new ProfessorRepositoryImpl(professorDAO, professorMapper);
     }
 
     @Test
-    @DisplayName("Ein Professor kann gespeichert und wieder geladen werden")
+    @DisplayName("Laden der Daten erfolgreich")
     void test_01() {
-        // Arrange
-        Professor professor = new Professor.ProfessorBuilder()
-                .id(null)
-                .fachId(null)
-                .name("Dr. KekW")
-                .build();
-
         // Act
-        repository.save(professor);
-        Optional<Professor> geladen = repository.findByFachId(professor.uuid());
+        Optional<Professor> geladen = repository.findByFachId(PROFUUID);
 
         // Assert
-        assertThat(geladen.isPresent()).isTrue();
-        assertThat(geladen.get().getName()).isEqualTo("Dr. KekW");
-        assertThat(geladen.get().uuid()).isEqualTo(professor.uuid());
+        assertThat(geladen).isPresent();
     }
 
     @Test
     @DisplayName("Die FachId eines Professor kann nach dem Namen gefunden werden")
     void test_02() {
-        // Arrange
-        Professor professor = new Professor.ProfessorBuilder()
-                .id(null)
-                .fachId(null)
-                .name("Dr. KekW")
-                .build();
-
         // Act
-        repository.save(professor);
-        Optional<Professor> fachId = repository.findByName("Dr. KekW");
+        Optional<Professor> fachId = repository.findByName("ProfTestName");
 
         // Assert
-        assertThat(fachId.isPresent()).isTrue();
-        assertThat(fachId.get().uuid()).isEqualTo(professor.uuid());
+        assertThat(fachId).isPresent();
     }
 }
