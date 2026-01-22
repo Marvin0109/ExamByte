@@ -131,8 +131,8 @@ public class ExamDBTest {
                 .id(null)
                 .fachId(null)
                 .frageFachId(frage.getFachId())
-                .korrekteAntworten("JDBC")
-                .antwort_optionen("JPA\nJDBC")
+                .loesungen("JDBC")
+                .antwortOptionen("JPA\nJDBC")
                 .build();
 
         LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
@@ -196,8 +196,8 @@ public class ExamDBTest {
         assertThat(geladenKorrekteAntworten).isPresent();
         assertThat(geladenKorrekteAntworten.get().getFachId()).isEqualTo(korrekteAntworten.getFachId());
         assertThat(geladenKorrekteAntworten.get().getFrageFachId()).isEqualTo(frage.getFachId());
-        assertThat(geladenKorrekteAntworten.get().getKorrekteAntworten()).contains("JDBC");
-        assertThat(geladenKorrekteAntworten.get().getAntwort_optionen()).contains("JPA\nJDBC");
+        assertThat(geladenKorrekteAntworten.get().getLoesungen()).contains("JDBC");
+        assertThat(geladenKorrekteAntworten.get().getAntwortOptionen()).contains("JPA\nJDBC");
 
         // Professor
         assertThat(geladenProf).isPresent();
@@ -278,8 +278,8 @@ public class ExamDBTest {
                 .id(null)
                 .fachId(null)
                 .frageFachId(frage.getFachId())
-                .korrekteAntworten("JDBC")
-                .antwort_optionen("JPA\nJDBC")
+                .loesungen("JDBC")
+                .antwortOptionen("JPA\nJDBC")
                 .build();
 
         LocalDateTime startSubmit = LocalDateTime.of(2025, 6, 22, 10, 23);
@@ -376,8 +376,8 @@ public class ExamDBTest {
                 .id(null)
                 .fachId(null)
                 .frageFachId(frage.getFachId())
-                .korrekteAntworten("JDBC")
-                .antwort_optionen("JPA\nJDBC")
+                .loesungen("JDBC")
+                .antwortOptionen("JPA\nJDBC")
                 .build();
 
         Antwort antwort = new Antwort.AntwortBuilder()
@@ -472,8 +472,8 @@ public class ExamDBTest {
                 .id(null)
                 .fachId(null)
                 .frageFachId(frage.getFachId())
-                .korrekteAntworten("JDBC")
-                .antwort_optionen("JPA\nJDBC")
+                .loesungen("JDBC")
+                .antwortOptionen("JPA\nJDBC")
                 .build();
 
         Antwort antwort = new Antwort.AntwortBuilder()
@@ -562,8 +562,8 @@ public class ExamDBTest {
                 .id(null)
                 .fachId(null)
                 .frageFachId(frage.getFachId())
-                .korrekteAntworten("JDBC")
-                .antwort_optionen("JPA\nJDBC")
+                .loesungen("JDBC")
+                .antwortOptionen("JPA\nJDBC")
                 .build();
 
         Antwort antwort = new Antwort.AntwortBuilder()
