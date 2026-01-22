@@ -4,7 +4,6 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamManagementService;
-import exambyte.infrastructure.NichtVorhandenException;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.*;
 import org.springframework.stereotype.Service;
@@ -170,63 +169,71 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public ExamTimeInfo getExamTimeInfo(ExamDTO examDTO) {
-        String fristAnzeige = "";
-        String tageAnzeige = "";
-        String stundenAnzeige = "";
-        String minutenAnzeige = "";
         boolean timeLeft = false;
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
-        LocalDateTime now = LocalDateTime.now();
-        if (now.isBefore(examDTO.startTime())) {
-            String startTimeFormatted = examDTO.startTime().format(formatter);
-
-            fristAnzeige = "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
-        } else if (now.isAfter(examDTO.endTime())) {
-            String endTimeFormatted = examDTO.endTime().format(formatter);
-
-            fristAnzeige = "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
-                    "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
-        } else {
-            Duration diff = Duration.between(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                    examDTO.endTime().truncatedTo(ChronoUnit.MINUTES));
-
-            long days = diff.toDays();
-            long hours = diff.toHours() % 24;
-            long minutes = diff.toMinutes() % 60;
-
-            if (days == 1) {
-                tageAnzeige = days + " Tag";
-            } else if (days > 1) {
-                tageAnzeige = days + " Tage";
-            }
-
-            if (hours == 1) {
-                stundenAnzeige = hours + " Stunde";
-            } else if (hours > 1) {
-                stundenAnzeige = hours + " Stunden";
-            }
-
-            if (minutes == 1) {
-                minutenAnzeige = minutes + " Minute";
-            } else if (minutes > 1) {
-                minutenAnzeige = minutes + " Minuten";
-            }
-
-            if (!tageAnzeige.isEmpty()) {
-                fristAnzeige += tageAnzeige + " ";
-            }
-            if (!stundenAnzeige.isEmpty()) {
-                fristAnzeige += stundenAnzeige + " ";
-            }
-            if (!minutenAnzeige.isEmpty()) {
-                fristAnzeige += minutenAnzeige;
-            }
-
+        String fristAnzeige = getExamAvailabilityNotice(examDTO);
+        if (fristAnzeige.isEmpty()) {
+            fristAnzeige = getTimeDifference(examDTO);
             timeLeft = true;
         }
 
         return new ExamTimeInfo(fristAnzeige, timeLeft);
+    }
+
+    private String getExamAvailabilityNotice(ExamDTO examDTO) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isBefore(examDTO.startTime())) {
+            String startTimeFormatted = examDTO.startTime().format(formatter);
+
+            return "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
+        }
+
+        if (now.isAfter(examDTO.endTime())) {
+            String endTimeFormatted = examDTO.endTime().format(formatter);
+
+            return "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
+                    "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
+        }
+
+        return "";
+    }
+
+    private String getTimeDifference(ExamDTO examDTO) {
+        StringBuilder fristAnzeige = new StringBuilder();
+        String tageAnzeige = "";
+        String stundenAnzeige = "";
+        String minutenAnzeige = "";
+
+        Duration diff = Duration.between(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+                examDTO.endTime().truncatedTo(ChronoUnit.MINUTES));
+
+        long days = diff.toDays();
+        long hours = diff.toHours() % 24;
+        long minutes = diff.toMinutes() % 60;
+
+        if (days == 1) {
+            tageAnzeige = days + " Tag";
+        } else if (days > 1) {
+            tageAnzeige = days + " Tage";
+        }
+
+        if (hours == 1) {
+            stundenAnzeige = hours + " Stunde";
+        } else if (hours > 1) {
+            stundenAnzeige = hours + " Stunden";
+        }
+
+        if (minutes == 1) {
+            minutenAnzeige = minutes + " Minute";
+        } else if (minutes > 1) {
+            minutenAnzeige = minutes + " Minuten";
+        }
+
+        if (!tageAnzeige.isEmpty()) fristAnzeige.append(tageAnzeige).append(" ");
+        if (!stundenAnzeige.isEmpty()) fristAnzeige.append(stundenAnzeige).append(" ");
+        if (!minutenAnzeige.isEmpty()) fristAnzeige.append(minutenAnzeige).append(" ");
+        return fristAnzeige.toString();
     }
 
     @Override
