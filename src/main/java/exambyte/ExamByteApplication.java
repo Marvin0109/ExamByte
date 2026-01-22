@@ -1,8 +1,10 @@
 package exambyte;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import java.io.IOException;
@@ -21,6 +23,16 @@ import java.net.URI;
 public class ExamByteApplication {
 
 	private static final Logger logger = Logger.getLogger(ExamByteApplication.class.getName());
+
+	private static void init() {
+		Dotenv dotenv = Dotenv.load();
+
+		System.setProperty("CLIENT_ID", Objects.requireNonNull(dotenv.get("CLIENT_ID")));
+		System.setProperty("CLIENT_SECRET", Objects.requireNonNull(dotenv.get("CLIENT_SECRET")));
+		System.setProperty("DB_NAME", Objects.requireNonNull(dotenv.get("DB_NAME")));
+		System.setProperty("DB_USERNAME", Objects.requireNonNull(dotenv.get("DB_USERNAME")));
+		System.setProperty("DB_PASSWORD", Objects.requireNonNull(dotenv.get("DB_PASSWORD")));
+	}
 
 	/**
 	 * Versucht, eine URL im Standardbrowser zu öffnen.
@@ -57,7 +69,7 @@ public class ExamByteApplication {
 	 */
 	public static void main(String[] args) {
 		// Lädt Umgebungsvariablen aus der .env-Datei
-		SystemPropertyInitializer.init();
+		init();
 
 		// Starten der Spring Boot-Anwendung
 		SpringApplication.run(ExamByteApplication.class, args);
