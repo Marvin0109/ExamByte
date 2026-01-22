@@ -32,8 +32,8 @@ public class KorrekteAntwortDTOMapperTest {
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .fachId(fachID)
                 .frageFachId(frageFachID)
-                .korrekteAntworten(korrekteAntworten)
-                .antwort_optionen(antwort_optionen)
+                .loesungen(korrekteAntworten)
+                .antwortOptionen(antwort_optionen)
                 .build();
 
         // Act
@@ -67,7 +67,7 @@ public class KorrekteAntwortDTOMapperTest {
         // Assert
         assertThat(result.getFachId()).isEqualTo(fachID);
         assertThat(result.getFrageFachId()).isEqualTo(frageFachID);
-        assertThat(result.getKorrekteAntworten()).contains(korrekteAntworten);
-        assertThat(result.getAntwort_optionen()).contains(antwort_optionen);
+        assertThat(result.getLoesungen()).contains(korrekteAntworten);
+        assertThat(result.getAntwortOptionen()).contains(antwort_optionen);
     }
 }

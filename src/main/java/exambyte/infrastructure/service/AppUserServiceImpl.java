@@ -9,6 +9,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import java.util.logging.Logger;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,6 @@ import java.util.Set;
 /**
  * UserService implementiert die {@link OAuth2UserService} Schnittstelle und wird verwendet,
  * um Benutzerinformationen von einem OAuth2-Provider zu laden und die zugehörigen Benutzerrollen zu setzen.
- *
  * Diese Klasse überprüft den "login"-Wert des Benutzers und weist dem Benutzer basierend auf den Wert
  * eine bestimmte Rolle zu. In diesem Fall wird der Benutzer mit dem Login "Marvin0109" die Rolle "ROLE_ADMIN"
  * zugewiesen.
@@ -28,6 +28,8 @@ import java.util.Set;
 public class AppUserServiceImpl implements AppUserService {
 
   private final UserCreationService userCreationService;
+  private static final String ADMIN_MARVIN = "Marvin0109";
+  Logger logger = Logger.getLogger(getClass().getName());
 
   public AppUserServiceImpl(UserCreationService userCreationService) {
     this.userCreationService = userCreationService;
@@ -36,7 +38,6 @@ public class AppUserServiceImpl implements AppUserService {
   /**
    * Lädt die Benutzerinformationen vom OAuth2-Provider und weist dem Benutzer, basierend auf seinem Login,
    * die entsprechende Rolle zu.
-   *
    * Wenn der Benutzer den Login "Marvin0109" hat, wird ihm die Rolle "ROLE_ADMIN" zugewiesen.
    *
    * @param userRequest Die Anfrage, die Benutzerdaten vom OAuth2-Provider anfordert.
@@ -45,7 +46,7 @@ public class AppUserServiceImpl implements AppUserService {
    */
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-    System.out.println("User Service called");
+    logger.info("User Service called");
     OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
     OAuth2User originalUser = delegate.loadUser(userRequest);
     return addRole(originalUser);
@@ -70,15 +71,15 @@ public class AppUserServiceImpl implements AppUserService {
       found = true;
     }
 
-    // Wenn der Benutzer noch nicht existiert, erstell ihn mit einer passenden Rolle
+    // Wenn der Benutzer noch nicht existiert, erstelle ihn mit einer passenden Rolle
     if (!found) {
-      if ("Marvin0109".equals(login) || "muz70wuc".equals(login)) {
+      if (ADMIN_MARVIN.equals(login) || "muz70wuc".equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
       }
-      if ("Marvin0109".equals(login)) {
+      if (ADMIN_MARVIN.equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
       }
-      if ("Marvin0109".equals(login)) {
+      if (ADMIN_MARVIN.equals(login)) {
         authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
       }
       // Neuen Benutzer in die DB speichern

@@ -24,15 +24,15 @@ public class KorrekteAntwortTest {
                 .id(id)
                 .fachId(fachId)
                 .frageFachId(frageFachID)
-                .korrekteAntworten(korrekteAntworten)
-                .antwort_optionen(antwort_optionen)
+                .loesungen(korrekteAntworten)
+                .antwortOptionen(antwort_optionen)
                 .build();
 
         assertEquals(id, domain.getId());
         assertEquals(fachId, domain.getFachId());
         assertEquals(frageFachID, domain.getFrageFachId());
-        assertThat(domain.getKorrekteAntworten()).contains(korrekteAntworten);
-        assertThat(domain.getAntwort_optionen()).contains(antwort_optionen);
+        assertThat(domain.getLoesungen()).contains(korrekteAntworten);
+        assertThat(domain.getAntwortOptionen()).contains(antwort_optionen);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class KorrekteAntwortTest {
         assertNull(domain.getId());
         assertNotNull(domain.getFachId());
         assertNull(domain.getFrageFachId());
-        assertNull(domain.getKorrekteAntworten());
-        assertNull(domain.getAntwort_optionen());
+        assertNull(domain.getLoesungen());
+        assertNull(domain.getAntwortOptionen());
     }
 }

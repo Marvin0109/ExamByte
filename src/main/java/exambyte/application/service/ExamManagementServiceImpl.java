@@ -228,7 +228,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public String getChoiceForFrage(UUID frageFachId) {
-         return korrekteAntwortenService.findKorrekteAntwort(frageFachId).getAntwort_optionen();
+         return korrekteAntwortenService.findKorrekteAntwort(frageFachId).getAntwortOptionen();
     }
 
     @Override

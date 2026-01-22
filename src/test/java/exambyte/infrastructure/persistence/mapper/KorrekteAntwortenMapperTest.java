@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class KorrekteAntwortenMapperTest {
@@ -38,8 +37,8 @@ public class KorrekteAntwortenMapperTest {
         // Assert
         assertThat(korrekteAntworten.getFachId()).isEqualTo(fachID);
         assertThat(korrekteAntworten.getFrageFachId()).isEqualTo(frageFachID);
-        assertThat(korrekteAntworten.getKorrekteAntworten()).contains("Lösung 1\nLösung 2");
-        assertThat(korrekteAntworten.getAntwort_optionen()).contains(antwort_optionen);
+        assertThat(korrekteAntworten.getLoesungen()).contains("Lösung 1\nLösung 2");
+        assertThat(korrekteAntworten.getAntwortOptionen()).contains(antwort_optionen);
     }
 
     @Test
@@ -54,8 +53,8 @@ public class KorrekteAntwortenMapperTest {
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .fachId(fachID)
                 .frageFachId(frageFachID)
-                .korrekteAntworten(korrekteAntworten)
-                .antwort_optionen(antwort_optionen)
+                .loesungen(korrekteAntworten)
+                .antwortOptionen(antwort_optionen)
                 .build();
 
         // Act
