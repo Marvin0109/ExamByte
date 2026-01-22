@@ -1,18 +1,17 @@
 package exambyte;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.IOException; import java.net.URI;
-import java.util.Objects;
+import java.util.logging.Logger;
+
+import java.io.IOException;
+import java.net.URI;
 
 /**
  * Die Hauptklasse der Anwendung, die den Spring Boot Server startet und eine URL in einem Browser öffnet. ඞ
- *
  * Diese Klasse enthält die 'main'-Methode, die den Spring Boot-Anwendung-Context startet. Zusätzlich wird beim Starten der Anwendung
  * eine vordefinierte URL xD in einem bevorzugten Browser geöffnet.
- *
  * Wenn der Desktop nicht unterstützt wird, wird versucht, die die URL über einen der gängigen
  * Browser (z. B. Firefox, Chrome, Edge) zu öffnen. Falls auch dieser Schritt fehlschlägt, wird eine Fehlermeldung ausgegeben.
  *
@@ -20,6 +19,8 @@ import java.util.Objects;
  */
 @SpringBootApplication()
 public class ExamByteApplication {
+
+	private static final Logger logger = Logger.getLogger(ExamByteApplication.class.getName());
 
 	/**
 	 * Versucht, eine URL im Standardbrowser zu öffnen.
@@ -44,7 +45,7 @@ public class ExamByteApplication {
 		}
 
 		if (!browserOpened) {
-			System.err.println("Keiner der Browser konnte geöffnet werden.");
+			logger.info("Keiner der Browser konnte geöffnet werden.");
 		}
 
 	}
@@ -65,7 +66,7 @@ public class ExamByteApplication {
 			URI uri = new URI("http://localhost:8080/");
 			openInBrowser(uri);
 		} catch (Exception e) {
-			System.err.println("Ungültige URI: " + e.getMessage());
+			logger.info("Ungültige URI: " + e.getMessage());
 		}
 	}
 }
