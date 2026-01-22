@@ -62,21 +62,17 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(
-                    MESSAGE,
-                    "Fehlerhafte Eingabedaten!");
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-
-            return REDIRECT_EXAM_PROF;
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Fehlerhafte Eingabedaten!",
+                    false);
         }
 
         if (form.getQuestions().size() < 6){
-            redirectAttributes.addFlashAttribute(
-                    MESSAGE,
-                    "Weniger Fragen als sonst.");
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-
-            return REDIRECT_EXAM_PROF;
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Weniger Fragen als sonst.",
+                    false);
         }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
@@ -89,23 +85,25 @@ public class ExamController {
         String message = service.createExam(form, name);
 
         if (!message.isEmpty()) {
-            redirectAttributes.addFlashAttribute(
-                    MESSAGE,
-                    message);
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-
-            return REDIRECT_EXAM_PROF;
+            return redirectWithMessage(
+                    redirectAttributes,
+                    message,
+                    false);
         }
 
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
         service.createQuestions(form, fachId, examUUID);
 
-        redirectAttributes.addFlashAttribute(
-                MESSAGE,
-                "Prüfung und Fragen erfolgreich erstellt!");
-        redirectAttributes.addFlashAttribute(SUCCESS, true);
+        return redirectWithMessage(
+                redirectAttributes,
+                "Prüfung und Fragen erfolgreich erstellt!",
+                true);
+    }
 
+    private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
+        redirectAttributes.addFlashAttribute(MESSAGE, message);
+        redirectAttributes.addFlashAttribute(SUCCESS, success);
         return REDIRECT_EXAM_PROF;
     }
 
