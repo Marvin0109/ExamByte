@@ -2,7 +2,7 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.repository.StudentRepository;
 import exambyte.domain.service.StudentService;
-import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

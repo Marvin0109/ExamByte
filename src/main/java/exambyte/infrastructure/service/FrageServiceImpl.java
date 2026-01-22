@@ -20,11 +20,7 @@ public class FrageServiceImpl implements FrageService {
 
     @Override
     public List<Frage> getFragenForExam(UUID examId) {
-        List<Frage> frageList = repository.findByExamFachId(examId);
-        if (frageList.isEmpty()) {
-            throw new RuntimeException("Keine Fragen für das angegebene ExamId gefunden.");
-        }
-        return frageList;
+        return repository.findByExamFachId(examId);
     }
 
     @Override

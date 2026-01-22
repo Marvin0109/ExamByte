@@ -3,7 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.ExamService;
-import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

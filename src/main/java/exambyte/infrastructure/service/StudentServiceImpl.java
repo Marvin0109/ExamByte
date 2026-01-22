@@ -2,7 +2,7 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.repository.StudentRepository;
-import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import exambyte.domain.service.StudentService;
 import org.springframework.stereotype.Service;
 

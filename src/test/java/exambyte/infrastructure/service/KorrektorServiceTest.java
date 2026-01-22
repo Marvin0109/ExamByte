@@ -3,7 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.repository.KorrektorRepository;
 import exambyte.domain.service.KorrektorService;
-import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
