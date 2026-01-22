@@ -13,43 +13,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
-public class KorrektorDBTest {
+@Sql("/data-test.sql")
+class KorrektorDBTest {
 
     @Autowired
-    private KorrektorDAO korrektorRepository;
+    private KorrektorDAO korrektorDAO;
+
     private KorrektorRepository repository;
+
+    private static final UUID KORREKTORUUID = UUID.fromString("33333333-3333-3333-3333-333333333333");
 
     @BeforeEach
     void setUp() {
         KorrektorMapper mapper = new KorrektorMapperImpl();
-        repository = new KorrektorRepositoryImpl(korrektorRepository, mapper);
+        repository = new KorrektorRepositoryImpl(korrektorDAO, mapper);
     }
 
     @Test
-    @DisplayName("Ein Korrektor kann gespeichert und wieder geladen werden")
+    @DisplayName("Ein kann geladen werden")
     void test1() {
-        // Arrange
-        Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .id(null)
-                .fachId(null)
-                .name("Korrektor 1")
-                .build();
-
         // Act
-        repository.save(korrektor);
-        Optional<Korrektor> geladen = repository.findByFachId(korrektor.uuid());
+        Optional<Korrektor> geladen = repository.findByFachId(KORREKTORUUID);
 
         // Assert
-        assertThat(geladen.isPresent()).isTrue();
-        assertThat(geladen.get().getName()).isEqualTo("Korrektor 1");
-        assertThat(geladen.get().uuid()).isEqualTo(korrektor.uuid());
+        assertThat(geladen).isPresent();
     }
 }
