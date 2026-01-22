@@ -1,14 +1,11 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.ExamService;
-import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

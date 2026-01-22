@@ -3,7 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.repository.ProfessorRepository;
 import exambyte.domain.service.ProfessorService;
-import exambyte.infrastructure.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

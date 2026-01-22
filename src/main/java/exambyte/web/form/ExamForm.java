@@ -2,6 +2,7 @@ package exambyte.web.form;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -27,6 +28,7 @@ public class ExamForm {
     @NotNull(message = "Ergebniszeit muss gesetzt werden!")
     private LocalDateTime result;
 
+    @NotEmpty
     private List<@Valid QuestionData> questions = new ArrayList<>();
 
     private UUID fachId;

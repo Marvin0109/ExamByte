@@ -1,11 +1,11 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.model.aggregate.user.Student;
-import exambyte.domain.entitymapper.StudentMapper;
-import exambyte.infrastructure.persistence.mapper.StudentMapperImpl;
-import exambyte.infrastructure.persistence.repository.StudentDAO;
-import exambyte.infrastructure.persistence.repository.StudentRepositoryImpl;
-import exambyte.domain.repository.StudentRepository;
+import exambyte.domain.entitymapper.AntwortMapper;
+import exambyte.domain.model.aggregate.exam.Antwort;
+import exambyte.domain.repository.AntwortRepository;
+import exambyte.infrastructure.persistence.mapper.AntwortMapperImpl;
+import exambyte.infrastructure.persistence.repository.AntwortDAO;
+import exambyte.infrastructure.persistence.repository.AntwortRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,27 +23,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
-@Sql("/data-test.sql")
-class StudentDBTest {
+@Sql(scripts = "/data-test.sql")
+class AntwortDBTest {
 
     @Autowired
-    private StudentDAO studentDAO;
+    private AntwortDAO antwortDAO;
 
-    private StudentRepository repository;
+    private AntwortRepository antwortRepository;
 
-    private static final UUID STUDENTUUID = UUID.fromString("22222222-2222-2222-2222-222222222222");
+    private static final UUID ANTWORTUUID = UUID.fromString("dddddddd-dddd-dddd-dddd-dddddddddddd");
 
     @BeforeEach
     void setUp() {
-        StudentMapper studentMapper = new StudentMapperImpl();
-        repository = new StudentRepositoryImpl(studentDAO, studentMapper);
+        AntwortMapper antwortMapper = new AntwortMapperImpl();
+        antwortRepository = new AntwortRepositoryImpl(antwortDAO, antwortMapper);
     }
 
     @Test
-    @DisplayName("Ein Student kann geladen werden")
+    @DisplayName("Laden der Daten erfolgreich")
     void test_01() {
         // Act
-        Optional<Student> geladen = repository.findByFachId(STUDENTUUID);
+        Optional<Antwort> geladen = antwortRepository.findByFachId(ANTWORTUUID);
 
         // Assert
         assertThat(geladen).isPresent();
