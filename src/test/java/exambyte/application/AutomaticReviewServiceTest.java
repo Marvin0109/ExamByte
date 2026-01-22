@@ -7,7 +7,6 @@ import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.AutomaticReviewService;
 import exambyte.application.service.AutomaticReviewServiceImpl;
-import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.service.ReviewService;
 import exambyte.infrastructure.service.ReviewServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,12 +23,10 @@ import static org.mockito.Mockito.mock;
 public class AutomaticReviewServiceTest {
 
     private ReviewService service;
-    private ReviewDTOMapper mapper;
 
     @BeforeEach
     void setUp() {
         service = mock(ReviewServiceImpl.class);
-        mapper = mock(ReviewDTOMapper.class);
     }
 
     @Test
@@ -40,7 +37,7 @@ public class AutomaticReviewServiceTest {
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(mapper);
+        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl();
         FrageDTO frage1 = new FrageDTO(
                 null,
                 UUID.randomUUID(),
@@ -126,7 +123,7 @@ public class AutomaticReviewServiceTest {
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl(mapper);
+        AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl();
         FrageDTO frage1 = new FrageDTO(
                 null,
                 UUID.randomUUID(),

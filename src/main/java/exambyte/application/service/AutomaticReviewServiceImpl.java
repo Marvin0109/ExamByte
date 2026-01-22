@@ -4,7 +4,6 @@ import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +12,11 @@ import java.util.*;
 @Service
 public class AutomaticReviewServiceImpl implements AutomaticReviewService {
 
-    private final ReviewDTOMapper reviewDTOMapper;
-
-    public AutomaticReviewServiceImpl(ReviewDTOMapper reviewDTOMapper) {
-        this.reviewDTOMapper = reviewDTOMapper;
-    }
-
     @Override
-    public List<ReviewDTO> automatischeReviewSC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
-                                                List<KorrekteAntwortenDTO> korrekteAntworten, UUID studentUUID,
+    public List<ReviewDTO> automatischeReviewSC(List<FrageDTO> fragen,
+                                                List<AntwortDTO> antworten,
+                                                List<KorrekteAntwortenDTO> korrekteAntworten,
+                                                UUID studentUUID,
                                                 ReviewService reviewService) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
@@ -55,8 +50,11 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     }
 
     @Override
-    public List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen, List<AntwortDTO> antworten, List<KorrekteAntwortenDTO> answers,
-                                                UUID studentUUID, ReviewService reviewService) {
+    public List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen,
+                                                List<AntwortDTO> antworten,
+                                                List<KorrekteAntwortenDTO> answers,
+                                                UUID studentUUID,
+                                                ReviewService reviewService) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
