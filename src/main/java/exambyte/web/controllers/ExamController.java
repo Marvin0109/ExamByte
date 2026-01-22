@@ -23,6 +23,12 @@ import java.util.*;
 public class ExamController {
 
     private final ExamControllerService service;
+    private static final String LOGIN_NAME = "login";
+    private static final String CURRENT_PATH = "currentPath";
+    private static final String MESSAGE = "message";
+    private static final String SUCCESS = "success";
+    private static final String TIME_NOW = "timeNow";
+    private static final String REDIRECT_EXAM_PROF = "redirect:/exams/examsProfessoren";
 
     public  ExamController(ExamControllerService service) {
         this.service =  service;
@@ -36,13 +42,13 @@ public class ExamController {
             HttpServletRequest request) {
 
         OAuth2User user = auth.getPrincipal();
-        String name = user.getAttribute("login");
+        String name = user.getAttribute(LOGIN_NAME);
 
         ExamForm examForm = service.createExamForm();
 
         model.addAttribute("name", name);
         model.addAttribute("examForm", examForm);
-        model.addAttribute("currentPath", request.getRequestURI());
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "/exams/examsProfessoren";
     }
 
@@ -56,24 +62,20 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(
-                    "message",
-                    "Fehlerhafte Eingabedaten!");
-            redirectAttributes.addFlashAttribute("success", false);
-
-            return "redirect:/exams/examsProfessoren";
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Fehlerhafte Eingabedaten!",
+                    false);
         }
 
         if (form.getQuestions().size() < 6){
-            redirectAttributes.addFlashAttribute(
-                    "message",
-                    "Weniger Fragen als sonst.");
-            redirectAttributes.addFlashAttribute("success", false);
-
-            return "redirect:/exams/examsProfessoren";
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Weniger Fragen als sonst.",
+                    false);
         }
 
-        String name = auth.getPrincipal().getAttribute("login");
+        String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
         Optional<UUID> profFachID = service.getProfFachIDByName(name);
         UUID fachId = null;
         if (profFachID.isPresent()) {
@@ -83,24 +85,26 @@ public class ExamController {
         String message = service.createExam(form, name);
 
         if (!message.isEmpty()) {
-            redirectAttributes.addFlashAttribute(
-                    "message",
-                    message);
-            redirectAttributes.addFlashAttribute("success", false);
-
-            return "redirect:/exams/examsProfessoren";
+            return redirectWithMessage(
+                    redirectAttributes,
+                    message,
+                    false);
         }
 
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
         service.createQuestions(form, fachId, examUUID);
 
-        redirectAttributes.addFlashAttribute(
-                "message",
-                "Prüfung und Fragen erfolgreich erstellt!");
-        redirectAttributes.addFlashAttribute("success", true);
+        return redirectWithMessage(
+                redirectAttributes,
+                "Prüfung und Fragen erfolgreich erstellt!",
+                true);
+    }
 
-        return "redirect:/exams/examsProfessoren";
+    private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
+        redirectAttributes.addFlashAttribute(MESSAGE, message);
+        redirectAttributes.addFlashAttribute(SUCCESS, success);
+        return REDIRECT_EXAM_PROF;
     }
 
     @GetMapping("/examsKorrektor")
@@ -111,7 +115,7 @@ public class ExamController {
             HttpServletRequest request) {
 
         OAuth2User user = auth.getPrincipal();
-        model.addAttribute("name", user.getAttribute("login"));
+        model.addAttribute("name", user.getAttribute(LOGIN_NAME));
 
         List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
@@ -119,8 +123,8 @@ public class ExamController {
         List<ReviewCoverageForm> covList = service.getReviewCoverage(examDTOs);
 
         model.addAttribute("reviewCoverage", covList);
-        model.addAttribute("timeNow", now);
-        model.addAttribute("currentPath", request.getRequestURI());
+        model.addAttribute(TIME_NOW, now);
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "/exams/examsKorrektor";
     }
 
@@ -135,9 +139,9 @@ public class ExamController {
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isBefore(examDTO.endTime())) {
-            redirectAttributes.addFlashAttribute("message", "Die Prüfung läuft noch! " +
+            redirectAttributes.addFlashAttribute(MESSAGE, "Die Prüfung läuft noch! " +
                     "Keine Korrektur erlaubt.");
-            redirectAttributes.addFlashAttribute("success", false);
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
             return "redirect:/exams/examsKorrektor";
         }
 
@@ -145,7 +149,7 @@ public class ExamController {
 
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", examDTO);
-        model.addAttribute("timeNow", now);
+        model.addAttribute(TIME_NOW, now);
         return "/exams/examSubmittedUebersicht";
     }
 
@@ -168,15 +172,15 @@ public class ExamController {
             HttpServletRequest request) {
 
         OAuth2User user = auth.getPrincipal();
-        String studentName = user.getAttribute("login");
+        String studentName = user.getAttribute(LOGIN_NAME);
 
         List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
 
-        model.addAttribute("timeNow", now);
+        model.addAttribute(TIME_NOW, now);
         model.addAttribute("exams", examDTOs);
         model.addAttribute("name", studentName);
-        model.addAttribute("currentPath", request.getRequestURI());
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "/exams/examsStudierende";
     }
 
@@ -188,7 +192,7 @@ public class ExamController {
             OAuth2AuthenticationToken auth) {
 
         OAuth2User user = auth.getPrincipal();
-        String studentLogin = user.getAttribute("login");
+        String studentLogin = user.getAttribute(LOGIN_NAME);
         ExamDTO examDTO = service.getExamByUUID(examFachId);
         boolean alreadySubmitted = service.examIsAlreadySubmitted(examFachId, studentLogin);
 
@@ -236,7 +240,7 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         OAuth2User user = auth.getPrincipal();
-        String name =  user.getAttribute("login");
+        String name =  user.getAttribute(LOGIN_NAME);
 
         boolean submitted = service.examIsAlreadySubmitted(examFachId, name);
 
@@ -248,14 +252,14 @@ public class ExamController {
 
         if (success) {
             redirectAttributes.addFlashAttribute(
-                    "message",
+                    MESSAGE,
                     "Alle Antworten erfolgreich eingereicht!");
-            redirectAttributes.addFlashAttribute("success", true);
+            redirectAttributes.addFlashAttribute(SUCCESS, true);
         } else {
             redirectAttributes.addFlashAttribute(
-                    "message",
+                    MESSAGE,
                     "Fehler beim Einreichen der Antworten.");
-            redirectAttributes.addFlashAttribute("success", false);
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
         }
         return "redirect:/exams/examsStudierende";
     }

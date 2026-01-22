@@ -1,13 +1,11 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.ExamManagementService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -19,6 +17,7 @@ import java.util.UUID;
 public class WebController {
 
     private final ExamControllerService service;
+    private static final String CURRENT_PATH = "currentPath";
 
     public WebController(ExamControllerService service) {
         this.service = service;
@@ -27,7 +26,7 @@ public class WebController {
     @GetMapping("/")
     public String index(Model model, HttpServletRequest request) {
         service.saveAutomaticReviewer();
-        model.addAttribute("currentPath", request.getRequestURI());
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "index";
     }
 
@@ -44,14 +43,14 @@ public class WebController {
 
         model.addAttribute("name", auth.getPrincipal().getAttribute("login"));
         model.addAttribute("fachID", id);
-        model.addAttribute("currentPath", request.getRequestURI());
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "contact";
     }
 
     @GetMapping("/settings")
     @Secured("ROLE_ADMIN")
     public String showSettings(Model model, HttpServletRequest request) {
-        model.addAttribute("currentPath", request.getRequestURI());
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "settings";
     }
 
@@ -73,8 +72,8 @@ public class WebController {
      */
     @PostMapping("/force-logout")
     public String forceLogout(HttpServletRequest request) {
-        request.getSession(false).invalidate(); // Session invalidieren
-        SecurityContextHolder.clearContext(); // Sicherheitskontext löschen
+        request.getSession(false).invalidate();
+        SecurityContextHolder.clearContext();
         return "redirect:/";
     }
 }
