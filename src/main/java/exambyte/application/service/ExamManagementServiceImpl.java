@@ -16,6 +16,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import java.util.logging.Logger;
+
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
 
@@ -35,6 +37,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
     private final StudentDTOMapper studentDTOMapper;
+
+    private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
     @Autowired
     public ExamManagementServiceImpl(ExamService examService,
@@ -158,7 +162,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
             } catch (IllegalArgumentException ex) {
                 // Falls ein Key keine gültige UUID ist → Eingabe ignorieren, weiter mit nächster Frage
-                System.out.println("WARNUNG: Ungültige FrageFachId in SubmitExam: "
+                logger.info("WARNUNG: Ungültige FrageFachId in SubmitExam: "
                         + frageKey + " (" + ex.getMessage() + ")");
             }
         }
@@ -363,9 +367,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 reviewsTotal.add(reviewDTOMapper.toDTO(review));
             }
         }
-
-        System.out.println(reviewsTotal.size());
-        System.out.println(antworten.size());
 
         double coverage = antworten.isEmpty()
                 ? 0.0
