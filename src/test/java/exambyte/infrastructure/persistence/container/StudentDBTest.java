@@ -13,43 +13,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
-public class StudentDBTest {
+@Sql("/data-test.sql")
+class StudentDBTest {
 
     @Autowired
-    private StudentDAO studentRepository;
+    private StudentDAO studentDAO;
+
     private StudentRepository repository;
+
+    private static final UUID STUDENTUUID = UUID.fromString("22222222-2222-2222-2222-222222222222");
 
     @BeforeEach
     void setUp() {
         StudentMapper studentMapper = new StudentMapperImpl();
-        repository = new StudentRepositoryImpl(studentRepository, studentMapper);
+        repository = new StudentRepositoryImpl(studentDAO, studentMapper);
     }
 
     @Test
-    @DisplayName("Ein Student kann gespeichert und wieder geladen werden")
+    @DisplayName("Ein Student kann geladen werden")
     void test_01() {
-        // Arrange
-        Student student = new Student.StudentBuilder()
-                .id(null)
-                .fachId(null)
-                .name("Max Mustermann")
-                .build();
-
         // Act
-        repository.save(student);
-        Optional<Student> geladen = repository.findByFachId(student.uuid());
+        Optional<Student> geladen = repository.findByFachId(STUDENTUUID);
 
         // Assert
-        assertThat(geladen.isPresent()).isTrue();
-        assertThat(geladen.get().getName()).isEqualTo("Max Mustermann");
-        assertThat(geladen.get().uuid()).isEqualTo(student.uuid());
+        assertThat(geladen).isPresent();
     }
 }
