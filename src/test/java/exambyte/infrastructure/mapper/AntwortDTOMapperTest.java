@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AntwortDTOMapperTest {
+class AntwortDTOMapperTest {
 
     private final AntwortDTOMapper mapper = new AntwortDTOMapperImpl();
 

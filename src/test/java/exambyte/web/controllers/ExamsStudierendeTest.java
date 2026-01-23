@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ExamController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-public class ExamsStudierendeTest {
+class ExamsStudierendeTest {
 
     @Autowired
     private MockMvc mvc;
@@ -134,8 +134,8 @@ public class ExamsStudierendeTest {
     }
 
     @Test
-    @DisplayName("Starten des Exams nicht möglich ohne Authentifizierung")
-    void startExams_01() throws Exception {
+    @DisplayName("Der Zugang zum Exam ist nicht erlaubt ohne Anmeldung")
+    void testExamAccess() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -146,7 +146,7 @@ public class ExamsStudierendeTest {
     @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT"})
     @DisplayName("Starten des Exams erfolgreich")
-    void startExams_02() throws Exception {
+    void startExams_01() throws Exception {
         UUID examFachId = UUID.randomUUID();
         ExamForm form = mock(ExamForm.class);
 
@@ -157,16 +157,6 @@ public class ExamsStudierendeTest {
             .andExpect(model().attribute("exam", form))
             .andExpect(model().attributeExists("submitForm"))
             .andExpect(view().name("/exams/examsDurchfuehren"));
-    }
-
-    @Test
-    @DisplayName("Das Einreichen eines Exams ist nicht möglich ohne Authentifizierung")
-    void submitExam_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", UUID.randomUUID()))
-            .andExpect(status().is3xxRedirection())
-            .andReturn();
-        assertThat(mvcResult.getResponse().getRedirectedUrl())
-            .contains("oauth2/authorization/github");
     }
 
     @Test

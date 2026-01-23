@@ -65,9 +65,10 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/") // Nach erfolgreichem Logout
                         .invalidateHttpSession(true) // Session invalidieren
                         .deleteCookies("JSESSIONID") // Cookies löschen
-                        .addLogoutHandler((request, response, authentication) -> {
-                            SecurityContextHolder.clearContext(); // Sicherheitskontext löschen
-                        })
+                        .addLogoutHandler(
+                                (request, response, authentication) ->
+                            SecurityContextHolder.clearContext() // Sicherheitskontext löschen
+                        )
                 )
                 .build();
     }

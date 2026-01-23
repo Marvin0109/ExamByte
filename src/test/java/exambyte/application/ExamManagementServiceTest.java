@@ -18,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -26,14 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ExamManagementServiceTest {
+class ExamManagementServiceTest {
 
     private ExamService examService;
     private AntwortService antwortService;
     private FrageService frageService;
     private StudentService studentService;
     private ProfessorService professorService;
-    private KorrektorService korrektorService;
     private KorrekteAntwortenService korrekteAntwortenService;
     private ExamManagementService examManagementService;
     private ReviewService reviewService;
@@ -42,7 +40,6 @@ public class ExamManagementServiceTest {
     private ExamDTOMapper examDTOMapper;
     private FrageDTOMapper frageDTOMapper;
     private AntwortDTOMapper antwortDTOMapper;
-    private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private ReviewDTOMapper reviewDTOMapper;
     private StudentDTOMapper studentDTOMapper;
 
@@ -53,7 +50,7 @@ public class ExamManagementServiceTest {
         frageService = mock(FrageServiceImpl.class);
         studentService = mock(StudentServiceImpl.class);
         professorService = mock(ProfessorServiceImpl.class);
-        korrektorService = mock(KorrektorServiceImpl.class);
+        KorrektorService korrektorService = mock(KorrektorServiceImpl.class);
         korrekteAntwortenService = mock(KorrekteAntwortenServiceImpl.class);
         reviewService = mock(ReviewServiceImpl.class);
         automaticReviewService = mock(AutomaticReviewServiceImpl.class);
@@ -62,7 +59,7 @@ public class ExamManagementServiceTest {
         frageDTOMapper = mock(FrageDTOMapperImpl.class);
         antwortDTOMapper = mock(AntwortDTOMapperImpl.class);
         reviewDTOMapper = mock(ReviewDTOMapperImpl.class);
-        korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
+        KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
         studentDTOMapper = mock(StudentDTOMapperImpl.class);
 
         examManagementService = new ExamManagementServiceImpl(
@@ -981,7 +978,7 @@ public class ExamManagementServiceTest {
         List<StudentDTO> result = examManagementService.getStudentSubmittedExam(examFachId);
 
         // Assert
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1);
         assertThat(result.getFirst()).isEqualTo(studentDTO);
     }
 }

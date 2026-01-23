@@ -11,7 +11,7 @@ import java.util.UUID;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
-public class ReviewServiceTest {
+class ReviewServiceTest {
 
     private final ReviewRepository reviewRepository = mock(ReviewRepository.class);
     private final ReviewService reviewService = new ReviewServiceImpl(reviewRepository);

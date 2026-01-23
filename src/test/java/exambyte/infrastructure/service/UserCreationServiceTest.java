@@ -9,11 +9,9 @@ import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -22,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class UserCreationServiceTest {
+class UserCreationServiceTest {
 
     private StudentService studentService;
     private KorrektorService korrektorService;
@@ -174,6 +172,4 @@ public class UserCreationServiceTest {
         // Assert
         verify(studentService).saveStudent(login);
     }
-
-    // TODO: Transactional Test
 }

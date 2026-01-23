@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class ProfessorServiceTest {
+class ProfessorServiceTest {
 
     private final ProfessorRepository profRepo = mock(ProfessorRepository.class);
     private final ProfessorService service = new ProfessorServiceImpl(profRepo);
@@ -59,7 +59,7 @@ public class ProfessorServiceTest {
         var result = service.getProfessorByName(name);
 
         // Assert
-        assertThat(result).isNotNull();
+        assertThat(result).isPresent();
         assertThat(result.get().getName()).isEqualTo(name);
         verify(profRepo).findByName(name);
     }

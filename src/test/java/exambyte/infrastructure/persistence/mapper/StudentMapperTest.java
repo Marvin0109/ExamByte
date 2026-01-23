@@ -10,13 +10,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class StudentMapperTest {
+class StudentMapperTest {
 
     private final StudentMapper studentMapper = new StudentMapperImpl();
 
     @Test
     @DisplayName("StudentMapper test 'toEntity'")
-    public void test_01() {
+    void test_01() {
         // Arrange
         Student student = new Student.StudentBuilder()
                 .id(null)
@@ -37,7 +37,7 @@ public class StudentMapperTest {
 
     @Test
     @DisplayName("StudentMapper test 'toDomain'")
-    public void test_02() {
+    void test_02() {
         // Arrange
         StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
                 .id(null)

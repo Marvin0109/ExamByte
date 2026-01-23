@@ -20,13 +20,12 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
  * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
  */
 @AnalyzeClasses(packages = "exambyte")
-public class OnionArchitectureTest {
+class OnionArchitectureTest {
 
     /**
      * Enthält die importierten Java-Klassen aus dem angegebenen Paket "exambyte".
      * Die importierten Klassen werden für ArchUnit-Tests verwendet, um Architekturregeln innerhalb
      * der Exambyte-Anwendung zu prüfen.
-     *
      * Diese Variable wird hauptsächlich zur Definition und Überprüfung verschiedener Architekturregelexemplare
      * verwendet, um sicherzustellen, dass die vorgegebene Schichtenarchitektur und andere Richtlinien
      * eingehalten werden.
@@ -37,7 +36,7 @@ public class OnionArchitectureTest {
 
     @Test
     @DisplayName("Die ExamByte Anwendung hat eine Onion Architektur")
-    public void onionArchitecture() throws Exception {
+    void onionArchitecture() {
         ArchRule rule = Architectures.onionArchitecture()
             .domainModels("exambyte.domain..")
             .domainServices("exambyte.domain.model.impl..")

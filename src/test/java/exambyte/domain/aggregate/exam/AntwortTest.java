@@ -11,11 +11,11 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class AntwortTest {
+class AntwortTest {
 
     @Test
     @DisplayName("AntwortBuilder Test")
-    public void test_01() {
+    void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
         String antwortText = "Test answer";
@@ -45,7 +45,7 @@ public class AntwortTest {
 
     @Test
     @DisplayName("AntwortBuilder Test mit null Werte")
-    public void test_02() {
+    void test_02() {
         Long id = 1L;
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();

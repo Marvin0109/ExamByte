@@ -15,7 +15,7 @@ public class KorrekteAntwortenMapperImpl implements KorrekteAntwortenMapper {
                 .fachId(entity.getFachID())
                 .frageFachId(entity.getFrageFachID())
                 .loesungen(entity.getRichtigeAntwort())
-                .antwortOptionen(entity.getAntwort_optionen())
+                .antwortOptionen(entity.getAntwortOptionen())
                 .build();
     }
 

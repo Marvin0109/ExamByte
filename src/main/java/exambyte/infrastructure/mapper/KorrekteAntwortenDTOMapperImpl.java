@@ -21,7 +21,7 @@ public class KorrekteAntwortenDTOMapperImpl implements KorrekteAntwortenDTOMappe
                 .fachId(dto.getFachID())
                 .frageFachId(dto.getFrageFachID())
                 .loesungen(dto.getAntworten())
-                .antwortOptionen(dto.getAntwort_optionen())
+                .antwortOptionen(dto.getAntwortOptionen())
                 .build();
     }
 }

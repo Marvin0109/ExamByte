@@ -10,13 +10,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KorrektorMapperTest {
+class KorrektorMapperTest {
 
     private final KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
 
     @Test
     @DisplayName("KorrektorMapper test 'toEntity'")
-    public void test_01() {
+    void test_01() {
         // Arrange
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
                 .id(null)
@@ -37,7 +37,7 @@ public class KorrektorMapperTest {
 
     @Test
     @DisplayName("KorrektorMapper test 'toDomain'")
-    public void test_02() {
+    void test_02() {
         // Arrange
         KorrektorEntity korrektorEntity = new KorrektorEntity.KorrektorEntityBuilder()
                 .id(null)

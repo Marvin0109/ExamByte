@@ -20,7 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-public class ExamControllerServiceTest {
+class ExamControllerServiceTest {
 
     private ExamManagementService examService;
     private ExamControllerService service;
@@ -39,9 +39,9 @@ public class ExamControllerServiceTest {
         QuestionData q = form.getQuestions().getFirst();
 
         // Assert
-        assertThat(form.getQuestions().size()).isEqualTo(6);
+        assertThat(form.getQuestions()).hasSize(6);
         assertThat(q.getType()).isEmpty();
-        assertThat(q.getPunkte()).isEqualTo(0);
+        assertThat(q.getPunkte()).isZero();
     }
 
     @Test
@@ -77,7 +77,7 @@ public class ExamControllerServiceTest {
         ExamForm form = service.fillExamForm(examUUID);
 
         // Assert
-        assertThat(form.getQuestions().size()).isEqualTo(1);
+        assertThat(form.getQuestions()).hasSize(1);
         assertThat(form.getQuestions().getFirst().getType()).isEqualTo("FREITEXT");
     }
 
@@ -115,7 +115,7 @@ public class ExamControllerServiceTest {
         ExamForm form = service.fillExamForm(examUUID);
 
         // Assert
-        assertThat(form.getQuestions().size()).isEqualTo(1);
+        assertThat(form.getQuestions()).hasSize(1);
         assertThat(form.getQuestions().getFirst().getType()).isEqualTo("MC");
         assertThat(form.getQuestions().getFirst().getChoices()).isEqualTo("A- B,C,D");
     }
@@ -181,7 +181,7 @@ public class ExamControllerServiceTest {
         List<ReviewCoverageForm> result = service.getReviewCoverage(List.of(exam));
 
         // Assert
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1);
         assertThat(result.getFirst().getExam()).isEqualTo(exam);
         assertThat(result.getFirst().getReviewCoverage()).isEqualTo(50.0);
     }

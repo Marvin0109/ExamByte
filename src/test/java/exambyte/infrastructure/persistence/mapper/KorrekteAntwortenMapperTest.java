@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KorrekteAntwortenMapperTest {
+class KorrekteAntwortenMapperTest {
 
     private KorrekteAntwortenMapper korrekteAntwortenMapper;
 
@@ -27,9 +27,9 @@ public class KorrekteAntwortenMapperTest {
         UUID fachID = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
         String antworten = "Lösung 1\nLösung 2";
-        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
+        String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
         KorrekteAntwortenEntity entity = new KorrekteAntwortenEntity(null,
-                fachID, frageFachID, antworten, antwort_optionen);
+                fachID, frageFachID, antworten, antwortOptionen);
 
         // Act
         KorrekteAntworten korrekteAntworten = korrekteAntwortenMapper.toDomain(entity);
@@ -38,7 +38,7 @@ public class KorrekteAntwortenMapperTest {
         assertThat(korrekteAntworten.getFachId()).isEqualTo(fachID);
         assertThat(korrekteAntworten.getFrageFachId()).isEqualTo(frageFachID);
         assertThat(korrekteAntworten.getLoesungen()).contains("Lösung 1\nLösung 2");
-        assertThat(korrekteAntworten.getAntwortOptionen()).contains(antwort_optionen);
+        assertThat(korrekteAntworten.getAntwortOptionen()).contains(antwortOptionen);
     }
 
     @Test
@@ -48,13 +48,13 @@ public class KorrekteAntwortenMapperTest {
         UUID fachID = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
-        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
+        String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .fachId(fachID)
                 .frageFachId(frageFachID)
                 .loesungen(korrekteAntworten)
-                .antwortOptionen(antwort_optionen)
+                .antwortOptionen(antwortOptionen)
                 .build();
 
         // Act
@@ -64,6 +64,6 @@ public class KorrekteAntwortenMapperTest {
         assertThat(entity.getFachID()).isEqualTo(antworten.getFachId());
         assertThat(entity.getFrageFachID()).isEqualTo(antworten.getFrageFachId());
         assertThat(entity.getRichtigeAntwort()).contains(korrekteAntworten);
-        assertThat(entity.getAntwort_optionen()).contains(antwort_optionen);
+        assertThat(entity.getAntwortOptionen()).contains(antwortOptionen);
     }
 }

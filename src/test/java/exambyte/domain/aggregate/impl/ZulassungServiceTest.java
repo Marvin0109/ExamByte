@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ZulassungServiceTest {
+class ZulassungServiceTest {
 
     @Test
     @DisplayName("berechneErreichtePunkte Test (angenommen, MC und SC Bewertung sei korrekt implementiert worden")

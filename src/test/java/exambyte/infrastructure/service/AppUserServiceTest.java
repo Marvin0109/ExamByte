@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.testcontainers.shaded.org.checkerframework.common.value.qual.IntVal;
 
 import java.util.*;
 
@@ -14,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class AppUserServiceTest {
+class AppUserServiceTest {
 
     private static UserCreationService userCreationService;
     private static AppUserServiceImpl appUserService;
@@ -175,7 +174,4 @@ public class AppUserServiceTest {
 
         verify(userCreationService).createUser(user, authorities);
     }
-
-    // TODO: Synchronized Test
-
 }

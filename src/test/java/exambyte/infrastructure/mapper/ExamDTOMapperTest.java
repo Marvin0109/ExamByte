@@ -14,7 +14,7 @@ import exambyte.domain.model.aggregate.exam.Exam;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ExamDTOMapperTest {
+class ExamDTOMapperTest {
 
     private final ExamDTOMapper mapper = new ExamDTOMapperImpl();
 

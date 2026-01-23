@@ -15,7 +15,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FrageDTOMapperTest {
+class FrageDTOMapperTest {
 
     private final FrageDTOMapper mapper = new FrageDTOMapperImpl();
 
