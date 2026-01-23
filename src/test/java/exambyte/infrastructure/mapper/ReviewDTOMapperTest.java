@@ -26,7 +26,6 @@ class ReviewDTOMapperTest {
         UUID korrektorFachId = UUID.randomUUID();
 
         Review review = new Review.ReviewBuilder()
-                .id(null)
                 .fachId(fachId)
                 .antwortFachId(antwortFachId)
                 .korrektorFachId(korrektorFachId)
@@ -38,12 +37,11 @@ class ReviewDTOMapperTest {
         ReviewDTO reviewDTO = mapper.toDTO(review);
 
         // Assert
-        assertNull(reviewDTO.getId());
-        assertEquals(fachId, reviewDTO.getFachId());
-        assertEquals(antwortFachId, reviewDTO.getAntwortFachId());
-        assertEquals(korrektorFachId, reviewDTO.getKorrektorId());
-        assertEquals("Bewertung", reviewDTO.getBewertung());
-        assertEquals(3, reviewDTO.getPunkte());
+        assertEquals(fachId, reviewDTO.fachId());
+        assertEquals(antwortFachId, reviewDTO.antwortFachId());
+        assertEquals(korrektorFachId, reviewDTO.korrektorFachId());
+        assertEquals("Bewertung", reviewDTO.bewertung());
+        assertEquals(3, reviewDTO.punkte());
     }
 
     @Test
@@ -65,7 +63,6 @@ class ReviewDTOMapperTest {
         UUID korrektorFachId2 = UUID.randomUUID();
 
         Review review1 = new Review.ReviewBuilder()
-                .id(null)
                 .fachId(fachId1)
                 .antwortFachId(antwortFachId1)
                 .korrektorFachId(korrektorFachId1)
@@ -74,7 +71,6 @@ class ReviewDTOMapperTest {
                 .build();
 
         Review review2 = new Review.ReviewBuilder()
-                .id(null)
                 .fachId(fachId2)
                 .antwortFachId(antwortFachId2)
                 .korrektorFachId(korrektorFachId2)
@@ -89,16 +85,16 @@ class ReviewDTOMapperTest {
 
         // Assert
         assertEquals(2, reviewDTOs.size());
-        assertThat(reviewDTOs.getFirst().getFachId()).isEqualTo(fachId1);
-        assertThat(reviewDTOs.getFirst().getAntwortFachId()).isEqualTo(antwortFachId1);
-        assertThat(reviewDTOs.getFirst().getKorrektorId()).isEqualTo(korrektorFachId1);
-        assertThat(reviewDTOs.getFirst().getBewertung()).isEqualTo("Bewertung 1");
-        assertThat(reviewDTOs.getFirst().getPunkte()).isEqualTo(3);
+        assertThat(reviewDTOs.getFirst().fachId()).isEqualTo(fachId1);
+        assertThat(reviewDTOs.getFirst().antwortFachId()).isEqualTo(antwortFachId1);
+        assertThat(reviewDTOs.getFirst().korrektorFachId()).isEqualTo(korrektorFachId1);
+        assertThat(reviewDTOs.getFirst().bewertung()).isEqualTo("Bewertung 1");
+        assertThat(reviewDTOs.getFirst().punkte()).isEqualTo(3);
 
-        assertThat(reviewDTOs.getLast().getFachId()).isEqualTo(fachId2);
-        assertThat(reviewDTOs.getLast().getAntwortFachId()).isEqualTo(antwortFachId2);
-        assertThat(reviewDTOs.getLast().getKorrektorId()).isEqualTo(korrektorFachId2);
-        assertThat(reviewDTOs.getLast().getBewertung()).isEqualTo("Bewertung 2");
-        assertThat(reviewDTOs.getLast().getPunkte()).isEqualTo(6);
+        assertThat(reviewDTOs.getLast().fachId()).isEqualTo(fachId2);
+        assertThat(reviewDTOs.getLast().antwortFachId()).isEqualTo(antwortFachId2);
+        assertThat(reviewDTOs.getLast().korrektorFachId()).isEqualTo(korrektorFachId2);
+        assertThat(reviewDTOs.getLast().bewertung()).isEqualTo("Bewertung 2");
+        assertThat(reviewDTOs.getLast().punkte()).isEqualTo(6);
     }
 }

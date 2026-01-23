@@ -6,17 +6,15 @@ import java.util.UUID;
 
 public class Frage {
 
-    private final Long id;
     private final UUID fachId;
     private final String frageText;
-    private int maxPunkte;
+    private final int maxPunkte;
     private final QuestionType type;
     private final UUID professorUUID;
     private final UUID examUUID;
 
-    private Frage(Long id, UUID fachId,String frageText, int maxPunkte, QuestionType type, UUID professorUUID, UUID examUUID) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
-        this.id = id;
+    private Frage(UUID fachId,String frageText, int maxPunkte, QuestionType type, UUID professorUUID, UUID examUUID) {
+        this.fachId = fachId;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
         this.type = type;
@@ -30,10 +28,6 @@ public class Frage {
 
     public String getFrageText() {
         return frageText;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UUID getFachId() {
@@ -50,23 +44,13 @@ public class Frage {
 
     public QuestionType getType() { return type; }
 
-    public void setMaxPunkte(int maxPunkte) {
-        this.maxPunkte = maxPunkte;
-    }
-
     public static class FrageBuilder {
-        private Long id;
         private UUID fachId;
         private String frageText;
         private int maxPunkte;
         private QuestionType type;
         private UUID professorUUID;
         private UUID examUUID;
-
-        public FrageBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public FrageBuilder fachId(UUID fachId) {
             this.fachId = fachId;
@@ -99,7 +83,7 @@ public class Frage {
         }
 
         public Frage build() {
-            return new Frage(id, fachId, frageText, maxPunkte, type, professorUUID, examUUID);
+            return new Frage(fachId, frageText, maxPunkte, type, professorUUID, examUUID);
         }
     }
 }

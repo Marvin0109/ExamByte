@@ -32,20 +32,20 @@ public class ReviewData {
 
     public void filterToType(QuestionTypeDTO type){
         fragen = fragen.stream()
-                .filter(f -> f.getType().equals(type))
+                .filter(f -> f.type().equals(type))
                 .toList();
 
         List<UUID> frageIds = fragen.stream()
-                .map(FrageDTO::getFachId)
+                .map(FrageDTO::fachId)
                 .toList();
 
         antworten = antworten.stream()
-                .filter(a -> frageIds.contains(a.getFrageFachId()))
+                .filter(a -> frageIds.contains(a.frageFachId()))
                 .toList();
 
         korrekteAntworten = fragen.stream()
                 .map(f -> korrekteAntwortenDTOMapper.toDTO(
-                        korrekteAntwortenService.findKorrekteAntwort(f.getFachId())))
+                        korrekteAntwortenService.findKorrekteAntwort(f.fachId())))
                 .toList();
     }
 

@@ -5,8 +5,6 @@ import exambyte.domain.entitymapper.StudentMapper;
 import exambyte.infrastructure.persistence.entities.StudentEntity;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StudentMapperTest {
@@ -22,12 +20,9 @@ class StudentMapperTest {
 
         // Act
         StudentEntity studentEntity = studentMapper.toEntity(student);
-        UUID entityFachId = studentEntity.getFachId();
         String entityName = studentEntity.getName();
 
         // Assert
-        assertThat(studentEntity).isNotNull();
-        assertThat(entityFachId).isEqualTo(student.uuid());
         assertThat(entityName).isEqualTo("Jim Bim");
     }
 

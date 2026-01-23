@@ -40,10 +40,10 @@ class KorrekteAntwortDTOMapperTest {
         KorrekteAntwortenDTO dto = mapper.toDTO(antworten);
 
         // Assert
-        assertThat(dto.getFachID()).isEqualTo(fachID);
-        assertThat(dto.getFrageFachID()).isEqualTo(frageFachID);
-        assertThat(dto.getAntworten()).contains(korrekteAntworten);
-        assertThat(dto.getAntwortOptionen()).contains(antwortOptionen);
+        assertThat(dto.fachId()).isEqualTo(fachID);
+        assertThat(dto.frageFachId()).isEqualTo(frageFachID);
+        assertThat(dto.antworten()).contains(korrekteAntworten);
+        assertThat(dto.antwortOptionen()).contains(antwortOptionen);
     }
 
     @Test
@@ -55,11 +55,11 @@ class KorrekteAntwortDTOMapperTest {
         String korrekteAntworten = "Lösung 1\nLösung 2";
         String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
-        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null,
+        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(
                 fachID,
-                frageFachID,
                 korrekteAntworten,
-                antwortOptionen);
+                antwortOptionen,
+                frageFachID);
 
         // Act
         KorrekteAntworten result = mapper.toDomain(dto);

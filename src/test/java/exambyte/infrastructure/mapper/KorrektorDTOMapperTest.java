@@ -24,7 +24,6 @@ class KorrektorDTOMapperTest {
         UUID fachId = UUID.randomUUID();
 
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .id(null)
                 .fachId(fachId)
                 .name("Korrektorname")
                 .build();
@@ -33,7 +32,6 @@ class KorrektorDTOMapperTest {
         KorrektorDTO dto = mapper.toDTO(korrektor);
 
         // Assert
-        assertNull(dto.id());
         assertEquals(fachId, dto.fachId());
         assertEquals("Korrektorname", dto.name());
     }
@@ -52,13 +50,11 @@ class KorrektorDTOMapperTest {
         UUID fachId2 = UUID.randomUUID();
 
         Korrektor korrektor1 = new Korrektor.KorrektorBuilder()
-                .id(null)
                 .fachId(fachId1)
                 .name("Korrektor 1")
                 .build();
 
         Korrektor korrektor2 = new Korrektor.KorrektorBuilder()
-                .id(null)
                 .fachId(fachId2)
                 .name("Korrektor 2")
                 .build();

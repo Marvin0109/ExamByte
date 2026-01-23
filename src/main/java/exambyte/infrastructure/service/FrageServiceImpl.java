@@ -25,8 +25,7 @@ public class FrageServiceImpl implements FrageService {
 
     @Override
     public UUID addFrage(Frage frage) {
-        repository.save(frage);
-        return frage.getFachId();
+        return repository.save(frage);
     }
 
     @Override

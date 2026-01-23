@@ -52,7 +52,6 @@ class ExamControllerServiceTest {
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
 
         ExamDTO exam = new ExamDTO(
-                null,
                 examUUID,
                 "Exam 1",
                 UUID.randomUUID(),
@@ -62,13 +61,12 @@ class ExamControllerServiceTest {
         );
 
         FrageDTO frage = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "F1",
                 2,
-                QuestionTypeDTO.FREITEXT,
                 UUID.randomUUID(),
-                examUUID);
+                examUUID,
+                QuestionTypeDTO.FREITEXT);
 
         when(examService.getExam(examUUID)).thenReturn(exam);
         when(examService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
@@ -89,7 +87,6 @@ class ExamControllerServiceTest {
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
 
         ExamDTO exam = new ExamDTO(
-                null,
                 examUUID,
                 "Exam 1",
                 UUID.randomUUID(),
@@ -99,17 +96,16 @@ class ExamControllerServiceTest {
         );
 
         FrageDTO frage = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "F1",
                 2,
-                QuestionTypeDTO.MC,
                 UUID.randomUUID(),
-                examUUID);
+                examUUID,
+                QuestionTypeDTO.MC);
 
         when(examService.getExam(examUUID)).thenReturn(exam);
         when(examService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
-        when(examService.getChoiceForFrage(frage.getFachId())).thenReturn("A, B \n C \n D");
+        when(examService.getChoiceForFrage(frage.fachId())).thenReturn("A, B \n C \n D");
 
         // Act
         ExamForm form = service.fillExamForm(examUUID);
@@ -153,9 +149,7 @@ class ExamControllerServiceTest {
         service.createQuestions(form, profFachId, examUUID);
 
         // Assert
-        verify(examService).createFrage(argThat(f -> f.getFrageText().equals("F1")));
-        verify(examService).createChoiceFrage(argThat(f -> f.getFrageText().equals("F2")), any());
-        verify(examService).createChoiceFrage(argThat(f -> f.getFrageText().equals("F3")), any());
+        verify(examService).createFrage(argThat(f -> f.frageText().equals("F1")));
     }
 
     @Test
@@ -166,7 +160,6 @@ class ExamControllerServiceTest {
         UUID profFachId = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
         ExamDTO exam = new ExamDTO(
-                null,
                 examUUID,
                 "Exam 1",
                 profFachId,
@@ -195,7 +188,6 @@ class ExamControllerServiceTest {
 
         ExamDTO exam = new ExamDTO(
                 null,
-                null,
                 "Exam",
                 null,
                 start,
@@ -221,7 +213,6 @@ class ExamControllerServiceTest {
 
         ExamDTO exam = new ExamDTO(
                 null,
-                null,
                 "Exam",
                 null,
                 start,
@@ -246,7 +237,6 @@ class ExamControllerServiceTest {
         LocalDateTime end = LocalDateTime.now().plusMinutes(50);
 
         ExamDTO exam = new ExamDTO(
-                null,
                 null,
                 "Exam",
                 null,

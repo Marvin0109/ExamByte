@@ -15,6 +15,7 @@ public interface AutomaticReviewService {
                                          List<KorrekteAntwortenDTO> korrekteAntworten, UUID studentUUID,
                                          ReviewService reviewService);
 
-    List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen, List<AntwortDTO> antworten, List<KorrekteAntwortenDTO> answers,
+    List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
+                                         List<KorrekteAntwortenDTO> answers,
                                          UUID studentUUID, ReviewService reviewService);
 }

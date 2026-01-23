@@ -27,8 +27,6 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public void saveProfessor(String name) {
         Professor professor = new Professor.ProfessorBuilder()
-                .id(null)
-                .fachId(null)
                 .name(name)
                 .build();
         repository.save(professor);

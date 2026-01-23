@@ -6,7 +6,6 @@ import exambyte.infrastructure.persistence.mapper.FrageMapperImpl;
 import exambyte.domain.repository.FrageRepository;
 import exambyte.infrastructure.persistence.repository.FrageDAO;
 import exambyte.infrastructure.persistence.repository.FrageRepositoryImpl;
-import exambyte.infrastructure.persistence.repository.ProfessorDAO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,9 +29,6 @@ class FrageDBTest {
     @Autowired
     private FrageDAO frageDAO;
 
-    @Autowired
-    private ProfessorDAO professorDAO;
-
     private FrageRepository frageRepository;
 
     private static final UUID FRAGEUUID = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
@@ -40,7 +36,7 @@ class FrageDBTest {
     @BeforeEach
     void setUp() {
         FrageMapper frageMapper = new FrageMapperImpl();
-        frageRepository = new FrageRepositoryImpl(professorDAO, frageDAO, frageMapper);
+        frageRepository = new FrageRepositoryImpl(frageDAO, frageMapper);
     }
 
     @Test

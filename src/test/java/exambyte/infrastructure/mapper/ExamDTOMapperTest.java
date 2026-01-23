@@ -27,7 +27,6 @@ class ExamDTOMapperTest {
         UUID profId = UUID.randomUUID();
 
         Exam exam = new Exam.ExamBuilder()
-                .id(null)
                 .fachId(fachId)
                 .title("Test Exam")
                 .professorFachId(profId)
@@ -40,7 +39,6 @@ class ExamDTOMapperTest {
         ExamDTO dto = mapper.toDTO(exam);
 
         // Assert
-        assertNull(dto.id());
         assertEquals(fachId, dto.fachId());
         assertEquals("Test Exam", dto.title());
         assertEquals(profId, dto.professorFachId());
@@ -66,7 +64,6 @@ class ExamDTOMapperTest {
         UUID profId = UUID.randomUUID();
 
         Exam exam1 = new Exam.ExamBuilder()
-                .id(null)
                 .fachId(fachId)
                 .title("Test Exam 1")
                 .professorFachId(profId)
@@ -76,7 +73,6 @@ class ExamDTOMapperTest {
                 .build();
 
         Exam exam2 = new Exam.ExamBuilder()
-                .id(null)
                 .fachId(fachId2)
                 .title("Test Exam 2")
                 .professorFachId(profId)
@@ -109,7 +105,13 @@ class ExamDTOMapperTest {
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 1, 1);
         LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 2);
         LocalDateTime resultTime = LocalDateTime.of(2020, 1, 1, 1, 3);
-        ExamDTO dto = new ExamDTO(null, fachId, "Exam 1", profFachId, start, end, resultTime);
+        ExamDTO dto = new ExamDTO(
+                fachId,
+                "Exam 1",
+                profFachId,
+                start,
+                end,
+                resultTime);
 
         // Act
         Exam exam = mapper.toDomain(dto);

@@ -10,18 +10,20 @@ public class KorrekteAntwortenDTOMapperImpl implements KorrekteAntwortenDTOMappe
 
     @Override
     public KorrekteAntwortenDTO toDTO(KorrekteAntworten antworten) {
-        return new KorrekteAntwortenDTO(antworten.getId(), antworten.getFachId(),
-                antworten.getFrageFachId(), antworten.getLoesungen(),
-                antworten.getAntwortOptionen());
+        return new KorrekteAntwortenDTO(
+                antworten.getFachId(),
+                antworten.getLoesungen(),
+                antworten.getAntwortOptionen(),
+                antworten.getFrageFachId());
     }
 
     @Override
     public KorrekteAntworten toDomain(KorrekteAntwortenDTO dto) {
         return new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .fachId(dto.getFachID())
-                .frageFachId(dto.getFrageFachID())
-                .loesungen(dto.getAntworten())
-                .antwortOptionen(dto.getAntwortOptionen())
+                .fachId(dto.fachId())
+                .frageFachId(dto.frageFachId())
+                .loesungen(dto.antworten())
+                .antwortOptionen(dto.antwortOptionen())
                 .build();
     }
 }

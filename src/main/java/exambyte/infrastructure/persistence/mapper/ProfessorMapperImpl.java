@@ -11,7 +11,6 @@ public class ProfessorMapperImpl implements ProfessorMapper {
     @Override
     public Professor toDomain(ProfessorEntity entity) {
         return new Professor.ProfessorBuilder()
-                .id(null)
                 .fachId(entity.getFachId())
                 .name(entity.getName())
                 .build();
@@ -20,7 +19,6 @@ public class ProfessorMapperImpl implements ProfessorMapper {
     @Override
     public ProfessorEntity toEntity(Professor professor) {
         return new ProfessorEntity.ProfessorEntityBuilder()
-                .id(null)
                 .fachId(professor.uuid())
                 .name(professor.getName())
                 .build();

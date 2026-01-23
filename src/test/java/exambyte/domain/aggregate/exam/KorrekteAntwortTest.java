@@ -14,37 +14,21 @@ class KorrekteAntwortTest {
     @Test
     @DisplayName("KorrekteAntwortenBuilder Test")
     void test_01() {
-        Long id = 1L;
         UUID fachId = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
         String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .id(id)
                 .fachId(fachId)
                 .frageFachId(frageFachID)
                 .loesungen(korrekteAntworten)
                 .antwortOptionen(antwortOptionen)
                 .build();
 
-        assertEquals(id, domain.getId());
         assertEquals(fachId, domain.getFachId());
         assertEquals(frageFachID, domain.getFrageFachId());
         assertThat(domain.getLoesungen()).contains(korrekteAntworten);
         assertThat(domain.getAntwortOptionen()).contains(antwortOptionen);
-    }
-
-    @Test
-    @DisplayName("KorrekteAntwortenBuilder mit null Werte (FachID wird bei null generiert)")
-    void test_02() {
-        KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .build();
-
-        assertNull(domain.getId());
-        assertNotNull(domain.getFachId());
-        assertNull(domain.getFrageFachId());
-        assertNull(domain.getLoesungen());
-        assertNull(domain.getAntwortOptionen());
     }
 }

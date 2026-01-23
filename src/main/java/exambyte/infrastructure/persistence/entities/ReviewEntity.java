@@ -10,7 +10,7 @@ import java.util.UUID;
 public class ReviewEntity {
 
     @Id
-    private final Long id;
+    private Long id;
 
     @Column("fach_id")
     private final UUID fachId;
@@ -27,17 +27,12 @@ public class ReviewEntity {
     @Column("punkte")
     private int punkte;
 
-    private ReviewEntity(Long id, UUID fachId, UUID antwortFachId, UUID korrektorFachId, String bewertung, int punkte) {
-        this.id = id;
+    private ReviewEntity(UUID fachId, UUID antwortFachId, UUID korrektorFachId, String bewertung, int punkte) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.bewertung = bewertung;
         this.punkte = punkte;
         this.antwortFachId = antwortFachId;
         this.korrektorFachId = korrektorFachId;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UUID getFachId() {
@@ -69,17 +64,11 @@ public class ReviewEntity {
     }
 
     public static class ReviewEntityBuilder {
-        private Long id;
         private UUID fachId;
         private String bewertung;
         private int punkte;
         private UUID antwortFachId;
         private UUID korrektorFachId;
-
-        public ReviewEntityBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public ReviewEntityBuilder fachId(UUID fachId) {
             this.fachId = fachId;
@@ -108,9 +97,9 @@ public class ReviewEntity {
 
         public ReviewEntity build() {
             if (antwortFachId == null || korrektorFachId == null || bewertung == null || bewertung.isEmpty() || punkte < 0) {
-                throw new IllegalArgumentException("Alle Felder außer die Id müssen gesetzt werden.");
+                throw new IllegalArgumentException("Alle Felder außer die Id korrekt gesetzt werden");
             }
-            return new ReviewEntity(id, fachId, antwortFachId, korrektorFachId, bewertung, punkte);
+            return new ReviewEntity(fachId, antwortFachId, korrektorFachId, bewertung, punkte);
         }
     }
 }

@@ -27,8 +27,6 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void saveStudent(String name) {
         Student student = new Student.StudentBuilder()
-                .id(null)
-                .fachId(null)
                 .name(name)
                 .build();
         repository.save(student);

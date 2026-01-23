@@ -13,7 +13,6 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
     @Override
     public ExamDTO toDTO(Exam exam) {
         return new ExamDTO(
-                null,
                 exam.getFachId(),
                 exam.getTitle(),
                 exam.getProfessorFachId(),

@@ -6,15 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+
 class ReviewTest {
 
     @Test
     @DisplayName("ReviewBuilder Test")
     void test_01() {
-        Long id = 1L;
         UUID fachId = UUID.randomUUID();
         UUID antwortFachId = UUID.randomUUID();
         UUID korrektorId = UUID.randomUUID();
@@ -22,7 +20,6 @@ class ReviewTest {
         int punkte = 85;
 
         Review review = new Review.ReviewBuilder()
-                .id(id)
                 .fachId(fachId)
                 .antwortFachId(antwortFachId)
                 .korrektorFachId(korrektorId)
@@ -30,35 +27,10 @@ class ReviewTest {
                 .punkte(punkte)
                 .build();
 
-        assertEquals(id, review.getId());
         assertEquals(fachId, review.getFachId());
         assertEquals(antwortFachId, review.getAntwortFachId());
         assertEquals(korrektorId, review.getKorrektorFachId());
         assertEquals(bewertung, review.getBewertung());
         assertEquals(punkte, review.getPunkte());
-    }
-
-    @Test
-    @DisplayName("ReviewBuilder Test mit null Feldern")
-    void test_02() {
-        Long id = 1L;
-        UUID antwortFachId = UUID.randomUUID();
-        UUID korrektorId = UUID.randomUUID();
-
-        Review review = new Review.ReviewBuilder()
-                .id(id)
-                .fachId(null)
-                .antwortFachId(antwortFachId)
-                .korrektorFachId(korrektorId)
-                .bewertung(null)
-                .punkte(0)
-                .build();
-
-        assertEquals(id, review.getId());
-        assertNotNull(review.getFachId());
-        assertEquals(antwortFachId, review.getAntwortFachId());
-        assertEquals(korrektorId, review.getKorrektorFachId());
-        assertNull(review.getBewertung());
-        assertEquals(0, review.getPunkte());
     }
 }

@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.repository;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
-import exambyte.infrastructure.persistence.entities.ProfessorEntity;
 import exambyte.domain.repository.FrageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,12 +14,9 @@ public class FrageRepositoryImpl implements FrageRepository {
 
     private final FrageMapper frageMapper;
     private final FrageDAO frageDAO;
-    private final ProfessorDAO professorDAO;
 
     @Autowired
-    public FrageRepositoryImpl(ProfessorDAO professorDAO,
-                               FrageDAO frageDAO, FrageMapper frageMapper) {
-        this.professorDAO = professorDAO;
+    public FrageRepositoryImpl(FrageDAO frageDAO, FrageMapper frageMapper) {
         this.frageDAO = frageDAO;
         this.frageMapper = frageMapper;
     }
@@ -40,9 +36,10 @@ public class FrageRepositoryImpl implements FrageRepository {
     }
 
     @Override
-    public void save(Frage frage) {
+    public UUID save(Frage frage) {
         FrageEntity entity = frageMapper.toEntity(frage);
         frageDAO.save(entity);
+        return entity.getFachId();
     }
 
     @Override
@@ -50,22 +47,6 @@ public class FrageRepositoryImpl implements FrageRepository {
         return frageDAO.findByExamFachId(examId).stream()
                 .map(frageMapper::toDomain)
                 .toList();
-    }
-
-    public ProfessorEntity findByProfFachId(UUID profFachId) {
-        Optional<ProfessorEntity> existingProfessor = professorDAO.findByFachId(profFachId);
-
-        if (existingProfessor.isPresent()) {
-            return existingProfessor.get();
-        }
-
-        ProfessorEntity newProfessor = new ProfessorEntity.ProfessorEntityBuilder()
-                .id(null)
-                .fachId(profFachId)
-                .name("")
-                .build();
-        professorDAO.save(newProfessor);
-        return newProfessor;
     }
 
     @Override
