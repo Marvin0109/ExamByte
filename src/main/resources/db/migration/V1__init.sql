@@ -51,8 +51,6 @@ CREATE TABLE antwort (
     frage_antwort_id        UUID NOT NULL,
     antwort_text            VARCHAR(500) NOT NULL,
     student_fach_id         UUID NOT NULL,
-    antwort_zeitpunkt       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    last_changes_zeitpunkt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY(frage_antwort_id) REFERENCES frage(fach_id) ON DELETE CASCADE,
     FOREIGN KEY(student_fach_id) REFERENCES student(fach_id) ON DELETE CASCADE,
     CONSTRAINT unique_fach_id_antwort UNIQUE(fach_id)
