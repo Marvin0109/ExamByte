@@ -14,7 +14,6 @@ public class FrageMapperImpl implements FrageMapper {
     public Frage toDomain(FrageEntity entity) {
 
         return new Frage.FrageBuilder()
-                .id(null)
                 .fachId(entity.getFachId())
                 .frageText(entity.getFrageText())
                 .maxPunkte(entity.getMaxPunkte())
@@ -28,7 +27,6 @@ public class FrageMapperImpl implements FrageMapper {
     public FrageEntity toEntity(Frage frage) {
 
         return new FrageEntity.FrageEntityBuilder()
-                .id(null)
                 .fachId(frage.getFachId())
                 .frageText(frage.getFrageText())
                 .maxPunkte(frage.getMaxPunkte())

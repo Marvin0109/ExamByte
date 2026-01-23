@@ -102,7 +102,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return "Ein Exam mit der selben Startzeit ist schon vorhanden!";
         }
 
-        ExamDTO examDTO = new ExamDTO(null, null, title, profFachId, startTime, endTime, resultTime);
+        ExamDTO examDTO = new ExamDTO(null, title, profFachId, startTime, endTime, resultTime);
         examService.addExam(examDTOMapper.toDomain(examDTO));
         return "";
     }
@@ -121,7 +121,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<FrageDTO> fragen = frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examFachId));
 
         return fragen.stream()
-                .anyMatch(frage -> antwortService.findByStudentAndFrage(studentFachId, frage.getFachId()) != null);
+                .anyMatch(frage ->
+                        antwortService.findByStudentAndFrage(studentFachId, frage.fachId()) != null);
     }
 
     /**
@@ -149,11 +150,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
                 String antwortText = String.join("\n", value);
 
-                AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
-                    .frageFachId(frageFachId)
-                    .studentFachId(studentFachId)
-                    .antwortText(antwortText)
-                    .build();
+                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
 
                 antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
 
@@ -172,7 +169,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         // 4. Alle gespeicherten Antworten des Studenten für dieses Exam abrufen
         List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
                 .map(f -> antwortDTOMapper.toDTO(
-                        antwortService.findByStudentAndFrage(studentFachId, f.getFachId())))
+                        antwortService.findByStudentAndFrage(studentFachId, f.fachId())))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -221,10 +218,10 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public void createChoiceFrage(FrageDTO frageDTO, KorrekteAntwortenDTO korrekteAntwortenDTO) {
-        UUID frageFachID = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
-        korrekteAntwortenDTO.setFrageFachID(frageFachID);
-        korrekteAntwortenService.addKorrekteAntwort(korrekteAntwortenDTOMapper.toDomain(korrekteAntwortenDTO));
+    public void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices) {
+        UUID frageFachId = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
+        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null, correctAnswer, choices, frageFachId);
+        korrekteAntwortenService.addKorrekteAntwort(korrekteAntwortenDTOMapper.toDomain(dto));
     }
 
     @Override
@@ -273,7 +270,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<UUID> antwortenToDelete = new ArrayList<>();
         for (FrageDTO frageDTO : fragenDTOList) {
             antwortenToDelete.add(
-                        antwortService.findByStudentAndFrage(studentFachID, frageDTO.getFachId())
+                        antwortService.findByStudentAndFrage(studentFachID, frageDTO.fachId())
                     .getFachId());
         }
 
@@ -300,11 +297,11 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         // Alle Fragen des Exams und deren Maximalpunkte
         Map<UUID, FrageDTO> frageMap = frageService.getFragenForExam(examFachId).stream()
                 .map(frageDTOMapper::toDTO)
-                .collect(Collectors.toMap(FrageDTO::getFachId, f -> f));
+                .collect(Collectors.toMap(FrageDTO::fachId, f -> f));
 
         // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
-                .mapToDouble(FrageDTO::getMaxPunkte)
+                .mapToDouble(FrageDTO::maxPunkte)
                 .sum();
 
         // Alle Antworten des Studenten für dieses Exam
@@ -317,12 +314,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         double erreichtePunkte = 0.0;
 
         for (AntwortDTO antwortDTO : alleAntworten) {
-            FrageDTO frage = frageMap.get(antwortDTO.getFrageFachId());
+            FrageDTO frage = frageMap.get(antwortDTO.frageFachId());
             if (frage == null) {
                 continue;
             }
 
-            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.getFachId());
+            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.fachId());
             if (review != null) {
                 erreichtePunkte += review.getPunkte();
             }
@@ -333,7 +330,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 : 0.0;
 
         LocalDateTime zeitpunkt = alleAntworten.stream()
-                .map(AntwortDTO::getAntwortZeitpunkt)
+                .map(AntwortDTO::antwortZeitpunkt)
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 
@@ -359,7 +356,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
         for (AntwortDTO antwortDTO : antworten) {
-            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.getFachId());
+            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.fachId());
             if (review != null) {
                 reviewsTotal.add(reviewDTOMapper.toDTO(review));
             }
@@ -379,8 +376,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
         return antworten.stream()
             .collect(Collectors.toMap(
-                    AntwortDTO::getStudentFachId,
-                    a -> studentService.getStudent(a.getStudentFachId()),
+                    AntwortDTO::studentFachId,
+                    a -> studentService.getStudent(a.studentFachId()),
                     (existing, duplicate) -> existing
             ))
             .values()
@@ -394,8 +391,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
 
         List<UUID> studentAntwortList = antworten.stream()
-                .filter(a -> a.getStudentFachId().equals(student.fachId()))
-                .map(AntwortDTO::getFachId)
+                .filter(a -> a.studentFachId().equals(student.fachId()))
+                .map(AntwortDTO::fachId)
                 .toList();
 
         for (UUID uuid : studentAntwortList) {
@@ -420,7 +417,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     @Override
     public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
         return getFreitextFragen(examFachId).stream()
-                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.getFachId()))
+                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.fachId()))
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)
                 .toList();

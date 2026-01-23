@@ -5,7 +5,6 @@ import java.util.UUID;
 
 public class Exam {
 
-    private final Long id;
     private final UUID fachId;
     private final String title;
     private final UUID professorFachId;
@@ -13,19 +12,14 @@ public class Exam {
     private final LocalDateTime endTime;
     private final LocalDateTime resultTime;
 
-    private Exam(Long id, UUID fachId, String title, UUID professorFachId,
+    private Exam(UUID fachId, String title, UUID professorFachId,
                  LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
-        this.id = id;
+        this.fachId = fachId;
         this.title = title;
         this.professorFachId = professorFachId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.resultTime = resultTime;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UUID getFachId() {
@@ -53,18 +47,12 @@ public class Exam {
     }
 
     public static class ExamBuilder {
-        private Long id;
         private UUID fachId;
         private String title;
         private UUID professorFachId;
         private LocalDateTime startTime;
         private LocalDateTime endTime;
         private LocalDateTime resultTime;
-
-        public ExamBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public ExamBuilder fachId(UUID fachId) {
             this.fachId = fachId;
@@ -97,7 +85,7 @@ public class Exam {
         }
 
         public Exam build() {
-            return new Exam(id, fachId, title, professorFachId, startTime, endTime, resultTime);
+            return new Exam(fachId, title, professorFachId, startTime, endTime, resultTime);
         }
     }
 }

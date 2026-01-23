@@ -57,12 +57,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
         for (FrageDTO frage : fragen) {
             QuestionData questionData = new QuestionData();
-            questionData.setQuestionText(frage.getFrageText());
-            questionData.setPunkte(frage.getMaxPunkte());
-            questionData.setType(frage.getType().toString());
-            questionData.setFachId(frage.getFachId());
+            questionData.setQuestionText(frage.frageText());
+            questionData.setPunkte(frage.maxPunkte());
+            questionData.setType(frage.type().toString());
+            questionData.setFachId(frage.fachId());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
-                String choice = service.getChoiceForFrage(frage.getFachId());
+                String choice = service.getChoiceForFrage(frage.fachId());
                 List<String> choiceList = Arrays.stream(choice.split("\n"))
                         .map(String::trim)
                         .filter(s -> !s.isEmpty())
@@ -123,22 +123,20 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
             switch(frageTyp) {
                 case QuestionTypeWeb.FREITEXT:
-                    service.createFrage(new FrageDTO(null, null, frageText,
-                            maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()), profFachID, examUUID));
+                    service.createFrage(new FrageDTO(null, frageText,
+                            maxPunkte, profFachID, examUUID, QuestionTypeDTO.valueOf(frageTyp.name())));
                     break;
                 case QuestionTypeWeb.SC:
                     String correctAnswer = q.getCorrectAnswer();
-                    FrageDTO f1 = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
-                            profFachID, examUUID);
-                    service.createChoiceFrage(f1, new KorrekteAntwortenDTO(null, null,
-                            f1.getFachId(), correctAnswer, q.getChoices()));
+                    FrageDTO f1 = new FrageDTO(null, frageText, maxPunkte, profFachID, examUUID,
+                            QuestionTypeDTO.valueOf(frageTyp.name()));
+                    service.createChoiceFrage(f1, correctAnswer, q.getChoices());
                     break;
                 case QuestionTypeWeb.MC:
                     String correctAnswers = q.getCorrectAnswers();
-                    FrageDTO f2 = new FrageDTO(null, null, frageText, maxPunkte, QuestionTypeDTO.valueOf(frageTyp.name()),
-                            profFachID, examUUID);
-                    service.createChoiceFrage(f2, new KorrekteAntwortenDTO(null, null, f2.getFachId(),
-                            correctAnswers, q.getChoices()));
+                    FrageDTO f2 = new FrageDTO(null, frageText, maxPunkte, profFachID, examUUID,
+                            QuestionTypeDTO.valueOf(frageTyp.name()));
+                    service.createChoiceFrage(f2, correctAnswers, q.getChoices());
                     break;
                 default:
             }

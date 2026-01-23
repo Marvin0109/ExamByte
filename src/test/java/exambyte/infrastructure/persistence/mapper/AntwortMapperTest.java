@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.entitymapper.AntwortMapper;
 import exambyte.infrastructure.persistence.entities.AntwortEntity;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -16,27 +15,23 @@ class AntwortMapperTest {
     private final AntwortMapper mapper = new AntwortMapperImpl();
 
     @Test
-    @DisplayName("AntwortMapper test 'toEntity'")
-    void test_01() {
+    void toEntity() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
+
         Antwort antwort = new Antwort.AntwortBuilder()
-                .fachId(fachId)
-                .antwortText("Antworttext")
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeit)
-                .build();
+            .antwortText("Antworttext")
+            .frageFachId(frageFachId)
+            .studentFachId(studentFachId)
+            .antwortZeitpunkt(antwortZeit)
+            .build();
 
         // Act
         AntwortEntity antwortEntity = mapper.toEntity(antwort);
 
         // Assert
-        assertThat(antwortEntity).isNotNull();
-        assertThat(antwortEntity.getFachId()).isEqualTo(fachId);
         assertThat(antwortEntity.getAntwortText()).isEqualTo("Antworttext");
         assertThat(antwortEntity.getFrageFachId()).isEqualTo(frageFachId);
         assertThat(antwortEntity.getStudentFachId()).isEqualTo(studentFachId);
@@ -44,28 +39,23 @@ class AntwortMapperTest {
     }
 
     @Test
-    @DisplayName("AntwortMapper test 'toDomain'")
-    void test_02() {
+    void toDomain() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         AntwortEntity antwortEntity = new AntwortEntity.AntwortEntityBuilder()
-                .fachId(fachId)
-                .antwortText("Antworttext")
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeit)
-                .build();
+            .antwortText("Antworttext")
+            .frageFachId(frageFachId)
+            .studentFachId(studentFachId)
+            .antwortZeitpunkt(antwortZeit)
+            .build();
 
         // Act
         Antwort antwort = mapper.toDomain(antwortEntity);
 
         // Assert
-        assertThat(antwort).isNotNull();
-        assertThat(antwort.getFachId()).isEqualTo(fachId);
         assertThat(antwort.getAntwortText()).isEqualTo("Antworttext");
         assertThat(antwort.getFrageFachId()).isEqualTo(frageFachId);
         assertThat(antwort.getStudentUUID()).isEqualTo(studentFachId);

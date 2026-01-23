@@ -28,7 +28,6 @@ class FrageDTOMapperTest {
         UUID examFachId = UUID.randomUUID();
 
         Frage frage = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(fachId)
                 .frageText("Frage 1")
                 .maxPunkte(10)
@@ -41,13 +40,12 @@ class FrageDTOMapperTest {
         FrageDTO dto = mapper.toDTO(frage);
 
         // Assert
-        assertNull(dto.getId());
-        assertEquals(fachId, dto.getFachId());
-        assertEquals(profFachID, dto.getProfessorUUID());
-        assertEquals(examFachId, dto.getExamUUID());
-        assertEquals(QuestionType.MC, QuestionType.valueOf(dto.getType().name()));
-        assertEquals(frage.getFrageText(), dto.getFrageText());
-        assertEquals(frage.getMaxPunkte(), dto.getMaxPunkte());
+        assertEquals(fachId, dto.fachId());
+        assertEquals(profFachID, dto.profUUID());
+        assertEquals(examFachId, dto.examUUID());
+        assertEquals(QuestionType.MC, QuestionType.valueOf(dto.type().name()));
+        assertEquals(frage.getFrageText(), dto.frageText());
+        assertEquals(frage.getMaxPunkte(), dto.maxPunkte());
     }
 
     @Test
@@ -70,7 +68,6 @@ class FrageDTOMapperTest {
         UUID examFachId2 = UUID.randomUUID();
 
         Frage frage1 = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(fachId1)
                 .frageText("Frage 1")
                 .maxPunkte(4)
@@ -80,7 +77,6 @@ class FrageDTOMapperTest {
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(fachId2)
                 .frageText("Frage 2")
                 .maxPunkte(9)
@@ -96,16 +92,16 @@ class FrageDTOMapperTest {
 
         // Assert
         assertEquals(fragen.size(), frageDTOList.size());
-        assertThat(frageDTOList.getFirst().getFachId()).isEqualTo(fachId1);
-        assertThat(frageDTOList.getFirst().getType()).isEqualTo(QuestionTypeDTO.valueOf(frage1.getType().name()));
-        assertThat(frageDTOList.getFirst().getProfessorUUID()).isEqualTo(profFachId1);
-        assertThat(frageDTOList.getFirst().getExamUUID()).isEqualTo(examFachId1);
-        assertThat(frageDTOList.getFirst().getFrageText()).isEqualTo(frage1.getFrageText());
+        assertThat(frageDTOList.getFirst().fachId()).isEqualTo(fachId1);
+        assertThat(frageDTOList.getFirst().type()).isEqualTo(QuestionTypeDTO.valueOf(frage1.getType().name()));
+        assertThat(frageDTOList.getFirst().profUUID()).isEqualTo(profFachId1);
+        assertThat(frageDTOList.getFirst().examUUID()).isEqualTo(examFachId1);
+        assertThat(frageDTOList.getFirst().frageText()).isEqualTo(frage1.getFrageText());
 
-        assertThat(frageDTOList.getLast().getFachId()).isEqualTo(fachId2);
-        assertThat(frageDTOList.getLast().getProfessorUUID()).isEqualTo(profFachId2);
-        assertThat(frageDTOList.getLast().getType()).isEqualTo(QuestionTypeDTO.valueOf(frage2.getType().name()));
-        assertThat(frageDTOList.getLast().getExamUUID()).isEqualTo(examFachId2);
-        assertThat(frageDTOList.getLast().getFrageText()).isEqualTo(frage2.getFrageText());
+        assertThat(frageDTOList.getLast().fachId()).isEqualTo(fachId2);
+        assertThat(frageDTOList.getLast().profUUID()).isEqualTo(profFachId2);
+        assertThat(frageDTOList.getLast().type()).isEqualTo(QuestionTypeDTO.valueOf(frage2.getType().name()));
+        assertThat(frageDTOList.getLast().examUUID()).isEqualTo(examFachId2);
+        assertThat(frageDTOList.getLast().frageText()).isEqualTo(frage2.getFrageText());
     }
 }

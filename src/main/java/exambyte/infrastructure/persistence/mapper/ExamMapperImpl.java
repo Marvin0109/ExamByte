@@ -11,7 +11,6 @@ public class ExamMapperImpl implements ExamMapper {
     @Override
     public Exam toDomain(ExamEntity entity) {
         return new Exam.ExamBuilder()
-                .id(null)
                 .fachId(entity.getFachId())
                 .title(entity.getTitle())
                 .professorFachId(entity.getProfessorFachId())
@@ -24,7 +23,6 @@ public class ExamMapperImpl implements ExamMapper {
     @Override
     public ExamEntity toEntity(Exam exam) {
     return new ExamEntity.ExamEntityBuilder()
-            .id(null)
             .fachId(exam.getFachId())
             .title(exam.getTitle())
             .professorFachId(exam.getProfessorFachId())

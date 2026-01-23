@@ -11,7 +11,7 @@ import java.util.UUID;
 public class ExamEntity {
 
     @Id
-    private final Long id;
+    private Long id;
 
     @Column("fach_id")
     private final UUID fachId;
@@ -31,19 +31,14 @@ public class ExamEntity {
     @Column("result_time")
     private final LocalDateTime resultZeitpunkt;
 
-    private ExamEntity(Long id, UUID fachId, String title, UUID professorFachId,
+    private ExamEntity(UUID fachId, String title, UUID professorFachId,
                       LocalDateTime startZeitpunkt, LocalDateTime endZeitpunkt, LocalDateTime resultZeitpunkt) {
-        this.id = id;
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.title = title;
         this.professorFachId = professorFachId;
         this.startZeitpunkt = startZeitpunkt;
         this.endZeitpunkt = endZeitpunkt;
         this.resultZeitpunkt = resultZeitpunkt;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UUID getFachId() {
@@ -75,18 +70,12 @@ public class ExamEntity {
     }
 
     public static class ExamEntityBuilder {
-        private Long id;
         private UUID fachId;
         private String title;
         private UUID professorFachId;
         private LocalDateTime startZeitpunkt;
         private LocalDateTime endZeitpunkt;
         private LocalDateTime resultZeitpunkt;
-
-        public ExamEntityBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public ExamEntityBuilder fachId(UUID fachId) {
             this.fachId = fachId;
@@ -122,7 +111,7 @@ public class ExamEntity {
             if (title == null || professorFachId == null) {
                 throw new IllegalArgumentException("Der Titel und die professorFachId müssen gesetzt werden.");
             }
-            return new ExamEntity(id, fachId, title, professorFachId, startZeitpunkt, endZeitpunkt, resultZeitpunkt);
+            return new ExamEntity(fachId, title, professorFachId, startZeitpunkt, endZeitpunkt, resultZeitpunkt);
         }
     }
 }

@@ -13,7 +13,6 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
     @Override
     public ReviewDTO toDTO(Review review) {
         return new ReviewDTO(
-                null,
                 review.getFachId(),
                 review.getAntwortFachId(),
                 review.getKorrektorFachId(),
@@ -31,11 +30,11 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
     @Override
     public Review toDomain(ReviewDTO dto) {
         return new Review.ReviewBuilder()
-                .fachId(dto.getFachId())
-                .antwortFachId(dto.getAntwortFachId())
-                .korrektorFachId(dto.getKorrektorId())
-                .bewertung(dto.getBewertung())
-                .punkte(dto.getPunkte())
+                .fachId(dto.fachId())
+                .antwortFachId(dto.antwortFachId())
+                .korrektorFachId(dto.korrektorFachId())
+                .bewertung(dto.bewertung())
+                .punkte(dto.punkte())
                 .build();
     }
 }

@@ -35,82 +35,69 @@ class AutomaticReviewServiceTest {
         // Arrange
         UUID studentUUID = UUID.randomUUID();
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl();
         FrageDTO frage1 = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "Fragetext 1",
                 5,
-                QuestionTypeDTO.SC,
                 UUID.randomUUID(),
-                UUID.randomUUID());
+                UUID.randomUUID(),
+                QuestionTypeDTO.SC);
 
         FrageDTO frage2 = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "Fragetext 2",
                 10,
-                QuestionTypeDTO.SC,
                 UUID.randomUUID(),
-                UUID.randomUUID()
-        );
+                UUID.randomUUID(),
+                QuestionTypeDTO.SC);
 
         List<FrageDTO> scFragen = List.of(frage1, frage2);
 
-        AntwortDTO antwort1 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(UUID.randomUUID())
-                .frageFachId(frage1.getFachId())
-                .antwortText("Antwort 1")
-                .studentFachId(studentUUID)
-                .antwortZeitpunkt(antwortTime)
-                .build();
+        AntwortDTO antwort1 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 1",
+                frage1.fachId(),
+                studentUUID,
+                antwortTime);
 
-        AntwortDTO antwort2 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(UUID.randomUUID())
-                .frageFachId(frage2.getFachId())
-                .antwortText("Antwort 2")
-                .studentFachId(studentUUID)
-                .antwortZeitpunkt(antwortTime)
-                .build();
+        AntwortDTO antwort2 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 2",
+                frage2.fachId(),
+                studentUUID,
+                antwortTime);
 
         List<AntwortDTO> antwortDTOList = List.of(antwort1, antwort2);
 
         KorrekteAntwortenDTO korrekteAntworten1 = new KorrekteAntwortenDTO(
-                null,
                 UUID.randomUUID(),
-                frage1.getFachId(),
                 "Antwort 1",
-                "Antwort 1\nAntwort A"
-        );
+                "Antwort 1\nAntwort A",
+                frage1.fachId());
 
         KorrekteAntwortenDTO korrekteAntworten2 = new KorrekteAntwortenDTO(
-                null,
                 UUID.randomUUID(),
-                frage2.getFachId(),
                 "Antwort 2",
-                "Antwort 2\nAntwort A"
-        );
+                "Antwort 2\nAntwort A",
+                frage2.fachId());
 
         List<KorrekteAntwortenDTO> korrekteAntwortenList = List.of(korrekteAntworten1, korrekteAntworten2);
 
-
         // Act
-
         List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
                 scFragen,
                 antwortDTOList,
                 korrekteAntwortenList,
                 studentUUID,
-                service
-        );
+                service);
 
         // Assert
         assertThat(reviews).hasSize(2);
         assertThat(reviews)
-                .extracting(ReviewDTO::getPunkte)
-                .containsExactlyInAnyOrder(frage1.getMaxPunkte(), frage2.getMaxPunkte());
+                .extracting(ReviewDTO::punkte)
+                .containsExactlyInAnyOrder(frage1.maxPunkte(), frage2.maxPunkte());
     }
 
     @Test
@@ -119,68 +106,57 @@ class AutomaticReviewServiceTest {
         // Arrange
         UUID studentUUID = UUID.randomUUID();
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime lastChanges = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         AutomaticReviewService automaticReviewService = new AutomaticReviewServiceImpl();
         FrageDTO frage1 = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "Fragetext 1",
                 5,
-                QuestionTypeDTO.MC,
                 UUID.randomUUID(),
-                UUID.randomUUID());
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC);
 
         FrageDTO frage2 = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "Fragetext 2",
                 10,
-                QuestionTypeDTO.MC,
                 UUID.randomUUID(),
-                UUID.randomUUID()
-        );
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC);
 
         List<FrageDTO> scFragen = List.of(frage1, frage2);
 
-        AntwortDTO antwort1 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(UUID.randomUUID())
-                .frageFachId(frage1.getFachId())
-                .antwortText("Antwort 1\nAntwort 2")
-                .studentFachId(studentUUID)
-                .antwortZeitpunkt(antwortTime)
-                .build();
+        AntwortDTO antwort1 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 1\nAntwort 2",
+                frage1.fachId(),
+                studentUUID,
+                antwortTime);
 
-        AntwortDTO antwort2 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(UUID.randomUUID())
-                .frageFachId(frage2.getFachId())
-                .antwortText("Antwort 2\nAntwort 3")
-                .studentFachId(studentUUID)
-                .antwortZeitpunkt(antwortTime)
-                .build();
+        AntwortDTO antwort2 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 2\nAntwort 3",
+                frage2.fachId(),
+                studentUUID,
+                antwortTime);
 
         List<AntwortDTO> antwortDTOList = List.of(antwort1, antwort2);
 
         KorrekteAntwortenDTO korrekteAntworten1 = new KorrekteAntwortenDTO(
-                null,
                 UUID.randomUUID(),
-                frage1.getFachId(),
                 "Antwort 1\nAntwort 2",
-                "Antwort 1\nAntwort A\nAntwort 2"
-        );
+                "Antwort 1\nAntwort A\nAntwort 2",
+                frage1.fachId());
 
         KorrekteAntwortenDTO korrekteAntworten2 = new KorrekteAntwortenDTO(
-                null,
                 UUID.randomUUID(),
-                frage2.getFachId(),
                 "Antwort 2\nAntwort 3",
-                "Antwort 2\nAntwort A\nAntwort 3"
-        );
+                "Antwort 2\nAntwort A\nAntwort 3",
+                frage2.fachId());
 
         List<KorrekteAntwortenDTO> korrekteAntwortenList = List.of(korrekteAntworten1, korrekteAntworten2);
 
         // Act
-
         List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
                 scFragen,
                 antwortDTOList,
@@ -192,7 +168,7 @@ class AutomaticReviewServiceTest {
         // Assert
         assertThat(reviews).hasSize(2);
         assertThat(reviews)
-                .extracting(ReviewDTO::getPunkte)
-                .containsExactlyInAnyOrder(frage1.getMaxPunkte(), frage2.getMaxPunkte());
+                .extracting(ReviewDTO::punkte)
+                .containsExactlyInAnyOrder(frage1.maxPunkte(), frage2.maxPunkte());
     }
 }

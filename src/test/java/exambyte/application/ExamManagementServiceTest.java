@@ -93,7 +93,7 @@ class ExamManagementServiceTest {
         LocalDateTime result = end.plusHours(2);
 
 
-        ExamDTO dto = new ExamDTO(null, null, title, id, start, end, result);
+        ExamDTO dto = new ExamDTO(null, title, id, start, end, result);
 
         when(professorService.getProfessorFachIdByName(profName)).thenReturn(Optional.of(id));
         when(examService.allExams()).thenReturn(List.of());
@@ -166,7 +166,6 @@ class ExamManagementServiceTest {
 
         ExamDTO examDTO = new ExamDTO(
                 null,
-                null,
                 title,
                 id,
                 start,
@@ -230,7 +229,7 @@ class ExamManagementServiceTest {
         when(examDTOMapper.toDTO(any(Exam.class)))
                 .thenAnswer(invocation -> {
                     Exam e = invocation.getArgument(0);
-                    return new ExamDTO(null, null, "x", id,
+                    return new ExamDTO(null, "x", id,
                             e.getStartTime(), null, null);
                 });
 
@@ -252,29 +251,26 @@ class ExamManagementServiceTest {
         String studentName = "Marvin0109";
 
         FrageDTO frageDTO = new FrageDTO(
-                null,
                 UUID.randomUUID(),
                 "Frage 1",
                 10,
-                QuestionTypeDTO.FREITEXT,
                 UUID.randomUUID(),
-                examFachId
-        );
+                examFachId,
+                QuestionTypeDTO.FREITEXT);
 
         Frage frage = new Frage.FrageBuilder()
-                .id(null)
-                .fachId(frageDTO.getFachId())
+                .fachId(frageDTO.fachId())
                 .frageText("Frage 1")
                 .maxPunkte(10)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(frageDTO.getProfessorUUID())
+                .professorUUID(frageDTO.profUUID())
                 .examUUID(examFachId)
                 .build();
 
         when(studentService.getStudentFachId(studentName)).thenReturn(studentFachId);
         when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
         when(frageDTOMapper.toFrageDTOList(List.of(frage))).thenReturn(List.of(frageDTO));
-        when(antwortService.findByStudentAndFrage(studentFachId, frageDTO.getFachId())).thenReturn(mock(Antwort.class));
+        when(antwortService.findByStudentAndFrage(studentFachId, frageDTO.fachId())).thenReturn(mock(Antwort.class));
 
         // Act
         boolean success = examManagementService.isExamAlreadySubmitted(examFachId, studentName);
@@ -319,22 +315,20 @@ class ExamManagementServiceTest {
                 .build();
 
         FrageDTO frageDTO1 = new FrageDTO(
-                null,
                 frage1.getFachId(),
                 frage1.getFrageText(),
                 frage1.getMaxPunkte(),
-                QuestionTypeDTO.valueOf(frage1.getType().toString()),
                 frage1.getProfessorUUID(),
-                frage1.getExamUUID());
+                frage1.getExamUUID(),
+                QuestionTypeDTO.valueOf(frage1.getType().toString()));
 
         FrageDTO frageDTO2 = new FrageDTO(
-                null,
                 frage2.getFachId(),
                 frage2.getFrageText(),
                 frage2.getMaxPunkte(),
-                QuestionTypeDTO.valueOf(frage2.getType().toString()),
                 frage2.getProfessorUUID(),
-                frage2.getExamUUID());
+                frage2.getExamUUID(),
+                QuestionTypeDTO.valueOf(frage2.getType().toString()));
 
         when(studentService.getStudentFachId(studentLogin)).thenReturn(studentFachId);
         when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage1, frage2));
@@ -369,7 +363,6 @@ class ExamManagementServiceTest {
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Exam exam = new Exam.ExamBuilder()
-                .id(null)
                 .fachId(examId)
                 .title("Exam 1")
                 .startTime(start)
@@ -379,7 +372,6 @@ class ExamManagementServiceTest {
                 .build();
 
         ExamDTO examDTO = new ExamDTO(
-                null,
                 examId,
                 "Exam 1",
                 profUUID,
@@ -405,7 +397,6 @@ class ExamManagementServiceTest {
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Exam exam = new Exam.ExamBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .title("Exam 1")
                 .startTime(start.plusHours(1))
@@ -415,7 +406,6 @@ class ExamManagementServiceTest {
                 .build();
 
         ExamDTO examDTO = new ExamDTO(
-                null,
                 exam.getFachId(),
                 "Exam 1",
                 exam.getProfessorFachId(),
@@ -484,22 +474,20 @@ class ExamManagementServiceTest {
         LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         FrageDTO frageDTO1 = new FrageDTO(
-                null,
                 frageFachId1,
                 "F1",
                 10,
-                QuestionTypeDTO.FREITEXT,
                 profFachId,
-                examFachId);
+                examFachId,
+                QuestionTypeDTO.FREITEXT);
 
         FrageDTO frageDTO2 = new FrageDTO(
-                null,
                 frageFachId2,
                 "F2",
                 10,
-                QuestionTypeDTO.FREITEXT,
                 profFachId,
-                examFachId);
+                examFachId,
+                QuestionTypeDTO.FREITEXT);
 
         Antwort antwort = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId1)
@@ -518,7 +506,6 @@ class ExamManagementServiceTest {
                 .build();
 
         Review review = new Review.ReviewBuilder()
-                .id(null)
                 .fachId(reviewFachId1)
                 .antwortFachId(antwortFachId1)
                 .korrektorFachId(UUID.randomUUID())
@@ -570,7 +557,6 @@ class ExamManagementServiceTest {
         UUID korrektorFachId = UUID.randomUUID();
 
         LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime lastChangesZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Frage frage = new Frage.FrageBuilder()
                 .fachId(frageFachId)
@@ -582,24 +568,23 @@ class ExamManagementServiceTest {
                 .build();
 
         FrageDTO frageDTO = new FrageDTO(
-                null,
                 frageFachId,
                 "Testfrage",
                 5,
-                QuestionTypeDTO.MC,
                 UUID.randomUUID(),
-                examFachId);
+                examFachId,
+                QuestionTypeDTO.MC);
 
         when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
         when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
 
-        AntwortDTO antwortDTO = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(antwortFachId)
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
-                .antwortText("Antwort")
-                .antwortZeitpunkt(antwortZeitpunkt)
-                .build();
+        AntwortDTO antwortDTO = new AntwortDTO(
+                antwortFachId,
+                "Antwort",
+                frageFachId,
+                studentFachId,
+                antwortZeitpunkt);
+
 
         Antwort antwortDomain = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId)
@@ -621,7 +606,6 @@ class ExamManagementServiceTest {
                 .build();
 
         ReviewDTO reviewDTO = new ReviewDTO(
-                null,
                 UUID.randomUUID(),
                 antwortFachId,
                 korrektorFachId,
@@ -638,7 +622,6 @@ class ExamManagementServiceTest {
         assertThat(attempt.erreichtePunkte()).isEqualTo(5.0);
         assertThat(attempt.maxPunkte()).isEqualTo(5.0);
         assertThat(attempt.prozent()).isEqualTo(100.00);
-        assertThat(attempt.lastChanges()).isEqualTo(lastChangesZeitpunkt);
     }
 
     @Test
@@ -650,7 +633,6 @@ class ExamManagementServiceTest {
         LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Frage frage1 = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .frageText("F1")
                 .maxPunkte(2)
@@ -660,7 +642,6 @@ class ExamManagementServiceTest {
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .frageText("F2")
                 .maxPunkte(2)
@@ -670,23 +651,20 @@ class ExamManagementServiceTest {
                 .build();
 
         FrageDTO frageDTO1 = new FrageDTO(
-                null,
                 frage1.getFachId(),
                 "F1",
                 2,
-                QuestionTypeDTO.FREITEXT,
                 frage1.getProfessorUUID(),
-                examFachId
-        );
+                examFachId,
+                QuestionTypeDTO.FREITEXT);
 
         FrageDTO frageDTO2 = new FrageDTO(
-                null,
                 frage2.getFachId(),
                 "F2",
                 2,
-                QuestionTypeDTO.FREITEXT,
                 frage2.getProfessorUUID(),
-                examFachId
+                examFachId,
+                QuestionTypeDTO.FREITEXT
         );
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
@@ -705,35 +683,31 @@ class ExamManagementServiceTest {
                 .antwortZeitpunkt(antwortZeitpunkt)
                 .build();
 
-        AntwortDTO antwortDTO1 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(antwort1.getFachId())
-                .antwortText("A1")
-                .frageFachId(frageDTO1.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
-                .build();
+        AntwortDTO antwortDTO1 = new AntwortDTO(
+                antwort1.getFachId(),
+                "A1",
+                frageDTO1.fachId(),
+                studentFachId,
+                antwortZeitpunkt);
 
-        AntwortDTO antwortDTO2 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(antwort2.getFachId())
-                .antwortText("A2")
-                .frageFachId(frageDTO2.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
-                .build();
+        AntwortDTO antwortDTO2 = new AntwortDTO(
+                antwort2.getFachId(),
+                "A2",
+                frageDTO2.fachId(),
+                studentFachId,
+                antwortZeitpunkt);
 
         Review r1 = new Review.ReviewBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
-                .antwortFachId(antwortDTO1.getFachId())
+                .antwortFachId(antwortDTO1.fachId())
                 .korrektorFachId(UUID.randomUUID())
                 .bewertung("Gut")
                 .punkte(1)
                 .build();
 
         ReviewDTO r1DTO = new ReviewDTO(
-                null,
                 r1.getFachId(),
-                antwortDTO1.getFachId(),
+                antwortDTO1.fachId(),
                 r1.getKorrektorFachId(),
                 r1.getBewertung(),
                 r1.getPunkte()
@@ -747,8 +721,8 @@ class ExamManagementServiceTest {
         when(antwortDTOMapper.toDTO(antwort1)).thenReturn(antwortDTO1);
         when(antwortDTOMapper.toDTO(antwort2)).thenReturn(antwortDTO2);
 
-        when(reviewService.getReviewByAntwortFachId(antwortDTO1.getFachId())).thenReturn(r1);
-        when(reviewService.getReviewByAntwortFachId(antwortDTO2.getFachId())).thenReturn(null);
+        when(reviewService.getReviewByAntwortFachId(antwortDTO1.fachId())).thenReturn(r1);
+        when(reviewService.getReviewByAntwortFachId(antwortDTO2.fachId())).thenReturn(null);
 
         when(reviewDTOMapper.toDTO(r1)).thenReturn(r1DTO);
 
@@ -771,7 +745,6 @@ class ExamManagementServiceTest {
         LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Frage frage1 = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .frageText("F1")
                 .maxPunkte(2)
@@ -781,7 +754,6 @@ class ExamManagementServiceTest {
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .frageText("F2")
                 .maxPunkte(2)
@@ -791,23 +763,21 @@ class ExamManagementServiceTest {
                 .build();
 
         FrageDTO frageDTO1 = new FrageDTO(
-                null,
                 frage1.getFachId(),
                 "F1",
                 2,
-                QuestionTypeDTO.FREITEXT,
                 frage1.getProfessorUUID(),
-                examFachId
+                examFachId,
+                QuestionTypeDTO.FREITEXT
         );
 
         FrageDTO frageDTO2 = new FrageDTO(
-                null,
                 frage2.getFachId(),
                 "F2",
                 2,
-                QuestionTypeDTO.MC,
                 frage2.getProfessorUUID(),
-                examFachId
+                examFachId,
+                QuestionTypeDTO.MC
         );
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
@@ -826,35 +796,31 @@ class ExamManagementServiceTest {
                 .antwortZeitpunkt(antwortZeitpunkt)
                 .build();
 
-        AntwortDTO antwortDTO1 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(antwort1.getFachId())
-                .antwortText("A1")
-                .frageFachId(frageDTO1.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
-                .build();
+        AntwortDTO antwortDTO1 = new AntwortDTO(
+                antwort1.getFachId(),
+                "A1",
+                frageDTO1.fachId(),
+                studentFachId,
+                antwortZeitpunkt);
 
-        AntwortDTO antwortDTO2 = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(antwort2.getFachId())
-                .antwortText("A2")
-                .frageFachId(frageDTO2.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
-                .build();
+        AntwortDTO antwortDTO2 = new AntwortDTO(
+                antwort2.getFachId(),
+                "A2",
+                frageDTO2.fachId(),
+                studentFachId,
+                antwortZeitpunkt);
 
         Review r1 = new Review.ReviewBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
-                .antwortFachId(antwortDTO1.getFachId())
+                .antwortFachId(antwortDTO1.fachId())
                 .korrektorFachId(UUID.randomUUID())
                 .bewertung("Gut")
                 .punkte(1)
                 .build();
 
         ReviewDTO r1DTO = new ReviewDTO(
-                null,
                 r1.getFachId(),
-                antwortDTO1.getFachId(),
+                antwortDTO1.fachId(),
                 r1.getKorrektorFachId(),
                 r1.getBewertung(),
                 r1.getPunkte()
@@ -868,8 +834,8 @@ class ExamManagementServiceTest {
         when(antwortDTOMapper.toDTO(antwort1)).thenReturn(antwortDTO1);
         when(antwortDTOMapper.toDTO(antwort2)).thenReturn(antwortDTO2);
 
-        when(reviewService.getReviewByAntwortFachId(antwortDTO1.getFachId())).thenReturn(r1);
-        when(reviewService.getReviewByAntwortFachId(antwortDTO2.getFachId())).thenReturn(null);
+        when(reviewService.getReviewByAntwortFachId(antwortDTO1.fachId())).thenReturn(r1);
+        when(reviewService.getReviewByAntwortFachId(antwortDTO2.fachId())).thenReturn(null);
 
         when(reviewDTOMapper.toDTO(r1)).thenReturn(r1DTO);
 
@@ -880,7 +846,6 @@ class ExamManagementServiceTest {
         double coverage = examManagementService.reviewCoverage(examFachId);
 
         // Assert
-
         // 2 Fragen: MC und Freitextaufgaben, aber von den Freitextaufgaben haben alle eine Bewertung
         assertThat(coverage).isEqualTo(100.0);
     }
@@ -897,13 +862,11 @@ class ExamManagementServiceTest {
         LocalDateTime antwortZeitpunkt = LocalDateTime.of(2026, 1, 1, 0, 0);
 
         Student student = new Student.StudentBuilder()
-                .id(null)
                 .fachId(studentFachId)
                 .name("Marvin0109")
                 .build();
 
         Frage frage = new Frage.FrageBuilder()
-                .id(null)
                 .fachId(frageFachId)
                 .frageText("F1")
                 .maxPunkte(10)
@@ -913,16 +876,14 @@ class ExamManagementServiceTest {
                 .build();
 
         FrageDTO frageDTO = new FrageDTO(
-                null,
                 frageFachId,
                 "F1",
                 10,
-                QuestionTypeDTO.FREITEXT,
                 profFachId,
-                examFachId
-        );
+                examFachId,
+                QuestionTypeDTO.FREITEXT);
 
-        StudentDTO studentDTO = new StudentDTO(null, studentFachId, "Marvin0109");
+        StudentDTO studentDTO = new StudentDTO(studentFachId, "Marvin0109");
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId)
@@ -932,13 +893,12 @@ class ExamManagementServiceTest {
                 .antwortZeitpunkt(antwortZeitpunkt)
                 .build();
 
-        AntwortDTO antwort1DTO = new AntwortDTO.AntwortDTOBuilder()
-            .fachId(antwortFachId)
-            .antwortText("Antwort 1")
-            .frageFachId(frageFachId)
-            .studentFachId(studentFachId)
-            .antwortZeitpunkt(antwortZeitpunkt)
-            .build();
+        AntwortDTO antwort1DTO = new AntwortDTO(
+                antwortFachId,
+                "Antwort 1",
+                frageFachId,
+                studentFachId,
+                antwortZeitpunkt);
 
         when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
         when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);

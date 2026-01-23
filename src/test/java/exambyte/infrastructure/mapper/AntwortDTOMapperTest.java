@@ -38,11 +38,11 @@ class AntwortDTOMapperTest {
         AntwortDTO dto = mapper.toDTO(antwort);
 
         // Assert
-        assertEquals(fachId, dto.getFachId());
-        assertEquals(studentFachId, dto.getStudentFachId());
-        assertEquals(frageFachId, dto.getFrageFachId());
-        assertEquals("Antwort", dto.getAntwortText());
-        assertEquals(antwortTime, dto.getAntwortZeitpunkt());
+        assertEquals(fachId, dto.fachId());
+        assertEquals(studentFachId, dto.studentFachId());
+        assertEquals(frageFachId, dto.frageFachId());
+        assertEquals("Antwort", dto.antwortText());
+        assertEquals(antwortTime, dto.antwortZeitpunkt());
     }
 
     @Test
@@ -88,15 +88,15 @@ class AntwortDTOMapperTest {
 
         // Assert
         assertEquals(2, dto.size());
-        assertEquals(fachId, dto.getFirst().getFachId());
-        assertEquals(studentFachId, dto.getFirst().getStudentFachId());
-        assertEquals(frageFachId, dto.getFirst().getFrageFachId());
-        assertEquals(antwortTime, dto.getFirst().getAntwortZeitpunkt());
+        assertEquals(fachId, dto.getFirst().fachId());
+        assertEquals(studentFachId, dto.getFirst().studentFachId());
+        assertEquals(frageFachId, dto.getFirst().frageFachId());
+        assertEquals(antwortTime, dto.getFirst().antwortZeitpunkt());
 
-        assertEquals(fachId2, dto.getLast().getFachId());
-        assertEquals(studentFachId2, dto.getLast().getStudentFachId());
-        assertEquals(frageFachId2, dto.getLast().getFrageFachId());
-        assertEquals(antwortTime2, dto.getLast().getAntwortZeitpunkt());
+        assertEquals(fachId2, dto.getLast().fachId());
+        assertEquals(studentFachId2, dto.getLast().studentFachId());
+        assertEquals(frageFachId2, dto.getLast().frageFachId());
+        assertEquals(antwortTime2, dto.getLast().antwortZeitpunkt());
     }
 
     @Test
@@ -108,13 +108,12 @@ class AntwortDTOMapperTest {
         UUID frageFachId = UUID.randomUUID();
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
-                .fachId(fachId)
-                .antwortText("Antwort")
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortTime)
-                .build();
+        AntwortDTO dto = new AntwortDTO(
+                fachId,
+                "Antwort",
+                frageFachId,
+                studentFachId,
+                antwortTime);
 
         // Act
         Antwort antwort = mapper.toDomain(dto);

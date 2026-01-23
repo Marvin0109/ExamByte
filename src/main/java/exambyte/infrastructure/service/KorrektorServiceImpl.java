@@ -29,7 +29,6 @@ public class KorrektorServiceImpl  implements KorrektorService {
         if (name.equals("Automatischer Korrektor")) {
             UUID automatic = UUID.fromString("11111111-1111-1111-1111-111111111111");
             Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                    .id(null)
                     .fachId(automatic)
                     .name(name)
                     .build();
@@ -37,8 +36,6 @@ public class KorrektorServiceImpl  implements KorrektorService {
             repository.save(korrektor);
         } else {
             Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .id(null)
-                .fachId(null)
                 .name(name)
                 .build();
 

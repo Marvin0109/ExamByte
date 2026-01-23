@@ -2,5 +2,4 @@ package exambyte.application.dto;
 
 import java.util.UUID;
 
-public record StudentDTO(Long id, UUID fachId, String name) {
-}
+public record StudentDTO(UUID fachId, String name) {}

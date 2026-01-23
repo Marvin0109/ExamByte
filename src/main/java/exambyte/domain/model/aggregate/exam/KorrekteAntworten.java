@@ -4,22 +4,16 @@ import java.util.UUID;
 
 public class KorrekteAntworten {
 
-    private final Long id;
     private final UUID fachId;
     private final String loesungen;
     private final String antwortOptionen;
     private final UUID frageFachId;
 
-    private KorrekteAntworten(Long id, UUID fachId, UUID frageFachId, String loesungen, String antwortOptionen) {
-        this.id = id;
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+    private KorrekteAntworten(UUID fachId, UUID frageFachId, String loesungen, String antwortOptionen) {
+        this.fachId = fachId;
         this.frageFachId = frageFachId;
         this.loesungen = loesungen;
         this.antwortOptionen = antwortOptionen;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UUID getFachId() {
@@ -37,16 +31,10 @@ public class KorrekteAntworten {
     public String getAntwortOptionen() { return antwortOptionen; }
 
     public static class KorrekteAntwortenBuilder {
-        private Long id;
         private UUID fachId;
         private UUID frageFachId;
         private String loesungen;
         private String antwortOptionen;
-
-        public KorrekteAntwortenBuilder id(Long id) {
-            this.id = id;
-            return this;
-        }
 
         public KorrekteAntwortenBuilder fachId(UUID fachId) {
             this.fachId = fachId;
@@ -69,7 +57,7 @@ public class KorrekteAntworten {
         }
 
         public KorrekteAntworten build() {
-            return new KorrekteAntworten(id, fachId, frageFachId, loesungen, antwortOptionen);
+            return new KorrekteAntworten(fachId, frageFachId, loesungen, antwortOptionen);
         }
     }
 }

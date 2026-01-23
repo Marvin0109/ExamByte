@@ -27,7 +27,7 @@ public interface ExamManagementService {
 
     void createFrage(FrageDTO frageDTO);
 
-    void createChoiceFrage(FrageDTO frageDTO, KorrekteAntwortenDTO korrekteAntwortenDTO);
+    void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);
 
     String getChoiceForFrage(UUID frageFachId);
 

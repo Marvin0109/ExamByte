@@ -24,7 +24,6 @@ class ProfessorDTOMapperTest {
         UUID fachId = UUID.randomUUID();
 
         Professor professor = new Professor.ProfessorBuilder()
-                .id(null)
                 .fachId(fachId)
                 .name("Prof name")
                 .build();
@@ -33,7 +32,6 @@ class ProfessorDTOMapperTest {
         ProfessorDTO professorDTO = mapper.toDTO(professor);
 
         // Assert
-        assertNull(professorDTO.id());
         assertEquals(professorDTO.fachId(), fachId);
         assertEquals("Prof name", professorDTO.name());
     }
@@ -52,13 +50,11 @@ class ProfessorDTOMapperTest {
         UUID fachId2 = UUID.randomUUID();
 
         Professor professor1 = new Professor.ProfessorBuilder()
-                .id(null)
                 .fachId(fachId1)
                 .name("Prof 1")
                 .build();
 
         Professor professor2 = new Professor.ProfessorBuilder()
-                .id(null)
                 .fachId(fachId2)
                 .name("Prof 2")
                 .build();

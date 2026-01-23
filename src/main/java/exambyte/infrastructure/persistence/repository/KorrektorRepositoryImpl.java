@@ -38,22 +38,4 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
         Optional<KorrektorEntity> entity = dao.findByName(name);
         return entity.map(mapper::toDomain);
     }
-
-    public KorrektorEntity findByKorFachId(UUID fachId) {
-        Optional<Korrektor> korrektor = findByFachId(fachId);
-
-        if (korrektor.isPresent()) {
-            return new KorrektorEntity.KorrektorEntityBuilder()
-                    .id(null)
-                    .fachId(fachId)
-                    .name(korrektor.get().getName())
-                    .build();
-        }
-
-        return new KorrektorEntity.KorrektorEntityBuilder()
-                .id(null)
-                .fachId(fachId)
-                .name("")
-                .build();
-    }
 }

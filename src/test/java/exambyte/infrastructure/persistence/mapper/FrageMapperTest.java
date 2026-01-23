@@ -5,7 +5,6 @@ import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -17,14 +16,11 @@ class FrageMapperTest {
     private final FrageMapper mapper = new FrageMapperImpl();
 
     @Test
-    @DisplayName("FrageMapper test 'toEntity'")
-    void test_01() {
+    void toEntity() {
         // Arrange
         UUID profFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
         Frage frage = new Frage.FrageBuilder()
-                .id(null)
-                .fachId(null)
                 .frageText("Fragetext")
                 .maxPunkte(5)
                 .type(QuestionType.FREITEXT)
@@ -36,7 +32,6 @@ class FrageMapperTest {
         FrageEntity entity = mapper.toEntity(frage);
 
         // Assert
-        assertThat(entity).isNotNull();
         assertThat(entity.getFrageText()).isEqualTo("Fragetext");
         assertThat(entity.getMaxPunkte()).isEqualTo(5);
         assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREITEXT);
@@ -45,15 +40,11 @@ class FrageMapperTest {
     }
 
     @Test
-    @DisplayName("FrageMapper test 'toDomain'")
-    void test_02() {
+    void toDomain() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
         UUID professorFachId = UUID.randomUUID();
         UUID examFachId = UUID.randomUUID();
         FrageEntity frageEntity = new FrageEntity.FrageEntityBuilder()
-                .id(null)
-                .fachId(fachId)
                 .frageText("Fragetext")
                 .maxPunkte(5)
                 .type(QuestionTypeEntity.FREITEXT)
@@ -64,11 +55,10 @@ class FrageMapperTest {
         // Act
         Frage frage = mapper.toDomain(frageEntity);
 
-        assertThat(frage).isNotNull();
-        assertThat(frage.getFachId()).isEqualTo(fachId);
         assertThat(frage.getFrageText()).isEqualTo("Fragetext");
         assertThat(frage.getType()).isEqualTo(QuestionType.FREITEXT);
         assertThat(frage.getMaxPunkte()).isEqualTo(5);
         assertThat(frage.getProfessorUUID()).isEqualTo(professorFachId);
+        assertThat(frage.getExamUUID()).isEqualTo(examFachId);
     }
 }
