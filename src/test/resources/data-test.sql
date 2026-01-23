@@ -29,12 +29,11 @@ VALUES ('cccccccc-cccc-cccc-cccc-cccccccccccc',
         'Loesung1',
         'Loesung1\nLoesung2');
 
-INSERT INTO antwort (fach_id, frage_antwort_id, antwort_text, student_fach_id, antwort_zeitpunkt, last_changes_zeitpunkt)
+INSERT INTO antwort (fach_id, frage_antwort_id, antwort_text, student_fach_id, antwort_zeitpunkt)
 VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'Loesung1',
         '22222222-2222-2222-2222-222222222222',
-        '2025-06-20 08:10:00',
         '2025-06-20 08:10:00'
         );
 

@@ -37,6 +37,7 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     public void save(Antwort antwort) {
         AntwortEntity antwortEntity = mapper.toEntity(antwort);
         dao.save(antwortEntity);
+        dao.updateTimestamp(antwortEntity.getFachId());
     }
 
     @Override
@@ -54,5 +55,10 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     @Override
     public void deleteAnswer(UUID id) {
         dao.deleteByFachId(id);
+    }
+
+    @Override
+    public void updateAntwortZeitpunkt(UUID id) {
+        dao.updateTimestamp(id);
     }
 }

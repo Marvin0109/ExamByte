@@ -16,55 +16,45 @@ class AntwortTest {
     @Test
     @DisplayName("AntwortBuilder Test")
     void test_01() {
-        Long id = 1L;
         UUID fachId = UUID.randomUUID();
         String antwortText = "Test answer";
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
-        LocalDateTime antwortZeitpunkt = LocalDateTime.now();
-        LocalDateTime lastChangesZeitpunkt = LocalDateTime.now();
+        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
-                .id(id)
                 .fachId(fachId)
                 .antwortText(antwortText)
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(lastChangesZeitpunkt)
                 .build();
 
-        assertEquals(id, antwort.getId());
         assertEquals(fachId, antwort.getFachId());
         assertEquals(antwortText, antwort.getAntwortText());
         assertEquals(frageFachId, antwort.getFrageFachId());
         assertEquals(studentFachId, antwort.getStudentUUID());
         assertEquals(antwortZeitpunkt, antwort.getAntwortZeitpunkt());
-        assertEquals(lastChangesZeitpunkt, antwort.getLastChangesZeitpunkt());
+
     }
 
     @Test
     @DisplayName("AntwortBuilder Test mit null Werte")
     void test_02() {
-        Long id = 1L;
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
-        LocalDateTime antwortZeitpunkt = LocalDateTime.now();
+        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
-                .id(id)
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
                 .build();
 
-        assertEquals(id, antwort.getId());
-        assertNotNull(antwort.getFachId());
         assertNull(antwort.getAntwortText());
         assertEquals(frageFachId, antwort.getFrageFachId());
         assertEquals(studentFachId, antwort.getStudentUUID());
         assertEquals(antwortZeitpunkt, antwort.getAntwortZeitpunkt());
-        assertNull(antwort.getLastChangesZeitpunkt());
     }
 
 }

@@ -67,7 +67,7 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID") // Cookies löschen
                         .addLogoutHandler(
                                 (request, response, authentication) ->
-                            SecurityContextHolder.clearContext() // Sicherheitskontext löschen
+                                    SecurityContextHolder.clearContext() // Sicherheitskontext löschen
                         )
                 )
                 .build();

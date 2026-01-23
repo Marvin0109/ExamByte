@@ -12,13 +12,11 @@ public class AntwortMapperImpl implements AntwortMapper {
     public Antwort toDomain(AntwortEntity entity) {
 
         return new Antwort.AntwortBuilder()
-            .id(null)
             .fachId(entity.getFachId())
             .antwortText(entity.getAntwortText())
             .frageFachId(entity.getFrageFachId())
             .studentFachId(entity.getStudentFachId())
             .antwortZeitpunkt(entity.getAntwortZeitpunkt())
-            .lastChangesZeitpunkt(entity.getLastChangesZeitpunkt())
             .build();
     }
 
@@ -26,13 +24,11 @@ public class AntwortMapperImpl implements AntwortMapper {
     public AntwortEntity toEntity(Antwort antwort) {
 
         return new AntwortEntity.AntwortEntityBuilder()
-                .id(null)
                 .fachId(antwort.getFachId())
                 .antwortText(antwort.getAntwortText())
                 .frageFachId(antwort.getFrageFachId())
                 .studentFachId(antwort.getStudentUUID())
                 .antwortZeitpunkt(antwort.getAntwortZeitpunkt())
-                .lastChangesZeitpunkt(antwort.getLastChangesZeitpunkt())
                 .build();
     }
 }

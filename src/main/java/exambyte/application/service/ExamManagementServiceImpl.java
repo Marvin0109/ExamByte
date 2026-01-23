@@ -150,7 +150,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 String antwortText = String.join("\n", value);
 
                 AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
-                    .fachId(null)
                     .frageFachId(frageFachId)
                     .studentFachId(studentFachId)
                     .antwortText(antwortText)

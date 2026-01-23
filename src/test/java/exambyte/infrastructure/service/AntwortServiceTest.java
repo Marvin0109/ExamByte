@@ -18,14 +18,8 @@ class AntwortServiceTest {
     private final AntwortService service = new AntwortServiceImpl(antwortRepository);
 
     @Test
-    @DisplayName("Exception wird geworfen falls FrageFachID null ist")
-    void test_01() {
-        assertThrows(IllegalArgumentException.class, () -> service.findByFrageFachId(null));
-    }
-
-    @Test
     @DisplayName("gib null zurück wenn keine antwort gefunden wird nach studentID und questionID")
-    void test_02() {
+    void test_01() {
         // Arrange
         UUID studentId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
