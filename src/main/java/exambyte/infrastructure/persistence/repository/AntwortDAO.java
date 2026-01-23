@@ -20,6 +20,11 @@ public interface AntwortDAO extends CrudRepository<AntwortEntity, Long> {
 
     AntwortEntity save(AntwortEntity entity);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE antwort SET antwort_zeitpunkt = CURRENT_TIMESTAMP WHERE fach_id = :fachId")
+    void updateTimestamp(@Param("fachId") UUID fachId);
+
     void deleteAll();
 
     @Transactional

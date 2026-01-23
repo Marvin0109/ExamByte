@@ -24,30 +24,25 @@ class AntwortDTOMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
-        LocalDateTime antwortTime = LocalDateTime.now();
-        LocalDateTime lastChangesTime = LocalDateTime.now();
+        LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(fachId)
                 .antwortText("Antwort")
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChangesTime)
                 .build();
 
         // Act
         AntwortDTO dto = mapper.toDTO(antwort);
 
         // Assert
-        assertNull(dto.getId());
         assertEquals(fachId, dto.getFachId());
         assertEquals(studentFachId, dto.getStudentFachId());
         assertEquals(frageFachId, dto.getFrageFachId());
         assertEquals("Antwort", dto.getAntwortText());
         assertEquals(antwortTime, dto.getAntwortZeitpunkt());
-        assertEquals(lastChangesTime, dto.getLastChangesZeitpunkt());
     }
 
     @Test
@@ -63,33 +58,27 @@ class AntwortDTOMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
-        LocalDateTime antwortTime = LocalDateTime.now();
-        LocalDateTime lastChangesTime = LocalDateTime.now();
+        LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         UUID fachId2 = UUID.randomUUID();
         UUID studentFachId2 = UUID.randomUUID();
         UUID frageFachId2 = UUID.randomUUID();
-        LocalDateTime antwortTime2 = LocalDateTime.now();
-        LocalDateTime lastChangesTime2 = LocalDateTime.now();
+        LocalDateTime antwortTime2 = LocalDateTime.of(2020, 1, 1, 1, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(fachId)
                 .antwortText("Antwort")
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChangesTime)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(fachId2)
                 .antwortText("Antwort2")
                 .frageFachId(frageFachId2)
                 .studentFachId(studentFachId2)
                 .antwortZeitpunkt(antwortTime2)
-                .lastChangesZeitpunkt(lastChangesTime2)
                 .build();
 
         List<Antwort> antworten = Arrays.asList(antwort, antwort2);
@@ -103,13 +92,11 @@ class AntwortDTOMapperTest {
         assertEquals(studentFachId, dto.getFirst().getStudentFachId());
         assertEquals(frageFachId, dto.getFirst().getFrageFachId());
         assertEquals(antwortTime, dto.getFirst().getAntwortZeitpunkt());
-        assertEquals(lastChangesTime, dto.getFirst().getLastChangesZeitpunkt());
 
         assertEquals(fachId2, dto.getLast().getFachId());
         assertEquals(studentFachId2, dto.getLast().getStudentFachId());
         assertEquals(frageFachId2, dto.getLast().getFrageFachId());
         assertEquals(antwortTime2, dto.getLast().getAntwortZeitpunkt());
-        assertEquals(lastChangesTime2, dto.getLast().getLastChangesZeitpunkt());
     }
 
     @Test
@@ -119,8 +106,7 @@ class AntwortDTOMapperTest {
         UUID fachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
-        LocalDateTime antwortTime = LocalDateTime.now();
-        LocalDateTime lastChangesTime = LocalDateTime.now();
+        LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         AntwortDTO dto = new AntwortDTO.AntwortDTOBuilder()
                 .fachId(fachId)
@@ -128,7 +114,6 @@ class AntwortDTOMapperTest {
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChangesTime)
                 .build();
 
         // Act
@@ -139,7 +124,6 @@ class AntwortDTOMapperTest {
         assertEquals(studentFachId, antwort.getStudentUUID());
         assertEquals(frageFachId, antwort.getFrageFachId());
         assertEquals(antwortTime, antwort.getAntwortZeitpunkt());
-        assertEquals(lastChangesTime, antwort.getLastChangesZeitpunkt());
         assertEquals("Antwort", antwort.getAntwortText());
     }
 }

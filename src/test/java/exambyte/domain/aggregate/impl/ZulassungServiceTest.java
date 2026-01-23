@@ -100,7 +100,6 @@ class ZulassungServiceTest {
                 .frageFachId(frage1FachID)
                 .studentFachId(studentId)
                 .antwortZeitpunkt(LocalDateTime.now())
-                .lastChangesZeitpunkt(LocalDateTime.now())
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
@@ -109,7 +108,6 @@ class ZulassungServiceTest {
                 .frageFachId(frage2FachID)
                 .studentFachId(studentId)
                 .antwortZeitpunkt(LocalDateTime.now())
-                .lastChangesZeitpunkt(LocalDateTime.now())
                 .build();
 
         Antwort antwort3 = new Antwort.AntwortBuilder()
@@ -118,7 +116,6 @@ class ZulassungServiceTest {
                 .frageFachId(frage3FachID)
                 .studentFachId(studentId)
                 .antwortZeitpunkt(LocalDateTime.now())
-                .lastChangesZeitpunkt(LocalDateTime.now())
                 .build();
 
         Review review1 = new Review.ReviewBuilder()

@@ -13,13 +13,11 @@ public class AntwortDTOMapperImpl implements AntwortDTOMapper {
     @Override
     public AntwortDTO toDTO(Antwort antwort) {
         return new AntwortDTO.AntwortDTOBuilder()
-                .id(null)
                 .fachId(antwort.getFachId())
                 .antwortText(antwort.getAntwortText())
                 .frageFachId(antwort.getFrageFachId())
                 .studentFachId(antwort.getStudentUUID())
                 .antwortZeitpunkt(antwort.getAntwortZeitpunkt())
-                .lastChangesZeitpunkt(antwort.getLastChangesZeitpunkt())
                 .build();
     }
 
@@ -38,7 +36,6 @@ public class AntwortDTOMapperImpl implements AntwortDTOMapper {
                 .frageFachId(dto.getFrageFachId())
                 .studentFachId(dto.getStudentFachId())
                 .antwortZeitpunkt(dto.getAntwortZeitpunkt())
-                .lastChangesZeitpunkt(dto.getLastChangesZeitpunkt())
                 .build();
     }
 }

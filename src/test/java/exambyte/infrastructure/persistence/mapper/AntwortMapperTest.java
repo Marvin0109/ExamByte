@@ -23,15 +23,12 @@ class AntwortMapperTest {
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
-        LocalDateTime lastChangesZeit = LocalDateTime.of(2025, 1, 1, 12, 5);
         Antwort antwort = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(fachId)
                 .antwortText("Antworttext")
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeit)
-                .lastChangesZeitpunkt(lastChangesZeit)
                 .build();
 
         // Act
@@ -44,7 +41,6 @@ class AntwortMapperTest {
         assertThat(antwortEntity.getFrageFachId()).isEqualTo(frageFachId);
         assertThat(antwortEntity.getStudentFachId()).isEqualTo(studentFachId);
         assertThat(antwortEntity.getAntwortZeitpunkt()).isEqualTo(antwort.getAntwortZeitpunkt());
-        assertThat(antwortEntity.getLastChangesZeitpunkt()).isEqualTo(antwort.getLastChangesZeitpunkt());
     }
 
     @Test
@@ -55,16 +51,13 @@ class AntwortMapperTest {
         UUID frageFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
         LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
-        LocalDateTime lastChangesZeit = LocalDateTime.of(2025, 1, 1, 12, 5);
 
         AntwortEntity antwortEntity = new AntwortEntity.AntwortEntityBuilder()
-                .id(null)
                 .fachId(fachId)
                 .antwortText("Antworttext")
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeit)
-                .lastChangesZeitpunkt(lastChangesZeit)
                 .build();
 
         // Act
@@ -77,6 +70,5 @@ class AntwortMapperTest {
         assertThat(antwort.getFrageFachId()).isEqualTo(frageFachId);
         assertThat(antwort.getStudentUUID()).isEqualTo(studentFachId);
         assertThat(antwort.getAntwortZeitpunkt()).isEqualTo(antwortEntity.getAntwortZeitpunkt());
-        assertThat(antwort.getLastChangesZeitpunkt()).isEqualTo(antwortEntity.getLastChangesZeitpunkt());
     }
 }

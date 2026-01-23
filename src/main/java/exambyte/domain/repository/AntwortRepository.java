@@ -18,4 +18,6 @@ public interface AntwortRepository {
     void deleteAll();
 
     void deleteAnswer(UUID fachId);
+
+    void updateAntwortZeitpunkt(UUID fachId);
 }

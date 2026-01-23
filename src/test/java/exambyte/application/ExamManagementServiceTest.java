@@ -507,7 +507,6 @@ class ExamManagementServiceTest {
                 .frageFachId(frageFachId1)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
@@ -516,7 +515,6 @@ class ExamManagementServiceTest {
                 .frageFachId(frageFachId2)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         Review review = new Review.ReviewBuilder()
@@ -601,17 +599,14 @@ class ExamManagementServiceTest {
                 .studentFachId(studentFachId)
                 .antwortText("Antwort")
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(lastChangesZeitpunkt)
                 .build();
 
         Antwort antwortDomain = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(antwortFachId)
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortText("Antwort")
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(lastChangesZeitpunkt)
                 .build();
 
         when(antwortService.findByStudentAndFrage(studentFachId, frageFachId)).thenReturn(antwortDomain);
@@ -695,43 +690,35 @@ class ExamManagementServiceTest {
         );
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .antwortText("A1")
                 .frageFachId(frage1.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .antwortText("A2")
                 .frageFachId(frage2.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         AntwortDTO antwortDTO1 = new AntwortDTO.AntwortDTOBuilder()
-                .id(null)
                 .fachId(antwort1.getFachId())
                 .antwortText("A1")
                 .frageFachId(frageDTO1.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         AntwortDTO antwortDTO2 = new AntwortDTO.AntwortDTOBuilder()
-                .id(null)
                 .fachId(antwort2.getFachId())
                 .antwortText("A2")
                 .frageFachId(frageDTO2.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         Review r1 = new Review.ReviewBuilder()
@@ -824,43 +811,35 @@ class ExamManagementServiceTest {
         );
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .antwortText("A1")
                 .frageFachId(frage1.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(UUID.randomUUID())
                 .antwortText("A2")
                 .frageFachId(frage2.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         AntwortDTO antwortDTO1 = new AntwortDTO.AntwortDTOBuilder()
-                .id(null)
                 .fachId(antwort1.getFachId())
                 .antwortText("A1")
                 .frageFachId(frageDTO1.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         AntwortDTO antwortDTO2 = new AntwortDTO.AntwortDTOBuilder()
-                .id(null)
                 .fachId(antwort2.getFachId())
                 .antwortText("A2")
                 .frageFachId(frageDTO2.getFachId())
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         Review r1 = new Review.ReviewBuilder()
@@ -946,23 +925,19 @@ class ExamManagementServiceTest {
         StudentDTO studentDTO = new StudentDTO(null, studentFachId, "Marvin0109");
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
-                .id(null)
                 .fachId(antwortFachId)
                 .antwortText("Antwort 1")
                 .frageFachId(frageFachId)
                 .studentFachId(studentFachId)
                 .antwortZeitpunkt(antwortZeitpunkt)
-                .lastChangesZeitpunkt(antwortZeitpunkt)
                 .build();
 
         AntwortDTO antwort1DTO = new AntwortDTO.AntwortDTOBuilder()
-            .id(null)
             .fachId(antwortFachId)
             .antwortText("Antwort 1")
             .frageFachId(frageFachId)
             .studentFachId(studentFachId)
             .antwortZeitpunkt(antwortZeitpunkt)
-            .lastChangesZeitpunkt(antwortZeitpunkt)
             .build();
 
         when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));

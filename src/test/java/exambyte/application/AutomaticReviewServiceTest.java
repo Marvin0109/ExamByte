@@ -65,7 +65,6 @@ class AutomaticReviewServiceTest {
                 .antwortText("Antwort 1")
                 .studentFachId(studentUUID)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChanges)
                 .build();
 
         AntwortDTO antwort2 = new AntwortDTO.AntwortDTOBuilder()
@@ -74,7 +73,6 @@ class AutomaticReviewServiceTest {
                 .antwortText("Antwort 2")
                 .studentFachId(studentUUID)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChanges)
                 .build();
 
         List<AntwortDTO> antwortDTOList = List.of(antwort1, antwort2);
@@ -151,7 +149,6 @@ class AutomaticReviewServiceTest {
                 .antwortText("Antwort 1\nAntwort 2")
                 .studentFachId(studentUUID)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChanges)
                 .build();
 
         AntwortDTO antwort2 = new AntwortDTO.AntwortDTOBuilder()
@@ -160,7 +157,6 @@ class AutomaticReviewServiceTest {
                 .antwortText("Antwort 2\nAntwort 3")
                 .studentFachId(studentUUID)
                 .antwortZeitpunkt(antwortTime)
-                .lastChangesZeitpunkt(lastChanges)
                 .build();
 
         List<AntwortDTO> antwortDTOList = List.of(antwort1, antwort2);
