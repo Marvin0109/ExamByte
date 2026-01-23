@@ -5,8 +5,12 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - exambyte_data:/var/lib/postgresql/data
+      - ./src/main/resources/db/migration/V1__init.sql:/docker-entrypoint-initdb.d/V1__init.sql
     environment:
       - "POSTGRES_DB=${DB_NAME}"
       - "POSTGRES_USER=${DB_USERNAME}"
       - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+
+volumes:
+  exambyte_data:
