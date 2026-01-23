@@ -505,9 +505,13 @@
 ---
 
 ### 23.01.2026
-**Bereich**: Refactoring / Testing / Dokumentation / Datenbank / Umgebungsvariablen
+**Bereich**: Refactoring / Testing / Dokumentation / Datenbank / Umgebungsvariablen / Jar
 - SQL Skript `V1__init.sql` um weitere Integritätsbedingungen erweitert
 - Restliche Code Smells beseitigt
 - SonarQube Bedienungshinweise in `example.env` hinzugefügt
 - Redundante Attribute von `DTO`'s, `Entities` und `Model` Objekten entfernt
 - `ExamManagementServiceImpl` und zugehöriger Test optimiert in Hinsicht auf Wartbarkeit
+- Jar konnte die Thymeleaf Templates nicht finden aufgrund von `\`-Prefix in View Namen 
+(s. https://github.com/spring-projects/spring-boot/issues/2057)
+- Docker Volume eingeführt, kein externer, lokaler Data Ordner mehr
+- README aktualisiert (Installationsanweisungen ergänzt)
