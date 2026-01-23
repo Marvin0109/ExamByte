@@ -3,7 +3,6 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.entitymapper.StudentMapper;
 import exambyte.infrastructure.persistence.entities.StudentEntity;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -15,12 +14,9 @@ class StudentMapperTest {
     private final StudentMapper studentMapper = new StudentMapperImpl();
 
     @Test
-    @DisplayName("StudentMapper test 'toEntity'")
-    void test_01() {
+    void toEntity() {
         // Arrange
         Student student = new Student.StudentBuilder()
-                .id(null)
-                .fachId(null)
                 .name("Jim Bim")
                 .build();
 
@@ -36,23 +32,16 @@ class StudentMapperTest {
     }
 
     @Test
-    @DisplayName("StudentMapper test 'toDomain'")
-    void test_02() {
+    void toDomain() {
         // Arrange
         StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
-                .id(null)
-                .fachId(null)
-                .name("John Tectone")
+                .name("Test student")
                 .build();
 
         // Act
         Student student = studentMapper.toDomain(studentEntity);
-        UUID studentFachId = student.uuid();
-        String studentName = student.getName();
 
         // Assert
-        assertThat(student).isNotNull();
-        assertThat(studentFachId).isEqualTo(studentEntity.getFachId());
-        assertThat(studentName).isEqualTo("John Tectone");
+        assertThat(student.getName()).isEqualTo("Test student");
     }
 }

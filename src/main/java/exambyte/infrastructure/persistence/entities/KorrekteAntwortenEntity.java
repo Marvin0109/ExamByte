@@ -10,7 +10,7 @@ import java.util.UUID;
 public class KorrekteAntwortenEntity {
 
     @Id
-    private final Long id;
+    private Long id;
 
     @Column("fach_id")
     private final UUID fachID;
@@ -24,16 +24,11 @@ public class KorrekteAntwortenEntity {
     @Column("antwort_optionen")
     private final String antwortOptionen;
 
-    public KorrekteAntwortenEntity(Long id, UUID fachID, UUID frageFachID, String richtigeAntwort, String antwortOptionen) {
-        this.id = id;
+    private KorrekteAntwortenEntity(UUID fachID, UUID frageFachID, String richtigeAntwort, String antwortOptionen) {
         this.fachID = fachID != null ? fachID : UUID.randomUUID();
         this.frageFachID = frageFachID;
         this.richtigeAntwort = richtigeAntwort;
         this.antwortOptionen = antwortOptionen;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public UUID getFachID() {
@@ -49,4 +44,35 @@ public class KorrekteAntwortenEntity {
     }
 
     public String getAntwortOptionen() { return antwortOptionen; }
+
+    public static class KorrekteAntwortenEntityBuilder {
+        private UUID fachID;
+        private UUID frageFachID;
+        private String richtigeAntwort;
+        private String antwortOptionen;
+
+        public KorrekteAntwortenEntityBuilder fachID(UUID fachID) {
+            this.fachID = fachID;
+            return this;
+        }
+
+        public KorrekteAntwortenEntityBuilder frageFachID(UUID frageFachID) {
+            this.frageFachID = frageFachID;
+            return this;
+        }
+
+        public KorrekteAntwortenEntityBuilder richtigeAntwort(String richtigeAntwort) {
+            this.richtigeAntwort = richtigeAntwort;
+            return this;
+        }
+
+        public KorrekteAntwortenEntityBuilder antwortOptionen(String antwortOptionen) {
+            this.antwortOptionen = antwortOptionen;
+            return this;
+        }
+
+        public KorrekteAntwortenEntity build() {
+            return new KorrekteAntwortenEntity(fachID, frageFachID, richtigeAntwort, antwortOptionen);
+        }
+    }
 }
