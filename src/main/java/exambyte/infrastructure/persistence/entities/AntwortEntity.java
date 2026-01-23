@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Table("antwort")
@@ -13,7 +14,7 @@ public class AntwortEntity {
     private Long id;
 
     @Column("antwort_text")
-    private String antwortText;
+    private final String antwortText;
 
     @Column("fach_id")
     private final UUID fachId;
@@ -24,11 +25,16 @@ public class AntwortEntity {
     @Column("student_fach_id")
     private final UUID studentFachId;
 
-    private AntwortEntity(UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId) {
+    @Column("antwort_zeitpunkt")
+    private final LocalDateTime antwortZeitpunkt;
+
+    private AntwortEntity(UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId,
+                          LocalDateTime antwortZeitpunkt) {
         this.fachId = fachId != null ? fachId : UUID.randomUUID();
         this.antwortText = antwortText;
         this.frageFachId = frageFachId;
         this.studentFachId = studentFachId;
+        this.antwortZeitpunkt = antwortZeitpunkt;
     }
 
     public UUID getFachId() {
@@ -39,10 +45,6 @@ public class AntwortEntity {
         return antwortText;
     }
 
-    public void setAntwortText(String antwortText) {
-        this.antwortText = antwortText;
-    }
-
     public UUID getFrageFachId() {
         return frageFachId;
     }
@@ -51,11 +53,16 @@ public class AntwortEntity {
         return studentFachId;
     }
 
+    public LocalDateTime getAntwortZeitpunkt() {
+        return antwortZeitpunkt;
+    }
+
     public static class AntwortEntityBuilder {
         private UUID fachId;
         private UUID frageFachId;
         private String antwortText;
         private UUID studentFachId;
+        private LocalDateTime antwortZeitpunkt;
 
         public AntwortEntityBuilder fachId(UUID fachId) {
             this.fachId = fachId;
@@ -77,11 +84,16 @@ public class AntwortEntity {
             return this;
         }
 
+        public AntwortEntityBuilder antwortZeitpunkt(LocalDateTime antwortZeitpunkt) {
+            this.antwortZeitpunkt = antwortZeitpunkt;
+            return this;
+        }
+
         public AntwortEntity build() {
             if (antwortText == null || frageFachId == null || studentFachId == null) {
                 throw new IllegalStateException("Alle erforderlichen Felder müssen gesetzt werden (exklusive der Id).");
             }
-            return new AntwortEntity(fachId, antwortText, frageFachId, studentFachId);
+            return new AntwortEntity(fachId, antwortText, frageFachId, studentFachId,  antwortZeitpunkt);
         }
     }
 }

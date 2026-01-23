@@ -154,8 +154,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                     .frageFachId(frageFachId)
                     .studentFachId(studentFachId)
                     .antwortText(antwortText)
-                    .antwortZeitpunkt(LocalDateTime.now())
-                    .lastChangesZeitpunkt(LocalDateTime.now())
                     .build();
 
                 antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
@@ -336,7 +334,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 : 0.0;
 
         LocalDateTime zeitpunkt = alleAntworten.stream()
-                .map(AntwortDTO::getLastChangesZeitpunkt)
+                .map(AntwortDTO::getAntwortZeitpunkt)
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 
