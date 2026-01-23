@@ -26,16 +26,26 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
     - Java 21
     - Github-Account für Authentifizierung
     - Docker für die Datenbank
-    - SSH Key für das einfachere klonen des Repository
+    - SSH Key für das Klonen des Repository
+    - Einsetzen der Credentials in `example.env`
 
 2. **Projekt klonen mit SSH**
-   ```sh
-   git clone git@github.com:Marvin0109/ExamByte.git
-   cd yourDirectory/exambyte-chillex
+   ```
+   $ git clone git@github.com:Marvin0109/ExamByte.git
 
-3. **Projekt starten**
-   ...
+3. **Container starten**
+   ```
+   $ docker compose up -d
+   
+4. **Jar File bauen und starten**
+   ```
+   $ ./gradlew build
+   $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
+   
+5. **Runterfahren (`strg+c`) und Container mit Volumes löschen**
+   ```
+   $ docker compose down -v
    
 ## Dokumentation
 
-Die ausführliche Architektur-Dokumentation findest du [hier](docs/arc42.md).
+Die ausführliche Architektur-Dokumentation finden Sie [hier](docs/arc42.md).
