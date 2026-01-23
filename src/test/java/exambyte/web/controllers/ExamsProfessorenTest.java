@@ -60,7 +60,7 @@ class ExamsProfessorenTest {
             .andExpect(model().attribute("name", "Marvin0109"))
             .andExpect(model().attributeExists("examForm"))
             .andExpect(model().attributeExists("currentPath"))
-            .andExpect(view().name("/exams/examsProfessoren"));
+            .andExpect(view().name("exams/examsProfessoren"));
     }
 
     @Test

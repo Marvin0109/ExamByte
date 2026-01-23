@@ -59,7 +59,7 @@ class ExamsKorrektorTest {
             .andExpect(model().attributeExists("reviewCoverage"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("timeNow"))
-            .andExpect(view().name("/exams/examsKorrektor"));
+            .andExpect(view().name("exams/examsKorrektor"));
     }
 
     @Test
@@ -109,7 +109,7 @@ class ExamsKorrektorTest {
                 .andExpect(model().attribute("exam", examDTO))
                 .andExpect(model().attributeExists("submitInfoList"))
                 .andExpect(model().attributeExists("timeNow"))
-                .andExpect(view().name("/exams/examSubmittedUebersicht"));
+                .andExpect(view().name("exams/examSubmittedUebersicht"));
     }
 
     @Test

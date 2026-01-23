@@ -63,7 +63,7 @@ class ExamsStudierendeTest {
 
         mvc.perform(get("/exams/examsStudierende"))
             .andExpect(status().isOk())
-            .andExpect(view().name("/exams/examsStudierende"))
+            .andExpect(view().name("exams/examsStudierende"))
             .andExpect(model().attribute("name", "Marvin0109"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("exams"))
@@ -97,7 +97,7 @@ class ExamsStudierendeTest {
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
-            .andExpect(view().name("/exams/examMenu"))
+            .andExpect(view().name("exams/examMenu"))
             .andExpect(model().attributeExists("exam"))
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
@@ -124,7 +124,7 @@ class ExamsStudierendeTest {
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
-            .andExpect(view().name("/exams/examMenu"))
+            .andExpect(view().name("exams/examMenu"))
             .andExpect(model().attributeExists("exam"))
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
@@ -156,7 +156,7 @@ class ExamsStudierendeTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("exam", form))
             .andExpect(model().attributeExists("submitForm"))
-            .andExpect(view().name("/exams/examsDurchfuehren"));
+            .andExpect(view().name("exams/examsDurchfuehren"));
     }
 
     @Test

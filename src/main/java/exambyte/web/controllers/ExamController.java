@@ -49,7 +49,7 @@ public class ExamController {
         model.addAttribute("name", name);
         model.addAttribute("examForm", examForm);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        return "/exams/examsProfessoren";
+        return "exams/examsProfessoren";
     }
 
     @PostMapping("/examsProfessoren")
@@ -125,7 +125,7 @@ public class ExamController {
         model.addAttribute("reviewCoverage", covList);
         model.addAttribute(TIME_NOW, now);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        return "/exams/examsKorrektor";
+        return "exams/examsKorrektor";
     }
 
     @GetMapping("/showExamSubmits/{examFachId}")
@@ -150,7 +150,7 @@ public class ExamController {
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", examDTO);
         model.addAttribute(TIME_NOW, now);
-        return "/exams/examSubmittedUebersicht";
+        return "exams/examSubmittedUebersicht";
     }
 
     //TODO: Korrektur Seite, HTML existiert noch nicht
@@ -161,7 +161,7 @@ public class ExamController {
             @PathVariable UUID examFachId,
             @PathVariable UUID studentFachId) {
 
-        return "/exams/showSubmit";
+        return "exams/showSubmit";
     }
 
     @GetMapping("/examsStudierende")
@@ -181,7 +181,7 @@ public class ExamController {
         model.addAttribute("exams", examDTOs);
         model.addAttribute("name", studentName);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        return "/exams/examsStudierende";
+        return "exams/examsStudierende";
     }
 
     @GetMapping("/examsDurchfuehren/{examFachId}/menu")
@@ -213,7 +213,7 @@ public class ExamController {
 
         //TODO: For better UX: Show author name instead
         model.addAttribute("authorID", authorIDString);
-        return "/exams/examMenu";
+        return "exams/examMenu";
     }
 
     @GetMapping("/examsDurchfuehren/{examFachId}")
@@ -228,7 +228,7 @@ public class ExamController {
 
         model.addAttribute("exam", form);
         model.addAttribute("submitForm", submitForm);
-        return "/exams/examsDurchfuehren";
+        return "exams/examsDurchfuehren";
     }
 
     @PostMapping("/submit/{examFachId}")
