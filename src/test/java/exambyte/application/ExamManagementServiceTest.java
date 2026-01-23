@@ -18,7 +18,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -26,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ExamManagementServiceTest {
+class ExamManagementServiceTest {
 
     private ExamService examService;
     private AntwortService antwortService;
@@ -981,7 +980,7 @@ public class ExamManagementServiceTest {
         List<StudentDTO> result = examManagementService.getStudentSubmittedExam(examFachId);
 
         // Assert
-        assertThat(result.size()).isEqualTo(1);
+        assertThat(result).hasSize(1);
         assertThat(result.getFirst()).isEqualTo(studentDTO);
     }
 }
