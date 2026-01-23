@@ -110,7 +110,6 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
         int maxWrongAllowed = totalCorrectAnswers / 2;
         if (wrongAnswers > maxWrongAllowed) return 0;
 
-        // fraction = (correct - wrong) / totalCorrectAnswers
         double fraction = (double)(correctAnswers - wrongAnswers) / (double) totalCorrectAnswers;
         fraction = Math.max(0.0, fraction); // nie negativ
 

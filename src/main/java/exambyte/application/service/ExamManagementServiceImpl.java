@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -81,11 +82,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                               LocalDateTime endTime,
                               LocalDateTime resultTime) {
 
-        UUID profFachId = null;
-        Optional<UUID> optionalFachID = professorService.getProfessorFachIdByName(professorName);
-        if (optionalFachID.isPresent()) {
-            profFachId = optionalFachID.get();
-        }
+        UUID profFachId = professorService.getProfessorFachIdByName(professorName)
+                .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + professorName));
 
         int examCount = examService.allExams().size();
 
@@ -136,53 +134,66 @@ public class ExamManagementServiceImpl implements ExamManagementService {
      */
     @Override
     public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId) {
-        // 1. Student ermitteln
-        UUID studentFachId = studentService.getStudentFachId(studentLogin);
-
-        // 2. Eingehende Antworten des Studenten speichern
-        for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
-            String frageKey = entry.getKey();
-            List<String> value = entry.getValue();
-
-            try {
-                // Key der Map muss eine UUID (Frage-Fach-ID) sein
-                UUID frageFachId = UUID.fromString(frageKey);
-
-                String antwortText = String.join("\n", value);
-
-                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
-
-                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
-
-            } catch (IllegalArgumentException ex) {
-                // Falls ein Key keine gültige UUID ist → Eingabe ignorieren, weiter mit nächster Frage
-                logger.info("WARNUNG: Ungültige FrageFachId in SubmitExam: "
-                        + frageKey + " (" + ex.getMessage() + ")");
-            }
+        UUID studentFachId;
+        try {
+            studentFachId = studentService.getStudentFachId(studentLogin);
+        } catch (Exception e) {
+            String msg = "Student nicht gefunden: " + studentLogin;
+            logger.log(Level.SEVERE, msg, e);
+            return false;
         }
 
-        // 3. Alle Fragen dieses Exams abrufen
+        boolean saved = saveStudentAnswers(studentFachId, antworten);
+        if (!saved) {
+            return false;
+        }
+
         List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
                 .map(frageDTOMapper::toDTO)
                 .toList();
 
-        // 4. Alle gespeicherten Antworten des Studenten für dieses Exam abrufen
         List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
                 .map(f -> antwortDTOMapper.toDTO(
                         antwortService.findByStudentAndFrage(studentFachId, f.fachId())))
                 .filter(Objects::nonNull)
                 .toList();
 
-        // 5. ReviewData-Objekte für MC und SC vorbereiten
-        ReviewData mcData = new ReviewData(fragenDTOList, antwortDTOList,
+        List<ReviewDTO> allReviews = generateReviews(studentFachId, fragenDTOList, antwortDTOList);
+
+        try {
+            allReviews.forEach(r -> reviewService.addReview(reviewDTOMapper.toDomain(r)));
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean saveStudentAnswers(UUID studentFachId, Map<String, List<String>> antworten) {
+        try {
+            for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
+                UUID frageFachId = UUID.fromString(entry.getKey());
+                String antwortText = String.join("\n", entry.getValue());
+                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
+                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
+            }
+            return true;
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
+            return false;
+        }
+    }
+
+    private List<ReviewDTO> generateReviews(UUID studentFachId, List<FrageDTO> fragen, List<AntwortDTO> antworten) {
+        ReviewData mcData = new ReviewData(fragen, antworten,
                 korrekteAntwortenDTOMapper, korrekteAntwortenService);
-        ReviewData scData = new ReviewData(fragenDTOList, antwortDTOList,
+        ReviewData scData = new ReviewData(fragen, antworten,
                 korrekteAntwortenDTOMapper, korrekteAntwortenService);
 
         mcData.filterToType(QuestionTypeDTO.MC);
         scData.filterToType(QuestionTypeDTO.SC);
 
-        // 6. Automatische Reviews erzeugen
         List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
                 mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId,
                 reviewService);
@@ -190,11 +201,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId,
                 reviewService);
 
-        // 7. Reviews speichern
-        Stream.concat(reviewsMC.stream(), reviewsSC.stream())
-                .forEach(r -> reviewService.addReview(reviewDTOMapper.toDomain(r)));
-
-        return true;
+        return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
     }
 
     @Override
@@ -252,6 +259,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public void reset() {
+        // Entweder examService.deleteAll() oder
+        // diese Variante, mehr boilerplate, aber robuster
         reviewService.deleteAll();
         antwortService.deleteAll();
         korrekteAntwortenService.deleteAll();
@@ -294,36 +303,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     public VersuchDTO getSubmission(UUID examFachId, String studentLogin) {
         UUID studentFachId = studentService.getStudentFachId(studentLogin);
 
-        // Alle Fragen des Exams und deren Maximalpunkte
-        Map<UUID, FrageDTO> frageMap = frageService.getFragenForExam(examFachId).stream()
-                .map(frageDTOMapper::toDTO)
-                .collect(Collectors.toMap(FrageDTO::fachId, f -> f));
+        Map<UUID, FrageDTO> frageMap = getFragenMap(examFachId);
+        List<AntwortDTO> alleAntworten = getAntworten(studentFachId, frageMap.keySet());
 
         // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
                 .mapToDouble(FrageDTO::maxPunkte)
                 .sum();
 
-        // Alle Antworten des Studenten für dieses Exam
-        List<AntwortDTO> alleAntworten = frageMap.keySet().stream()
-                .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
-                .filter(Objects::nonNull)
-                .map(antwortDTOMapper::toDTO)
-                .toList();
-
-        double erreichtePunkte = 0.0;
-
-        for (AntwortDTO antwortDTO : alleAntworten) {
-            FrageDTO frage = frageMap.get(antwortDTO.frageFachId());
-            if (frage == null) {
-                continue;
-            }
-
-            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.fachId());
-            if (review != null) {
-                erreichtePunkte += review.getPunkte();
-            }
-        }
+        double erreichtePunkte = berechneErreichtePunkte(alleAntworten, frageMap);
 
         double prozent = gesamtMaxPunkte > 0
                 ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
@@ -340,6 +328,31 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 gesamtMaxPunkte,
                 prozent
         );
+    }
+
+    private Map<UUID, FrageDTO> getFragenMap(UUID examFachId) {
+        return frageService.getFragenForExam(examFachId).stream()
+                .map(frageDTOMapper::toDTO)
+                .collect(Collectors.toMap(FrageDTO::fachId, f -> f));
+    }
+
+    private List<AntwortDTO> getAntworten(UUID studentFachId, Set<UUID> frageFachIds) {
+        return frageFachIds.stream()
+                .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
+                .filter(Objects::nonNull)
+                .map(antwortDTOMapper::toDTO)
+                .toList();
+    }
+
+    private double berechneErreichtePunkte(List<AntwortDTO> antworten, Map<UUID, FrageDTO> fragen) {
+        return antworten.stream()
+            .mapToDouble(a -> {
+                FrageDTO f = fragen.get(a.frageFachId());
+                if (f == null) return 0;
+                Review review = reviewService.getReviewByAntwortFachId(a.fachId());
+                return review != null ? review.getPunkte() : 0;
+            })
+            .sum();
     }
 
     @Override

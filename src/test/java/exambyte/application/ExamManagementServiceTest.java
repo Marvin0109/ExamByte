@@ -43,6 +43,15 @@ class ExamManagementServiceTest {
     private ReviewDTOMapper reviewDTOMapper;
     private StudentDTOMapper studentDTOMapper;
 
+    private static final String STUDENT_NAME = "Marvin0109";
+    private static final String PROF_NAME = "Prof";
+
+    private static final UUID STUDENT_UUID = UUID.randomUUID();
+    private static final UUID PROF_UUID = UUID.randomUUID();
+    private static final UUID EXAM_UUID = UUID.randomUUID();
+    private static final LocalDateTime TIME_VAR =
+            LocalDateTime.of(2020, 1, 1, 0, 0);
+
     @BeforeEach
     void setUp() {
         examService = mock(ExamServiceImpl.class);
@@ -85,27 +94,22 @@ class ExamManagementServiceTest {
     void createExam_01() {
         // Arrange
         Exam mockExam = mock(Exam.class);
-        String profName = "Prof 1";
-        String title = "Exam 1";
-        UUID id = UUID.randomUUID();
-        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime end = start.plusHours(1);
+        LocalDateTime end = TIME_VAR.plusHours(1);
         LocalDateTime result = end.plusHours(2);
 
+        ExamDTO dto = new ExamDTO(null, "Exam 1", PROF_UUID, TIME_VAR, end, result);
 
-        ExamDTO dto = new ExamDTO(null, title, id, start, end, result);
-
-        when(professorService.getProfessorFachIdByName(profName)).thenReturn(Optional.of(id));
+        when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
         when(examService.allExams()).thenReturn(List.of());
         when(examDTOMapper.toDTO(any())).thenReturn(dto);
         when(examDTOMapper.toDomain(any(ExamDTO.class))).thenReturn(mockExam);
 
         // Act
-        String message = examManagementService.createExam(profName, title, start, end, result);
+        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
 
         // Assert
         assertThat(message).isEmpty();
-        verify(professorService).getProfessorFachIdByName(profName);
+        verify(professorService).getProfessorFachIdByName(PROF_NAME);
         verify(examService).addExam(any(Exam.class));
     }
 
@@ -113,34 +117,29 @@ class ExamManagementServiceTest {
     @DisplayName("Das erstellen eines Exams ist nicht erfolgreich (12 Exams sind schon vorhanden)")
     void createExam_02() {
         // Arrange
-        String profName = "Prof 1";
-        String title = "Exam 0";
-        UUID id = UUID.randomUUID();
-
-        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime end = start.plusHours(1);
+        LocalDateTime end = TIME_VAR.plusHours(1);
         LocalDateTime result = end.plusHours(2);
 
         List<Exam> exams = new ArrayList<>();
         for (int i = 1; i < 13; i++) {
             exams.add(new Exam.ExamBuilder()
                     .title("Exam " + i)
-                    .startTime(start.plusHours(i))
+                    .startTime(TIME_VAR.plusHours(i))
                     .endTime(end.plusHours(i))
                     .resultTime(result.plusHours(i))
-                    .professorFachId(id)
+                    .professorFachId(PROF_UUID)
                     .build());
         }
 
-        when(professorService.getProfessorFachIdByName(profName)).thenReturn(Optional.of(id));
+        when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
         when(examService.allExams()).thenReturn(exams);
 
         // Act
-        String message = examManagementService.createExam(profName, title, start, end, result);
+        String message = examManagementService.createExam(PROF_NAME, "Exam 0", TIME_VAR, end, result);
 
         // Assert
         assertThat(message).isEqualTo("Die maximale Kapazität von 12 Exams ist nun überschritten worden!");
-        verify(professorService).getProfessorFachIdByName(profName);
+        verify(professorService).getProfessorFachIdByName(PROF_NAME);
         verify(examService, never()).addExam(any());
     }
 
@@ -148,114 +147,94 @@ class ExamManagementServiceTest {
     @DisplayName("Das erstellen eines Exams ist nicht erfolgreich (Exam mit selben Startzeit schon vorhanden)")
     void createExam_03() {
         // Arrange
-        String profName = "Prof 1";
-        String title = "Exam 1";
-        UUID id = UUID.randomUUID();
-
-        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime end = start.plusHours(1);
+        LocalDateTime end = TIME_VAR.plusHours(1);
         LocalDateTime result = end.plusHours(2);
 
         Exam exam = new Exam.ExamBuilder()
-                .title(title)
-                .startTime(start)
+                .title("Exam 1")
+                .startTime(TIME_VAR)
                 .endTime(end)
                 .resultTime(result)
-                .professorFachId(id)
+                .professorFachId(PROF_UUID)
                 .build();
 
         ExamDTO examDTO = new ExamDTO(
                 null,
-                title,
-                id,
-                start,
+                "Exam 1",
+                PROF_UUID,
+                TIME_VAR,
                 end.plusHours(1),
                 result.plusHours(1));
 
         List<Exam> exams = List.of(exam);
 
-        when(professorService.getProfessorFachIdByName(profName)).thenReturn(Optional.of(id));
+        when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
         when(examService.allExams()).thenReturn(exams);
         when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
 
         // Act
-        String message = examManagementService.createExam(profName, title, start, end, result);
+        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
 
         // Assert
         assertThat(message).isEqualTo("Ein Exam mit der selben Startzeit ist schon vorhanden!");
-        verify(professorService).getProfessorFachIdByName(profName);
+        verify(professorService).getProfessorFachIdByName(PROF_NAME);
         verify(examService, never()).addExam(any());
     }
 
     @Test
-    @DisplayName("getAllExams liefert Exams sortiert nach Startzeit")
-    void getAllExams_01() {
-        // Arrange
-        UUID id = UUID.randomUUID();
+    @DisplayName("Professor wurde nicht gefunden")
+    void createExam_04() {
+        LocalDateTime end = TIME_VAR.plusHours(1);
+        LocalDateTime result = end.plusHours(2);
 
-        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
-        LocalDateTime end = start.plusHours(10);
-        LocalDateTime result = end.plusHours(20);
-
-        Exam exam1 = new Exam.ExamBuilder()
-                .fachId(UUID.randomUUID())
-                .title("Exam 1")
-                .startTime(start)
-                .endTime(end)
-                .resultTime(result)
-                .professorFachId(id)
-                .build();
-
-        Exam exam2 = new Exam.ExamBuilder()
-                .fachId(UUID.randomUUID())
-                .title("Exam 2")
-                .startTime(start.plusHours(2))
-                .endTime(end)
-                .resultTime(result)
-                .professorFachId(id)
-                .build();
-
-        Exam exam3 = new Exam.ExamBuilder()
-                .fachId(UUID.randomUUID())
-                .title("Exam 2")
-                .startTime(start.plusHours(1))
-                .endTime(end)
-                .resultTime(result)
-                .professorFachId(id)
-                .build();
-
-        // Startzeiten hier: start, start + 2, start + 1
-        when(examService.allExams()).thenReturn(List.of(exam1, exam2, exam3));
-        when(examDTOMapper.toDTO(any(Exam.class)))
-                .thenAnswer(invocation -> {
-                    Exam e = invocation.getArgument(0);
-                    return new ExamDTO(null, "x", id,
-                            e.getStartTime(), null, null);
-                });
-
-        // Act
-        List<ExamDTO> resultList = examManagementService.getAllExams();
-
-        // Assert
-        assertThat(resultList).extracting(ExamDTO::startTime)
-                .containsExactly(start, start.plusHours(1), start.plusHours(2));
-        verify(examService).allExams();
+        when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.empty());
+        assertThrows(IllegalStateException.class,
+                () -> examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result));
     }
 
     @Test
-    @DisplayName("isExamAlreadySubmitted Test")
-    void isExamAlreadySubmitted_01() {
+    void getAllExams_sortedASC() {
         // Arrange
-        UUID examFachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
-        String studentName = "Marvin0109";
+        Exam exam1 = new Exam.ExamBuilder()
+                .startTime(TIME_VAR.plusHours(2))
+                .professorFachId(PROF_UUID)
+                .build();
+        Exam exam2 = new Exam.ExamBuilder()
+                .startTime(TIME_VAR)
+                .professorFachId(PROF_UUID)
+                .build();
+        Exam exam3 = new Exam.ExamBuilder()
+                .startTime(TIME_VAR.plusHours(1))
+                .professorFachId(PROF_UUID)
+                .build();
 
+        when(examService.allExams()).thenReturn(List.of(exam1, exam2, exam3));
+        when(examDTOMapper.toDTO(any())).thenAnswer(i -> {
+            Exam e = i.getArgument(0);
+            return new ExamDTO(null, "x", PROF_UUID, e.getStartTime(), null, null);
+        });
+
+        // Act
+        List<ExamDTO> exams = examManagementService.getAllExams();
+
+        // Assert
+        assertThat(exams)
+                .extracting(ExamDTO::startTime)
+                .containsExactly(TIME_VAR, TIME_VAR.plusHours(1), TIME_VAR.plusHours(2));
+
+        verify(examService).allExams();
+        verify(examDTOMapper, times(3)).toDTO(any());
+    }
+
+    @Test
+    void isExamAlreadySubmitted_Yes() {
+        // Arrange
         FrageDTO frageDTO = new FrageDTO(
                 UUID.randomUUID(),
                 "Frage 1",
                 10,
-                UUID.randomUUID(),
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT);
 
         Frage frage = new Frage.FrageBuilder()
@@ -263,31 +242,122 @@ class ExamManagementServiceTest {
                 .frageText("Frage 1")
                 .maxPunkte(10)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(frageDTO.profUUID())
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
-        when(studentService.getStudentFachId(studentName)).thenReturn(studentFachId);
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
         when(frageDTOMapper.toFrageDTOList(List.of(frage))).thenReturn(List.of(frageDTO));
-        when(antwortService.findByStudentAndFrage(studentFachId, frageDTO.fachId())).thenReturn(mock(Antwort.class));
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageDTO.fachId())).thenReturn(mock(Antwort.class));
 
         // Act
-        boolean success = examManagementService.isExamAlreadySubmitted(examFachId, studentName);
+        boolean success = examManagementService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(success).isTrue();
+        verify(studentService).getStudentFachId(STUDENT_NAME);
+        verify(frageService).getFragenForExam(EXAM_UUID);
+        verify(antwortService).findByStudentAndFrage(STUDENT_UUID, frageDTO.fachId());
     }
 
     @Test
-    @DisplayName("Ein Exam kann erfolgreich eingereicht werden")
-    void submitExam_01() {
+    void isExamAlreadySubmitted_No() {
         // Arrange
-        String studentLogin = "Marvin0109";
-        UUID studentFachId = UUID.randomUUID();
-        UUID professorFachId = UUID.randomUUID();
+        FrageDTO frageDTO = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 1",
+                10,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.FREITEXT);
 
-        UUID examFachId = UUID.randomUUID();
+        Frage frage = new Frage.FrageBuilder()
+                .fachId(frageDTO.fachId())
+                .frageText("Frage 1")
+                .maxPunkte(10)
+                .type(QuestionType.FREITEXT)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
+                .build();
+
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
+        when(frageDTOMapper.toFrageDTOList(List.of(frage))).thenReturn(List.of(frageDTO));
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageDTO.fachId())).thenReturn(null);
+
+        // Act
+        boolean success = examManagementService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
+
+        // Assert
+        assertThat(success).isFalse();
+        verify(studentService).getStudentFachId(STUDENT_NAME);
+        verify(frageService).getFragenForExam(EXAM_UUID);
+        verify(antwortService).findByStudentAndFrage(STUDENT_UUID, frageDTO.fachId());
+    }
+
+    @Test
+    @DisplayName("Ist mind. 1 Antwort vorhanden, dann bricht die Suche ab")
+    void isExamAlreadySubmitted_OnlyOneOfTwo() {
+        // Arrange
+        FrageDTO frage1DTO = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 1",
+                10,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.FREITEXT);
+
+        FrageDTO frage2DTO = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 2",
+                5,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.FREITEXT);
+
+        Frage frage1 = new Frage.FrageBuilder()
+                .fachId(frage1DTO.fachId())
+                .frageText("Frage 1")
+                .maxPunkte(10)
+                .type(QuestionType.FREITEXT)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
+                .build();
+
+        Frage frage2 = new Frage.FrageBuilder()
+                .fachId(frage2DTO.fachId())
+                .frageText("Frage 2")
+                .maxPunkte(5)
+                .type(QuestionType.FREITEXT)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
+                .build();
+
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage1, frage2));
+        when(frageDTOMapper.toFrageDTOList(List.of(frage1, frage2))).thenReturn(List.of(frage1DTO, frage2DTO));
+
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frage1DTO.fachId()))
+                .thenReturn(mock(Antwort.class));
+
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frage2DTO.fachId()))
+                .thenReturn(null);
+
+        // Act
+        boolean submitted = examManagementService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
+
+        // Assert
+        assertThat(submitted).isTrue();
+        verify(studentService).getStudentFachId(STUDENT_NAME);
+        verify(frageService).getFragenForExam(EXAM_UUID);
+        verify(antwortService).findByStudentAndFrage(STUDENT_UUID, frage1DTO.fachId());
+        verify(antwortService, never()).findByStudentAndFrage(STUDENT_UUID, frage2DTO.fachId());
+    }
+
+    @Test
+    void submitExam_Success() {
+        // Arrange
         UUID frageFachId1 = UUID.randomUUID();
         UUID frageFachId2 = UUID.randomUUID();
 
@@ -301,8 +371,8 @@ class ExamManagementServiceTest {
                 .frageText("Fragetext1")
                 .maxPunkte(10)
                 .type(QuestionType.SC)
-                .professorUUID(professorFachId)
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
@@ -310,99 +380,150 @@ class ExamManagementServiceTest {
                 .frageText("Fragetext2")
                 .maxPunkte(5)
                 .type(QuestionType.MC)
-                .professorUUID(professorFachId)
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         FrageDTO frageDTO1 = new FrageDTO(
-                frage1.getFachId(),
-                frage1.getFrageText(),
-                frage1.getMaxPunkte(),
-                frage1.getProfessorUUID(),
-                frage1.getExamUUID(),
-                QuestionTypeDTO.valueOf(frage1.getType().toString()));
+                frageFachId1,
+                "Fragetext1",
+                10,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.SC);
 
         FrageDTO frageDTO2 = new FrageDTO(
-                frage2.getFachId(),
-                frage2.getFrageText(),
-                frage2.getMaxPunkte(),
-                frage2.getProfessorUUID(),
-                frage2.getExamUUID(),
-                QuestionTypeDTO.valueOf(frage2.getType().toString()));
+                frageFachId2,
+                "FrageText2",
+                5,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.MC);
 
-        when(studentService.getStudentFachId(studentLogin)).thenReturn(studentFachId);
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage1, frage2));
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage1, frage2));
         when(frageDTOMapper.toDTO(frage1)).thenReturn(frageDTO1);
         when(frageDTOMapper.toDTO(frage2)).thenReturn(frageDTO2);
 
-        when(antwortService.findByStudentAndFrage(any(), any())).thenReturn(mock(Antwort.class));
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageFachId1)).thenReturn(mock(Antwort.class));
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageFachId2)).thenReturn(mock(Antwort.class));
 
-        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), any(), any()))
+        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), eq(STUDENT_UUID), any()))
                 .thenReturn(List.of());
-        when(automaticReviewService.automatischeReviewSC(any(), any(), any(), any(), any()))
+        when(automaticReviewService.automatischeReviewSC(any(), any(), any(), eq(STUDENT_UUID), any()))
                 .thenReturn(List.of());
 
         // Act
-        boolean result = examManagementService.submitExam(studentLogin, antworten, examFachId);
+        boolean result = examManagementService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
 
         // Assert
         assertTrue(result);
 
         verify(antwortService, times(2)).addAntwort(any());
 
-        verify(automaticReviewService).automatischeReviewMC(any(), any(), any(), eq(studentFachId), any());
-        verify(automaticReviewService).automatischeReviewSC(any(), any(), any(), eq(studentFachId), any());
+        verify(automaticReviewService).automatischeReviewMC(any(), any(), any(), eq(STUDENT_UUID), any());
+        verify(automaticReviewService).automatischeReviewSC(any(), any(), any(), eq(STUDENT_UUID), any());
+    }
+
+    @Test
+    void submitExam_Fail_StudentNotFound() {
+        // Arrange
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenThrow(new RuntimeException("Nicht gefunden"));
+
+        // Act
+        boolean result = examManagementService.submitExam(STUDENT_NAME, Map.of(), EXAM_UUID);
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("AntwortService wirft Exception -> false")
+    void submitExam_AntwortServiceFails() {
+        // Arrange
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        Map<String, List<String>> antworten = Map.of(UUID.randomUUID().toString(), List.of("Antwort"));
+        doThrow(new RuntimeException("DB Error")).when(antwortService).addAntwort(any());
+
+        // Act
+        boolean result = examManagementService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    @DisplayName("submitExam: ReviewService wirft Exception -> false")
+    void submitExam_ReviewServiceFails() {
+        // Arrange
+        ReviewDTO rDTO = new ReviewDTO(null, null, null, "", 0);
+        Review r = new Review.ReviewBuilder().build();
+
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+
+        Map<String, List<String>> antworten = Map.of(UUID.randomUUID().toString(), List.of("Antwort"));
+
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of());
+
+        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), eq(STUDENT_UUID), any()))
+                .thenReturn(List.of(rDTO));
+        when(automaticReviewService.automatischeReviewSC(any(), any(), any(), eq(STUDENT_UUID), any()))
+                .thenReturn(List.of());
+
+        when(reviewDTOMapper.toDomain(rDTO)).thenReturn(r);
+
+        doThrow(new RuntimeException("Review DB Error")).when(reviewService).addReview(r);
+
+        // Act
+        boolean result = examManagementService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
+
+        // Assert
+        assertFalse(result);
     }
 
     @Test
     @DisplayName("Ein Exam wird erfolgreich gefunden nach der Startzeit")
     void getExamByStartTime_01() {
         // Arrange
-        UUID examId = UUID.randomUUID();
-        UUID profUUID = UUID.randomUUID();
-        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
-
         Exam exam = new Exam.ExamBuilder()
-                .fachId(examId)
+                .fachId(EXAM_UUID)
                 .title("Exam 1")
-                .startTime(start)
-                .endTime(start.plusHours(1))
-                .resultTime(start.plusHours(2))
-                .professorFachId(profUUID)
+                .startTime(TIME_VAR)
+                .endTime(TIME_VAR.plusHours(1))
+                .resultTime(TIME_VAR.plusHours(2))
+                .professorFachId(PROF_UUID)
                 .build();
 
         ExamDTO examDTO = new ExamDTO(
-                examId,
+                EXAM_UUID,
                 "Exam 1",
-                profUUID,
-                start,
-                start.plusHours(1),
-                start.plusHours(2)
+                PROF_UUID,
+                TIME_VAR,
+                TIME_VAR.plusHours(1),
+                TIME_VAR.plusHours(2)
         );
 
         when(examService.allExams()).thenReturn(List.of(exam));
         when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
 
         // Act
-        UUID result = examManagementService.getExamByStartTime(start);
+        UUID result = examManagementService.getExamByStartTime(TIME_VAR);
 
         // Assert
-        assertThat(result).isEqualTo(examId);
+        assertThat(result).isEqualTo(EXAM_UUID);
     }
 
     @Test
     @DisplayName("Ein Exam wurde nicht gefunden mit der gegebenen Startzeit")
     void getExamByStartTime_02() {
         // Arrange
-        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
-
         Exam exam = new Exam.ExamBuilder()
                 .fachId(UUID.randomUUID())
                 .title("Exam 1")
-                .startTime(start.plusHours(1))
-                .endTime(start.plusHours(2))
-                .resultTime(start.plusHours(3))
-                .professorFachId(UUID.randomUUID())
+                .startTime(TIME_VAR.plusHours(1))
+                .endTime(TIME_VAR.plusHours(2))
+                .resultTime(TIME_VAR.plusHours(3))
+                .professorFachId(PROF_UUID)
                 .build();
 
         ExamDTO examDTO = new ExamDTO(
@@ -418,7 +539,7 @@ class ExamManagementServiceTest {
         when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
 
         // Act
-        UUID result = examManagementService.getExamByStartTime(start);
+        UUID result = examManagementService.getExamByStartTime(TIME_VAR);
 
         // Assert
         assertThat(result).isNull();
@@ -455,14 +576,7 @@ class ExamManagementServiceTest {
     }
 
     @Test
-    @DisplayName("Das entfernen von alten Antworten und die dazugehörigen Reviews ist erfolgreich")
-    void removeOldAnswers_01() {
-        UUID examFachId = UUID.randomUUID();
-        String studentName = "Marvin0109";
-        UUID studentFachId = UUID.randomUUID();
-
-        UUID profFachId = UUID.randomUUID();
-
+    void removeOldAnswers_Success() {
         UUID frageFachId1 = UUID.randomUUID();
         UUID frageFachId2 = UUID.randomUUID();
 
@@ -471,38 +585,36 @@ class ExamManagementServiceTest {
 
         UUID reviewFachId1 = UUID.randomUUID();
 
-        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
-
         FrageDTO frageDTO1 = new FrageDTO(
                 frageFachId1,
                 "F1",
                 10,
-                profFachId,
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT);
 
         FrageDTO frageDTO2 = new FrageDTO(
                 frageFachId2,
                 "F2",
                 10,
-                profFachId,
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT);
 
         Antwort antwort = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId1)
                 .antwortText("A1")
                 .frageFachId(frageFachId1)
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId2)
                 .antwortText("A2")
                 .frageFachId(frageFachId2)
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         Review review = new Review.ReviewBuilder()
@@ -513,8 +625,8 @@ class ExamManagementServiceTest {
                 .punkte(5)
                 .build();
 
-        when(studentService.getStudentFachId(studentName)).thenReturn(studentFachId);
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(
                 mock(Frage.class), mock(Frage.class)
         ));
 
@@ -522,14 +634,14 @@ class ExamManagementServiceTest {
                 .thenReturn(frageDTO1)
                 .thenReturn(frageDTO2);
 
-        when(antwortService.findByStudentAndFrage(studentFachId, frageFachId1)).thenReturn(antwort);
-        when(antwortService.findByStudentAndFrage(studentFachId, frageFachId2)).thenReturn(antwort2);
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageFachId1)).thenReturn(antwort);
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageFachId2)).thenReturn(antwort2);
 
         when(reviewService.getReviewByAntwortFachId(antwortFachId1)).thenReturn(review);
         when(reviewService.getReviewByAntwortFachId(antwortFachId2)).thenReturn(null);
 
         // Act
-        examManagementService.removeOldAnswers(examFachId, studentName);
+        examManagementService.removeOldAnswers(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         verify(antwortService).deleteAnswer(antwortFachId1);
@@ -543,24 +655,15 @@ class ExamManagementServiceTest {
     @DisplayName("getSubmission ist erfolgreich")
     void getSubmission_01() {
         // Arrange
-        String studentName = "Marvin0109";
-        UUID studentFachId = UUID.randomUUID();
-
-        when(studentService.getStudentFachId(studentName)).thenReturn(studentFachId);
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
 
         UUID frageFachId = UUID.randomUUID();
-
-        UUID examFachId = UUID.randomUUID();
-
         UUID antwortFachId = UUID.randomUUID();
-
         UUID korrektorFachId = UUID.randomUUID();
-
-        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Frage frage = new Frage.FrageBuilder()
                 .fachId(frageFachId)
-                .examUUID(examFachId)
+                .examUUID(EXAM_UUID)
                 .maxPunkte(5)
                 .type(QuestionType.MC)
                 .frageText("Testfrage")
@@ -572,29 +675,28 @@ class ExamManagementServiceTest {
                 "Testfrage",
                 5,
                 UUID.randomUUID(),
-                examFachId,
+                EXAM_UUID,
                 QuestionTypeDTO.MC);
 
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
         when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
 
         AntwortDTO antwortDTO = new AntwortDTO(
                 antwortFachId,
                 "Antwort",
                 frageFachId,
-                studentFachId,
-                antwortZeitpunkt);
-
+                STUDENT_UUID,
+                TIME_VAR);
 
         Antwort antwortDomain = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId)
                 .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
+                .studentFachId(STUDENT_UUID)
                 .antwortText("Antwort")
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
-        when(antwortService.findByStudentAndFrage(studentFachId, frageFachId)).thenReturn(antwortDomain);
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageFachId)).thenReturn(antwortDomain);
         when(antwortDTOMapper.toDTO(antwortDomain)).thenReturn(antwortDTO);
 
         Review review = new Review.ReviewBuilder()
@@ -616,7 +718,7 @@ class ExamManagementServiceTest {
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
         // Act
-        VersuchDTO attempt = examManagementService.getSubmission(examFachId, "Marvin0109");
+        VersuchDTO attempt = examManagementService.getSubmission(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(attempt.erreichtePunkte()).isEqualTo(5.0);
@@ -625,20 +727,79 @@ class ExamManagementServiceTest {
     }
 
     @Test
+    void getSubmission_NoAnswers() {
+        // Arrange
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of());
+
+        // Act
+        VersuchDTO attempt = examManagementService.getSubmission(EXAM_UUID, STUDENT_NAME);
+
+        // Assert
+        assertThat(attempt.erreichtePunkte()).isEqualTo(0.0);
+        assertThat(attempt.maxPunkte()).isEqualTo(0.0);
+        assertThat(attempt.prozent()).isEqualTo(0.0);
+    }
+
+    @Test
+    void getSubmission_AnswerNoReview() {
+        // Arrange
+        UUID frageFachId = UUID.randomUUID();
+        UUID antwortFachId = UUID.randomUUID();
+
+        when(studentService.getStudentFachId(STUDENT_NAME)).thenReturn(STUDENT_UUID);
+
+        Frage frage = new Frage.FrageBuilder()
+                .fachId(frageFachId)
+                .examUUID(EXAM_UUID)
+                .maxPunkte(5)
+                .build();
+
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
+        when(frageDTOMapper.toDTO(frage)).thenReturn(
+                new FrageDTO(
+                    frageFachId,
+                    "Text",
+                    5,
+                    UUID.randomUUID(),
+                    EXAM_UUID,
+                    QuestionTypeDTO.MC));
+
+        Antwort antwortDomain = new Antwort.AntwortBuilder()
+                .fachId(antwortFachId)
+                .frageFachId(frageFachId)
+                .studentFachId(STUDENT_UUID)
+                .antwortText("Antwort")
+                .antwortZeitpunkt(TIME_VAR)
+                .build();
+
+        when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageFachId)).thenReturn(antwortDomain);
+        when(antwortDTOMapper.toDTO(antwortDomain)).thenReturn(
+                new AntwortDTO(antwortFachId, "Antwort", frageFachId, STUDENT_UUID, TIME_VAR));
+
+        when(reviewService.getReviewByAntwortFachId(antwortFachId)).thenReturn(null);
+
+        // Act
+        VersuchDTO attempt = examManagementService.getSubmission(EXAM_UUID, STUDENT_NAME);
+
+        // Assert
+        assertThat(attempt.erreichtePunkte()).isEqualTo(0.0);
+        assertThat(attempt.maxPunkte()).isEqualTo(5.0);
+        assertThat(attempt.prozent()).isEqualTo(0.0);
+    }
+
+
+    @Test
     @DisplayName("Laden des Bewertungsstatus ist erfolgreich (1 von 2 Freitext-Antworten hat Review)")
     void reviewCoverage_01() {
         // Arrange
-        UUID examFachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
-        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
-
         Frage frage1 = new Frage.FrageBuilder()
                 .fachId(UUID.randomUUID())
                 .frageText("F1")
                 .maxPunkte(2)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(UUID.randomUUID())
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
@@ -646,24 +807,24 @@ class ExamManagementServiceTest {
                 .frageText("F2")
                 .maxPunkte(2)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(UUID.randomUUID())
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         FrageDTO frageDTO1 = new FrageDTO(
                 frage1.getFachId(),
                 "F1",
                 2,
-                frage1.getProfessorUUID(),
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT);
 
         FrageDTO frageDTO2 = new FrageDTO(
                 frage2.getFachId(),
                 "F2",
                 2,
-                frage2.getProfessorUUID(),
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT
         );
 
@@ -671,31 +832,31 @@ class ExamManagementServiceTest {
                 .fachId(UUID.randomUUID())
                 .antwortText("A1")
                 .frageFachId(frage1.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
                 .fachId(UUID.randomUUID())
                 .antwortText("A2")
                 .frageFachId(frage2.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         AntwortDTO antwortDTO1 = new AntwortDTO(
                 antwort1.getFachId(),
                 "A1",
                 frageDTO1.fachId(),
-                studentFachId,
-                antwortZeitpunkt);
+                STUDENT_UUID,
+                TIME_VAR);
 
         AntwortDTO antwortDTO2 = new AntwortDTO(
                 antwort2.getFachId(),
                 "A2",
                 frageDTO2.fachId(),
-                studentFachId,
-                antwortZeitpunkt);
+                STUDENT_UUID,
+                TIME_VAR);
 
         Review r1 = new Review.ReviewBuilder()
                 .fachId(UUID.randomUUID())
@@ -713,7 +874,7 @@ class ExamManagementServiceTest {
                 r1.getPunkte()
         );
 
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage1, frage2));
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage1, frage2));
 
         when(antwortService.findByFrageFachId(frage1.getFachId())).thenReturn(antwort1);
         when(antwortService.findByFrageFachId(frage2.getFachId())).thenReturn(antwort2);
@@ -730,7 +891,7 @@ class ExamManagementServiceTest {
         when(frageDTOMapper.toDTO(frage2)).thenReturn(frageDTO2);
 
         // Act
-        double coverage = examManagementService.reviewCoverage(examFachId);
+        double coverage = examManagementService.reviewCoverage(EXAM_UUID);
 
         // Assert
         assertThat(coverage).isEqualTo(50.0);
@@ -740,17 +901,13 @@ class ExamManagementServiceTest {
     @DisplayName("Laden des Bewertungsstatus ist erfolgreich (1 von 1 Freitext-Antwort hat Review)")
     void reviewCoverage_02() {
         // Arrange
-        UUID examFachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
-        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2020, 1, 1, 0, 0);
-
         Frage frage1 = new Frage.FrageBuilder()
                 .fachId(UUID.randomUUID())
                 .frageText("F1")
                 .maxPunkte(2)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(UUID.randomUUID())
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         Frage frage2 = new Frage.FrageBuilder()
@@ -758,16 +915,16 @@ class ExamManagementServiceTest {
                 .frageText("F2")
                 .maxPunkte(2)
                 .type(QuestionType.MC)
-                .professorUUID(UUID.randomUUID())
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         FrageDTO frageDTO1 = new FrageDTO(
                 frage1.getFachId(),
                 "F1",
                 2,
-                frage1.getProfessorUUID(),
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT
         );
 
@@ -775,8 +932,8 @@ class ExamManagementServiceTest {
                 frage2.getFachId(),
                 "F2",
                 2,
-                frage2.getProfessorUUID(),
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.MC
         );
 
@@ -784,31 +941,31 @@ class ExamManagementServiceTest {
                 .fachId(UUID.randomUUID())
                 .antwortText("A1")
                 .frageFachId(frage1.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
                 .fachId(UUID.randomUUID())
                 .antwortText("A2")
                 .frageFachId(frage2.getFachId())
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         AntwortDTO antwortDTO1 = new AntwortDTO(
                 antwort1.getFachId(),
                 "A1",
                 frageDTO1.fachId(),
-                studentFachId,
-                antwortZeitpunkt);
+                STUDENT_UUID,
+                TIME_VAR);
 
         AntwortDTO antwortDTO2 = new AntwortDTO(
                 antwort2.getFachId(),
                 "A2",
                 frageDTO2.fachId(),
-                studentFachId,
-                antwortZeitpunkt);
+                STUDENT_UUID,
+                TIME_VAR);
 
         Review r1 = new Review.ReviewBuilder()
                 .fachId(UUID.randomUUID())
@@ -826,7 +983,7 @@ class ExamManagementServiceTest {
                 r1.getPunkte()
         );
 
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage1, frage2));
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage1, frage2));
 
         when(antwortService.findByFrageFachId(frage1.getFachId())).thenReturn(antwort1);
         when(antwortService.findByFrageFachId(frage2.getFachId())).thenReturn(antwort2);
@@ -843,7 +1000,7 @@ class ExamManagementServiceTest {
         when(frageDTOMapper.toDTO(frage2)).thenReturn(frageDTO2);
 
         // Act
-        double coverage = examManagementService.reviewCoverage(examFachId);
+        double coverage = examManagementService.reviewCoverage(EXAM_UUID);
 
         // Assert
         // 2 Fragen: MC und Freitextaufgaben, aber von den Freitextaufgaben haben alle eine Bewertung
@@ -854,16 +1011,12 @@ class ExamManagementServiceTest {
     @DisplayName("Freitextantworten aller Studenten wird erfolgreich gefunden und nach Namen gruppiert")
     void getStudentSubmittedExam_01() {
         // Arrange
-        UUID studentFachId = UUID.randomUUID();
-        UUID examFachId = UUID.randomUUID();
         UUID antwortFachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
-        UUID profFachId = UUID.randomUUID();
-        LocalDateTime antwortZeitpunkt = LocalDateTime.of(2026, 1, 1, 0, 0);
 
         Student student = new Student.StudentBuilder()
-                .fachId(studentFachId)
-                .name("Marvin0109")
+                .fachId(STUDENT_UUID)
+                .name(STUDENT_NAME)
                 .build();
 
         Frage frage = new Frage.FrageBuilder()
@@ -871,46 +1024,46 @@ class ExamManagementServiceTest {
                 .frageText("F1")
                 .maxPunkte(10)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(profFachId)
-                .examUUID(examFachId)
+                .professorUUID(PROF_UUID)
+                .examUUID(EXAM_UUID)
                 .build();
 
         FrageDTO frageDTO = new FrageDTO(
                 frageFachId,
                 "F1",
                 10,
-                profFachId,
-                examFachId,
+                PROF_UUID,
+                EXAM_UUID,
                 QuestionTypeDTO.FREITEXT);
 
-        StudentDTO studentDTO = new StudentDTO(studentFachId, "Marvin0109");
+        StudentDTO studentDTO = new StudentDTO(STUDENT_UUID, STUDENT_NAME);
 
         Antwort antwort1 = new Antwort.AntwortBuilder()
                 .fachId(antwortFachId)
                 .antwortText("Antwort 1")
                 .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
-                .antwortZeitpunkt(antwortZeitpunkt)
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
                 .build();
 
         AntwortDTO antwort1DTO = new AntwortDTO(
                 antwortFachId,
                 "Antwort 1",
                 frageFachId,
-                studentFachId,
-                antwortZeitpunkt);
+                STUDENT_UUID,
+                TIME_VAR);
 
-        when(frageService.getFragenForExam(examFachId)).thenReturn(List.of(frage));
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
         when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
 
         when(antwortService.findByFrageFachId(frageFachId)).thenReturn(antwort1);
         when(antwortDTOMapper.toDTO(antwort1)).thenReturn(antwort1DTO);
 
-        when(studentService.getStudent(studentFachId)).thenReturn(student);
+        when(studentService.getStudent(STUDENT_UUID)).thenReturn(student);
         when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
 
         // Act
-        List<StudentDTO> result = examManagementService.getStudentSubmittedExam(examFachId);
+        List<StudentDTO> result = examManagementService.getStudentSubmittedExam(EXAM_UUID);
 
         // Assert
         assertThat(result).hasSize(1);
