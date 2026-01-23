@@ -498,6 +498,16 @@
 ### 22.01.2026
 **Bereich**: Refactoring / Testing / Infrastruktur
 - Neuen Branch erstellt: `refactor`
-- `Sonarqube` als Plugin in `build.gradle` eingefügt
-- Mithilfe von `Sonarqube` schwere Code Smells entfernt
+- `SonarQube` als Plugin in `build.gradle` eingefügt
+- Mithilfe von `SonarQube` schwere Code Smells entfernt
 - `data-test.sql` angelegt und Datenbanktests angepasst
+
+---
+
+### 23.01.2026
+**Bereich**: Refactoring / Testing / Dokumentation / Datenbank / Umgebungsvariablen
+- SQL Skript `V1__init.sql` um weitere Integritätsbedingungen erweitert
+- Restliche Code Smells beseitigt
+- SonarQube Bedienungshinweise in `example.env` hinzugefügt
+- Redundante Attribute von `DTO`'s, `Entities` und `Model` Objekten entfernt
+- `ExamManagementServiceImpl` und zugehöriger Test optimiert in Hinsicht auf Wartbarkeit

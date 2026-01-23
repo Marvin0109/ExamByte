@@ -1,48 +1,52 @@
 # TODO für ExamByte
 
-> **Autor:** Marvin0109
-> **Datum:** 21.01.2026
+> **Autor:** Marvin0109,
+> **aktualisiert am:** 23.01.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
 ### Priorität: Hoch
 - **Testing**
-  - [ ] **Logik-Tests**: Restliche Logik Tests müssen implementiert werden, s. Jacoco Test Report
+  - [ ] **Logik-Tests**: Erweiterung der Logik-Tests basierend auf Jacoco Coverage Report
 
-- **Frontend**
+- **Use Case-Erweiterungen**
+  - [ ] **Korrektur von Freitextantworten**
+  - [ ] **Neuer Testdurchlauf mit bestehenden Antworten**
+  - [ ] **Zulassungslogik für Testteilnahmen**
+
+- **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
   - [ ] **CSV-Export**: Formular exportieren
-  - [ ] **Testantwort-Einsicht**: Ansicht für Admins/Lehrkräfte, um Testergebnisse einzusehen.
-  - [ ] **Korrektor korrigiert**: Das korrigieren der Freitextantworten entwickeln
-  - [ ] **Neuer Testdurchlauf**: Implementierung von Testdurchläufen mit alten Antworten 
-  - [ ] **Zulassungslogik**: Der Zulassungsstatus muss ins Frontend integriert werden
+  - [ ] **Testantwort-Einsicht**: Einsicht in Testergebnisse für Admins/Lehrkräfte
 
 - **Dokumentation**
-  - [X] **Arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
+  - [X] **arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
  
 - **Authentifizierung**
-  - [ ] **Rollenverteilung**: Feature einführen, wo man seine Rollen aktivieren kann nach Bedarf
+  - [ ] **Rollenverteilung**: Erweiterung des Rollenmodells um dynamische Rollenaktivierung (RBAC)
 
 ---
 
 ### Priorität: Mittel
-- [ ] **Java-Konventionen**: Sicherstellen, dass der Code durchgehend den Konventionen entspricht (s. Styleguide)
-- [ ] **Accessiblity**: Überprüfung auf Accessibility nötig
-- [ ] **Codequalität**: Refaktorisierung nötig
+- [ ] **Java-Konventionen**: Sicherstellung von Codekonventionen (Styleguide)
+- [ ] **Accessiblity**: Überprüfung auf Accessibility
+- [X] **Codequalität**: Komponenten mithilfe von SonarQube analysiert 
+und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 
 ---
 
 ### Priorität: Niedrig
-- [ ] **Optimierung**: Performance der Datenbank-Queries verbessern
-- [ ] **CD**: Code Deployment einrichten
-- [ ] **Threading**: Anwendung erweitern auf parallele Ausführungen von Usern
+- [ ] **CD**: Experimentelles Setup mit Railway
+- [ ] **Threading**: Analyse und Optimierung hinsichtlich Nebenläufigkeit und Skalierbarkeit bei parallelen Userzugriffen
 
 ---
 
 ## 2. Nächste Schritte (Empfohlene Reihenfolge)
-1. [X] acr42-Doc aktualisieren
-2. [ ] Logik-Test vervollständigen für vorhandenen Quellcode
-3. [ ] Korrektur der Freitextantworten einführen + Test
-4. [ ] Zulassungslogik + Test
-5. [ ] Neuer Testdurchlauf mit alten Anworten umsetzen + Test
-6. [ ] Einsicht auf Testergebnisse + CSV Export einführen + Test
-7. [ ] Rollenverteilung-Feature
+1. [X] arc42-Doc aktualisieren
+2. [X] Code Refactoring mithilfe von SonarQube
+3. [ ] Logiktests vervollständigen
+4. [ ] Korrektur der Freitextantworten
+5. [ ] Zulassungslogik
+6. [ ] Testdurchlauf mit alten Antworten
+7. [ ] Einsicht auf Testergebnisse
+8. [ ] CSV-Export einführen
+9. [ ] Rollenverteilungs-Feature
