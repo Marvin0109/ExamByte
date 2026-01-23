@@ -19,11 +19,7 @@ public class ZulassungService {
             int gesamtPunkte = punkteProExam.get(i);
             int erreichtePunkte = erreichtePunkteProExam.get(i);
 
-            if (erreichtePunkte >= gesamtPunkte * 0.5) {
-                examBestanden.add(true);
-            } else {
-                examBestanden.add(false);
-            }
+            examBestanden.add(erreichtePunkte >= gesamtPunkte * 0.5);
         }
 
         return examBestanden.stream().allMatch(Boolean::booleanValue);
