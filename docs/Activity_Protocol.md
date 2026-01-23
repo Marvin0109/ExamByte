@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**Aktualisiert am: 21.01.2026
+>**aktualisiert am:** 22.01.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -394,7 +394,7 @@
 ### 11.09.2025
 **Bereich**: Tests
 - `SubmitExam` Test geschrieben
-- Weitere TODOs ergänzt
+- Weitere To-dos ergänzt
 
 ---
 
@@ -492,3 +492,12 @@
 - arc42-Dokumentation überarbeitet
 - TO_DO aktualisiert
 - Activity_Protocol aktualisiert
+
+---
+
+### 22.01.2026
+**Bereich**: Refactoring / Testing / Infrastruktur
+- Neuen Branch erstellt: `refactor`
+- `Sonarqube` als Plugin in `build.gradle` eingefügt
+- Mithilfe von `Sonarqube` schwere Code Smells entfernt
+- `data-test.sql` angelegt und Datenbanktests angepasst

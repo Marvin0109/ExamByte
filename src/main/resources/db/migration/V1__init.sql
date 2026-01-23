@@ -1,81 +1,81 @@
-create table student(
-    id                      serial primary key,
-    name                    varchar(100),
-    fach_id                 uuid,
-    constraint unique_fach_id_student unique(fach_id)
+CREATE TABLE student (
+    id                      SERIAL PRIMARY KEY,
+    name                    VARCHAR(100) NOT NULL,
+    fach_id                 UUID NOT NULL,
+    CONSTRAINT unique_fach_id_student UNIQUE(fach_id)
 );
 
-create table professor(
-    id                      serial primary key,
-    name                    varchar(100),
-    fach_id                 uuid,
-    constraint unique_fach_id_professor unique(fach_id)
+CREATE TABLE professor (
+    id                      SERIAL PRIMARY KEY,
+    name                    VARCHAR(100) NOT NULL,
+    fach_id                 UUID NOT NULL,
+    CONSTRAINT unique_fach_id_professor UNIQUE(fach_id)
 );
 
-create table korrektor(
-    id                      serial primary key,
-    name                    varchar(100),
-    fach_id                 uuid,
-    constraint unique_fach_id_korrektor unique(fach_id)
+CREATE TABLE korrektor (
+    id                      SERIAL PRIMARY KEY,
+    name                    VARCHAR(100) NOT NULL,
+    fach_id                 UUID NOT NULL,
+    CONSTRAINT unique_fach_id_korrektor UNIQUE(fach_id)
 );
 
-create table exam(
-    id                      serial primary key,
-    fach_id                 uuid,
-    title                   varchar(100),
-    professor_fach_id       uuid,
-    start_time              timestamp not null,
-    end_time                timestamp not null,
-    result_time             timestamp not null,
-    constraint unique_fach_id_test unique(fach_id),
-    constraint check_exam_times check(start_time < end_time AND end_time <= result_time),
-    foreign key(professor_fach_id) references professor(fach_id)
+CREATE TABLE exam (
+    id                      SERIAL PRIMARY KEY,
+    fach_id                 UUID NOT NULL,
+    title                   VARCHAR(100) NOT NULL,
+    professor_fach_id       UUID NOT NULL,
+    start_time              TIMESTAMP NOT NULL,
+    end_time                TIMESTAMP NOT NULL,
+    result_time             TIMESTAMP NOT NULL,
+    CONSTRAINT unique_fach_id_test UNIQUE(fach_id),
+    CONSTRAINT check_exam_times CHECK(start_time < end_time AND end_time <= result_time),
+    FOREIGN KEY(professor_fach_id) REFERENCES professor(fach_id) ON DELETE CASCADE
 );
 
-create table frage(
-    id                      serial primary key,
-    frage_text              TEXT,
-    professor_fach_id       uuid,
-    exam_fach_id            uuid,
-    fach_id                 uuid,
-    max_punkte              int,
-    type                    TEXT,
-    foreign key(professor_fach_id) references professor(fach_id),
-    foreign key(exam_fach_id) references exam(fach_id) on delete cascade,
-    constraint unique_fach_id_frage unique(fach_id)
+CREATE TABLE frage (
+    id                      SERIAL PRIMARY KEY,
+    frage_text              TEXT NOT NULL,
+    professor_fach_id       UUID,
+    exam_fach_id            UUID NOT NULL,
+    fach_id                 UUID NOT NULL,
+    max_punkte              INT NOT NULL,
+    type                    TEXT NOT NULL,
+    FOREIGN KEY(professor_fach_id) REFERENCES professor(fach_id) ON DELETE SET NULL,
+    FOREIGN KEY(exam_fach_id) REFERENCES exam(fach_id) ON DELETE CASCADE,
+    CONSTRAINT unique_fach_id_frage UNIQUE(fach_id)
 );
 
-create table antwort(
-    id                      serial primary key,
-    fach_id                 uuid,
-    frage_antwort_id        uuid,
-    antwort_text            varchar(500),
-    student_fach_id         uuid,
-    antwort_zeitpunkt       timestamp default current_timestamp not null,
-    last_changes_zeitpunkt  timestamp default current_timestamp not null,
-    foreign key(frage_antwort_id) references frage(fach_id) on delete cascade,
-    foreign key(student_fach_id) references student(fach_id),
-    constraint unique_fach_id_antwort unique(fach_id)
+CREATE TABLE antwort (
+    id                      SERIAL PRIMARY KEY,
+    fach_id                 UUID NOT NULL,
+    frage_antwort_id        UUID NOT NULL,
+    antwort_text            VARCHAR(500) NOT NULL,
+    student_fach_id         UUID NOT NULL,
+    antwort_zeitpunkt       TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    last_changes_zeitpunkt  TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    FOREIGN KEY(frage_antwort_id) REFERENCES frage(fach_id) ON DELETE CASCADE,
+    FOREIGN KEY(student_fach_id) REFERENCES student(fach_id) ON DELETE CASCADE,
+    CONSTRAINT unique_fach_id_antwort UNIQUE(fach_id)
 );
 
-create table review(
-    id                      serial primary key,
-    fach_id                 uuid,
-    antwort_fach_id         uuid not null,
-    korrektor_fach_id       uuid not null,
-    bewertung               TEXT,
-    punkte                  int,
-    foreign key (antwort_fach_id) references antwort(fach_id) on delete cascade,
-    foreign key (korrektor_fach_id) references korrektor(fach_id),
-    constraint unique_fach_id_review unique(fach_id)
+CREATE TABLE review (
+    id                      SERIAL PRIMARY KEY,
+    fach_id                 UUID NOT NULL,
+    antwort_fach_id         UUID NOT NULL,
+    korrektor_fach_id       UUID,
+    bewertung               TEXT NOT NULL,
+    punkte                  INT NOT NULL,
+    FOREIGN KEY(antwort_fach_id) REFERENCES antwort(fach_id) ON DELETE CASCADE,
+    FOREIGN KEY(korrektor_fach_id) REFERENCES korrektor(fach_id) ON DELETE SET NULL,
+    CONSTRAINT unique_fach_id_review UNIQUE(fach_id)
 );
 
-create table correct_answers(
-    id                      serial primary key,
-    fach_id                 uuid,
-    frage_id                uuid not null,
-    richtige_antwort        TEXT,
-    antwort_optionen        TEXT,
-    foreign key (frage_id) references frage(fach_id) on delete cascade,
-    constraint unique_fach_id_correct_answers unique(fach_id)
+CREATE TABLE correct_answers (
+    id                      SERIAL PRIMARY KEY,
+    fach_id                 UUID NOT NULL,
+    frage_id                UUID NOT NULL,
+    richtige_antwort        TEXT NOT NULL,
+    antwort_optionen        TEXT NOT NULL,
+    FOREIGN KEY(frage_id) REFERENCES frage(fach_id) ON DELETE CASCADE,
+    CONSTRAINT unique_fach_id_correct_answers UNIQUE(fach_id)
 );
