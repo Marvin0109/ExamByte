@@ -11,11 +11,11 @@ import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ExamTest {
+class ExamTest {
 
     @Test
     @DisplayName("Exam Builder Test")
-    public void test_01() {
+    void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
         String title = "Math Exam";
@@ -45,7 +45,7 @@ public class ExamTest {
 
     @Test
     @DisplayName("ExamBuilder Test mit null Feldern")
-    public void test_02() {
+    void test_02() {
         String title = "Math Exam";
         LocalDateTime startTime = LocalDateTime.now();
         LocalDateTime endTime = startTime.plusHours(2);

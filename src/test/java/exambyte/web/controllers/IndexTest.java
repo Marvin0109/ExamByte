@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(WebController.class)
 @Import({MethodSecurityConfig.class})
-public class IndexTest {
+class IndexTest {
 
     @Autowired
     private MockMvc mvc;

@@ -12,7 +12,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class StudentServiceTest {
+class StudentServiceTest {
 
     private final StudentRepository studentRepository = mock(StudentRepository.class);
     private final StudentService studentService = new StudentServiceImpl(studentRepository);

@@ -11,7 +11,6 @@ import org.springframework.security.test.context.support.WithSecurityContext;
  * Sie kann auf Methoden und Klassen angewendet werden und ermöglicht es, simuliert OAuth2-Benutzerdaten bereitzustellen.
  * Die Annotation wird mit einer benutzerdefinierten Factory {@link WithOAuth2UserSecurityContextFactory} kombiniert,
  * um den SecurityContext für die Tests zu setzen.
- *
  * Mögliche Attribute:
  * - id: Die ID des Benutzers (Standard: 666666).
  * - login: Der Benutzername des Mock-OAuth2-Benutzers (Standard: "username").

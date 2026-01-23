@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-public class KorrektorServiceTest {
+class KorrektorServiceTest {
 
     private final KorrektorRepository korrektorRepository = mock(KorrektorRepository.class);
     private final KorrektorService service = new KorrektorServiceImpl(korrektorRepository);

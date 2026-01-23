@@ -19,16 +19,13 @@ import org.springframework.util.Assert;
  * Diese Klasse ist eine benutzerdefinierte Factory, die den SecurityContext für Tests mit einer simulierten
  * OAuth2-Benutzeridentität erstellt. Sie wird in Kombination mit der Annotation {@link WithMockOAuth2User} verwendet,
  * um in Tests eine gefälschte OAuth2-Benutzersitzung zu simulieren.
- *
  * Die Methode createSecurityContext erstellt den SecurityContext basierend auf den Attributen der {@link WithMockOAuth2User}-Annotation.
  * Dabei werden die angegebenen Rollen und Berechtigungen (authorities) in eine List von GrantedAuthority umgewandelt.
  * Wenn keine Berechtigungen angegeben sind, werden die Rollen zu Berechtigungen umgewandelt, und es wird sichergestellt,
  * dass die Rollen nicht mit "ROLE_" beginnen.
- *
  * Mögliche Fehler:
  * - Wenn sowohl Rollen als auch Berechtigungen angegeben sind, wird eine {@link IllegalStateException} geworfen, es sei denn,
  *   die Rollen sind auf "USER" gesetzt.
- *
  * Der resultierende SecurityContext enthält ein {@link OAuth2AuthenticationToken}, das die Information des Benutzers
  * sowie die Berechtigungen und die Client-Registrierung enthält.
  */

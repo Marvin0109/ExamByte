@@ -13,7 +13,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ProfessorDTOMapperTest {
+class ProfessorDTOMapperTest {
 
     private final ProfessorDTOMapper mapper = new ProfessorDTOMapperImpl();
 

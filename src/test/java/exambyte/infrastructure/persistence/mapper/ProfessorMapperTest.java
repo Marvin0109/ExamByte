@@ -10,13 +10,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ProfessorMapperTest {
+class ProfessorMapperTest {
 
     private final ProfessorMapper professorMapper = new ProfessorMapperImpl();
 
     @Test
     @DisplayName("ProfessorMapper test 'toEntity'")
-    public void test_01() {
+    void test_01() {
         // Arrange
         Professor professor = new Professor.ProfessorBuilder()
                 .id(null)
@@ -37,7 +37,7 @@ public class ProfessorMapperTest {
 
     @Test
     @DisplayName("ProfessorMapper test 'toDomain'")
-    public void test_02() {
+    void test_02() {
         // Arrange
         ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
                 .id(null)

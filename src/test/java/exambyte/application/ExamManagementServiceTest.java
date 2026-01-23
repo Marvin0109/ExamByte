@@ -32,7 +32,6 @@ class ExamManagementServiceTest {
     private FrageService frageService;
     private StudentService studentService;
     private ProfessorService professorService;
-    private KorrektorService korrektorService;
     private KorrekteAntwortenService korrekteAntwortenService;
     private ExamManagementService examManagementService;
     private ReviewService reviewService;
@@ -41,7 +40,6 @@ class ExamManagementServiceTest {
     private ExamDTOMapper examDTOMapper;
     private FrageDTOMapper frageDTOMapper;
     private AntwortDTOMapper antwortDTOMapper;
-    private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private ReviewDTOMapper reviewDTOMapper;
     private StudentDTOMapper studentDTOMapper;
 
@@ -52,7 +50,7 @@ class ExamManagementServiceTest {
         frageService = mock(FrageServiceImpl.class);
         studentService = mock(StudentServiceImpl.class);
         professorService = mock(ProfessorServiceImpl.class);
-        korrektorService = mock(KorrektorServiceImpl.class);
+        KorrektorService korrektorService = mock(KorrektorServiceImpl.class);
         korrekteAntwortenService = mock(KorrekteAntwortenServiceImpl.class);
         reviewService = mock(ReviewServiceImpl.class);
         automaticReviewService = mock(AutomaticReviewServiceImpl.class);
@@ -61,7 +59,7 @@ class ExamManagementServiceTest {
         frageDTOMapper = mock(FrageDTOMapperImpl.class);
         antwortDTOMapper = mock(AntwortDTOMapperImpl.class);
         reviewDTOMapper = mock(ReviewDTOMapperImpl.class);
-        korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
+        KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
         studentDTOMapper = mock(StudentDTOMapperImpl.class);
 
         examManagementService = new ExamManagementServiceImpl(

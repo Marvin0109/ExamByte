@@ -11,13 +11,13 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AntwortMapperTest {
+class AntwortMapperTest {
 
     private final AntwortMapper mapper = new AntwortMapperImpl();
 
     @Test
     @DisplayName("AntwortMapper test 'toEntity'")
-    public void test_01() {
+    void test_01() {
         // Arrange
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();
@@ -49,7 +49,7 @@ public class AntwortMapperTest {
 
     @Test
     @DisplayName("AntwortMapper test 'toDomain'")
-    public void test_02() {
+    void test_02() {
         // Arrange
         UUID fachId = UUID.randomUUID();
         UUID frageFachId = UUID.randomUUID();

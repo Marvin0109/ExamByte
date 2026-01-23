@@ -9,11 +9,11 @@ import java.util.UUID;
 import static org.hibernate.validator.internal.util.Contracts.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-public class ReviewTest {
+class ReviewTest {
 
     @Test
     @DisplayName("ReviewBuilder Test")
-    public void test_01() {
+    void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
         UUID antwortFachId = UUID.randomUUID();
@@ -40,7 +40,7 @@ public class ReviewTest {
 
     @Test
     @DisplayName("ReviewBuilder Test mit null Feldern")
-    public void test_02() {
+    void test_02() {
         Long id = 1L;
         UUID antwortFachId = UUID.randomUUID();
         UUID korrektorId = UUID.randomUUID();
