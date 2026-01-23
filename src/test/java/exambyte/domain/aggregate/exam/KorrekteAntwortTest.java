@@ -9,35 +9,35 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KorrekteAntwortTest {
+class KorrekteAntwortTest {
 
     @Test
     @DisplayName("KorrekteAntwortenBuilder Test")
-    public void test_01() {
+    void test_01() {
         Long id = 1L;
         UUID fachId = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
-        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
+        String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .id(id)
                 .fachId(fachId)
                 .frageFachId(frageFachID)
                 .loesungen(korrekteAntworten)
-                .antwortOptionen(antwort_optionen)
+                .antwortOptionen(antwortOptionen)
                 .build();
 
         assertEquals(id, domain.getId());
         assertEquals(fachId, domain.getFachId());
         assertEquals(frageFachID, domain.getFrageFachId());
         assertThat(domain.getLoesungen()).contains(korrekteAntworten);
-        assertThat(domain.getAntwortOptionen()).contains(antwort_optionen);
+        assertThat(domain.getAntwortOptionen()).contains(antwortOptionen);
     }
 
     @Test
     @DisplayName("KorrekteAntwortenBuilder mit null Werte (FachID wird bei null generiert)")
-    public void test_02() {
+    void test_02() {
         KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .build();
 

@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class KorrekteAntwortDTOMapperTest {
+class KorrekteAntwortDTOMapperTest {
 
     private KorrekteAntwortenDTOMapper mapper;
 
@@ -27,13 +27,13 @@ public class KorrekteAntwortDTOMapperTest {
         UUID fachID = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
-        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
+        String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
                 .fachId(fachID)
                 .frageFachId(frageFachID)
                 .loesungen(korrekteAntworten)
-                .antwortOptionen(antwort_optionen)
+                .antwortOptionen(antwortOptionen)
                 .build();
 
         // Act
@@ -43,7 +43,7 @@ public class KorrekteAntwortDTOMapperTest {
         assertThat(dto.getFachID()).isEqualTo(fachID);
         assertThat(dto.getFrageFachID()).isEqualTo(frageFachID);
         assertThat(dto.getAntworten()).contains(korrekteAntworten);
-        assertThat(dto.getAntwortOptionen()).contains(antwort_optionen);
+        assertThat(dto.getAntwortOptionen()).contains(antwortOptionen);
     }
 
     @Test
@@ -53,13 +53,13 @@ public class KorrekteAntwortDTOMapperTest {
         UUID fachID = UUID.randomUUID();
         UUID frageFachID = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
-        String antwort_optionen = "Lösung 1\nLösung 2\nLösung 3";
+        String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null,
                 fachID,
                 frageFachID,
                 korrekteAntworten,
-                antwort_optionen);
+                antwortOptionen);
 
         // Act
         KorrekteAntworten result = mapper.toDomain(dto);
@@ -68,6 +68,6 @@ public class KorrekteAntwortDTOMapperTest {
         assertThat(result.getFachId()).isEqualTo(fachID);
         assertThat(result.getFrageFachId()).isEqualTo(frageFachID);
         assertThat(result.getLoesungen()).contains(korrekteAntworten);
-        assertThat(result.getAntwortOptionen()).contains(antwort_optionen);
+        assertThat(result.getAntwortOptionen()).contains(antwortOptionen);
     }
 }
