@@ -43,7 +43,7 @@ public class KorrekteAntwortDTOMapperTest {
         assertThat(dto.getFachID()).isEqualTo(fachID);
         assertThat(dto.getFrageFachID()).isEqualTo(frageFachID);
         assertThat(dto.getAntworten()).contains(korrekteAntworten);
-        assertThat(dto.getAntwort_optionen()).contains(antwort_optionen);
+        assertThat(dto.getAntwortOptionen()).contains(antwort_optionen);
     }
 
     @Test

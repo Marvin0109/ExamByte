@@ -7,15 +7,15 @@ public class KorrekteAntwortenDTO {
     private final Long id;
     private final UUID fachID;
     private final String antworten;
-    private final String antwort_optionen;
+    private final String antwortOptionen;
     private UUID frageFachID;
 
-    public KorrekteAntwortenDTO(Long id, UUID fachID, UUID frageFachID, String antworten, String antwort_optionen) {
+    public KorrekteAntwortenDTO(Long id, UUID fachID, UUID frageFachID, String antworten, String antwortOptionen) {
         this.id = id;
         this.fachID = fachID;
         this.antworten = antworten;
         this.frageFachID = frageFachID;
-        this.antwort_optionen = antwort_optionen;
+        this.antwortOptionen = antwortOptionen;
     }
 
     public void setFrageFachID(UUID frageFachID) {
@@ -34,7 +34,7 @@ public class KorrekteAntwortenDTO {
         return antworten;
     }
 
-    public String getAntwort_optionen() { return antwort_optionen; }
+    public String getAntwortOptionen() { return antwortOptionen; }
 
     public Long getId() {
         return id;
