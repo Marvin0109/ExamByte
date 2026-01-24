@@ -515,3 +515,10 @@
 (s. https://github.com/spring-projects/spring-boot/issues/2057)
 - Docker Volume eingeführt, kein externer, lokaler Data Ordner mehr
 - README aktualisiert (Installationsanweisungen ergänzt)
+
+---
+
+### 24.01.2026
+**Bereich**: UX / Authentifizierung
+- Feature hinzugefügt, wo man seine Rolle sich aussuchen kann
+- Jeder angemeldeter User erhält die Rolle `STUDENT` als Standard Rolle
