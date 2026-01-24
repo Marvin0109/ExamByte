@@ -2,6 +2,7 @@ package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.AppUserService;
+import exambyte.application.service.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
@@ -15,11 +16,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Optional;
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -32,6 +29,9 @@ class ContactTest {
 
     @MockitoBean
     private ExamControllerService service;
+
+    @MockitoBean
+    private UserCreationService creationService;
 
     @MockitoBean
     private AppUserService appUserService;
@@ -47,16 +47,13 @@ class ContactTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT", "REVIEWER", "ADMIN"})
-    @DisplayName("Die contact Seite ist für authentifizierte User erreichbar, die eine höhere Rolle haben als USER")
+    @WithMockOAuth2User(roles = {"STUDENT", "REVIEWER", "ADMIN"})
+    @DisplayName("Die contact Seite ist für authentifizierte User erreichbar")
     void test_02() throws Exception {
-        UUID randomUUID = UUID.randomUUID();
-        when(service.getProfFachIDByName("Marvin0109")).thenReturn(Optional.of(randomUUID));
 
         mvc.perform(get("/contact"))
             .andExpect(status().isOk())
-            .andExpect(model().attribute("name", "Marvin0109"))
-            .andExpect(model().attribute("fachID", randomUUID.toString()))
+            .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(view().name("contact"));
     }

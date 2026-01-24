@@ -1,6 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
+import exambyte.application.service.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.application.service.AppUserService;
@@ -31,6 +32,9 @@ class SettingsTest {
     private ExamControllerService service;
 
     @MockitoBean
+    private UserCreationService creationService;
+
+    @MockitoBean
     private AppUserService appUserService;
 
     @Test
@@ -44,7 +48,7 @@ class SettingsTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT, REVIEWER, ADMIN"})
+    @WithMockOAuth2User(roles = {"STUDENT", "REVIEWER", "ADMIN"})
     @DisplayName("Die settings Seite ist für jeden angemeldeten User zugänglich")
     void test_02() throws Exception {
         mvc.perform(get("/settings"))
@@ -54,9 +58,19 @@ class SettingsTest {
     }
 
     @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Die settings Seite ist für jeden Studenten zugänglich")
+    void test_03() throws Exception {
+        mvc.perform(get("/settings"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("currentPath"))
+                .andExpect(view().name("settings"));
+    }
+
+    @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
     @DisplayName("Das löschen der Daten ist erfolgreich")
-    void test_03() throws Exception {
+    void test_04() throws Exception {
         mvc.perform(post("/settings/reset")
             .with(csrf()))
             .andExpect(status().is3xxRedirection())

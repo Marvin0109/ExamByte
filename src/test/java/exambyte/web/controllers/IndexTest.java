@@ -1,6 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
+import exambyte.application.service.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,9 @@ class IndexTest {
 
     @MockitoBean
     private ExamControllerService service;
+
+    @MockitoBean
+    private UserCreationService creationService;
 
     @Test
     @DisplayName("Startseite ist öffentlich erreichbar")
