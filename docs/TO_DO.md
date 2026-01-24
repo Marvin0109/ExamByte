@@ -1,7 +1,7 @@
 # TODO für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 23.01.2026
+> **aktualisiert am:** 24.01.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
@@ -17,18 +17,19 @@
 - **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
   - [ ] **CSV-Export**: Formular exportieren
   - [ ] **Testantwort-Einsicht**: Einsicht in Testergebnisse für Admins/Lehrkräfte
+  - [ ] **HTML-Inhalte**: Überarbeiten hinsichtlich Benutzerfreundlichkeit
+  - [ ] **Accessiblity**: Überprüfung auf Accessibility
 
 - **Dokumentation**
   - [X] **arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
  
 - **Authentifizierung**
-  - [ ] **Rollenverteilung**: Erweiterung des Rollenmodells um dynamische Rollenaktivierung (RBAC)
+  - [X] **Rollenverteilung**: Erweiterung des Rollenmodells um dynamische Rollenaktivierung (RBAC)
 
 ---
 
 ### Priorität: Mittel
 - [ ] **Java-Konventionen**: Sicherstellung von Codekonventionen (Styleguide)
-- [ ] **Accessiblity**: Überprüfung auf Accessibility
 - [X] **Codequalität**: Komponenten mithilfe von SonarQube analysiert 
 und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 
@@ -43,10 +44,12 @@ und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 ## 2. Nächste Schritte (Empfohlene Reihenfolge)
 1. [X] arc42-Doc aktualisieren
 2. [X] Code Refactoring mithilfe von SonarQube
-3. [ ] Logiktests vervollständigen
-4. [ ] Korrektur der Freitextantworten
-5. [ ] Zulassungslogik
-6. [ ] Testdurchlauf mit alten Antworten
-7. [ ] Einsicht auf Testergebnisse
-8. [ ] CSV-Export einführen
-9. [ ] Rollenverteilungs-Feature
+3. [X] Rollenverteilungs-Feature
+4. [ ] HTML-Inhalte Überarbeiten hinsichtlich Benutzerfreundlichkeit
+5. [ ] **Accessiblity**: Überprüfung auf Accessibility
+6. [ ] Logiktests vervollständigen
+7. [ ] Korrektur der Freitextantworten
+8. [ ] Zulassungslogik
+9. [ ] Testdurchlauf mit alten Antworten
+10. [ ] Einsicht auf Testergebnisse
+11. [ ] CSV-Export einführen
