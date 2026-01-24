@@ -519,6 +519,8 @@
 ---
 
 ### 24.01.2026
-**Bereich**: UX / Authentifizierung
+**Bereich**: UX / Authentifizierung / Test / Architektur
 - Feature hinzugefügt, wo man seine Rolle sich aussuchen kann
 - Jeder angemeldeter User erhält die Rolle `STUDENT` als Standard Rolle
+- Onion-Architektur aufrechterhalten
+- Index, Contact und Setting Test korrigiert
