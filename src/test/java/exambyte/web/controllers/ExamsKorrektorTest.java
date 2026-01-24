@@ -1,9 +1,9 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.service.AppUserService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.infrastructure.service.*;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;

@@ -1,8 +1,8 @@
 package exambyte.infrastructure.service;
 
+import exambyte.application.service.AppUserService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -28,10 +28,10 @@ import java.util.Set;
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
-  private final UserCreationService userCreationService;
+  private final UserCreationServiceImpl userCreationService;
   Logger logger = Logger.getLogger(getClass().getName());
 
-  public AppUserServiceImpl(UserCreationService userCreationService) {
+  public AppUserServiceImpl(UserCreationServiceImpl userCreationService) {
     this.userCreationService = userCreationService;
   }
 

@@ -1,5 +1,6 @@
 package exambyte.infrastructure.service;
 
+import exambyte.application.service.UserCreationService;
 import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Student;
@@ -32,7 +33,7 @@ class UserCreationServiceTest {
         studentService = mock(StudentServiceImpl.class);
         korrektorService = mock(KorrektorServiceImpl.class);
         professorService = mock(ProfessorServiceImpl.class);
-        userCreationService = new UserCreationService(studentService,
+        userCreationService = new UserCreationServiceImpl(studentService,
                                                       korrektorService,
                                                       professorService);
     }

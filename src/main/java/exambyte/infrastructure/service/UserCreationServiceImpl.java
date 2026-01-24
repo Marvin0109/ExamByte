@@ -1,26 +1,26 @@
 package exambyte.infrastructure.service;
 
+import exambyte.application.service.UserCreationService;
 import exambyte.domain.service.KorrektorService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserCreationService {
+public class UserCreationServiceImpl implements UserCreationService {
 
     private final StudentService studentService;
     private final KorrektorService korrektorService;
     private final ProfessorService professorService;
 
-    public UserCreationService(StudentService studentService,
-                               KorrektorService korrektorService,
-                               ProfessorService professorService) {
+    public UserCreationServiceImpl(StudentService studentService,
+                                   KorrektorService korrektorService,
+                                   ProfessorService professorService) {
         this.studentService = studentService;
         this.korrektorService = korrektorService;
         this.professorService = professorService;
@@ -38,7 +38,6 @@ public class UserCreationService {
         return professorService.getProfessorByName(username).isPresent();
     }
 
-    @Transactional
     public void createUser(OAuth2User user, Set<GrantedAuthority> authorities) {
         String name = user.getAttribute("login");
         Set<Role> roles = extractRoles(authorities);

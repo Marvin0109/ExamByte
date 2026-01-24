@@ -1,7 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.infrastructure.service.UserCreationService;
+import exambyte.application.service.UserCreationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -15,9 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
 
 @Controller
 public class WebController {
