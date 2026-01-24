@@ -1,3 +1,5 @@
+<div style="height: 100px;"></div>
+
 <nav class="navbar navbar-expand-md navbar-dark fixed-bottom bg-dark" xmlns:th="http://www.w3.org/1999/xhtml">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -15,7 +17,7 @@
       </li>
 
       <li class="nav-item" th:classappend="${currentPath == '/settings'} ? 'active' : ''"
-          th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+          th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}">
         <a class="nav-link" href="/settings">
           Settings
           <span class="sr-only" th:if="${currentPath == '/settings'}">(current)</span>

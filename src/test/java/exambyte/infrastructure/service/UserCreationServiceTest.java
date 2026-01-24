@@ -34,8 +34,7 @@ class UserCreationServiceTest {
         professorService = mock(ProfessorServiceImpl.class);
         userCreationService = new UserCreationService(studentService,
                                                       korrektorService,
-                                                      professorService,
-                                                      mock(UserCreationService.class));
+                                                      professorService);
     }
 
     @Test

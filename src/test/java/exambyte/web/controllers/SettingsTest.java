@@ -12,7 +12,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,16 +36,18 @@ class SettingsTest {
     private AppUserService appUserService;
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"USER", "STUDENT", "REVIEWER"})
-    @DisplayName("Die settings Seite ist für jeden außer dem Admin nicht zugänglich")
+    @DisplayName("Die settings Seite nicht angemeldete User nicht zugänglich")
     void test_01() throws Exception {
-        mvc.perform(get("/settings"))
-            .andExpect(status().isForbidden());
+        MvcResult mvcResult = mvc.perform(get("/settings"))
+                .andExpect(status().is3xxRedirection())
+                .andReturn();
+        assertThat(mvcResult.getResponse().getRedirectedUrl())
+                .contains("oauth2/authorization/github");
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
-    @DisplayName("Die settings Seite ist für Admins zugänglich")
+    @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT, REVIEWER, ADMIN"})
+    @DisplayName("Die settings Seite ist für jeden angemeldeten User zugänglich")
     void test_02() throws Exception {
         mvc.perform(get("/settings"))
             .andExpect(status().isOk())
@@ -60,4 +66,6 @@ class SettingsTest {
             .andExpect(flash().attribute("success", true))
             .andExpect(redirectedUrl("/settings"));
     }
+
+    // TODO: settings/role Test
 }

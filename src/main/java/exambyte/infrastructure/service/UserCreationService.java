@@ -3,14 +3,13 @@ package exambyte.infrastructure.service;
 import exambyte.domain.service.KorrektorService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserCreationService {
@@ -18,16 +17,13 @@ public class UserCreationService {
     private final StudentService studentService;
     private final KorrektorService korrektorService;
     private final ProfessorService professorService;
-    private final UserCreationService self;
 
     public UserCreationService(StudentService studentService,
                                KorrektorService korrektorService,
-                               ProfessorService professorService,
-                               @Lazy UserCreationService self) {
+                               ProfessorService professorService) {
         this.studentService = studentService;
         this.korrektorService = korrektorService;
         this.professorService = professorService;
-        this.self = self;
     }
 
     public boolean checkStudent(String username) {
@@ -45,16 +41,37 @@ public class UserCreationService {
     @Transactional
     public void createUser(OAuth2User user, Set<GrantedAuthority> authorities) {
         String name = user.getAttribute("login");
+        Set<Role> roles = extractRoles(authorities);
 
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            createProfessor(name);
+        for (Role role : roles) {
+            switch (role) {
+                case Role.ADMIN:
+                    if (!checkProfessor(name)) {
+                        createProfessor(name);
+                    }
+                    break;
+                case Role.REVIEWER:
+                    if (!checkKorrektor(name)) {
+                        createKorrektor(name);
+                    }
+                    break;
+                case Role.STUDENT:
+                    if (!checkStudent(name)) {
+                        createStudent(name);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_REVIEWER"))) {
-            createKorrektor(name);
-        }
-        if (authorities.contains(new SimpleGrantedAuthority("ROLE_STUDENT"))) {
-            createStudent(name);
-        }
+    }
+
+    private Set<Role> extractRoles(Set<GrantedAuthority> authorities) {
+        return authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(a -> a.startsWith("ROLE_"))
+                .map(a -> Role.valueOf(a.substring(5)))
+                .collect(Collectors.toSet());
     }
 
     private void createKorrektor(String name) {

@@ -31,8 +31,11 @@
         <span th:text="${message}"></span>
     </div>
 
+    <h2>Willkommen <span th:text="${name}">Name</span>!</h2>
+    <p>Ihre aktuelle Rolle: <span th:text="${role}">Rolle</span></p>
+
     <div class="container">
-        <div class="row mb-2">
+        <div class="row mb-2" th:if="${role} == 'Admin'">
             <div class="col-3 fw-bold">Daten</div>
             <div class="col-9">
                 <form method="post" th:action="@{/settings/reset}">
@@ -41,18 +44,25 @@
                 </form>
             </div>
         </div>
+    </div>
 
+    <div class="container">
         <div class="row mb-2">
             <div class="col-3 fw-bold">Rolle wechseln</div>
             <div class="col-9">
-                Feature hier.
-            </div>
-        </div>
+                <form method="post" th:action="@{/settings/role}">
+                    <button name="role" class="btn btn-secondary"
+                            value="student"
+                            th:if="${role != 'Student'}">Student</button>
 
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">Mails löschen</div>
-            <div class="col-9">
-                Feature hier.
+                    <button name="role" class="btn btn-secondary"
+                            value="reviewer"
+                            th:if="${role != 'Reviewer'}">Reviewer</button>
+
+                    <button name="role" class="btn btn-secondary"
+                            value="admin"
+                            th:if="${role != 'Admin'}">Admin</button>
+                </form>
             </div>
         </div>
     </div>

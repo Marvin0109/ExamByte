@@ -2,6 +2,7 @@ package exambyte.infrastructure.service;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -28,7 +29,6 @@ import java.util.Set;
 public class AppUserServiceImpl implements AppUserService {
 
   private final UserCreationService userCreationService;
-  private static final String ADMIN_MARVIN = "Marvin0109";
   Logger logger = Logger.getLogger(getClass().getName());
 
   public AppUserServiceImpl(UserCreationService userCreationService) {
@@ -46,46 +46,23 @@ public class AppUserServiceImpl implements AppUserService {
    */
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-    logger.info("User Service called");
-    OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-    OAuth2User originalUser = delegate.loadUser(userRequest);
-    return addRole(originalUser);
+        logger.info("User Service called");
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+        OAuth2User originalUser = delegate.loadUser(userRequest);
+        return addDefaultRole(originalUser);
   }
 
-  public synchronized OAuth2User addRole(OAuth2User originalUser) {
-      Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
-      String login = originalUser.getAttribute("login");
-      boolean found = false;
-
-    // Es wird nach bestehenden Benutzer in der DB gesucht
-    if (userCreationService.checkProfessor(login)) {
-      authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-      found = true;
-    }
-    if (userCreationService.checkKorrektor(login)) {
-      authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
-      found = true;
-    }
-    if (userCreationService.checkStudent(login)) {
-      authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
-      found = true;
-    }
-
-    // Wenn der Benutzer noch nicht existiert, erstelle ihn mit einer passenden Rolle
-    if (!found) {
-      if (ADMIN_MARVIN.equals(login) || "muz70wuc".equals(login)) {
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-      }
-      if (ADMIN_MARVIN.equals(login)) {
-        authorities.add(new SimpleGrantedAuthority("ROLE_REVIEWER"));
-      }
-      if (ADMIN_MARVIN.equals(login)) {
+  public OAuth2User addDefaultRole(OAuth2User originalUser) {
+        logger.info("Adding default role");
+        Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
+        String login = originalUser.getAttribute("login");
         authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
-      }
-      // Neuen Benutzer in die DB speichern
-      userCreationService.createUser(originalUser, authorities);
-    }
+        boolean found = userCreationService.checkStudent(login);
 
-    return new DefaultOAuth2User(authorities, originalUser.getAttributes(), "id");
+        if (!found) {
+              userCreationService.createUser(originalUser, authorities);
+        }
+
+        return new DefaultOAuth2User(authorities, originalUser.getAttributes(), "id");
   }
 }
