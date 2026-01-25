@@ -524,3 +524,9 @@
 - Jeder angemeldeter User erhält die Rolle `STUDENT` als Standard Rolle
 - Onion-Architektur aufrechterhalten
 - Index, Contact und Setting Test korrigiert
+
+---
+
+### 25.01.2026
+**Bereich**: Dokumentation
+- Testcontainer Troubleshooting in `README` hinzugefügt

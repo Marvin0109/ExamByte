@@ -49,3 +49,18 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 ## Dokumentation
 
 Die ausführliche Architektur-Dokumentation finden Sie [hier](docs/arc42.md).
+
+## Troubleshooting
+
+### Testcontainer-Tests funktionieren nicht
+
+Temporärer Workaround:
+```
+$ echo api.version=1.44 >> ~/.docker-java.properties
+```
+
+Quellen:
+
+- [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
+- [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
+
