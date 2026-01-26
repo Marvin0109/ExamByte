@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 22.01.2026
+>**aktualisiert am:** 26.01.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -530,3 +530,10 @@
 ### 25.01.2026
 **Bereich**: Dokumentation
 - Testcontainer Troubleshooting in `README` hinzugefügt
+
+---
+
+### 26.01.2026
+**Bereich**: Ressourcen / Dokumentation
+- Code Statistik aktualisiert (`cloc`)
+- Testabdeckungsstatistik aktualisiert
