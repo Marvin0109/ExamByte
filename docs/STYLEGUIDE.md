@@ -2,7 +2,7 @@
 
 >**Autor**: Marvin0109,
 >**erstellt am**: 08.01.2025,
->**aktualisiert am**: 21.01.2026
+>**aktualisiert am**: 26.01.2026
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -150,7 +150,7 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
    - Img: Verwende Bilder für bessere Nachvollziehbarkeit
    - GitHub wird ein Ticket erstellen, mit dem man bei Commits referenzieren kann z.B.: #1
 
-2. **Committe zuert den Bug**
+2. **Committe zuerst den Bug**
    - Arbeite am Code und speichere deine Arbeit mit git add
 
 3. **Referenziere dem Issue**
@@ -167,7 +167,7 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 - Wir verwenden **JUnit**, **spring-security-test**, **ArchUnit**, **spring-boot-starter-test** und **Testcontainers**.
 
 ### Namenskonventionen für Tests
-- Testmethoden werden nach den zu Testenden Methoden benannt.
+- Testmethoden werden nach den zu testenden Methoden benannt.
   - Beispiel: 
   ```java
   void multiplicationSuccess_03() { ... }
@@ -317,7 +317,7 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 - Alle Ressourcen im Ordner `resources.static.public` ablegen.
 
 ### Text
-- Textfiller: https://www.loremipsum.de/
+- Textgenerator: https://www.loremipsum.de/
 
 ## Fun Facts
 Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
@@ -325,63 +325,55 @@ Hier die Statistik vom 20.04.2025:
 ```
 $ cloc .
 
-github.com/AlDanial/cloc v 2.06  T=0.45 s (1564.1 files/s, 135535.3 lines/s)
+github.com/AlDanial/cloc v 1.98  T=1.25 s (475.7 files/s, 46163.7 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-HTML                           406           1592             88          16263
-CSS                             13           1310             53          10706
-Java                           189           2072            727           8268
-JavaScript                       8           1934           2167           7998
-XML                             68             21              0           6258
-Markdown                         6            205              2            733
-Text                             4             20              0            223
+HTML                           302           1230             83          13250
+CSS                             12           1310             53          10676
+JavaScript                       7           1933           2167           7988
+Java                           188           2116            638           7961
+XML                             64             21              0           6413
+Markdown                         6            293              2            921
+SQL                              2             14              0            112
 Bourne Shell                     1             28            118            105
-YAML                             4             13              0             98
 Maven                            1              9              9             88
-SQL                              1              7              0             74
+Gradle                           2             21             24             80
+YAML                             3              8              0             73
 DOS Batch                        1             21              2             71
-Gradle                           2             20             24             70
-PlantUML                         2              3              1             25
+Text                             3             20              0             34
+PlantUML                         2              5              1             20
 Properties                       3              0              1             11
 -------------------------------------------------------------------------------
-SUM:                           709           7255           3192          50991
+SUM:                           597           7029           3098          47803
 -------------------------------------------------------------------------------
 
 $ cloc src/main/java/
 
-  133 text files.
-     133 unique files.                                          
-       0 files ignored.
-
-github.com/AlDanial/cloc v 2.06  T=0.06 s (2286.6 files/s, 97173.7 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.17 s (814.5 files/s, 32984.2 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           133           1158            382           4112
+Java                           137           1193            321           4034
 -------------------------------------------------------------------------------
-SUM:                           133           1158            382           4112
+SUM:                           137           1193            321           4034
 -------------------------------------------------------------------------------
 
 $ cloc src/test/java/
 
-57 text files.
-      56 unique files.                              
-       1 file ignored.
-
-github.com/AlDanial/cloc v 2.06  T=0.05 s (1093.5 files/s, 105734.8 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.11 s (478.7 files/s, 48500.9 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            56            914            345           4156
+Java                            51            923            317           3927
 -------------------------------------------------------------------------------
-SUM:                            56            914            345           4156
+SUM:                            51            923            317           3927
 -------------------------------------------------------------------------------
 ```
 
 ## JacocoTestReport
 
-![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-23-09-2025.jpg)
+![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-26-01-2026.jpg)
 
 ## Schlussbemerkung
 - Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeiteten schließlich nur noch ich als alleiniger Entwickler weiter.
