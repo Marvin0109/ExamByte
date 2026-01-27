@@ -80,9 +80,4 @@ public class ExamForm {
     public void setFachId(UUID fachId) {
         this.fachId = fachId;
     }
-
-    // Validierungsmethode
-    public boolean isValid() {
-        return start != null && end != null && result != null && start.isBefore(end) && end.isBefore(result);
-    }
 }

@@ -283,4 +283,130 @@ class AutomaticReviewServiceTest {
                 .extracting(ReviewDTO::punkte)
                 .containsExactly(1);
     }
+
+    @Test
+    @DisplayName("SC: StudentAntwort nicht existierend")
+    void automatischeReviewSC_studentAntwortNotFound() {
+        // Arrange
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Fragetext 1",
+                3,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC);
+
+        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
+                UUID.randomUUID(),
+                "Antwort 2\nAntwort 4\nAntwort 5",
+                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
+                frage.fachId());
+
+        // Act
+        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
+                List.of(frage),
+                List.of(),
+                List.of(korrekteAntworten),
+                studentUUID,
+                service
+        );
+
+        // Assert
+        assertThat(reviews).isEmpty();
+    }
+
+    @Test
+    @DisplayName("SC: KorrekteAntwort nicht existierend")
+    void automatischeReviewSC_korrekteAntwortNotFound() {
+        // Arrange
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Fragetext 1",
+                3,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC);
+
+        AntwortDTO antwort = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 2\nAntwort 3\nAntwort 4",
+                frage.fachId(),
+                studentUUID,
+                antwortTime);
+
+        // Act
+        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
+                List.of(frage),
+                List.of(antwort),
+                List.of(),
+                studentUUID,
+                service
+        );
+
+        // Assert
+        assertThat(reviews).isEmpty();
+    }
+
+    @Test
+    @DisplayName("MC: StudentAntwort nicht existierend")
+    void automatischeReviewMC_studentAntwortNotFound() {
+        // Arrange
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Fragetext 1",
+                3,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC);
+
+        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
+                UUID.randomUUID(),
+                "Antwort 2\nAntwort 4\nAntwort 5",
+                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
+                frage.fachId());
+
+        // Act
+        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+                List.of(frage),
+                List.of(),
+                List.of(korrekteAntworten),
+                studentUUID,
+                service
+        );
+
+        // Assert
+        assertThat(reviews).isEmpty();
+    }
+
+    @Test
+    @DisplayName("MC: KorrekteAntwort nicht existierend")
+    void automatischeReviewMC_korrekteAntwortNotFound() {
+        // Arrange
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Fragetext 1",
+                3,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC);
+
+        AntwortDTO antwort = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 2\nAntwort 3\nAntwort 4",
+                frage.fachId(),
+                studentUUID,
+                antwortTime);
+
+        // Act
+        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+                List.of(frage),
+                List.of(antwort),
+                List.of(),
+                studentUUID,
+                service
+        );
+
+        // Assert
+        assertThat(reviews).isEmpty();
+    }
 }

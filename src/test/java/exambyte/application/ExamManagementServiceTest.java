@@ -812,6 +812,110 @@ class ExamManagementServiceTest {
         assertThat(attempt.prozent()).isEqualTo(0.0);
     }
 
+    @Test
+    @DisplayName("Antworten sind korrigiert worden")
+    void isSubmitBeingReviewed_true() {
+        // Arrange
+        Frage frage = new Frage.FrageBuilder()
+                .fachId(UUID.randomUUID())
+                .frageText("Frage")
+                .examUUID(EXAM_UUID)
+                .type(QuestionType.FREITEXT)
+                .maxPunkte(1)
+                .professorUUID(PROF_UUID)
+                .build();
+
+        FrageDTO frageDTO = new FrageDTO(
+                frage.getFachId(),
+                "Frage",
+                1,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.FREITEXT
+        );
+
+        List<AntwortDTO> antworten = List.of(
+                new AntwortDTO(UUID.randomUUID(), "A1", frage.getFachId(), STUDENT_UUID, TIME_VAR)
+        );
+
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .fachId(antworten.getFirst().fachId())
+                .antwortText("A1")
+                .frageFachId(frage.getFachId())
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
+                .build();
+
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
+        when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
+
+        when(antwortService.findByFrageFachId(frage.getFachId())).thenReturn(antwort);
+        when(antwortDTOMapper.toDTO(antwort)).thenReturn(antworten.getFirst());
+
+        for (AntwortDTO a : antworten) {
+            when(reviewService.getReviewByAntwortFachId(a.fachId())).thenReturn(mock(Review.class));
+        }
+
+        // Act
+        boolean result = examManagementService.isSubmitBeingReviewed(
+                EXAM_UUID, new StudentDTO(STUDENT_UUID,"Student"));
+
+        // Assert
+        assertTrue(result);
+    }
+
+    @Test
+    @DisplayName("Es gibt keine Korrektur zu einer Antwort")
+    void isSubmitBeingReviewed_reviewNotFound() {
+        // Arrange
+        Frage frage = new Frage.FrageBuilder()
+                .fachId(UUID.randomUUID())
+                .frageText("Frage")
+                .examUUID(EXAM_UUID)
+                .type(QuestionType.FREITEXT)
+                .maxPunkte(1)
+                .professorUUID(PROF_UUID)
+                .build();
+
+        FrageDTO frageDTO = new FrageDTO(
+                frage.getFachId(),
+                "Frage",
+                1,
+                PROF_UUID,
+                EXAM_UUID,
+                QuestionTypeDTO.FREITEXT
+        );
+
+        List<AntwortDTO> antworten = List.of(
+                new AntwortDTO(UUID.randomUUID(), "A1", frage.getFachId(), STUDENT_UUID, TIME_VAR)
+        );
+
+        Antwort antwort = new Antwort.AntwortBuilder()
+                .fachId(antworten.getFirst().fachId())
+                .antwortText("A1")
+                .frageFachId(frage.getFachId())
+                .studentFachId(STUDENT_UUID)
+                .antwortZeitpunkt(TIME_VAR)
+                .build();
+
+        when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of(frage));
+        when(frageDTOMapper.toDTO(frage)).thenReturn(frageDTO);
+
+        when(antwortService.findByFrageFachId(frage.getFachId())).thenReturn(antwort);
+        when(antwortDTOMapper.toDTO(antwort)).thenReturn(antworten.getFirst());
+
+        for (AntwortDTO a : antworten) {
+            when(reviewService.getReviewByAntwortFachId(a.fachId())).thenReturn(null);
+        }
+
+        // Act
+        boolean result = examManagementService.isSubmitBeingReviewed(
+                EXAM_UUID, new StudentDTO(STUDENT_UUID,"Student"));
+
+        // Assert
+        assertFalse(result);
+    }
+
 
     @Test
     @DisplayName("Laden des Bewertungsstatus ist erfolgreich (1 von 2 Freitext-Antworten hat Review)")
