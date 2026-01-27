@@ -1,13 +1,13 @@
 # TODO für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 24.01.2026
+> **aktualisiert am:** 27.01.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
 ### Priorität: Hoch
 - **Testing**
-  - [ ] **Logik-Tests**: Erweiterung der Logik-Tests basierend auf Jacoco Coverage Report
+  - [X] **Logik-Tests**: Erweiterung der Logik-Tests basierend auf Jacoco Coverage Report
 
 - **Use Case-Erweiterungen**
   - [ ] **Korrektur von Freitextantworten**
@@ -47,7 +47,7 @@ und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 3. [X] Rollenverteilungs-Feature
 4. [ ] HTML-Inhalte Überarbeiten hinsichtlich Benutzerfreundlichkeit
 5. [ ] **Accessiblity**: Überprüfung auf Accessibility
-6. [ ] Logiktests vervollständigen
+6. [X] Logiktests vervollständigen
 7. [ ] Korrektur der Freitextantworten
 8. [ ] Zulassungslogik
 9. [ ] Testdurchlauf mit alten Antworten
