@@ -118,7 +118,14 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     public void createQuestions(ExamForm form, UUID profFachID, UUID examUUID) {
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
-            QuestionTypeWeb frageTyp = QuestionTypeWeb.valueOf(q.getType().trim());
+            QuestionTypeWeb frageTyp;
+
+            try {
+                frageTyp = QuestionTypeWeb.valueOf(q.getType().trim());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Fehlender Fragetyp im ENUM: " + q.getType(), e);
+            }
+
             int maxPunkte = q.getPunkte();
 
             switch(frageTyp) {
@@ -139,6 +146,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                     service.createChoiceFrage(f2, correctAnswers, q.getChoices());
                     break;
                 default:
+                    throw new IllegalStateException("Unbehandelter Fragetyp: " + frageTyp);
             }
         }
     }

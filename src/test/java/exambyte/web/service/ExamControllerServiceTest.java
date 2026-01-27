@@ -3,12 +3,10 @@ package exambyte.web.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.StudentDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamManagementService;
-import exambyte.web.form.ExamForm;
-import exambyte.web.form.ExamTimeInfo;
-import exambyte.web.form.QuestionData;
-import exambyte.web.form.ReviewCoverageForm;
+import exambyte.web.form.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ExamControllerServiceTest {
@@ -150,6 +149,29 @@ class ExamControllerServiceTest {
 
         // Assert
         verify(examService).createFrage(argThat(f -> f.frageText().equals("F1")));
+        verify(examService, times(2)).createChoiceFrage(any(), any(), any());
+    }
+
+    @Test
+    @DisplayName("Erstellen der Fragen ist nicht erfolgreich, unbehandelter Fragetyp vorhanden")
+    void createQuestions_02() {
+        // Arrange
+        UUID examUUID = UUID.randomUUID();
+        UUID profFachId = UUID.randomUUID();
+
+        QuestionData q1 = new QuestionData();
+        q1.setQuestionText("F1");
+        q1.setType("OTHER_TYPE");
+        q1.setPunkte(1);
+
+        ExamForm form = new ExamForm();
+        form.setQuestions(List.of(q1));
+
+        // Act
+        assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, profFachId, examUUID));
+
+        // Assert
+        verify(examService, never()).createFrage(any());
     }
 
     @Test
@@ -251,5 +273,41 @@ class ExamControllerServiceTest {
         // Assert
         assertThat(info.timeLeft()).isTrue();
         assertThat(info.fristAnzeige()).contains("Minute");
+    }
+
+    @Test
+    @DisplayName("")
+    void getSubmitInfo_01() {
+        // Arrange
+        UUID examUUID = UUID.randomUUID();
+
+        StudentDTO student1 = new StudentDTO(UUID.randomUUID(),"Alice");
+        StudentDTO student2 = new StudentDTO(UUID.randomUUID(),"Bob");
+
+        when(examService.getStudentSubmittedExam(examUUID))
+                .thenReturn(List.of(student1, student2));
+
+        when(examService.isSubmitBeingReviewed(examUUID, student1)).thenReturn(true);
+        when(examService.isSubmitBeingReviewed(examUUID, student2)).thenReturn(false);
+
+        // Act
+        List<SubmitInfo> result = service.getSubmitInfo(examUUID);
+
+        // Assert
+        assertEquals(2, result.size());
+
+        SubmitInfo info1 = result.getFirst();
+        assertEquals("Alice", info1.name());
+        assertEquals(student1.fachId(), info1.fachId());
+        assertTrue(info1.reviewStatus());
+
+        SubmitInfo info2 = result.get(1);
+        assertEquals("Bob", info2.name());
+        assertEquals(student2.fachId(), info2.fachId());
+        assertFalse(info2.reviewStatus());
+
+        verify(examService).getStudentSubmittedExam(examUUID);
+        verify(examService).isSubmitBeingReviewed(examUUID, student1);
+        verify(examService).isSubmitBeingReviewed(examUUID, student2);
     }
 }
