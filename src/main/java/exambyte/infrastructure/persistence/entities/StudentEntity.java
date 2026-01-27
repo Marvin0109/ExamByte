@@ -50,8 +50,8 @@ public class StudentEntity {
         }
 
         public StudentEntity build() {
-            if (name == null || name.isEmpty()) {
-                throw new IllegalArgumentException("Name darf nicht null oder leer sein.");
+            if (name == null || name.isBlank()) {
+                throw new IllegalStateException("Name fehlt");
             }
             return new StudentEntity(fachId, name);
         }

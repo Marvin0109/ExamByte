@@ -72,7 +72,18 @@ public class KorrekteAntwortenEntity {
         }
 
         public KorrekteAntwortenEntity build() {
+            if (frageFachID == null) {
+                throw new IllegalStateException("Frage-Fach-ID fehlt");
+            }
+            checkStringField(richtigeAntwort, "Lösungen fehlen");
+            checkStringField(antwortOptionen, "Antwort Optionen fehlen");
             return new KorrekteAntwortenEntity(fachID, frageFachID, richtigeAntwort, antwortOptionen);
+        }
+
+        private static void checkStringField(String field, String message) {
+            if (field == null || field.isBlank()) {
+                throw new IllegalStateException(message);
+            }
         }
     }
 }

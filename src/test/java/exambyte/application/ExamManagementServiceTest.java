@@ -193,6 +193,30 @@ class ExamManagementServiceTest {
     }
 
     @Test
+    @DisplayName("Startzeit ist invalide")
+    void createExam_05() {
+        LocalDateTime end = TIME_VAR.minusHours(1);
+        LocalDateTime result = TIME_VAR.plusHours(1);
+
+        when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
+
+        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
+        assertThat(message).isEqualTo("Start-Zeitpunkt muss vor End-Zeitpunkt liegen!");
+    }
+
+    @Test
+    @DisplayName("Ergebnis-Zeitpunkt ist invalide")
+    void createExam_06() {
+        LocalDateTime end = TIME_VAR.plusHours(10);
+        LocalDateTime result = TIME_VAR.plusHours(1);
+
+        when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
+
+        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
+        assertThat(message).isEqualTo("Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!");
+    }
+
+    @Test
     void getAllExams_sortedASC() {
         // Arrange
         Exam exam1 = new Exam.ExamBuilder()

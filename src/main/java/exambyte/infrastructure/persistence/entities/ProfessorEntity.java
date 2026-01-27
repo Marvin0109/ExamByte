@@ -46,8 +46,8 @@ public class ProfessorEntity {
         }
 
         public ProfessorEntity build() {
-            if (name == null || name.isEmpty()) {
-                throw new IllegalArgumentException("Name darf nicht null oder leer sein.");
+            if (name == null || name.isBlank()) {
+                throw new IllegalStateException("Name darf nicht leer sein");
             }
             return new ProfessorEntity(fachId, name);
         }

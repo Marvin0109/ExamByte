@@ -85,6 +85,14 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         UUID profFachId = professorService.getProfessorFachIdByName(professorName)
                 .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + professorName));
 
+        if (startTime.isAfter(endTime) || startTime.isEqual(endTime)) {
+            return "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!";
+        }
+
+        if (resultTime.isBefore(endTime) || resultTime.isEqual(endTime)) {
+            return "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!";
+        }
+
         int examCount = examService.allExams().size();
 
         if (examCount >= 12) {

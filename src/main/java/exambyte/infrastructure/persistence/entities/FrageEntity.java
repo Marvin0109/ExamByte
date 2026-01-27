@@ -113,8 +113,17 @@ public class FrageEntity {
         }
 
         public FrageEntity build() {
-            if (frageText == null || maxPunkte <= 0 || professorFachId == null || examFachId == null) {
-                throw new IllegalStateException("Alle Felder müssen gesetzt werden (außer die Id).");
+            if (frageText == null || frageText.isBlank()) {
+                throw new IllegalStateException("Fragetext fehlt");
+            }
+            if (maxPunkte <= 0) {
+                throw new IllegalStateException("Punkte dürfen nicht 0 oder negativ sein");
+            }
+            if (professorFachId == null) {
+                throw new IllegalStateException("Professor-Fach-ID fehlt");
+            }
+            if (examFachId == null) {
+                throw new IllegalStateException("Exam-Fach-ID fehlt");
             }
             return new FrageEntity(fachId, frageText, maxPunkte, type, professorFachId, examFachId);
         }

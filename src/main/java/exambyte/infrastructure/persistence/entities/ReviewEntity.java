@@ -96,10 +96,21 @@ public class ReviewEntity {
         }
 
         public ReviewEntity build() {
-            if (antwortFachId == null || korrektorFachId == null || bewertung == null || bewertung.isEmpty() || punkte < 0) {
-                throw new IllegalArgumentException("Alle Felder außer die Id korrekt gesetzt werden");
+            checkFachID(antwortFachId, "Antwort-Fach-ID fehlt");
+            checkFachID(korrektorFachId, "Korrektor-Fach-ID fehlt");
+            if (bewertung == null || bewertung.isBlank()) {
+                throw new IllegalStateException("Bewertung fehlt");
+            }
+            if (punkte < 0) {
+                throw new IllegalStateException("Punkte dürfen nicht negativ sein");
             }
             return new ReviewEntity(fachId, antwortFachId, korrektorFachId, bewertung, punkte);
+        }
+
+        private static void checkFachID(UUID fachId, String message) {
+            if (fachId == null) {
+                throw new IllegalStateException(message);
+            }
         }
     }
 }

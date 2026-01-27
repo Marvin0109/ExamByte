@@ -90,8 +90,14 @@ public class AntwortEntity {
         }
 
         public AntwortEntity build() {
-            if (antwortText == null || frageFachId == null || studentFachId == null) {
-                throw new IllegalStateException("Alle erforderlichen Felder müssen gesetzt werden (exklusive der Id).");
+            if (antwortText == null || antwortText.isBlank()) {
+                throw new IllegalStateException("Antworttext fehlt");
+            }
+            if (frageFachId == null) {
+                throw new IllegalStateException("Frage-Fach-ID fehlt");
+            }
+            if (studentFachId == null) {
+                throw new IllegalStateException("Student-Fach-ID fehlt");
             }
             return new AntwortEntity(fachId, antwortText, frageFachId, studentFachId,  antwortZeitpunkt);
         }

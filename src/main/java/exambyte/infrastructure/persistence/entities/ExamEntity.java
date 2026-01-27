@@ -108,10 +108,21 @@ public class ExamEntity {
         }
 
         public ExamEntity build() {
-            if (title == null || professorFachId == null) {
-                throw new IllegalArgumentException("Der Titel und die professorFachId müssen gesetzt werden.");
+            if (title == null || title.isBlank()) {
+                throw new IllegalStateException("Titel fehlt");
             }
+
+            checkNotNull(professorFachId, "Professor-Fach-ID fehlt");
+            checkNotNull(startZeitpunkt, "Start-Zeitpunkt fehlt");
+            checkNotNull(endZeitpunkt, "End-Zeitpunkt fehlt");
+            checkNotNull(resultZeitpunkt, "Ergebnis-Zeitpunkt fehlt");
             return new ExamEntity(fachId, title, professorFachId, startZeitpunkt, endZeitpunkt, resultZeitpunkt);
+        }
+
+        private static void checkNotNull(Object object, String message) {
+            if (object == null) {
+                throw new IllegalStateException(message);
+            }
         }
     }
 }
