@@ -113,7 +113,7 @@ class ExamControllerServiceTest {
         // Assert
         assertThat(form.getQuestions()).hasSize(1);
         assertThat(form.getQuestions().getFirst().getType()).isEqualTo("MC");
-        assertThat(form.getQuestions().getFirst().getChoices()).isEqualTo("A- B,C,D");
+        assertThat(form.getQuestions().getFirst().getChoices()).isEqualTo("Aĸ B,C,D");
     }
 
     @Test

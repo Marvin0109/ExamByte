@@ -66,7 +66,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 List<String> choiceList = Arrays.stream(choice.split("\n"))
                         .map(String::trim)
                         .filter(s -> !s.isEmpty())
-                        .map(s -> s.replace(",", "-"))
+                        .map(s -> s.replace(",", "ĸ"))
                         .toList();
                 questionData.setChoices(String.join(",", choiceList));
             }
