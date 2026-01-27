@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 26.01.2026
+>**aktualisiert am:** 27.01.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -537,3 +537,11 @@
 **Bereich**: Ressourcen / Dokumentation
 - Code Statistik aktualisiert (`cloc`)
 - Testabdeckungsstatistik aktualisiert
+
+---
+
+### 27.01.2026
+**Bereich**: Ressourcen / Test / Geschäftslogik
+- Weitere Logiktests erstellt
+- JacocoTest-Report aktualisiert
+- Paar Validierungen hinzugefügt in Entities und in Service-Klassen
