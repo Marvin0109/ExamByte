@@ -1,6 +1,7 @@
 package exambyte.infrastructure.service;
 
 import exambyte.application.service.AppUserService;
+import exambyte.application.service.UserCreationService;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -28,41 +29,42 @@ import java.util.Set;
 @Service
 public class AppUserServiceImpl implements AppUserService {
 
-  private final UserCreationServiceImpl userCreationService;
-  Logger logger = Logger.getLogger(getClass().getName());
+      private final UserCreationService userCreationService;
+      Logger logger = Logger.getLogger(getClass().getName());
 
-  public AppUserServiceImpl(UserCreationServiceImpl userCreationService) {
-    this.userCreationService = userCreationService;
-  }
+      public AppUserServiceImpl(UserCreationService userCreationService) {
+        this.userCreationService = userCreationService;
+      }
 
-  /**
-   * Lädt die Benutzerinformationen vom OAuth2-Provider und weist dem Benutzer, basierend auf seinem Login,
-   * die entsprechende Rolle zu.
-   * Wenn der Benutzer den Login "Marvin0109" hat, wird ihm die Rolle "ROLE_ADMIN" zugewiesen.
-   *
-   * @param userRequest Die Anfrage, die Benutzerdaten vom OAuth2-Provider anfordert.
-   * @return Ein {@link OAuth2User} Objekt, das die Benutzerinformationen und die zugewiesenen Rollen enthält.
-   * @throws OAuth2AuthenticationException Falls ein Fehler beim Laden der Benutzerdaten auftritt.
-   */
-  @Override
-  public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        logger.info("User Service called");
-        OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
-        OAuth2User originalUser = delegate.loadUser(userRequest);
-        return addDefaultRole(originalUser);
-  }
+      /**
+       * Lädt die Benutzerinformationen vom OAuth2-Provider und weist dem Benutzer, basierend auf seinem Login,
+       * die entsprechende Rolle zu.
+       * Wenn der Benutzer den Login "Marvin0109" hat, wird ihm die Rolle "ROLE_ADMIN" zugewiesen.
+       *
+       * @param userRequest Die Anfrage, die Benutzerdaten vom OAuth2-Provider anfordert.
+       * @return Ein {@link OAuth2User} Objekt, das die Benutzerinformationen und die zugewiesenen Rollen enthält.
+       * @throws OAuth2AuthenticationException Falls ein Fehler beim Laden der Benutzerdaten auftritt.
+       */
+      @Override
+      public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+            logger.info("User Service called");
+            OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+            OAuth2User originalUser = delegate.loadUser(userRequest);
+            return addDefaultRole(originalUser);
+      }
 
-  public OAuth2User addDefaultRole(OAuth2User originalUser) {
-        logger.info("Adding default role");
-        Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
-        String login = originalUser.getAttribute("login");
-        authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
-        boolean found = userCreationService.checkStudent(login);
+      @Override
+      public OAuth2User addDefaultRole(OAuth2User originalUser) {
+            logger.info("Adding default role");
+            Set<GrantedAuthority> authorities = new HashSet<>(originalUser.getAuthorities());
+            String login = originalUser.getAttribute("login");
+            authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
+            boolean found = userCreationService.checkStudent(login);
 
-        if (!found) {
-              userCreationService.createUser(originalUser, authorities);
-        }
+            if (!found) {
+                  userCreationService.createUser(originalUser, authorities);
+            }
 
-        return new DefaultOAuth2User(authorities, originalUser.getAttributes(), "id");
-  }
+            return new DefaultOAuth2User(authorities, originalUser.getAttributes(), "id");
+      }
 }
