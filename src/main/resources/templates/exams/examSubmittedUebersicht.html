@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Übersicht aller Prüflinge für eine bestimmte Prüfung">
-  <meta name="author" content="Marvin0109">
-  <link rel="icon" href="/public/pictures/exambyteIcon.ico">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Übersicht aller Prüflinge für eine bestimmte Prüfung">
+    <meta name="author" content="Marvin0109">
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-  <title>Exam</title>
+    <title>Exam</title>
 
-  <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
-  <!-- Custom styles for this template -->
-  <link rel="stylesheet" href="/public/custom/index.css">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
 </head>
+
 <body>
 <!-- Navigation -->
 <header th:replace="~{navigation/navbar.html}"> </header>
@@ -25,59 +26,59 @@
 
     <div th:if="${message}" class="alert"
          th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
-      <span th:text="${message}"></span>
+        <span th:text="${message}"></span>
     </div>
 
     <div class="alert alert-info" role="alert">
-      <p>
-        Hier werden alle Studenten aufgelistet, die erfolgreich die Prüfung bearbeitet haben.
-      </p>
+        <i class="fas fa-info-circle fa-lg me-2"></i>
+        <p>
+            Hier werden alle Studenten aufgelistet, die erfolgreich die Prüfung bearbeitet haben.
+        </p>
     </div>
 
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Prüfling</th>
-      <th>Abgabezeit</th>
-      <th>Bewertungsstatus</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="submitInfo: ${submitInfoList}">
-      <td>
-        <a th:href="@{/exams/showSubmit/{examFachId}/{studentFachId}
-                        (examFachId=${exam.fachId},
-                        studentFachId=${submitInfo.fachId})
-                    }"
-           th:text="${submitInfo.name}">
-        </a>
-      </td>
-
-      <td>
-          <span th:switch="${timeNow.isBefore(exam.startTime)}">
-              <span th:case="true">Startet bald</span>
-              <span th:case="false">
-                <span th:switch="${timeNow.isBefore(exam.endTime)}">
-                    <span th:case="true">Prüfung läuft</span>
-                    <span th:case="false">
-                        <span th:switch="${timeNow.isBefore(exam.resultTime)}">
-                            <span th:case="true">Korrektur läuft</span>
-                            <span th:case="false">Beendet</span>
+    <table class="table table-primary table-striped">
+        <thead>
+            <tr>
+                <th>Prüfling</th>
+                <th>Abgabezeit</th>
+                <th>Bewertungsstatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="submitInfo: ${submitInfoList}">
+                <td>
+                    <a th:href="@{/exams/showSubmit/{examFachId}/{studentFachId}
+                                (examFachId=${exam.fachId},
+                                studentFachId=${submitInfo.fachId})}"
+                       th:text="${submitInfo.name}">
+                    </a>
+                </td>
+                <td>
+                    <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                        <span th:case="true">Startet bald</span>
+                        <span th:case="false">
+                            <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                                <span th:case="true">Prüfung läuft</span>
+                                <span th:case="false">
+                                    <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                        <span th:case="true">Korrektur läuft</span>
+                                        <span th:case="false">Beendet</span>
+                                    </span>
+                                </span>
+                            </span>
                         </span>
                     </span>
-                </span>
-              </span>
-          </span>
-      </td>
+                </td>
 
-      <td>
-        <span th:text="${submitInfo.reviewStatus ? '✔' : '✘'}"
-              th:style="${submitInfo.reviewStatus ? 'color:green;' : 'color:red;'}">
-        </span>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+                <td>
+                    <span th:text="${submitInfo.reviewStatus ? '✔' : '✘'}"
+                          th:style="${submitInfo.reviewStatus ? 'color:green;' : 'color:red;'}">
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
 </main>
 
 <!-- Navigation -->

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,7 +7,7 @@
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Tests Erstellen</title>
+    <title>Tests erstellen</title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -33,7 +33,7 @@
     <h1>Test Generator</h1>
 
     <div class="alert alert-info" role="alert">
-        Willkommen!
+        <i class="fas fa-info-circle fa-lg me-2"></i>
         <p>
             Hier auf der Seite werden die Tests erstellt. Nach dem Ausfüllen aller Fragen und Antworten sowie Fristen
             geben Sie bitte den Test ab und wird ab dem von Ihnen gesetzten Startzeitpunkt bearbeitbar sein.
@@ -49,31 +49,34 @@
     <form th:action="@{/exams/examsProfessoren}" method="post" th:object="${examForm}">
         <h2>Test Metadaten</h2>
 
-        <label>Titel:</label>
-        <input type="text" th:field="*{title}" class="form-control">
+        <label for="title">Titel:</label>
+        <input type="text" id="title" th:field="*{title}" class="form-control">
         <small class="text-danger" th:errors="*{title}"></small>
 
-        <label>Startzeit:</label>
-        <input type="datetime-local" th:field="*{start}" class="form-control">
+        <label for="startzeit">Startzeit:</label>
+        <input type="datetime-local" id="startzeit" th:field="*{start}" class="form-control">
         <small class="text-danger" th:errors="*{start}"></small>
 
-        <label>Endzeit:</label>
-        <input type="datetime-local" th:field="*{end}" class="form-control">
+        <label for="endzeit">Endzeit:</label>
+        <input type="datetime-local" id="endzeit" th:field="*{end}" class="form-control">
         <small class="text-danger" th:errors="*{end}"></small>
 
-        <label>Ergebniszeit:</label>
-        <input type="datetime-local" th:field="*{result}" class="form-control">
+        <label for="ergebniszeit">Ergebniszeit:</label>
+        <input type="datetime-local" id="ergebniszeit" th:field="*{result}" class="form-control">
         <small class="text-danger" th:errors="*{result}"></small>
 
-        <br><br>
+        <br>
+        <br>
+
         <h2>Fragen</h2>
 
         <h3>Frage 1: Multiple Choice</h3>
-        <div class="form-group">
+        <div class="mb-4">
             <!-- Punkte -->
             <label for="mc_points_1">Punkte:</label>
             <input type="number" id="mc_points_1" th:field="*{questions[0].punkte}" class="form-control" min="1">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].punkte')}" th:errors="*{questions[0].punkte}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].punkte')}"
+                                       th:errors="*{questions[0].punkte}"></small>
 
             <!-- Frageart (wird automatisch auf MC gesetzt) -->
             <input type="hidden" th:name="|questions[0].type|" th:value="MC"/>
@@ -82,31 +85,34 @@
             <label for="mc_question_1">Frage:</label>
             <textarea id="mc_question_1" th:field="*{questions[0].questionText}" class="form-control"
                       placeholder="Frage eingeben"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].questionText')}" th:errors="*{questions[0].questionText}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].questionText')}"
+                                       th:errors="*{questions[0].questionText}"></small>
 
 
             <!-- Antwortmöglichkeiten -->
             <label for="mc_choices_1">Antwortmöglichkeiten (eine pro Zeile):</label>
             <textarea rows="6" id="mc_choices_1" th:field="*{questions[0].choices}" class="form-control"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].choices')}" th:errors="*{questions[0].choices}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].choices')}"
+                                       th:errors="*{questions[0].choices}"></small>
 
 
             <!-- Lösungen -->
             <label for="mc_correctAnswers_1">Richtige Antworten (eine pro Zeile):</label>
             <textarea rows="6" id="mc_correctAnswers_1" th:field="*{questions[0].correctAnswers}" class="form-control"
                       placeholder="Richtige 1&#10;Richtige 2"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].correctAnswers')}" th:errors="*{questions[0].correctAnswers}"></small>
-
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[0].correctAnswers')}"
+                                       th:errors="*{questions[0].correctAnswers}"></small>
         </div>
 
         <h3>Frage 2: Freitextaufgabe</h3>
-        <div class="form-group">
+        <div class="mb-4">
 
             <!-- Punkte -->
             <label for="ft_points_2">Punkte:</label>
             <input type="number" id="ft_points_2" th:field="*{questions[1].punkte}" class="form-control" min="1">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[1].punkte')}" th:errors="*{questions[1].punkte}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[1].punkte')}"
+                                       th:errors="*{questions[1].punkte}"></small>
 
             <!-- Frageart (automatisch FREITEXT) -->
             <input type="hidden" th:name="|questions[1].type|" th:value="FREITEXT"/>
@@ -115,16 +121,18 @@
             <label for="ft_question_2">Frage:</label>
             <textarea id="ft_question_2" th:field="*{questions[1].questionText}" class="form-control" rows="8"
                       placeholder="Frage eingeben"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[1].questionText')}" th:errors="*{questions[1].questionText}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[1].questionText')}"
+                                       th:errors="*{questions[1].questionText}"></small>
         </div>
 
         <h3>Frage 3: Single Choice</h3>
-        <div class="form-group">
+        <div class="mb-4">
 
             <!-- Punkte -->
             <label for="sc_points_3">Punkte:</label>
             <input type="number" id="sc_points_3" th:field="*{questions[2].punkte}" class="form-control" min="1">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].punkte')}" th:errors="*{questions[2].punkte}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].punkte')}"
+                                       th:errors="*{questions[2].punkte}"></small>
 
             <!-- Frageart (automatisch SC) -->
             <input type="hidden" th:name="|questions[2].type|" th:value="SC"/>
@@ -133,28 +141,32 @@
             <label for="sc_question_3">Frage:</label>
             <textarea id="sc_question_3" th:field="*{questions[2].questionText}" class="form-control" rows="4"
                       placeholder="Frage eingeben"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].questionText')}" th:errors="*{questions[2].questionText}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].questionText')}"
+                                       th:errors="*{questions[2].questionText}"></small>
 
             <!-- Antwortmöglichkeiten -->
             <label for="sc_choices_3">Antwortmöglichkeiten (eine pro Zeile):</label>
             <textarea id="sc_choices_3" th:field="*{questions[2].choices}" class="form-control" rows="4"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].choices')}" th:errors="*{questions[2].choices}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].choices')}"
+                                       th:errors="*{questions[2].choices}"></small>
 
             <!-- Richtige Antwort -->
             <label for="sc_correctAnswer_3">Richtige Antwort:</label>
             <input type="text" id="sc_correctAnswer_3" th:field="*{questions[2].correctAnswer}" class="form-control"
                    placeholder="Exakte richtige Antwort eingeben">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].correctAnswer')}" th:errors="*{questions[2].correctAnswer}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[2].correctAnswer')}"
+                                       th:errors="*{questions[2].correctAnswer}"></small>
         </div>
 
         <h3>Frage 4: Multiple Choice</h3>
-        <div class="form-group">
+        <div class="mb-4">
 
             <!-- Punkte -->
             <label for="mc_points_4">Punkte:</label>
             <input type="number" id="mc_points_4" th:field="*{questions[3].punkte}" class="form-control" min="1">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].punkte')}" th:errors="*{questions[3].punkte}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].punkte')}"
+                                       th:errors="*{questions[3].punkte}"></small>
 
             <!-- Frageart (wird automatisch auf MC gesetzt) -->
             <input type="hidden" th:name="|questions[3].type|" th:value="MC"/>
@@ -163,28 +175,32 @@
             <label for="mc_question_4">Frage:</label>
             <textarea id="mc_question_4" th:field="*{questions[3].questionText}" class="form-control"
                       placeholder="Frage eingeben"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].questionText')}" th:errors="*{questions[3].questionText}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].questionText')}"
+                                       th:errors="*{questions[3].questionText}"></small>
 
             <!-- Antwortmöglichkeiten -->
             <label for="mc_choices_4">Antwortmöglichkeiten (eine pro Zeile):</label>
             <textarea rows="6" id="mc_choices_4" th:field="*{questions[3].choices}" class="form-control"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].choices')}" th:errors="*{questions[3].choices}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].choices')}"
+                                       th:errors="*{questions[3].choices}"></small>
 
             <!-- Lösungen -->
             <label for="mc_correctAnswers_4">Richtige Antworten (eine pro Zeile):</label>
             <textarea rows="6" id="mc_correctAnswers_4" th:field="*{questions[3].correctAnswers}" class="form-control"
                       placeholder="Richtige 1&#10;Richtige 2"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].correctAnswers')}" th:errors="*{questions[3].correctAnswers}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[3].correctAnswers')}"
+                                       th:errors="*{questions[3].correctAnswers}"></small>
         </div>
 
         <h3>Frage 5: Single Choice</h3>
-        <div class="form-group">
+        <div class="mb-4">
 
             <!-- Punkte -->
             <label for="sc_points_5">Punkte:</label>
             <input type="number" id="sc_points_5" th:field="*{questions[4].punkte}" class="form-control" min="1">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].punkte')}" th:errors="*{questions[4].punkte}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].punkte')}"
+                                       th:errors="*{questions[4].punkte}"></small>
 
             <!-- Frageart (automatisch SC) -->
             <input type="hidden" th:name="|questions[4].type|" th:value="SC"/>
@@ -193,28 +209,32 @@
             <label for="sc_question_5">Frage:</label>
             <textarea id="sc_question_5" th:field="*{questions[4].questionText}" class="form-control" rows="4"
                       placeholder="Frage eingeben"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].questionText')}" th:errors="*{questions[4].questionText}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].questionText')}"
+                                       th:errors="*{questions[4].questionText}"></small>
 
             <!-- Antwortmöglichkeiten -->
             <label for="sc_choices_5">Antwortmöglichkeiten (eine pro Zeile):</label>
             <textarea id="sc_choices_5" th:field="*{questions[4].choices}" class="form-control" rows="4"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].choices')}" th:errors="*{questions[4].choices}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].choices')}"
+                                       th:errors="*{questions[4].choices}"></small>
 
             <!-- Richtige Antwort -->
             <label for="sc_correctAnswer_5">Richtige Antwort:</label>
             <input type="text" id="sc_correctAnswer_5" th:field="*{questions[4].correctAnswer}" class="form-control"
                    placeholder="Exakte richtige Antwort eingeben">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].correctAnswer')}" th:errors="*{questions[4].correctAnswer}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[4].correctAnswer')}"
+                                       th:errors="*{questions[4].correctAnswer}"></small>
         </div>
 
         <h3>Frage 6: Freitextaufgabe</h3>
-        <div class="form-group">
+        <div class="mb-4">
 
             <!-- Punkte -->
             <label for="ft_points_6">Punkte:</label>
             <input type="number" id="ft_points_6" th:field="*{questions[5].punkte}" class="form-control" min="1">
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[5].punkte')}" th:errors="*{questions[5].punkte}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[5].punkte')}"
+                                       th:errors="*{questions[5].punkte}"></small>
 
             <!-- Frageart (automatisch FREITEXT) -->
             <input type="hidden" th:name="|questions[5].type|" th:value="FREITEXT"/>
@@ -223,12 +243,14 @@
             <label for="ft_question_6">Frage:</label>
             <textarea id="ft_question_6" th:field="*{questions[5].questionText}" class="form-control" rows="8"
                       placeholder="Frage eingeben"></textarea>
-            <small class="text-danger" th:if="${#fields.hasErrors('questions[5].questionText')}" th:errors="*{questions[5].questionText}"></small>
+            <small class="text-danger" th:if="${#fields.hasErrors('questions[5].questionText')}"
+                                       th:errors="*{questions[5].questionText}"></small>
         </div>
 
         <br>
         <button type="submit" class="btn btn-primary">Test speichern</button>
     </form>
+
 </main>
 
 <!-- Navigation -->

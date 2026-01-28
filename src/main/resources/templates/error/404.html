@@ -6,11 +6,13 @@
     <link rel="stylesheet" type="text/css" th:href="@{/public/custom/errorPages/error.css}">
 </head>
 <body>
-<h1>404</h1>
-<p> <img src="/public/pictures/cooking.webp" alt="Koch am Herd Gif"> </p>
-<p>Die angeforderte Seite wurde nicht gefunden.</p>
-<p>We are still cooking this site</p>
-<p th:text="${errorMessage}"></p>
-<a th:href="@{/}">Zurück zur Startseite</a>
+<main>
+    <h1>404</h1>
+    <p> <img src="/public/pictures/cooking.webp" alt="Koch am Herd Gif"> </p>
+    <p>Die angeforderte Seite wurde nicht gefunden.</p>
+    <p>We are still cooking this site</p>
+    <p th:text="${errorMessage}"></p>
+    <a th:href="@{/}">Zurück zur Startseite</a>
+</main>
 </body>
 </html>

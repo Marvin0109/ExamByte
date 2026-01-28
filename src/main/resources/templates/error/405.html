@@ -6,11 +6,14 @@
     <link rel="stylesheet" type="text/css" th:href="@{/public/custom/errorPages/error.css}">
 </head>
 <body>
-<h1>405</h1>
-<p> <img src="/public/pictures/xqcDespair.webp" alt="XQC Despair Gif"> </p>
-<p>POST Requests funktionieren noch nicht.</p>
-<p>Why are the devs so slow???</p>
-<p th:text="${errorMessage}"></p>
-<a th:href="@{/}">Zurück zur Startseite</a>
+<main>
+    <h1>405</h1>
+    <p> <img src="/public/pictures/xqcDespair.webp" alt="XQC Despair Gif"> </p>
+    <p>POST Requests funktionieren noch nicht.</p>
+    <p>Why are the devs so slow???</p>
+    <p th:text="${errorMessage}"></p>
+    <a th:href="@{/}">Zurück zur Startseite</a>
+</main>
+
 </body>
 </html>

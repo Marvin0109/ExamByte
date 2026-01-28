@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,7 +7,7 @@
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Contact</title>
+    <title>Einstellungen</title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -17,6 +17,7 @@
     <!-- Custom styles for this template -->
     <link rel="stylesheet" href="/public/custom/index.css">
 </head>
+
 <body>
 <!-- Navigation -->
 <header th:replace="~{navigation/navbar.html}"> </header>
@@ -31,7 +32,10 @@
     </div>
 
     <h2>Willkommen <span th:text="${name}">Name</span>!</h2>
-    <p>Ihre aktuelle Rolle: <span th:text="${role}">Rolle</span></p>
+    <p>
+        Ihre aktuelle Rolle:
+        <strong class="text-primary" th:text="${role}">Rolle</strong>
+    </p>
 
     <div class="container">
         <div class="row mb-2" th:if="${role} == 'Admin'">
@@ -47,7 +51,9 @@
 
     <div class="container">
         <div class="row mb-2">
-            <div class="col-3 fw-bold">Rolle wechseln</div>
+            <div class="col-3 fw-bold">
+                Rolle wechseln
+            </div>
             <div class="col-9">
                 <form method="post" th:action="@{/settings/role}">
                     <button name="role" class="btn btn-secondary"
@@ -72,5 +78,6 @@
 
 <!-- js Imports -->
 <script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>

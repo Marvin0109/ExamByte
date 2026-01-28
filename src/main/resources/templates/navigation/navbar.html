@@ -1,67 +1,91 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" xmlns:th="http://www.w3.org/1999/xhtml">
-  <div class="container-fluid px-3">
-    <a class="navbar-brand" href="/">
-      <img src="/public/pictures/HHUKoksLogo.png" alt="HHU Koks Logo" style="height: 75px;">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <div class="container-fluid px-3">
+        <a class="navbar-brand" href="/">
+        <img src="/public/pictures/HHUKoksLogo.png" alt="HHU Logo (bearbeitet)" style="height: 75px;">
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon"></span>
     </button>
-    <!-- Collapsible Navbar Links -->
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-      <ul class="navbar-nav mr-auto">
 
-        <li class="nav-item">
-          <a class="nav-link" th:classappend="${currentPath == '/'} ? ' active' : ''" href="/">
-            Home
-            <span class="visually-hidden" th:if="${currentPath == '/'}">(current)</span>
-          </a>
-        </li>
+        <!-- Collapsible Navbar Links -->
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
 
-        <!-- Link für Studenten -->
-        <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-          <a class="nav-link" th:classappend="${currentPath == '/exams/examsStudierende'} ? ' active' : ''"
-             href="/exams/examsStudierende">
-            Tests bearbeiten
-            <span class="visually-hidden" th:if="${currentPath == '/exams/examsStudierende'}">(current)</span>
-          </a>
-        </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${currentPath == '/'} ? ' active' : ''" href="/">
+                        <i class="fas fa-home me-1"></i>
+                        Home
+                        <span class="visually-hidden" th:if="${currentPath == '/'}">(current)</span>
+                    </a>
+                </li>
 
-        <!-- Link für Professoren -->
-        <li class="nav-item"  th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                <!-- Link für Studenten -->
+                <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
+                    <a class="nav-link" th:classappend="${currentPath == '/exams/examsStudierende'} ? ' active' : ''"
+                        href="/exams/examsStudierende">
+                        <i class="fas fa-pen me-1"></i>
+                        Tests bearbeiten
+                        <span class="visually-hidden" th:if="${currentPath == '/exams/examsStudierende'}">(current)
+                        </span>
+                    </a>
+                </li>
 
-          <a class="nav-link" th:classappend="${currentPath == '/exams/examsProfessoren'} ? ' active' : ''"
-             href="/exams/examsProfessoren">
-            Tests erstellen
-            <span class="visually-hidden" th:if="${currentPath == '/exams/examsProfessoren'}">(current)</span>
-          </a>
-        </li>
+                <!-- Link für Professoren -->
+                <li class="nav-item"  th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-        <!-- Link für Korrektor -->
-        <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
+                    <a class="nav-link" th:classappend="${currentPath == '/exams/examsProfessoren'} ? ' active' : ''"
+                        href="/exams/examsProfessoren">
+                        <i class="fas fa-file-circle-plus me-1"></i>
+                        Tests erstellen
+                        <span class="visually-hidden" th:if="${currentPath == '/exams/examsProfessoren'}">(current)
+                        </span>
+                    </a>
+                </li>
 
-          <a class="nav-link" th:classappend="${currentPath == '/exams/examsKorrektor'} ? 'active' : ''"
-             href="/exams/examsKorrektor">
-            Tests korrigieren
-            <span class="visually-hidden" th:if="${currentPath == '/exams/examsKorrektor'}">(current)</span>
-          </a>
-        </li>
-      </ul>
+                <!-- Link für Korrektor -->
+                <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
 
-      <ul class="navbar-nav ms-auto">
+                    <a class="nav-link" th:classappend="${currentPath == '/exams/examsKorrektor'} ? 'active' : ''"
+                        href="/exams/examsKorrektor">
+                        <i class="fas fa-clipboard-check me-1"></i>
+                        Tests korrigieren
+                        <span class="visually-hidden" th:if="${currentPath == '/exams/examsKorrektor'}">(current)
+                        </span>
+                    </a>
+                </li>
+            </ul>
 
-        <li class="nav-item"
-            th:if="${#authorization.expression('!hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
-          <a class="nav-link" th:href="@{/oauth2/authorization/github}">Login mit GitHub</a>
-        </li>
+            <ul class="navbar-nav ms-auto">
 
-        <li class="nav-item"
-            th:if="${#authorization.expression('hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
-          <form th:action="@{/force-logout}" method="post" style="display: inline;">
-            <button class="btn btn-link nav-link" type="submit">Logout</button>
-          </form>
-        </li>
-      </ul>
+                <li class="nav-item"
+                    th:if="${#authorization.expression('!hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
+                    <a class="nav-link" th:href="@{/oauth2/authorization/github}">
+                        <i class="fab fa-github me-1"></i>
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item"
+                    th:if="${#authorization.expression('hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
+                    <form th:action="@{/force-logout}" method="post" style="display: inline;">
+                        <button class="btn btn-link nav-link" type="submit">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            Logout
+                        </button>
+                    </form>
+                </li>
+
+                <li class="nav-item"
+                    th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}">
+                    <a class="nav-link" th:classappend="${currentPath == '/settings'} ? ' active' : ''"
+                       href="/settings">
+                        <i class="fas fa-cog fa-lg>"></i>
+                        <span class="visually-hidden">Einstellungen</span>
+                        <span class="visually-hidden" th:if="${currentPath == '/settings'}">(current)</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>

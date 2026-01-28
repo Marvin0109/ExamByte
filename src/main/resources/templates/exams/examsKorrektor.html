@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Übersichtsseite von Prüfungen für die Korrektoren">
-  <meta name="author" content="Marvin0109">
-  <link rel="icon" href="/public/pictures/exambyteIcon.ico">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Übersichtsseite von Prüfungen für die Korrektoren">
+    <meta name="author" content="Marvin0109">
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-  <title>Tests Korrigieren</title>
+    <title>Tests Korrigieren</title>
 
-  <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
-  <!-- Custom styles for this template -->
-  <link href="/public/custom/index.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
 </head>
 
 <body>
@@ -24,52 +24,52 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-  <h1>Teststatus Übersicht</h1>
+    <h1>Teststatus Übersicht</h1>
 
-  <div th:if="${message}" class="alert"
-       th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+    <div th:if="${message}" class="alert"
+    th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
     <span th:text="${message}"></span>
-  </div>
+    </div>
 
-  <table class="table">
-      <thead>
-          <tr>
-              <th>Test</th>
-              <th>Prüfungsstatus</th>
-              <th>Bewertungsstatus</th>
-          </tr>
-      </thead>
-      <tbody>
-      <tr th:each="covItem : ${reviewCoverage}">
-          <td>
-              <a th:href="@{/exams/showExamSubmits/{examFachId}(examFachId=${covItem.exam.fachId})}"
-                 th:text="${covItem.exam.title}">
-              </a>
-          </td>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Test</th>
+                <th>Prüfungsstatus</th>
+                <th>Bewertungsstatus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="covItem : ${reviewCoverage}">
+                <td>
+                    <a th:href="@{/exams/showExamSubmits/{examFachId}(examFachId=${covItem.exam.fachId})}"
+                       th:text="${covItem.exam.title}">
+                    </a>
+                </td>
 
-          <td>
-              <span th:switch="${timeNow.isBefore(covItem.exam.startTime)}">
-                  <span th:case="true">Startet bald</span>
-                  <span th:case="false">
-                    <span th:switch="${timeNow.isBefore(covItem.exam.endTime)}">
-                        <span th:case="true">Prüfung läuft</span>
+                <td>
+                    <span th:switch="${timeNow.isBefore(covItem.exam.startTime)}">
+                        <span th:case="true">Startet bald</span>
                         <span th:case="false">
-                            <span th:switch="${timeNow.isBefore(covItem.exam.resultTime)}">
-                                <span th:case="true">Korrektur läuft</span>
-                                <span th:case="false">Beendet</span>
+                            <span th:switch="${timeNow.isBefore(covItem.exam.endTime)}">
+                                <span th:case="true">Prüfung läuft</span>
+                                <span th:case="false">
+                                    <span th:switch="${timeNow.isBefore(covItem.exam.resultTime)}">
+                                    <span th:case="true">Korrektur läuft</span>
+                                    <span th:case="false">Beendet</span>
+                                    </span>
+                                </span>
                             </span>
                         </span>
                     </span>
-                  </span>
-              </span>
-          </td>
+                </td>
 
-          <td>
-              <span th:text="${#numbers.formatDecimal(covItem.reviewCoverage, 1, 2)} + ' %'"></span>
-          </td>
-      </tr>
-      </tbody>
-  </table>
+                <td>
+                    <span th:text="${#numbers.formatDecimal(covItem.reviewCoverage, 1, 2)} + ' %'"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
 </main>
 

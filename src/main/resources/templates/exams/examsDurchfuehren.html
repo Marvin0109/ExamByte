@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Bearbeitungsseite einer Prüfung">
-  <meta name="author" content="Marvin0109">
-  <link rel="icon" href="/public/pictures/exambyteIcon.ico">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Bearbeitungsseite einer Prüfung">
+    <meta name="author" content="Marvin0109">
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-  <title>Tests bearbeiten</title>
+    <title>Tests bearbeiten</title>
 
-  <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
-  <!-- Bootstrap core CSS -->
-  <link href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
-  <!-- Custom styles for this template -->
-  <link href="/public/custom/index.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
 </head>
 
 <body>
@@ -69,7 +69,8 @@
             <!-- Freitext -->
             <div th:if="${frage.type == 'FREITEXT'}">
                 <label class="form-check-label"
-                        th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"></label>
+                        th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}">
+                </label>
                 <textarea th:name="${frage.fachId}"
                           th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                           th:field="*{answers[__${frage.fachId}__]}"

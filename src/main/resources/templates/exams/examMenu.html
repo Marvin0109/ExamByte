@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,7 +7,7 @@
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Menü</title>
+    <title>Informationen zum Testversuch</title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -51,7 +51,7 @@
                   th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}"
                   style="margin-right: 1rem;">
                 <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
-                <button type="submit" class="btn btn-secondary">
+                <button type="submit" class="btn btn-outline-primary">
                     Test neu starten
                 </button>
             </form>
@@ -62,7 +62,7 @@
                   th:action="@{/exams/startWithData/{examFachId}(examFachId=${exam.fachId})}">
                 <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
                 <button type="submit" class="btn btn-outline-secondary">
-                    Letzter Versuch ändern
+                    Letzten Versuch ändern
                 </button>
             </form>
         </div>
@@ -71,74 +71,83 @@
     <div class="mt-4">
         <h2>Letzte Versuche</h2>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Bearbeitungszeitpunkt</th>
-                <th>Punkte (%)</th>
-            </tr>
-            </thead>
+        <div class="rounded-3">
+            <table class="table table-primary table-striped">
+                <thead>
+                <tr>
+                    <th>Bearbeitungszeitpunkt</th>
+                    <th>Punkte (%)</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${attempt != null}">
+                    <td th:text="${#temporals.format(attempt.lastChanges, 'dd.MM.yyyy HH:mm')}"></td>
+                    <td th:text="${#numbers.formatDecimal(attempt.prozent, 1, 2)} + ' %'"></td>
+                </tr>
+                <tr th:if="${attempt == null}">
+                    <td colspan="2"> Keine Versuche vorhanden</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <h2>Regeln</h2>
+
+    <div class="rounded-3 overflow-hidden">
+        <table class="table table-secondary table-striped mb-0">
             <tbody>
-            <tr th:if="${attempt != null}">
-                <td th:text="${#temporals.format(attempt.lastChanges, 'dd.MM.yyyy HH:mm')}"></td>
-                <td th:text="${#numbers.formatDecimal(attempt.prozent, 1, 2)} + ' %'"></td>
+            <tr>
+                <th scope="row" class="fw-bold w-25">Autor-UUID</th>
+                <td>
+                    <span th:text="${authorID}">Autor Fach ID</span>
+                </td>
             </tr>
-            <tr th:if="${attempt == null}">
-                <td colspan="2"> Keine Versuche vorhanden</td>
+
+            <tr>
+                <th scope="row" class="fw-bold">Informationen zum Test</th>
+                <td>
+                    Mit den Tests wollen wir sichergehen, dass nur diejenigen die Klausur mitschreiben,
+                    die sich ausreichend gut mit dem Stoff beschäftigt haben. Sie sollen dabei auch üben,
+                    nachvollziehbare Freitextantworten zu formulieren. Sie können
+                    <strong>beliebig viele Versuche</strong> durchführen.
+                    Wird während der Bearbeitung des Tests zu einer anderen Seite navigiert, wird der Versuch
+                    <strong>nicht gespeichert!</strong> Beim erneuten Durchlauf des Tests werden die alten Antworten
+                    angezeigt, wenn die Option ausgewählt wurde.
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row" class="fw-bold">Bewertung</th>
+                <td>
+                    Nach dem Beenden des Tests werden die Ankreuzaufgaben automatisch bewertet, die Freitextaufgaben
+                    werden erst nach der Bearbeitungsfrist des Tests manuell korrigiert.
+                    Die endgültigen Ergebnisse werden hier ganz angezeigt nach der Korrekturfrist.
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row" class="fw-bold">Plagiate</th>
+                <td>
+                    Es gibt <strong>keine Toleranz</strong> bei Verstößen gegen die gute wissenschaftliche Praxis,
+                    dazu gehört die Übernahme von Text oder Code aus Internetquellen oder von anderen Personen
+                    ohne Quellenangabe. Wenn Quellen (außerhalb des Kursmaterials) zitiert oder paraphrasiert werden,
+                    müssen diese angegeben werden. Dies gilt insbesondere für generative KIs.
+                    Kommt es zum Plagiat, wird der Test als <strong>nicht bestanden</strong> bewertet!
+                </td>
+            </tr>
+
+            <tr>
+                <th scope="row" class="fw-bold">Fragen</th>
+                <td>
+                    Bei Fragen bitte das Kontaktformular nutzen.
+                </td>
             </tr>
             </tbody>
         </table>
     </div>
 
-    <h2>Regeln</h2>
-
-    <div class="container">
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">Autor-UUID</div>
-            <div class="col-9">
-                <span th:text="${authorID}"></span>
-            </div>
-        </div>
-
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">Informationen zum Test</div>
-            <div class="col-9">
-                Mit den Tests wollen wir sichergehen, dass nur diejenigen die Klausur mitschreiben,
-                die sich ausreichend gut mit dem Stoff beschäftigt haben. Sie sollen dabei auch üben,
-                nachvollziehbare Freitextantworten zu formulieren. Sie können <strong>beliebig viele Versuche</strong>
-                durchführen. Wird während der Bearbeitung des Tests zu einer anderen Seite navigiert, wird der Versuch
-                <strong>nicht gespeichert!</strong> Beim erneuten Durchlauf des Tests werden die alten Antworten
-                angezeigt, wenn die Option ausgewählt wurde.
-            </div>
-        </div>
-
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">Bewertung</div>
-            <div class="col-9">
-                Nach dem Beenden des Tests werden die Ankreuzaufgaben automatisch bewertet, die Freitextaufgaben
-                werden erst nach der Bearbeitungsfrist des Tests manuell korrigiert. Die endgültigen Ergebnisse werden hier
-                ganz angezeigt nach der Korrekturfrist.
-            </div>
-        </div>
-
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">Plagiate</div>
-            <div class="col-9">
-                Es gibt <strong>keine Toleranz</strong> bei Verstößen gegen die gute wissenschaftliche Praxis,
-                dazu gehört die Übernahme von Text oder Code aus Internetquellen oder von anderen Personen
-                ohne Quellenangabe. Wenn Quellen (außerhalb des Kursmaterials) zitiert oder paraphrasiert werden,
-                müssen diese angegeben werden. Dies gilt insbesondere für generative KIs. Kommt es zum Plagiat, wird
-                der Test als <strong>nicht bestanden</strong> bewertet!
-            </div>
-        </div>
-
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">Fragen</div>
-            <div class="col-9">
-                Bei Fragen bitte das Kontaktformular verwenden mit Angabe des Empfängers UUID (zukünftiges Feature).
-            </div>
-        </div>
-    </div>
 
 </main>
 

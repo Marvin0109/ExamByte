@@ -1,22 +1,23 @@
 <!DOCTYPE html>
-<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Startseite">
-<meta name="author" content="Marvin0109">
-<link rel="icon" href="/public/pictures/exambyteIcon.ico">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Startseite">
+    <meta name="author" content="Marvin0109">
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-<title>ExamByte</title>
+    <title>ExamByte</title>
 
-<link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
-<!-- Bootstrap core CSS -->
-<link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
-<!-- Custom styles for this template -->
-<link rel="stylesheet" href="/public/custom/index.css">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
 </head>
+
 <body>
 <!-- Navigation -->
 <header th:replace="~{navigation/navbar.html}"> </header>
@@ -24,26 +25,40 @@
 <main role="main" class="container mt-5 pt-5">
 
     <h1>Willkommen bei ExamByte</h1>
-    <p>Hier ist dein Hauptinhalt ... (Text ist Lorem Ipsum und fungiert als Beispieltext)</p>
-    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-    et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-    Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-    consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-    sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-    no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-    sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-    At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-    <br>
-    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu
-    feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit
-    augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-    nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+    <p class="lead">
+        Auf ExamByte kann man einfach und sicher Online-Tests bearbeiten und eine Zulassung erhalten nach erfolgreicher
+        bearbeitung aller Tests.
+    </p>
 
-    Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse.
-    <p> <a href="https://www.loremipsum.de/" aria-label="Lorem Ipsum Generator Link"> Lorem Ipsum Generator</a> </p>
-    <p> Demonstration davon, dass die HTML-Seiten nicht gebunden sind von der Navigationsleiste. (Einfach scrollen und man wird es merken) </p>
-    <p> <img src="/public/pictures/beepoBusiness.webp" alt="Beepo as Businessman" class="responsive-img"></p>
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <h3>Tests erstellen</h3>
+            <p>Erstellen Sie Tests mit beliebig vielen Fragen in wenigen Minuten.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Automatische Bewertung</h3>
+            <p>Multiple / Single Choice werden automatisch bewertet,
+                Freitextantworten müssen manuell korrigiert werden.</p>
+        </div>
+        <div class="col-md-4">
+            <h3>Plagiatschutz</h3>
+            <p>Alle Antworten werden auf Plagiate geprüft, um faire Ergebnisse zu garantieren.</p>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="alert alert-info rounded-3 d-flex align-items-center" role="alert">
+            <i class="fas fa-info-circle fa-lg me-2"></i>
+            <div>
+                Hinweis: Diese Plattform dient ausschließlich zu Lern-, Übung- und Testzwecken.
+                Damit Sie alle Features im vollen Umfang verwenden können, melden Sie sich mit Ihrem Github Login Daten
+                an.
+                Anschließend wählen Sie in den Einstellungen Ihre gewünschte Rolle.
+            </div>
+
+        </div>
+    </div>
+
 
 </main>
 
@@ -52,5 +67,6 @@
 
 <!-- js Imports -->
 <script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>
