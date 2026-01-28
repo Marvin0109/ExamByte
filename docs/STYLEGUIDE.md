@@ -2,7 +2,7 @@
 
 >**Autor**: Marvin0109,
 >**erstellt am**: 08.01.2025,
->**aktualisiert am**: 27.01.2026
+>**aktualisiert am**: 28.01.2026
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -210,12 +210,12 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
     <header th:replace="~{navigation/navbar.html}"> </header>
 
 ### Einrückung und Formatierung
-- Verwende **2 Leerzeichen** für die Einrückung.
+- Verwende **1 Tab** für die Einrückung.
 - Jede Öffnung eines neuen Elements sollte eingerückt sein, um die Struktur lesbar zu machen.
   - Beispiel:
   ```html
   <div>
-    <p>Beispieltext</p>
+       <p>Beispieltext</p>
   </div>
 
 ### Tags
