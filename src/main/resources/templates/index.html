@@ -1,29 +1,27 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="public/pictures/exambyteIcon.ico">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Startseite">
+<meta name="author" content="Marvin0109">
+<link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>ExamByte</title>
+<title>ExamByte</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
-    <!-- Bootstrap core CSS -->
-    <link href="public/bootstrap-4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
-    <!-- Custom styles for this template -->
-    <link href="public/custom/index.css" rel="stylesheet">
-  </head>
-  <body>
-  <!-- Navigation -->
-  <header th:replace="~{navigation/navbar.html}"> </header>
+<!-- Custom styles for this template -->
+<link rel="stylesheet" href="/public/custom/index.css">
+</head>
+<body>
+<!-- Navigation -->
+<header th:replace="~{navigation/navbar.html}"> </header>
 
-  <!-- Main Content -->
-  <main role="main" class="container mt-5 pt-5">
+<main role="main" class="container mt-5 pt-5">
 
     <h1>Willkommen bei ExamByte</h1>
     <p>Hier ist dein Hauptinhalt ... (Text ist Lorem Ipsum und fungiert als Beispieltext)</p>
@@ -45,16 +43,14 @@
     Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse.
     <p> <a href="https://www.loremipsum.de/" aria-label="Lorem Ipsum Generator Link"> Lorem Ipsum Generator</a> </p>
     <p> Demonstration davon, dass die HTML-Seiten nicht gebunden sind von der Navigationsleiste. (Einfach scrollen und man wird es merken) </p>
-    <p> <img src="public/pictures/beepoBusiness.webp" alt="Beepo as Businessman" class="responsive-img"></p>
+    <p> <img src="/public/pictures/beepoBusiness.webp" alt="Beepo as Businessman" class="responsive-img"></p>
 
-  </main>
+</main>
 
-  <!-- Navigation -->
-  <header th:replace="~{navigation/navbarDown.html}"> </header>
+<!-- Navigation -->
+<header th:replace="~{navigation/navbarDown.html}"> </header>
 
-    <!-- js Imports -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-    <script src="public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
-  </body>
+<!-- js Imports -->
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+</body>
 </html>

@@ -1,65 +1,67 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" xmlns:th="http://www.w3.org/1999/xhtml">
-  <a class="navbar-brand" href="/">
-    <img src="/public/pictures/HHUKoksLogo.png" alt="HHU Koks Logo" style="height: 75px;">
-  </a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <!-- Collapsible Navbar Links -->
-  <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav mr-auto">
+  <div class="container-fluid px-3">
+    <a class="navbar-brand" href="/">
+      <img src="/public/pictures/HHUKoksLogo.png" alt="HHU Koks Logo" style="height: 75px;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <!-- Collapsible Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
 
-      <li class="nav-item" th:classappend="${currentPath == '/'} ? 'active' : ''">
-        <a class="nav-link" href="/">
-          Home
-          <span class="sr-only" th:if="${currentPath == '/'}">(current)</span>
-        </a>
-      </li>
+        <li class="nav-item">
+          <a class="nav-link" th:classappend="${currentPath == '/'} ? ' active' : ''" href="/">
+            Home
+            <span class="visually-hidden" th:if="${currentPath == '/'}">(current)</span>
+          </a>
+        </li>
 
-      <!-- Link für Studenten -->
-      <li class="nav-item" th:classappend="${currentPath == '/exams/examsStudierende'} ? 'active' : ''"
-          th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
+        <!-- Link für Studenten -->
+        <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
+          <a class="nav-link" th:classappend="${currentPath == '/exams/examsStudierende'} ? ' active' : ''"
+             href="/exams/examsStudierende">
+            Tests bearbeiten
+            <span class="visually-hidden" th:if="${currentPath == '/exams/examsStudierende'}">(current)</span>
+          </a>
+        </li>
 
-        <a class="nav-link" href="/exams/examsStudierende">
-          Tests bearbeiten
-          <span class="sr-only" th:if="${currentPath == '/exams/examsStudierende'}">(current)</span>
-        </a>
-      </li>
+        <!-- Link für Professoren -->
+        <li class="nav-item"  th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-      <!-- Link für Professoren -->
-      <li class="nav-item" th:classappend="${currentPath == '/exams/examsProfessoren'} ? 'active' : ''"
-          th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+          <a class="nav-link" th:classappend="${currentPath == '/exams/examsProfessoren'} ? ' active' : ''"
+             href="/exams/examsProfessoren">
+            Tests erstellen
+            <span class="visually-hidden" th:if="${currentPath == '/exams/examsProfessoren'}">(current)</span>
+          </a>
+        </li>
 
-        <a class="nav-link" href="/exams/examsProfessoren">
-          Tests erstellen
-          <span class="sr-only" th:if="${currentPath == '/exams/examsProfessoren'}">(current)</span>
-        </a>
-      </li>
+        <!-- Link für Korrektor -->
+        <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
 
-      <!-- Link für Korrektor -->
-      <li class="nav-item" th:classappend="${currentPath == '/exams/examsKorrektor'} ? 'active' : ''"
-          th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
+          <a class="nav-link" th:classappend="${currentPath == '/exams/examsKorrektor'} ? 'active' : ''"
+             href="/exams/examsKorrektor">
+            Tests korrigieren
+            <span class="visually-hidden" th:if="${currentPath == '/exams/examsKorrektor'}">(current)</span>
+          </a>
+        </li>
+      </ul>
 
-        <a class="nav-link" href="/exams/examsKorrektor">
-          Tests korrigieren
-          <span class="sr-only" th:if="${currentPath == '/exams/examsKorrektor'}">(current)</span>
-        </a>
-      </li>
-    </ul>
+      <ul class="navbar-nav ms-auto">
 
-    <ul class="navbar-nav ml-auto">
+        <li class="nav-item"
+            th:if="${#authorization.expression('!hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
+          <a class="nav-link" th:href="@{/oauth2/authorization/github}">Login mit GitHub</a>
+        </li>
 
-      <li class="nav-item ml-auto"
-          th:if="${#authorization.expression('!hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
-        <a class="nav-link" th:href="@{/oauth2/authorization/github}">Login mit GitHub</a>
-      </li>
-
-      <li class="nav-item ml-auto"
-          th:if="${#authorization.expression('hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
-        <form th:action="@{/force-logout}" method="post" style="display: inline;">
-          <button class="btn btn-link nav-link" type="submit">Logout</button>
-        </form>
-      </li>
-    </ul>
+        <li class="nav-item"
+            th:if="${#authorization.expression('hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
+          <form th:action="@{/force-logout}" method="post" style="display: inline;">
+            <button class="btn btn-link nav-link" type="submit">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>

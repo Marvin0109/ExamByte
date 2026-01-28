@@ -1,19 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="Bearbeitungsseite einer Prüfung">
+  <meta name="author" content="Marvin0109">
   <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
   <title>Tests bearbeiten</title>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
   <!-- Bootstrap core CSS -->
-  <link href="/public/bootstrap-4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- Custom styles for this template -->
   <link href="/public/custom/index.css" rel="stylesheet">
@@ -33,35 +32,49 @@
 
         <div th:each="frage, iterStat : ${exam.questions}" class="mb-4">
 
-            <label th:text="'Frage ' + (${iterStat.index}+1) + ': ' + ${frage.questionText}"></label>
+            <h2 th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h2>
+
+            <p th:text="${frage.questionText}">Fragestellung</p>
 
             <!-- Multiple Choice -->
             <div th:if="${frage.type == 'MC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                    <label class="form-check-label"
+                           th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
+                           th:text="${antwort.replace('ĸ', ',')}">
+                    </label>
                     <input type="checkbox"
+                           th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                            th:name="${frage.fachId}"
                            th:field="*{answers[__${frage.fachId}__]}"
-                           th:value="${antwort}"/>
-                    <label th:text="${antwort.replace('ĸ', ',')}" class="form-check-label"></label>
+                           th:value="${antwort}" />
                 </div>
             </div>
 
             <!-- Single Choice -->
             <div th:if="${frage.type == 'SC'}">
                 <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                    <label class="form-check-label"
+                           th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
+                           th:text="${antwort.replace('ĸ', ',')}">
+                    </label>
                     <input type="radio"
+                           th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                            th:name="${frage.fachId}"
                            th:field="*{answers[__${frage.fachId}__]}"
-                           th:value="${antwort}"/>
-                    <label th:text="${antwort.replace('ĸ', ',')}" class="form-check-label"></label>
+                           th:value="${antwort}" />
                 </div>
             </div>
 
             <!-- Freitext -->
             <div th:if="${frage.type == 'FREITEXT'}">
+                <label class="form-check-label"
+                        th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"></label>
                 <textarea th:name="${frage.fachId}"
+                          th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                           th:field="*{answers[__${frage.fachId}__]}"
-                          class="form-control" rows="6"></textarea>
+                          class="form-control" rows="6">
+                </textarea>
             </div>
         </div>
 
@@ -74,9 +87,7 @@
 <header th:replace="~{navigation/navbarDown.html}"> </header>
 
 <!-- js Imports -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+<script defer src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>

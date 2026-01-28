@@ -1,91 +1,88 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="Testsübersichtsseite für die Studierenden">
+  <meta name="author" content="Marvin0109">
   <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
   <title>Tests bearbeiten</title>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
   <!-- Bootstrap core CSS -->
-  <link href="/public/bootstrap-4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
   <!-- Custom styles for this template -->
   <link href="/public/custom/index.css" rel="stylesheet">
 </head>
-    <body>
-      <!-- Navigation -->
-      <header th:replace="~{navigation/navbar.html}"> </header>
+<body>
+<!-- Navigation -->
+<header th:replace="~{navigation/navbar.html}"> </header>
 
-      <main role="main" class="container mt-5 pt-5">
+<main role="main" class="container mt-5 pt-5">
 
-          <h1> Tests </h1>
+      <h1> Tests </h1>
 
-          <div class="alert alert-info" role="alert">
-              <p>
-                  Hier sind alle Tests aufgelistet, und je nach Frist sind die bereit zur Bearbeitung. Der
-                  Zulassungsstatus wird auch hier angezeigt und aktualisiert.
-              </p>
-              <p>
-                  <strong>
-                      Hinweis: Die Zulassung erhält man erst, wenn man in jedem Test mind. 50 % der zu erreichten Punkte
-                      hat, ist dies nicht erfüllt, hat man den Kurs nicht bestanden!
-                  </strong>
-              </p>
-          </div>
+      <div class="alert alert-info" role="alert">
+          <p>
+              Hier sind alle Tests aufgelistet, und je nach Frist sind die bereit zur Bearbeitung. Der
+              Zulassungsstatus wird auch hier angezeigt und aktualisiert.
+          </p>
+          <p>
+              <strong>
+                  Hinweis: Die Zulassung erhält man erst, wenn man in jedem Test mind. 50 % der zu erreichten Punkte
+                  hat, ist dies nicht erfüllt, hat man den Kurs nicht bestanden!
+              </strong>
+          </p>
+      </div>
 
-          <div th:if="${message}" class="alert"
-               th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
-              <span th:text="${message}"></span>
-          </div>
+      <div th:if="${message}" class="alert"
+           th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+          <span th:text="${message}"></span>
+      </div>
 
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th>Test</th>
-                      <th>Status</th>
-                  </tr>
-              </thead>
-              <tbody>
-              <tr th:each="exam : ${exams}">
-                  <td>
-                      <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}" th:text="${exam.title}">
-                      </a>
-                  </td>
-                  <td>
-                      <span th:switch="${timeNow.isBefore(exam.startTime)}">
-                          <span th:case="true">Startet bald</span>
-                          <span th:case="false">
-                            <span th:switch="${timeNow.isBefore(exam.endTime)}">
-                                <span th:case="true">Online</span>
-                                <span th:case="false">
-                                    <span th:switch="${timeNow.isBefore(exam.resultTime)}">
-                                        <span th:case="true">In Bearbeitung</span>
-                                        <span th:case="false">Beendet</span>
-                                    </span>
+      <table class="table">
+          <thead>
+              <tr>
+                  <th>Test</th>
+                  <th>Status</th>
+              </tr>
+          </thead>
+          <tbody>
+          <tr th:each="exam : ${exams}">
+              <td>
+                  <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}" th:text="${exam.title}">
+                  </a>
+              </td>
+              <td>
+                  <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                      <span th:case="true">Startet bald</span>
+                      <span th:case="false">
+                        <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                            <span th:case="true">Online</span>
+                            <span th:case="false">
+                                <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                    <span th:case="true">In Bearbeitung</span>
+                                    <span th:case="false">Beendet</span>
                                 </span>
                             </span>
-                          </span>
+                        </span>
                       </span>
-                  </td>
-              </tr>
-              </tbody>
-          </table>
+                  </span>
+              </td>
+          </tr>
+          </tbody>
+      </table>
 
-      </main>
+</main>
 
-      <!-- Navigation -->
-      <header th:replace="~{navigation/navbarDown.html}"> </header>
+<!-- Navigation -->
+<header th:replace="~{navigation/navbarDown.html}"> </header>
 
-      <!-- js Imports -->
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-      <script src="/public/bootstrap-4.0.0/js/bootstrap.min.js"></script>
+<!-- js Imports -->
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
 
-    </body>
+</body>
 </html>

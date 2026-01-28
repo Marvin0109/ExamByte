@@ -1,34 +1,37 @@
 <div style="height: 100px;"></div>
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-bottom bg-dark" xmlns:th="http://www.w3.org/1999/xhtml">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+          aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <!-- Collapsible Navbar Links -->
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
 
-      <li class="nav-item" th:classappend="${currentPath == '/contact'} ? 'active' : ''"
+      <li class="nav-item"
           th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}">
-        <a class="nav-link" href="/contact">
-          Contact
-          <span class="sr-only" th:if="${currentPath == '/contact'}">(current)</span>
+        <a class="nav-link" th:classappend="${currentPath == '/contact'} ? ' active' : ''"
+           href="/contact">
+          Kontakt
+          <span class="visually-hidden" th:if="${currentPath == '/contact'}">(current)</span>
         </a>
       </li>
 
-      <li class="nav-item" th:classappend="${currentPath == '/settings'} ? 'active' : ''"
+      <li class="nav-item"
           th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}">
-        <a class="nav-link" href="/settings">
-          Settings
-          <span class="sr-only" th:if="${currentPath == '/settings'}">(current)</span>
+        <a class="nav-link" th:classappend="${currentPath == '/settings'} ? ' active' : ''"
+           href="/settings">
+          Einstellungen
+          <span class="visually-hidden" th:if="${currentPath == '/settings'}">(current)</span>
         </a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"> ??? </a>
+        <a class="nav-link" href="https://github.com/Marvin0109/ExamByte">
+          Quellcode auf GitHub
+        </a>
       </li>
-
-        <!-- Hier kommen weitere links hinzu (li navbar-nav mr-auto und a...)//-->
     </ul>
   </div>
 </nav>

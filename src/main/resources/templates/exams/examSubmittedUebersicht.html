@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="de" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <script type="module" id="truffle-injected" data-runtime="bkkjeefjfjcfdfifddmkdmcpmaakmelp" src="chrome-extension://bkkjeefjfjcfdfifddmkdmcpmaakmelp/./injected-script/index.js"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="Übersicht aller Prüflinge für eine bestimmte Prüfung">
+  <meta name="author" content="Marvin0109">
   <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
   <title>Exam</title>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
   <!-- Bootstrap core CSS -->
-  <link href="/public/bootstrap-4.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
 
   <!-- Custom styles for this template -->
-  <link href="/public/custom/index.css" rel="stylesheet">
+  <link rel="stylesheet" href="/public/custom/index.css">
 </head>
 <body>
 <!-- Navigation -->
@@ -33,9 +31,6 @@
     <div class="alert alert-info" role="alert">
       <p>
         Hier werden alle Studenten aufgelistet, die erfolgreich die Prüfung bearbeitet haben.
-      </p>
-      <p>
-        Noch nicht korrigierte Lösungen werden in der Tabelle vorangestellt.
       </p>
     </div>
 
@@ -87,6 +82,9 @@
 
 <!-- Navigation -->
 <header th:replace="~{navigation/navbarDown.html}"> </header>
+
+<!-- js Imports -->
+<script defer src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
