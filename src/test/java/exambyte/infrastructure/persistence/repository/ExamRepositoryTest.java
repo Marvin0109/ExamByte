@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,7 +48,7 @@ class ExamRepositoryTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualTo(examEntity.getFachId());
+        assertEquals(result.get(), examEntity.getFachId());
     }
 
     @Test
