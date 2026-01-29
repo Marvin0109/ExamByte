@@ -26,18 +26,15 @@
 
     <h1> Tests </h1>
 
-    <div class="alert alert-info" role="alert">
+    <div class="alert alert-info rounded-3 flex-column" role="alert">
         <i class="fas fa-info-circle fa-lg me-2"></i>
-        <p>
             Hier sind alle Tests aufgelistet, und je nach Frist sind die bereit zur Bearbeitung. Der
             Zulassungsstatus wird auch hier angezeigt und aktualisiert.
-        </p>
-        <p>
+            <br>
             <strong>
                 Hinweis: Die Zulassung erhält man erst, wenn man in jedem Test mind. 50 % der zu erreichten Punkte
                 hat, ist dies nicht erfüllt, hat man den Kurs nicht bestanden!
             </strong>
-        </p>
     </div>
 
     <div th:if="${message}" class="alert"

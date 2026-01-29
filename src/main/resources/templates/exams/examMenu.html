@@ -33,6 +33,7 @@
 
         <div th:unless="${timeLeftBool}">
             <button type="button" class="btn btn-secondary" disabled>
+                <i class="fas fa-rocket me-1"></i>
                 <span th:text="${timeLeft}"></span>
             </button>
         </div>
@@ -52,6 +53,7 @@
                   style="margin-right: 1rem;">
                 <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
                 <button type="submit" class="btn btn-outline-primary">
+                    <i class="fas fa-redo"></i>
                     Test neu starten
                 </button>
             </form>

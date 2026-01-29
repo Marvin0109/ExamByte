@@ -32,45 +32,70 @@
     </div>
 
     <h2>Willkommen <span th:text="${name}">Name</span>!</h2>
-    <p>
-        Ihre aktuelle Rolle:
-        <strong class="text-primary" th:text="${role}">Rolle</strong>
-    </p>
 
     <div class="container">
-        <div class="row mb-2" th:if="${role} == 'Admin'">
-            <div class="col-3 fw-bold">Daten</div>
-            <div class="col-9">
-                <form method="post" th:action="@{/settings/reset}">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <button type="submit" class="btn btn-danger">Exams, Antworten und Reviews löschen</button>
-                </form>
-            </div>
-        </div>
-    </div>
 
-    <div class="container">
-        <div class="row mb-2">
-            <div class="col-3 fw-bold">
-                Rolle wechseln
-            </div>
-            <div class="col-9">
-                <form method="post" th:action="@{/settings/role}">
-                    <button name="role" class="btn btn-secondary"
+        <!-- Rollen -->
+        <div class="card mb-1">
+            <div class="card-body">
+                <div class="mb-2 text-muted small">
+                    Aktuelle Rolle: <strong th:text="${role}"></strong>
+                </div>
+
+                Rolle wechseln zu:
+
+                <form method="post"
+                      th:action="@{/settings/role}"
+                      class="d-flex justify-content-center gap-3 mt-3 flex-wrap">
+                    <button name="role" class="btn btn-primary btn-role"
                             value="student"
-                            th:if="${role != 'Student'}">Student</button>
+                            th:if="${role != 'Student'}">
+                        <i class="fas fa-user-graduate me-1"></i>
+                        Student:in
+                    </button>
 
-                    <button name="role" class="btn btn-secondary"
+                    <button name="role" class="btn btn-primary btn-role"
                             value="reviewer"
-                            th:if="${role != 'Reviewer'}">Reviewer</button>
+                            th:if="${role != 'Reviewer'}">
+                        <i class="fas fa-user-check me-1"></i>
+                        Korrektor:in
+                    </button>
 
-                    <button name="role" class="btn btn-secondary"
+                    <button name="role" class="btn btn-primary btn-role"
                             value="admin"
-                            th:if="${role != 'Admin'}">Admin</button>
+                            th:if="${role != 'Admin'}">
+                        <i class="fas fa-chalkboard-teacher me-1"></i>
+                        Professor:in
+                    </button>
                 </form>
             </div>
         </div>
+
+        <!-- Admin -->
+        <div class="card" th:if="${role} == 'Admin'">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-3 fw-bold">
+                        Exam-Daten löschen
+                    </div>
+                    <div class="col-md-9">
+                        <form method="post"
+                              th:action="@{/settings/reset}"
+                              class="d-flex justify-content-end">
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                                Löschen
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
 </main>
 
 <!-- Navigation -->
