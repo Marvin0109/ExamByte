@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 28.01.2026
+>**aktualisiert am:** 29.01.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -553,3 +553,9 @@
 - HTML Dokumente auf Barrierefreiheit überprüft und korrigiert
 - Startseite mit Einleitung und Nutzungshinweise
 - Extras
+
+---
+
+### 29.01.2026
+**Bereich**: UI 
+- Letzte Bearbeitung der HTML-Dokumente in Hinblick auf Benutzerfreundlichkeit

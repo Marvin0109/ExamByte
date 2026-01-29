@@ -1,7 +1,7 @@
 # TODO für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 27.01.2026
+> **aktualisiert am:** 29.01.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
@@ -17,8 +17,8 @@
 - **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
   - [ ] **CSV-Export**: Formular exportieren
   - [ ] **Testantwort-Einsicht**: Einsicht in Testergebnisse für Admins/Lehrkräfte
-  - [ ] **HTML-Inhalte**: Überarbeiten hinsichtlich Benutzerfreundlichkeit
-  - [ ] **Accessiblity**: Überprüfung auf Accessibility
+  - [X] **HTML-Inhalte**: Überarbeiten hinsichtlich Benutzerfreundlichkeit
+  - [X] **Accessiblity**: Überprüfung auf Accessibility
 
 - **Dokumentation**
   - [X] **arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
@@ -45,8 +45,8 @@ und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 1. [X] arc42-Doc aktualisieren
 2. [X] Code Refactoring mithilfe von SonarQube
 3. [X] Rollenverteilungs-Feature
-4. [ ] HTML-Inhalte Überarbeiten hinsichtlich Benutzerfreundlichkeit
-5. [ ] **Accessiblity**: Überprüfung auf Accessibility
+4. [X] HTML-Inhalte Überarbeiten hinsichtlich Benutzerfreundlichkeit
+5. [X] **Accessiblity**: Überprüfung auf Accessibility
 6. [X] Logiktests vervollständigen
 7. [ ] Korrektur der Freitextantworten
 8. [ ] Zulassungslogik
