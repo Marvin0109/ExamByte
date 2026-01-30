@@ -380,7 +380,7 @@ class ExamControllerServiceTest {
         when(examManagementService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
 
         // Act
-        boolean result = service.failedYetOrNot("student");
+        boolean result = service.hasAnyFailedAttempt("student");
 
         // Assert
         assertThat(result).isEqualTo(status);

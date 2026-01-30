@@ -57,5 +57,5 @@ public interface ExamControllerService {
 
     double getZulassungsProgress(String studentName);
 
-    boolean failedYetOrNot(String studentName);
+    boolean hasAnyFailedAttempt(String studentName);
 }

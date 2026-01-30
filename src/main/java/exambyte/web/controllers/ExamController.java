@@ -179,7 +179,7 @@ public class ExamController {
         LocalDateTime now = LocalDateTime.now();
 
         double progress = service.getZulassungsProgress(studentName);
-        boolean zulassungsStatus = service.failedYetOrNot(studentName);
+        boolean zulassungsStatus = service.hasAnyFailedAttempt(studentName);
 
         model.addAttribute(TIME_NOW, now);
         model.addAttribute("exams", examDTOs);

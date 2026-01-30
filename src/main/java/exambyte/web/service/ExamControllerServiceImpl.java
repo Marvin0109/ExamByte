@@ -9,6 +9,7 @@ import exambyte.web.form.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -179,7 +180,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public boolean failedYetOrNot(String studentLogin) {
+    public boolean hasAnyFailedAttempt(String studentLogin) {
         List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
 
         for (VersuchDTO v : allValidAttempts) {
@@ -193,10 +194,11 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     private List<VersuchDTO> getValidAttempts(String studentLogin) {
         List<ExamDTO> exams = service.getAllExams();
         List<VersuchDTO> allValidAttempts = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
         for (ExamDTO exam : exams) {
             VersuchDTO v = service.getSubmission(exam.fachId(), studentLogin);
-            if (exam.resultTime().isBefore(LocalDateTime.now())) {
+            if (exam.resultTime().isBefore(now)) {
                 allValidAttempts.add(v);
             }
         }
