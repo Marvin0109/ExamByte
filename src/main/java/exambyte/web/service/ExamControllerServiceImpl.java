@@ -162,6 +162,49 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
+    public double getZulassungsProgress(String studentLogin) {
+        List<ExamDTO> exams = service.getAllExams();
+        List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
+
+        double size = exams.size();
+        double progressForSuccessAttempt = 100.0 / size;
+        double progress = 0.0;
+        for (VersuchDTO v : allValidAttempts) {
+            if (v.erreichtePunkte() >= v.maxPunkte() * 0.5) {
+                progress += progressForSuccessAttempt;
+            }
+        }
+
+        return progress;
+    }
+
+    @Override
+    public boolean failedYetOrNot(String studentLogin) {
+        List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
+
+        for (VersuchDTO v : allValidAttempts) {
+            if (v.erreichtePunkte() < v.maxPunkte() * 0.5) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<VersuchDTO> getValidAttempts(String studentLogin) {
+        List<ExamDTO> exams = service.getAllExams();
+        List<VersuchDTO> allValidAttempts = new ArrayList<>();
+
+        for (ExamDTO exam : exams) {
+            VersuchDTO v = service.getSubmission(exam.fachId(), studentLogin);
+            if (exam.resultTime().isBefore(LocalDateTime.now())) {
+                allValidAttempts.add(v);
+            }
+        }
+
+        return allValidAttempts;
+    }
+
+    @Override
     public List<ReviewCoverageForm> getReviewCoverage(List<ExamDTO> examDTOList) {
         List<Double> reviewCoverageList = new ArrayList<>();
         for (ExamDTO examDTO : examDTOList) {

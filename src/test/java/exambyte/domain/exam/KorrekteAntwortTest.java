@@ -1,4 +1,4 @@
-package exambyte.domain.aggregate.exam;
+package exambyte.domain.exam;
 
 import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
 import org.junit.jupiter.api.DisplayName;

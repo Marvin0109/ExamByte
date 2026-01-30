@@ -178,10 +178,15 @@ public class ExamController {
         List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
 
+        double progress = service.getZulassungsProgress(studentName);
+        boolean zulassungsStatus = service.failedYetOrNot(studentName);
+
         model.addAttribute(TIME_NOW, now);
         model.addAttribute("exams", examDTOs);
         model.addAttribute("name", studentName);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        model.addAttribute("progress", progress);
+        model.addAttribute("failedYetOrNot", zulassungsStatus);
         return "exams/examsStudierende";
     }
 

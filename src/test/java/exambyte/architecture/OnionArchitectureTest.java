@@ -39,7 +39,7 @@ class OnionArchitectureTest {
     void onionArchitecture() {
         ArchRule rule = Architectures.onionArchitecture()
             .domainModels("exambyte.domain..")
-            .domainServices("exambyte.domain.model.impl..")
+            .domainServices("exambyte.domain.service..")
             .applicationServices("exambyte.application.service..")
             .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
             .adapter("service", "exambyte.infrastructure.service..",

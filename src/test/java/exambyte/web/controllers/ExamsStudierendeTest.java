@@ -60,16 +60,15 @@ class ExamsStudierendeTest {
     @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT"})
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void listExamsForStudents_02() throws Exception {
-
-        when(service.getAllExams()).thenReturn(List.of());
-
         mvc.perform(get("/exams/examsStudierende"))
             .andExpect(status().isOk())
             .andExpect(view().name("exams/examsStudierende"))
             .andExpect(model().attribute("name", "Marvin0109"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("exams"))
-            .andExpect(model().attributeExists("timeNow"));
+            .andExpect(model().attributeExists("timeNow"))
+            .andExpect(model().attributeExists("progress"))
+            .andExpect(model().attributeExists("failedYetOrNot"));
     }
 
     @Test

@@ -4,12 +4,15 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.StudentDTO;
+import exambyte.application.dto.VersuchDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamManagementService;
 import exambyte.web.form.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,13 +24,13 @@ import static org.mockito.Mockito.*;
 
 class ExamControllerServiceTest {
 
-    private ExamManagementService examService;
+    private ExamManagementService examManagementService;
     private ExamControllerService service;
 
     @BeforeEach
     void setUp() {
-        examService = mock(ExamManagementService.class);
-        service = new ExamControllerServiceImpl(examService);
+        examManagementService = mock(ExamManagementService.class);
+        service = new ExamControllerServiceImpl(examManagementService);
     }
 
     @Test
@@ -67,8 +70,8 @@ class ExamControllerServiceTest {
                 examUUID,
                 QuestionTypeDTO.FREITEXT);
 
-        when(examService.getExam(examUUID)).thenReturn(exam);
-        when(examService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
+        when(examManagementService.getExam(examUUID)).thenReturn(exam);
+        when(examManagementService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
 
         // Act
         ExamForm form = service.fillExamForm(examUUID);
@@ -102,9 +105,9 @@ class ExamControllerServiceTest {
                 examUUID,
                 QuestionTypeDTO.MC);
 
-        when(examService.getExam(examUUID)).thenReturn(exam);
-        when(examService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
-        when(examService.getChoiceForFrage(frage.fachId())).thenReturn("A, B \n C \n D");
+        when(examManagementService.getExam(examUUID)).thenReturn(exam);
+        when(examManagementService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
+        when(examManagementService.getChoiceForFrage(frage.fachId())).thenReturn("A, B \n C \n D");
 
         // Act
         ExamForm form = service.fillExamForm(examUUID);
@@ -148,8 +151,8 @@ class ExamControllerServiceTest {
         service.createQuestions(form, profFachId, examUUID);
 
         // Assert
-        verify(examService).createFrage(argThat(f -> f.frageText().equals("F1")));
-        verify(examService, times(2)).createChoiceFrage(any(), any(), any());
+        verify(examManagementService).createFrage(argThat(f -> f.frageText().equals("F1")));
+        verify(examManagementService, times(2)).createChoiceFrage(any(), any(), any());
     }
 
     @Test
@@ -171,7 +174,7 @@ class ExamControllerServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, profFachId, examUUID));
 
         // Assert
-        verify(examService, never()).createFrage(any());
+        verify(examManagementService, never()).createFrage(any());
     }
 
     @Test
@@ -190,7 +193,7 @@ class ExamControllerServiceTest {
                 start.plusHours(2)
         );
 
-        when(examService.reviewCoverage(examUUID)).thenReturn(50.0);
+        when(examManagementService.reviewCoverage(examUUID)).thenReturn(50.0);
 
         // Act
         List<ReviewCoverageForm> result = service.getReviewCoverage(List.of(exam));
@@ -276,7 +279,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("Bewertungsstatus: Alice hat Bewertung, Bob nicht")
     void getSubmitInfo_01() {
         // Arrange
         UUID examUUID = UUID.randomUUID();
@@ -284,11 +287,11 @@ class ExamControllerServiceTest {
         StudentDTO student1 = new StudentDTO(UUID.randomUUID(),"Alice");
         StudentDTO student2 = new StudentDTO(UUID.randomUUID(),"Bob");
 
-        when(examService.getStudentSubmittedExam(examUUID))
+        when(examManagementService.getStudentSubmittedExam(examUUID))
                 .thenReturn(List.of(student1, student2));
 
-        when(examService.isSubmitBeingReviewed(examUUID, student1)).thenReturn(true);
-        when(examService.isSubmitBeingReviewed(examUUID, student2)).thenReturn(false);
+        when(examManagementService.isSubmitBeingReviewed(examUUID, student1)).thenReturn(true);
+        when(examManagementService.isSubmitBeingReviewed(examUUID, student2)).thenReturn(false);
 
         // Act
         List<SubmitInfo> result = service.getSubmitInfo(examUUID);
@@ -306,8 +309,82 @@ class ExamControllerServiceTest {
         assertEquals(student2.fachId(), info2.fachId());
         assertFalse(info2.reviewStatus());
 
-        verify(examService).getStudentSubmittedExam(examUUID);
-        verify(examService).isSubmitBeingReviewed(examUUID, student1);
-        verify(examService).isSubmitBeingReviewed(examUUID, student2);
+        verify(examManagementService).getStudentSubmittedExam(examUUID);
+        verify(examManagementService).isSubmitBeingReviewed(examUUID, student1);
+        verify(examManagementService).isSubmitBeingReviewed(examUUID, student2);
     }
+
+    @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, expectedProgress={3}")
+    @CsvSource({
+            "15, 20, 100.0",  // > 50%
+            "10, 20, 100.0",  // = 50%
+            "8, 20, 0.0"      // < 50%
+    })
+    void getZulassungProgress(int erreichtePunkte, int maxPunkte, double expectedProgress) {
+        // Arrange
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
+        List<ExamDTO> exams = List.of(
+                new ExamDTO(
+                        UUID.randomUUID(),
+                        "Exam",
+                        UUID.randomUUID(),
+                        start,
+                        start.plusHours(1),
+                        start.plusHours(2))
+        );
+
+        VersuchDTO versuch = new VersuchDTO(
+                start.plusHours(3),
+                erreichtePunkte,
+                maxPunkte,
+                ((double) erreichtePunkte / maxPunkte) * 100
+        );
+
+        when(examManagementService.getAllExams()).thenReturn(exams);
+        when(examManagementService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
+
+        // Act
+        double result = service.getZulassungsProgress("student");
+
+        // Assert
+        assertThat(result).isEqualTo(expectedProgress);
+    }
+
+    @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, status={3}")
+    @CsvSource({
+            "15, 20, false",  // > 50%
+            "10, 20, false",  // = 50%
+            "8, 20, true"     // < 50%
+    })
+    void failedYetOrNot(int erreichtePunkte, int maxPunkte, boolean status) {
+        // Arrange
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
+        List<ExamDTO> exams = List.of(
+                new ExamDTO(
+                        UUID.randomUUID(),
+                        "Exam",
+                        UUID.randomUUID(),
+                        start,
+                        start.plusHours(1),
+                        start.plusHours(2))
+        );
+
+        VersuchDTO versuch = new VersuchDTO(
+                start.plusHours(3),
+                erreichtePunkte,
+                maxPunkte,
+                ((double) erreichtePunkte / maxPunkte) * 100
+        );
+
+        when(examManagementService.getAllExams()).thenReturn(exams);
+        when(examManagementService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
+
+        // Act
+        boolean result = service.failedYetOrNot("student");
+
+        // Assert
+        assertThat(result).isEqualTo(status);
+    }
+
+
 }

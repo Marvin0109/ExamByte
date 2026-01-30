@@ -54,4 +54,8 @@ public interface ExamControllerService {
     void reset();
 
     ProfessorDTO getProfessorByFachId(UUID fachId);
+
+    double getZulassungsProgress(String studentName);
+
+    boolean failedYetOrNot(String studentName);
 }
