@@ -2,6 +2,7 @@ package exambyte.application.service;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.VersuchDTO;
 import exambyte.web.form.ExamForm;
 import exambyte.web.form.ExamTimeInfo;
@@ -51,4 +52,6 @@ public interface ExamControllerService {
     Optional<UUID> getProfFachIDByName(String name);
 
     void reset();
+
+    ProfessorDTO getProfessorByFachId(UUID fachId);
 }

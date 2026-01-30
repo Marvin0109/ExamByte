@@ -115,6 +115,11 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
+    public ProfessorDTO getProfessorByFachId(UUID fachId) {
+        return service.getProfessor(fachId);
+    }
+
+    @Override
     public void createQuestions(ExamForm form, UUID profFachID, UUID examUUID) {
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();

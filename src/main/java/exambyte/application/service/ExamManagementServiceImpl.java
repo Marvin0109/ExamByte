@@ -5,6 +5,7 @@ import exambyte.application.dto.*;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
     private final StudentDTOMapper studentDTOMapper;
+    private final ProfessorDTOMapper professorDTOMapper;
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
@@ -56,7 +58,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      AntwortDTOMapper antwortDTOMapper,
                                      KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
                                      ReviewDTOMapper reviewDTOMapper,
-                                     StudentDTOMapper studentDTOMapper) {
+                                     StudentDTOMapper studentDTOMapper,
+                                     ProfessorDTOMapper professorDTOMapper) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
@@ -71,6 +74,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.frageDTOMapper = frageDTOMapper;
         this.antwortDTOMapper = antwortDTOMapper;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
+        this.professorDTOMapper = professorDTOMapper;
         this.reviewDTOMapper = reviewDTOMapper;
         this.studentDTOMapper = studentDTOMapper;
     }
@@ -225,6 +229,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     @Override
     public Optional<UUID> getProfFachIDByName(String name) {
         return professorService.getProfessorFachIdByName(name);
+    }
+
+    @Override
+    public ProfessorDTO getProfessor(UUID profFachId) {
+        Professor professor = professorService.getProfessor(profFachId);
+        return professorDTOMapper.toDTO(professor);
     }
 
     @Override

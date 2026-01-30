@@ -25,6 +25,8 @@ public interface ExamManagementService {
 
     Optional<UUID> getProfFachIDByName(String name);
 
+    ProfessorDTO getProfessor(UUID profFachId);
+
     void createFrage(FrageDTO frageDTO);
 
     void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);

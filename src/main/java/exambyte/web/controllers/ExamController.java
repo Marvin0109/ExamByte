@@ -1,6 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.VersuchDTO;
 import exambyte.web.form.*;
 import exambyte.application.service.ExamControllerService;
@@ -196,8 +197,8 @@ public class ExamController {
         ExamDTO examDTO = service.getExamByUUID(examFachId);
         boolean alreadySubmitted = service.examIsAlreadySubmitted(examFachId, studentLogin);
 
-        UUID author = examDTO.professorFachId();
-        String authorIDString = author.toString();
+        UUID profFachId = examDTO.professorFachId();
+        ProfessorDTO prof = service.getProfessorByFachId(profFachId);
 
         if (alreadySubmitted) {
             VersuchDTO attempt = service.getAttempt(examFachId, studentLogin);
@@ -210,9 +211,7 @@ public class ExamController {
         model.addAttribute("alreadySubmitted", alreadySubmitted);
         model.addAttribute("timeLeft", examTimeInfo.fristAnzeige());
         model.addAttribute("timeLeftBool", examTimeInfo.timeLeft());
-
-        //TODO: For better UX: Show author name instead
-        model.addAttribute("authorID", authorIDString);
+        model.addAttribute("authorName", prof.name());
         return "exams/examMenu";
     }
 

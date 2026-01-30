@@ -42,6 +42,7 @@ class ExamManagementServiceTest {
     private AntwortDTOMapper antwortDTOMapper;
     private ReviewDTOMapper reviewDTOMapper;
     private StudentDTOMapper studentDTOMapper;
+    private ProfessorDTOMapper professorDTOMapper;
 
     private static final String STUDENT_NAME = "Marvin0109";
     private static final String PROF_NAME = "Prof";
@@ -86,7 +87,8 @@ class ExamManagementServiceTest {
                 antwortDTOMapper,
                 korrekteAntwortenDTOMapper,
                 reviewDTOMapper,
-                studentDTOMapper);
+                studentDTOMapper,
+                professorDTOMapper);
     }
 
     @Test
