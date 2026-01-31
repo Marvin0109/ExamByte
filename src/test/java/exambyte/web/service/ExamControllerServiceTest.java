@@ -1,13 +1,11 @@
 package exambyte.web.service;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.StudentDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamManagementService;
 import exambyte.web.form.*;
+import net.bytebuddy.asm.Advice;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +14,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -387,5 +387,58 @@ class ExamControllerServiceTest {
         assertThat(result).isEqualTo(status);
     }
 
+    @Test
+    void createAnswerForm_success() {
+        UUID studentUUID = UUID.randomUUID();
+        UUID examUUID = UUID.randomUUID();
+        LocalDateTime time = LocalDateTime.of(2000, 1, 1, 0, 0);
 
+        FrageDTO frage1 = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 1",
+                2,
+                UUID.randomUUID(),
+                examUUID,
+                QuestionTypeDTO.FREITEXT);
+
+        FrageDTO frage2 = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 2",
+                1,
+                UUID.randomUUID(),
+                examUUID,
+                QuestionTypeDTO.FREITEXT);
+
+        AntwortDTO antwort1 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 1",
+                frage1.fachId(),
+                studentUUID,
+                time
+        );
+
+        AntwortDTO antwort2 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort 2",
+                frage2.fachId(),
+                studentUUID,
+                time
+        );
+
+        Map<FrageDTO, AntwortDTO> map = new LinkedHashMap<>();
+        map.put(frage1, antwort1);
+        map.put(frage2, antwort2);
+
+        when(examManagementService.antwortHasReview(antwort1)).thenReturn(false);
+        when(examManagementService.antwortHasReview(antwort2)).thenReturn(true);
+
+        List<AnswerForm> result = service.createAnswerForm(map);
+        AnswerForm form = result.getFirst();
+
+        assertThat(result).hasSize(1);
+        assertThat(form.getFrageText()).isEqualTo("Frage 1");
+        assertThat(form.getAntwort()).isEqualTo("Antwort 1");
+        assertThat(form.getMaxPunkte()).isEqualTo(2);
+        assertThat(form.getAntwortFachId()).isEqualTo(antwort1.fachId());
+    }
 }

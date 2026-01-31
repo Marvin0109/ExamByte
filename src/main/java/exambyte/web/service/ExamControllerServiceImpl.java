@@ -351,10 +351,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map) {
         List<AnswerForm> answerFormList = new ArrayList<>();
-        AnswerForm answerForm = new AnswerForm();
 
         for (Map.Entry<FrageDTO, AntwortDTO> entry : map.entrySet()) {
             if (!service.antwortHasReview(entry.getValue())) {
+                AnswerForm answerForm = new AnswerForm();
                 answerForm.setFrageText(entry.getKey().frageText());
                 answerForm.setAntwort(entry.getValue().antwortText());
                 answerForm.setMaxPunkte(entry.getKey().maxPunkte());
