@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -173,13 +174,17 @@ public class ExamController {
     @Secured("ROLE_REVIEWER")
     public String createReview(
             @Valid ReviewForm reviewForm,
+            BindingResult bindingResult,
             @PathVariable UUID antwortFachId,
             RedirectAttributes redirectAttributes,
-            BindingResult bindingResult,
             OAuth2AuthenticationToken auth) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(MESSAGE, bindingResult.getAllErrors());
+            String message = bindingResult.getFieldErrors().stream()
+                            .findFirst()
+                            .map(FieldError::getDefaultMessage)
+                            .orElse("Ungültige Eingabe");
+            redirectAttributes.addFlashAttribute(MESSAGE, message);
             redirectAttributes.addFlashAttribute(SUCCESS, false);
             return "redirect:/exams/examsKorrektor";
         }
