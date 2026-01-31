@@ -48,16 +48,16 @@
             <p class="card-text">Ist der Fortschrittsbalken rot, hat man den Kurs nicht bestanden!
             Bei Unklarheiten bitte den zuständigen Professor:in / Korrektor:in benachrichtigen.</p>
 
-            <div class="progress">
+            <div class="progress" role="progressbar"
+                 aria-label="Zulassungsfortschrittleiste"
+                 aria-valuemin="0"
+                 th:attr="aria-valuenow=${failedYetOrNot ? 100 : progress}"
+                 aria-valuemax="100">
+
                 <div class="progress-bar progress-bar-striped progress-bar-animated"
-                     role="progressbar"
                      th:classappend="${failedYetOrNot} ? ' bg-danger' : ''"
-                     th:style="'width:' + (failedYetOrNot ? 100 : progress) + '%'"
-                     th:attr="aria-valuenow=${failedYetOrNot ? 100 : #numbers.formatDecimal(progress, 0, 1)}"
-                     aria-valuemin="0"
-                     aria-valuemax="100">
-                    <span th:text="${#numbers.formatDecimal(progress, 1, 2)} + '%'">
-                    </span>
+                     th:style="${'width:' + (failedYetOrNot ? 100 : T(java.lang.Math).round(progress)) + '%'}">
+                    <span th:text="${#numbers.formatDecimal(progress, 1, 0)} + '%'"></span>
                 </div>
             </div>
         </div>
