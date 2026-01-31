@@ -8,6 +8,7 @@ import exambyte.application.dto.VersuchDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamManagementService;
 import exambyte.web.form.*;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -316,8 +317,8 @@ class ExamControllerServiceTest {
 
     @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, expectedProgress={3}")
     @CsvSource({
-            "15, 20, 100.0",  // > 50%
-            "10, 20, 100.0",  // = 50%
+            "15, 20, 8.33",  // > 50%
+            "10, 20, 8.33",  // = 50%
             "8, 20, 0.0"      // < 50%
     })
     void getZulassungProgress(int erreichtePunkte, int maxPunkte, double expectedProgress) {
@@ -347,7 +348,7 @@ class ExamControllerServiceTest {
         double result = service.getZulassungsProgress("student");
 
         // Assert
-        assertThat(result).isEqualTo(expectedProgress);
+        assertThat(result).isCloseTo(expectedProgress, Offset.offset(0.01));
     }
 
     @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, status={3}")

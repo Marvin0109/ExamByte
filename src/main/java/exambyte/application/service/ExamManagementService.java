@@ -54,4 +54,10 @@ public interface ExamManagementService {
     List<FrageDTO> getFreitextFragen(UUID examFachId);
 
     List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId);
+
+    boolean antwortHasReview(AntwortDTO antwort);
+
+    void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId);
+
+    UUID getReviewerByName(String name);
 }

@@ -164,10 +164,9 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public double getZulassungsProgress(String studentLogin) {
-        List<ExamDTO> exams = service.getAllExams();
         List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
 
-        double size = exams.size();
+        double size = 12;
         double progressForSuccessAttempt = 100.0 / size;
         double progress = 0.0;
         for (VersuchDTO v : allValidAttempts) {
@@ -331,5 +330,55 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public void reset() {
         service.reset();
+    }
+
+    @Override
+    public Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examFachId, UUID studentFachId) {
+        List<FrageDTO> fragen = service.getFreitextFragen(examFachId);
+        List<AntwortDTO> antworten = service.getFreitextAntwortenForExam(examFachId);
+
+        Map<FrageDTO, AntwortDTO> resultMap = new HashMap<>();
+
+        for (FrageDTO frage : fragen) {
+            antworten.stream()
+                    .filter(a -> a.frageFachId().equals(frage.fachId()))
+                    .filter(a -> a.studentFachId().equals(studentFachId))
+                    .findFirst().ifPresent(ans -> resultMap.put(frage, ans));
+        }
+
+        return resultMap;
+    }
+
+    @Override
+    public List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map) {
+        List<AnswerForm> answerFormList = new ArrayList<>();
+        AnswerForm answerForm = new AnswerForm();
+
+        for (Map.Entry<FrageDTO, AntwortDTO> entry : map.entrySet()) {
+            if (!service.antwortHasReview(entry.getValue())) {
+                answerForm.setFrageText(entry.getKey().frageText());
+                answerForm.setAntwort(entry.getValue().antwortText());
+                answerForm.setMaxPunkte(entry.getKey().maxPunkte());
+                answerForm.setAntwortFachId(entry.getValue().fachId());
+
+                answerFormList.add(answerForm);
+            }
+        }
+
+        return answerFormList;
+    }
+
+    @Override
+    public void createReview(ReviewForm reviewForm, UUID antwortFachId, UUID korrektorFachId) {
+        service.createReview(
+                reviewForm.getBewertung(),
+                reviewForm.getPunkteVergeben(),
+                antwortFachId,
+                korrektorFachId);
+    }
+
+    @Override
+    public UUID getReviewerByName(String name) {
+        return service.getReviewerByName(name);
     }
 }

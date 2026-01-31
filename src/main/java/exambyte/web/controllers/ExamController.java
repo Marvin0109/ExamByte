@@ -1,8 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.ProfessorDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.*;
 import exambyte.web.form.*;
 import exambyte.application.service.ExamControllerService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,7 +56,6 @@ public class ExamController {
     public String createExam(
             @Valid ExamForm form,
             BindingResult bindingResult,
-            Model model,
             OAuth2AuthenticationToken auth,
             RedirectAttributes redirectAttributes) {
 
@@ -154,7 +151,6 @@ public class ExamController {
         return "exams/examSubmittedUebersicht";
     }
 
-    //TODO: Korrektur Seite, HTML existiert noch nicht
     @GetMapping("/showSubmit/{examFachId}/{studentFachId}")
     @Secured("ROLE_REVIEWER")
     public String showSubmit(
@@ -162,7 +158,40 @@ public class ExamController {
             @PathVariable UUID examFachId,
             @PathVariable UUID studentFachId) {
 
+        Map<FrageDTO, AntwortDTO> frageAntwortMap =
+                service.getFreitextAntwortenForExamAndStudent(examFachId, studentFachId);
+
+        List<AnswerForm> antwortForm = service.createAnswerForm(frageAntwortMap);
+        ReviewForm reviewForm = new ReviewForm();
+
+        model.addAttribute("antworten", antwortForm);
+        model.addAttribute("reviewForm", reviewForm);
         return "exams/showSubmit";
+    }
+
+    @PostMapping("/createReview/{antwortFachId}")
+    @Secured("ROLE_REVIEWER")
+    public String createReview(
+            @Valid ReviewForm reviewForm,
+            @PathVariable UUID antwortFachId,
+            RedirectAttributes redirectAttributes,
+            BindingResult bindingResult,
+            OAuth2AuthenticationToken auth) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(MESSAGE, bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
+            return "redirect:/exams/examsKorrektor";
+        }
+
+        OAuth2User user = auth.getPrincipal();
+        String name = user.getAttribute(LOGIN_NAME);
+        UUID korrektorFachId = service.getReviewerByName(name);
+        service.createReview(reviewForm, antwortFachId, korrektorFachId);
+
+        redirectAttributes.addFlashAttribute(MESSAGE, "Bewertung erfolgreich!");
+        redirectAttributes.addFlashAttribute(SUCCESS, true);
+        return "redirect:/exams/examsKorrektor";
     }
 
     @GetMapping("/examsStudierende")

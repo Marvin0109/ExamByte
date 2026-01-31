@@ -5,9 +5,11 @@ import exambyte.application.dto.*;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.*;
+import exambyte.web.form.AnswerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -452,5 +454,28 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public boolean antwortHasReview(AntwortDTO antwort) {
+        return reviewService.getReviewByAntwortFachId(antwort.fachId()) != null;
+    }
+
+    @Override
+    public void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId) {
+        Review review = new Review.ReviewBuilder()
+                .korrektorFachId(korrektorFachId)
+                .punkte(punkte)
+                .antwortFachId(antwortFachId)
+                .bewertung(bewertung)
+                .build();
+
+        reviewService.addReview(review);
+    }
+
+    @Override
+    public UUID getReviewerByName(String name) {
+        Optional<Korrektor> k = korrektorService.getKorrektorByName(name);
+        return k.map(Korrektor::uuid).orElse(null);
     }
 }
