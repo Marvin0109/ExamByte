@@ -13,7 +13,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Service
 public class ExamSubmissionServiceImpl implements ExamSubmissionService {
@@ -34,7 +33,6 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
-    private final StudentDTOMapper studentDTOMapper;
 
     private static final Logger logger = Logger.getLogger(ExamSubmissionServiceImpl.class.getName());
 
@@ -51,8 +49,7 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                                      ExamDTOMapper examDTOMapper,
                                      FrageDTOMapper frageDTOMapper,
                                      AntwortDTOMapper antwortDTOMapper,
-                                     ReviewDTOMapper reviewDTOMapper,
-                                     StudentDTOMapper studentDTOMapper) {
+                                     ReviewDTOMapper reviewDTOMapper) {
 
         this.answerSubmissionService = answerSubmissionService;
         this.reviewGenerationService = reviewGenerationService;
@@ -68,7 +65,6 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
         this.frageDTOMapper = frageDTOMapper;
         this.antwortDTOMapper = antwortDTOMapper;
         this.reviewDTOMapper = reviewDTOMapper;
-        this.studentDTOMapper = studentDTOMapper;
     }
 
     @Override
@@ -210,21 +206,5 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                 gesamtMaxPunkte,
                 prozent
         );
-    }
-
-    @Override
-    public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
-        List<AntwortDTO> antworten = answerSubmissionService.getFreitextAntwortenForExam(examId);
-
-        return antworten.stream()
-                .collect(Collectors.toMap(
-                        AntwortDTO::studentFachId,
-                        a -> studentService.getStudent(a.studentFachId()),
-                        (existing, duplicate) -> existing
-                ))
-                .values()
-                .stream()
-                .map(studentDTOMapper::toDTO)
-                .toList();
     }
 }

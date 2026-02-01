@@ -19,6 +19,7 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
     private final ReviewManagementService reviewManagementService;
     private final ExamSubmissionService examSubmissionService;
     private final AnswerSubmissionService answerSubmissionService;
+    private final StudentQueryService studentQueryService;
 
 
     public ExamUseCaseServiceImpl(ExamQueryService examQueryService,
@@ -26,7 +27,8 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
                                   QuestionQueryService questionQueryService,
                                   ReviewManagementService reviewManagementService,
                                   ExamSubmissionService examSubmissionService,
-                                  AnswerSubmissionService answerSubmissionService) {
+                                  AnswerSubmissionService answerSubmissionService,
+                                  StudentQueryService studentQueryService) {
 
         this.examQueryService = examQueryService;
         this.professorQueryService = professorQueryService;
@@ -34,6 +36,7 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
         this.reviewManagementService = reviewManagementService;
         this.examSubmissionService = examSubmissionService;
         this.answerSubmissionService = answerSubmissionService;
+        this.studentQueryService = studentQueryService;
     }
 
     @Override
@@ -133,7 +136,7 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 
     @Override
     public List<StudentDTO> getStudentSubmittedExam(UUID examFachId) {
-        return examSubmissionService.getStudentSubmittedExam(examFachId);
+        return studentQueryService.getStudentSubmittedExam(examFachId);
     }
 
     @Override

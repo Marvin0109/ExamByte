@@ -37,6 +37,9 @@ class ExamUseCaseServiceTest {
     @Mock
     private AnswerSubmissionService answerSubmissionService;
 
+    @Mock
+    private StudentQueryService studentQueryService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -47,7 +50,8 @@ class ExamUseCaseServiceTest {
                 questionQueryService,
                 reviewManagementService,
                 examSubmissionService,
-                answerSubmissionService);
+                answerSubmissionService,
+                studentQueryService);
     }
 
     @Test
