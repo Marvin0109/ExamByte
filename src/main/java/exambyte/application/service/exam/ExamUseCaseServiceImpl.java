@@ -229,16 +229,16 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 //        return frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examFachId));
 //    }
 
-    @Override
-    public Optional<UUID> getProfFachIDByName(String name) {
-        return professorService.getProfessorFachIdByName(name);
-    }
-
-    @Override
-    public ProfessorDTO getProfessor(UUID profFachId) {
-        Professor professor = professorService.getProfessor(profFachId);
-        return professorDTOMapper.toDTO(professor);
-    }
+//    @Override
+//    public Optional<UUID> getProfFachIDByName(String name) {
+//        return professorService.getProfessorFachIdByName(name);
+//    }
+//
+//    @Override
+//    public ProfessorDTO getProfessor(UUID profFachId) {
+//        Professor professor = professorService.getProfessor(profFachId);
+//        return professorDTOMapper.toDTO(professor);
+//    }
 
 //    @Override
 //    public void createFrage(FrageDTO frageDTO) {
