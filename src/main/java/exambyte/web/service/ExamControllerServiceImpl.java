@@ -306,7 +306,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         List<SubmitInfo> submitInfoList = new ArrayList<>();
 
         for (StudentDTO student : students) {
-            if (service.isSubmitBeingReviewed(examUUID, student)) {
+            if (service.isSubmitBeingReviewed(examUUID, student.fachId())) {
                 submitInfoList.add(new SubmitInfo(student.name(), student.fachId(),  true));
             } else {
                 submitInfoList.add(new SubmitInfo(student.name(), student.fachId(), false));

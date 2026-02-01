@@ -4,8 +4,6 @@ import exambyte.application.dto.*;
 import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.ReviewManagementService;
 import exambyte.application.service.submission.ExamSubmissionService;
-import exambyte.domain.mapper.*;
-import exambyte.domain.service.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -136,8 +134,8 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
     }
 
     @Override
-    public boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student) {
-        return reviewManagementService.submitHasReview(examFachId, student.fachId());
+    public boolean isSubmitBeingReviewed(UUID examFachId, UUID studentId) {
+        return reviewManagementService.submitHasReview(examFachId, studentId);
     }
 
     @Override

@@ -49,7 +49,7 @@ public interface ExamUseCaseService {
 
     List<StudentDTO> getStudentSubmittedExam(UUID examFachId);
 
-    boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student);
+    boolean isSubmitBeingReviewed(UUID examFachId, UUID studentId);
 
     List<FrageDTO> getFreitextFragen(UUID examFachId);
 

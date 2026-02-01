@@ -290,8 +290,8 @@ class ExamControllerServiceTest {
         when(examUseCaseService.getStudentSubmittedExam(examUUID))
                 .thenReturn(List.of(student1, student2));
 
-        when(examUseCaseService.isSubmitBeingReviewed(examUUID, student1)).thenReturn(true);
-        when(examUseCaseService.isSubmitBeingReviewed(examUUID, student2)).thenReturn(false);
+        when(examUseCaseService.isSubmitBeingReviewed(examUUID, student1.fachId())).thenReturn(true);
+        when(examUseCaseService.isSubmitBeingReviewed(examUUID, student2.fachId())).thenReturn(false);
 
         // Act
         List<SubmitInfo> result = service.getSubmitInfo(examUUID);
@@ -310,8 +310,8 @@ class ExamControllerServiceTest {
         assertFalse(info2.reviewStatus());
 
         verify(examUseCaseService).getStudentSubmittedExam(examUUID);
-        verify(examUseCaseService).isSubmitBeingReviewed(examUUID, student1);
-        verify(examUseCaseService).isSubmitBeingReviewed(examUUID, student2);
+        verify(examUseCaseService).isSubmitBeingReviewed(examUUID, student1.fachId());
+        verify(examUseCaseService).isSubmitBeingReviewed(examUUID, student2.fachId());
     }
 
     @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, expectedProgress={3}")
