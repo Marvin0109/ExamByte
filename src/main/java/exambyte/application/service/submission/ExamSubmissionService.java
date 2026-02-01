@@ -1,5 +1,7 @@
 package exambyte.application.service.submission;
 
+import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.StudentDTO;
 import exambyte.application.dto.VersuchDTO;
 
 import java.time.LocalDateTime;
@@ -15,4 +17,8 @@ public interface ExamSubmissionService {
     void removeOldAnswers(UUID examId, String name);
 
     VersuchDTO getSubmission(UUID examFachId, String studentName);
+
+    List<StudentDTO> getStudentSubmittedExam(UUID examId);
+
+    List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
 }

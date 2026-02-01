@@ -4,6 +4,8 @@ import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.domain.mapper.FrageDTOMapper;
 import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
+import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.FrageService;
 import exambyte.domain.service.KorrekteAntwortenService;
 import org.springframework.stereotype.Service;
@@ -49,5 +51,15 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     @Override
     public String getChoiceForFrage(UUID frageId) {
         return korrekteAntwortenService.findKorrekteAntwort(frageId).getAntwortOptionen();
+    }
+
+    @Override
+    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
+        List<Frage> fragen = frageService.getFragenForExam(examFachId);
+
+        return fragen.stream()
+                .filter(frage -> QuestionType.FREITEXT == frage.getType())
+                .map(frageDTOMapper::toDTO)
+                .toList();
     }
 }

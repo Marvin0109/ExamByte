@@ -3,6 +3,7 @@ package exambyte.application.service.submission;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ReviewData;
+import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.AutomaticReviewService;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.Review;
@@ -29,10 +30,13 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
     private final KorrekteAntwortenService korrekteAntwortenService;
     private final AutomaticReviewService automaticReviewService;
 
+    private final QuestionQueryService questionQueryService;
+
     private final ExamDTOMapper examDTOMapper;
     private final FrageDTOMapper frageDTOMapper;
     private final AntwortDTOMapper antwortDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
+    private final StudentDTOMapper studentDTOMapper;
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
 
     private static final Logger logger = Logger.getLogger(ExamSubmissionServiceImpl.class.getName());
@@ -45,10 +49,12 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                                      AntwortService antwortService,
                                      KorrekteAntwortenService korrekteAntwortenService,
                                      AutomaticReviewService automaticReviewService,
+                                     QuestionQueryService questionQueryService,
                                      ExamDTOMapper examDTOMapper,
                                      FrageDTOMapper frageDTOMapper,
                                      AntwortDTOMapper antwortDTOMapper,
                                      ReviewDTOMapper reviewDTOMapper,
+                                     StudentDTOMapper studentDTOMapper,
                                      KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper) {
 
         this.examService = examService;
@@ -59,12 +65,13 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
         this.antwortService = antwortService;
         this.korrekteAntwortenService = korrekteAntwortenService;
         this.automaticReviewService = automaticReviewService;
+        this.questionQueryService = questionQueryService;
         this.examDTOMapper = examDTOMapper;
         this.frageDTOMapper = frageDTOMapper;
         this.antwortDTOMapper = antwortDTOMapper;
         this.reviewDTOMapper = reviewDTOMapper;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
-
+        this.studentDTOMapper = studentDTOMapper;
     }
 
     @Override
@@ -262,5 +269,30 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                     return review != null ? review.getPunkte() : 0;
                 })
                 .sum();
+    }
+
+    @Override
+    public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
+        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examId);
+
+        return antworten.stream()
+                .collect(Collectors.toMap(
+                        AntwortDTO::studentFachId,
+                        a -> studentService.getStudent(a.studentFachId()),
+                        (existing, duplicate) -> existing
+                ))
+                .values()
+                .stream()
+                .map(studentDTOMapper::toDTO)
+                .toList();
+    }
+
+    @Override
+    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
+        return questionQueryService.getFreitextFragen(examFachId).stream()
+                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.fachId()))
+                .filter(Objects::nonNull)
+                .map(antwortDTOMapper::toDTO)
+                .toList();
     }
 }

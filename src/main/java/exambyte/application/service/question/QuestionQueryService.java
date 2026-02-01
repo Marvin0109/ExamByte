@@ -14,4 +14,6 @@ public interface QuestionQueryService {
     void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);
 
     String getChoiceForFrage(UUID frageId);
+
+    List<FrageDTO> getFreitextFragen(UUID examId);
 }

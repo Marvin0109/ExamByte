@@ -403,22 +403,22 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
         return Math.round(coverage * 100.0) / 100.0;
     }
 
-    @Override
-    public List<StudentDTO> getStudentSubmittedExam(UUID examFachId) {
-
-        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
-
-        return antworten.stream()
-            .collect(Collectors.toMap(
-                    AntwortDTO::studentFachId,
-                    a -> studentService.getStudent(a.studentFachId()),
-                    (existing, duplicate) -> existing
-            ))
-            .values()
-            .stream()
-            .map(studentDTOMapper::toDTO)
-            .toList();
-    }
+//    @Override
+//    public List<StudentDTO> getStudentSubmittedExam(UUID examFachId) {
+//
+//        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
+//
+//        return antworten.stream()
+//            .collect(Collectors.toMap(
+//                    AntwortDTO::studentFachId,
+//                    a -> studentService.getStudent(a.studentFachId()),
+//                    (existing, duplicate) -> existing
+//            ))
+//            .values()
+//            .stream()
+//            .map(studentDTOMapper::toDTO)
+//            .toList();
+//    }
 
     @Override
     public boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student) {
@@ -438,24 +438,24 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
         return true;
     }
 
-    @Override
-    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
-        List<Frage> fragen = frageService.getFragenForExam(examFachId);
+//    @Override
+//    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
+//        List<Frage> fragen = frageService.getFragenForExam(examFachId);
+//
+//        return fragen.stream()
+//                .filter(frage -> QuestionType.FREITEXT == frage.getType())
+//                .map(frageDTOMapper::toDTO)
+//                .toList();
+//    }
 
-        return fragen.stream()
-                .filter(frage -> QuestionType.FREITEXT == frage.getType())
-                .map(frageDTOMapper::toDTO)
-                .toList();
-    }
-
-    @Override
-    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
-        return getFreitextFragen(examFachId).stream()
-                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.fachId()))
-                .filter(Objects::nonNull)
-                .map(antwortDTOMapper::toDTO)
-                .toList();
-    }
+//    @Override
+//    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
+//        return getFreitextFragen(examFachId).stream()
+//                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.fachId()))
+//                .filter(Objects::nonNull)
+//                .map(antwortDTOMapper::toDTO)
+//                .toList();
+//    }
 
     @Override
     public boolean antwortHasReview(AntwortDTO antwort) {
