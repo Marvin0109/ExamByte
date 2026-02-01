@@ -150,39 +150,39 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
         return true;
     }
 
-    private boolean saveStudentAnswers(UUID studentFachId, Map<String, List<String>> antworten) {
-        try {
-            for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
-                UUID frageFachId = UUID.fromString(entry.getKey());
-                String antwortText = String.join("\n", entry.getValue());
-                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
-                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
-            }
-            return true;
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
-            return false;
-        }
-    }
+//    private boolean saveStudentAnswers(UUID studentFachId, Map<String, List<String>> antworten) {
+//        try {
+//            for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
+//                UUID frageFachId = UUID.fromString(entry.getKey());
+//                String antwortText = String.join("\n", entry.getValue());
+//                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
+//                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
+//            }
+//            return true;
+//        } catch (Exception e) {
+//            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
+//            return false;
+//        }
+//    }
 
-    private List<ReviewDTO> generateReviews(UUID studentFachId, List<FrageDTO> fragen, List<AntwortDTO> antworten) {
-        ReviewData mcData = new ReviewData(fragen, antworten,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-        ReviewData scData = new ReviewData(fragen, antworten,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-
-        mcData.filterToType(QuestionTypeDTO.MC);
-        scData.filterToType(QuestionTypeDTO.SC);
-
-        List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
-                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId,
-                reviewService);
-        List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
-                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId,
-                reviewService);
-
-        return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
-    }
+//    private List<ReviewDTO> generateReviews(UUID studentFachId, List<FrageDTO> fragen, List<AntwortDTO> antworten) {
+//        ReviewData mcData = new ReviewData(fragen, antworten,
+//                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+//        ReviewData scData = new ReviewData(fragen, antworten,
+//                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+//
+//        mcData.filterToType(QuestionTypeDTO.MC);
+//        scData.filterToType(QuestionTypeDTO.SC);
+//
+//        List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
+//                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId,
+//                reviewService);
+//        List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
+//                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId,
+//                reviewService);
+//
+//        return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
+//    }
 
     @Override
     public void removeOldAnswers(UUID examId, String name) {
