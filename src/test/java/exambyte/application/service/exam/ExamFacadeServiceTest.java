@@ -1,6 +1,8 @@
 package exambyte.application.service.exam;
 
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.service.ExamFacadeService;
+import exambyte.application.service.ExamFacadeServiceImpl;
 import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.ReviewManagementService;
 import exambyte.application.service.submission.AnswerSubmissionService;
@@ -15,9 +17,9 @@ import java.util.UUID;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-class ExamUseCaseServiceTest {
+class ExamFacadeServiceTest {
 
-    private ExamUseCaseService examUseCaseService;
+    private ExamFacadeService examFacadeService;
 
     @Mock
     private ExamQueryService examQueryService;
@@ -44,7 +46,7 @@ class ExamUseCaseServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        examUseCaseService = new ExamUseCaseServiceImpl(
+        examFacadeService = new ExamFacadeServiceImpl(
                 examQueryService,
                 professorQueryService,
                 questionQueryService,
@@ -57,7 +59,7 @@ class ExamUseCaseServiceTest {
     @Test
     void createChoiceFrageWithCorrectParams() {
         FrageDTO mockFrageDTO = mock(FrageDTO.class);
-        examUseCaseService.createChoiceFrage(mockFrageDTO, "A", "A, B");
+        examFacadeService.createChoiceFrage(mockFrageDTO, "A", "A, B");
         verify(questionQueryService).createChoiceFrage(mockFrageDTO, "A", "A, B");
     }
 
@@ -65,7 +67,7 @@ class ExamUseCaseServiceTest {
     void isSubmitBeingReviewedWithCorrectParams() {
         UUID examId = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
-        examUseCaseService.isSubmitBeingReviewed(examId, studentId);
+        examFacadeService.isSubmitBeingReviewed(examId, studentId);
         verify(reviewManagementService).submitHasReview(examId, studentId);
     }
 
@@ -73,7 +75,7 @@ class ExamUseCaseServiceTest {
     void createReviewWithCorrectParams() {
         UUID antwortId = UUID.randomUUID();
         UUID korrektorId = UUID.randomUUID();
-        examUseCaseService.createReview("Bewertung", 1, antwortId, korrektorId);
+        examFacadeService.createReview("Bewertung", 1, antwortId, korrektorId);
         verify(reviewManagementService).createReview("Bewertung", 1, antwortId, korrektorId);
     }
 }

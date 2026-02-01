@@ -3,7 +3,7 @@ package exambyte.web.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.exam.ExamUseCaseService;
+import exambyte.application.service.ExamFacadeService;
 import exambyte.web.form.*;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,13 +24,13 @@ import static org.mockito.Mockito.*;
 
 class ExamControllerServiceTest {
 
-    private ExamUseCaseService examUseCaseService;
+    private ExamFacadeService examFacadeService;
     private ExamControllerService service;
 
     @BeforeEach
     void setUp() {
-        examUseCaseService = mock(ExamUseCaseService.class);
-        service = new ExamControllerServiceImpl(examUseCaseService);
+        examFacadeService = mock(ExamFacadeService.class);
+        service = new ExamControllerServiceImpl(examFacadeService);
     }
 
     @Test
@@ -70,8 +70,8 @@ class ExamControllerServiceTest {
                 examUUID,
                 QuestionTypeDTO.FREITEXT);
 
-        when(examUseCaseService.getExam(examUUID)).thenReturn(exam);
-        when(examUseCaseService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
+        when(examFacadeService.getExam(examUUID)).thenReturn(exam);
+        when(examFacadeService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
 
         // Act
         ExamForm form = service.fillExamForm(examUUID);
@@ -105,9 +105,9 @@ class ExamControllerServiceTest {
                 examUUID,
                 QuestionTypeDTO.MC);
 
-        when(examUseCaseService.getExam(examUUID)).thenReturn(exam);
-        when(examUseCaseService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
-        when(examUseCaseService.getChoiceForFrage(frage.fachId())).thenReturn("A, B \n C \n D");
+        when(examFacadeService.getExam(examUUID)).thenReturn(exam);
+        when(examFacadeService.getFragenForExam(examUUID)).thenReturn(List.of(frage));
+        when(examFacadeService.getChoiceForFrage(frage.fachId())).thenReturn("A, B \n C \n D");
 
         // Act
         ExamForm form = service.fillExamForm(examUUID);
@@ -151,8 +151,8 @@ class ExamControllerServiceTest {
         service.createQuestions(form, profFachId, examUUID);
 
         // Assert
-        verify(examUseCaseService).createFrage(argThat(f -> f.frageText().equals("F1")));
-        verify(examUseCaseService, times(2)).createChoiceFrage(any(), any(), any());
+        verify(examFacadeService).createFrage(argThat(f -> f.frageText().equals("F1")));
+        verify(examFacadeService, times(2)).createChoiceFrage(any(), any(), any());
     }
 
     @Test
@@ -174,7 +174,7 @@ class ExamControllerServiceTest {
         assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, profFachId, examUUID));
 
         // Assert
-        verify(examUseCaseService, never()).createFrage(any());
+        verify(examFacadeService, never()).createFrage(any());
     }
 
     @Test
@@ -193,7 +193,7 @@ class ExamControllerServiceTest {
                 start.plusHours(2)
         );
 
-        when(examUseCaseService.reviewCoverage(examUUID)).thenReturn(50.0);
+        when(examFacadeService.reviewCoverage(examUUID)).thenReturn(50.0);
 
         // Act
         List<ReviewCoverageForm> result = service.getReviewCoverage(List.of(exam));
@@ -287,11 +287,11 @@ class ExamControllerServiceTest {
         StudentDTO student1 = new StudentDTO(UUID.randomUUID(),"Alice");
         StudentDTO student2 = new StudentDTO(UUID.randomUUID(),"Bob");
 
-        when(examUseCaseService.getStudentSubmittedExam(examUUID))
+        when(examFacadeService.getStudentSubmittedExam(examUUID))
                 .thenReturn(List.of(student1, student2));
 
-        when(examUseCaseService.isSubmitBeingReviewed(examUUID, student1.fachId())).thenReturn(true);
-        when(examUseCaseService.isSubmitBeingReviewed(examUUID, student2.fachId())).thenReturn(false);
+        when(examFacadeService.isSubmitBeingReviewed(examUUID, student1.fachId())).thenReturn(true);
+        when(examFacadeService.isSubmitBeingReviewed(examUUID, student2.fachId())).thenReturn(false);
 
         // Act
         List<SubmitInfo> result = service.getSubmitInfo(examUUID);
@@ -309,9 +309,9 @@ class ExamControllerServiceTest {
         assertEquals(student2.fachId(), info2.fachId());
         assertFalse(info2.reviewStatus());
 
-        verify(examUseCaseService).getStudentSubmittedExam(examUUID);
-        verify(examUseCaseService).isSubmitBeingReviewed(examUUID, student1.fachId());
-        verify(examUseCaseService).isSubmitBeingReviewed(examUUID, student2.fachId());
+        verify(examFacadeService).getStudentSubmittedExam(examUUID);
+        verify(examFacadeService).isSubmitBeingReviewed(examUUID, student1.fachId());
+        verify(examFacadeService).isSubmitBeingReviewed(examUUID, student2.fachId());
     }
 
     @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, expectedProgress={3}")
@@ -340,8 +340,8 @@ class ExamControllerServiceTest {
                 ((double) erreichtePunkte / maxPunkte) * 100
         );
 
-        when(examUseCaseService.getAllExams()).thenReturn(exams);
-        when(examUseCaseService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
+        when(examFacadeService.getAllExams()).thenReturn(exams);
+        when(examFacadeService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
 
         // Act
         double result = service.getZulassungsProgress("student");
@@ -376,8 +376,8 @@ class ExamControllerServiceTest {
                 ((double) erreichtePunkte / maxPunkte) * 100
         );
 
-        when(examUseCaseService.getAllExams()).thenReturn(exams);
-        when(examUseCaseService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
+        when(examFacadeService.getAllExams()).thenReturn(exams);
+        when(examFacadeService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
 
         // Act
         boolean result = service.hasAnyFailedAttempt("student");
@@ -428,8 +428,8 @@ class ExamControllerServiceTest {
         map.put(frage1, antwort1);
         map.put(frage2, antwort2);
 
-        when(examUseCaseService.antwortHasReview(antwort1)).thenReturn(false);
-        when(examUseCaseService.antwortHasReview(antwort2)).thenReturn(true);
+        when(examFacadeService.antwortHasReview(antwort1)).thenReturn(false);
+        when(examFacadeService.antwortHasReview(antwort2)).thenReturn(true);
 
         List<AnswerForm> result = service.createAnswerForm(map);
         AnswerForm form = result.getFirst();

@@ -1,4 +1,4 @@
-package exambyte.application.service.exam;
+package exambyte.application.service;
 
 import exambyte.application.dto.*;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ExamUseCaseService {
+public interface ExamFacadeService {
 
     String createExam(String profName, String title,
                        LocalDateTime startDate, LocalDateTime endDate, LocalDateTime resultTime);

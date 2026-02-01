@@ -1,6 +1,9 @@
-package exambyte.application.service.exam;
+package exambyte.application.service;
 
 import exambyte.application.dto.*;
+import exambyte.application.service.exam.ExamQueryService;
+import exambyte.application.service.exam.ProfessorQueryService;
+import exambyte.application.service.exam.StudentQueryService;
 import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.ReviewManagementService;
 import exambyte.application.service.submission.AnswerSubmissionService;
@@ -11,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class ExamUseCaseServiceImpl implements ExamUseCaseService {
+public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     private final ExamQueryService examQueryService;
     private final ProfessorQueryService professorQueryService;
@@ -22,13 +25,13 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
     private final StudentQueryService studentQueryService;
 
 
-    public ExamUseCaseServiceImpl(ExamQueryService examQueryService,
-                                  ProfessorQueryService professorQueryService,
-                                  QuestionQueryService questionQueryService,
-                                  ReviewManagementService reviewManagementService,
-                                  ExamSubmissionService examSubmissionService,
-                                  AnswerSubmissionService answerSubmissionService,
-                                  StudentQueryService studentQueryService) {
+    public ExamFacadeServiceImpl(ExamQueryService examQueryService,
+                                 ProfessorQueryService professorQueryService,
+                                 QuestionQueryService questionQueryService,
+                                 ReviewManagementService reviewManagementService,
+                                 ExamSubmissionService examSubmissionService,
+                                 AnswerSubmissionService answerSubmissionService,
+                                 StudentQueryService studentQueryService) {
 
         this.examQueryService = examQueryService;
         this.professorQueryService = professorQueryService;
