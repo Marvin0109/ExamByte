@@ -3,6 +3,7 @@ package exambyte.application.service.exam;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.ReviewManagementService;
+import exambyte.application.service.submission.AnswerSubmissionService;
 import exambyte.application.service.submission.ExamSubmissionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ class ExamUseCaseServiceTest {
     @Mock
     private ExamSubmissionService examSubmissionService;
 
+    @Mock
+    private AnswerSubmissionService answerSubmissionService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -42,7 +46,8 @@ class ExamUseCaseServiceTest {
                 professorQueryService,
                 questionQueryService,
                 reviewManagementService,
-                examSubmissionService);
+                examSubmissionService,
+                answerSubmissionService);
     }
 
     @Test

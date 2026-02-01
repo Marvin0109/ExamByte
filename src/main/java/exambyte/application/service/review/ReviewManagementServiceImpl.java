@@ -2,7 +2,7 @@ package exambyte.application.service.review;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.submission.ExamSubmissionService;
+import exambyte.application.service.submission.AnswerSubmissionService;
 import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.model.aggregate.user.Korrektor;
@@ -22,16 +22,16 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
     private final ReviewService reviewService;
     private final ReviewDTOMapper reviewDTOMapper;
 
-    private final ExamSubmissionService examSubmissionService;
+    private final AnswerSubmissionService answerSubmissionService;
 
 
     public ReviewManagementServiceImpl(KorrektorService korrektorService,
                                        ReviewService reviewService,
-                                       ExamSubmissionService examSubmissionService,
+                                       AnswerSubmissionService answerSubmissionService,
                                        ReviewDTOMapper reviewDTOMapper) {
         this.korrektorService = korrektorService;
         this.reviewService = reviewService;
-        this.examSubmissionService = examSubmissionService;
+        this.answerSubmissionService = answerSubmissionService;
         this.reviewDTOMapper = reviewDTOMapper;
     }
 
@@ -44,7 +44,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     @Override
     public double getReviewCoverage(UUID examFachId) {
-        List<AntwortDTO> antworten = examSubmissionService.getFreitextAntwortenForExam(examFachId);
+        List<AntwortDTO> antworten = answerSubmissionService.getFreitextAntwortenForExam(examFachId);
 
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
@@ -64,7 +64,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     @Override
     public boolean submitHasReview(UUID examFachId, UUID studentId) {
-        List<AntwortDTO> antworten = examSubmissionService.getFreitextAntwortenForExam(examFachId);
+        List<AntwortDTO> antworten = answerSubmissionService.getFreitextAntwortenForExam(examFachId);
 
         List<UUID> studentAntwortList = antworten.stream()
                 .filter(a -> a.studentFachId().equals(studentId))

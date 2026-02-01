@@ -3,6 +3,7 @@ package exambyte.application.service.exam;
 import exambyte.application.dto.*;
 import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.ReviewManagementService;
+import exambyte.application.service.submission.AnswerSubmissionService;
 import exambyte.application.service.submission.ExamSubmissionService;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +18,22 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
     private final QuestionQueryService questionQueryService;
     private final ReviewManagementService reviewManagementService;
     private final ExamSubmissionService examSubmissionService;
+    private final AnswerSubmissionService answerSubmissionService;
 
 
     public ExamUseCaseServiceImpl(ExamQueryService examQueryService,
                                   ProfessorQueryService professorQueryService,
                                   QuestionQueryService questionQueryService,
                                   ReviewManagementService reviewManagementService,
-                                  ExamSubmissionService examSubmissionService) {
+                                  ExamSubmissionService examSubmissionService,
+                                  AnswerSubmissionService answerSubmissionService) {
 
         this.examQueryService = examQueryService;
         this.professorQueryService = professorQueryService;
         this.questionQueryService = questionQueryService;
         this.reviewManagementService = reviewManagementService;
         this.examSubmissionService = examSubmissionService;
-
+        this.answerSubmissionService = answerSubmissionService;
     }
 
     @Override
@@ -145,7 +148,7 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 
     @Override
     public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
-        return examSubmissionService.getFreitextAntwortenForExam(examFachId);
+        return answerSubmissionService.getFreitextAntwortenForExam(examFachId);
     }
 
     @Override

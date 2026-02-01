@@ -2,7 +2,7 @@ package exambyte.application.service.review;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.submission.ExamSubmissionService;
+import exambyte.application.service.submission.AnswerSubmissionService;
 import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.model.aggregate.user.Korrektor;
@@ -42,7 +42,7 @@ class ReviewManagementServiceTest {
     private ReviewDTOMapper reviewDTOMapper;
 
     @Mock
-    private ExamSubmissionService examSubmissionService;
+    private AnswerSubmissionService answerSubmissionService;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +51,7 @@ class ReviewManagementServiceTest {
         reviewManagementService = new ReviewManagementServiceImpl(
                 korrektorService,
                 reviewService,
-                examSubmissionService,
+                answerSubmissionService,
                 reviewDTOMapper);
 
         korrektor = new Korrektor.KorrektorBuilder()
@@ -102,7 +102,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_100Percent() {
-        when(examSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(review);
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
@@ -120,7 +120,7 @@ class ReviewManagementServiceTest {
                 STUDENT_UUID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));
 
-        when(examSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
+        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(null);
         when(reviewService.getReviewByAntwortFachId(antwortDTO2.fachId())).thenReturn(review);
 
@@ -131,7 +131,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_0Percent() {
-        when(examSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(null);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
@@ -142,7 +142,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void submitHasReview_true() {
-        when(examSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(review);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
@@ -152,7 +152,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void submitHasReview_false() {
-        when(examSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(null);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
