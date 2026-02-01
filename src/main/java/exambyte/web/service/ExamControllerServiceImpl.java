@@ -323,7 +323,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public Optional<UUID> getProfFachIDByName(String name) {
-        return service.getProfFachIDByName(name);
+        return service.getProfIDByName(name);
     }
 
     @Override

@@ -1,12 +1,10 @@
-package exambyte.application;
+package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.review.AutomaticReviewService;
-import exambyte.application.service.review.AutomaticReviewServiceImpl;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
