@@ -9,6 +9,7 @@ import exambyte.domain.service.ExamService;
 import exambyte.domain.service.FrageService;
 import exambyte.domain.service.StudentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -78,5 +79,16 @@ public class ExamQueryServiceImpl implements ExamQueryService {
         return fragen.stream()
                 .anyMatch(frage ->
                         antwortService.findByStudentAndFrage(studentFachId, frage.fachId()) != null);
+    }
+
+    @Override
+    public void deleteByFachId(UUID examId) {
+        examService.deleteByFachId(examId);
+    }
+
+    @Transactional
+    @Override
+    public void resetAllExamDataCascade() {
+        examService.deleteAll();
     }
 }

@@ -1,24 +1,20 @@
 package exambyte.application.service.submission;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.ReviewDTO;
+import exambyte.application.dto.*;
 import exambyte.application.service.ReviewData;
 import exambyte.application.service.review.AutomaticReviewService;
 import exambyte.domain.mapper.*;
+import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.service.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -179,5 +175,92 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                 reviewService);
 
         return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
+    }
+
+    @Override
+    public void removeOldAnswers(UUID examId, String name) {
+        UUID studentFachID = studentService.getStudentFachId(name);
+
+        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examId).stream()
+                .map(frageDTOMapper::toDTO)
+                .toList();
+
+        List<UUID> antwortenToDelete = new ArrayList<>();
+        for (FrageDTO frageDTO : fragenDTOList) {
+            antwortenToDelete.add(
+                    antwortService.findByStudentAndFrage(studentFachID, frageDTO.fachId())
+                            .getFachId());
+        }
+
+        List<UUID> reviewsToDelete = new ArrayList<>();
+        for (UUID id : antwortenToDelete) {
+            if (reviewService.getReviewByAntwortFachId(id) != null) {
+                reviewsToDelete.add(reviewService.getReviewByAntwortFachId(id).getFachId());
+            }
+        }
+
+        for (UUID id : antwortenToDelete) {
+            antwortService.deleteAnswer(id);
+        }
+
+        for (UUID id : reviewsToDelete) {
+            reviewService.deleteReview(id);
+        }
+    }
+
+    @Override
+    public VersuchDTO getSubmission(UUID examFachId, String studentName) {
+        UUID studentFachId = studentService.getStudentFachId(studentName);
+
+        Map<UUID, FrageDTO> frageMap = getFragenMap(examFachId);
+        List<AntwortDTO> alleAntworten = getAntworten(studentFachId, frageMap.keySet());
+
+        // Gesamt-MaxPunkte
+        double gesamtMaxPunkte = frageMap.values().stream()
+                .mapToDouble(FrageDTO::maxPunkte)
+                .sum();
+
+        double erreichtePunkte = berechneErreichtePunkte(alleAntworten, frageMap);
+
+        double prozent = gesamtMaxPunkte > 0
+                ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
+                : 0.0;
+
+        LocalDateTime zeitpunkt = alleAntworten.stream()
+                .map(AntwortDTO::antwortZeitpunkt)
+                .max(LocalDateTime::compareTo)
+                .orElse(LocalDateTime.now());
+
+        return new VersuchDTO(
+                zeitpunkt,
+                erreichtePunkte,
+                gesamtMaxPunkte,
+                prozent
+        );
+    }
+
+    private Map<UUID, FrageDTO> getFragenMap(UUID examFachId) {
+        return frageService.getFragenForExam(examFachId).stream()
+                .map(frageDTOMapper::toDTO)
+                .collect(Collectors.toMap(FrageDTO::fachId, f -> f));
+    }
+
+    private List<AntwortDTO> getAntworten(UUID studentFachId, Set<UUID> frageFachIds) {
+        return frageFachIds.stream()
+                .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
+                .filter(Objects::nonNull)
+                .map(antwortDTOMapper::toDTO)
+                .toList();
+    }
+
+    private double berechneErreichtePunkte(List<AntwortDTO> antworten, Map<UUID, FrageDTO> fragen) {
+        return antworten.stream()
+                .mapToDouble(a -> {
+                    FrageDTO f = fragen.get(a.frageFachId());
+                    if (f == null) return 0;
+                    Review review = reviewService.getReviewByAntwortFachId(a.fachId());
+                    return review != null ? review.getPunkte() : 0;
+                })
+                .sum();
     }
 }

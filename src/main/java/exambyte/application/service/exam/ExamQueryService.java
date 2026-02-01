@@ -14,4 +14,8 @@ public interface ExamQueryService {
     List<ExamDTO> getAllExams();
 
     boolean hasStudentSubmittedExam(UUID examId, String studentName);
+
+    void deleteByFachId(UUID examId);
+
+    void resetAllExamDataCascade();
 }
