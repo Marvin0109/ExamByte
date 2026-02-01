@@ -1,4 +1,4 @@
-package exambyte.application.service.submission;
+package exambyte.application.service.query;
 
 import exambyte.application.dto.AntwortDTO;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-public interface AnswerSubmissionService {
+public interface AntwortQueryService {
 
     boolean saveAnswers(UUID studentId, Map<String, List<String>> antworten);
 

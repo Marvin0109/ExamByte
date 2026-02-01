@@ -1,4 +1,4 @@
-package exambyte.application.service.review;
+package exambyte.application.service.usecase;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.FrageDTO;

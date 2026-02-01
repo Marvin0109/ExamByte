@@ -2,6 +2,8 @@ package exambyte.application.service.question;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.service.query.FrageQueryService;
+import exambyte.application.service.query.FrageQueryServiceImpl;
 import exambyte.domain.mapper.FrageDTOMapper;
 import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
 import exambyte.domain.model.aggregate.exam.Frage;
@@ -22,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class QuestionQueryServiceTest {
+class FrageQueryServiceTest {
 
-    private QuestionQueryService questionQueryService;
+    private FrageQueryService frageQueryService;
 
     private FrageDTO frageDTOFreitext;
     private FrageDTO frageDTOMC;
@@ -47,7 +49,7 @@ class QuestionQueryServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        questionQueryService = new QuestionQueryServiceImpl(
+        frageQueryService = new FrageQueryServiceImpl(
                 frageService,
                 korrekteAntwortenService,
                 frageDTOMapper,
@@ -99,7 +101,7 @@ class QuestionQueryServiceTest {
         when(frageService.addFrage(any())).thenReturn(frageDTOMC.fachId());
         when(korrekteAntwortenDTOMapper.toDomain(any())).thenReturn(domain);
 
-        questionQueryService.createChoiceFrage(frageDTOMC, "A", "A, B");
+        frageQueryService.createChoiceFrage(frageDTOMC, "A", "A, B");
 
         ArgumentCaptor<KorrekteAntworten> captor = ArgumentCaptor.forClass(KorrekteAntworten.class);
         verify(korrekteAntwortenService).addKorrekteAntwort(captor.capture());
@@ -115,7 +117,7 @@ class QuestionQueryServiceTest {
         when(frageService.getFragenForExam(any())).thenReturn(List.of(frageMC, frageFreitext));
         when(frageDTOMapper.toDTO(frageFreitext)).thenReturn(frageDTOFreitext);
 
-        List<FrageDTO> result = questionQueryService.getFreitextFragen(UUID.randomUUID());
+        List<FrageDTO> result = frageQueryService.getFreitextFragen(UUID.randomUUID());
 
         assertEquals(1, result.size());
         verify(frageDTOMapper).toDTO(frageFreitext);

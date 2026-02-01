@@ -2,7 +2,10 @@ package exambyte.application.service.review;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.submission.AnswerSubmissionService;
+import exambyte.application.service.query.AntwortQueryService;
+import exambyte.application.service.query.ReviewQueryService;
+import exambyte.application.service.usecase.ReviewManagementService;
+import exambyte.application.service.usecase.ReviewManagementServiceImpl;
 import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.model.aggregate.user.Korrektor;
@@ -42,17 +45,18 @@ class ReviewManagementServiceTest {
     private ReviewDTOMapper reviewDTOMapper;
 
     @Mock
-    private AnswerSubmissionService answerSubmissionService;
+    private AntwortQueryService antwortQueryService;
+
+    @Mock
+    private ReviewQueryService reviewQueryService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         reviewManagementService = new ReviewManagementServiceImpl(
-                korrektorService,
-                reviewService,
-                answerSubmissionService,
-                reviewDTOMapper);
+                reviewQueryService,
+                antwortQueryService);
 
         korrektor = new Korrektor.KorrektorBuilder()
                 .fachId(UUID.randomUUID())
@@ -102,7 +106,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_100Percent() {
-        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(review);
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
@@ -120,7 +124,7 @@ class ReviewManagementServiceTest {
                 STUDENT_UUID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));
 
-        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
+        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(null);
         when(reviewService.getReviewByAntwortFachId(antwortDTO2.fachId())).thenReturn(review);
 
@@ -131,7 +135,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_0Percent() {
-        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(null);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
@@ -142,7 +146,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void submitHasReview_true() {
-        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(review);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
@@ -152,7 +156,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void submitHasReview_false() {
-        when(answerSubmissionService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(reviewService.getReviewByAntwortFachId(antwortDTO.fachId())).thenReturn(null);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
@@ -162,7 +166,7 @@ class ReviewManagementServiceTest {
 
     @Test
     void createReviewWithCorrectParams() {
-        reviewManagementService.createReview(
+        reviewQueryService.createReview(
                 "Bewertung",
                 1,
                 antwortDTO.fachId(),

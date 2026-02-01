@@ -1,7 +1,6 @@
-package exambyte.application.service.submission;
+package exambyte.application.service.query;
 
 import exambyte.application.dto.AntwortDTO;
-import exambyte.application.service.question.QuestionQueryService;
 import exambyte.domain.mapper.AntwortDTOMapper;
 import exambyte.domain.service.AntwortService;
 import org.springframework.stereotype.Service;
@@ -11,18 +10,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-public class AnswerSubmissionServiceImpl implements AnswerSubmissionService {
+public class AntwortQueryServiceImpl implements AntwortQueryService {
 
-    private final QuestionQueryService questionQueryService;
+    private final FrageQueryService frageQueryService;
     private final AntwortService antwortService;
     private final AntwortDTOMapper antwortDTOMapper;
 
-    private static final Logger logger = Logger.getLogger(AnswerSubmissionServiceImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(AntwortQueryServiceImpl.class.getName());
 
-    public AnswerSubmissionServiceImpl(QuestionQueryService questionQueryService,
-                                       AntwortService antwortService,
-                                       AntwortDTOMapper antwortDTOMapper) {
-        this.questionQueryService = questionQueryService;
+    public AntwortQueryServiceImpl(FrageQueryService frageQueryService,
+                                   AntwortService antwortService,
+                                   AntwortDTOMapper antwortDTOMapper) {
+        this.frageQueryService = frageQueryService;
         this.antwortService = antwortService;
         this.antwortDTOMapper = antwortDTOMapper;
     }
@@ -54,7 +53,7 @@ public class AnswerSubmissionServiceImpl implements AnswerSubmissionService {
 
     @Override
     public List<AntwortDTO> getFreitextAntwortenForExam(UUID examId) {
-        return questionQueryService.getFreitextFragen(examId).stream()
+        return frageQueryService.getFreitextFragen(examId).stream()
                 .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.fachId()))
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)

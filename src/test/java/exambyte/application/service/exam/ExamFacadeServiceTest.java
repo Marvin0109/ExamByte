@@ -3,10 +3,13 @@ package exambyte.application.service.exam;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.application.service.ExamFacadeServiceImpl;
-import exambyte.application.service.question.QuestionQueryService;
-import exambyte.application.service.review.ReviewManagementService;
-import exambyte.application.service.submission.AnswerSubmissionService;
-import exambyte.application.service.submission.ExamSubmissionService;
+import exambyte.application.service.query.ExamQueryService;
+import exambyte.application.service.query.ProfessorQueryService;
+import exambyte.application.service.query.StudentQueryService;
+import exambyte.application.service.query.FrageQueryService;
+import exambyte.application.service.usecase.ReviewManagementService;
+import exambyte.application.service.query.AntwortQueryService;
+import exambyte.application.service.usecase.ExamManagementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,16 +31,16 @@ class ExamFacadeServiceTest {
     private ProfessorQueryService professorQueryService;
 
     @Mock
-    private QuestionQueryService questionQueryService;
+    private FrageQueryService frageQueryService;
 
     @Mock
     private ReviewManagementService reviewManagementService;
 
     @Mock
-    private ExamSubmissionService examSubmissionService;
+    private ExamManagementService examManagementService;
 
     @Mock
-    private AnswerSubmissionService answerSubmissionService;
+    private AntwortQueryService antwortQueryService;
 
     @Mock
     private StudentQueryService studentQueryService;
@@ -49,10 +52,10 @@ class ExamFacadeServiceTest {
         examFacadeService = new ExamFacadeServiceImpl(
                 examQueryService,
                 professorQueryService,
-                questionQueryService,
+                frageQueryService,
                 reviewManagementService,
-                examSubmissionService,
-                answerSubmissionService,
+                examManagementService,
+                antwortQueryService,
                 studentQueryService);
     }
 
@@ -60,7 +63,7 @@ class ExamFacadeServiceTest {
     void createChoiceFrageWithCorrectParams() {
         FrageDTO mockFrageDTO = mock(FrageDTO.class);
         examFacadeService.createChoiceFrage(mockFrageDTO, "A", "A, B");
-        verify(questionQueryService).createChoiceFrage(mockFrageDTO, "A", "A, B");
+        verify(frageQueryService).createChoiceFrage(mockFrageDTO, "A", "A, B");
     }
 
     @Test

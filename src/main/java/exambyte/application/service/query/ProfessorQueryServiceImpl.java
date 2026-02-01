@@ -1,4 +1,4 @@
-package exambyte.application.service.exam;
+package exambyte.application.service.query;
 
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.domain.mapper.ProfessorDTOMapper;

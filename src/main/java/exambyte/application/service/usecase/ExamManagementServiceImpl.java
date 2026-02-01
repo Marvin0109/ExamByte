@@ -1,17 +1,8 @@
-package exambyte.application.service.submission;
+package exambyte.application.service.usecase;
 
 import exambyte.application.dto.*;
-import exambyte.application.service.exam.ExamQueryService;
-import exambyte.application.service.exam.ProfessorQueryService;
-import exambyte.application.service.exam.StudentQueryService;
-import exambyte.application.service.question.QuestionQueryService;
+import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
-import exambyte.application.service.review.ReviewManagementService;
-import exambyte.application.service.review.ReviewManagementServiceImpl;
-import exambyte.application.service.review.ScoringService;
-import exambyte.domain.entitymapper.ReviewMapper;
-import exambyte.domain.mapper.*;
-import exambyte.domain.service.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,36 +12,36 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-public class ExamSubmissionServiceImpl implements ExamSubmissionService {
+public class ExamManagementServiceImpl implements ExamManagementService {
 
-    private final AnswerSubmissionService answerSubmissionService;
+    private final AntwortQueryService antwortQueryService;
     private final ReviewGenerationService reviewGenerationService;
-    private final ReviewManagementService reviewManagementService;
-    private final QuestionQueryService questionQueryService;
+    private final FrageQueryService frageQueryService;
     private final ScoringService scoringService;
     private final ProfessorQueryService professorQueryService;
     private final StudentQueryService studentQueryService;
     private final ExamQueryService examQueryService;
+    private final ReviewQueryService reviewQueryService;
 
-    private static final Logger logger = Logger.getLogger(ExamSubmissionServiceImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
-    public ExamSubmissionServiceImpl(AnswerSubmissionService answerSubmissionService,
+    public ExamManagementServiceImpl(AntwortQueryService antwortQueryService,
                                      ReviewGenerationService reviewGenerationService,
-                                     QuestionQueryService questionQueryService,
+                                     FrageQueryService frageQueryService,
                                      ScoringService scoringService,
                                      ProfessorQueryService professorQueryService,
                                      StudentQueryService studentQueryService,
                                      ExamQueryService examQueryService,
-                                     ReviewManagementService reviewManagementService) {
+                                     ReviewQueryService reviewQueryService) {
 
-        this.answerSubmissionService = answerSubmissionService;
+        this.antwortQueryService = antwortQueryService;
         this.reviewGenerationService = reviewGenerationService;
-        this.questionQueryService = questionQueryService;
+        this.frageQueryService = frageQueryService;
         this.scoringService = scoringService;
         this.professorQueryService = professorQueryService;
         this.studentQueryService = studentQueryService;
         this.examQueryService = examQueryService;
-        this.reviewManagementService = reviewManagementService;
+        this.reviewQueryService = reviewQueryService;
     }
 
     @Override
@@ -102,15 +93,15 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
             return false;
         }
 
-        boolean saved = answerSubmissionService.saveAnswers(studentFachId, antworten);
+        boolean saved = antwortQueryService.saveAnswers(studentFachId, antworten);
         if (!saved) {
             return false;
         }
 
-        List<FrageDTO> fragenDTOList = questionQueryService.getFragenForExam(examId);
+        List<FrageDTO> fragenDTOList = frageQueryService.getFragenForExam(examId);
 
         List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
-                .map(f -> answerSubmissionService.findByStudentAndFrage(studentFachId, f.fachId()))
+                .map(f -> antwortQueryService.findByStudentAndFrage(studentFachId, f.fachId()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -120,7 +111,7 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                 antwortDTOList);
 
         try {
-            allReviews.forEach(r -> reviewManagementService.createReview(
+            allReviews.forEach(r -> reviewQueryService.createReview(
                     r.bewertung(),
                     r.punkte(),
                     r.antwortFachId(),
@@ -137,29 +128,29 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
     public void removeOldAnswers(UUID examId, String name) {
         UUID studentFachID = studentQueryService.getStudentIdByName(name);
 
-        List<FrageDTO> fragenDTOList = questionQueryService.getFragenForExam(examId);
+        List<FrageDTO> fragenDTOList = frageQueryService.getFragenForExam(examId);
 
         List<UUID> antwortenToDelete = new ArrayList<>();
         for (FrageDTO frageDTO : fragenDTOList) {
             antwortenToDelete.add(
-                    answerSubmissionService.findByStudentAndFrage(
+                    antwortQueryService.findByStudentAndFrage(
                             studentFachID, frageDTO.fachId())
                             .fachId());
         }
 
         List<UUID> reviewsToDelete = new ArrayList<>();
         for (UUID id : antwortenToDelete) {
-            if (reviewManagementService.antwortHasReview(id)) {
-                reviewsToDelete.add(reviewManagementService.getReviewIdByAntwortId(id));
+            if (reviewQueryService.antwortHasReview(id)) {
+                reviewsToDelete.add(reviewQueryService.getReviewIdByAntwortId(id));
             }
         }
 
         for (UUID id : antwortenToDelete) {
-            answerSubmissionService.deleteAntwort(id);
+            antwortQueryService.deleteAntwort(id);
         }
 
         for (UUID id : reviewsToDelete) {
-            reviewManagementService.deleteReview(id);
+            reviewQueryService.deleteReview(id);
         }
     }
 
@@ -167,8 +158,8 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
     public VersuchDTO getSubmission(UUID examFachId, String studentName) {
         UUID studentFachId = studentQueryService.getStudentIdByName(studentName);
 
-        Map<UUID, FrageDTO> frageMap = questionQueryService.getFragenUUIDMap(examFachId);
-        List<AntwortDTO> alleAntworten = answerSubmissionService.getAntworten(studentFachId, frageMap.keySet());
+        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examFachId);
+        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentFachId, frageMap.keySet());
 
         // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
@@ -192,5 +183,35 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                 gesamtMaxPunkte,
                 prozent
         );
+    }
+
+    @Override
+    public List<ExamDTO> getAllExams() {
+        return examQueryService.getAllExams();
+    }
+
+    @Override
+    public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
+        return examQueryService.hasStudentSubmittedExam(examId, studentName);
+    }
+
+    @Override
+    public ExamDTO getExam(UUID examId) {
+        return examQueryService.getExam(examId);
+    }
+
+    @Override
+    public UUID getExamIdByStartTime(LocalDateTime startTime) {
+        return examQueryService.getExamIdByStartTime(startTime);
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        examQueryService.deleteByFachId(id);
+    }
+
+    @Override
+    public void resetAllExamDataCascade() {
+        examQueryService.resetAllExamDataCascade();
     }
 }

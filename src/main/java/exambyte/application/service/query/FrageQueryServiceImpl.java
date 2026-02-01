@@ -1,4 +1,4 @@
-package exambyte.application.service.question;
+package exambyte.application.service.query;
 
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
@@ -16,17 +16,17 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class QuestionQueryServiceImpl implements QuestionQueryService {
+public class FrageQueryServiceImpl implements FrageQueryService {
 
     private final FrageService frageService;
     private final KorrekteAntwortenService korrekteAntwortenService;
     private final FrageDTOMapper frageDTOMapper;
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
 
-    public QuestionQueryServiceImpl(FrageService frageService,
-                                    KorrekteAntwortenService korrekteAntwortenService,
-                                    FrageDTOMapper frageDTOMapper,
-                                    KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper) {
+    public FrageQueryServiceImpl(FrageService frageService,
+                                 KorrekteAntwortenService korrekteAntwortenService,
+                                 FrageDTOMapper frageDTOMapper,
+                                 KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper) {
         this.frageService = frageService;
         this.frageDTOMapper = frageDTOMapper;
         this.korrekteAntwortenService = korrekteAntwortenService;

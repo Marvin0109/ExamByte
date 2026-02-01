@@ -1,4 +1,4 @@
-package exambyte.application.service.question;
+package exambyte.application.service.query;
 
 import exambyte.application.dto.FrageDTO;
 
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public interface QuestionQueryService {
+public interface FrageQueryService {
 
     List<FrageDTO> getFragenForExam(UUID examId);
 
