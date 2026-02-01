@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 29.01.2026
+>**aktualisiert am:** 01.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -559,3 +559,10 @@
 ### 29.01.2026
 **Bereich**: UI 
 - Letzte Bearbeitung der HTML-Dokumente in Hinblick auf Benutzerfreundlichkeit
+
+---
+
+### 30.01.2026 - 31.01.2026
+**Bereich**: UI / UX / Feature
+- Zulassungslogik als Fortschrittbalken eingeführt
+- Korrektur einer Antwort implementiert
