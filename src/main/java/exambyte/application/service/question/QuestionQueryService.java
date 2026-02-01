@@ -3,6 +3,7 @@ package exambyte.application.service.question;
 import exambyte.application.dto.FrageDTO;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface QuestionQueryService {
@@ -16,4 +17,6 @@ public interface QuestionQueryService {
     String getChoiceForFrage(UUID frageId);
 
     List<FrageDTO> getFreitextFragen(UUID examId);
+
+    Map<UUID, FrageDTO> getFragenUUIDMap(UUID examId);
 }

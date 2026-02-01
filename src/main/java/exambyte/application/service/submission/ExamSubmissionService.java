@@ -1,6 +1,5 @@
 package exambyte.application.service.submission;
 
-import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.StudentDTO;
 import exambyte.application.dto.VersuchDTO;
 
@@ -19,6 +18,4 @@ public interface ExamSubmissionService {
     VersuchDTO getSubmission(UUID examFachId, String studentName);
 
     List<StudentDTO> getStudentSubmittedExam(UUID examId);
-
-    List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
 }

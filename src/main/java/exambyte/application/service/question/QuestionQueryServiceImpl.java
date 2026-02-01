@@ -11,7 +11,9 @@ import exambyte.domain.service.KorrekteAntwortenService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionQueryServiceImpl implements QuestionQueryService {
@@ -61,5 +63,12 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
                 .filter(frage -> QuestionType.FREITEXT == frage.getType())
                 .map(frageDTOMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public Map<UUID, FrageDTO> getFragenUUIDMap(UUID examId) {
+        return frageService.getFragenForExam(examId).stream()
+                .map(frageDTOMapper::toDTO)
+                .collect(Collectors.toMap(FrageDTO::fachId, f -> f));
     }
 }
