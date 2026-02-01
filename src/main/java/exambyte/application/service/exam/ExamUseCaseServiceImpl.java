@@ -376,32 +376,32 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 //            .sum();
 //    }
 
-    @Override
-    public void saveAutomaticReviewer() {
-        if (korrektorService.getKorrektorByName("Automatischer Korrektor").isEmpty()) {
-            korrektorService.saveKorrektor("Automatischer Korrektor");
-        }
-    }
+//    @Override
+//    public void saveAutomaticReviewer() {
+//        if (korrektorService.getKorrektorByName("Automatischer Korrektor").isEmpty()) {
+//            korrektorService.saveKorrektor("Automatischer Korrektor");
+//        }
+//    }
 
-    @Override
-    public double reviewCoverage(UUID examFachId) {
-        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
-
-        List<ReviewDTO> reviewsTotal = new ArrayList<>();
-
-        for (AntwortDTO antwortDTO : antworten) {
-            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.fachId());
-            if (review != null) {
-                reviewsTotal.add(reviewDTOMapper.toDTO(review));
-            }
-        }
-
-        double coverage = antworten.isEmpty()
-                ? 0.0
-                : (double) reviewsTotal.size() / antworten.size() * 100;
-
-        return Math.round(coverage * 100.0) / 100.0;
-    }
+//    @Override
+//    public double reviewCoverage(UUID examFachId) {
+//        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
+//
+//        List<ReviewDTO> reviewsTotal = new ArrayList<>();
+//
+//        for (AntwortDTO antwortDTO : antworten) {
+//            Review review = reviewService.getReviewByAntwortFachId(antwortDTO.fachId());
+//            if (review != null) {
+//                reviewsTotal.add(reviewDTOMapper.toDTO(review));
+//            }
+//        }
+//
+//        double coverage = antworten.isEmpty()
+//                ? 0.0
+//                : (double) reviewsTotal.size() / antworten.size() * 100;
+//
+//        return Math.round(coverage * 100.0) / 100.0;
+//    }
 
 //    @Override
 //    public List<StudentDTO> getStudentSubmittedExam(UUID examFachId) {
@@ -420,23 +420,23 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 //            .toList();
 //    }
 
-    @Override
-    public boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student) {
-        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
-
-        List<UUID> studentAntwortList = antworten.stream()
-                .filter(a -> a.studentFachId().equals(student.fachId()))
-                .map(AntwortDTO::fachId)
-                .toList();
-
-        for (UUID uuid : studentAntwortList) {
-            if (reviewService.getReviewByAntwortFachId(uuid) == null) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+//    @Override
+//    public boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student) {
+//        List<AntwortDTO> antworten = getFreitextAntwortenForExam(examFachId);
+//
+//        List<UUID> studentAntwortList = antworten.stream()
+//                .filter(a -> a.studentFachId().equals(student.fachId()))
+//                .map(AntwortDTO::fachId)
+//                .toList();
+//
+//        for (UUID uuid : studentAntwortList) {
+//            if (reviewService.getReviewByAntwortFachId(uuid) == null) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
 
 //    @Override
 //    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
@@ -457,26 +457,26 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 //                .toList();
 //    }
 
-    @Override
-    public boolean antwortHasReview(AntwortDTO antwort) {
-        return reviewService.getReviewByAntwortFachId(antwort.fachId()) != null;
-    }
+//    @Override
+//    public boolean antwortHasReview(AntwortDTO antwort) {
+//        return reviewService.getReviewByAntwortFachId(antwort.fachId()) != null;
+//    }
 
-    @Override
-    public void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId) {
-        Review review = new Review.ReviewBuilder()
-                .korrektorFachId(korrektorFachId)
-                .punkte(punkte)
-                .antwortFachId(antwortFachId)
-                .bewertung(bewertung)
-                .build();
+//    @Override
+//    public void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId) {
+//        Review review = new Review.ReviewBuilder()
+//                .korrektorFachId(korrektorFachId)
+//                .punkte(punkte)
+//                .antwortFachId(antwortFachId)
+//                .bewertung(bewertung)
+//                .build();
+//
+//        reviewService.addReview(review);
+//    }
 
-        reviewService.addReview(review);
-    }
-
-    @Override
-    public UUID getReviewerByName(String name) {
-        Optional<Korrektor> k = korrektorService.getKorrektorByName(name);
-        return k.map(Korrektor::uuid).orElse(null);
-    }
+//    @Override
+//    public UUID getReviewerByName(String name) {
+//        Optional<Korrektor> k = korrektorService.getKorrektorByName(name);
+//        return k.map(Korrektor::uuid).orElse(null);
+//    }
 }
