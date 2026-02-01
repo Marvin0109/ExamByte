@@ -2,10 +2,10 @@ package exambyte.application;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
-import exambyte.application.service.AutomaticReviewService;
-import exambyte.application.service.AutomaticReviewServiceImpl;
-import exambyte.application.service.ExamManagementService;
-import exambyte.application.service.ExamManagementServiceImpl;
+import exambyte.application.service.review.AutomaticReviewService;
+import exambyte.application.service.review.AutomaticReviewServiceImpl;
+import exambyte.application.service.exam.ExamUseCaseService;
+import exambyte.application.service.exam.ExamUseCaseServiceImpl;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.*;
 import exambyte.domain.model.aggregate.user.Student;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ExamManagementServiceTest {
+class ExamUseCaseServiceTest {
 
     private ExamService examService;
     private AntwortService antwortService;
@@ -33,7 +33,7 @@ class ExamManagementServiceTest {
     private StudentService studentService;
     private ProfessorService professorService;
     private KorrekteAntwortenService korrekteAntwortenService;
-    private ExamManagementService examManagementService;
+    private ExamUseCaseService examUseCaseService;
     private ReviewService reviewService;
     private AutomaticReviewService automaticReviewService;
 
@@ -72,7 +72,7 @@ class ExamManagementServiceTest {
         KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper = mock(KorrekteAntwortenDTOMapperImpl.class);
         studentDTOMapper = mock(StudentDTOMapperImpl.class);
 
-        examManagementService = new ExamManagementServiceImpl(
+        examUseCaseService = new ExamUseCaseServiceImpl(
                 examService,
                 antwortService,
                 frageService,
@@ -107,7 +107,7 @@ class ExamManagementServiceTest {
         when(examDTOMapper.toDomain(any(ExamDTO.class))).thenReturn(mockExam);
 
         // Act
-        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
+        String message = examUseCaseService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
 
         // Assert
         assertThat(message).isEmpty();
@@ -137,7 +137,7 @@ class ExamManagementServiceTest {
         when(examService.allExams()).thenReturn(exams);
 
         // Act
-        String message = examManagementService.createExam(PROF_NAME, "Exam 0", TIME_VAR, end, result);
+        String message = examUseCaseService.createExam(PROF_NAME, "Exam 0", TIME_VAR, end, result);
 
         // Assert
         assertThat(message).isEqualTo("Die maximale Kapazität von 12 Exams ist nun überschritten worden!");
@@ -175,7 +175,7 @@ class ExamManagementServiceTest {
         when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
 
         // Act
-        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
+        String message = examUseCaseService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
 
         // Assert
         assertThat(message).isEqualTo("Ein Exam mit der selben Startzeit ist schon vorhanden!");
@@ -191,7 +191,7 @@ class ExamManagementServiceTest {
 
         when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.empty());
         assertThrows(IllegalStateException.class,
-                () -> examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result));
+                () -> examUseCaseService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result));
     }
 
     @Test
@@ -202,7 +202,7 @@ class ExamManagementServiceTest {
 
         when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
 
-        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
+        String message = examUseCaseService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
         assertThat(message).isEqualTo("Start-Zeitpunkt muss vor End-Zeitpunkt liegen!");
     }
 
@@ -214,7 +214,7 @@ class ExamManagementServiceTest {
 
         when(professorService.getProfessorFachIdByName(PROF_NAME)).thenReturn(Optional.of(PROF_UUID));
 
-        String message = examManagementService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
+        String message = examUseCaseService.createExam(PROF_NAME, "Exam 1", TIME_VAR, end, result);
         assertThat(message).isEqualTo("Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!");
     }
 
@@ -241,7 +241,7 @@ class ExamManagementServiceTest {
         });
 
         // Act
-        List<ExamDTO> exams = examManagementService.getAllExams();
+        List<ExamDTO> exams = examUseCaseService.getAllExams();
 
         // Assert
         assertThat(exams)
@@ -278,7 +278,7 @@ class ExamManagementServiceTest {
         when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageDTO.fachId())).thenReturn(mock(Antwort.class));
 
         // Act
-        boolean success = examManagementService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
+        boolean success = examUseCaseService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(success).isTrue();
@@ -313,7 +313,7 @@ class ExamManagementServiceTest {
         when(antwortService.findByStudentAndFrage(STUDENT_UUID, frageDTO.fachId())).thenReturn(null);
 
         // Act
-        boolean success = examManagementService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
+        boolean success = examUseCaseService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(success).isFalse();
@@ -371,7 +371,7 @@ class ExamManagementServiceTest {
                 .thenReturn(null);
 
         // Act
-        boolean submitted = examManagementService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
+        boolean submitted = examUseCaseService.isExamAlreadySubmitted(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(submitted).isTrue();
@@ -440,7 +440,7 @@ class ExamManagementServiceTest {
                 .thenReturn(List.of());
 
         // Act
-        boolean result = examManagementService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
+        boolean result = examUseCaseService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
 
         // Assert
         assertTrue(result);
@@ -457,7 +457,7 @@ class ExamManagementServiceTest {
         when(studentService.getStudentFachId(STUDENT_NAME)).thenThrow(new RuntimeException("Nicht gefunden"));
 
         // Act
-        boolean result = examManagementService.submitExam(STUDENT_NAME, Map.of(), EXAM_UUID);
+        boolean result = examUseCaseService.submitExam(STUDENT_NAME, Map.of(), EXAM_UUID);
 
         // Assert
         assertFalse(result);
@@ -472,7 +472,7 @@ class ExamManagementServiceTest {
         doThrow(new RuntimeException("DB Error")).when(antwortService).addAntwort(any());
 
         // Act
-        boolean result = examManagementService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
+        boolean result = examUseCaseService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
 
         // Assert
         assertFalse(result);
@@ -501,7 +501,7 @@ class ExamManagementServiceTest {
         doThrow(new RuntimeException("Review DB Error")).when(reviewService).addReview(r);
 
         // Act
-        boolean result = examManagementService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
+        boolean result = examUseCaseService.submitExam(STUDENT_NAME, antworten, EXAM_UUID);
 
         // Assert
         assertFalse(result);
@@ -533,7 +533,7 @@ class ExamManagementServiceTest {
         when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
 
         // Act
-        UUID result = examManagementService.getExamByStartTime(TIME_VAR);
+        UUID result = examUseCaseService.getExamByStartTime(TIME_VAR);
 
         // Assert
         assertThat(result).isEqualTo(EXAM_UUID);
@@ -565,7 +565,7 @@ class ExamManagementServiceTest {
         when(examDTOMapper.toDTO(exam)).thenReturn(examDTO);
 
         // Act
-        UUID result = examManagementService.getExamByStartTime(TIME_VAR);
+        UUID result = examUseCaseService.getExamByStartTime(TIME_VAR);
 
         // Assert
         assertThat(result).isNull();
@@ -575,7 +575,7 @@ class ExamManagementServiceTest {
     @DisplayName("reset Test")
     void reset_01() {
         // Act
-        examManagementService.reset();
+        examUseCaseService.reset();
 
         // Assert
         InOrder inOrder = inOrder(
@@ -667,7 +667,7 @@ class ExamManagementServiceTest {
         when(reviewService.getReviewByAntwortFachId(antwortFachId2)).thenReturn(null);
 
         // Act
-        examManagementService.removeOldAnswers(EXAM_UUID, STUDENT_NAME);
+        examUseCaseService.removeOldAnswers(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         verify(antwortService).deleteAnswer(antwortFachId1);
@@ -744,7 +744,7 @@ class ExamManagementServiceTest {
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
         // Act
-        VersuchDTO attempt = examManagementService.getSubmission(EXAM_UUID, STUDENT_NAME);
+        VersuchDTO attempt = examUseCaseService.getSubmission(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(attempt.erreichtePunkte()).isEqualTo(5.0);
@@ -759,7 +759,7 @@ class ExamManagementServiceTest {
         when(frageService.getFragenForExam(EXAM_UUID)).thenReturn(List.of());
 
         // Act
-        VersuchDTO attempt = examManagementService.getSubmission(EXAM_UUID, STUDENT_NAME);
+        VersuchDTO attempt = examUseCaseService.getSubmission(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(attempt.erreichtePunkte()).isEqualTo(0.0);
@@ -806,7 +806,7 @@ class ExamManagementServiceTest {
         when(reviewService.getReviewByAntwortFachId(antwortFachId)).thenReturn(null);
 
         // Act
-        VersuchDTO attempt = examManagementService.getSubmission(EXAM_UUID, STUDENT_NAME);
+        VersuchDTO attempt = examUseCaseService.getSubmission(EXAM_UUID, STUDENT_NAME);
 
         // Assert
         assertThat(attempt.erreichtePunkte()).isEqualTo(0.0);
@@ -859,7 +859,7 @@ class ExamManagementServiceTest {
         }
 
         // Act
-        boolean result = examManagementService.isSubmitBeingReviewed(
+        boolean result = examUseCaseService.isSubmitBeingReviewed(
                 EXAM_UUID, new StudentDTO(STUDENT_UUID,"Student"));
 
         // Assert
@@ -911,7 +911,7 @@ class ExamManagementServiceTest {
         }
 
         // Act
-        boolean result = examManagementService.isSubmitBeingReviewed(
+        boolean result = examUseCaseService.isSubmitBeingReviewed(
                 EXAM_UUID, new StudentDTO(STUDENT_UUID,"Student"));
 
         // Assert
@@ -1021,7 +1021,7 @@ class ExamManagementServiceTest {
         when(frageDTOMapper.toDTO(frage2)).thenReturn(frageDTO2);
 
         // Act
-        double coverage = examManagementService.reviewCoverage(EXAM_UUID);
+        double coverage = examUseCaseService.reviewCoverage(EXAM_UUID);
 
         // Assert
         assertThat(coverage).isEqualTo(50.0);
@@ -1130,7 +1130,7 @@ class ExamManagementServiceTest {
         when(frageDTOMapper.toDTO(frage2)).thenReturn(frageDTO2);
 
         // Act
-        double coverage = examManagementService.reviewCoverage(EXAM_UUID);
+        double coverage = examUseCaseService.reviewCoverage(EXAM_UUID);
 
         // Assert
         // 2 Fragen: MC und Freitextaufgaben, aber von den Freitextaufgaben haben alle eine Bewertung
@@ -1193,7 +1193,7 @@ class ExamManagementServiceTest {
         when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
 
         // Act
-        List<StudentDTO> result = examManagementService.getStudentSubmittedExam(EXAM_UUID);
+        List<StudentDTO> result = examUseCaseService.getStudentSubmittedExam(EXAM_UUID);
 
         // Assert
         assertThat(result).hasSize(1);

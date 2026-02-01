@@ -1,7 +1,9 @@
-package exambyte.application.service;
+package exambyte.application.service.exam;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
+import exambyte.application.service.review.AutomaticReviewService;
+import exambyte.application.service.ReviewData;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
@@ -22,7 +24,7 @@ import java.util.stream.Stream;
 import java.util.logging.Logger;
 
 @Service
-public class ExamManagementServiceImpl implements ExamManagementService {
+public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 
     private final ExamService examService;
     private final AntwortService antwortService;
@@ -42,25 +44,25 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final StudentDTOMapper studentDTOMapper;
     private final ProfessorDTOMapper professorDTOMapper;
 
-    private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(ExamUseCaseServiceImpl.class.getName());
 
     @Autowired
-    public ExamManagementServiceImpl(ExamService examService,
-                                     AntwortService antwortService,
-                                     FrageService frageService,
-                                     StudentService studentService,
-                                     ProfessorService professorService,
-                                     KorrektorService korrektorService,
-                                     ReviewService reviewService,
-                                     AutomaticReviewService automaticReviewService,
-                                     KorrekteAntwortenService korrekteAntwortenService,
-                                     ExamDTOMapper examDTOMapper,
-                                     FrageDTOMapper frageDTOMapper,
-                                     AntwortDTOMapper antwortDTOMapper,
-                                     KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
-                                     ReviewDTOMapper reviewDTOMapper,
-                                     StudentDTOMapper studentDTOMapper,
-                                     ProfessorDTOMapper professorDTOMapper) {
+    public ExamUseCaseServiceImpl(ExamService examService,
+                                  AntwortService antwortService,
+                                  FrageService frageService,
+                                  StudentService studentService,
+                                  ProfessorService professorService,
+                                  KorrektorService korrektorService,
+                                  ReviewService reviewService,
+                                  AutomaticReviewService automaticReviewService,
+                                  KorrekteAntwortenService korrekteAntwortenService,
+                                  ExamDTOMapper examDTOMapper,
+                                  FrageDTOMapper frageDTOMapper,
+                                  AntwortDTOMapper antwortDTOMapper,
+                                  KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
+                                  ReviewDTOMapper reviewDTOMapper,
+                                  StudentDTOMapper studentDTOMapper,
+                                  ProfessorDTOMapper professorDTOMapper) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
@@ -80,61 +82,61 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.studentDTOMapper = studentDTOMapper;
     }
 
-    @Override
-    public String createExam(String professorName,
-                              String title,
-                              LocalDateTime startTime,
-                              LocalDateTime endTime,
-                              LocalDateTime resultTime) {
+//    @Override
+//    public String createExam(String professorName,
+//                              String title,
+//                              LocalDateTime startTime,
+//                              LocalDateTime endTime,
+//                              LocalDateTime resultTime) {
+//
+//        UUID profFachId = professorService.getProfessorFachIdByName(professorName)
+//                .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + professorName));
+//
+//        if (startTime.isAfter(endTime) || startTime.isEqual(endTime)) {
+//            return "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!";
+//        }
+//
+//        if (resultTime.isBefore(endTime) || resultTime.isEqual(endTime)) {
+//            return "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!";
+//        }
+//
+//        int examCount = examService.allExams().size();
+//
+//        if (examCount >= 12) {
+//            return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
+//        }
+//
+//        boolean startTimeExists = examService.allExams().stream()
+//                .map(examDTOMapper::toDTO)
+//                .anyMatch(e -> e.startTime().truncatedTo(ChronoUnit.MINUTES)
+//                        .equals(startTime.truncatedTo(ChronoUnit.MINUTES)));
+//
+//        if (startTimeExists) {
+//            return "Ein Exam mit der selben Startzeit ist schon vorhanden!";
+//        }
+//
+//        ExamDTO examDTO = new ExamDTO(null, title, profFachId, startTime, endTime, resultTime);
+//        examService.addExam(examDTOMapper.toDomain(examDTO));
+//        return "";
+//    }
 
-        UUID profFachId = professorService.getProfessorFachIdByName(professorName)
-                .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + professorName));
+//    @Override
+//    public List<ExamDTO> getAllExams() {
+//        return examService.allExams().stream()
+//                .map(examDTOMapper::toDTO)
+//                .sorted(Comparator.comparing(ExamDTO::startTime))
+//                .toList();
+//    }
 
-        if (startTime.isAfter(endTime) || startTime.isEqual(endTime)) {
-            return "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!";
-        }
-
-        if (resultTime.isBefore(endTime) || resultTime.isEqual(endTime)) {
-            return "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!";
-        }
-
-        int examCount = examService.allExams().size();
-
-        if (examCount >= 12) {
-            return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
-        }
-
-        boolean startTimeExists = examService.allExams().stream()
-                .map(examDTOMapper::toDTO)
-                .anyMatch(e -> e.startTime().truncatedTo(ChronoUnit.MINUTES)
-                        .equals(startTime.truncatedTo(ChronoUnit.MINUTES)));
-
-        if (startTimeExists) {
-            return "Ein Exam mit der selben Startzeit ist schon vorhanden!";
-        }
-
-        ExamDTO examDTO = new ExamDTO(null, title, profFachId, startTime, endTime, resultTime);
-        examService.addExam(examDTOMapper.toDomain(examDTO));
-        return "";
-    }
-
-    @Override
-    public List<ExamDTO> getAllExams() {
-        return examService.allExams().stream()
-                .map(examDTOMapper::toDTO)
-                .sorted(Comparator.comparing(ExamDTO::startTime))
-                .toList();
-    }
-
-    @Override
-    public boolean isExamAlreadySubmitted(UUID examFachId, String studentName) {
-        UUID studentFachId = studentService.getStudentFachId(studentName);
-        List<FrageDTO> fragen = frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examFachId));
-
-        return fragen.stream()
-                .anyMatch(frage ->
-                        antwortService.findByStudentAndFrage(studentFachId, frage.fachId()) != null);
-    }
+//    @Override
+//    public boolean isExamAlreadySubmitted(UUID examFachId, String studentName) {
+//        UUID studentFachId = studentService.getStudentFachId(studentName);
+//        List<FrageDTO> fragen = frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examFachId));
+//
+//        return fragen.stream()
+//                .anyMatch(frage ->
+//                        antwortService.findByStudentAndFrage(studentFachId, frage.fachId()) != null);
+//    }
 
     /**
      * Speichert die Antworten eines Studenten zu einem Exam und erstellt automatische
@@ -145,82 +147,82 @@ public class ExamManagementServiceImpl implements ExamManagementService {
      * @param examFachId   Fach-ID des Exams
      * @return true, wenn alle Antworten und Reviews erfolgreich gespeichert wurden
      */
-    @Override
-    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId) {
-        UUID studentFachId;
-        try {
-            studentFachId = studentService.getStudentFachId(studentLogin);
-        } catch (Exception e) {
-            String msg = "Student nicht gefunden: " + studentLogin;
-            logger.log(Level.SEVERE, msg, e);
-            return false;
-        }
+//    @Override
+//    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId) {
+//        UUID studentFachId;
+//        try {
+//            studentFachId = studentService.getStudentFachId(studentLogin);
+//        } catch (Exception e) {
+//            String msg = "Student nicht gefunden: " + studentLogin;
+//            logger.log(Level.SEVERE, msg, e);
+//            return false;
+//        }
+//
+//        boolean saved = saveStudentAnswers(studentFachId, antworten);
+//        if (!saved) {
+//            return false;
+//        }
+//
+//        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
+//                .map(frageDTOMapper::toDTO)
+//                .toList();
+//
+//        List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
+//                .map(f -> antwortDTOMapper.toDTO(
+//                        antwortService.findByStudentAndFrage(studentFachId, f.fachId())))
+//                .filter(Objects::nonNull)
+//                .toList();
+//
+//        List<ReviewDTO> allReviews = generateReviews(studentFachId, fragenDTOList, antwortDTOList);
+//
+//        try {
+//            allReviews.forEach(r -> reviewService.addReview(reviewDTOMapper.toDomain(r)));
+//        } catch (Exception e) {
+//            logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
+//            return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    private boolean saveStudentAnswers(UUID studentFachId, Map<String, List<String>> antworten) {
+//        try {
+//            for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
+//                UUID frageFachId = UUID.fromString(entry.getKey());
+//                String antwortText = String.join("\n", entry.getValue());
+//                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
+//                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
+//            }
+//            return true;
+//        } catch (Exception e) {
+//            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
+//            return false;
+//        }
+//    }
+//
+//    private List<ReviewDTO> generateReviews(UUID studentFachId, List<FrageDTO> fragen, List<AntwortDTO> antworten) {
+//        ReviewData mcData = new ReviewData(fragen, antworten,
+//                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+//        ReviewData scData = new ReviewData(fragen, antworten,
+//                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+//
+//        mcData.filterToType(QuestionTypeDTO.MC);
+//        scData.filterToType(QuestionTypeDTO.SC);
+//
+//        List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
+//                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId,
+//                reviewService);
+//        List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
+//                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId,
+//                reviewService);
+//
+//        return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
+//    }
 
-        boolean saved = saveStudentAnswers(studentFachId, antworten);
-        if (!saved) {
-            return false;
-        }
-
-        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examFachId).stream()
-                .map(frageDTOMapper::toDTO)
-                .toList();
-
-        List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
-                .map(f -> antwortDTOMapper.toDTO(
-                        antwortService.findByStudentAndFrage(studentFachId, f.fachId())))
-                .filter(Objects::nonNull)
-                .toList();
-
-        List<ReviewDTO> allReviews = generateReviews(studentFachId, fragenDTOList, antwortDTOList);
-
-        try {
-            allReviews.forEach(r -> reviewService.addReview(reviewDTOMapper.toDomain(r)));
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean saveStudentAnswers(UUID studentFachId, Map<String, List<String>> antworten) {
-        try {
-            for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
-                UUID frageFachId = UUID.fromString(entry.getKey());
-                String antwortText = String.join("\n", entry.getValue());
-                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentFachId, null);
-                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
-            }
-            return true;
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
-            return false;
-        }
-    }
-
-    private List<ReviewDTO> generateReviews(UUID studentFachId, List<FrageDTO> fragen, List<AntwortDTO> antworten) {
-        ReviewData mcData = new ReviewData(fragen, antworten,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-        ReviewData scData = new ReviewData(fragen, antworten,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-
-        mcData.filterToType(QuestionTypeDTO.MC);
-        scData.filterToType(QuestionTypeDTO.SC);
-
-        List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
-                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentFachId,
-                reviewService);
-        List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
-                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentFachId,
-                reviewService);
-
-        return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
-    }
-
-    @Override
-    public ExamDTO getExam(UUID examFachId) {
-        return examDTOMapper.toDTO(examService.getExam(examFachId));
-    }
+//    @Override
+//    public ExamDTO getExam(UUID examFachId) {
+//        return examDTOMapper.toDTO(examService.getExam(examFachId));
+//    }
 
     @Override
     public List<FrageDTO> getFragenForExam(UUID examFachId) {
@@ -255,21 +257,21 @@ public class ExamManagementServiceImpl implements ExamManagementService {
          return korrekteAntwortenService.findKorrekteAntwort(frageFachId).getAntwortOptionen();
     }
 
-    @Override
-    public UUID getExamByStartTime(LocalDateTime startTime) {
-        List<ExamDTO> examList = examService.allExams().stream()
-                .map(examDTOMapper::toDTO)
-                .toList();
-
-        for (ExamDTO examDTO : examList) {
-            if (startTime.truncatedTo(ChronoUnit.MINUTES)
-                    .equals(examDTO.startTime().truncatedTo(ChronoUnit.MINUTES))) {
-                return examDTO.fachId();
-            }
-        }
-
-        return null;
-    }
+//    @Override
+//    public UUID getExamByStartTime(LocalDateTime startTime) {
+//        List<ExamDTO> examList = examService.allExams().stream()
+//                .map(examDTOMapper::toDTO)
+//                .toList();
+//
+//        for (ExamDTO examDTO : examList) {
+//            if (startTime.truncatedTo(ChronoUnit.MINUTES)
+//                    .equals(examDTO.startTime().truncatedTo(ChronoUnit.MINUTES))) {
+//                return examDTO.fachId();
+//            }
+//        }
+//
+//        return null;
+//    }
 
     @Override
     public void deleteByFachId(UUID uuid) {

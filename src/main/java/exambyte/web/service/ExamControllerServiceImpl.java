@@ -3,7 +3,7 @@ package exambyte.web.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.ExamManagementService;
+import exambyte.application.service.exam.ExamUseCaseService;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.*;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.*;
 @Service
 public class ExamControllerServiceImpl implements ExamControllerService {
 
-    private final ExamManagementService service;
+    private final ExamUseCaseService service;
 
-    public ExamControllerServiceImpl(ExamManagementService service) {
+    public ExamControllerServiceImpl(ExamUseCaseService service) {
         this.service = service;
     }
 
