@@ -224,10 +224,10 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
 //        return examDTOMapper.toDTO(examService.getExam(examFachId));
 //    }
 
-    @Override
-    public List<FrageDTO> getFragenForExam(UUID examFachId) {
-        return frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examFachId));
-    }
+//    @Override
+//    public List<FrageDTO> getFragenForExam(UUID examFachId) {
+//        return frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examFachId));
+//    }
 
     @Override
     public Optional<UUID> getProfFachIDByName(String name) {
@@ -240,22 +240,22 @@ public class ExamUseCaseServiceImpl implements ExamUseCaseService {
         return professorDTOMapper.toDTO(professor);
     }
 
-    @Override
-    public void createFrage(FrageDTO frageDTO) {
-        frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
-    }
+//    @Override
+//    public void createFrage(FrageDTO frageDTO) {
+//        frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
+//    }
 
-    @Override
-    public void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices) {
-        UUID frageFachId = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
-        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null, correctAnswer, choices, frageFachId);
-        korrekteAntwortenService.addKorrekteAntwort(korrekteAntwortenDTOMapper.toDomain(dto));
-    }
+//    @Override
+//    public void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices) {
+//        UUID frageFachId = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
+//        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null, correctAnswer, choices, frageFachId);
+//        korrekteAntwortenService.addKorrekteAntwort(korrekteAntwortenDTOMapper.toDomain(dto));
+//    }
 
-    @Override
-    public String getChoiceForFrage(UUID frageFachId) {
-         return korrekteAntwortenService.findKorrekteAntwort(frageFachId).getAntwortOptionen();
-    }
+//    @Override
+//    public String getChoiceForFrage(UUID frageFachId) {
+//         return korrekteAntwortenService.findKorrekteAntwort(frageFachId).getAntwortOptionen();
+//    }
 
 //    @Override
 //    public UUID getExamByStartTime(LocalDateTime startTime) {

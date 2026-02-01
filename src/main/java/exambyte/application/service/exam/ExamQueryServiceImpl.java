@@ -8,6 +8,7 @@ import exambyte.domain.service.AntwortService;
 import exambyte.domain.service.ExamService;
 import exambyte.domain.service.FrageService;
 import exambyte.domain.service.StudentService;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -15,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class ExamQueryServiceImpl implements ExamQueryService {
 
     private final ExamService examService;
