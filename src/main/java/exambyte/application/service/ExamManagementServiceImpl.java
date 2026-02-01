@@ -5,6 +5,8 @@ import exambyte.application.dto.*;
 import exambyte.domain.mapper.*;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
     private final ReviewDTOMapper reviewDTOMapper;
     private final StudentDTOMapper studentDTOMapper;
+    private final ProfessorDTOMapper professorDTOMapper;
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
@@ -56,7 +59,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      AntwortDTOMapper antwortDTOMapper,
                                      KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
                                      ReviewDTOMapper reviewDTOMapper,
-                                     StudentDTOMapper studentDTOMapper) {
+                                     StudentDTOMapper studentDTOMapper,
+                                     ProfessorDTOMapper professorDTOMapper) {
         this.examService = examService;
         this.antwortService = antwortService;
         this.frageService = frageService;
@@ -71,6 +75,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.frageDTOMapper = frageDTOMapper;
         this.antwortDTOMapper = antwortDTOMapper;
         this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
+        this.professorDTOMapper = professorDTOMapper;
         this.reviewDTOMapper = reviewDTOMapper;
         this.studentDTOMapper = studentDTOMapper;
     }
@@ -225,6 +230,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     @Override
     public Optional<UUID> getProfFachIDByName(String name) {
         return professorService.getProfessorFachIdByName(name);
+    }
+
+    @Override
+    public ProfessorDTO getProfessor(UUID profFachId) {
+        Professor professor = professorService.getProfessor(profFachId);
+        return professorDTOMapper.toDTO(professor);
     }
 
     @Override
@@ -442,5 +453,28 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)
                 .toList();
+    }
+
+    @Override
+    public boolean antwortHasReview(AntwortDTO antwort) {
+        return reviewService.getReviewByAntwortFachId(antwort.fachId()) != null;
+    }
+
+    @Override
+    public void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId) {
+        Review review = new Review.ReviewBuilder()
+                .korrektorFachId(korrektorFachId)
+                .punkte(punkte)
+                .antwortFachId(antwortFachId)
+                .bewertung(bewertung)
+                .build();
+
+        reviewService.addReview(review);
+    }
+
+    @Override
+    public UUID getReviewerByName(String name) {
+        Optional<Korrektor> k = korrektorService.getKorrektorByName(name);
+        return k.map(Korrektor::uuid).orElse(null);
     }
 }

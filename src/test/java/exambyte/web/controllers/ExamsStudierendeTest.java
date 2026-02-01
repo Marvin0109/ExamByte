@@ -1,6 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.VersuchDTO;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
@@ -19,6 +20,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -58,16 +60,15 @@ class ExamsStudierendeTest {
     @WithMockOAuth2User(login = "Marvin0109", roles = {"STUDENT"})
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void listExamsForStudents_02() throws Exception {
-
-        when(service.getAllExams()).thenReturn(List.of());
-
         mvc.perform(get("/exams/examsStudierende"))
             .andExpect(status().isOk())
             .andExpect(view().name("exams/examsStudierende"))
             .andExpect(model().attribute("name", "Marvin0109"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("exams"))
-            .andExpect(model().attributeExists("timeNow"));
+            .andExpect(model().attributeExists("timeNow"))
+            .andExpect(model().attributeExists("progress"))
+            .andExpect(model().attributeExists("failedYetOrNot"));
     }
 
     @Test
@@ -85,15 +86,18 @@ class ExamsStudierendeTest {
     @DisplayName("Prüfungsmenü ist erreichbar (noch kein Exam eingereicht vorher)")
     void examMenu_02() throws Exception {
         UUID examFachId = UUID.randomUUID();
-
+        UUID profFachId = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
 
         ExamTimeInfo examTimeInfo = new ExamTimeInfo("Anzeige", true);
-        ExamDTO examDTO = mock(ExamDTO.class);
+        ExamDTO examDTO = new ExamDTO(examFachId, "Exam 1", profFachId,
+                start, start.plusHours(1), start.plusHours(2));
+        ProfessorDTO p = new ProfessorDTO(profFachId, "ProfName");
 
         when(service.getExamByUUID(examFachId)).thenReturn(examDTO);
         when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(false);
         when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
-        when(examDTO.professorFachId()).thenReturn(UUID.randomUUID());
+        when(service.getProfessorByFachId(profFachId)).thenReturn(p);
 
         mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
@@ -102,7 +106,7 @@ class ExamsStudierendeTest {
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", false))
-            .andExpect(model().attributeExists("authorID"));
+            .andExpect(model().attribute("authorName", "ProfName"));
     }
 
     @Test
@@ -110,15 +114,19 @@ class ExamsStudierendeTest {
     @DisplayName("Prüfungsmenü ist erreichbar (Exam eingereicht vorher)")
     void examMenu_03() throws Exception {
         UUID examFachId = UUID.randomUUID();
+        UUID profFachId = UUID.randomUUID();
+        LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
 
         ExamTimeInfo examTimeInfo = new ExamTimeInfo("Anzeige", true);
-        ExamDTO examDTO = mock(ExamDTO.class);
+        ExamDTO examDTO = new ExamDTO(examFachId, "Exam 1", profFachId,
+                start, start.plusHours(1), start.plusHours(2));
+        ProfessorDTO p = new ProfessorDTO(profFachId, "ProfName");
         VersuchDTO versuchDTO = mock(VersuchDTO.class);
 
         when(service.getExamByUUID(examFachId)).thenReturn(examDTO);
         when(service.examIsAlreadySubmitted(examFachId, "Marvin0109")).thenReturn(true);
         when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
-        when(examDTO.professorFachId()).thenReturn(UUID.randomUUID());
+        when(service.getProfessorByFachId(profFachId)).thenReturn(p);
 
         when(service.getAttempt(examFachId, "Marvin0109")).thenReturn(versuchDTO);
 
@@ -130,7 +138,7 @@ class ExamsStudierendeTest {
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", true))
             .andExpect(model().attribute("attempt", versuchDTO))
-            .andExpect(model().attributeExists("authorID"));
+            .andExpect(model().attribute("authorName", "ProfName"));
     }
 
     @Test

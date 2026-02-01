@@ -1,12 +1,7 @@
 package exambyte.application.service;
 
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.VersuchDTO;
-import exambyte.web.form.ExamForm;
-import exambyte.web.form.ExamTimeInfo;
-import exambyte.web.form.ReviewCoverageForm;
-import exambyte.web.form.SubmitInfo;
+import exambyte.application.dto.*;
+import exambyte.web.form.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -51,4 +46,18 @@ public interface ExamControllerService {
     Optional<UUID> getProfFachIDByName(String name);
 
     void reset();
+
+    ProfessorDTO getProfessorByFachId(UUID fachId);
+
+    double getZulassungsProgress(String studentName);
+
+    boolean hasAnyFailedAttempt(String studentName);
+
+    Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examUUID, UUID studentUUID);
+
+    List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map);
+
+    void createReview(ReviewForm reviewForm, UUID antwortFachId, UUID korrektorFachId);
+
+    UUID getReviewerByName(String name);
 }

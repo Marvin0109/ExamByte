@@ -115,6 +115,11 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
+    public ProfessorDTO getProfessorByFachId(UUID fachId) {
+        return service.getProfessor(fachId);
+    }
+
+    @Override
     public void createQuestions(ExamForm form, UUID profFachID, UUID examUUID) {
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
@@ -154,6 +159,49 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public VersuchDTO getAttempt(UUID examUUID, String studentLogin) {
         return service.getSubmission(examUUID, studentLogin);
+    }
+
+    @Override
+    public double getZulassungsProgress(String studentLogin) {
+        List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
+
+        double size = 12;
+        double progressForSuccessAttempt = 100.0 / size;
+        double progress = 0.0;
+        for (VersuchDTO v : allValidAttempts) {
+            if (v.erreichtePunkte() >= v.maxPunkte() * 0.5) {
+                progress += progressForSuccessAttempt;
+            }
+        }
+
+        return progress;
+    }
+
+    @Override
+    public boolean hasAnyFailedAttempt(String studentLogin) {
+        List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
+
+        for (VersuchDTO v : allValidAttempts) {
+            if (v.erreichtePunkte() < v.maxPunkte() * 0.5) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private List<VersuchDTO> getValidAttempts(String studentLogin) {
+        List<ExamDTO> exams = service.getAllExams();
+        List<VersuchDTO> allValidAttempts = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+
+        for (ExamDTO exam : exams) {
+            VersuchDTO v = service.getSubmission(exam.fachId(), studentLogin);
+            if (exam.resultTime().isBefore(now)) {
+                allValidAttempts.add(v);
+            }
+        }
+
+        return allValidAttempts;
     }
 
     @Override
@@ -281,5 +329,55 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public void reset() {
         service.reset();
+    }
+
+    @Override
+    public Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examFachId, UUID studentFachId) {
+        List<FrageDTO> fragen = service.getFreitextFragen(examFachId);
+        List<AntwortDTO> antworten = service.getFreitextAntwortenForExam(examFachId);
+
+        Map<FrageDTO, AntwortDTO> resultMap = new HashMap<>();
+
+        for (FrageDTO frage : fragen) {
+            antworten.stream()
+                    .filter(a -> a.frageFachId().equals(frage.fachId()))
+                    .filter(a -> a.studentFachId().equals(studentFachId))
+                    .findFirst().ifPresent(ans -> resultMap.put(frage, ans));
+        }
+
+        return resultMap;
+    }
+
+    @Override
+    public List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map) {
+        List<AnswerForm> answerFormList = new ArrayList<>();
+
+        for (Map.Entry<FrageDTO, AntwortDTO> entry : map.entrySet()) {
+            if (!service.antwortHasReview(entry.getValue())) {
+                AnswerForm answerForm = new AnswerForm();
+                answerForm.setFrageText(entry.getKey().frageText());
+                answerForm.setAntwort(entry.getValue().antwortText());
+                answerForm.setMaxPunkte(entry.getKey().maxPunkte());
+                answerForm.setAntwortFachId(entry.getValue().fachId());
+
+                answerFormList.add(answerForm);
+            }
+        }
+
+        return answerFormList;
+    }
+
+    @Override
+    public void createReview(ReviewForm reviewForm, UUID antwortFachId, UUID korrektorFachId) {
+        service.createReview(
+                reviewForm.getBewertung(),
+                reviewForm.getPunkteVergeben(),
+                antwortFachId,
+                korrektorFachId);
+    }
+
+    @Override
+    public UUID getReviewerByName(String name) {
+        return service.getReviewerByName(name);
     }
 }

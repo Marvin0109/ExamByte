@@ -22,7 +22,9 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ExamController.class)
@@ -123,14 +125,65 @@ class ExamsKorrektorTest {
                 .contains("oauth2/authorization/github");
     }
 
-    // TODO: Anpassen, HTML Seite existiert noch nicht!
     @Test
     @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
-    @DisplayName("Korrekturseite erfolgt")
-    void showExamSubmits_04() throws Exception {
+    @DisplayName("Korrekturseite ist erreichbar")
+    void showSubmit_02() throws Exception {
         UUID examFachId = UUID.randomUUID();
         UUID studentFachId = UUID.randomUUID();
-        mvc.perform(get("/exams/showExamSubmits/{examFachId}/{studentFachId}", examFachId, studentFachId))
-            .andExpect(status().is4xxClientError());
+        mvc.perform(get("/exams/showSubmit/{examFachId}/{studentFachId}", examFachId, studentFachId))
+            .andExpect(status().isOk())
+            .andExpect(model().attributeExists("antworten"))
+            .andExpect(model().attributeExists("reviewForm"))
+            .andExpect(view().name("exams/showSubmit"));
+    }
+
+    @Test
+    @DisplayName("Das erstellen der Reviews erfolgt nicht ohne Authentifizierung")
+    void createReview_01() throws Exception {
+        mvc.perform(post("/exams/createReview/{antwortFachId}", UUID.randomUUID()))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"REVIEWER"})
+    @DisplayName("Erstellen einer Bewertung ist erfolgreich")
+    void createReview_02() throws Exception {
+        mvc.perform(post("/exams/createReview/{antwortFachId}", UUID.randomUUID())
+                .with(csrf())
+                .param("bewertung", "Bewertung")
+                .param("punkteVergeben", "1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/exams/examsKorrektor"))
+            .andExpect(flash().attribute("message", "Bewertung erfolgreich!"))
+            .andExpect(flash().attribute("success", true));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"REVIEWER"})
+    @DisplayName("Erstellen einer Bewertung schlägt fehl (Bewertungstext fehlt)")
+    void createReview_03() throws Exception {
+        mvc.perform(post("/exams/createReview/{antwortFachId}", UUID.randomUUID())
+                .with(csrf())
+                .param("bewertung", "")
+                .param("punkteVergeben", "1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/exams/examsKorrektor"))
+            .andExpect(flash().attribute("message", "Ein Bewertungstext muss vorhanden sein"))
+            .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"REVIEWER"})
+    @DisplayName("Erstellen einer Bewertung schlägt fehl (Ungültige Punktzahl vergeben)")
+    void createReview_04() throws Exception {
+        mvc.perform(post("/exams/createReview/{antwortFachId}", UUID.randomUUID())
+                .with(csrf())
+                .param("bewertung", "B")
+                .param("punkteVergeben", "-1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/exams/examsKorrektor"))
+            .andExpect(flash().attribute("message", "Punkte dürfen nicht negativ sein"))
+            .andExpect(flash().attribute("success", false));
     }
 }

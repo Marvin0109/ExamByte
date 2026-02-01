@@ -25,6 +25,8 @@ public interface ExamManagementService {
 
     Optional<UUID> getProfFachIDByName(String name);
 
+    ProfessorDTO getProfessor(UUID profFachId);
+
     void createFrage(FrageDTO frageDTO);
 
     void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);
@@ -52,4 +54,10 @@ public interface ExamManagementService {
     List<FrageDTO> getFreitextFragen(UUID examFachId);
 
     List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId);
+
+    boolean antwortHasReview(AntwortDTO antwort);
+
+    void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId);
+
+    UUID getReviewerByName(String name);
 }

@@ -1,7 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.*;
 import exambyte.web.form.*;
 import exambyte.application.service.ExamControllerService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +11,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -57,7 +57,6 @@ public class ExamController {
     public String createExam(
             @Valid ExamForm form,
             BindingResult bindingResult,
-            Model model,
             OAuth2AuthenticationToken auth,
             RedirectAttributes redirectAttributes) {
 
@@ -153,7 +152,6 @@ public class ExamController {
         return "exams/examSubmittedUebersicht";
     }
 
-    //TODO: Korrektur Seite, HTML existiert noch nicht
     @GetMapping("/showSubmit/{examFachId}/{studentFachId}")
     @Secured("ROLE_REVIEWER")
     public String showSubmit(
@@ -161,7 +159,44 @@ public class ExamController {
             @PathVariable UUID examFachId,
             @PathVariable UUID studentFachId) {
 
+        Map<FrageDTO, AntwortDTO> frageAntwortMap =
+                service.getFreitextAntwortenForExamAndStudent(examFachId, studentFachId);
+
+        List<AnswerForm> antwortForm = service.createAnswerForm(frageAntwortMap);
+        ReviewForm reviewForm = new ReviewForm();
+
+        model.addAttribute("antworten", antwortForm);
+        model.addAttribute("reviewForm", reviewForm);
         return "exams/showSubmit";
+    }
+
+    @PostMapping("/createReview/{antwortFachId}")
+    @Secured("ROLE_REVIEWER")
+    public String createReview(
+            @Valid ReviewForm reviewForm,
+            BindingResult bindingResult,
+            @PathVariable UUID antwortFachId,
+            RedirectAttributes redirectAttributes,
+            OAuth2AuthenticationToken auth) {
+
+        if (bindingResult.hasErrors()) {
+            String message = bindingResult.getFieldErrors().stream()
+                            .findFirst()
+                            .map(FieldError::getDefaultMessage)
+                            .orElse("Ungültige Eingabe");
+            redirectAttributes.addFlashAttribute(MESSAGE, message);
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
+            return "redirect:/exams/examsKorrektor";
+        }
+
+        OAuth2User user = auth.getPrincipal();
+        String name = user.getAttribute(LOGIN_NAME);
+        UUID korrektorFachId = service.getReviewerByName(name);
+        service.createReview(reviewForm, antwortFachId, korrektorFachId);
+
+        redirectAttributes.addFlashAttribute(MESSAGE, "Bewertung erfolgreich!");
+        redirectAttributes.addFlashAttribute(SUCCESS, true);
+        return "redirect:/exams/examsKorrektor";
     }
 
     @GetMapping("/examsStudierende")
@@ -177,10 +212,15 @@ public class ExamController {
         List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
 
+        double progress = service.getZulassungsProgress(studentName);
+        boolean zulassungsStatus = service.hasAnyFailedAttempt(studentName);
+
         model.addAttribute(TIME_NOW, now);
         model.addAttribute("exams", examDTOs);
         model.addAttribute("name", studentName);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        model.addAttribute("progress", progress);
+        model.addAttribute("failedYetOrNot", zulassungsStatus);
         return "exams/examsStudierende";
     }
 
@@ -196,8 +236,8 @@ public class ExamController {
         ExamDTO examDTO = service.getExamByUUID(examFachId);
         boolean alreadySubmitted = service.examIsAlreadySubmitted(examFachId, studentLogin);
 
-        UUID author = examDTO.professorFachId();
-        String authorIDString = author.toString();
+        UUID profFachId = examDTO.professorFachId();
+        ProfessorDTO prof = service.getProfessorByFachId(profFachId);
 
         if (alreadySubmitted) {
             VersuchDTO attempt = service.getAttempt(examFachId, studentLogin);
@@ -210,9 +250,7 @@ public class ExamController {
         model.addAttribute("alreadySubmitted", alreadySubmitted);
         model.addAttribute("timeLeft", examTimeInfo.fristAnzeige());
         model.addAttribute("timeLeftBool", examTimeInfo.timeLeft());
-
-        //TODO: For better UX: Show author name instead
-        model.addAttribute("authorID", authorIDString);
+        model.addAttribute("authorName", prof.name());
         return "exams/examMenu";
     }
 
