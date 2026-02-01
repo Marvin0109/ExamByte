@@ -91,4 +91,9 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     public void resetAllExamDataCascade() {
         examService.deleteAll();
     }
+
+    @Override
+    public void addExam(ExamDTO examDTO) {
+        examService.addExam(examDTOMapper.toDomain(examDTO));
+    }
 }

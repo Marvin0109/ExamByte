@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface StudentQueryService {
 
     List<StudentDTO> getStudentSubmittedExam(UUID examId);
+
+    UUID getStudentIdByName(String studentName);
 }

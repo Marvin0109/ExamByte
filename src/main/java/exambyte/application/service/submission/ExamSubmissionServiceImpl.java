@@ -1,9 +1,15 @@
 package exambyte.application.service.submission;
 
 import exambyte.application.dto.*;
+import exambyte.application.service.exam.ExamQueryService;
+import exambyte.application.service.exam.ProfessorQueryService;
+import exambyte.application.service.exam.StudentQueryService;
 import exambyte.application.service.question.QuestionQueryService;
 import exambyte.application.service.review.ReviewGenerationService;
+import exambyte.application.service.review.ReviewManagementService;
+import exambyte.application.service.review.ReviewManagementServiceImpl;
 import exambyte.application.service.review.ScoringService;
+import exambyte.domain.entitymapper.ReviewMapper;
 import exambyte.domain.mapper.*;
 import exambyte.domain.service.*;
 import org.springframework.stereotype.Service;
@@ -19,20 +25,12 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
 
     private final AnswerSubmissionService answerSubmissionService;
     private final ReviewGenerationService reviewGenerationService;
+    private final ReviewManagementService reviewManagementService;
     private final QuestionQueryService questionQueryService;
     private final ScoringService scoringService;
-
-    private final ExamService examService;
-    private final ProfessorService professorService;
-    private final StudentService studentService;
-    private final FrageService frageService;
-    private final ReviewService reviewService;
-    private final AntwortService antwortService;
-
-    private final ExamDTOMapper examDTOMapper;
-    private final FrageDTOMapper frageDTOMapper;
-    private final AntwortDTOMapper antwortDTOMapper;
-    private final ReviewDTOMapper reviewDTOMapper;
+    private final ProfessorQueryService professorQueryService;
+    private final StudentQueryService studentQueryService;
+    private final ExamQueryService examQueryService;
 
     private static final Logger logger = Logger.getLogger(ExamSubmissionServiceImpl.class.getName());
 
@@ -40,31 +38,19 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                                      ReviewGenerationService reviewGenerationService,
                                      QuestionQueryService questionQueryService,
                                      ScoringService scoringService,
-                                     ExamService examService,
-                                     ProfessorService professorService,
-                                     StudentService studentService,
-                                     FrageService frageService,
-                                     ReviewService reviewService,
-                                     AntwortService antwortService,
-                                     ExamDTOMapper examDTOMapper,
-                                     FrageDTOMapper frageDTOMapper,
-                                     AntwortDTOMapper antwortDTOMapper,
-                                     ReviewDTOMapper reviewDTOMapper) {
+                                     ProfessorQueryService professorQueryService,
+                                     StudentQueryService studentQueryService,
+                                     ExamQueryService examQueryService,
+                                     ReviewManagementService reviewManagementService) {
 
         this.answerSubmissionService = answerSubmissionService;
         this.reviewGenerationService = reviewGenerationService;
         this.questionQueryService = questionQueryService;
         this.scoringService = scoringService;
-        this.examService = examService;
-        this.professorService = professorService;
-        this.studentService = studentService;
-        this.frageService = frageService;
-        this.reviewService = reviewService;
-        this.antwortService = antwortService;
-        this.examDTOMapper = examDTOMapper;
-        this.frageDTOMapper = frageDTOMapper;
-        this.antwortDTOMapper = antwortDTOMapper;
-        this.reviewDTOMapper = reviewDTOMapper;
+        this.professorQueryService = professorQueryService;
+        this.studentQueryService = studentQueryService;
+        this.examQueryService = examQueryService;
+        this.reviewManagementService = reviewManagementService;
     }
 
     @Override
@@ -74,7 +60,7 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                              LocalDateTime end,
                              LocalDateTime result) {
 
-        UUID profFachId = professorService.getProfessorFachIdByName(profName)
+        UUID profFachId = professorQueryService.getProfIdByName(profName)
                 .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + profName));
 
         if (start.isAfter(end) || start.isEqual(end)) {
@@ -85,14 +71,14 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
             return "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!";
         }
 
-        int examCount = examService.allExams().size();
+        List<ExamDTO> exams = examQueryService.getAllExams();
+        int examCount = exams.size();
 
         if (examCount >= 12) {
             return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
         }
 
-        boolean startTimeExists = examService.allExams().stream()
-                .map(examDTOMapper::toDTO)
+        boolean startTimeExists = exams.stream()
                 .anyMatch(e -> e.startTime().truncatedTo(ChronoUnit.MINUTES)
                         .equals(start.truncatedTo(ChronoUnit.MINUTES)));
 
@@ -101,7 +87,7 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
         }
 
         ExamDTO examDTO = new ExamDTO(null, title, profFachId, start, end, result);
-        examService.addExam(examDTOMapper.toDomain(examDTO));
+        examQueryService.addExam(examDTO);
         return "";
     }
 
@@ -109,7 +95,7 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
     public boolean submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
         UUID studentFachId;
         try {
-            studentFachId = studentService.getStudentFachId(studentName);
+            studentFachId = studentQueryService.getStudentIdByName(studentName);
         } catch (Exception e) {
             String msg = "Student nicht gefunden: " + studentName;
             logger.log(Level.SEVERE, msg, e);
@@ -121,13 +107,10 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
             return false;
         }
 
-        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examId).stream()
-                .map(frageDTOMapper::toDTO)
-                .toList();
+        List<FrageDTO> fragenDTOList = questionQueryService.getFragenForExam(examId);
 
         List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
-                .map(f -> antwortDTOMapper.toDTO(
-                        antwortService.findByStudentAndFrage(studentFachId, f.fachId())))
+                .map(f -> answerSubmissionService.findByStudentAndFrage(studentFachId, f.fachId()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -137,7 +120,11 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
                 antwortDTOList);
 
         try {
-            allReviews.forEach(r -> reviewService.addReview(reviewDTOMapper.toDomain(r)));
+            allReviews.forEach(r -> reviewManagementService.createReview(
+                    r.bewertung(),
+                    r.punkte(),
+                    r.antwortFachId(),
+                    r.korrektorFachId()));
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
             return false;
@@ -148,38 +135,37 @@ public class ExamSubmissionServiceImpl implements ExamSubmissionService {
 
     @Override
     public void removeOldAnswers(UUID examId, String name) {
-        UUID studentFachID = studentService.getStudentFachId(name);
+        UUID studentFachID = studentQueryService.getStudentIdByName(name);
 
-        List<FrageDTO> fragenDTOList = frageService.getFragenForExam(examId).stream()
-                .map(frageDTOMapper::toDTO)
-                .toList();
+        List<FrageDTO> fragenDTOList = questionQueryService.getFragenForExam(examId);
 
         List<UUID> antwortenToDelete = new ArrayList<>();
         for (FrageDTO frageDTO : fragenDTOList) {
             antwortenToDelete.add(
-                    antwortService.findByStudentAndFrage(studentFachID, frageDTO.fachId())
-                            .getFachId());
+                    answerSubmissionService.findByStudentAndFrage(
+                            studentFachID, frageDTO.fachId())
+                            .fachId());
         }
 
         List<UUID> reviewsToDelete = new ArrayList<>();
         for (UUID id : antwortenToDelete) {
-            if (reviewService.getReviewByAntwortFachId(id) != null) {
-                reviewsToDelete.add(reviewService.getReviewByAntwortFachId(id).getFachId());
+            if (reviewManagementService.antwortHasReview(id)) {
+                reviewsToDelete.add(reviewManagementService.getReviewIdByAntwortId(id));
             }
         }
 
         for (UUID id : antwortenToDelete) {
-            antwortService.deleteAnswer(id);
+            answerSubmissionService.deleteAntwort(id);
         }
 
         for (UUID id : reviewsToDelete) {
-            reviewService.deleteReview(id);
+            reviewManagementService.deleteReview(id);
         }
     }
 
     @Override
     public VersuchDTO getSubmission(UUID examFachId, String studentName) {
-        UUID studentFachId = studentService.getStudentFachId(studentName);
+        UUID studentFachId = studentQueryService.getStudentIdByName(studentName);
 
         Map<UUID, FrageDTO> frageMap = questionQueryService.getFragenUUIDMap(examFachId);
         List<AntwortDTO> alleAntworten = answerSubmissionService.getAntworten(studentFachId, frageMap.keySet());

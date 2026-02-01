@@ -102,4 +102,14 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
         Optional<Korrektor> k = korrektorService.getKorrektorByName(name);
         return k.map(Korrektor::uuid).orElse(null);
     }
+
+    @Override
+    public UUID getReviewIdByAntwortId(UUID antwortId) {
+        return reviewService.getReviewByAntwortFachId(antwortId).getAntwortFachId();
+    }
+
+    @Override
+    public void deleteReview(UUID id) {
+        reviewService.deleteReview(id);
+    }
 }

@@ -15,4 +15,8 @@ public interface ReviewManagementService {
     void createReview(String bewertung, int punkte, UUID antwortId, UUID korrektorId);
 
     UUID getReviewerIdByName(String name);
+
+    UUID getReviewIdByAntwortId(UUID antwortId);
+
+    void deleteReview(UUID id);
 }

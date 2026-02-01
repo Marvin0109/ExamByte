@@ -18,4 +18,6 @@ public interface ExamQueryService {
     void deleteByFachId(UUID examId);
 
     void resetAllExamDataCascade();
+
+    void addExam(ExamDTO examDTO);
 }

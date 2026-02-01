@@ -60,4 +60,14 @@ public class AnswerSubmissionServiceImpl implements AnswerSubmissionService {
                 .map(antwortDTOMapper::toDTO)
                 .toList();
     }
+
+    @Override
+    public AntwortDTO findByStudentAndFrage(UUID studentId, UUID frageId) {
+        return antwortDTOMapper.toDTO(antwortService.findByStudentAndFrage(studentId, frageId));
+    }
+
+    @Override
+    public void deleteAntwort(UUID id) {
+        antwortService.deleteAnswer(id);
+    }
 }

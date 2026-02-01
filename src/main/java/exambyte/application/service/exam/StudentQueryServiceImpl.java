@@ -41,4 +41,9 @@ public class StudentQueryServiceImpl implements StudentQueryService {
                 .map(studentDTOMapper::toDTO)
                 .toList();
     }
+
+    @Override
+    public UUID getStudentIdByName(String studentName) {
+        return studentService.getStudentFachId(studentName);
+    }
 }

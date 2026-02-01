@@ -14,4 +14,8 @@ public interface AnswerSubmissionService {
     List<AntwortDTO> getAntworten(UUID studentId, Set<UUID> frageIds);
 
     List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
+
+    AntwortDTO findByStudentAndFrage(UUID studentId, UUID frageId);
+
+    void deleteAntwort(UUID id);
 }
