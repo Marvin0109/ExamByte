@@ -23,7 +23,7 @@ public interface ExamUseCaseService {
 
     List<FrageDTO> getFragenForExam(UUID examFachId);
 
-    Optional<UUID> getProfFachIDByName(String name);
+    Optional<UUID> getProfIDByName(String name);
 
     ProfessorDTO getProfessor(UUID profFachId);
 
@@ -35,7 +35,7 @@ public interface ExamUseCaseService {
 
     UUID getExamByStartTime(LocalDateTime startTime);
 
-    void deleteByFachId(UUID examFachId);
+    void deleteById(UUID examFachId);
 
     void reset();
 
