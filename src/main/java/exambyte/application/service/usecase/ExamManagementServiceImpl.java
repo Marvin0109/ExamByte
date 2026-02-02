@@ -169,6 +169,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     public VersuchDTO getSubmission(UUID examFachId, String studentName) {
         UUID studentFachId = studentQueryService.getStudentIdByName(studentName);
 
+        ExamDTO exam = examQueryService.getExam(examFachId);
         Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examFachId);
         List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentFachId, frageMap.keySet());
 
@@ -177,7 +178,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .mapToDouble(FrageDTO::maxPunkte)
                 .sum();
 
-        double erreichtePunkte = scoringService.berechneErreichtePunkte(alleAntworten, frageMap);
+        double erreichtePunkte = scoringService.berechneErreichtePunkte(alleAntworten, frageMap, exam.resultTime());
 
         double prozent = gesamtMaxPunkte > 0
                 ? (erreichtePunkte / gesamtMaxPunkte) * 100.0

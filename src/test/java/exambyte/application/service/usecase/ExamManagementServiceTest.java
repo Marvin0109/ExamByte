@@ -20,6 +20,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.within;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -358,10 +359,16 @@ class ExamManagementServiceTest {
     @Test
     void getSubmission_returnsCorrectVersuchDTO() {
         String studentName = "Max";
+
+        LocalDateTime resultTime = LocalDateTime.of(2025, 1, 1, 12, 0);
+
         FrageDTO frage1 = mock(FrageDTO.class);
         when(frage1.maxPunkte()).thenReturn(5);
+
         FrageDTO frage2 = mock(FrageDTO.class);
         when(frage2.maxPunkte()).thenReturn(10);
+
+        ExamDTO exam = mock(ExamDTO.class);
 
         Map<UUID, FrageDTO> frageMap = Map.of(
                 FRAGE_ID1, frage1,
@@ -379,23 +386,25 @@ class ExamManagementServiceTest {
         List<AntwortDTO> alleAntworten = List.of(antwort1, antwort2);
 
         when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(exam.resultTime()).thenReturn(resultTime);
         when(frageQueryService.getFragenUUIDMap(EXAM_ID)).thenReturn(frageMap);
         when(antwortQueryService.getAntworten(STUDENT_ID, frageMap.keySet())).thenReturn(alleAntworten);
-
-        when(scoringService.berechneErreichtePunkte(alleAntworten, frageMap)).thenReturn(12.0);
+        when(scoringService.berechneErreichtePunkte(alleAntworten, frageMap, resultTime)).thenReturn(12.0);
 
         // Act
         VersuchDTO result = examManagementService.getSubmission(EXAM_ID, studentName);
 
-        // Assertions
+        // Assert
         assertThat(result.maxPunkte()).isEqualTo(15.0);
         assertThat(result.erreichtePunkte()).isEqualTo(12.0);
-        assertThat(result.prozent()).isEqualTo((12.0 / 15.0) * 100.0);
+        assertThat(result.prozent()).isCloseTo(80.0, within(0.0001));
         assertThat(result.lastChanges()).isEqualTo(zeit2);
 
         verify(studentQueryService).getStudentIdByName(studentName);
         verify(frageQueryService).getFragenUUIDMap(EXAM_ID);
         verify(antwortQueryService).getAntworten(STUDENT_ID, frageMap.keySet());
-        verify(scoringService).berechneErreichtePunkte(alleAntworten, frageMap);
+        verify(scoringService).berechneErreichtePunkte(alleAntworten, frageMap, resultTime);
     }
+
 }
