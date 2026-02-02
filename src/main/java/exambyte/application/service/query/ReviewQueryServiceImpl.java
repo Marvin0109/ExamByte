@@ -2,6 +2,7 @@ package exambyte.application.service.query;
 
 import exambyte.application.dto.ReviewDTO;
 import exambyte.domain.mapper.ReviewDTOMapper;
+import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,11 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewDTO getReviewByAntwortId(UUID antwortId) {
-        return reviewDTOMapper.toDTO(reviewService.getReviewByAntwortFachId(antwortId));
+        Review review = reviewService.getReviewByAntwortFachId(antwortId);
+        if (review != null) {
+            return reviewDTOMapper.toDTO(review);
+        }
+        return null;
     }
 
     @Override

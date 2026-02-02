@@ -2,8 +2,8 @@ package exambyte.application.service.usecase;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.query.ReviewQueryService;
+import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.UUID;
 @Service
 public class ScoringServiceImpl implements ScoringService {
 
-    private final ReviewQueryService reviewQueryService;
+    private final ReviewService reviewService;
 
-    public ScoringServiceImpl(ReviewQueryService reviewQueryService) {
-        this.reviewQueryService = reviewQueryService;
+    public ScoringServiceImpl(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
     @Override
@@ -25,8 +25,8 @@ public class ScoringServiceImpl implements ScoringService {
                 .mapToDouble(a -> {
                     FrageDTO f = fragen.get(a.frageFachId());
                     if (f == null) return 0;
-                    ReviewDTO review = reviewQueryService.getReviewByAntwortId(a.fachId());
-                    return review != null ? review.punkte() : 0;
+                    Review review = reviewService.getReviewByAntwortFachId(a.fachId());
+                    return review != null ? review.getPunkte() : 0;
                 })
                 .sum();
     }
