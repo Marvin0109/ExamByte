@@ -1,9 +1,7 @@
-package exambyte.application.service.question;
+package exambyte.application.service.query;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.service.query.FrageQueryService;
-import exambyte.application.service.query.FrageQueryServiceImpl;
 import exambyte.domain.mapper.FrageDTOMapper;
 import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
 import exambyte.domain.model.aggregate.exam.Frage;

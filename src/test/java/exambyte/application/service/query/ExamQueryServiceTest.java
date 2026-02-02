@@ -1,10 +1,8 @@
-package exambyte.application.service.exam;
+package exambyte.application.service.query;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.service.query.ExamQueryService;
-import exambyte.application.service.query.ExamQueryServiceImpl;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.mapper.FrageDTOMapper;
 import exambyte.domain.model.aggregate.exam.Antwort;

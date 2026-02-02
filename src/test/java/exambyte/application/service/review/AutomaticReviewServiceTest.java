@@ -9,10 +9,14 @@ import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -30,256 +34,158 @@ class AutomaticReviewServiceTest {
         automaticReviewService = new AutomaticReviewServiceImpl();
     }
 
-    @Test
-    @DisplayName("SC alles richtig")
-    void automatischeReviewSCSuccess() {
-        // Arrange
-        FrageDTO frage1 = new FrageDTO(
-                UUID.randomUUID(),
-                "Fragetext 1",
-                5,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                QuestionTypeDTO.SC);
-
-        FrageDTO frage2 = new FrageDTO(
-                UUID.randomUUID(),
-                "Fragetext 2",
-                10,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                QuestionTypeDTO.SC);
-
-        List<FrageDTO> scFragen = List.of(frage1, frage2);
-
-        AntwortDTO antwort1 = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort 1",
-                frage1.fachId(),
-                studentUUID,
-                antwortTime);
-
-        AntwortDTO antwort2 = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort 2",
-                frage2.fachId(),
-                studentUUID,
-                antwortTime);
-
-        List<AntwortDTO> antwortDTOList = List.of(antwort1, antwort2);
-
-        KorrekteAntwortenDTO korrekteAntworten1 = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 1",
-                "Antwort 1\nAntwort A",
-                frage1.fachId());
-
-        KorrekteAntwortenDTO korrekteAntworten2 = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 2",
-                "Antwort 2\nAntwort A",
-                frage2.fachId());
-
-        List<KorrekteAntwortenDTO> korrekteAntwortenList = List.of(korrekteAntworten1, korrekteAntworten2);
-
-        // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
-                scFragen,
-                antwortDTOList,
-                korrekteAntwortenList,
-                studentUUID,
-                service);
-
-        // Assert
-        assertThat(reviews).hasSize(2);
-        assertThat(reviews)
-                .extracting(ReviewDTO::punkte)
-                .containsExactlyInAnyOrder(frage1.maxPunkte(), frage2.maxPunkte());
-    }
-
-    @Test
-    @DisplayName("MC alles richtig")
-    void automatischeReviewMCSuccess() {
-        // Arrange
-        FrageDTO frage1 = new FrageDTO(
-                UUID.randomUUID(),
-                "Fragetext 1",
-                5,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                QuestionTypeDTO.MC);
-
-        FrageDTO frage2 = new FrageDTO(
-                UUID.randomUUID(),
-                "Fragetext 2",
-                10,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                QuestionTypeDTO.MC);
-
-        AntwortDTO antwort1 = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort 1\nAntwort 2",
-                frage1.fachId(),
-                studentUUID,
-                antwortTime);
-
-        AntwortDTO antwort2 = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort 2\nAntwort 3",
-                frage2.fachId(),
-                studentUUID,
-                antwortTime);
-
-        KorrekteAntwortenDTO korrekteAntworten1 = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 1\nAntwort 2",
-                "Antwort 1\nAntwort A\nAntwort 2",
-                frage1.fachId());
-
-        KorrekteAntwortenDTO korrekteAntworten2 = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 2\nAntwort 3",
-                "Antwort 2\nAntwort A\nAntwort 3",
-                frage2.fachId());
-
-        // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
-                List.of(frage1, frage2),
-                List.of(antwort1, antwort2),
-                List.of(korrekteAntworten1, korrekteAntworten2),
-                studentUUID,
-                service
-        );
-
-        // Assert
-        assertThat(reviews).hasSize(2);
-        assertThat(reviews)
-                .extracting(ReviewDTO::punkte)
-                .containsExactlyInAnyOrder(frage1.maxPunkte(), frage2.maxPunkte());
-    }
-
-    @Test
-    @DisplayName("MC: Alles falsch")
-    void automatischeReviewMCFailure() {
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("mcTestCases")
+    @DisplayName("MC automatische Bewertung")
+    void automatischeReviewMC(
+            String bewertung,
+            int maxPunkte,
+            String studentAntwort,
+            String korrekteAntwort,
+            int expectedPunkte
+    ) {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
-                "Fragetext 1",
-                5,
+                "Fragetext",
+                maxPunkte,
                 UUID.randomUUID(),
                 UUID.randomUUID(),
-                QuestionTypeDTO.MC);
-
-        AntwortDTO antwort = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort 1\nAntwort 2",
-                frage.fachId(),
-                studentUUID,
-                antwortTime);
-
-        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort3\nAntwort 4",
-                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4",
-                frage.fachId());
-
-        // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
-                List.of(frage),
-                List.of(antwort),
-                List.of(korrekteAntworten),
-                studentUUID,
-                service
+                QuestionTypeDTO.MC
         );
 
-        // Assert
-        assertThat(reviews).hasSize(1);
-        assertThat(reviews)
-                .extracting(ReviewDTO::punkte)
-                .containsExactly(0);
-    }
-
-    @Test
-    @DisplayName("MC: 1 richtig, 1 falsch -> 0 Punkte")
-    void automatischeReviewMCMixed() {
-        // Arrange
-        FrageDTO frage = new FrageDTO(
-                UUID.randomUUID(),
-                "Fragetext 1",
-                2,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                QuestionTypeDTO.MC);
-
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
-                "Antwort 1\nAntwort 2",
+                studentAntwort,
                 frage.fachId(),
                 studentUUID,
-                antwortTime);
-
-        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 2\nAntwort 4",
-                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4",
-                frage.fachId());
-
-        // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
-                List.of(frage),
-                List.of(antwort),
-                List.of(korrekteAntworten),
-                studentUUID,
-                service
+                antwortTime
         );
 
-        // Assert
-        assertThat(reviews).hasSize(1);
-        assertThat(reviews)
-                .extracting(ReviewDTO::punkte)
-                .containsExactly(0);
-    }
-
-    @Test
-    @DisplayName("MC: 2 richtig, 1 falsch -> 1 Punkt")
-    void automatischeReviewMCMixed2() {
-        // Arrange
-        FrageDTO frage = new FrageDTO(
+        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
                 UUID.randomUUID(),
-                "Fragetext 1",
-                3,
-                UUID.randomUUID(),
-                UUID.randomUUID(),
-                QuestionTypeDTO.MC);
-
-        AntwortDTO antwort = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort 2\nAntwort 3\nAntwort 4",
-                frage.fachId(),
-                studentUUID,
-                antwortTime);
-
-        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 2\nAntwort 4\nAntwort 5",
+                korrekteAntwort,
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.fachId());
+                frage.fachId()
+        );
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
                 List.of(frage),
                 List.of(antwort),
-                List.of(korrekteAntworten),
+                List.of(korrekteAntwortenDTO),
                 studentUUID,
                 service
         );
 
         // Assert
         assertThat(reviews).hasSize(1);
-        assertThat(reviews)
-                .extracting(ReviewDTO::punkte)
-                .containsExactly(1);
+        assertThat(reviews.getFirst().punkte()).isEqualTo(expectedPunkte);
+    }
+
+    static Stream<Arguments> mcTestCases() {
+        return Stream.of(
+                Arguments.of(
+                        "Richtig",
+                        5,
+                        "Antwort 1\nAntwort 2",
+                        "Antwort 1\nAntwort 2",
+                        5
+                ),
+
+                Arguments.of(
+                        "Falsch",
+                        5,
+                        "Antwort 1\nAntwort 2",
+                        "Antwort 3\nAntwort 4",
+                        0
+                ),
+
+                Arguments.of(
+                        "1 richtig, 1 falsch -> 0 Punkte",
+                        2,
+                        "Antwort 1\nAntwort 2",
+                        "Antwort 2\nAntwort 4",
+                        0
+                ),
+
+                Arguments.of(
+                        "2 richtig, 1 falsch -> 1 Punkt",
+                        3,
+                        "Antwort 2\nAntwort 3\nAntwort 4",
+                        "Antwort 2\nAntwort 4\nAntwort 5",
+                        1
+                )
+        );
+    }
+
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("scTestCases")
+    @DisplayName("SC automatische Bewertung")
+    void automatischeReviewSC(
+            String bewertung,
+            int maxPunkte,
+            String studentAntwort,
+            String korrekteAntwort,
+            int expectedPunkte
+    ) {
+        // Arrange
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Fragetext",
+                maxPunkte,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                QuestionTypeDTO.SC
+        );
+
+        AntwortDTO antwort = new AntwortDTO(
+                UUID.randomUUID(),
+                studentAntwort,
+                frage.fachId(),
+                studentUUID,
+                antwortTime
+        );
+
+        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
+                UUID.randomUUID(),
+                korrekteAntwort,
+                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
+                frage.fachId()
+        );
+
+        // Act
+        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+                List.of(frage),
+                List.of(antwort),
+                List.of(korrekteAntwortenDTO),
+                studentUUID,
+                service
+        );
+
+        // Assert
+        assertThat(reviews).hasSize(1);
+        assertThat(reviews.getFirst().punkte()).isEqualTo(expectedPunkte);
+    }
+
+    static Stream<Arguments> scTestCases() {
+        return Stream.of(
+                Arguments.of(
+                        "Alles richtig",
+                        5,
+                        "Antwort 1",
+                        "Antwort 1",
+                        5
+                ),
+
+                Arguments.of(
+                        "Alles falsch",
+                        5,
+                        "Antwort 2",
+                        "Antwort 3",
+                        0
+                )
+        );
     }
 
     @Test

@@ -1,14 +1,8 @@
-package exambyte.application.service.exam;
+package exambyte.application.service;
 
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.service.ExamFacadeService;
-import exambyte.application.service.ExamFacadeServiceImpl;
-import exambyte.application.service.query.ExamQueryService;
-import exambyte.application.service.query.ProfessorQueryService;
-import exambyte.application.service.query.StudentQueryService;
-import exambyte.application.service.query.FrageQueryService;
+import exambyte.application.service.query.*;
 import exambyte.application.service.usecase.ReviewManagementService;
-import exambyte.application.service.query.AntwortQueryService;
 import exambyte.application.service.usecase.ExamManagementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,38 +19,42 @@ class ExamFacadeServiceTest {
     private ExamFacadeService examFacadeService;
 
     @Mock
-    private ExamQueryService examQueryService;
-
-    @Mock
-    private ProfessorQueryService professorQueryService;
-
-    @Mock
-    private FrageQueryService frageQueryService;
-
-    @Mock
     private ReviewManagementService reviewManagementService;
 
     @Mock
     private ExamManagementService examManagementService;
 
     @Mock
-    private AntwortQueryService antwortQueryService;
+    private FrageQueryService frageQueryService;
 
     @Mock
     private StudentQueryService studentQueryService;
+
+    @Mock
+    private ProfessorQueryService professorQueryService;
+
+    @Mock
+    private AntwortQueryService antwortQueryService;
+
+    @Mock
+    private ReviewQueryService reviewQueryService;
+
+    @Mock
+    private KorrektorQueryService korrektorQueryService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         examFacadeService = new ExamFacadeServiceImpl(
-                examQueryService,
-                professorQueryService,
-                frageQueryService,
                 reviewManagementService,
                 examManagementService,
+                frageQueryService,
+                professorQueryService,
+                korrektorQueryService,
+                studentQueryService,
                 antwortQueryService,
-                studentQueryService);
+                reviewQueryService);
     }
 
     @Test
@@ -79,6 +77,6 @@ class ExamFacadeServiceTest {
         UUID antwortId = UUID.randomUUID();
         UUID korrektorId = UUID.randomUUID();
         examFacadeService.createReview("Bewertung", 1, antwortId, korrektorId);
-        verify(reviewManagementService).createReview("Bewertung", 1, antwortId, korrektorId);
+        verify(reviewQueryService).createReview("Bewertung", 1, antwortId, korrektorId);
     }
 }
