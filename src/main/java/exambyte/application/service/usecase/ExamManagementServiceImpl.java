@@ -83,45 +83,56 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public boolean submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
-        UUID studentFachId;
+    public SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
+        UUID studentFachId = resolveStudent(studentName);
+        if (studentFachId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
+
+        if(!antwortQueryService.saveAnswers(studentFachId, antworten)) {
+            return SubmitExamResult.SAVE_ANSWERS_FAILED;
+        }
+
+        return generateAndSaveReviews(studentFachId, examId);
+    }
+
+    private UUID resolveStudent(String studentName) {
         try {
-            studentFachId = studentQueryService.getStudentIdByName(studentName);
+            return studentQueryService.getStudentIdByName(studentName);
         } catch (Exception e) {
             String msg = "Student nicht gefunden: " + studentName;
             logger.log(Level.SEVERE, msg, e);
-            return false;
+            return null;
         }
+    }
 
-        boolean saved = antwortQueryService.saveAnswers(studentFachId, antworten);
-        if (!saved) {
-            return false;
-        }
+    private SubmitExamResult generateAndSaveReviews(UUID studentId, UUID examId) {
+        List<FrageDTO> fragenList = frageQueryService.getFragenForExam(examId);
 
-        List<FrageDTO> fragenDTOList = frageQueryService.getFragenForExam(examId);
-
-        List<AntwortDTO> antwortDTOList = fragenDTOList.stream()
-                .map(f -> antwortQueryService.findByStudentAndFrage(studentFachId, f.fachId()))
+        List<AntwortDTO> antwortList = fragenList.stream()
+                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.fachId()))
                 .filter(Objects::nonNull)
                 .toList();
 
         List<ReviewDTO> allReviews = reviewGenerationService.generateReviews(
-                studentFachId,
-                fragenDTOList,
-                antwortDTOList);
+                studentId,
+                fragenList,
+                antwortList);
 
         try {
-            allReviews.forEach(r -> reviewQueryService.createReview(
-                    r.bewertung(),
-                    r.punkte(),
-                    r.antwortFachId(),
-                    r.korrektorFachId()));
+            allReviews.forEach(this::saveReviews);
+            return SubmitExamResult.SUCCESS;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
-            return false;
+            return SubmitExamResult.REVIEW_SAVE_FAILED;
         }
+    }
 
-        return true;
+    private void saveReviews(ReviewDTO reviewDTO) {
+        reviewQueryService.createReview(
+                reviewDTO.bewertung(),
+                reviewDTO.punkte(),
+                reviewDTO.antwortFachId(),
+                reviewDTO.korrektorFachId()
+        );
     }
 
     @Override

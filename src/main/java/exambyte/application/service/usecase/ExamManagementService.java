@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface ExamManagementService {
     String createExam(String profName, String title, LocalDateTime start, LocalDateTime end, LocalDateTime result);
 
-    boolean submitExam(String studentName, Map<String, List<String>> antworten, UUID examId);
+    SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId);
 
     void removeOldAnswers(UUID examId, String name);
 

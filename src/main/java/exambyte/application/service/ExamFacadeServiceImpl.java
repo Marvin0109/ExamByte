@@ -4,6 +4,7 @@ import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.usecase.ReviewManagementService;
 import exambyte.application.service.usecase.ExamManagementService;
+import exambyte.application.service.usecase.SubmitExamResult;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -63,7 +64,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId) {
-        return examManagementService.submitExam(studentLogin, antworten, examFachId);
+        SubmitExamResult result = examManagementService.submitExam(studentLogin, antworten, examFachId);
+        return result.equals(SubmitExamResult.SUCCESS);
     }
 
     @Override
