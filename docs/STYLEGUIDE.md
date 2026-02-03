@@ -2,7 +2,7 @@
 
 >**Autor**: Marvin0109,
 >**erstellt am**: 08.01.2025,
->**aktualisiert am**: 28.01.2026
+>**aktualisiert am**: 03.02.2026
 
 Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
@@ -320,6 +320,9 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 - Textgenerator: https://www.loremipsum.de/
 
 ## Fun Facts
+
+### Codelines Statistik
+
 Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
 Hier die Statistik vom 27.01.2026:
 ```
@@ -369,6 +372,109 @@ Java                            64           1142            370           4783
 -------------------------------------------------------------------------------
 SUM:                            64           1142            370           4783
 -------------------------------------------------------------------------------
+```
+
+### God-Class Refactoring (ExamManagementServiceImpl)
+
+```
+$ git pull
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Entpacke Objekte: 100% (1/1), 920 Bytes | 920.00 KiB/s, fertig.
+Von github.com:Marvin0109/ExamByte
+   f78801e..2f52394  main       -> origin/main
+Aktualisiere f78801e..2f52394
+Fast-forward
+ src/main/java/exambyte/application/service/{ExamManagementService.java => ExamFacadeService.java} |    8 +-
+ src/main/java/exambyte/application/service/ExamFacadeServiceImpl.java                             |  175 ++++++++++++++++++++++++++++++
+ src/main/java/exambyte/application/service/ExamManagementServiceImpl.java                         |  480 --------------------------------------------------------------------------------
+ src/main/java/exambyte/application/service/query/AntwortQueryService.java                         |   21 ++++
+ src/main/java/exambyte/application/service/query/AntwortQueryServiceImpl.java                     |   72 ++++++++++++
+ src/main/java/exambyte/application/service/query/ExamQueryService.java                            |   23 ++++
+ src/main/java/exambyte/application/service/query/ExamQueryServiceImpl.java                        |   99 +++++++++++++++++
+ src/main/java/exambyte/application/service/query/FrageQueryService.java                           |   22 ++++
+ src/main/java/exambyte/application/service/query/FrageQueryServiceImpl.java                       |   74 +++++++++++++
+ src/main/java/exambyte/application/service/query/KorrektorQueryService.java                       |   10 ++
+ src/main/java/exambyte/application/service/query/KorrektorQueryServiceImpl.java                   |   35 ++++++
+ src/main/java/exambyte/application/service/query/ProfessorQueryService.java                       |   13 +++
+ src/main/java/exambyte/application/service/query/ProfessorQueryServiceImpl.java                   |   31 ++++++
+ src/main/java/exambyte/application/service/query/ReviewQueryService.java                          |   18 +++
+ src/main/java/exambyte/application/service/query/ReviewQueryServiceImpl.java                      |   57 ++++++++++
+ src/main/java/exambyte/application/service/query/StudentQueryService.java                         |   13 +++
+ src/main/java/exambyte/application/service/query/StudentQueryServiceImpl.java                     |   48 ++++++++
+ src/main/java/exambyte/application/service/{ => review}/AutomaticReviewService.java               |    2 +-
+ src/main/java/exambyte/application/service/{ => review}/AutomaticReviewServiceImpl.java           |    2 +-
+ src/main/java/exambyte/application/service/review/ReviewGenerationService.java                    |   13 +++
+ src/main/java/exambyte/application/service/review/ReviewGenerationServiceImpl.java                |   54 +++++++++
+ src/main/java/exambyte/application/service/usecase/ExamManagementService.java                     |   31 ++++++
+ src/main/java/exambyte/application/service/usecase/ExamManagementServiceImpl.java                 |  229 +++++++++++++++++++++++++++++++++++++++
+ src/main/java/exambyte/application/service/usecase/ReviewManagementService.java                   |   10 ++
+ src/main/java/exambyte/application/service/usecase/ReviewManagementServiceImpl.java               |   62 +++++++++++
+ src/main/java/exambyte/application/service/usecase/ScoringService.java                            |   14 +++
+ src/main/java/exambyte/application/service/usecase/ScoringServiceImpl.java                        |   59 ++++++++++
+ src/main/java/exambyte/application/service/usecase/SubmitExamResult.java                          |    8 ++
+ src/main/java/exambyte/application/service/usecase/TimeConfig.java                                |   15 +++
+ src/main/java/exambyte/web/service/ExamControllerServiceImpl.java                                 |   10 +-
+ src/test/java/exambyte/application/AutomaticReviewServiceTest.java                                |  412 ---------------------------------------------------------------------
+ src/test/java/exambyte/application/ExamManagementServiceTest.java                                 | 1202 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ src/test/java/exambyte/application/service/ExamFacadeServiceTest.java                             |   82 ++++++++++++++
+ src/test/java/exambyte/application/service/query/AntwortQueryServiceTest.java                     |  207 +++++++++++++++++++++++++++++++++++
+ src/test/java/exambyte/application/service/query/ExamQueryServiceTest.java                        |  190 ++++++++++++++++++++++++++++++++
+ src/test/java/exambyte/application/service/query/FrageQueryServiceTest.java                       |  124 +++++++++++++++++++++
+ src/test/java/exambyte/application/service/query/KorrektorQueryServiceTest.java                   |   45 ++++++++
+ src/test/java/exambyte/application/service/query/ReviewQueryServiceTest.java                      |   90 +++++++++++++++
+ src/test/java/exambyte/application/service/query/StudentQueryServiceTest.java                     |   91 ++++++++++++++++
+ src/test/java/exambyte/application/service/review/AutomaticReviewServiceTest.java                 |  316 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/test/java/exambyte/application/service/review/ReviewGenerationServiceTest.java                |  133 +++++++++++++++++++++++
+ src/test/java/exambyte/application/service/usecase/ExamManagementServiceTest.java                 |  410 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ src/test/java/exambyte/application/service/usecase/ReviewManagementServiceTest.java               |  113 +++++++++++++++++++
+ src/test/java/exambyte/application/service/usecase/ScoringServiceTest.java                        |  145 +++++++++++++++++++++++++
+ src/test/java/exambyte/web/service/ExamControllerServiceTest.java                                 |   51 +++++----
+ 45 files changed, 3188 insertions(+), 2131 deletions(-)
+ rename src/main/java/exambyte/application/service/{ExamManagementService.java => ExamFacadeService.java} (88%)
+ create mode 100644 src/main/java/exambyte/application/service/ExamFacadeServiceImpl.java
+ delete mode 100644 src/main/java/exambyte/application/service/ExamManagementServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/AntwortQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/AntwortQueryServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/ExamQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/ExamQueryServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/FrageQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/FrageQueryServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/KorrektorQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/KorrektorQueryServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/ProfessorQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/ProfessorQueryServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/ReviewQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/ReviewQueryServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/query/StudentQueryService.java
+ create mode 100644 src/main/java/exambyte/application/service/query/StudentQueryServiceImpl.java
+ rename src/main/java/exambyte/application/service/{ => review}/AutomaticReviewService.java (94%)
+ rename src/main/java/exambyte/application/service/{ => review}/AutomaticReviewServiceImpl.java (99%)
+ create mode 100644 src/main/java/exambyte/application/service/review/ReviewGenerationService.java
+ create mode 100644 src/main/java/exambyte/application/service/review/ReviewGenerationServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/ExamManagementService.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/ExamManagementServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/ReviewManagementService.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/ReviewManagementServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/ScoringService.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/ScoringServiceImpl.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/SubmitExamResult.java
+ create mode 100644 src/main/java/exambyte/application/service/usecase/TimeConfig.java
+ delete mode 100644 src/test/java/exambyte/application/AutomaticReviewServiceTest.java
+ delete mode 100644 src/test/java/exambyte/application/ExamManagementServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/ExamFacadeServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/query/AntwortQueryServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/query/ExamQueryServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/query/FrageQueryServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/query/KorrektorQueryServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/query/ReviewQueryServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/query/StudentQueryServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/review/AutomaticReviewServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/review/ReviewGenerationServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/usecase/ExamManagementServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/usecase/ReviewManagementServiceTest.java
+ create mode 100644 src/test/java/exambyte/application/service/usecase/ScoringServiceTest.java
 ```
 
 ## JacocoTestReport

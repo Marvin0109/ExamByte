@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 01.02.2026
+>**aktualisiert am:** 03.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -566,3 +566,12 @@
 **Bereich**: UI / UX / Feature
 - Zulassungslogik als Fortschrittbalken eingeführt
 - Korrektur einer Antwort implementiert
+
+---
+
+### 01.02.2026 - 03.02.2026
+**Bereich**: Wartbarkeit / Feature / env / Dokumentation
+- `ExamManagementServiceImpl` zerlegt in Hinblick auf Wartbarkeit und Kohäsion
+- `git pull`-Log auf `STYLEGUIDE` unter *Fun Facts*
+- Ergebnisse von manuellen Korrekturen werden erst nach der Ergebniszeit angezeigt
+- `example.env` zu `.env.example` umbenannt und `.gitignore` aktualisiert
