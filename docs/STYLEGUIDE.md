@@ -324,53 +324,56 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 ### Codelines Statistik
 
 Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
-Hier die Statistik vom 27.01.2026:
+Hier die Statistik vom 03.02.2026 (`JSON`, `YAML` `CSS` usw. wegen *FontAwesome* und *Bootstrap*):
 ```
 $ cloc .
 
-github.com/AlDanial/cloc v 1.98  T=0.49 s (1300.4 files/s, 124915.1 lines/s)
+github.com/AlDanial/cloc v 1.98  T=3.82 s (1312.1 files/s, 133930.1 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-HTML                           317           1237             83          15322
-CSS                             12           1310             53          10676
-Java                           201           2342            690           8873
-JavaScript                       7           1933           2167           7988
-XML                             78             21              0           6598
-Markdown                         6            293              2            920
+JSON                             3              0              0         225011
+YAML                             8              8              0         113720
+CSS                             42           9296            266          60372
+JavaScript                      23           1620           2779          30956
+HTML                           390           1685             90          18754
+SVG                           4180              0             30          16726
+Java                           235           2659            628           9785
+SCSS                            20             98             85           7718
+XML                             87             21              0           6757
+Markdown                         6            307              2           1050
+Text                             4             61              0            158
 SQL                              2             14              0            112
 Bourne Shell                     1             28            118            105
 Maven                            1              9              9             88
 Gradle                           2             21             24             78
-YAML                             3              8              0             73
 DOS Batch                        1             21              2             71
-Text                             3             20              0             34
 PlantUML                         2              5              1             20
 Properties                       3              0              1             11
 -------------------------------------------------------------------------------
-SUM:                           639           7262           3150          50969
+SUM:                          5010          15853           4035         491492
 -------------------------------------------------------------------------------
 
 $ cloc src/main/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.06 s (2252.9 files/s, 92253.0 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.07 s (2370.8 files/s, 95433.9 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           137           1200            320           4090
+Java                           162           1423            307           4791
 -------------------------------------------------------------------------------
-SUM:                           137           1200            320           4090
+SUM:                           162           1423            307           4791
 -------------------------------------------------------------------------------
 
 $ cloc src/test/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.04 s (1473.2 files/s, 144899.5 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.05 s (1581.0 files/s, 141879.9 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            64           1142            370           4783
+Java                            73           1236            321           4994
 -------------------------------------------------------------------------------
-SUM:                            64           1142            370           4783
+SUM:                            73           1236            321           4994
 -------------------------------------------------------------------------------
 ```
 
