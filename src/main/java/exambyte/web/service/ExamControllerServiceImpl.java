@@ -3,7 +3,7 @@ package exambyte.web.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.ExamManagementService;
+import exambyte.application.service.ExamFacadeService;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.*;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.*;
 @Service
 public class ExamControllerServiceImpl implements ExamControllerService {
 
-    private final ExamManagementService service;
+    private final ExamFacadeService service;
 
-    public ExamControllerServiceImpl(ExamManagementService service) {
+    public ExamControllerServiceImpl(ExamFacadeService service) {
         this.service = service;
     }
 
@@ -306,7 +306,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         List<SubmitInfo> submitInfoList = new ArrayList<>();
 
         for (StudentDTO student : students) {
-            if (service.isSubmitBeingReviewed(examUUID, student)) {
+            if (service.isSubmitBeingReviewed(examUUID, student.fachId())) {
                 submitInfoList.add(new SubmitInfo(student.name(), student.fachId(),  true));
             } else {
                 submitInfoList.add(new SubmitInfo(student.name(), student.fachId(), false));
@@ -323,7 +323,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public Optional<UUID> getProfFachIDByName(String name) {
-        return service.getProfFachIDByName(name);
+        return service.getProfIDByName(name);
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface ExamManagementService {
+public interface ExamFacadeService {
 
     String createExam(String profName, String title,
                        LocalDateTime startDate, LocalDateTime endDate, LocalDateTime resultTime);
@@ -23,7 +23,7 @@ public interface ExamManagementService {
 
     List<FrageDTO> getFragenForExam(UUID examFachId);
 
-    Optional<UUID> getProfFachIDByName(String name);
+    Optional<UUID> getProfIDByName(String name);
 
     ProfessorDTO getProfessor(UUID profFachId);
 
@@ -35,7 +35,7 @@ public interface ExamManagementService {
 
     UUID getExamByStartTime(LocalDateTime startTime);
 
-    void deleteByFachId(UUID examFachId);
+    void deleteById(UUID examFachId);
 
     void reset();
 
@@ -49,7 +49,7 @@ public interface ExamManagementService {
 
     List<StudentDTO> getStudentSubmittedExam(UUID examFachId);
 
-    boolean isSubmitBeingReviewed(UUID examFachId, StudentDTO student);
+    boolean isSubmitBeingReviewed(UUID examFachId, UUID studentId);
 
     List<FrageDTO> getFreitextFragen(UUID examFachId);
 
