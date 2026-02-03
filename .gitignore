@@ -38,3 +38,4 @@ out/
 /data/
 .qodo
 .env
+!.env.example
