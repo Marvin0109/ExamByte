@@ -479,7 +479,7 @@ Fast-forward
 
 ## JacocoTestReport
 
-![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-27-01-2026.jpg)
+![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-03-02-2026.jpg)
 
 ## Schlussbemerkung
 - Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeiteten schließlich nur noch ich als alleiniger Entwickler weiter.
