@@ -32,4 +32,9 @@ public class KorrektorQueryServiceImpl implements KorrektorQueryService {
         Optional<KorrektorDTO> k = korrektorService.getKorrektorByName(name).map(korrektorDTOMapper::toDTO);
         return k.map(KorrektorDTO::fachId).orElse(null);
     }
+
+    @Override
+    public KorrektorDTO getReviewerById(UUID reviewerId) {
+        return korrektorDTOMapper.toDTO(korrektorService.getKorrektor(reviewerId));
+    }
 }

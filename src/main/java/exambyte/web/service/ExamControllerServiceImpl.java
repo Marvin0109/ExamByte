@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ExamControllerServiceImpl implements ExamControllerService {
@@ -392,14 +393,16 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
         ExamDTO exam = service.getExam(examUUID);
-        ProfessorDTO professor = service.getProfessor(exam.professorFachId());
+
         UUID studentId = service.getStudentIdByName(studentName);
 
         VersuchDTO versuch = service.getSubmission(examUUID, studentName);
 
-        List<FrageDTO> fragen = getFragenForExam(examUUID);
+        List<FrageDTO> fragen = service.getFragenForExam(examUUID);
 
         List<ReviewAggregateDTO> componentList = new ArrayList<>();
+
+        List<UUID> korrektoren = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
             AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
@@ -436,14 +439,23 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             ReviewDTO review = null;
             if (antwort != null) {
                 review = service.getReviewForAntwort(antwort.fachId());
+                if (review != null) korrektoren.add(review.korrektorFachId());
             }
 
             componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
         }
 
+
+        String korrektorNames = korrektoren.stream()
+                .map(service::getReviewerById)
+                .map(KorrektorDTO::name)
+                .filter(name -> !name.equals("Automatischer Korrektor"))
+                .distinct()
+                .collect(Collectors.joining(", "));
+
         return new ReviewViewForm(
                 exam.title(),
-                professor.name(),
+                korrektorNames,
                 versuch.erreichtePunkte(),
                 versuch.maxPunkte(),
                 componentList);

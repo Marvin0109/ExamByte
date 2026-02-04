@@ -200,4 +200,9 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     public boolean timeReachedToViewReview(UUID examFachId) {
         return examManagementService.allowedToViewReview(examFachId);
     }
+
+    @Override
+    public KorrektorDTO getReviewerById(UUID reviewerId) {
+        return korrektorQueryService.getReviewerById(reviewerId);
+    }
 }

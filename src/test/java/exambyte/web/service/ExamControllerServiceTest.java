@@ -448,9 +448,14 @@ class ExamControllerServiceTest {
         UUID studentUUID = UUID.randomUUID();
         LocalDateTime time = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-        ProfessorDTO professor = new ProfessorDTO(
-                null,
-                "Prof"
+        KorrektorDTO k = new KorrektorDTO(
+                UUID.randomUUID(),
+                "Korrektor"
+        );
+
+        KorrektorDTO automatic = new KorrektorDTO(
+                UUID.randomUUID(),
+                "Automatischer Korrektor"
         );
 
         ExamDTO examDTO = new ExamDTO(
@@ -471,6 +476,15 @@ class ExamControllerServiceTest {
                 QuestionTypeDTO.FREITEXT
         );
 
+        FrageDTO frage2 = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage",
+                2,
+                UUID.randomUUID(),
+                EXAM_ID,
+                QuestionTypeDTO.MC
+        );
+
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort",
@@ -479,12 +493,28 @@ class ExamControllerServiceTest {
                 LocalDateTime.of(2000, 1, 1, 0, 0)
         );
 
+        AntwortDTO antwort2 = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort",
+                frage2.fachId(),
+                studentUUID,
+                LocalDateTime.of(2000, 1, 1, 0, 0)
+        );
+
         ReviewDTO review = new ReviewDTO(
                 UUID.randomUUID(),
                 antwort.fachId(),
-                UUID.randomUUID(),
+                k.fachId(),
                 "Bewertung",
                 1
+        );
+
+        ReviewDTO review2 = new ReviewDTO(
+                UUID.randomUUID(),
+                antwort2.fachId(),
+                automatic.fachId(),
+                "Bewertung",
+                2
         );
 
         KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
@@ -502,7 +532,6 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getExam(examDTO.fachId())).thenReturn(examDTO);
-        when(examFacadeService.getProfessor(any())).thenReturn(professor);
         when(examFacadeService.getStudentIdByName(any())).thenReturn(studentUUID);
 
         when(examFacadeService.getSubmission(examDTO.fachId(), "student")).thenReturn(versuch);
@@ -512,16 +541,22 @@ class ExamControllerServiceTest {
         when(examFacadeService.getAntwortForFrageAndStudent(frage.fachId(), studentUUID)).thenReturn(antwort);
 
         when(examFacadeService.getReviewForAntwort(antwort.fachId())).thenReturn(review);
+        when(examFacadeService.getReviewForAntwort(antwort2.fachId())).thenReturn(review2);
 
         when(examFacadeService.getLoesungForFrage(frage.fachId())).thenReturn(korrekteAntwortenDTO);
+
+        when(examFacadeService.getReviewerById(k.fachId())).thenReturn(k);
+        when(examFacadeService.getReviewerById(automatic.fachId())).thenReturn(automatic);
 
         // Act
         ReviewViewForm rvf = service.prepareReviewViewForm(examDTO.fachId(), "student");
         ReviewAggregateDTO agg = rvf.components().getFirst();
 
         // Assert
+        assertNotNull(rvf);
         assertEquals(frage, agg.frage());
         assertEquals(antwort, agg.antwort());
+        assertEquals("Korrektor", rvf.authorName());
         assertEquals(review, agg.review());
         assertEquals(korrekteAntwortenDTO, agg.korrekteAntworten());
     }
@@ -532,11 +567,6 @@ class ExamControllerServiceTest {
         UUID studentUUID = UUID.randomUUID();
         LocalDateTime time = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-        ProfessorDTO professor = new ProfessorDTO(
-                null,
-                "Prof"
-        );
-
         ExamDTO examDTO = new ExamDTO(
                 EXAM_ID,
                 "Titel",
@@ -578,7 +608,6 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getExam(examDTO.fachId())).thenReturn(examDTO);
-        when(examFacadeService.getProfessor(any())).thenReturn(professor);
         when(examFacadeService.getStudentIdByName(any())).thenReturn(studentUUID);
 
         when(examFacadeService.getSubmission(examDTO.fachId(), "student")).thenReturn(versuch);
@@ -596,8 +625,10 @@ class ExamControllerServiceTest {
         ReviewAggregateDTO agg = rvf.components().getFirst();
 
         // Assert
+        assertNotNull(rvf);
         assertEquals(frage, agg.frage());
         assertEquals(antwort, agg.antwort());
+        assertEquals("", rvf.authorName());
         assertNull(agg.review());
         assertEquals(korrekteAntwortenDTO, agg.korrekteAntworten());
     }
