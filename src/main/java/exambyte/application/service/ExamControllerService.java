@@ -68,4 +68,6 @@ public interface ExamControllerService {
     UUID getReviewerByName(String name);
 
     ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName);
+
+    boolean checkTimeForReviewView(UUID examId);
 }

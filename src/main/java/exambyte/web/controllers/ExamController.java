@@ -251,12 +251,15 @@ public class ExamController {
             model.addAttribute("attempt", attempt);
         }
 
+        boolean reviewPermission = service.checkTimeForReviewView(examFachId);
+
         ExamTimeInfo examTimeInfo = service.getExamTimeInfo(examDTO);
 
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted);
         model.addAttribute("timeLeft", examTimeInfo.fristAnzeige());
         model.addAttribute("timeLeftBool", examTimeInfo.timeLeft());
+        model.addAttribute("reviewPermission", reviewPermission);
         model.addAttribute("authorName", prof.name());
         return "exams/examMenu";
     }
@@ -314,7 +317,17 @@ public class ExamController {
     public String showReview(
             @PathVariable UUID examFachId,
             Model model,
-            OAuth2AuthenticationToken auth) {
+            OAuth2AuthenticationToken auth,
+            RedirectAttributes redirectAttributes) {
+
+        boolean allowedToShowReview = service.checkTimeForReviewView(examFachId);
+
+        if (!allowedToShowReview) {
+            redirectAttributes.addFlashAttribute(MESSAGE, "Korrektureinsicht " +
+                    "noch nicht verfügbar!");
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
+            return "redirect:/exams/examsStudierende";
+        }
 
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);

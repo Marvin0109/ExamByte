@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,6 +61,11 @@ class ExamManagementServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        Clock fixedClock = Clock.fixed(
+                Instant.parse("2026-01-01T10:00:00Z"),
+                ZoneId.of("UTC")
+        );
+
         examManagementService = new ExamManagementServiceImpl(
                 antwortQueryService,
                 reviewGenerationService,
@@ -69,7 +74,8 @@ class ExamManagementServiceTest {
                 professorQueryService,
                 studentQueryService,
                 examQueryService,
-                reviewQueryService
+                reviewQueryService,
+                fixedClock
         );
     }
 
@@ -405,6 +411,44 @@ class ExamManagementServiceTest {
         verify(frageQueryService).getFragenUUIDMap(EXAM_ID);
         verify(antwortQueryService).getAntworten(STUDENT_ID, frageMap.keySet());
         verify(scoringService).berechneErreichtePunkte(alleAntworten, frageMap, resultTime);
+    }
+
+    @Test
+    void allowedToViewReview_yes() {
+        LocalDateTime start = LocalDateTime.of(2025, 1, 1, 12, 0);
+        ExamDTO exam = new ExamDTO(
+                EXAM_ID,
+                "Titel",
+                UUID.randomUUID(),
+                start,
+                start.plusHours(1),
+                start.plusHours(2)
+        );
+
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+
+        boolean result = examManagementService.allowedToViewReview(EXAM_ID);
+
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void allowedToViewReview_no() {
+        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 9, 0);
+        ExamDTO exam = new ExamDTO(
+                EXAM_ID,
+                "Titel",
+                UUID.randomUUID(),
+                start,
+                start.plusHours(2),
+                start.plusHours(3)
+        );
+
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+
+        boolean result = examManagementService.allowedToViewReview(EXAM_ID);
+
+        assertThat(result).isFalse();
     }
 
 }

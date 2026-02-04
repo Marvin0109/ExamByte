@@ -68,4 +68,6 @@ public interface ExamFacadeService {
     ReviewDTO getReviewForAntwort(UUID antwortFachId);
 
     KorrekteAntwortenDTO getLoesungForFrage(UUID frageId);
+
+    boolean timeReachedToViewReview(UUID examFachId);
 }

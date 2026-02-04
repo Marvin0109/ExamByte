@@ -28,4 +28,6 @@ public interface ExamManagementService {
     void deleteById(UUID examId);
 
     void resetAllExamDataCascade();
+
+    boolean allowedToViewReview(UUID examId);
 }

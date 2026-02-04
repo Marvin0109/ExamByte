@@ -392,7 +392,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
         ExamDTO exam = service.getExam(examUUID);
-        ProfessorDTO professor = service.getProfessor(examUUID);
+        ProfessorDTO professor = service.getProfessor(exam.professorFachId());
         UUID studentId = service.getStudentIdByName(studentName);
 
         VersuchDTO versuch = service.getSubmission(examUUID, studentName);
@@ -420,5 +420,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 versuch.erreichtePunkte(),
                 versuch.maxPunkte(),
                 componentList);
+    }
+
+    @Override
+    public boolean checkTimeForReviewView(UUID examId) {
+        return service.timeReachedToViewReview(examId);
     }
 }

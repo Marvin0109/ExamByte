@@ -195,4 +195,9 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     public KorrekteAntwortenDTO getLoesungForFrage(UUID frageId) {
         return korrekteAntwortenQueryService.getLoesungForFrage(frageId);
     }
+
+    @Override
+    public boolean timeReachedToViewReview(UUID examFachId) {
+        return examManagementService.allowedToViewReview(examFachId);
+    }
 }

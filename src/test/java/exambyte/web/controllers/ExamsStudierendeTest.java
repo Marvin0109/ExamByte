@@ -106,6 +106,7 @@ class ExamsStudierendeTest {
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", false))
+            .andExpect(model().attributeExists("reviewPermission"))
             .andExpect(model().attribute("authorName", "ProfName"));
     }
 
@@ -138,6 +139,7 @@ class ExamsStudierendeTest {
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", true))
             .andExpect(model().attribute("attempt", versuchDTO))
+            .andExpect(model().attributeExists("reviewPermission"))
             .andExpect(model().attribute("authorName", "ProfName"));
     }
 
@@ -253,10 +255,25 @@ class ExamsStudierendeTest {
     @DisplayName("Die Korrektureinsicht ist erfolgreich")
     void showReview() throws Exception {
         when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
+        when(service.checkTimeForReviewView(any())).thenReturn(true);
 
         mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("exams/showReview"))
                 .andExpect(model().attributeExists("view"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Korrektureinsicht nicht erfolgreich, da Ergebniszeit noch nicht erreicht wurde")
+    void showReview_failure() throws Exception {
+        when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
+        when(service.checkTimeForReviewView(any())).thenReturn(false);
+
+        mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(flash().attribute("success", false))
+                .andExpect(flash().attribute("message", "Korrektureinsicht noch nicht verfügbar!"));
     }
 }
