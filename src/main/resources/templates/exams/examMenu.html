@@ -74,7 +74,7 @@
         <h2>Letzte Versuche</h2>
 
         <div class="rounded-3">
-            <table class="table table-primary table-striped">
+            <table class="table table-secondary table-striped">
                 <thead>
                 <tr>
                     <th>Bearbeitungszeitpunkt</th>
@@ -93,6 +93,22 @@
             </table>
         </div>
 
+    </div>
+
+    <div class="card mb-1">
+        <div class="card-header">
+            Ergebnis
+        </div>
+        <div class="card-body">
+            <form th:if="${reviewPermission}"
+                  method="get"
+                  th:action="@{/exams/showReview/{examFachId}(examFachId=${exam.fachId})}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-clipboard-check"></i>
+                    Korrektur anzeigen
+                </button>
+            </form>
+        </div>
     </div>
 
     <h2>Regeln</h2>

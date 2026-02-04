@@ -7,9 +7,9 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.application.service.AppUserService;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
-import exambyte.web.form.ExamForm;
-import exambyte.web.form.ExamTimeInfo;
-import exambyte.web.form.SubmitForm;
+import exambyte.web.form.create_exam.ExamForm;
+import exambyte.web.form.info.ExamTimeInfo;
+import exambyte.web.form.submit_answers.SubmitForm;
 import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -106,6 +106,7 @@ class ExamsStudierendeTest {
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", false))
+            .andExpect(model().attributeExists("reviewPermission"))
             .andExpect(model().attribute("authorName", "ProfName"));
     }
 
@@ -138,6 +139,7 @@ class ExamsStudierendeTest {
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", true))
             .andExpect(model().attribute("attempt", versuchDTO))
+            .andExpect(model().attributeExists("reviewPermission"))
             .andExpect(model().attribute("authorName", "ProfName"));
     }
 
@@ -246,5 +248,32 @@ class ExamsStudierendeTest {
             .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
             .andExpect(flash().attribute("success", true))
             .andExpect(redirectedUrl("/exams/examsStudierende"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Die Korrektureinsicht ist erfolgreich")
+    void showReview() throws Exception {
+        when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
+        when(service.checkTimeForReviewView(any())).thenReturn(true);
+
+        mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("exams/showReview"))
+                .andExpect(model().attributeExists("view"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Korrektureinsicht nicht erfolgreich, da Ergebniszeit noch nicht erreicht wurde")
+    void showReview_failure() throws Exception {
+        when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
+        when(service.checkTimeForReviewView(any())).thenReturn(false);
+
+        mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(flash().attribute("success", false))
+                .andExpect(flash().attribute("message", "Korrektureinsicht noch nicht verfügbar!"));
     }
 }

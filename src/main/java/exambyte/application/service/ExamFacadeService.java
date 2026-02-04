@@ -60,4 +60,14 @@ public interface ExamFacadeService {
     void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId);
 
     UUID getReviewerByName(String name);
+
+    UUID getStudentIdByName(String name);
+
+    AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId);
+
+    ReviewDTO getReviewForAntwort(UUID antwortFachId);
+
+    KorrekteAntwortenDTO getLoesungForFrage(UUID frageId);
+
+    boolean timeReachedToViewReview(UUID examFachId);
 }

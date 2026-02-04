@@ -1,8 +1,15 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.*;
-import exambyte.web.form.*;
+import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.application.service.ExamControllerService;
+import exambyte.web.form.create_review.AnswerForm;
+import exambyte.web.form.create_review.ReviewForm;
+import exambyte.web.form.info.SubmitInfo;
+import exambyte.web.form.info.ExamTimeInfo;
+import exambyte.web.form.create_exam.ExamForm;
+import exambyte.web.form.info.ReviewCoverageForm;
+import exambyte.web.form.submit_answers.SubmitForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
@@ -244,12 +251,15 @@ public class ExamController {
             model.addAttribute("attempt", attempt);
         }
 
+        boolean reviewPermission = service.checkTimeForReviewView(examFachId);
+
         ExamTimeInfo examTimeInfo = service.getExamTimeInfo(examDTO);
 
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted);
         model.addAttribute("timeLeft", examTimeInfo.fristAnzeige());
         model.addAttribute("timeLeftBool", examTimeInfo.timeLeft());
+        model.addAttribute("reviewPermission", reviewPermission);
         model.addAttribute("authorName", prof.name());
         return "exams/examMenu";
     }
@@ -278,7 +288,7 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         OAuth2User user = auth.getPrincipal();
-        String name =  user.getAttribute(LOGIN_NAME);
+        String name = user.getAttribute(LOGIN_NAME);
 
         boolean submitted = service.examIsAlreadySubmitted(examFachId, name);
 
@@ -300,5 +310,31 @@ public class ExamController {
             redirectAttributes.addFlashAttribute(SUCCESS, false);
         }
         return "redirect:/exams/examsStudierende";
+    }
+
+    @GetMapping("/showReview/{examFachId}")
+    @Secured("ROLE_STUDENT")
+    public String showReview(
+            @PathVariable UUID examFachId,
+            Model model,
+            OAuth2AuthenticationToken auth,
+            RedirectAttributes redirectAttributes) {
+
+        boolean allowedToShowReview = service.checkTimeForReviewView(examFachId);
+
+        if (!allowedToShowReview) {
+            redirectAttributes.addFlashAttribute(MESSAGE, "Korrektureinsicht " +
+                    "noch nicht verfügbar!");
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
+            return "redirect:/exams/examsStudierende";
+        }
+
+        OAuth2User user = auth.getPrincipal();
+        String name = user.getAttribute(LOGIN_NAME);
+
+        ReviewViewForm view = service.prepareReviewViewForm(examFachId, name);
+
+        model.addAttribute("view", view);
+        return "exams/showReview";
     }
 }

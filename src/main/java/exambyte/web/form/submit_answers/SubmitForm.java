@@ -1,4 +1,4 @@
-package exambyte.web.form;
+package exambyte.web.form.submit_answers;
 
 import java.util.List;
 import java.util.Map;

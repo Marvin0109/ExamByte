@@ -5,7 +5,15 @@ import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.common.QuestionTypeWeb;
-import exambyte.web.form.*;
+import exambyte.web.form.create_review.AnswerForm;
+import exambyte.web.form.create_review.ReviewForm;
+import exambyte.web.form.info.SubmitInfo;
+import exambyte.web.form.info.ExamTimeInfo;
+import exambyte.web.form.create_exam.ExamForm;
+import exambyte.web.form.create_exam.QuestionData;
+import exambyte.web.form.info.ReviewCoverageForm;
+import exambyte.web.form.show_review.ReviewAggregateDTO;
+import exambyte.web.form.show_review.ReviewViewForm;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -379,5 +387,78 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public UUID getReviewerByName(String name) {
         return service.getReviewerByName(name);
+    }
+
+    @Override
+    public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
+        ExamDTO exam = service.getExam(examUUID);
+        ProfessorDTO professor = service.getProfessor(exam.professorFachId());
+        UUID studentId = service.getStudentIdByName(studentName);
+
+        VersuchDTO versuch = service.getSubmission(examUUID, studentName);
+
+        List<FrageDTO> fragen = getFragenForExam(examUUID);
+
+        List<ReviewAggregateDTO> componentList = new ArrayList<>();
+
+        for (FrageDTO frage : fragen) {
+            AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
+
+            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
+
+            if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
+                String choice = antwort.antwortText();
+                List<String> choiceList = split(choice);
+
+                antwort = new AntwortDTO(
+                        antwort.fachId(),
+                        String.join(",", choiceList),
+                        antwort.frageFachId(),
+                        antwort.studentFachId(),
+                        antwort.antwortZeitpunkt()
+                );
+
+                String kChoice = k.antwortOptionen();
+                List<String> choiceListKOptionen = split(kChoice);
+
+                String loesung = k.antworten();
+                List<String> loesungen = split(loesung);
+
+                k = new KorrekteAntwortenDTO(
+                        k.fachId(),
+                        String.join(",", loesungen),
+                        String.join(",", choiceListKOptionen),
+                        k.frageFachId()
+                );
+            }
+
+
+            ReviewDTO review = null;
+            if (antwort != null) {
+                review = service.getReviewForAntwort(antwort.fachId());
+            }
+
+            componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
+        }
+
+        return new ReviewViewForm(
+                exam.title(),
+                professor.name(),
+                versuch.erreichtePunkte(),
+                versuch.maxPunkte(),
+                componentList);
+    }
+
+    private List<String> split(String toSplit) {
+        return Arrays.stream(toSplit.split("\n"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(s -> s.replace(",", "ĸ"))
+                .toList();
+    }
+
+    @Override
+    public boolean checkTimeForReviewView(UUID examId) {
+        return service.timeReachedToViewReview(examId);
     }
 }

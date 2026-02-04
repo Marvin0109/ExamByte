@@ -21,6 +21,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final StudentQueryService studentQueryService;
     private final AntwortQueryService antwortQueryService;
     private final ReviewQueryService reviewQueryService;
+    private final KorrekteAntwortenQueryService korrekteAntwortenQueryService;
 
 
     public ExamFacadeServiceImpl(ReviewManagementService reviewManagementService,
@@ -30,7 +31,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  KorrektorQueryService korrektorQueryService,
                                  StudentQueryService studentQueryService,
                                  AntwortQueryService antwortQueryService,
-                                 ReviewQueryService reviewQueryService) {
+                                 ReviewQueryService reviewQueryService,
+                                 KorrekteAntwortenQueryService korrekteAntwortenQueryService) {
 
         this.reviewManagementService = reviewManagementService;
         this.examManagementService = examManagementService;
@@ -40,6 +42,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.studentQueryService = studentQueryService;
         this.antwortQueryService = antwortQueryService;
         this.reviewQueryService = reviewQueryService;
+        this.korrekteAntwortenQueryService = korrekteAntwortenQueryService;
     }
 
     @Override
@@ -171,5 +174,30 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     @Override
     public UUID getReviewerByName(String name) {
         return korrektorQueryService.getReviewerIdByName(name);
+    }
+
+    @Override
+    public UUID getStudentIdByName(String name) {
+        return studentQueryService.getStudentIdByName(name);
+    }
+
+    @Override
+    public AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId) {
+        return antwortQueryService.findByStudentAndFrage(studentId, frageId);
+    }
+
+    @Override
+    public ReviewDTO getReviewForAntwort(UUID antwortFachId) {
+        return reviewQueryService.getReviewByAntwortId(antwortFachId);
+    }
+
+    @Override
+    public KorrekteAntwortenDTO getLoesungForFrage(UUID frageId) {
+        return korrekteAntwortenQueryService.getLoesungForFrage(frageId);
+    }
+
+    @Override
+    public boolean timeReachedToViewReview(UUID examFachId) {
+        return examManagementService.allowedToViewReview(examFachId);
     }
 }

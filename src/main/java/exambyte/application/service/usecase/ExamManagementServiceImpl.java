@@ -5,6 +5,7 @@ import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -22,6 +23,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final StudentQueryService studentQueryService;
     private final ExamQueryService examQueryService;
     private final ReviewQueryService reviewQueryService;
+    private final Clock clock;
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
@@ -32,7 +34,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ProfessorQueryService professorQueryService,
                                      StudentQueryService studentQueryService,
                                      ExamQueryService examQueryService,
-                                     ReviewQueryService reviewQueryService) {
+                                     ReviewQueryService reviewQueryService,
+                                     Clock clock) {
 
         this.antwortQueryService = antwortQueryService;
         this.reviewGenerationService = reviewGenerationService;
@@ -42,6 +45,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.studentQueryService = studentQueryService;
         this.examQueryService = examQueryService;
         this.reviewQueryService = reviewQueryService;
+        this.clock = clock;
+    }
+
+    private LocalDateTime now() {
+        return LocalDateTime.now(clock)
+                .truncatedTo(ChronoUnit.MINUTES);
     }
 
     @Override
@@ -225,5 +234,11 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     @Override
     public void resetAllExamDataCascade() {
         examQueryService.resetAllExamDataCascade();
+    }
+
+    @Override
+    public boolean allowedToViewReview(UUID examId) {
+        ExamDTO exam = examQueryService.getExam(examId);
+        return exam.resultTime().isBefore(now().truncatedTo(ChronoUnit.MINUTES));
     }
 }

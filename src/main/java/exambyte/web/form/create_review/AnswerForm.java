@@ -1,4 +1,4 @@
-package exambyte.web.form;
+package exambyte.web.form.create_review;
 
 import java.util.UUID;
 

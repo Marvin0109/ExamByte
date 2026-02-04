@@ -42,6 +42,9 @@ class ExamFacadeServiceTest {
     @Mock
     private KorrektorQueryService korrektorQueryService;
 
+    @Mock
+    private KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -54,7 +57,8 @@ class ExamFacadeServiceTest {
                 korrektorQueryService,
                 studentQueryService,
                 antwortQueryService,
-                reviewQueryService);
+                reviewQueryService,
+                korrekteAntwortenQueryService);
     }
 
     @Test
