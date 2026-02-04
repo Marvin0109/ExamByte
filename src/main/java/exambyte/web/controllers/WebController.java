@@ -1,6 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.web.service.ExamControllerService;
+import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.UserCreationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.annotation.Secured;

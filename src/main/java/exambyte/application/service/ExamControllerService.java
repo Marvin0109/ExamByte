@@ -1,4 +1,4 @@
-package exambyte.web.service;
+package exambyte.application.service;
 
 import exambyte.application.dto.*;
 import exambyte.web.form.create_review.AnswerForm;

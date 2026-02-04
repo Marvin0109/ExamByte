@@ -10,7 +10,7 @@ import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.submit_answers.SubmitForm;
-import exambyte.web.service.ExamControllerService;
+import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

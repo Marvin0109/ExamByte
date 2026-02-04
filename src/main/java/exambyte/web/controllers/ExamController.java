@@ -2,7 +2,7 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.*;
 import exambyte.web.form.show_review.ReviewViewForm;
-import exambyte.web.service.ExamControllerService;
+import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
