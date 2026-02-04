@@ -10,7 +10,7 @@ import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.submit_answers.SubmitForm;
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -254,6 +254,7 @@ class ExamsStudierendeTest {
     void showReview() throws Exception {
         mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("reviewComponents"));
+                .andExpect(view().name("exams/showReview"))
+                .andExpect(model().attributeExists("view"));
     }
 }

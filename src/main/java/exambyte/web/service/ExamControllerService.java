@@ -1,4 +1,4 @@
-package exambyte.application.service;
+package exambyte.web.service;
 
 import exambyte.application.dto.*;
 import exambyte.web.form.create_review.AnswerForm;
@@ -7,6 +7,7 @@ import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ReviewCoverageForm;
+import exambyte.web.form.show_review.ReviewViewForm;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,4 +66,6 @@ public interface ExamControllerService {
     void createReview(ReviewForm reviewForm, UUID antwortFachId, UUID korrektorFachId);
 
     UUID getReviewerByName(String name);
+
+    ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName);
 }

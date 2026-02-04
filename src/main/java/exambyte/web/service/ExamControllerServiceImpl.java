@@ -2,7 +2,6 @@ package exambyte.web.service;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
-import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
@@ -12,6 +11,8 @@ import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
+import exambyte.web.form.show_review.ReviewComponent;
+import exambyte.web.form.show_review.ReviewViewForm;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -385,5 +386,32 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public UUID getReviewerByName(String name) {
         return service.getReviewerByName(name);
+    }
+
+    @Override
+    public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
+        ExamDTO exam = service.getExam(examUUID);
+        UUID studentId = service.getStudentIdByName(studentName);
+
+        List<FrageDTO> fragen = getFragenForExam(examUUID);
+        List<AntwortDTO> antworten = new ArrayList<>();
+        List<ReviewDTO> reviews = new ArrayList<>();
+        List<KorrekteAntwortenDTO> korrekteAntworten = new ArrayList<>();
+
+        for (FrageDTO frage : fragen) {
+            AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
+            antworten.add(antwort);
+
+            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
+            korrekteAntworten.add(k);
+        }
+
+        for (AntwortDTO antwort : antworten) {
+            ReviewDTO review = service.getReviewForAntwort(antwort.fachId());
+            reviews.add(review);
+        }
+
+
+        List<ReviewComponent> components = new ArrayList<>();
     }
 }

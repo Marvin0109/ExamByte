@@ -1,7 +1,8 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.*;
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.form.show_review.ReviewViewForm;
+import exambyte.web.service.ExamControllerService;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
@@ -284,7 +285,7 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         OAuth2User user = auth.getPrincipal();
-        String name =  user.getAttribute(LOGIN_NAME);
+        String name = user.getAttribute(LOGIN_NAME);
 
         boolean submitted = service.examIsAlreadySubmitted(examFachId, name);
 
@@ -306,5 +307,21 @@ public class ExamController {
             redirectAttributes.addFlashAttribute(SUCCESS, false);
         }
         return "redirect:/exams/examsStudierende";
+    }
+
+    @GetMapping("/showReview/{examFachId}")
+    @Secured("ROLE_STUDENT")
+    public String showReview(
+            @PathVariable UUID examFachId,
+            Model model,
+            OAuth2AuthenticationToken auth) {
+
+        OAuth2User user = auth.getPrincipal();
+        String name = user.getAttribute(LOGIN_NAME);
+
+        ReviewViewForm view = service.prepareReviewViewForm(examFachId, name);
+
+        model.addAttribute("view", view);
+        return "exams/showReview";
     }
 }
