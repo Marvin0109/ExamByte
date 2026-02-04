@@ -247,4 +247,13 @@ class ExamsStudierendeTest {
             .andExpect(flash().attribute("success", true))
             .andExpect(redirectedUrl("/exams/examsStudierende"));
     }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Die Korrektureinsicht ist erfolgreich")
+    void showReview() throws Exception {
+        mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("reviewComponents"));
+    }
 }
