@@ -1,4 +1,4 @@
-package exambyte.web.form;
+package exambyte.web.form.showReview;
 
 import exambyte.web.common.QuestionTypeWeb;
 

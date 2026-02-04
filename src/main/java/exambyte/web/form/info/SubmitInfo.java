@@ -1,4 +1,4 @@
-package exambyte.web.form;
+package exambyte.web.form.info;
 
 import java.util.UUID;
 

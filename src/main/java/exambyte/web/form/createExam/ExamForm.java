@@ -1,4 +1,4 @@
-package exambyte.web.form;
+package exambyte.web.form.createExam;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
