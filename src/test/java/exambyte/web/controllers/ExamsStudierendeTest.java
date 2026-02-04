@@ -252,6 +252,8 @@ class ExamsStudierendeTest {
     @WithMockOAuth2User(roles = {"STUDENT"})
     @DisplayName("Die Korrektureinsicht ist erfolgreich")
     void showReview() throws Exception {
+        when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
+
         mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("exams/showReview"))
