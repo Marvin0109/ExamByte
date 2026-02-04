@@ -5,12 +5,12 @@ import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.common.QuestionTypeWeb;
-import exambyte.web.form.createReview.AnswerForm;
-import exambyte.web.form.createReview.ReviewForm;
+import exambyte.web.form.create_review.AnswerForm;
+import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.info.ExamTimeInfo;
-import exambyte.web.form.createExam.ExamForm;
-import exambyte.web.form.createExam.QuestionData;
+import exambyte.web.form.create_exam.ExamForm;
+import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
 import org.springframework.stereotype.Service;
 

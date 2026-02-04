@@ -4,7 +4,7 @@ import exambyte.application.service.AppUserService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
-import exambyte.web.form.createExam.ExamForm;
+import exambyte.web.form.create_exam.ExamForm;
 import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -2,13 +2,13 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
-import exambyte.web.form.createReview.AnswerForm;
-import exambyte.web.form.createReview.ReviewForm;
+import exambyte.web.form.create_review.AnswerForm;
+import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.info.ExamTimeInfo;
-import exambyte.web.form.createExam.ExamForm;
+import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ReviewCoverageForm;
-import exambyte.web.form.submitAnswers.SubmitForm;
+import exambyte.web.form.submit_answers.SubmitForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
