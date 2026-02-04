@@ -11,7 +11,7 @@ import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
-import exambyte.web.form.show_review.ReviewComponent;
+import exambyte.web.form.show_review.ReviewAggregateDTO;
 import exambyte.web.form.show_review.ReviewViewForm;
 import org.springframework.stereotype.Service;
 
@@ -391,27 +391,33 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
         ExamDTO exam = service.getExam(examUUID);
+        ProfessorDTO professor = service.getProfessor(examUUID);
         UUID studentId = service.getStudentIdByName(studentName);
 
+        VersuchDTO versuch = service.getSubmission(examUUID, studentName);
+
         List<FrageDTO> fragen = getFragenForExam(examUUID);
-        List<AntwortDTO> antworten = new ArrayList<>();
-        List<ReviewDTO> reviews = new ArrayList<>();
-        List<KorrekteAntwortenDTO> korrekteAntworten = new ArrayList<>();
+
+        List<ReviewAggregateDTO> componentList = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
             AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
-            antworten.add(antwort);
+
+            ReviewDTO review = null;
+            if (antwort != null) {
+                review = service.getReviewForAntwort(antwort.fachId());
+            }
 
             KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
-            korrekteAntworten.add(k);
+
+            componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
         }
 
-        for (AntwortDTO antwort : antworten) {
-            ReviewDTO review = service.getReviewForAntwort(antwort.fachId());
-            reviews.add(review);
-        }
-
-
-        List<ReviewComponent> components = new ArrayList<>();
+        return new ReviewViewForm(
+                exam.title(),
+                professor.name(),
+                versuch.erreichtePunkte(),
+                versuch.maxPunkte(),
+                componentList);
     }
 }
