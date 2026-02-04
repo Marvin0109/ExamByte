@@ -404,12 +404,39 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         for (FrageDTO frage : fragen) {
             AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
 
+            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
+
+            if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
+                String choice = antwort.antwortText();
+                List<String> choiceList = split(choice);
+
+                antwort = new AntwortDTO(
+                        antwort.fachId(),
+                        String.join(",", choiceList),
+                        antwort.frageFachId(),
+                        antwort.studentFachId(),
+                        antwort.antwortZeitpunkt()
+                );
+
+                String kChoice = k.antwortOptionen();
+                List<String> choiceListKOptionen = split(kChoice);
+
+                String loesung = k.antworten();
+                List<String> loesungen = split(loesung);
+
+                k = new KorrekteAntwortenDTO(
+                        k.fachId(),
+                        String.join(",", loesungen),
+                        String.join(",", choiceListKOptionen),
+                        k.frageFachId()
+                );
+            }
+
+
             ReviewDTO review = null;
             if (antwort != null) {
                 review = service.getReviewForAntwort(antwort.fachId());
             }
-
-            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
 
             componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
         }
@@ -420,6 +447,14 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 versuch.erreichtePunkte(),
                 versuch.maxPunkte(),
                 componentList);
+    }
+
+    private List<String> split(String toSplit) {
+        return Arrays.stream(toSplit.split("\n"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(s -> s.replace(",", "ĸ"))
+                .toList();
     }
 
     @Override

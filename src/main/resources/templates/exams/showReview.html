@@ -24,7 +24,85 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    Hi Korrekturübersicht hier.
+    <h1 th:text="${view.examTitle}">Testtitel</h1>
+
+    <h5 th:text="'Autor: ' + ${view.authorName}">Autorenname</h5>
+
+    <h5 th:text="'Punktestand: ' + ${view.erreichtePunkte} + ' / ' + ${view.maxPunkte}">Punktestand</h5>
+
+    <div th:each="viewItem, iterStat : ${view.components}" class="mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
+                <p class="card-text" th:text="${viewItem.frage.frageText}">Fragestellung</p>
+
+                <!-- Multiple Choice -->
+                <div class="mb-2" th:if="${viewItem.frage.type.name == 'MC'}">
+                    <div th:each="antwort : ${#strings.arraySplit(viewItem.korrekteAntworten.antwortOptionen, ',')}">
+                        <input type="checkbox"
+                               disabled="disabled"
+                               th:id="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
+                               th:name="${viewItem.frage.fachId}"
+                               th:checked="${#arrays.contains(
+                               #strings.arraySplit(viewItem.antwort.antwortText.replace('ĸ', ','), ','),
+                               antwort)}"
+                               th:value="${antwort}" />
+                        <label class="form-check-label"
+                               th:for="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
+                               th:text="${antwort.replace('ĸ', ',')}">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Single Choice -->
+                <div class="mb-2" th:if="${viewItem.frage.type.name == 'SC'}">
+                    <div th:each="antwort : ${#strings.arraySplit(viewItem.korrekteAntworten.antwortOptionen, ',')}">
+                        <input type="radio"
+                               disabled="disabled"
+                               th:id="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
+                               th:name="${viewItem.frage.fachId}"
+                               th:checked="${#arrays.contains(
+                               #strings.arraySplit(viewItem.antwort.antwortText.replace('ĸ', ','), ','),
+                               antwort)}"
+                               th:value="${antwort}" />
+                        <label class="form-check-label"
+                               th:for="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
+                               th:text="${antwort.replace('ĸ', ',')}">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Freitext -->
+                <div class="mb-2" th:if="${viewItem.frage.type.name == 'FREITEXT'}">
+                    <label class="form-check-label"
+                           th:for="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}">
+                        Antwort:
+                    </label>
+                    <textarea th:name="${viewItem.frage.fachId}"
+                              th:id="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
+                              class="form-control"
+                              disabled="disabled"
+                              th:text="${viewItem.antwort.antwortText}">
+                    </textarea>
+                </div>
+
+                <!-- Bewertung -->
+                <div class="mt-3 p-2 bg-light border rounded" th:if="${viewItem.review != null}">
+                    <strong>Bewertung:</strong>
+                    <span th:text="${viewItem.review.bewertung}">
+                        Bewertungstext
+                    </span>
+                    <p>
+                        <strong>
+                            Punkte:
+                        </strong>
+                        <span th:text="${viewItem.review.punkte} + ' / ' + ${viewItem.frage.maxPunkte}">Punkte vergeben</span>
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 </main>
 
