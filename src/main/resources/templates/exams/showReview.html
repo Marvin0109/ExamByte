@@ -44,7 +44,7 @@
                                th:id="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
                                th:name="${viewItem.frage.fachId}"
                                th:checked="${#arrays.contains(
-                               #strings.arraySplit(viewItem.antwort.antwortText.replace('ĸ', ','), ','),
+                               #strings.arraySplit(viewItem.antwort.antwortText, ','),
                                antwort)}"
                                th:value="${antwort}" />
                         <label class="form-check-label"
@@ -62,7 +62,7 @@
                                th:id="'antwort-' + ${viewItem.frage.fachId} + '-' + ${iterStat.index}"
                                th:name="${viewItem.frage.fachId}"
                                th:checked="${#arrays.contains(
-                               #strings.arraySplit(viewItem.antwort.antwortText.replace('ĸ', ','), ','),
+                               #strings.arraySplit(viewItem.antwort.antwortText, ','),
                                antwort)}"
                                th:value="${antwort}" />
                         <label class="form-check-label"

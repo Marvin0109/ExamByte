@@ -32,7 +32,8 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
             for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
                 UUID frageFachId = UUID.fromString(entry.getKey());
                 String antwortText = String.join("\n", entry.getValue());
-                AntwortDTO dto = new AntwortDTO(null, antwortText, frageFachId, studentId, null);
+                String replaced = antwortText.replace("ĸ", ",");
+                AntwortDTO dto = new AntwortDTO(null, replaced, frageFachId, studentId, null);
                 antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
             }
             return true;

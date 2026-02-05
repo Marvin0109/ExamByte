@@ -12,8 +12,11 @@ import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
+import exambyte.web.form.load_old_submit_data.OldDataDTO;
+import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_review.ReviewAggregateDTO;
 import exambyte.web.form.show_review.ReviewViewForm;
+import exambyte.web.form.submit_answers.SubmitForm;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -72,11 +75,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             questionData.setFachId(frage.fachId());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
                 String choice = service.getChoiceForFrage(frage.fachId());
-                List<String> choiceList = Arrays.stream(choice.split("\n"))
-                        .map(String::trim)
-                        .filter(s -> !s.isEmpty())
-                        .map(s -> s.replace(",", "ĸ"))
-                        .toList();
+                List<String> choiceList = split(choice);
                 questionData.setChoices(String.join(",", choiceList));
             }
             questions.add(questionData);
@@ -390,6 +389,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         return service.getReviewerByName(name);
     }
 
+    // TODO: Aufräumen und testen
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
         ExamDTO exam = service.getExam(examUUID);
@@ -405,41 +405,22 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         List<UUID> korrektoren = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
-            AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
+            PreparedFrageData preparedFrageData = preparedFrageData(frage, studentId);
+            AntwortDTO antwort = preparedFrageData.antwort();
 
-            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
-
-            if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
-                String choice = antwort.antwortText();
-                List<String> choiceList = split(choice);
-
-                antwort = new AntwortDTO(
-                        antwort.fachId(),
-                        String.join(",", choiceList),
-                        antwort.frageFachId(),
-                        antwort.studentFachId(),
-                        antwort.antwortZeitpunkt()
-                );
-
-                String kChoice = k.antwortOptionen();
-                List<String> choiceListKOptionen = split(kChoice);
-
-                String loesung = k.antworten();
-                List<String> loesungen = split(loesung);
-
-                k = new KorrekteAntwortenDTO(
-                        k.fachId(),
-                        String.join(",", loesungen),
-                        String.join(",", choiceListKOptionen),
-                        k.frageFachId()
-                );
-            }
-
+            KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
 
             ReviewDTO review = null;
             if (antwort != null) {
                 review = service.getReviewForAntwort(antwort.fachId());
                 if (review != null) korrektoren.add(review.korrektorFachId());
+                antwort = new AntwortDTO(
+                        antwort.fachId(),
+                        splitOldDataMC(antwort.antwortText()).getFirst(),
+                        frage.fachId(),
+                        studentId,
+                        antwort.antwortZeitpunkt()
+                );
             }
 
             componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
@@ -469,8 +450,113 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 .toList();
     }
 
+    private List<String> splitOldDataMC(String toSplit) {
+        if (toSplit == null || toSplit.isEmpty()) return new ArrayList<>();
+
+        String replaced = toSplit.replaceAll("ĸ(?! )", "þ");
+
+        return Arrays.stream(replaced.split("þ"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+    }
+
     @Override
     public boolean checkTimeForReviewView(UUID examId) {
         return service.timeReachedToViewReview(examId);
     }
+
+    @Override
+    public OldDataForm fillOldDataForm(UUID examId, String studentName) {
+        ExamDTO exam = service.getExam(examId);
+
+        UUID studentId = service.getStudentIdByName(studentName);
+
+        List<FrageDTO> fragen = service.getFragenForExam(examId);
+
+        List<OldDataDTO> oldDataDTOList = new ArrayList<>();
+
+        for (FrageDTO frage : fragen) {
+            PreparedFrageData preparedFrageData = preparedFrageData(frage, studentId);
+
+            OldDataDTO oldDataDTO = new OldDataDTO(
+                    frage,
+                    preparedFrageData.korrekteAntwortenDTO(),
+                    preparedFrageData.antwort());
+
+            oldDataDTOList.add(oldDataDTO);
+        }
+
+        return new OldDataForm(examId, exam.title(), oldDataDTOList);
+    }
+
+    private PreparedFrageData preparedFrageData(FrageDTO frage, UUID studentId) {
+        AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
+        KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
+
+        if (antwort != null && (frage.type().name().equals("MC") || frage.type().name().equals("SC"))) {
+
+            List<String> choiceList = split(antwort.antwortText());
+            antwort = new AntwortDTO(
+                    antwort.fachId(),
+                    String.join(",", choiceList),
+                    antwort.frageFachId(),
+                    antwort.studentFachId(),
+                    antwort.antwortZeitpunkt()
+            );
+
+            String optionen = k.antwortOptionen();
+            List<String> optionenList = split(optionen);
+
+
+            String loesung = k.antworten();
+            List<String> loesungList = split(loesung);
+
+            k = new KorrekteAntwortenDTO(
+                    k.fachId(),
+                    String.join(",", loesungList),
+                    String.join(",", optionenList),
+                    k.frageFachId()
+            );
+        }
+
+        return new PreparedFrageData(frage, antwort, k);
+    }
+
+    @Override
+    public SubmitForm fillSubmitForWithData(OldDataForm form) {
+        SubmitForm submitForm = new SubmitForm();
+
+        Map<String, List<String>> answers = new HashMap<>();
+
+        List<OldDataDTO> oldDataDTOList = form.components();
+
+        for (OldDataDTO oldDataDTO : oldDataDTOList) {
+
+            String frageId = String.valueOf(oldDataDTO.fragen().fachId());
+            boolean answerIsPresent = oldDataDTO.antwort() != null && oldDataDTO.antwort().antwortText() != null;
+
+            if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {
+                if (answerIsPresent) {
+
+                    List<String> choices = split(oldDataDTO.antwort().antwortText());
+                    choices = splitOldDataMC(choices.getFirst());
+                    answers.put(frageId, choices);
+                } else {
+
+                    answers.put(frageId, new ArrayList<>());
+                }
+            } else {
+                if (answerIsPresent) {
+                    answers.put(frageId, List.of(oldDataDTO.antwort().antwortText()));
+                } else {
+                    answers.put(frageId, Collections.singletonList(""));
+                }
+            }
+        }
+
+        submitForm.setAnswers(answers);
+        return submitForm;
+    }
+
 }

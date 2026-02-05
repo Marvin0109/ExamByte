@@ -1,6 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.*;
+import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_review.AnswerForm;
@@ -310,6 +311,25 @@ public class ExamController {
             redirectAttributes.addFlashAttribute(SUCCESS, false);
         }
         return "redirect:/exams/examsStudierende";
+    }
+
+    // TODO: Testen
+    @GetMapping("/startWithData/{examFachId}")
+    @Secured("ROLE_STUDENT")
+    public String startWithData(
+            @PathVariable UUID examFachId,
+            Model model,
+            OAuth2AuthenticationToken auth) {
+
+        OAuth2User user = auth.getPrincipal();
+        String name = user.getAttribute(LOGIN_NAME);
+
+        OldDataForm form = service.fillOldDataForm(examFachId, name);
+        SubmitForm submitForm = service.fillSubmitForWithData(form);
+
+        model.addAttribute("exam", form);
+        model.addAttribute("submitForm", submitForm);
+        return "exams/examsDurchfuehrenWithData";
     }
 
     @GetMapping("/showReview/{examFachId}")
