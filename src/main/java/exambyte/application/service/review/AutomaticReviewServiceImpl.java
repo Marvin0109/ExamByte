@@ -71,12 +71,12 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
                         .findFirst();
 
                 if (korrekteAntwort.isPresent()) {
-                    List<String> richtigeAntworten = Arrays.stream(korrekteAntwort.get().antworten().split("\\r?\\n|,"))
+                    List<String> richtigeAntworten = Arrays.stream(korrekteAntwort.get().antworten().split("\n"))
                             .map(String::trim)
                             .filter(s -> !s.isEmpty())
                             .toList();
 
-                    List<String> studentAntworten = Arrays.stream(studentAntwort.get().antwortText().split("\\r?\\n|,"))
+                    List<String> studentAntworten = Arrays.stream(studentAntwort.get().antwortText().split("\n"))
                             .map(String::trim)
                             .filter(s -> !s.isEmpty())
                             .toList();
@@ -90,7 +90,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
                     int points = computeMcPoints(correctAnswers, wrongAnswers,
                             richtigeAntworten.size(), frageDTO.maxPunkte());
 
-                    String richtigeAntwortenText = String.join(", ", richtigeAntworten);
+                    String richtigeAntwortenText = String.join("; ", richtigeAntworten);
 
                     // UUID für automatische Review
                     UUID automaticKorrektor = UUID.fromString("11111111-1111-1111-1111-111111111111");

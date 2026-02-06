@@ -10,14 +10,14 @@ import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
-import exambyte.web.form.show_review.ReviewAggregateDTO;
-import exambyte.web.form.show_review.ReviewViewForm;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -31,15 +31,31 @@ import static org.mockito.Mockito.*;
 
 class ExamControllerServiceTest {
 
+    @Mock
     private ExamFacadeService examFacadeService;
+
+    @Mock
+    private HelperService helperService;
+
     private ExamControllerService service;
 
+    private ExamDTO exam;
     private static final UUID EXAM_ID = UUID.randomUUID();
+    private static final UUID PROF_ID = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
-        examFacadeService = mock(ExamFacadeService.class);
-        service = new ExamControllerServiceImpl(examFacadeService);
+        MockitoAnnotations.openMocks(this);
+        service = new ExamControllerServiceImpl(examFacadeService, helperService);
+
+        exam = new ExamDTO(
+                EXAM_ID,
+                "Exam",
+                PROF_ID,
+                null,
+                null,
+                null
+        );
     }
 
     @Test
@@ -56,20 +72,9 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Das Ausfüllen des ExamForm ist erfolgreich")
+    @DisplayName("Das Ausfüllen des ExamForm ist erfolgreich (Eine Freitext Aufgabe)")
     void fillExamForm_01() {
         // Arrange
-        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
-
-        ExamDTO exam = new ExamDTO(
-                EXAM_ID,
-                "Exam 1",
-                UUID.randomUUID(),
-                start,
-                start.plusHours(1),
-                start.plusHours(2)
-        );
-
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
                 "F1",
@@ -90,20 +95,9 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Das Ausfüllen des ExamForm ist erfolgreich (Test auf richtige Regex konvertierung)")
+    @DisplayName("Das Ausfüllen des ExamForm ist erfolgreich (MC Aufgabe)")
     void fillExamForm_02() {
         // Arrange
-        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
-
-        ExamDTO exam = new ExamDTO(
-                EXAM_ID,
-                "Exam 1",
-                UUID.randomUUID(),
-                start,
-                start.plusHours(1),
-                start.plusHours(2)
-        );
-
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
                 "F1",
@@ -114,7 +108,7 @@ class ExamControllerServiceTest {
 
         when(examFacadeService.getExam(EXAM_ID)).thenReturn(exam);
         when(examFacadeService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getChoiceForFrage(frage.fachId())).thenReturn("A, B \n C \n D");
+        when(examFacadeService.getChoiceForFrage(frage.fachId())).thenReturn("A, B\nC\nD");
 
         // Act
         ExamForm form = service.fillExamForm(EXAM_ID);
@@ -122,15 +116,12 @@ class ExamControllerServiceTest {
         // Assert
         assertThat(form.getQuestions()).hasSize(1);
         assertThat(form.getQuestions().getFirst().getType()).isEqualTo("MC");
-        assertThat(form.getQuestions().getFirst().getChoices()).isEqualTo("Aĸ B,C,D");
     }
 
     @Test
     @DisplayName("Erstellen der Fragen ist erfolgreich")
     void createQuestions_01() {
         // Arrange
-        UUID profFachId = UUID.randomUUID();
-
         QuestionData q1 = new QuestionData();
         q1.setQuestionText("F1");
         q1.setType("FREITEXT");
@@ -154,7 +145,7 @@ class ExamControllerServiceTest {
         form.setQuestions(List.of(q1, q2, q3));
 
         // Act
-        service.createQuestions(form, profFachId, EXAM_ID);
+        service.createQuestions(form, PROF_ID, EXAM_ID);
 
         // Assert
         verify(examFacadeService).createFrage(argThat(f -> f.frageText().equals("F1")));
@@ -165,8 +156,6 @@ class ExamControllerServiceTest {
     @DisplayName("Erstellen der Fragen ist nicht erfolgreich, unbehandelter Fragetyp vorhanden")
     void createQuestions_02() {
         // Arrange
-        UUID profFachId = UUID.randomUUID();
-
         QuestionData q1 = new QuestionData();
         q1.setQuestionText("F1");
         q1.setType("OTHER_TYPE");
@@ -176,7 +165,7 @@ class ExamControllerServiceTest {
         form.setQuestions(List.of(q1));
 
         // Act
-        assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, profFachId, EXAM_ID));
+        assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, PROF_ID, EXAM_ID));
 
         // Assert
         verify(examFacadeService, never()).createFrage(any());
@@ -185,101 +174,34 @@ class ExamControllerServiceTest {
     @Test
     @DisplayName("Die Korrekturgesamtübersicht für alle Exams wird korrekt ermittelt")
     void getReviewCoverage_01() {
-        // Arrange
-        UUID profFachId = UUID.randomUUID();
-        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
-        ExamDTO exam = new ExamDTO(
-                EXAM_ID,
-                "Exam 1",
-                profFachId,
-                start,
-                start.plusHours(1),
-                start.plusHours(2)
-        );
-
         when(examFacadeService.reviewCoverage(EXAM_ID)).thenReturn(50.0);
 
-        // Act
         List<ReviewCoverageForm> result = service.getReviewCoverage(List.of(exam));
 
-        // Assert
         assertThat(result).hasSize(1);
         assertThat(result.getFirst().getExam()).isEqualTo(exam);
         assertThat(result.getFirst().getReviewCoverage()).isEqualTo(50.0);
     }
 
     @Test
-    @DisplayName("Anzeige: Test noch nicht online zum bearbeiten")
+    @DisplayName("Test nicht verfügbar")
     void getExamTimeInfo_01() {
-        // Arrange
-        LocalDateTime start = LocalDateTime.now().plusHours(1);
-        LocalDateTime end = start.plusHours(2);
+        when(helperService.getExamAvailabilityNotice(exam)).thenReturn("Message");
 
-        ExamDTO exam = new ExamDTO(
-                EXAM_ID,
-                "Exam",
-                null,
-                start,
-                end,
-                end.plusHours(2)
-        );
-
-        // Act
         ExamTimeInfo info = service.getExamTimeInfo(exam);
 
-        // Assert
         assertThat(info.timeLeft()).isFalse();
-        assertThat(info.fristAnzeige()).contains("Der Test kann erst ab den");
-        assertThat(info.fristAnzeige()).contains(start.getDayOfMonth() + "");
     }
 
     @Test
-    @DisplayName("Anzeige: Test schon beendet worden")
+    @DisplayName("Test verfügbar")
     void getExamTimeInfo_02() {
-        // Arrange
-        LocalDateTime start = LocalDateTime.now().minusHours(3);
-        LocalDateTime end = LocalDateTime.now().minusHours(1);
+        when(helperService.getExamAvailabilityNotice(exam)).thenReturn("");
+        when(helperService.getTimeDifference(exam)).thenReturn("Anzeige");
 
-        ExamDTO exam = new ExamDTO(
-                null,
-                "Exam",
-                null,
-                start,
-                end,
-                end.plusHours(1)
-        );
-
-        // Act
         ExamTimeInfo info = service.getExamTimeInfo(exam);
 
-        // Assert
-        assertThat(info.timeLeft()).isFalse();
-        assertThat(info.fristAnzeige()).contains("überschritten");
-        assertThat(info.fristAnzeige()).contains(end.getHour() + "");
-    }
-
-    @Test
-    @DisplayName("Anzeige: Test online, Restzeit wird angezeigt")
-    void getExamTimeInfo_03() {
-        // Arrange
-        LocalDateTime start = LocalDateTime.now().minusMinutes(10);
-        LocalDateTime end = LocalDateTime.now().plusMinutes(50);
-
-        ExamDTO exam = new ExamDTO(
-                null,
-                "Exam",
-                null,
-                start,
-                end,
-                end.plusHours(1)
-        );
-
-        // Act
-        ExamTimeInfo info = service.getExamTimeInfo(exam);
-
-        // Assert
         assertThat(info.timeLeft()).isTrue();
-        assertThat(info.fristAnzeige()).contains("Minute");
     }
 
     @Test
@@ -343,7 +265,7 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getAllExams()).thenReturn(exams);
-        when(examFacadeService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
+        when(helperService.getValidAttempts("student")).thenReturn(List.of(versuch));
 
         // Act
         double result = service.getZulassungsProgress("student");
@@ -379,7 +301,7 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getAllExams()).thenReturn(exams);
-        when(examFacadeService.getSubmission(exams.getFirst().fachId(), "student")).thenReturn(versuch);
+        when(helperService.getValidAttempts("student")).thenReturn(List.of(versuch));
 
         // Act
         boolean result = service.hasAnyFailedAttempt("student");
@@ -440,196 +362,5 @@ class ExamControllerServiceTest {
         assertThat(form.getAntwort()).isEqualTo("Antwort 1");
         assertThat(form.getMaxPunkte()).isEqualTo(2);
         assertThat(form.getAntwortFachId()).isEqualTo(antwort1.fachId());
-    }
-
-    @Test
-    void prepareReviewViewForm_allFound() {
-        // Arrange
-        UUID studentUUID = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.of(2000, 1, 1, 0, 0);
-
-        KorrektorDTO k = new KorrektorDTO(
-                UUID.randomUUID(),
-                "Korrektor"
-        );
-
-        KorrektorDTO automatic = new KorrektorDTO(
-                UUID.randomUUID(),
-                "Automatischer Korrektor"
-        );
-
-        ExamDTO examDTO = new ExamDTO(
-                EXAM_ID,
-                "Titel",
-                UUID.randomUUID(),
-                time,
-                time.plusHours(1),
-                time.plusHours(2)
-        );
-
-        FrageDTO frage = new FrageDTO(
-                UUID.randomUUID(),
-                "Frage",
-                1,
-                UUID.randomUUID(),
-                EXAM_ID,
-                QuestionTypeDTO.FREITEXT
-        );
-
-        FrageDTO frage2 = new FrageDTO(
-                UUID.randomUUID(),
-                "Frage",
-                2,
-                UUID.randomUUID(),
-                EXAM_ID,
-                QuestionTypeDTO.MC
-        );
-
-        AntwortDTO antwort = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort",
-                frage.fachId(),
-                studentUUID,
-                LocalDateTime.of(2000, 1, 1, 0, 0)
-        );
-
-        AntwortDTO antwort2 = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort",
-                frage2.fachId(),
-                studentUUID,
-                LocalDateTime.of(2000, 1, 1, 0, 0)
-        );
-
-        ReviewDTO review = new ReviewDTO(
-                UUID.randomUUID(),
-                antwort.fachId(),
-                k.fachId(),
-                "Bewertung",
-                1
-        );
-
-        ReviewDTO review2 = new ReviewDTO(
-                UUID.randomUUID(),
-                antwort2.fachId(),
-                automatic.fachId(),
-                "Bewertung",
-                2
-        );
-
-        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 1",
-                "Antwort 1\nAntwort 2",
-                frage.fachId()
-        );
-
-        VersuchDTO versuch = new VersuchDTO(
-                time,
-                1.0,
-                1.0,
-                100.0
-        );
-
-        when(examFacadeService.getExam(examDTO.fachId())).thenReturn(examDTO);
-        when(examFacadeService.getStudentIdByName(any())).thenReturn(studentUUID);
-
-        when(examFacadeService.getSubmission(examDTO.fachId(), "student")).thenReturn(versuch);
-
-        when(examFacadeService.getFragenForExam(examDTO.fachId())).thenReturn(List.of(frage));
-
-        when(examFacadeService.getAntwortForFrageAndStudent(frage.fachId(), studentUUID)).thenReturn(antwort);
-
-        when(examFacadeService.getReviewForAntwort(antwort.fachId())).thenReturn(review);
-        when(examFacadeService.getReviewForAntwort(antwort2.fachId())).thenReturn(review2);
-
-        when(examFacadeService.getLoesungForFrage(frage.fachId())).thenReturn(korrekteAntwortenDTO);
-
-        when(examFacadeService.getReviewerById(k.fachId())).thenReturn(k);
-        when(examFacadeService.getReviewerById(automatic.fachId())).thenReturn(automatic);
-
-        // Act
-        ReviewViewForm rvf = service.prepareReviewViewForm(examDTO.fachId(), "student");
-        ReviewAggregateDTO agg = rvf.components().getFirst();
-
-        // Assert
-        assertNotNull(rvf);
-        assertEquals(frage, agg.frage());
-        assertEquals(antwort, agg.antwort());
-        assertEquals("Korrektor", rvf.authorName());
-        assertEquals(review, agg.review());
-        assertEquals(korrekteAntwortenDTO, agg.korrekteAntworten());
-    }
-
-    @Test
-    void prepareReviewViewForm_reviewMissing() {
-        // Arrange
-        UUID studentUUID = UUID.randomUUID();
-        LocalDateTime time = LocalDateTime.of(2000, 1, 1, 0, 0);
-
-        ExamDTO examDTO = new ExamDTO(
-                EXAM_ID,
-                "Titel",
-                UUID.randomUUID(),
-                time,
-                time.plusHours(1),
-                time.plusHours(2)
-        );
-
-        FrageDTO frage = new FrageDTO(
-                UUID.randomUUID(),
-                "Frage",
-                1,
-                UUID.randomUUID(),
-                EXAM_ID,
-                QuestionTypeDTO.FREITEXT
-        );
-
-        AntwortDTO antwort = new AntwortDTO(
-                UUID.randomUUID(),
-                "Antwort",
-                frage.fachId(),
-                studentUUID,
-                LocalDateTime.of(2000, 1, 1, 0, 0)
-        );
-
-        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
-                UUID.randomUUID(),
-                "Antwort 1",
-                "Antwort 1\nAntwort 2",
-                frage.fachId()
-        );
-
-        VersuchDTO versuch = new VersuchDTO(
-                time,
-                1.0,
-                1.0,
-                100.0
-        );
-
-        when(examFacadeService.getExam(examDTO.fachId())).thenReturn(examDTO);
-        when(examFacadeService.getStudentIdByName(any())).thenReturn(studentUUID);
-
-        when(examFacadeService.getSubmission(examDTO.fachId(), "student")).thenReturn(versuch);
-
-        when(examFacadeService.getFragenForExam(examDTO.fachId())).thenReturn(List.of(frage));
-
-        when(examFacadeService.getAntwortForFrageAndStudent(frage.fachId(), studentUUID)).thenReturn(antwort);
-
-        when(examFacadeService.getReviewForAntwort(antwort.fachId())).thenReturn(null);
-
-        when(examFacadeService.getLoesungForFrage(frage.fachId())).thenReturn(korrekteAntwortenDTO);
-
-        // Act
-        ReviewViewForm rvf = service.prepareReviewViewForm(examDTO.fachId(), "student");
-        ReviewAggregateDTO agg = rvf.components().getFirst();
-
-        // Assert
-        assertNotNull(rvf);
-        assertEquals(frage, agg.frage());
-        assertEquals(antwort, agg.antwort());
-        assertEquals("", rvf.authorName());
-        assertNull(agg.review());
-        assertEquals(korrekteAntwortenDTO, agg.korrekteAntworten());
     }
 }

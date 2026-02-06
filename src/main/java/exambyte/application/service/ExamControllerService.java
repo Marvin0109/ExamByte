@@ -7,7 +7,9 @@ import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ReviewCoverageForm;
+import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_review.ReviewViewForm;
+import exambyte.web.form.submit_answers.SubmitForm;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -70,4 +72,8 @@ public interface ExamControllerService {
     ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName);
 
     boolean checkTimeForReviewView(UUID examId);
+
+    OldDataForm fillOldDataForm(UUID examId, String studentName);
+
+    SubmitForm fillSubmitFormWithData(OldDataForm form);
 }

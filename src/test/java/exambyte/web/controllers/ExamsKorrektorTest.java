@@ -51,13 +51,13 @@ class ExamsKorrektorTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
+    @WithMockOAuth2User(roles = {"REVIEWER"})
     @DisplayName("Die Seite zur gesamten Korrekturübersicht ist erfolgreich")
     void listExamsForReviewer_02() throws Exception {
 
         mvc.perform(get("/exams/examsKorrektor"))
             .andExpect(status().isOk())
-            .andExpect(model().attribute("name", "Marvin0109"))
+            .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("reviewCoverage"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("timeNow"))
@@ -75,7 +75,7 @@ class ExamsKorrektorTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
+    @WithMockOAuth2User(roles = {"REVIEWER"})
     @DisplayName("Seite zur Korrekturübersicht eines bestimmten Exams nicht erfolgreich: Exam läuft noch!")
     void showExamSubmits_02() throws Exception {
 
@@ -94,7 +94,7 @@ class ExamsKorrektorTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
+    @WithMockOAuth2User(roles = {"REVIEWER"})
     @DisplayName("Seite zur Korrekturübersicht erfolgt")
     void showExamSubmits_03() throws Exception {
 
@@ -126,7 +126,7 @@ class ExamsKorrektorTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"REVIEWER"})
+    @WithMockOAuth2User(roles = {"REVIEWER"})
     @DisplayName("Korrekturseite ist erreichbar")
     void showSubmit_02() throws Exception {
         UUID examFachId = UUID.randomUUID();
