@@ -18,6 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -31,15 +33,20 @@ import static org.mockito.Mockito.*;
 
 class ExamControllerServiceTest {
 
+    @Mock
     private ExamFacadeService examFacadeService;
+
+    @Mock
+    private HelperService helperService;
+
     private ExamControllerService service;
 
     private static final UUID EXAM_ID = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
-        examFacadeService = mock(ExamFacadeService.class);
-        service = new ExamControllerServiceImpl(examFacadeService);
+        MockitoAnnotations.openMocks(this);
+        service = new ExamControllerServiceImpl(examFacadeService, helperService);
     }
 
     @Test

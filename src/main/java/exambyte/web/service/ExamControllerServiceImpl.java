@@ -30,9 +30,11 @@ import java.util.stream.Collectors;
 public class ExamControllerServiceImpl implements ExamControllerService {
 
     private final ExamFacadeService service;
+    private final HelperService helperService;
 
-    public ExamControllerServiceImpl(ExamFacadeService service) {
+    public ExamControllerServiceImpl(ExamFacadeService service, HelperService helperService) {
         this.service = service;
+        this.helperService = helperService;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             questionData.setFachId(frage.fachId());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
                 String choice = service.getChoiceForFrage(frage.fachId());
-                List<String> choiceList = split(choice);
+                List<String> choiceList = helperService.split(choice);
                 questionData.setChoices(String.join(",", choiceList));
             }
             questions.add(questionData);
@@ -171,7 +173,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public double getZulassungsProgress(String studentLogin) {
-        List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
+        List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
         double size = 12;
         double progressForSuccessAttempt = 100.0 / size;
@@ -187,7 +189,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public boolean hasAnyFailedAttempt(String studentLogin) {
-        List<VersuchDTO> allValidAttempts = getValidAttempts(studentLogin);
+        List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
         for (VersuchDTO v : allValidAttempts) {
             if (v.erreichtePunkte() < v.maxPunkte() * 0.5) {
@@ -195,21 +197,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             }
         }
         return false;
-    }
-
-    private List<VersuchDTO> getValidAttempts(String studentLogin) {
-        List<ExamDTO> exams = service.getAllExams();
-        List<VersuchDTO> allValidAttempts = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-
-        for (ExamDTO exam : exams) {
-            VersuchDTO v = service.getSubmission(exam.fachId(), studentLogin);
-            if (exam.resultTime().isBefore(now)) {
-                allValidAttempts.add(v);
-            }
-        }
-
-        return allValidAttempts;
     }
 
     @Override
@@ -232,70 +219,13 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public ExamTimeInfo getExamTimeInfo(ExamDTO examDTO) {
         boolean timeLeft = false;
-        String fristAnzeige = getExamAvailabilityNotice(examDTO);
+        String fristAnzeige = helperService.getExamAvailabilityNotice(examDTO);
         if (fristAnzeige.isEmpty()) {
-            fristAnzeige = getTimeDifference(examDTO);
+            fristAnzeige = helperService.getTimeDifference(examDTO);
             timeLeft = true;
         }
 
         return new ExamTimeInfo(fristAnzeige, timeLeft);
-    }
-
-    private String getExamAvailabilityNotice(ExamDTO examDTO) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
-        LocalDateTime now = LocalDateTime.now();
-
-        if (now.isBefore(examDTO.startTime())) {
-            String startTimeFormatted = examDTO.startTime().format(formatter);
-
-            return "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
-        }
-
-        if (now.isAfter(examDTO.endTime())) {
-            String endTimeFormatted = examDTO.endTime().format(formatter);
-
-            return "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
-                    "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
-        }
-
-        return "";
-    }
-
-    private String getTimeDifference(ExamDTO examDTO) {
-        StringBuilder fristAnzeige = new StringBuilder();
-        String tageAnzeige = "";
-        String stundenAnzeige = "";
-        String minutenAnzeige = "";
-
-        Duration diff = Duration.between(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
-                examDTO.endTime().truncatedTo(ChronoUnit.MINUTES));
-
-        long days = diff.toDays();
-        long hours = diff.toHours() % 24;
-        long minutes = diff.toMinutes() % 60;
-
-        if (days == 1) {
-            tageAnzeige = days + " Tag";
-        } else if (days > 1) {
-            tageAnzeige = days + " Tage";
-        }
-
-        if (hours == 1) {
-            stundenAnzeige = hours + " Stunde";
-        } else if (hours > 1) {
-            stundenAnzeige = hours + " Stunden";
-        }
-
-        if (minutes == 1) {
-            minutenAnzeige = minutes + " Minute";
-        } else if (minutes > 1) {
-            minutenAnzeige = minutes + " Minuten";
-        }
-
-        if (!tageAnzeige.isEmpty()) fristAnzeige.append(tageAnzeige).append(" ");
-        if (!stundenAnzeige.isEmpty()) fristAnzeige.append(stundenAnzeige).append(" ");
-        if (!minutenAnzeige.isEmpty()) fristAnzeige.append(minutenAnzeige).append(" ");
-        return fristAnzeige.toString();
     }
 
     @Override
@@ -393,19 +323,15 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
         ExamDTO exam = service.getExam(examUUID);
-
         UUID studentId = service.getStudentIdByName(studentName);
-
         VersuchDTO versuch = service.getSubmission(examUUID, studentName);
 
         List<FrageDTO> fragen = service.getFragenForExam(examUUID);
-
         List<ReviewAggregateDTO> componentList = new ArrayList<>();
-
         List<UUID> korrektoren = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
-            PreparedFrageData preparedFrageData = preparedFrageData(frage, studentId);
+            PreparedFrageData preparedFrageData = helperService.prepareFrageData(frage, studentId);
             AntwortDTO antwort = preparedFrageData.antwort();
 
             KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
@@ -416,7 +342,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 if (review != null) korrektoren.add(review.korrektorFachId());
                 antwort = new AntwortDTO(
                         antwort.fachId(),
-                        splitOldDataMC(antwort.antwortText()).getFirst(),
+                        helperService.splitOldDataMC(antwort.antwortText()).getFirst(),
                         frage.fachId(),
                         studentId,
                         antwort.antwortZeitpunkt()
@@ -425,7 +351,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
             componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
         }
-
 
         String korrektorNames = korrektoren.stream()
                 .map(service::getReviewerById)
@@ -440,25 +365,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 versuch.erreichtePunkte(),
                 versuch.maxPunkte(),
                 componentList);
-    }
-
-    private List<String> split(String toSplit) {
-        return Arrays.stream(toSplit.split("\n"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .map(s -> s.replace(",", "ĸ"))
-                .toList();
-    }
-
-    private List<String> splitOldDataMC(String toSplit) {
-        if (toSplit == null || toSplit.isEmpty()) return new ArrayList<>();
-
-        String replaced = toSplit.replaceAll("ĸ(?! )", "þ");
-
-        return Arrays.stream(replaced.split("þ"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .toList();
     }
 
     @Override
@@ -477,7 +383,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         List<OldDataDTO> oldDataDTOList = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
-            PreparedFrageData preparedFrageData = preparedFrageData(frage, studentId);
+            PreparedFrageData preparedFrageData = helperService.prepareFrageData(frage, studentId);
 
             OldDataDTO oldDataDTO = new OldDataDTO(
                     frage,
@@ -488,39 +394,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         }
 
         return new OldDataForm(examId, exam.title(), oldDataDTOList);
-    }
-
-    private PreparedFrageData preparedFrageData(FrageDTO frage, UUID studentId) {
-        AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
-        KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
-
-        if (antwort != null && (frage.type().name().equals("MC") || frage.type().name().equals("SC"))) {
-
-            List<String> choiceList = split(antwort.antwortText());
-            antwort = new AntwortDTO(
-                    antwort.fachId(),
-                    String.join(",", choiceList),
-                    antwort.frageFachId(),
-                    antwort.studentFachId(),
-                    antwort.antwortZeitpunkt()
-            );
-
-            String optionen = k.antwortOptionen();
-            List<String> optionenList = split(optionen);
-
-
-            String loesung = k.antworten();
-            List<String> loesungList = split(loesung);
-
-            k = new KorrekteAntwortenDTO(
-                    k.fachId(),
-                    String.join(",", loesungList),
-                    String.join(",", optionenList),
-                    k.frageFachId()
-            );
-        }
-
-        return new PreparedFrageData(frage, antwort, k);
     }
 
     @Override
@@ -539,11 +412,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {
                 if (answerIsPresent) {
 
-                    List<String> choices = split(oldDataDTO.antwort().antwortText());
-                    choices = splitOldDataMC(choices.getFirst());
+                    List<String> choices = helperService.split(oldDataDTO.antwort().antwortText());
+                    choices = helperService.splitOldDataMC(choices.getFirst());
                     answers.put(frageId, choices);
                 } else {
-
                     answers.put(frageId, new ArrayList<>());
                 }
             } else {
@@ -558,5 +430,4 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         submitForm.setAnswers(answers);
         return submitForm;
     }
-
 }
