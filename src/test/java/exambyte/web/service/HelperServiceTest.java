@@ -131,6 +131,12 @@ class HelperServiceTest {
                 ),
 
                 Arguments.of(
+                        LocalDateTime.of(2026, 1, 1, 0, 0),
+                        LocalDateTime.of(2026, 1, 1, 10, 0),
+                        "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten."
+                ),
+
+                Arguments.of(
                         LocalDateTime.of(2026, 1, 1, 11, 0),
                         LocalDateTime.of(2026, 1, 1, 12, 0),
                         "Der Test kann erst ab den "

@@ -59,7 +59,7 @@ public class HelperServiceImpl implements HelperService {
             return "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
         }
 
-        if (now().isAfter(dto.endTime())) {
+        if (now().isAfter(dto.endTime()) || now().isEqual(dto.endTime())) {
             String endTimeFormatted = dto.endTime().format(formatter);
 
             return "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +

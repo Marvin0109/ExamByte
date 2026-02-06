@@ -284,9 +284,16 @@ public class ExamController {
     @Secured("ROLE_STUDENT")
     public String submitExam(
             @PathVariable UUID examFachId,
-            @ModelAttribute SubmitForm antworten,
+            @Valid @ModelAttribute("submitForm") SubmitForm submitForm,
+            BindingResult bindingResult,
             OAuth2AuthenticationToken auth,
             RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(MESSAGE, "Alle Antworten müssen gesetzt werden!");
+            redirectAttributes.addFlashAttribute(SUCCESS, false);
+            return "redirect:/exams/examsStudierende";
+        }
 
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
@@ -297,7 +304,7 @@ public class ExamController {
             service.removeOldAnswersAndReviews(examFachId, name);
         }
 
-        boolean success = service.submitExam(name, antworten.getAnswers(), examFachId);
+        boolean success = service.submitExam(name, submitForm.getAnswers(), examFachId);
 
         if (success) {
             redirectAttributes.addFlashAttribute(

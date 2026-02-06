@@ -187,7 +187,7 @@ class ExamsStudierendeTest {
         when(service.submitExam(eq("username"), any(), eq(examFachId))).thenReturn(false);
 
         mvc.perform(post("/exams/submit/{examFachId}", examFachId)
-                .flashAttr("antworten", form)
+                .flashAttr("submitForm", form)
                 .with(csrf()))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/exams/examsStudierende"))
@@ -200,8 +200,74 @@ class ExamsStudierendeTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das Einreichen eines Exams ist erfolgreich (noch kein Exam vorher eingereicht)")
+    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (fehlende Antwort)")
     void submitExam_03() throws Exception {
+        UUID examFachId = UUID.randomUUID();
+
+        Map<String, List<String>> answers = Map.of(
+                "q2", List.of()
+        );
+
+        SubmitForm form = new SubmitForm();
+        form.setAnswers(answers);
+
+        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+                        .flashAttr("submitForm", form)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
+                .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (fehlende Antwort)")
+    void submitExam_04() throws Exception {
+        UUID examFachId = UUID.randomUUID();
+
+        Map<String, List<String>> answers = Map.of(
+                "q2", List.of("")
+        );
+
+        SubmitForm form = new SubmitForm();
+        form.setAnswers(answers);
+
+        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+                        .flashAttr("submitForm", form)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
+                .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (fehlende Antwort)")
+    void submitExam_05() throws Exception {
+        UUID examFachId = UUID.randomUUID();
+
+        Map<String, List<String>> answers = Map.of(
+                "q2", List.of(" ")
+        );
+
+        SubmitForm form = new SubmitForm();
+        form.setAnswers(answers);
+
+        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+                        .flashAttr("submitForm", form)
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
+                .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    @DisplayName("Das Einreichen eines Exams ist erfolgreich (noch kein Exam vorher eingereicht)")
+    void submitExam_06() throws Exception {
         UUID examFachId = UUID.randomUUID();
 
         Map<String, List<String>> answers = Map.of(
@@ -216,7 +282,7 @@ class ExamsStudierendeTest {
         when(service.submitExam(eq("username"), any(), eq(examFachId))).thenReturn(true);
 
         mvc.perform(post("/exams/submit/{examFachId}", examFachId)
-                        .flashAttr("antworten", form)
+                        .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/exams/examsStudierende"))
@@ -230,7 +296,7 @@ class ExamsStudierendeTest {
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
     @DisplayName("Das einreichen des Exams ist erfolgreich (mit Eingabedaten im richtigen Format)")
-    void submitExam_04() throws Exception {
+    void submitExam_07() throws Exception {
         UUID examFachId = UUID.randomUUID();
         UUID frageId1 = UUID.randomUUID();
         UUID frageId2 = UUID.randomUUID();
