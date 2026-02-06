@@ -68,7 +68,7 @@ class SettingsTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Das löschen der Daten ist erfolgreich")
     void test_04() throws Exception {
         mvc.perform(post("/settings/reset")

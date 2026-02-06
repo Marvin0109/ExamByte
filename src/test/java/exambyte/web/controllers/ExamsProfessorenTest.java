@@ -48,7 +48,7 @@ class ExamsProfessorenTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für Professoren sichtbar")
     void showCreateExamForm_02() throws Exception {
 
@@ -57,18 +57,18 @@ class ExamsProfessorenTest {
 
         mvc.perform(get("/exams/examsProfessoren"))
             .andExpect(status().isOk())
-            .andExpect(model().attribute("name", "Marvin0109"))
+            .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("examForm"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(view().name("exams/examsProfessoren"));
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Das erstellen eines Tests ist erfolgreich")
     void createExam_01() throws Exception {
 
-        when(service.createExam(any(ExamForm.class), eq("Marvin0109"))).thenReturn("");
+        when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("");
 
         mvc.perform(post("/exams/examsProfessoren")
             .with(csrf())
@@ -116,7 +116,7 @@ class ExamsProfessorenTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Das erstellen eines Tests mit zu wenig Fragen ist nicht erfolgreich")
     void createExam_02() throws Exception {
 
@@ -140,7 +140,7 @@ class ExamsProfessorenTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Eine Frage bekommt 0 Punkte")
     void createExam_03() throws Exception {
 
@@ -191,11 +191,11 @@ class ExamsProfessorenTest {
     }
 
     @Test
-    @WithMockOAuth2User(login = "Marvin0109", roles = {"ADMIN"})
+    @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Ein Exam mit der selben Startzeit existiert bereits / Maximale Kapazität ist überschritten worden")
     void createExam_04() throws Exception {
 
-        when(service.createExam(any(ExamForm.class), eq("Marvin0109"))).thenReturn("Error Nachricht");
+        when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Error Nachricht");
 
         mvc.perform(post("/exams/examsProfessoren")
                 .with(csrf())

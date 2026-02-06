@@ -1,4 +1,4 @@
-package exambyte.application;
+package exambyte;
 
 import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
 import org.junit.jupiter.api.Test;
