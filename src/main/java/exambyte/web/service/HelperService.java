@@ -15,9 +15,7 @@ public interface HelperService {
 
     String getTimeDifference(ExamDTO dto);
 
-    List<String> split(String toSplit);
-
-    List<String> splitOldDataMC(String toSplit);
+    String normalizeAnswerForFrontend(String toSplit);
 
     PreparedFrageData prepareFrageData(FrageDTO frage, UUID studentId);
 }

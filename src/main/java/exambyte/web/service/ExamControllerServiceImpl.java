@@ -19,10 +19,7 @@ import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -77,8 +74,8 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             questionData.setFachId(frage.fachId());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
                 String choice = service.getChoiceForFrage(frage.fachId());
-                List<String> choiceList = helperService.split(choice);
-                questionData.setChoices(String.join(",", choiceList));
+                String normalized = helperService.normalizeAnswerForFrontend(choice);
+                questionData.setChoices(normalized);
             }
             questions.add(questionData);
         }
@@ -319,7 +316,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         return service.getReviewerByName(name);
     }
 
-    // TODO: Aufräumen und testen
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
         ExamDTO exam = service.getExam(examUUID);
@@ -340,13 +336,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             if (antwort != null) {
                 review = service.getReviewForAntwort(antwort.fachId());
                 if (review != null) korrektoren.add(review.korrektorFachId());
-                antwort = new AntwortDTO(
-                        antwort.fachId(),
-                        helperService.splitOldDataMC(antwort.antwortText()).getFirst(),
-                        frage.fachId(),
-                        studentId,
-                        antwort.antwortZeitpunkt()
-                );
             }
 
             componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
@@ -411,16 +400,20 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
             if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {
                 if (answerIsPresent) {
+                    String answer = oldDataDTO.antwort().antwortText();
+                    List<String> choices = Arrays.stream(answer.split(","))
+                                            .map(String::trim)
+                                            .filter(s -> !s.isEmpty())
+                                            .toList();
 
-                    List<String> choices = helperService.split(oldDataDTO.antwort().antwortText());
-                    choices = helperService.splitOldDataMC(choices.getFirst());
                     answers.put(frageId, choices);
                 } else {
                     answers.put(frageId, new ArrayList<>());
                 }
             } else {
                 if (answerIsPresent) {
-                    answers.put(frageId, List.of(oldDataDTO.antwort().antwortText()));
+                    String normalized = oldDataDTO.antwort().antwortText();
+                    answers.put(frageId, List.of(normalized));
                 } else {
                     answers.put(frageId, Collections.singletonList(""));
                 }

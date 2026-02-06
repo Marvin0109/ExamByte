@@ -98,22 +98,14 @@ public class HelperServiceImpl implements HelperService {
     }
 
     @Override
-    public List<String> split(String toSplit) {
-        return Arrays.stream(toSplit.split("\n"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .map(s -> s.replace(",", "ĸ"))
-                .toList();
-    }
+    public String normalizeAnswerForFrontend(String toSplit) {
+        List<String> lines = Arrays.stream(toSplit.split("\n"))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .map(s -> s.replace(",", "ĸ"))
+                        .toList();
 
-    @Override
-    public List<String> splitOldDataMC(String toSplit) {
-        String replaced = toSplit.replaceAll("ĸ(?! )", "þ");
-
-        return Arrays.stream(replaced.split("þ"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .toList();
+        return String.join(",", lines);
     }
 
     @Override
@@ -122,27 +114,25 @@ public class HelperServiceImpl implements HelperService {
         KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
 
         if (antwort != null && (frage.type().name().equals("MC") || frage.type().name().equals("SC"))) {
-
-            List<String> choiceList = split(antwort.antwortText());
+            String normalized = normalizeAnswerForFrontend(antwort.antwortText());
             antwort = new AntwortDTO(
                     antwort.fachId(),
-                    String.join(",", choiceList),
+                    normalized,
                     antwort.frageFachId(),
                     antwort.studentFachId(),
                     antwort.antwortZeitpunkt()
             );
 
             String optionen = k.antwortOptionen();
-            List<String> optionenList = split(optionen);
-
+            String optionenNormalized = normalizeAnswerForFrontend(optionen);
 
             String loesung = k.antworten();
-            List<String> loesungList = split(loesung);
+            String loesungNormalized = normalizeAnswerForFrontend(loesung);
 
             k = new KorrekteAntwortenDTO(
                     k.fachId(),
-                    String.join(",", loesungList),
-                    String.join(",", optionenList),
+                    loesungNormalized,
+                    optionenNormalized,
                     k.frageFachId()
             );
         }
