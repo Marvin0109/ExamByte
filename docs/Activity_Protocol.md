@@ -583,3 +583,12 @@
 - Ergebniseinsicht für Studierende implementiert
 - Form Objekte in Packages aufgeteilt
 - Tests zum Feature Ergebniseinsicht
+
+---
+
+### 05.02.2026 - 06.02.2026
+**Bereich**: UI / UX / Refactoring / Test
+- Hilfsmethoden aus `ExamControllerServiceImpl` in `HelperServiceImpl` verlagert
+- Testdurchlauf mit alten Antworten implementiert
+- Umwandlung von Kommas für die Datenbank und für die Anzeige gefixt
+- Tests
