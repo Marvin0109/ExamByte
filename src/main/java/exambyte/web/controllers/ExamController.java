@@ -313,7 +313,6 @@ public class ExamController {
         return "redirect:/exams/examsStudierende";
     }
 
-    // TODO: Testen
     @GetMapping("/startWithData/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String startWithData(
