@@ -111,7 +111,6 @@ class ExamControllerServiceTest {
         when(examFacadeService.getExam(EXAM_ID)).thenReturn(exam);
         when(examFacadeService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage));
         when(examFacadeService.getChoiceForFrage(frage.fachId())).thenReturn("A, B\nC\nD");
-        //when(helperService.split(any())).thenReturn(List.of("Aĸ B", "C", "D"));
 
         // Act
         ExamForm form = service.fillExamForm(EXAM_ID);
@@ -408,7 +407,6 @@ class ExamControllerServiceTest {
         );
 
         when(helperService.prepareFrageData(frage, studentId)).thenReturn(prepared);
-        //when(helperService.splitOldDataMC("A,B")).thenReturn(List.of("A", "B"));
 
         ReviewDTO review = new ReviewDTO(
                 null,
@@ -476,17 +474,17 @@ class ExamControllerServiceTest {
                 frage.fachId()
         );
 
-        VersuchDTO versuch = new VersuchDTO(
-                time,
-                1.0,
-                1.0,
-                100.0
+        PreparedFrageData prepared = new PreparedFrageData(
+                frage,
+                antwort,
+                korrekteAntwortenDTO
         );
 
         when(examFacadeService.getExam(examDTO.fachId())).thenReturn(examDTO);
         when(examFacadeService.getStudentIdByName(any())).thenReturn(studentUUID);
 
-        when(examFacadeService.getSubmission(examDTO.fachId(), "student")).thenReturn(versuch);
+        when(examFacadeService.getSubmission(examDTO.fachId(), "student"))
+                .thenReturn(new VersuchDTO(null, 1.0, 1.0, 100.0));
 
         when(examFacadeService.getFragenForExam(examDTO.fachId())).thenReturn(List.of(frage));
 
@@ -495,6 +493,8 @@ class ExamControllerServiceTest {
         when(examFacadeService.getReviewForAntwort(antwort.fachId())).thenReturn(null);
 
         when(examFacadeService.getLoesungForFrage(frage.fachId())).thenReturn(korrekteAntwortenDTO);
+
+        when(helperService.prepareFrageData(frage, studentUUID)).thenReturn(prepared);
 
         // Act
         ReviewViewForm rvf = service.prepareReviewViewForm(examDTO.fachId(), "student");

@@ -282,7 +282,7 @@ class ExamsStudierendeTest {
     @DisplayName("Testversuch mit alten Antworten ist erfolgreich")
     void startWithData() throws Exception {
         when(service.fillOldDataForm(any(), any())).thenReturn(mock());
-        when(service.fillSubmitForWithData(any())).thenReturn(mock());
+        when(service.fillSubmitFormWithData(any())).thenReturn(mock());
 
         mvc.perform(get("/exams/startWithData/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().isOk())

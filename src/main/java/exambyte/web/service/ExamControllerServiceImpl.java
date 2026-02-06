@@ -12,16 +12,13 @@ import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
-import exambyte.web.form.load_old_submit_data.OldDataDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
-import exambyte.web.form.show_review.ReviewAggregateDTO;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ExamControllerServiceImpl implements ExamControllerService {
@@ -318,42 +315,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
-        ExamDTO exam = service.getExam(examUUID);
-        UUID studentId = service.getStudentIdByName(studentName);
-        VersuchDTO versuch = service.getSubmission(examUUID, studentName);
-
-        List<FrageDTO> fragen = service.getFragenForExam(examUUID);
-        List<ReviewAggregateDTO> componentList = new ArrayList<>();
-        List<UUID> korrektoren = new ArrayList<>();
-
-        for (FrageDTO frage : fragen) {
-            PreparedFrageData preparedFrageData = helperService.prepareFrageData(frage, studentId);
-            AntwortDTO antwort = preparedFrageData.antwort();
-
-            KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
-
-            ReviewDTO review = null;
-            if (antwort != null) {
-                review = service.getReviewForAntwort(antwort.fachId());
-                if (review != null) korrektoren.add(review.korrektorFachId());
-            }
-
-            componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
-        }
-
-        String korrektorNames = korrektoren.stream()
-                .map(service::getReviewerById)
-                .map(KorrektorDTO::name)
-                .filter(name -> !name.equals("Automatischer Korrektor"))
-                .distinct()
-                .collect(Collectors.joining(", "));
-
-        return new ReviewViewForm(
-                exam.title(),
-                korrektorNames,
-                versuch.erreichtePunkte(),
-                versuch.maxPunkte(),
-                componentList);
+        return helperService.prepareReviewViewForm(examUUID, studentName);
     }
 
     @Override
@@ -363,64 +325,11 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public OldDataForm fillOldDataForm(UUID examId, String studentName) {
-        ExamDTO exam = service.getExam(examId);
-
-        UUID studentId = service.getStudentIdByName(studentName);
-
-        List<FrageDTO> fragen = service.getFragenForExam(examId);
-
-        List<OldDataDTO> oldDataDTOList = new ArrayList<>();
-
-        for (FrageDTO frage : fragen) {
-            PreparedFrageData preparedFrageData = helperService.prepareFrageData(frage, studentId);
-
-            OldDataDTO oldDataDTO = new OldDataDTO(
-                    frage,
-                    preparedFrageData.korrekteAntwortenDTO(),
-                    preparedFrageData.antwort());
-
-            oldDataDTOList.add(oldDataDTO);
-        }
-
-        return new OldDataForm(examId, exam.title(), oldDataDTOList);
+        return helperService.fillOldDataForm(examId, studentName);
     }
 
     @Override
-    public SubmitForm fillSubmitForWithData(OldDataForm form) {
-        SubmitForm submitForm = new SubmitForm();
-
-        Map<String, List<String>> answers = new HashMap<>();
-
-        List<OldDataDTO> oldDataDTOList = form.components();
-
-        for (OldDataDTO oldDataDTO : oldDataDTOList) {
-
-            String frageId = String.valueOf(oldDataDTO.fragen().fachId());
-            boolean answerIsPresent = oldDataDTO.antwort() != null && oldDataDTO.antwort().antwortText() != null;
-
-            if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {
-                if (answerIsPresent) {
-                    String answer = oldDataDTO.antwort().antwortText();
-                    List<String> choices = Arrays.stream(answer.split(","))
-                                            .map(String::trim)
-                                            .filter(s -> !s.isEmpty())
-                                            .toList();
-
-                    answers.put(frageId, choices);
-                } else {
-                    answers.put(frageId, new ArrayList<>());
-                }
-            } else {
-                if (answerIsPresent) {
-                    String normalized = oldDataDTO.antwort().antwortText();
-                    answers.put(frageId, List.of(normalized));
-                } else {
-                    answers.put(frageId, Collections.singletonList(""));
-                }
-            }
-        }
-
-        submitForm.setAnswers(answers);
-        return submitForm;
+    public SubmitForm fillSubmitFormWithData(OldDataForm form) {
+        return helperService.fillSubmitFormWithData(form);
     }
 }

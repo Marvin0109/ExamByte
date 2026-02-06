@@ -76,5 +76,5 @@ public interface ExamControllerService {
 
     OldDataForm fillOldDataForm(UUID examId, String studentName);
 
-    SubmitForm fillSubmitForWithData(OldDataForm form);
+    SubmitForm fillSubmitFormWithData(OldDataForm form);
 }

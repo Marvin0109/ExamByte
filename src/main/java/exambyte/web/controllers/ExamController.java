@@ -324,7 +324,7 @@ public class ExamController {
         String name = user.getAttribute(LOGIN_NAME);
 
         OldDataForm form = service.fillOldDataForm(examFachId, name);
-        SubmitForm submitForm = service.fillSubmitForWithData(form);
+        SubmitForm submitForm = service.fillSubmitFormWithData(form);
 
         model.addAttribute("exam", form);
         model.addAttribute("submitForm", submitForm);
