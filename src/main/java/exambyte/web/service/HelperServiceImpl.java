@@ -10,6 +10,7 @@ import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,20 +22,26 @@ import java.util.stream.Collectors;
 public class HelperServiceImpl implements HelperService {
 
     private final ExamFacadeService service;
+    private final Clock clock;
 
-    public HelperServiceImpl(ExamFacadeService service) {
+    public HelperServiceImpl(ExamFacadeService service, Clock clock) {
         this.service = service;
+        this.clock = clock;
+    }
+
+    private LocalDateTime now() {
+        return LocalDateTime.now(clock)
+                .truncatedTo(ChronoUnit.MINUTES);
     }
 
     @Override
     public List<VersuchDTO> getValidAttempts(String studentName) {
         List<ExamDTO> exams = service.getAllExams();
         List<VersuchDTO> allValidAttempts = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
         for (ExamDTO exam : exams) {
             VersuchDTO v = service.getSubmission(exam.fachId(), studentName);
-            if (exam.resultTime().isBefore(now)) {
+            if (exam.resultTime().isBefore(now())) {
                 allValidAttempts.add(v);
             }
         }
@@ -45,15 +52,14 @@ public class HelperServiceImpl implements HelperService {
     @Override
     public String getExamAvailabilityNotice(ExamDTO dto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
-        LocalDateTime now = LocalDateTime.now();
 
-        if (now.isBefore(dto.startTime())) {
+        if (now().isBefore(dto.startTime())) {
             String startTimeFormatted = dto.startTime().format(formatter);
 
             return "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
         }
 
-        if (now.isAfter(dto.endTime())) {
+        if (now().isAfter(dto.endTime())) {
             String endTimeFormatted = dto.endTime().format(formatter);
 
             return "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
@@ -70,7 +76,7 @@ public class HelperServiceImpl implements HelperService {
         String stundenAnzeige = "";
         String minutenAnzeige = "";
 
-        Duration diff = Duration.between(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES),
+        Duration diff = Duration.between(now(),
                 examDTO.endTime().truncatedTo(ChronoUnit.MINUTES));
 
         long days = diff.toDays();
