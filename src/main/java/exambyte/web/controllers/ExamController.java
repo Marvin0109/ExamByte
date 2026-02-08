@@ -31,12 +31,15 @@ import java.util.*;
 public class ExamController {
 
     private final ExamControllerService service;
+    private static final int INT_QUESTIONS_COUNT = 6;
     private static final String LOGIN_NAME = "login";
     private static final String CURRENT_PATH = "currentPath";
     private static final String MESSAGE = "message";
     private static final String SUCCESS = "success";
     private static final String TIME_NOW = "timeNow";
     private static final String REDIRECT_EXAM_PROF = "redirect:/exams/examsProfessoren";
+    private static final String REDIRECT_EXAM_KORREKTOR = "redirect:/exams/examsKorrektor";
+    private static final String REDIRECT_EXAM_STUDENT = "redirect:/exams/examsStudierende";
 
     public  ExamController(ExamControllerService service) {
         this.service =  service;
@@ -72,22 +75,20 @@ public class ExamController {
             return redirectWithMessage(
                     redirectAttributes,
                     "Fehlerhafte Eingabedaten!",
-                    false);
+                    false,
+                    REDIRECT_EXAM_PROF);
         }
 
-        if (form.getQuestions().size() < 6){
+        if (form.getQuestions().size() < INT_QUESTIONS_COUNT){
             return redirectWithMessage(
                     redirectAttributes,
                     "Weniger Fragen als sonst.",
-                    false);
+                    false,
+                    REDIRECT_EXAM_PROF);
         }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
-        Optional<UUID> profFachID = service.getProfFachIDByName(name);
-        UUID fachId = null;
-        if (profFachID.isPresent()) {
-            fachId = profFachID.get();
-        }
+        UUID profFachID = service.getProfFachIDByName(name).orElse(null);
 
         String message = service.createExam(form, name);
 
@@ -95,23 +96,26 @@ public class ExamController {
             return redirectWithMessage(
                     redirectAttributes,
                     message,
-                    false);
+                    false,
+                    REDIRECT_EXAM_PROF);
         }
 
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
-        service.createQuestions(form, fachId, examUUID);
+        service.createQuestions(form, profFachID, examUUID);
 
         return redirectWithMessage(
                 redirectAttributes,
                 "Prüfung und Fragen erfolgreich erstellt!",
-                true);
+                true,
+                REDIRECT_EXAM_PROF);
     }
 
-    private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
+    private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success,
+                                       String redirectedUrl) {
         redirectAttributes.addFlashAttribute(MESSAGE, message);
         redirectAttributes.addFlashAttribute(SUCCESS, success);
-        return REDIRECT_EXAM_PROF;
+        return redirectedUrl;
     }
 
     @GetMapping("/examsKorrektor")
@@ -146,10 +150,11 @@ public class ExamController {
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isBefore(examDTO.endTime())) {
-            redirectAttributes.addFlashAttribute(MESSAGE, "Die Prüfung läuft noch! " +
-                    "Keine Korrektur erlaubt.");
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-            return "redirect:/exams/examsKorrektor";
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Die Prüfung läuft noch! Keine Korrektur erlaubt.",
+                    false,
+                    REDIRECT_EXAM_KORREKTOR);
         }
 
         List<SubmitInfo> submitInfoList = service.getSubmitInfo(examFachId);
@@ -192,9 +197,7 @@ public class ExamController {
                             .findFirst()
                             .map(FieldError::getDefaultMessage)
                             .orElse("Ungültige Eingabe");
-            redirectAttributes.addFlashAttribute(MESSAGE, message);
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-            return "redirect:/exams/examsKorrektor";
+            return redirectWithMessage(redirectAttributes, message, false, REDIRECT_EXAM_KORREKTOR);
         }
 
         OAuth2User user = auth.getPrincipal();
@@ -202,9 +205,11 @@ public class ExamController {
         UUID korrektorFachId = service.getReviewerByName(name);
         service.createReview(reviewForm, antwortFachId, korrektorFachId);
 
-        redirectAttributes.addFlashAttribute(MESSAGE, "Bewertung erfolgreich!");
-        redirectAttributes.addFlashAttribute(SUCCESS, true);
-        return "redirect:/exams/examsKorrektor";
+        return redirectWithMessage(
+                redirectAttributes,
+                "Bewertung erfolgreich!",
+                true,
+                REDIRECT_EXAM_KORREKTOR);
     }
 
     @GetMapping("/examsStudierende")
@@ -290,9 +295,11 @@ public class ExamController {
             RedirectAttributes redirectAttributes) {
 
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute(MESSAGE, "Alle Antworten müssen gesetzt werden!");
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-            return "redirect:/exams/examsStudierende";
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Alle Antworten müssen gesetzt werden!",
+                    false,
+                    REDIRECT_EXAM_STUDENT);
         }
 
         OAuth2User user = auth.getPrincipal();
@@ -306,18 +313,11 @@ public class ExamController {
 
         boolean success = service.submitExam(name, submitForm.getAnswers(), examFachId);
 
-        if (success) {
-            redirectAttributes.addFlashAttribute(
-                    MESSAGE,
-                    "Alle Antworten erfolgreich eingereicht!");
-            redirectAttributes.addFlashAttribute(SUCCESS, true);
-        } else {
-            redirectAttributes.addFlashAttribute(
-                    MESSAGE,
-                    "Fehler beim Einreichen der Antworten.");
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-        }
-        return "redirect:/exams/examsStudierende";
+        String redirectMsg;
+
+        if (success) redirectMsg = "Alle Antworten erfolgreich eingereicht!";
+        else redirectMsg = "Fehler beim Einreichen der Antworten.";
+        return redirectWithMessage(redirectAttributes, redirectMsg, success, REDIRECT_EXAM_STUDENT);
     }
 
     @GetMapping("/startWithData/{examFachId}")
@@ -349,10 +349,11 @@ public class ExamController {
         boolean allowedToShowReview = service.checkTimeForReviewView(examFachId);
 
         if (!allowedToShowReview) {
-            redirectAttributes.addFlashAttribute(MESSAGE, "Korrektureinsicht " +
-                    "noch nicht verfügbar!");
-            redirectAttributes.addFlashAttribute(SUCCESS, false);
-            return "redirect:/exams/examsStudierende";
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Korrektureinsicht noch nicht verfügbar!",
+                    false,
+                    REDIRECT_EXAM_STUDENT);
         }
 
         OAuth2User user = auth.getPrincipal();
