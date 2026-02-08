@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 04.02.2026
+>**aktualisiert am:** 08.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -592,3 +592,9 @@
 - Testdurchlauf mit alten Antworten implementiert
 - Umwandlung von Kommas für die Datenbank und für die Anzeige gefixt
 - Tests
+
+---
+
+### 08.02.2026
+**Bereich**: Test
+- Integrationstest eingeführt für folgende *Use Cases*: `createExam`, `submitAnswers` und `createReview`
