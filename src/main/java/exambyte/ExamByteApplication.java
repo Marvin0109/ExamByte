@@ -23,6 +23,7 @@ import java.net.URI;
 public class ExamByteApplication {
 
 	private static final Logger logger = Logger.getLogger(ExamByteApplication.class.getName());
+	private static final URI LOCALHOST_URI = URI.create("http://localhost:8080");
 
 	private static void init() {
 		Dotenv dotenv = Dotenv.load();
@@ -43,23 +44,17 @@ public class ExamByteApplication {
 	 */
 	private static void openInBrowser(URI uri) {
 		String[] browsers = {"firefox", "google-chrome", "microsoft-edge"};
-		boolean browserOpened = false;
 
 		for (String browser : browsers) {
 			try {
-				ProcessBuilder pb = new ProcessBuilder(browser, uri.toString());
-				pb.start();
-				browserOpened = true;
-				break;
-			} catch (IOException e) {
-				// Fehlerbehandlung für den Fall, dass der Browser nicht geöffnet werden konnte
+				new ProcessBuilder(browser, uri.toString()).start();
+				return;
+			} catch (IOException ignored) {
+				// Browser not available -> next
 			}
 		}
 
-		if (!browserOpened) {
-			logger.info("Keiner der Browser konnte geöffnet werden.");
-		}
-
+		logger.info("Keiner der unterstützen Browser konnte geöffnet werden.");
 	}
 
 	/**
@@ -68,15 +63,11 @@ public class ExamByteApplication {
 	 * @param args Kommandozeilenargumente
 	 */
 	public static void main(String[] args) {
-		// Lädt Umgebungsvariablen aus der .env-Datei
 		init();
 
-		// Starten der Spring Boot-Anwendung
 		SpringApplication.run(ExamByteApplication.class, args);
 		try {
-			// Die URL, die beim Starten der Anwendung geöffnet werden soll
-			URI uri = new URI("http://localhost:8080/");
-			openInBrowser(uri);
+			openInBrowser(LOCALHOST_URI);
 		} catch (Exception e) {
 			logger.info("Ungültige URI: " + e.getMessage());
 		}
