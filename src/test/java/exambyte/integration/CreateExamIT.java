@@ -3,9 +3,8 @@ package exambyte.integration;
 import exambyte.application.service.ExamControllerService;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.repository.ExamRepository;
-import exambyte.domain.repository.FrageRepository;
-import exambyte.domain.repository.ProfessorRepository;
+import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.repository.*;
 import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 @Import(TestcontainerConfiguration.class)
 class CreateExamIT {
 
@@ -36,6 +37,9 @@ class CreateExamIT {
 
     @Autowired
     private FrageRepository frageRepository;
+
+    @Autowired
+    private KorrekteAntwortenRepository korrekteAntwortenRepository;
 
     @Test
     void createExamAndQuestions() {
@@ -86,9 +90,14 @@ class CreateExamIT {
         assertThat(examRepository.findAll()).hasSize(1);
         assertThat(frageRepository.findAll()).hasSize(3);
 
-        Optional<Frage> frage = frageRepository.findAll().stream().findFirst();
+        Optional<UUID> frageId = frageRepository.findAll()
+                .stream()
+                .filter(f -> f.getType().equals(QuestionType.SC))
+                .map(Frage::getFachId)
+                .findFirst();
 
-        assertThat(frage).isPresent();
-        assertThat(frage.get().getMaxPunkte()).isGreaterThan(0);
+        assertThat(frageId).isPresent();
+
+        assertThat(korrekteAntwortenRepository.findByFrageFachID(frageId.get())).isPresent();
     }
 }
