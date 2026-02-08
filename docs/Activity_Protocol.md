@@ -596,5 +596,6 @@
 ---
 
 ### 08.02.2026
-**Bereich**: Test
+**Bereich**: Test / Refactoring
 - Integrationstest eingeführt für folgende *Use Cases*: `createExam`, `submitAnswers` und `createReview`
+- Kleine Smells behoben
