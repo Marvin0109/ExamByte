@@ -37,5 +37,10 @@ out/
 .vscode/
 /data/
 .qodo
+
+### Custom ###
 .env
 !.env.example
+docs/feedback.txt
+docs/feedback2.txt
+docs/FlywayHolzHammerMethode.md
