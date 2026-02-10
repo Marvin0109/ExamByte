@@ -111,12 +111,16 @@ public class ExamController {
                 REDIRECT_EXAM_PROF);
     }
 
-    private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success,
-                                       String redirectedUrl) {
-        redirectAttributes.addFlashAttribute(MESSAGE, message);
-        redirectAttributes.addFlashAttribute(SUCCESS, success);
-        return redirectedUrl;
+    @GetMapping("/showResults")
+    @Secured("ROLE_ADMIN")
+    public String listExamsForProfessor(
+            Model model,
+            HttpServletRequest request) {
+
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        return "exams/showResults";
     }
+
 
     @GetMapping("/examsKorrektor")
     @Secured("ROLE_REVIEWER")
@@ -363,5 +367,12 @@ public class ExamController {
 
         model.addAttribute("view", view);
         return "exams/showReview";
+    }
+
+    private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success,
+                                       String redirectedUrl) {
+        redirectAttributes.addFlashAttribute(MESSAGE, message);
+        redirectAttributes.addFlashAttribute(SUCCESS, success);
+        return redirectedUrl;
     }
 }
