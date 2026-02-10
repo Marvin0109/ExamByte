@@ -36,6 +36,8 @@
             <tr>
                 <th>Test</th>
                 <th>Prüfungsstatus</th>
+                <th>Start der Korrektur</th>
+                <th>Frist</th>
                 <th>Bewertungsstatus</th>
             </tr>
         </thead>
@@ -61,6 +63,18 @@
                                 </span>
                             </span>
                         </span>
+                    </span>
+                </td>
+
+                <td>
+                    <span th:text="${#temporals.format(covItem.exam.endTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                        Startzeit der Korrektur
+                    </span>
+                </td>
+
+                <td>
+                    <span th:text="${#temporals.format(covItem.exam.resultTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                        Korrekturfrist
                     </span>
                 </td>
 
