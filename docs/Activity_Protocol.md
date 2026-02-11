@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 08.02.2026
+>**aktualisiert am:** 11.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -599,3 +599,10 @@
 **Bereich**: Test / Refactoring
 - Integrationstest eingeführt für folgende *Use Cases*: `createExam`, `submitAnswers` und `createReview`
 - Kleine Smells behoben
+
+---
+
+### 10.02.2026 - 11.02.2026
+**Bereich**: UI / Refactoring
+- HTML erstellt für Ergebnisübersicht
+- `ExamController` zerlegt und Tests sowie URLs angepasst
