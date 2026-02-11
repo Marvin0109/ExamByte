@@ -22,11 +22,11 @@
 
                 <!-- Link für Studenten -->
                 <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                    <a class="nav-link" th:classappend="${currentPath == '/exams/examsStudierende'} ? ' active' : ''"
-                        href="/exams/examsStudierende">
+                    <a class="nav-link" th:classappend="${currentPath == '/exams/examListForStudent'} ? ' active' : ''"
+                        href="/exams/examListForStudent">
                         <i class="fas fa-pen me-1"></i>
                         Tests bearbeiten
-                        <span class="visually-hidden" th:if="${currentPath == '/exams/examsStudierende'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/exams/examListForStudent'}">(current)
                         </span>
                     </a>
                 </li>

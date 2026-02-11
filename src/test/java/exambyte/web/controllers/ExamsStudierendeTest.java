@@ -49,7 +49,7 @@ class ExamsStudierendeTest {
     @Test
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void listExamsForStudents_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsStudierende"))
+        MvcResult mvcResult = mvc.perform(get("/exams/examListForStudent"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -60,9 +60,9 @@ class ExamsStudierendeTest {
     @WithMockOAuth2User(roles = {"STUDENT"})
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void listExamsForStudents_02() throws Exception {
-        mvc.perform(get("/exams/examsStudierende"))
+        mvc.perform(get("/exams/examListForStudent"))
             .andExpect(status().isOk())
-            .andExpect(view().name("exams/examsStudierende"))
+            .andExpect(view().name("exams/examListForStudent"))
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("exams"))
@@ -190,7 +190,7 @@ class ExamsStudierendeTest {
                 .flashAttr("submitForm", form)
                 .with(csrf()))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsStudierende"))
+            .andExpect(redirectedUrl("/exams/examListForStudent"))
             .andExpect(flash().attribute("message", "Fehler beim Einreichen der Antworten."))
             .andExpect(flash().attribute("success", false));
 
@@ -215,7 +215,7 @@ class ExamsStudierendeTest {
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/exams/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
                 .andExpect(flash().attribute("success", false));
     }
@@ -237,7 +237,7 @@ class ExamsStudierendeTest {
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/exams/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
                 .andExpect(flash().attribute("success", false));
     }
@@ -259,7 +259,7 @@ class ExamsStudierendeTest {
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/exams/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
                 .andExpect(flash().attribute("success", false));
     }
@@ -285,7 +285,7 @@ class ExamsStudierendeTest {
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/exams/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
                 .andExpect(flash().attribute("success", true));
 
@@ -313,7 +313,7 @@ class ExamsStudierendeTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
             .andExpect(flash().attribute("success", true))
-            .andExpect(redirectedUrl("/exams/examsStudierende"));
+            .andExpect(redirectedUrl("/exams/examListForStudent"));
     }
 
     @Test
@@ -338,7 +338,7 @@ class ExamsStudierendeTest {
 
         mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/exams/examListForStudent"))
                 .andExpect(flash().attribute("success", false))
                 .andExpect(flash().attribute("message", "Korrektureinsicht noch nicht verfügbar!"));
     }

@@ -39,7 +39,7 @@ public class ExamController {
     private static final String TIME_NOW = "timeNow";
     private static final String REDIRECT_EXAM_PROF = "redirect:/exams/createExam";
     private static final String REDIRECT_EXAM_KORREKTOR = "redirect:/exams/examsKorrektor";
-    private static final String REDIRECT_EXAM_STUDENT = "redirect:/exams/examsStudierende";
+    private static final String REDIRECT_EXAM_STUDENT = "redirect:/exams/examListForStudent";
 
     public  ExamController(ExamControllerService service) {
         this.service =  service;
@@ -221,7 +221,7 @@ public class ExamController {
                 REDIRECT_EXAM_KORREKTOR);
     }
 
-    @GetMapping("/examsStudierende")
+    @GetMapping("/examListForStudent")
     @Secured("ROLE_STUDENT")
     public String listExamsForStudents(
             Model model,
@@ -243,7 +243,7 @@ public class ExamController {
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
         model.addAttribute("progress", progress);
         model.addAttribute("failedYetOrNot", zulassungsStatus);
-        return "exams/examsStudierende";
+        return "exams/examListForStudent";
     }
 
     @GetMapping("/startExam/{examFachId}/menu")
