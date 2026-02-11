@@ -37,7 +37,7 @@ public class ExamController {
     private static final String MESSAGE = "message";
     private static final String SUCCESS = "success";
     private static final String TIME_NOW = "timeNow";
-    private static final String REDIRECT_EXAM_PROF = "redirect:/exams/examsProfessoren";
+    private static final String REDIRECT_EXAM_PROF = "redirect:/exams/createExam";
     private static final String REDIRECT_EXAM_KORREKTOR = "redirect:/exams/examsKorrektor";
     private static final String REDIRECT_EXAM_STUDENT = "redirect:/exams/examsStudierende";
 
@@ -45,7 +45,7 @@ public class ExamController {
         this.service =  service;
     }
 
-    @GetMapping("/examsProfessoren")
+    @GetMapping("/createExam")
     @Secured("ROLE_ADMIN")
     public String showCreateExamForm(
             Model model,
@@ -60,10 +60,10 @@ public class ExamController {
         model.addAttribute("name", name);
         model.addAttribute("examForm", examForm);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        return "exams/examsProfessoren";
+        return "exams/createExam";
     }
 
-    @PostMapping("/examsProfessoren")
+    @PostMapping("/createExam")
     @Secured("ROLE_ADMIN")
     public String createExam(
             @Valid ExamForm form,

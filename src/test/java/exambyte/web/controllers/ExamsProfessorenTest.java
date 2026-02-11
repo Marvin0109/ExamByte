@@ -40,7 +40,7 @@ class ExamsProfessorenTest {
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void showCreateExamForm_01() throws Exception {
 
-        MvcResult mvcResult = mvc.perform(get("/exams/examsProfessoren"))
+        MvcResult mvcResult = mvc.perform(get("/exams/createExam"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -55,12 +55,12 @@ class ExamsProfessorenTest {
         ExamForm form = new ExamForm();
         when(service.createExamForm()).thenReturn(form);
 
-        mvc.perform(get("/exams/examsProfessoren"))
+        mvc.perform(get("/exams/createExam"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("examForm"))
             .andExpect(model().attributeExists("currentPath"))
-            .andExpect(view().name("exams/examsProfessoren"));
+            .andExpect(view().name("exams/createExam"));
     }
 
     @Test
@@ -70,7 +70,7 @@ class ExamsProfessorenTest {
 
         when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("");
 
-        mvc.perform(post("/exams/examsProfessoren")
+        mvc.perform(post("/exams/createExam")
             .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
@@ -110,7 +110,7 @@ class ExamsProfessorenTest {
                 .param("questions[5].questionText", "Text")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsProfessoren"))
+            .andExpect(redirectedUrl("/exams/createExam"))
             .andExpect(flash().attribute("message", "Prüfung und Fragen erfolgreich erstellt!"))
             .andExpect(flash().attribute("success", true));
     }
@@ -120,7 +120,7 @@ class ExamsProfessorenTest {
     @DisplayName("Das erstellen eines Tests mit zu wenig Fragen ist nicht erfolgreich")
     void createExam_02() throws Exception {
 
-        mvc.perform(post("/exams/examsProfessoren")
+        mvc.perform(post("/exams/createExam")
                 .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
@@ -134,7 +134,7 @@ class ExamsProfessorenTest {
                 .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsProfessoren"))
+            .andExpect(redirectedUrl("/exams/createExam"))
             .andExpect(flash().attribute("message", "Weniger Fragen als sonst."))
             .andExpect(flash().attribute("success", false));
     }
@@ -144,7 +144,7 @@ class ExamsProfessorenTest {
     @DisplayName("Eine Frage bekommt 0 Punkte")
     void createExam_03() throws Exception {
 
-        mvc.perform(post("/exams/examsProfessoren")
+        mvc.perform(post("/exams/createExam")
                 .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
@@ -185,7 +185,7 @@ class ExamsProfessorenTest {
                 .param("questions[5].questionText", "Text")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsProfessoren"))
+            .andExpect(redirectedUrl("/exams/createExam"))
             .andExpect(flash().attribute("message", "Fehlerhafte Eingabedaten!"))
             .andExpect(flash().attribute("success", false));
     }
@@ -197,7 +197,7 @@ class ExamsProfessorenTest {
 
         when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Error Nachricht");
 
-        mvc.perform(post("/exams/examsProfessoren")
+        mvc.perform(post("/exams/createExam")
                 .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
@@ -237,7 +237,7 @@ class ExamsProfessorenTest {
                 .param("questions[5].questionText", "Text")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsProfessoren"))
+            .andExpect(redirectedUrl("/exams/createExam"))
             .andExpect(flash().attribute("message", "Error Nachricht"))
             .andExpect(flash().attribute("success", false));
     }
