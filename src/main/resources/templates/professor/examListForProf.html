@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Testsübersichtsseite für die Studierenden">
+    <meta name="description" content="Übersichtsseite von Prüfungen für die Modulverantwortlichen">
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Tests bearbeiten</title>
+    <title>Übersicht der Prüfungen</title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -24,43 +24,11 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <h1> Tests </h1>
-
-    <div class="alert alert-info rounded-3 flex-column" role="alert">
-        <i class="fas fa-info-circle fa-lg me-2"></i>
-            Hier sind alle Tests aufgelistet, und je nach Frist sind die bereit zur Bearbeitung. Der
-            Zulassungsstatus wird auch hier angezeigt und aktualisiert.
-            <br>
-            <strong>
-                Hinweis: Die Zulassung erhält man erst, wenn man in jedem Test mind. 50 % der zu erreichten Punkte
-                hat, ist dies nicht erfüllt, hat man den Kurs nicht bestanden!
-            </strong>
-    </div>
+    <h1>Test Übersicht</h1>
 
     <div th:if="${message}" class="alert"
          th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
         <span th:text="${message}"></span>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Fortschritt</h5>
-            <p class="card-text">Ist der Fortschrittsbalken rot, hat man den Kurs nicht bestanden!
-            Bei Unklarheiten bitte den zuständigen Professor:in / Korrektor:in benachrichtigen.</p>
-
-            <div class="progress" role="progressbar"
-                 aria-label="Zulassungsfortschrittleiste"
-                 aria-valuemin="0"
-                 th:attr="aria-valuenow=${failedYetOrNot ? 100 : progress}"
-                 aria-valuemax="100">
-
-                <div class="progress-bar progress-bar-striped progress-bar-animated"
-                     th:classappend="${failedYetOrNot} ? ' bg-danger' : ''"
-                     th:style="${'width:' + (failedYetOrNot ? 100 : T(java.lang.Math).round(progress)) + '%'}">
-                    <span th:text="${#numbers.formatDecimal(progress, 1, 0)} + '%'"></span>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class="card">
@@ -73,30 +41,32 @@
                     <th>Start</th>
                     <th>Frist</th>
                     <th>Ergebnisse</th>
+                    <th>Export</th>
+                    <th>Löschen</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="exam : ${exams}">
                     <td>
-                        <a th:href="@{/exams/examsDurchfuehren/{examFachId}/menu(examFachId=${exam.fachId})}"
+                        <a th:href="@{/professor/listParticipants/{examId}(examId=${exam.fachId})}"
                            th:text="${exam.title}">
                         </a>
                     </td>
                     <td>
-                    <span th:switch="${timeNow.isBefore(exam.startTime)}">
-                        <span th:case="true">Startet bald</span>
-                        <span th:case="false">
-                            <span th:switch="${timeNow.isBefore(exam.endTime)}">
-                                <span th:case="true">Online</span>
-                                <span th:case="false">
-                                    <span th:switch="${timeNow.isBefore(exam.resultTime)}">
-                                        <span th:case="true">In Korrektur</span>
-                                        <span th:case="false">Beendet</span>
+                        <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                            <span th:case="true">Startet bald</span>
+                            <span th:case="false">
+                                <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                                    <span th:case="true">Online</span>
+                                    <span th:case="false">
+                                        <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                            <span th:case="true">In Korrektur</span>
+                                            <span th:case="false">Beendet</span>
+                                        </span>
                                     </span>
                                 </span>
                             </span>
                         </span>
-                    </span>
                     </td>
                     <td>
                         <span th:text="${#temporals.format(exam.startTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
@@ -113,6 +83,8 @@
                             Veröffentlichungszeitpunkt der Ergebnisse
                         </span>
                     </td>
+                    <td>Export</td>
+                    <td>Löschen</td>
                 </tr>
                 </tbody>
             </table>
@@ -125,7 +97,7 @@
 <header th:replace="~{navigation/navbarDown.html}"> </header>
 
 <!-- js Imports -->
-<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+<script defer src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>

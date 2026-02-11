@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Übersichtsseite von Prüfungen für die Korrektoren">
+    <meta name="description" content="Übersicht aller Prüflinge für eine bestimmte Prüfung">
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Tests Korrigieren</title>
+    <title>Exam</title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -24,62 +24,55 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <h1>Teststatus Übersicht</h1>
-
     <div th:if="${message}" class="alert"
-    th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
-    <span th:text="${message}"></span>
+         th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+        <span th:text="${message}"></span>
     </div>
 
-    <table class="table">
+    <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle fa-lg me-2"></i>
+        <p>
+            Hier werden alle Studenten aufgelistet, die erfolgreich die Prüfung bearbeitet haben.
+        </p>
+    </div>
+
+    <table class="table table-primary table-striped">
         <thead>
             <tr>
-                <th>Test</th>
+                <th>Prüfling</th>
                 <th>Prüfungsstatus</th>
-                <th>Start der Korrektur</th>
-                <th>Frist</th>
                 <th>Bewertungsstatus</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="covItem : ${reviewCoverage}">
+            <tr th:each="submitInfo: ${submitInfoList}">
                 <td>
-                    <a th:href="@{/exams/showExamSubmits/{examFachId}(examFachId=${covItem.exam.fachId})}"
-                       th:text="${covItem.exam.title}">
+                    <a th:href="@{/korrektor/showSubmit/{examFachId}/{studentFachId}
+                                (examFachId=${exam.fachId},
+                                studentFachId=${submitInfo.fachId})}"
+                       th:text="${submitInfo.name}">
                     </a>
                 </td>
-
                 <td>
-                    <span th:switch="${timeNow.isBefore(covItem.exam.startTime)}">
+                    <span th:switch="${timeNow.isBefore(exam.startTime)}">
                         <span th:case="true">Startet bald</span>
                         <span th:case="false">
-                            <span th:switch="${timeNow.isBefore(covItem.exam.endTime)}">
+                            <span th:switch="${timeNow.isBefore(exam.endTime)}">
                                 <span th:case="true">Prüfung läuft</span>
                                 <span th:case="false">
-                                    <span th:switch="${timeNow.isBefore(covItem.exam.resultTime)}">
-                                    <span th:case="true">Korrektur läuft</span>
-                                    <span th:case="false">Beendet</span>
+                                    <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                        <span th:case="true">Korrektur läuft</span>
+                                        <span th:case="false">Beendet</span>
                                     </span>
                                 </span>
                             </span>
                         </span>
                     </span>
                 </td>
-
                 <td>
-                    <span th:text="${#temporals.format(covItem.exam.endTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
-                        Startzeit der Korrektur
+                    <span th:text="${submitInfo.reviewStatus ? '✔' : '✘'}"
+                          th:style="${submitInfo.reviewStatus ? 'color:green;' : 'color:red;'}">
                     </span>
-                </td>
-
-                <td>
-                    <span th:text="${#temporals.format(covItem.exam.resultTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
-                        Korrekturfrist
-                    </span>
-                </td>
-
-                <td>
-                    <span th:text="${#numbers.formatDecimal(covItem.reviewCoverage, 1, 2)} + ' %'"></span>
                 </td>
             </tr>
         </tbody>

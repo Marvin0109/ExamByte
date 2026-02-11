@@ -33,9 +33,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ExamController.class)
+@WebMvcTest(StudentController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-class ExamsStudierendeTest {
+class StudentControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -49,7 +49,7 @@ class ExamsStudierendeTest {
     @Test
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void listExamsForStudents_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsStudierende"))
+        MvcResult mvcResult = mvc.perform(get("/student/examListForStudent"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -60,9 +60,9 @@ class ExamsStudierendeTest {
     @WithMockOAuth2User(roles = {"STUDENT"})
     @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
     void listExamsForStudents_02() throws Exception {
-        mvc.perform(get("/exams/examsStudierende"))
+        mvc.perform(get("/student/examListForStudent"))
             .andExpect(status().isOk())
-            .andExpect(view().name("exams/examsStudierende"))
+            .andExpect(view().name("student/examListForStudent"))
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("exams"))
@@ -74,7 +74,7 @@ class ExamsStudierendeTest {
     @Test
     @DisplayName("Prüfungsmenü nicht erreichbar für nicht authentifizierte User")
     void examMenu_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", UUID.randomUUID()))
+        MvcResult mvcResult = mvc.perform(get("/student/startExam/{examFachId}/menu", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -99,9 +99,9 @@ class ExamsStudierendeTest {
         when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
         when(service.getProfessorByFachId(profFachId)).thenReturn(p);
 
-        mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
+        mvc.perform(get("/student/startExam/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
-            .andExpect(view().name("exams/examMenu"))
+            .andExpect(view().name("student/examMenu"))
             .andExpect(model().attributeExists("exam"))
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
@@ -131,9 +131,9 @@ class ExamsStudierendeTest {
 
         when(service.getAttempt(examFachId, "username")).thenReturn(versuchDTO);
 
-        mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
+        mvc.perform(get("/student/startExam/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
-            .andExpect(view().name("exams/examMenu"))
+            .andExpect(view().name("student/examMenu"))
             .andExpect(model().attributeExists("exam"))
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
@@ -146,7 +146,7 @@ class ExamsStudierendeTest {
     @Test
     @DisplayName("Der Zugang zum Exam ist nicht erlaubt ohne Anmeldung")
     void testExamAccess() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", UUID.randomUUID()))
+        MvcResult mvcResult = mvc.perform(get("/student/startExam/{examFachId}", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -162,11 +162,11 @@ class ExamsStudierendeTest {
 
         when(service.fillExamForm(examFachId)).thenReturn(form);
 
-        mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", examFachId))
+        mvc.perform(get("/student/startExam/{examFachId}", examFachId))
             .andExpect(status().isOk())
             .andExpect(model().attribute("exam", form))
             .andExpect(model().attributeExists("submitForm"))
-            .andExpect(view().name("exams/examsDurchfuehren"));
+            .andExpect(view().name("student/startExam"));
     }
 
     @Test
@@ -186,11 +186,11 @@ class ExamsStudierendeTest {
         when(service.examIsAlreadySubmitted(examFachId, "username")).thenReturn(false);
         when(service.submitExam(eq("username"), any(), eq(examFachId))).thenReturn(false);
 
-        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+        mvc.perform(post("/student/submit/{examFachId}", examFachId)
                 .flashAttr("submitForm", form)
                 .with(csrf()))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsStudierende"))
+            .andExpect(redirectedUrl("/student/examListForStudent"))
             .andExpect(flash().attribute("message", "Fehler beim Einreichen der Antworten."))
             .andExpect(flash().attribute("success", false));
 
@@ -211,11 +211,11 @@ class ExamsStudierendeTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
-        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+        mvc.perform(post("/student/submit/{examFachId}", examFachId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/student/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
                 .andExpect(flash().attribute("success", false));
     }
@@ -233,11 +233,11 @@ class ExamsStudierendeTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
-        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+        mvc.perform(post("/student/submit/{examFachId}", examFachId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/student/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
                 .andExpect(flash().attribute("success", false));
     }
@@ -255,11 +255,11 @@ class ExamsStudierendeTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
-        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+        mvc.perform(post("/student/submit/{examFachId}", examFachId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/student/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
                 .andExpect(flash().attribute("success", false));
     }
@@ -281,11 +281,11 @@ class ExamsStudierendeTest {
         when(service.examIsAlreadySubmitted(examFachId, "username")).thenReturn(false);
         when(service.submitExam(eq("username"), any(), eq(examFachId))).thenReturn(true);
 
-        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+        mvc.perform(post("/student/submit/{examFachId}", examFachId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/student/examListForStudent"))
                 .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
                 .andExpect(flash().attribute("success", true));
 
@@ -305,7 +305,7 @@ class ExamsStudierendeTest {
         when(service.examIsAlreadySubmitted(examFachId, "username")).thenReturn(false);
         when(service.submitExam(eq("username"), any(), eq(examFachId))).thenReturn(true);
 
-        mvc.perform(post("/exams/submit/{examFachId}", examFachId)
+        mvc.perform(post("/student/submit/{examFachId}", examFachId)
                 .with(csrf())
                 .param("answers[" + frageId1 + "]", "Antwort 1") // SC
                 .param("answers[" + frageId2 + "]", "Antwort 1", "Antwort 2") // MC
@@ -313,7 +313,7 @@ class ExamsStudierendeTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
             .andExpect(flash().attribute("success", true))
-            .andExpect(redirectedUrl("/exams/examsStudierende"));
+            .andExpect(redirectedUrl("/student/examListForStudent"));
     }
 
     @Test
@@ -323,9 +323,9 @@ class ExamsStudierendeTest {
         when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
         when(service.checkTimeForReviewView(any())).thenReturn(true);
 
-        mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
+        mvc.perform(get("/student/showReview/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("exams/showReview"))
+                .andExpect(view().name("student/showReview"))
                 .andExpect(model().attributeExists("view"));
     }
 
@@ -336,9 +336,9 @@ class ExamsStudierendeTest {
         when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
         when(service.checkTimeForReviewView(any())).thenReturn(false);
 
-        mvc.perform(get("/exams/showReview/{examFachId}", UUID.randomUUID()))
+        mvc.perform(get("/student/showReview/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/exams/examsStudierende"))
+                .andExpect(redirectedUrl("/student/examListForStudent"))
                 .andExpect(flash().attribute("success", false))
                 .andExpect(flash().attribute("message", "Korrektureinsicht noch nicht verfügbar!"));
     }
@@ -350,10 +350,10 @@ class ExamsStudierendeTest {
         when(service.fillOldDataForm(any(), any())).thenReturn(mock());
         when(service.fillSubmitFormWithData(any())).thenReturn(mock());
 
-        mvc.perform(get("/exams/startWithData/{examFachId}", UUID.randomUUID()))
+        mvc.perform(get("/student/startWithData/{examFachId}", UUID.randomUUID()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("exam"))
                 .andExpect(model().attributeExists("submitForm"))
-                .andExpect(view().name("exams/examsDurchfuehrenWithData"));
+                .andExpect(view().name("student/startExamWithData"));
     }
 }
