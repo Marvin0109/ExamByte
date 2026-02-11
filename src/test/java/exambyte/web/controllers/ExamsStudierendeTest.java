@@ -74,7 +74,7 @@ class ExamsStudierendeTest {
     @Test
     @DisplayName("Prüfungsmenü nicht erreichbar für nicht authentifizierte User")
     void examMenu_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", UUID.randomUUID()))
+        MvcResult mvcResult = mvc.perform(get("/exams/startExam/{examFachId}/menu", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -99,7 +99,7 @@ class ExamsStudierendeTest {
         when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
         when(service.getProfessorByFachId(profFachId)).thenReturn(p);
 
-        mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
+        mvc.perform(get("/exams/startExam/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
             .andExpect(view().name("exams/examMenu"))
             .andExpect(model().attributeExists("exam"))
@@ -131,7 +131,7 @@ class ExamsStudierendeTest {
 
         when(service.getAttempt(examFachId, "username")).thenReturn(versuchDTO);
 
-        mvc.perform(get("/exams/examsDurchfuehren/{examFachId}/menu", examFachId))
+        mvc.perform(get("/exams/startExam/{examFachId}/menu", examFachId))
             .andExpect(status().isOk())
             .andExpect(view().name("exams/examMenu"))
             .andExpect(model().attributeExists("exam"))
@@ -146,7 +146,7 @@ class ExamsStudierendeTest {
     @Test
     @DisplayName("Der Zugang zum Exam ist nicht erlaubt ohne Anmeldung")
     void testExamAccess() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", UUID.randomUUID()))
+        MvcResult mvcResult = mvc.perform(get("/exams/startExam/{examFachId}", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -162,11 +162,11 @@ class ExamsStudierendeTest {
 
         when(service.fillExamForm(examFachId)).thenReturn(form);
 
-        mvc.perform(get("/exams/examsDurchfuehren/{examFachId}", examFachId))
+        mvc.perform(get("/exams/startExam/{examFachId}", examFachId))
             .andExpect(status().isOk())
             .andExpect(model().attribute("exam", form))
             .andExpect(model().attributeExists("submitForm"))
-            .andExpect(view().name("exams/examsDurchfuehren"));
+            .andExpect(view().name("exams/startExam"));
     }
 
     @Test

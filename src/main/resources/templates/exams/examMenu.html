@@ -40,7 +40,7 @@
 
         <div class="d-flex">
             <form th:if="${timeLeftBool and !alreadySubmitted}"
-                  th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}" method="get">
+                  th:action="@{/exams/startExam/{examFachId}(examFachId=${exam.fachId})}" method="get">
                 <button type="submit" class="btn btn-primary">Test starten</button>
             </form>
         </div>
@@ -49,7 +49,7 @@
              th:if="${timeLeftBool and alreadySubmitted}">
 
             <form method="get"
-                  th:action="@{/exams/examsDurchfuehren/{examFachId}(examFachId=${exam.fachId})}"
+                  th:action="@{/exams/startExam/{examFachId}(examFachId=${exam.fachId})}"
                   style="margin-right: 1rem;">
                 <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
                 <button type="submit" class="btn btn-outline-primary">

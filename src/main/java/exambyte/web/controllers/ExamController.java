@@ -246,7 +246,7 @@ public class ExamController {
         return "exams/examsStudierende";
     }
 
-    @GetMapping("/examsDurchfuehren/{examFachId}/menu")
+    @GetMapping("/startExam/{examFachId}/menu")
     @Secured("ROLE_STUDENT")
     public String examMenu(
             @PathVariable UUID examFachId,
@@ -279,7 +279,7 @@ public class ExamController {
         return "exams/examMenu";
     }
 
-    @GetMapping("/examsDurchfuehren/{examFachId}")
+    @GetMapping("/startExam/{examFachId}")
     @Secured("ROLE_STUDENT")
     public String startExam(
             @PathVariable UUID examFachId,
@@ -291,7 +291,7 @@ public class ExamController {
 
         model.addAttribute("exam", form);
         model.addAttribute("submitForm", submitForm);
-        return "exams/examsDurchfuehren";
+        return "exams/startExam";
     }
 
     @PostMapping("/submit/{examFachId}")
