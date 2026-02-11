@@ -43,7 +43,7 @@ class ExamsKorrektorTest {
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void listExamsForReviewer_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/exams/examsKorrektor"))
+        MvcResult mvcResult = mvc.perform(get("/exams/examListForReviewer"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -55,13 +55,13 @@ class ExamsKorrektorTest {
     @DisplayName("Die Seite zur gesamten Korrekturübersicht ist erfolgreich")
     void listExamsForReviewer_02() throws Exception {
 
-        mvc.perform(get("/exams/examsKorrektor"))
+        mvc.perform(get("/exams/examListForReviewer"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("reviewCoverage"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("timeNow"))
-            .andExpect(view().name("exams/examsKorrektor"));
+            .andExpect(view().name("exams/examListForReviewer"));
     }
 
     @Test
@@ -90,7 +90,7 @@ class ExamsKorrektorTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attribute("message", "Die Prüfung läuft noch! Keine Korrektur erlaubt."))
                 .andExpect(flash().attribute("success", false))
-                .andExpect(redirectedUrl("/exams/examsKorrektor"));
+                .andExpect(redirectedUrl("/exams/examListForReviewer"));
     }
 
     @Test
@@ -154,7 +154,7 @@ class ExamsKorrektorTest {
                 .param("bewertung", "Bewertung")
                 .param("punkteVergeben", "1"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsKorrektor"))
+            .andExpect(redirectedUrl("/exams/examListForReviewer"))
             .andExpect(flash().attribute("message", "Bewertung erfolgreich!"))
             .andExpect(flash().attribute("success", true));
     }
@@ -168,7 +168,7 @@ class ExamsKorrektorTest {
                 .param("bewertung", "")
                 .param("punkteVergeben", "1"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsKorrektor"))
+            .andExpect(redirectedUrl("/exams/examListForReviewer"))
             .andExpect(flash().attribute("message", "Ein Bewertungstext muss vorhanden sein"))
             .andExpect(flash().attribute("success", false));
     }
@@ -182,7 +182,7 @@ class ExamsKorrektorTest {
                 .param("bewertung", "B")
                 .param("punkteVergeben", "-1"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/exams/examsKorrektor"))
+            .andExpect(redirectedUrl("/exams/examListForReviewer"))
             .andExpect(flash().attribute("message", "Punkte dürfen nicht negativ sein"))
             .andExpect(flash().attribute("success", false));
     }

@@ -57,11 +57,11 @@
                 <!-- Link für Korrektor -->
                 <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
 
-                    <a class="nav-link" th:classappend="${currentPath == '/exams/examsKorrektor'} ? 'active' : ''"
-                        href="/exams/examsKorrektor">
+                    <a class="nav-link" th:classappend="${currentPath == '/exams/examListForReviewer'} ? 'active' : ''"
+                        href="/exams/examListForReviewer">
                         <i class="fas fa-clipboard-check me-1"></i>
                         Tests korrigieren
-                        <span class="visually-hidden" th:if="${currentPath == '/exams/examsKorrektor'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/exams/examListForReviewer'}">(current)
                         </span>
                     </a>
                 </li>
