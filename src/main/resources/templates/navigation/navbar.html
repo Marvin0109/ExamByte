@@ -22,11 +22,11 @@
 
                 <!-- Link für Studenten -->
                 <li class="nav-item" th:if="${#authorization.expression('hasRole(''STUDENT'')')}">
-                    <a class="nav-link" th:classappend="${currentPath == '/exams/examListForStudent'} ? ' active' : ''"
-                        href="/exams/examListForStudent">
+                    <a class="nav-link" th:classappend="${currentPath == '/student/examListForStudent'} ? ' active' : ''"
+                        href="/student/examListForStudent">
                         <i class="fas fa-pen me-1"></i>
                         Tests bearbeiten
-                        <span class="visually-hidden" th:if="${currentPath == '/exams/examListForStudent'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/student/examListForStudent'}">(current)
                         </span>
                     </a>
                 </li>
@@ -34,22 +34,22 @@
                 <!-- Link für Professoren -->
                 <li class="nav-item"  th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-                    <a class="nav-link" th:classappend="${currentPath == '/exams/createExam'} ? ' active' : ''"
-                        href="/exams/createExam">
+                    <a class="nav-link" th:classappend="${currentPath == '/professor/createExam'} ? ' active' : ''"
+                        href="/professor/createExam">
                         <i class="fas fa-file-circle-plus me-1"></i>
                         Tests erstellen
-                        <span class="visually-hidden" th:if="${currentPath == '/exams/createExam'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/professor/createExam'}">(current)
                         </span>
                     </a>
                 </li>
 
                 <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-                    <a class="nav-link" th:classappend="${currentPath == '/exams/showResults'} ? ' active' : ''"
-                        href="/exams/showResults">
+                    <a class="nav-link" th:classappend="${currentPath == '/professor/showResults'} ? ' active' : ''"
+                        href="/professor/showResults">
                         <i class="fas fa-table me-1"></i>
                         Ergebnisübersicht
-                        <span class="visually-hidden" th:if="${currentPath == '/exams/showResults'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/professor/showResults'}">(current)
                         </span>
                     </a>
                 </li>
@@ -57,11 +57,11 @@
                 <!-- Link für Korrektor -->
                 <li class="nav-item" th:if="${#authorization.expression('hasRole(''REVIEWER'')')}">
 
-                    <a class="nav-link" th:classappend="${currentPath == '/exams/examListForReviewer'} ? 'active' : ''"
-                        href="/exams/examListForReviewer">
+                    <a class="nav-link" th:classappend="${currentPath == '/korrektor/examListForReviewer'} ? 'active' : ''"
+                        href="/korrektor/examListForReviewer">
                         <i class="fas fa-clipboard-check me-1"></i>
                         Tests korrigieren
-                        <span class="visually-hidden" th:if="${currentPath == '/exams/examListForReviewer'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/korrektor/examListForReviewer'}">(current)
                         </span>
                     </a>
                 </li>

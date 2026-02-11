@@ -78,7 +78,7 @@
                 <tbody>
                 <tr th:each="exam : ${exams}">
                     <td>
-                        <a th:href="@{/exams/startExam/{examFachId}/menu(examFachId=${exam.fachId})}"
+                        <a th:href="@{/student/startExam/{examFachId}/menu(examFachId=${exam.fachId})}"
                            th:text="${exam.title}">
                         </a>
                     </td>

@@ -47,7 +47,7 @@
         <tbody>
             <tr th:each="submitInfo: ${submitInfoList}">
                 <td>
-                    <a th:href="@{/exams/showSubmit/{examFachId}/{studentFachId}
+                    <a th:href="@{/korrektor/showSubmit/{examFachId}/{studentFachId}
                                 (examFachId=${exam.fachId},
                                 studentFachId=${submitInfo.fachId})}"
                        th:text="${submitInfo.name}">

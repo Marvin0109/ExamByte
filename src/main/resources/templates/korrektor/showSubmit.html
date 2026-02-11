@@ -34,7 +34,7 @@
     </div>
 
     <div th:each="antwort, iterStat : ${antworten}" class="card mb-3">
-        <form th:action="@{/exams/createReview/{antwortFachId}(antwortFachId=${antwort.antwortFachId})}" method="post"
+        <form th:action="@{/korrektor/createReview/{antwortFachId}(antwortFachId=${antwort.antwortFachId})}" method="post"
               th:object="${reviewForm}">
             <div class="card-body">
                 <h5 class="card-title" th:text="${antwort.frageText}">Fragestellung</h5>

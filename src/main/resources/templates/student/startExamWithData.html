@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Bearbeitungsseite einer Prüfung">
+    <meta name="description" content="Bearbeitungsseite einer Prüfung mit alten Antworten">
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
@@ -24,57 +24,57 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <form th:action="@{/exams/submit/{examFachId}(examFachId=${exam.fachId})}" method="post" th:object="${submitForm}">
+    <form th:action="@{/student/submit/{examFachId}(examFachId=${exam.examId})}" method="post" th:object="${submitForm}">
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-        <h1 th:text="${exam.title}">Testtitel</h1>
+        <h1 th:text="${exam.examTitle}">Testtitel</h1>
 
-        <div th:each="frage, iterStat : ${exam.questions}" class="mb-3">
+        <div th:each="component, iterStat : ${exam.components}" class="mb-3">
 
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
-                    <p class="card-text" th:text="${frage.questionText}">Fragestellung</p>
+                    <p class="card-text" th:text="${component.fragen.frageText}">Fragestellung</p>
 
                     <!-- Multiple Choice -->
-                    <div class="mb-2" th:if="${frage.type == 'MC'}">
-                        <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                    <div class="mb-2" th:if="${component.fragen.type.name == 'MC'}">
+                        <div th:each="antwort : ${#strings.arraySplit(component.korrekteAntworten.antwortOptionen, ',')}">
                             <input type="checkbox"
-                                   th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
-                                   th:name="${frage.fachId}"
-                                   th:field="*{answers[__${frage.fachId}__]}"
+                                   th:id="'antwort-' + ${component.fragen.fachId} + '-' + ${iterStat.index}"
+                                   th:name="${component.fragen.fachId}"
+                                   th:field="*{answers[__${component.fragen.fachId}__]}"
                                    th:value="${antwort}" />
                             <label class="form-check-label"
-                                   th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
+                                   th:for="'antwort-' + ${component.fragen.fachId} + '-' + ${iterStat.index}"
                                    th:text="${antwort.replace('ĸ', ',')}">
                             </label>
                         </div>
                     </div>
 
                     <!-- Single Choice -->
-                    <div class="mb-2" th:if="${frage.type == 'SC'}">
-                        <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                    <div class="mb-2" th:if="${component.fragen.type.name == 'SC'}">
+                        <div th:each="antwort : ${#strings.arraySplit(component.korrekteAntworten.antwortOptionen, ',')}">
                             <input type="radio"
-                                   th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
-                                   th:name="${frage.fachId}"
-                                   th:field="*{answers[__${frage.fachId}__]}"
+                                   th:id="'antwort-' + ${component.fragen.fachId} + '-' + ${iterStat.index}"
+                                   th:name="${component.fragen.fachId}"
+                                   th:field="*{answers[__${component.fragen.fachId}__]}"
                                    th:value="${antwort}" />
                             <label class="form-check-label"
-                                   th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
+                                   th:for="'antwort-' + ${component.fragen.fachId} + '-' + ${iterStat.index}"
                                    th:text="${antwort.replace('ĸ', ',')}">
                             </label>
                         </div>
                     </div>
 
                     <!-- Freitext -->
-                    <div class="mb-2" th:if="${frage.type == 'FREITEXT'}">
+                    <div class="mb-2" th:if="${component.fragen.type.name == 'FREITEXT'}">
                         <label class="form-check-label"
-                               th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}">
+                               th:for="'antwort-' + ${component.fragen.fachId} + '-' + ${iterStat.index}">
                         </label>
-                        <textarea th:name="${frage.fachId}"
-                                  th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
-                                  th:field="*{answers[__${frage.fachId}__]}"
+                        <textarea th:name="${component.fragen.fachId}"
+                                  th:id="'antwort-' + ${component.fragen.fachId} + '-' + ${iterStat.index}"
+                                  th:field="*{answers[__${component.fragen.fachId}__]}"
                                   class="form-control" rows="6">
                         </textarea>
                     </div>
