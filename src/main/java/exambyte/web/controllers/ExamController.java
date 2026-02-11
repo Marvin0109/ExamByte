@@ -344,7 +344,7 @@ public class ExamController {
 
         model.addAttribute("exam", form);
         model.addAttribute("submitForm", submitForm);
-        return "exams/examsDurchfuehrenWithData";
+        return "exams/startExamWithData";
     }
 
     @GetMapping("/showReview/{examFachId}")

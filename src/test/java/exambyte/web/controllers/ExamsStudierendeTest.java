@@ -354,6 +354,6 @@ class ExamsStudierendeTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("exam"))
                 .andExpect(model().attributeExists("submitForm"))
-                .andExpect(view().name("exams/examsDurchfuehrenWithData"));
+                .andExpect(view().name("exams/startExamWithData"));
     }
 }
