@@ -171,7 +171,7 @@ public class ExamController {
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", examDTO);
         model.addAttribute(TIME_NOW, now);
-        return "exams/examSubmittedUebersicht";
+        return "exams/examSubmitsView";
     }
 
     @GetMapping("/showSubmit/{examFachId}/{studentFachId}")

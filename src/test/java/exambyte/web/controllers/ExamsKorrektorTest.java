@@ -111,7 +111,7 @@ class ExamsKorrektorTest {
                 .andExpect(model().attribute("exam", examDTO))
                 .andExpect(model().attributeExists("submitInfoList"))
                 .andExpect(model().attributeExists("timeNow"))
-                .andExpect(view().name("exams/examSubmittedUebersicht"));
+                .andExpect(view().name("exams/examSubmitsView"));
     }
 
     @Test
