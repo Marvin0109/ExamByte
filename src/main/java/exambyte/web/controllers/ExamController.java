@@ -123,7 +123,7 @@ public class ExamController {
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
         model.addAttribute("exams", examDTOs);
         model.addAttribute(TIME_NOW, now);
-        return "exams/showResults";
+        return "exams/examListForProf";
     }
 
 
