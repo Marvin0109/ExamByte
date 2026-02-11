@@ -117,7 +117,12 @@ public class ExamController {
             Model model,
             HttpServletRequest request) {
 
+        List<ExamDTO> examDTOs = service.getAllExams();
+        LocalDateTime now = LocalDateTime.now();
+
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        model.addAttribute("exams", examDTOs);
+        model.addAttribute(TIME_NOW, now);
         return "exams/showResults";
     }
 
