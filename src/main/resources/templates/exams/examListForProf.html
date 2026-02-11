@@ -7,7 +7,7 @@
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Ergebnisübersicht aller Studenten</title>
+    <title>Übersicht der Prüfungen</title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -24,9 +24,74 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-</main>
+    <h1>Test Übersicht</h1>
 
-<h1>Übersicht hier</h1>
+    <div th:if="${message}" class="alert"
+         th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Test</th>
+                    <th>Status</th>
+                    <th>Start</th>
+                    <th>Frist</th>
+                    <th>Ergebnisse</th>
+                    <th>Export</th>
+                    <th>Löschen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="exam : ${exams}">
+                    <td>
+                        <a th:href="@{/}"
+                           th:text="${exam.title}">
+                        </a>
+                    </td>
+                    <td>
+                        <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                            <span th:case="true">Startet bald</span>
+                            <span th:case="false">
+                                <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                                    <span th:case="true">Online</span>
+                                    <span th:case="false">
+                                        <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                            <span th:case="true">In Korrektur</span>
+                                            <span th:case="false">Beendet</span>
+                                        </span>
+                                    </span>
+                                </span>
+                            </span>
+                        </span>
+                    </td>
+                    <td>
+                        <span th:text="${#temporals.format(exam.startTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                            Startzeit der Prüfung
+                        </span>
+                    </td>
+                    <td>
+                        <span th:text="${#temporals.format(exam.endTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                            Bearbeitungsfrist
+                        </span>
+                    </td>
+                    <td>
+                        <span th:text="${#temporals.format(exam.resultTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                            Veröffentlichungszeitpunkt der Ergebnisse
+                        </span>
+                    </td>
+                    <td>Export</td>
+                    <td>Löschen</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
 
 <!-- Navigation -->
 <header th:replace="~{navigation/navbarDown.html}"> </header>

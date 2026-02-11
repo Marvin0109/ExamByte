@@ -41,7 +41,7 @@ public class ExamController {
     private static final String REDIRECT_EXAM_KORREKTOR = "redirect:/exams/examListForReviewer";
     private static final String REDIRECT_EXAM_STUDENT = "redirect:/exams/examListForStudent";
 
-    public  ExamController(ExamControllerService service) {
+    public ExamController(ExamControllerService service) {
         this.service =  service;
     }
 
