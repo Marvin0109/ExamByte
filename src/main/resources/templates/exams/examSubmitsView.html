@@ -40,7 +40,7 @@
         <thead>
             <tr>
                 <th>Prüfling</th>
-                <th>Abgabezeit</th>
+                <th>Prüfungsstatus</th>
                 <th>Bewertungsstatus</th>
             </tr>
         </thead>
@@ -69,7 +69,6 @@
                         </span>
                     </span>
                 </td>
-
                 <td>
                     <span th:text="${submitInfo.reviewStatus ? '✔' : '✘'}"
                           th:style="${submitInfo.reviewStatus ? 'color:green;' : 'color:red;'}">

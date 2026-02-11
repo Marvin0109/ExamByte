@@ -48,7 +48,7 @@
                 <tbody>
                 <tr th:each="exam : ${exams}">
                     <td>
-                        <a th:href="@{/}"
+                        <a th:href="@{/exams/listParticipants/{examId}(examId=${exam.fachId})}"
                            th:text="${exam.title}">
                         </a>
                     </td>

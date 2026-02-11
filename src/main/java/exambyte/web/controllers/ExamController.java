@@ -126,6 +126,33 @@ public class ExamController {
         return "exams/examListForProf";
     }
 
+     @GetMapping("/listParticipants/{examId}")
+     @Secured("ROLE_ADMIN")
+     public String listParticipants(
+             Model model,
+             @PathVariable UUID examId,
+             RedirectAttributes redirectAttributes) {
+
+        ExamDTO exam = service.getExamByUUID(examId);
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isBefore(exam.resultTime())) {
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Ergebnisse noch nicht vorhanden!",
+                    false,
+                    "redirect:/exams/showResults"
+            );
+        }
+
+         List<SubmitInfo> submitInfoList = service.getSubmitInfo(examId);
+
+         model.addAttribute("submitInfoList", submitInfoList);
+         model.addAttribute("exam", exam);
+         model.addAttribute(TIME_NOW, now);
+         return "exams/submitStudentList";
+     }
+
 
     @GetMapping("/examListForReviewer")
     @Secured("ROLE_REVIEWER")
