@@ -17,6 +17,9 @@ jobs:
           
       - name: Set up Docker
         uses: docker/setup-docker-action@v4
-        
+
+      - name: Add user to docker group
+        run: sudo usermod -aG docker $USER
+
       - name: Run Gradle
         run:  ./gradlew check
