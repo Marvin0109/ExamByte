@@ -17,6 +17,10 @@ jobs:
         run: |
           docker --version
           docker ps
+          docker info
+
+      - name: Testcontainer Debug
+        run: ./gradlew test --debug
             
       - name: Run Gradle
         run:  ./gradlew check
