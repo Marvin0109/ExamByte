@@ -8,19 +8,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         name: Git Checkout
+
       - name: Set up JDK
         uses: actions/setup-java@v1
         with: 
           java-version: 21
 
-      - name: Debug Docker
-        run: |
-          docker --version
-          docker ps
-          docker info
-
-      - name: Testcontainer Debug
-        run: ./gradlew test --debug
-            
       - name: Run Gradle
         run:  ./gradlew check
