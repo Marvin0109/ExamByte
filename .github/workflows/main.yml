@@ -9,9 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v1
         name: Git Checkout
-      - name: Java installieren
+      - name: Set up JDK
         uses: actions/setup-java@v1
         with: 
           java-version: 21
+      - name: Set up Docker
+        uses: docker/setup-docker@v2
       - name: Run Gradle
         run:  ./gradlew check
