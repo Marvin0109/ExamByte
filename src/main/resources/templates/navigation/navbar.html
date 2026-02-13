@@ -45,11 +45,11 @@
 
                 <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-                    <a class="nav-link" th:classappend="${currentPath == '/professor/showResults'} ? ' active' : ''"
-                        href="/professor/showResults">
+                    <a class="nav-link" th:classappend="${currentPath == '/professor/listExams'} ? ' active' : ''"
+                        href="/professor/listExams">
                         <i class="fas fa-table me-1"></i>
                         Ergebnisübersicht
-                        <span class="visually-hidden" th:if="${currentPath == '/professor/showResults'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/professor/listExams'}">(current)
                         </span>
                     </a>
                 </li>

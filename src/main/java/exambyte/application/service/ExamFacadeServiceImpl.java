@@ -112,13 +112,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void deleteById(UUID uuid) {
-        examManagementService.deleteById(uuid);
+    public boolean deleteById(UUID uuid) {
+        return examManagementService.deleteById(uuid);
     }
 
     @Override
-    public void reset() {
-        examManagementService.resetAllExamDataCascade();
+    public boolean reset() {
+        return examManagementService.resetAllExamDataCascade();
     }
 
     @Override

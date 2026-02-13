@@ -25,9 +25,9 @@ public interface ExamManagementService {
 
     UUID getExamIdByStartTime(LocalDateTime startTime);
 
-    void deleteById(UUID examId);
+    boolean deleteById(UUID examId);
 
-    void resetAllExamDataCascade();
+    boolean resetAllExamDataCascade();
 
     boolean allowedToViewReview(UUID examId);
 }

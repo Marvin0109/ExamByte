@@ -4,6 +4,8 @@ import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,10 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -451,4 +450,110 @@ class ExamManagementServiceTest {
         assertThat(result).isFalse();
     }
 
+    @ParameterizedTest(name = "{0}")
+    @MethodSource("examTimeParameter")
+    void deleteById(
+            LocalDateTime startTime,
+            LocalDateTime resultTime,
+            boolean result
+    ) {
+        ExamDTO exam = new ExamDTO(
+                EXAM_ID,
+                "",
+                null,
+                startTime,
+                null,
+                resultTime
+        );
+
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+
+        boolean ans = examManagementService.deleteById(EXAM_ID);
+
+        assertThat(ans).isEqualTo(result);
+    }
+
+    private static Stream<Arguments> examTimeParameter() {
+        return Stream.of(
+                Arguments.of(
+                        LocalDateTime.of(2025, 12, 12, 0, 0),
+                        LocalDateTime.of(2025, 12, 12, 2, 0),
+                        true
+                ),
+
+                Arguments.of(
+                        LocalDateTime.of(2026, 3, 3, 0, 0),
+                        LocalDateTime.of(2026, 3, 3, 1, 0),
+                        true
+                ),
+
+                Arguments.of(
+                        LocalDateTime.of(2025, 12, 12, 0, 0),
+                        LocalDateTime.of(2026, 1, 1, 12, 0),
+                        false
+                ),
+
+                Arguments.of(
+                        LocalDateTime.of(2026, 1, 1, 10, 0),
+                        LocalDateTime.of(2026, 1, 1, 11, 0),
+                        false
+                )
+        );
+    }
+
+    @Test
+    void resetAllExamDataCascade_fail() {
+        when(examQueryService.getAllExams()).thenReturn(List.of());
+
+        boolean result = examManagementService.resetAllExamDataCascade();
+
+        assertThat(result).isFalse();
+        verify(examQueryService, never()).resetAllExamDataCascade();
+    }
+
+    @Test
+    void resetAllExamDataCascade_fail_only11Exam() {
+        ExamDTO finishedExam = mock(ExamDTO.class);
+        when(finishedExam.endTime()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
+
+        List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(11, finishedExam));
+        when(examQueryService.getAllExams()).thenReturn(examList);
+
+        boolean result = examManagementService.resetAllExamDataCascade();
+
+        assertThat(result).isFalse();
+        verify(examQueryService, never()).resetAllExamDataCascade();
+    }
+
+    @Test
+    void resetAllExamDataCascade_fail_examRunning() {
+        ExamDTO finishedExam = mock(ExamDTO.class);
+        when(finishedExam.endTime()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
+
+        ExamDTO examRunning = mock(ExamDTO.class);
+        when(examRunning.endTime()).thenReturn(LocalDateTime.of(2026, 1, 1, 12, 0));
+
+        List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(11, finishedExam));
+        examList.add(examRunning);
+        when(examQueryService.getAllExams()).thenReturn(examList);
+
+        boolean result = examManagementService.resetAllExamDataCascade();
+
+        assertThat(result).isFalse();
+        verify(examQueryService, never()).resetAllExamDataCascade();
+    }
+
+    @Test
+    void resetAllExamDataCascade_success_allExamDone() {
+        ExamDTO finishedExam = mock(ExamDTO.class);
+        when(finishedExam.endTime()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
+
+        List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(12, finishedExam));
+        when(examQueryService.getAllExams()).thenReturn(examList);
+
+        boolean result = examManagementService.resetAllExamDataCascade();
+
+        assertThat(result).isTrue();
+        verify(examQueryService).resetAllExamDataCascade();
+    }
 }

@@ -4,6 +4,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.SubmitInfo;
+import exambyte.web.form.show_review.ReviewViewForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.access.annotation.Secured;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,10 +36,19 @@ public class ProfessorController {
     private static final String LOGIN_NAME = "login";
     private static final String CURRENT_PATH = "currentPath";
     private static final String TIME_NOW = "timeNow";
-    private static final String REDIRECT_EXAM_PROF = "redirect:/professor/createExam";
+    private static final String REDIRECT_CREATE_EXAM = "redirect:/professor/createExam";
+    private static final String REDIRECT_LIST_EXAMS = "redirect:/professor/listExams";
 
-    public ProfessorController(ExamControllerService service) {
+    private final Clock clock;
+
+    public ProfessorController(ExamControllerService service, Clock clock) {
         this.service = service;
+        this.clock = clock;
+    }
+
+    private LocalDateTime now() {
+        return LocalDateTime.now(clock)
+                .truncatedTo(ChronoUnit.MINUTES);
     }
 
     private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success,
@@ -75,7 +87,7 @@ public class ProfessorController {
                     redirectAttributes,
                     "Fehlerhafte Eingabedaten!",
                     false,
-                    REDIRECT_EXAM_PROF);
+                    REDIRECT_CREATE_EXAM);
         }
 
         if (form.getQuestions().size() < INT_QUESTIONS_COUNT){
@@ -83,7 +95,7 @@ public class ProfessorController {
                     redirectAttributes,
                     "Weniger Fragen als sonst.",
                     false,
-                    REDIRECT_EXAM_PROF);
+                    REDIRECT_CREATE_EXAM);
         }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
@@ -96,7 +108,7 @@ public class ProfessorController {
                     redirectAttributes,
                     message,
                     false,
-                    REDIRECT_EXAM_PROF);
+                    REDIRECT_CREATE_EXAM);
         }
 
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
@@ -107,20 +119,19 @@ public class ProfessorController {
                 redirectAttributes,
                 "Prüfung und Fragen erfolgreich erstellt!",
                 true,
-                REDIRECT_EXAM_PROF);
+                REDIRECT_CREATE_EXAM);
     }
 
-    @GetMapping("/showResults")
+    @GetMapping("/listExams")
     public String listExamsForProfessor(
             Model model,
             HttpServletRequest request) {
 
         List<ExamDTO> examDTOs = service.getAllExams();
-        LocalDateTime now = LocalDateTime.now();
 
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
         model.addAttribute("exams", examDTOs);
-        model.addAttribute(TIME_NOW, now);
+        model.addAttribute(TIME_NOW, now());
         return "professor/examListForProf";
     }
 
@@ -131,14 +142,13 @@ public class ProfessorController {
             RedirectAttributes redirectAttributes) {
 
         ExamDTO exam = service.getExamByUUID(examId);
-        LocalDateTime now = LocalDateTime.now();
 
-        if (now.isBefore(exam.resultTime())) {
+        if (now().isBefore(exam.resultTime())) {
             return redirectWithMessage(
                     redirectAttributes,
                     "Ergebnisse noch nicht vorhanden!",
                     false,
-                    "redirect:/professor/showResults"
+                    REDIRECT_LIST_EXAMS
             );
         }
 
@@ -146,7 +156,43 @@ public class ProfessorController {
 
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", exam);
-        model.addAttribute(TIME_NOW, now);
+        model.addAttribute(TIME_NOW, now());
         return "professor/submitStudentList";
+    }
+
+    @GetMapping("/showResult/{examId}/{studentName}")
+    public String showStudentResult(
+            Model model,
+            @PathVariable UUID examId,
+            @PathVariable String studentName) {
+
+        ReviewViewForm view = service.prepareReviewViewForm(examId, studentName);
+
+        model.addAttribute("view", view);
+        return "student/showReview";
+    }
+
+    @PostMapping("/deleteExam/{examId}")
+    public String deleteExam(
+            @PathVariable UUID examId,
+            RedirectAttributes redirectAttributes) {
+
+        boolean success = service.deleteExam(examId);
+
+        if (success) {
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Exam erfolgreich gelöscht!",
+                    true,
+                    REDIRECT_LIST_EXAMS
+            );
+        }
+
+        return redirectWithMessage(
+                redirectAttributes,
+                "Exam am laufen!",
+                false,
+                REDIRECT_LIST_EXAMS
+        );
     }
 }

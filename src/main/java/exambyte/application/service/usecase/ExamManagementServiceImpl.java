@@ -25,6 +25,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final ReviewQueryService reviewQueryService;
     private final Clock clock;
 
+    private static final int EXAM_COUNT = 12;
+
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
     public ExamManagementServiceImpl(AntwortQueryService antwortQueryService,
@@ -74,7 +76,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<ExamDTO> exams = examQueryService.getAllExams();
         int examCount = exams.size();
 
-        if (examCount >= 12) {
+        if (examCount >= EXAM_COUNT) {
             return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
         }
 
@@ -227,13 +229,31 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public void deleteById(UUID id) {
-        examQueryService.deleteByFachId(id);
+    public boolean deleteById(UUID id) {
+        ExamDTO exam = examQueryService.getExam(id);
+
+        if (now().isBefore(exam.startTime()) || exam.resultTime().isBefore(now())) {
+            examQueryService.deleteByFachId(exam.fachId());
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void resetAllExamDataCascade() {
-        examQueryService.resetAllExamDataCascade();
+    public boolean resetAllExamDataCascade() {
+        List<ExamDTO> examList = examQueryService.getAllExams();
+
+        if (examList.size() != EXAM_COUNT) return false;
+        else {
+            for (ExamDTO exam : examList) {
+                if (exam.endTime().isAfter(now())) {
+                    return false;
+                }
+            }
+            examQueryService.resetAllExamDataCascade();
+        }
+
+        return true;
     }
 
     @Override

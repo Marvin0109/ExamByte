@@ -25,22 +25,30 @@
 <main role="main" class="container mt-5 pt-5">
     <h1> Teilnehmer der Prüfung </h1>
 
-    <table class="table table-primary table-striped">
+    <table class="table table-secondary table-striped">
         <thead>
         <tr>
             <th>Prüfling</th>
+            <th>Bewertungsstatus</th>
             <th>Ergebnis</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="submitInfo: ${submitInfoList}">
             <td>
-                <a th:href="@{/}"
-                   th:text="${submitInfo.name}">
-                </a>
+                <span th:text="${submitInfo.name}">Name des Prüflings</span>
             </td>
             <td>
-                Ergebnis hier (z.B.: Bestanden/Nicht bestanden)
+                <span th:text="${submitInfo.reviewStatus ? '✔' : '✘'}"
+                      th:style="${submitInfo.reviewStatus ? 'color:green;' : 'color:red;'}">
+                </span>
+            </td>
+            <td>
+                <a th:href="@{/professor/showResult/{examId}/{studentName}
+                            (examId=${exam.fachId}, studentName=${submitInfo.name})}">
+                    <i class="fas fa-eye"></i>
+                    Ergebnis
+                </a>
             </td>
         </tr>
         </tbody>
