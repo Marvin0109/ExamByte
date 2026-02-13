@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 11.02.2026
+>**aktualisiert am:** 13.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -606,3 +606,10 @@
 **Bereich**: UI / Refactoring
 - HTML erstellt für Ergebnisübersicht
 - `ExamController` zerlegt und Tests sowie URLs angepasst
+
+---
+
+### 13.02.2026
+**Bereich**: UI / UX / Test / Dependency
+- Ergebnisübersicht vollständig implementiert und getestet
+- Spring Boot Version auf **3.5.8** aktualisiert (Testcontainer funktionierte nicht auf Github Actions)
