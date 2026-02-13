@@ -93,10 +93,16 @@ public class WebController {
     @PostMapping("/settings/reset")
     @Secured("ROLE_ADMIN")
     public String resetExamData(RedirectAttributes redirectAttributes) {
-        service.reset();
+        boolean success = service.reset();
 
-        redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
-        redirectAttributes.addFlashAttribute("success", true);
+        if (success) {
+            redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
+            redirectAttributes.addFlashAttribute("success", true);
+            return "redirect:/settings";
+        }
+
+        redirectAttributes.addFlashAttribute("message", "Zulassungsszenario am laufen!");
+        redirectAttributes.addFlashAttribute("success", false);
         return "redirect:/settings";
     }
 

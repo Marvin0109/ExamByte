@@ -259,8 +259,8 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void reset() {
-        service.reset();
+    public boolean reset() {
+        return service.reset();
     }
 
     @Override
@@ -331,5 +331,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public SubmitForm fillSubmitFormWithData(OldDataForm form) {
         return helperService.fillSubmitFormWithData(form);
+    }
+
+    @Override
+    public boolean deleteExam(UUID examId) {
+        return service.deleteById(examId);
     }
 }

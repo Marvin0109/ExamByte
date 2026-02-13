@@ -53,7 +53,9 @@ public interface ExamControllerService {
 
     Optional<UUID> getProfFachIDByName(String name);
 
-    void reset();
+    boolean reset();
+
+    boolean deleteExam(UUID examUUID);
 
     ProfessorDTO getProfessorByFachId(UUID fachId);
 

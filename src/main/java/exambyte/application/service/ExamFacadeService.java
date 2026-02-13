@@ -35,9 +35,9 @@ public interface ExamFacadeService {
 
     UUID getExamByStartTime(LocalDateTime startTime);
 
-    void deleteById(UUID examFachId);
+    boolean deleteById(UUID examFachId);
 
-    void reset();
+    boolean reset();
 
     void removeOldAnswers(UUID examFachId, String name);
 

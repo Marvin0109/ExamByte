@@ -1,5 +1,6 @@
 package exambyte.web.controllers;
 
+import exambyte.application.dto.ExamDTO;
 import exambyte.application.service.AppUserService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
@@ -10,13 +11,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.*;
+import java.util.List;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,8 +32,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProfessorController.class)
-@Import({SecurityConfig.class, MethodSecurityConfig.class})
+@Import({SecurityConfig.class, MethodSecurityConfig.class, ProfessorControllerTest.ClockConfig.class})
 class ProfessorControllerTest {
+
+    @TestConfiguration
+    static class ClockConfig {
+        @Bean
+        public Clock clock() {
+            return Clock.fixed(
+                    Instant.parse("2026-01-01T10:00:00Z"),
+                    ZoneId.of("UTC")
+            );
+        }
+    }
 
     @Autowired
     private MockMvc mvc;
@@ -240,5 +259,105 @@ class ProfessorControllerTest {
             .andExpect(redirectedUrl("/professor/createExam"))
             .andExpect(flash().attribute("message", "Error Nachricht"))
             .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Anzeige aller Prüfungen")
+    void listExams() throws Exception {
+        when(service.getAllExams()).thenReturn(List.of());
+
+        mvc.perform(get("/professor/listExams"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("professor/examListForProf"))
+                .andExpect(model().attributeExists("exams"))
+                .andExpect(model().attributeExists("timeNow"))
+                .andExpect(model().attributeExists("currentPath"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Liste die Prüflinge für eine Prüfung auf (Ergebnisse sind vorhanden)")
+    void listParticipants_01() throws Exception {
+        ExamDTO exam = new ExamDTO(
+                null,
+                "",
+                null,
+                LocalDateTime.of(2026, 1, 1, 8, 0),
+                LocalDateTime.of(2026, 1, 1, 9, 0),
+                LocalDateTime.of(2026, 1, 1, 9, 1)
+        );
+
+        when(service.getExamByUUID(any())).thenReturn(exam);
+        when(service.getSubmitInfo(exam.fachId())).thenReturn(List.of());
+
+        mvc.perform(get("/professor/listParticipants/{examId}", UUID.randomUUID()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("professor/submitStudentList"))
+                .andExpect(model().attribute("exam", exam))
+                .andExpect(model().attributeExists("submitInfoList"))
+                .andExpect(model().attributeExists("timeNow"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Liste die Prüflinge für eine Prüfung auf (keine Ergebnisse sind vorhanden)")
+    void listParticipants_02() throws Exception {
+        ExamDTO exam = new ExamDTO(
+                null,
+                "",
+                null,
+                LocalDateTime.of(2026, 1, 1, 8, 0),
+                LocalDateTime.of(2026, 1, 1, 9, 0),
+                LocalDateTime.of(2026, 1, 1, 11, 0)
+        );
+
+        when(service.getExamByUUID(any())).thenReturn(exam);
+
+        mvc.perform(get("/professor/listParticipants/{examId}", UUID.randomUUID()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/professor/listExams"))
+                .andExpect(flash().attribute("message", "Ergebnisse noch nicht vorhanden!"))
+                .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Ergebnis eines Studenten für eine Prüfung einsehbar")
+    void showStudentResult() throws Exception {
+        when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
+
+        mvc.perform(get("/professor/showResult/{examId}/{studentName}", UUID.randomUUID(), "Student"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/showReview"))
+                .andExpect(model().attributeExists("view"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Ein Exam kann gelöscht werden")
+    void deleteExam_01() throws Exception {
+        when(service.deleteExam(any())).thenReturn(true);
+
+        mvc.perform(post("/professor/deleteExam/{examId}", UUID.randomUUID())
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/professor/listExams"))
+                .andExpect(flash().attribute("success", true))
+                .andExpect(flash().attribute("message", "Exam erfolgreich gelöscht!"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Ein laufendes Exam kann nicht gelöscht werden")
+    void deleteExam_02() throws Exception {
+        when(service.deleteExam(any())).thenReturn(false);
+
+        mvc.perform(post("/professor/deleteExam/{examId}", UUID.randomUUID())
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/professor/listExams"))
+                .andExpect(flash().attribute("success", false))
+                .andExpect(flash().attribute("message", "Exam am laufen!"));
     }
 }

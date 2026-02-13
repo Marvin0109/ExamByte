@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -71,13 +72,27 @@ class SettingsTest {
     @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Das löschen der Daten ist erfolgreich")
     void test_04() throws Exception {
+        when(service.reset()).thenReturn(true);
+
         mvc.perform(post("/settings/reset")
-            .with(csrf()))
+                .with(csrf()))
             .andExpect(status().is3xxRedirection())
             .andExpect(flash().attribute("message", "Daten wurden erfolgreich gelöscht!"))
             .andExpect(flash().attribute("success", true))
             .andExpect(redirectedUrl("/settings"));
     }
 
-    // TODO: settings/role Test
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Das löschen der Daten ist nicht erfolgreich")
+    void test_05() throws Exception {
+        when(service.reset()).thenReturn(false);
+
+        mvc.perform(post("/settings/reset")
+                .with(csrf()))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(flash().attribute("message", "Zulassungsszenario am laufen!"))
+            .andExpect(flash().attribute("success", false))
+            .andExpect(redirectedUrl("/settings"));
+    }
 }
