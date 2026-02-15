@@ -10,7 +10,9 @@ import java.util.List;
 
 public interface ReviewExportDTOMapper {
 
-    ReviewExportDTO mapDTOToExport(ExamDTO exam,
+    List<ReviewExportDTO> mapDTOToExport(ExamDTO exam,
+                                   String reviewerName,
+                                   int maxPunkte,
                                    List<FrageDTO> fragen,
                                    List<AntwortDTO> antworten,
                                    List<ReviewDTO> reviews);

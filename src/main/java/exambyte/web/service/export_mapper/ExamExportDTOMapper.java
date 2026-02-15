@@ -9,5 +9,9 @@ import java.util.List;
 
 public interface ExamExportDTOMapper {
 
-    ExamExportDTO mapDTOToExport(ExamDTO examDTO, List<FrageDTO> fragen, List<KorrekteAntwortenDTO> loesungen);
+    List<ExamExportDTO> mapDTOToExport(ExamDTO examDTO,
+                                 String profName,
+                                 int punkte,
+                                 List<FrageDTO> fragen,
+                                 List<KorrekteAntwortenDTO> loesungen);
 }
