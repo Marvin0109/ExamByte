@@ -65,6 +65,9 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core:11.2.0'
 	implementation 'org.flywaydb:flyway-database-postgresql'
 
+	// CSV
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
+
 	// Tests
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
@@ -75,9 +78,6 @@ dependencies {
 	testImplementation 'org.testcontainers:postgresql'
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-	// CSV
-	testImplementation("tools.jackson.dataformat:jackson-dataformat-csv:3.1.0-rc1")
 
 	//Env
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
