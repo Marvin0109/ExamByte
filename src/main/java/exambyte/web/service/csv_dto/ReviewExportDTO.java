@@ -1,6 +1,6 @@
-package exambyte.web.service.csvDTO;
+package exambyte.web.service.csv_dto;
 
-public class reviewExportDTO {
+public class ReviewExportDTO {
 
     private String examTitle;
     private String author;
