@@ -1,12 +1,17 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.service.CsvExportService;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.show_review.ReviewViewForm;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -19,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +37,7 @@ import java.util.UUID;
 public class ProfessorController {
 
     private final ExamControllerService service;
+    private final CsvExportService csvExportService;
 
     private static final int INT_QUESTIONS_COUNT = 6;
     private static final String LOGIN_NAME = "login";
@@ -41,8 +48,9 @@ public class ProfessorController {
 
     private final Clock clock;
 
-    public ProfessorController(ExamControllerService service, Clock clock) {
+    public ProfessorController(ExamControllerService service, CsvExportService csvExportService, Clock clock) {
         this.service = service;
+        this.csvExportService = csvExportService;
         this.clock = clock;
     }
 
@@ -194,5 +202,50 @@ public class ProfessorController {
                 false,
                 REDIRECT_LIST_EXAMS
         );
+    }
+
+    @GetMapping("/downloadExam/{examId}")
+    public void downloadExam(HttpServletResponse response,
+                             @PathVariable UUID examId) throws IOException {
+
+        List<ExamExportDTO> examDTOs = service.getExamExport(examId);
+        ExamDTO exam = service.getExamByUUID(examId);
+
+        try {
+            byte[] csvBytes = csvExportService.exportExamToCsv(examDTOs);
+
+            String examTitle = exam.title();
+            String fileName = examTitle + ".csv";
+
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+            response.getOutputStream().write(csvBytes);
+            response.getOutputStream().flush();
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/downloadReview/{examId}/{studentName}")
+    public void downloadReview(HttpServletResponse response,
+                               @PathVariable UUID examId,
+                               @PathVariable String studentName) throws IOException {
+
+        List<ReviewExportDTO> reviewDTOs = service.getReviewExport(examId, studentName);
+        ExamDTO exam =  service.getExamByUUID(examId);
+
+        try {
+            byte[] csvBytes = csvExportService.exportReviewToCsv(reviewDTOs);
+
+            String examTitle = exam.title();
+            String fileName = examTitle + "_" + studentName + ".csv";
+
+            response.setContentType("text/csv");
+            response.setHeader("Content-Disposition", "attachment; filename=\"" +  fileName + "\"");
+            response.getOutputStream().write(csvBytes);
+            response.getOutputStream().flush();
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 }

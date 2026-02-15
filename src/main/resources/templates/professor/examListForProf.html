@@ -41,7 +41,7 @@
                     <th>Start</th>
                     <th>Frist</th>
                     <th>Ergebnisse</th>
-                    <th>Export</th>
+                    <th>Download</th>
                     <th>Löschen</th>
                 </tr>
                 </thead>
@@ -83,7 +83,15 @@
                             Veröffentlichungszeitpunkt der Ergebnisse
                         </span>
                     </td>
-                    <td>Export</td>
+                    <td>
+                        <form method="get"
+                              th:action="@{/professor/downloadExam/{examId}(examId=${exam.fachId})}">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-download"></i>
+                                Download
+                            </button>
+                        </form>
+                    </td>
                     <td>
                         <form method="post"
                               th:action="@{/professor/deleteExam/{examId}(examId=${exam.fachId})}">

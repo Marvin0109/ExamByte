@@ -69,7 +69,11 @@ public class ReviewExportServiceImpl implements ReviewExportService {
                 KorrektorDTO korrektorDTO = korrektorQueryService.getReviewerById(r.korrektorFachId());
 
                 if (!korrektorDTO.name().equals("Automatischer Korrektor")) {
-                    sb.append(", ");
+
+                    if (!sb.isEmpty()) {
+                        sb.append(", ");
+                    }
+
                     sb.append(korrektorDTO.name());
                 }
             }

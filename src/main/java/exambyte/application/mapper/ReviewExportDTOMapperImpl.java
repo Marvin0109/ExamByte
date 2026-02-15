@@ -32,6 +32,7 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
 
             r.setFrageText(frage.frageText());
             r.setFrageTyp(frage.type().name());
+            r.setPunkte(frage.maxPunkte());
 
             AntwortDTO a = antworten.stream()
                     .filter(antwort -> antwort.frageFachId().equals(frage.fachId()))
@@ -46,8 +47,10 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
                         .findAny()
                         .orElse(null);
 
-                r.setBewertung(review == null ? "" : review.bewertung());
-                r.setErreichtePunkte(review == null ? 0 : review.punkte());
+                if (review != null) {
+                    r.setBewertung(review.bewertung());
+                    r.setErreichtePunkte(review.punkte());
+                }
             }
 
             export.add(r);

@@ -2,6 +2,7 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.service.AppUserService;
+import exambyte.application.service.CsvExportService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
@@ -54,6 +55,9 @@ class ProfessorControllerTest {
 
     @MockitoBean
     private ExamControllerService service;
+
+    @MockitoBean
+    private CsvExportService csvExportService;
 
     @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")

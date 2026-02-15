@@ -1,12 +1,17 @@
 package exambyte.application.dto.csv_dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"examTitle", "author", "maxPunkte", "frageText", "frageTyp",
+        "punkte", "antwortMoeglichkeiten", "loesungen"})
 public class ExamExportDTO {
 
     private String examTitle;
     private String author;
     private String frageText;
-    private int punkte;
+    private int maxPunkte;
     private String frageTyp;
+    private int punkte;
     private String antwortMoeglichkeiten;
     private String loesungen;
 
@@ -34,12 +39,12 @@ public class ExamExportDTO {
         this.frageText = frageText;
     }
 
-    public int getPunkte() {
-        return punkte;
+    public int getMaxPunkte() {
+        return maxPunkte;
     }
 
-    public void setPunkte(int punkte) {
-        this.punkte = punkte;
+    public void setMaxPunkte(int maxPunkte) {
+        this.maxPunkte = maxPunkte;
     }
 
     public String getFrageTyp() {
@@ -64,5 +69,13 @@ public class ExamExportDTO {
 
     public void setLoesungen(String loesungen) {
         this.loesungen = loesungen;
+    }
+
+    public int getPunkte() {
+        return punkte;
+    }
+
+    public void setPunkte(int punkte) {
+        this.punkte = punkte;
     }
 }

@@ -1,13 +1,17 @@
 package exambyte.application.dto.csv_dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"examTitle", "author", "maxPunkte", "frageText", "frageTyp", "punkte",
+        "studiAntworten", "bewertung", "erreichtePunkte"})
 public class ReviewExportDTO {
 
     private String examTitle;
     private String author;
     private String frageText;
     private int maxPunkte;
+    private int punkte;
     private String frageTyp;
-    private String antwortMoeglichkeiten;
     private String studiAntworten;
     private String bewertung;
     private double erreichtePunkte;
@@ -52,14 +56,6 @@ public class ReviewExportDTO {
         this.frageTyp = frageTyp;
     }
 
-    public String getAntwortMoeglichkeiten() {
-        return antwortMoeglichkeiten;
-    }
-
-    public void setAntwortMoeglichkeiten(String antwortMoeglichkeiten) {
-        this.antwortMoeglichkeiten = antwortMoeglichkeiten;
-    }
-
     public String getStudiAntworten() {
         return studiAntworten;
     }
@@ -82,5 +78,13 @@ public class ReviewExportDTO {
 
     public void setErreichtePunkte(double erreichtePunkte) {
         this.erreichtePunkte = erreichtePunkte;
+    }
+
+    public int getPunkte() {
+        return punkte;
+    }
+
+    public void setPunkte(int punkte) {
+        this.punkte = punkte;
     }
 }

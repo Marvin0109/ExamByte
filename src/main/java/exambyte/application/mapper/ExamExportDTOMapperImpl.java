@@ -26,10 +26,11 @@ public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
             ExamExportDTO e = new ExamExportDTO();
             e.setExamTitle(exam.title());
             e.setAuthor(profName);
-            e.setPunkte(punkte);
+            e.setMaxPunkte(punkte);
 
             e.setFrageText(frage.frageText());
             e.setFrageTyp(frage.type().name());
+            e.setPunkte(frage.maxPunkte());
 
             KorrekteAntwortenDTO k = loesungen.stream()
                     .filter(l -> l.frageFachId().equals(frage.fachId()))
