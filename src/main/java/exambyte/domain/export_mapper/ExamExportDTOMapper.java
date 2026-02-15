@@ -1,4 +1,4 @@
-package exambyte.application.mapper;
+package exambyte.domain.export_mapper;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;

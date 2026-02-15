@@ -5,7 +5,7 @@ import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.mapper.ExamExportDTOMapper;
+import exambyte.domain.export_mapper.ExamExportDTOMapper;
 import exambyte.application.service.query.ExamQueryService;
 
 import exambyte.application.service.query.FrageQueryService;

@@ -5,6 +5,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.domain.export_mapper.ReviewExportDTOMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

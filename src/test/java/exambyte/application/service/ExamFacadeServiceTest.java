@@ -1,6 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.FrageDTO;
+import exambyte.application.service.export.ExamExportService;
+import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
 import exambyte.application.service.usecase.ReviewManagementService;
 import exambyte.application.service.usecase.ExamManagementService;
@@ -45,6 +47,12 @@ class ExamFacadeServiceTest {
     @Mock
     private KorrekteAntwortenQueryService korrekteAntwortenQueryService;
 
+    @Mock
+    private ExamExportService examExportService;
+
+    @Mock
+    private ReviewExportService reviewExportService;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -52,6 +60,8 @@ class ExamFacadeServiceTest {
         examFacadeService = new ExamFacadeServiceImpl(
                 reviewManagementService,
                 examManagementService,
+                examExportService,
+                reviewExportService,
                 frageQueryService,
                 professorQueryService,
                 korrektorQueryService,

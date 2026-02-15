@@ -2,7 +2,7 @@ package exambyte.application.service.export;
 
 import exambyte.application.dto.*;
 import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.application.mapper.ReviewExportDTOMapper;
+import exambyte.domain.export_mapper.ReviewExportDTOMapper;
 import exambyte.application.service.query.*;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
@@ -78,4 +80,8 @@ public interface ExamControllerService {
     OldDataForm fillOldDataForm(UUID examId, String studentName);
 
     SubmitForm fillSubmitFormWithData(OldDataForm form);
+
+    List<ExamExportDTO> getExamExport(UUID examId);
+
+    List<ReviewExportDTO> getReviewExport(UUID examId, String studentName);
 }
