@@ -1,9 +1,9 @@
-package exambyte.web.service.export_mapper;
+package exambyte.application.service.export_mapper;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.KorrekteAntwortenDTO;
-import exambyte.web.service.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

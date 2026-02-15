@@ -1,10 +1,10 @@
-package exambyte.web.service.export_mapper;
+package exambyte.application.service.export_mapper;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.web.service.csv_dto.ReviewExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package exambyte.web.service.csv_dto;
+package exambyte.application.dto.csv_dto;
 
 public class ExamExportDTO {
 
