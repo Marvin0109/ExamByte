@@ -363,4 +363,54 @@ class ExamControllerServiceTest {
         assertThat(form.getMaxPunkte()).isEqualTo(2);
         assertThat(form.getAntwortFachId()).isEqualTo(antwort1.fachId());
     }
+
+    @Test
+    void getFreitextAntwortenForExamAndStudent() {
+        UUID studentId = UUID.randomUUID();
+
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 1",
+                2,
+                PROF_ID,
+                EXAM_ID,
+                QuestionTypeDTO.FREITEXT
+        );
+
+        AntwortDTO antwort = new AntwortDTO(
+                UUID.randomUUID(),
+                "Antwort",
+                frage.fachId(),
+                studentId,
+                null
+        );
+
+        when(examFacadeService.getFreitextFragen(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getFreitextAntwortenForExam(EXAM_ID)).thenReturn(List.of(antwort));
+
+        Map<FrageDTO, AntwortDTO> map = service.getFreitextAntwortenForExamAndStudent(EXAM_ID, studentId);
+
+        assertThat(map).hasSize(1);
+    }
+
+    @Test
+    void getFreitextAntwortenForExamAndStudent_noAnswer() {
+        UUID studentId = UUID.randomUUID();
+
+        FrageDTO frage = new FrageDTO(
+                UUID.randomUUID(),
+                "Frage 1",
+                2,
+                PROF_ID,
+                EXAM_ID,
+                QuestionTypeDTO.FREITEXT
+        );
+
+        when(examFacadeService.getFreitextFragen(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getFreitextAntwortenForExam(EXAM_ID)).thenReturn(List.of());
+
+        Map<FrageDTO, AntwortDTO> map = service.getFreitextAntwortenForExamAndStudent(EXAM_ID, studentId);
+
+        assertThat(map).isEmpty();
+    }
 }
