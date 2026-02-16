@@ -9,8 +9,8 @@ import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.show_review.ReviewViewForm;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -205,47 +204,45 @@ public class ProfessorController {
     }
 
     @GetMapping("/downloadExam/{examId}")
-    public void downloadExam(HttpServletResponse response,
-                             @PathVariable UUID examId) throws IOException {
-
-        List<ExamExportDTO> examDTOs = service.getExamExport(examId);
-        ExamDTO exam = service.getExamByUUID(examId);
-
+    public ResponseEntity<byte[]> downloadExam(@PathVariable UUID examId) {
         try {
+            List<ExamExportDTO> examDTOs = service.getExamExport(examId);
+            ExamDTO exam = service.getExamByUUID(examId);
+
             byte[] csvBytes = csvExportService.exportExamToCsv(examDTOs);
 
-            String examTitle = exam.title();
-            String fileName = examTitle + ".csv";
+            String fileName = exam.title() + ".csv";
 
-            response.setContentType("text/csv");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-            response.getOutputStream().write(csvBytes);
-            response.getOutputStream().flush();
+            return ResponseEntity.ok()
+                    .header("Content-Disposition",
+                            "attachment; filename=\"" + fileName + "\"")
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .body(csvBytes);
+
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @GetMapping("/downloadReview/{examId}/{studentName}")
-    public void downloadReview(HttpServletResponse response,
-                               @PathVariable UUID examId,
-                               @PathVariable String studentName) throws IOException {
-
-        List<ReviewExportDTO> reviewDTOs = service.getReviewExport(examId, studentName);
-        ExamDTO exam =  service.getExamByUUID(examId);
-
+    public ResponseEntity<byte[]> downloadReview(@PathVariable UUID examId,
+                                                 @PathVariable String studentName) {
         try {
+            List<ReviewExportDTO> reviewDTOs = service.getReviewExport(examId, studentName);
+            ExamDTO exam = service.getExamByUUID(examId);
+
             byte[] csvBytes = csvExportService.exportReviewToCsv(reviewDTOs);
 
-            String examTitle = exam.title();
-            String fileName = examTitle + "_" + studentName + ".csv";
+            String fileName = exam.title() + "_" + studentName + ".csv";
 
-            response.setContentType("text/csv");
-            response.setHeader("Content-Disposition", "attachment; filename=\"" +  fileName + "\"");
-            response.getOutputStream().write(csvBytes);
-            response.getOutputStream().flush();
+            return ResponseEntity.ok()
+                    .header("Content-Disposition",
+                            "attachment; filename=\"" + fileName + "\"")
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .body(csvBytes);
+
         } catch (Exception e) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 }

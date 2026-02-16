@@ -4,8 +4,6 @@ import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
