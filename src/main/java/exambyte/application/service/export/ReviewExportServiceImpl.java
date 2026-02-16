@@ -47,10 +47,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
 
         for (FrageDTO frage : fragen) {
             AntwortDTO a = antwortQueryService.findByStudentAndFrage(studentId, frage.fachId());
-
-            if (a != null) {
-                antworten.add(a);
-            }
+            antworten.add(a);
         }
 
         int maxPunkte = fragen.stream()
