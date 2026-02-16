@@ -128,13 +128,6 @@ class ExamExportServiceTest {
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(frageQueryService.getFragenForExam(exam.fachId())).thenReturn(List.of(frage2));
         when(korrekteAntwortenQueryService.getLoesungForFrage(frage2.fachId())).thenReturn(null);
-        when(examExportDTOMapper.mapDTOToExport(
-                exam,
-                professor.name(),
-                2,
-                List.of(frage2),
-                List.of()))
-                .thenReturn(mock());
 
         service.createExamExport(exam.fachId());
 
