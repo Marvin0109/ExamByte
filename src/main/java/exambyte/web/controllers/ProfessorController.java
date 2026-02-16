@@ -1,12 +1,17 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.service.CsvExportService;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.show_review.ReviewViewForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -31,6 +36,7 @@ import java.util.UUID;
 public class ProfessorController {
 
     private final ExamControllerService service;
+    private final CsvExportService csvExportService;
 
     private static final int INT_QUESTIONS_COUNT = 6;
     private static final String LOGIN_NAME = "login";
@@ -41,8 +47,9 @@ public class ProfessorController {
 
     private final Clock clock;
 
-    public ProfessorController(ExamControllerService service, Clock clock) {
+    public ProfessorController(ExamControllerService service, CsvExportService csvExportService, Clock clock) {
         this.service = service;
+        this.csvExportService = csvExportService;
         this.clock = clock;
     }
 
@@ -194,5 +201,48 @@ public class ProfessorController {
                 false,
                 REDIRECT_LIST_EXAMS
         );
+    }
+
+    @GetMapping("/downloadExam/{examId}")
+    public ResponseEntity<byte[]> downloadExam(@PathVariable UUID examId) {
+        try {
+            List<ExamExportDTO> examDTOs = service.getExamExport(examId);
+            ExamDTO exam = service.getExamByUUID(examId);
+
+            byte[] csvBytes = csvExportService.exportExamToCsv(examDTOs);
+
+            String fileName = exam.title() + ".csv";
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition",
+                            "attachment; filename=\"" + fileName + "\"")
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .body(csvBytes);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/downloadReview/{examId}/{studentName}")
+    public ResponseEntity<byte[]> downloadReview(@PathVariable UUID examId,
+                                                 @PathVariable String studentName) {
+        try {
+            List<ReviewExportDTO> reviewDTOs = service.getReviewExport(examId, studentName);
+            ExamDTO exam = service.getExamByUUID(examId);
+
+            byte[] csvBytes = csvExportService.exportReviewToCsv(reviewDTOs);
+
+            String fileName = exam.title() + "_" + studentName + ".csv";
+
+            return ResponseEntity.ok()
+                    .header("Content-Disposition",
+                            "attachment; filename=\"" + fileName + "\"")
+                    .contentType(MediaType.parseMediaType("text/csv"))
+                    .body(csvBytes);
+
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

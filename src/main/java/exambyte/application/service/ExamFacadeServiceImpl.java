@@ -1,6 +1,10 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.service.export.ExamExportService;
+import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
 import exambyte.application.service.usecase.ReviewManagementService;
 import exambyte.application.service.usecase.ExamManagementService;
@@ -15,6 +19,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     private final ReviewManagementService reviewManagementService;
     private final ExamManagementService examManagementService;
+    private final ExamExportService examExportService;
+    private final ReviewExportService reviewExportService;
     private final FrageQueryService frageQueryService;
     private final ProfessorQueryService professorQueryService;
     private final KorrektorQueryService korrektorQueryService;
@@ -26,6 +32,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     public ExamFacadeServiceImpl(ReviewManagementService reviewManagementService,
                                  ExamManagementService examManagementService,
+                                 ExamExportService examExportService,
+                                 ReviewExportService reviewExportService,
                                  FrageQueryService frageQueryService,
                                  ProfessorQueryService professorQueryService,
                                  KorrektorQueryService korrektorQueryService,
@@ -36,6 +44,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
         this.reviewManagementService = reviewManagementService;
         this.examManagementService = examManagementService;
+        this.examExportService = examExportService;
+        this.reviewExportService = reviewExportService;
         this.frageQueryService = frageQueryService;
         this.professorQueryService = professorQueryService;
         this.korrektorQueryService = korrektorQueryService;
@@ -204,5 +214,15 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     @Override
     public KorrektorDTO getReviewerById(UUID reviewerId) {
         return korrektorQueryService.getReviewerById(reviewerId);
+    }
+
+    @Override
+    public List<ExamExportDTO> getExamExportDTOs(UUID examId) {
+        return examExportService.createExamExport(examId);
+    }
+
+    @Override
+    public List<ReviewExportDTO> getReviewExportDTOs(UUID examId, String studentName) {
+        return reviewExportService.createReviewExport(examId, studentName);
     }
 }

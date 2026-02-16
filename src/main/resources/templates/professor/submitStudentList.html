@@ -31,6 +31,7 @@
             <th>Prüfling</th>
             <th>Bewertungsstatus</th>
             <th>Ergebnis</th>
+            <th>Download</th>
         </tr>
         </thead>
         <tbody>
@@ -44,11 +45,24 @@
                 </span>
             </td>
             <td>
-                <a th:href="@{/professor/showResult/{examId}/{studentName}
-                            (examId=${exam.fachId}, studentName=${submitInfo.name})}">
-                    <i class="fas fa-eye"></i>
-                    Ergebnis
-                </a>
+                <form method="get"
+                      th:action="@{/professor/showResult/{examId}/{studentName}
+                      (examId=${exam.fachId}, studentName=${submitInfo.name})}">
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="fas fa-eye"></i>
+                        Ergebnis
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="get"
+                      th:action="@{/professor/downloadReview/{examId}/{studentName}
+                      (examId=${exam.fachId}, studentName=${submitInfo.name})}">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        Download
+                    </button>
+                </form>
             </td>
         </tr>
         </tbody>

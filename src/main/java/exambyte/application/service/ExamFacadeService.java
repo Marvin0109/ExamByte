@@ -1,6 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -72,4 +74,8 @@ public interface ExamFacadeService {
     boolean timeReachedToViewReview(UUID examFachId);
 
     KorrektorDTO getReviewerById(UUID reviewerId);
+
+    List<ExamExportDTO> getExamExportDTOs(UUID examId);
+
+    List<ReviewExportDTO> getReviewExportDTOs(UUID examId, String studentName);
 }

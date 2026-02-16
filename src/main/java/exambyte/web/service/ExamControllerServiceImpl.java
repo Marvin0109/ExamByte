@@ -2,6 +2,8 @@ package exambyte.web.service;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.common.QuestionTypeWeb;
@@ -336,5 +338,15 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public boolean deleteExam(UUID examId) {
         return service.deleteById(examId);
+    }
+
+    @Override
+    public List<ExamExportDTO> getExamExport(UUID examId) {
+        return service.getExamExportDTOs(examId);
+    }
+
+    @Override
+    public List<ReviewExportDTO> getReviewExport(UUID examId, String studentName) {
+        return service.getReviewExportDTOs(examId, studentName);
     }
 }

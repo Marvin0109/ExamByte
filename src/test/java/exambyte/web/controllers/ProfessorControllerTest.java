@@ -1,7 +1,10 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
+import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.csv_dto.ReviewExportDTO;
 import exambyte.application.service.AppUserService;
+import exambyte.application.service.CsvExportService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
@@ -54,6 +57,9 @@ class ProfessorControllerTest {
 
     @MockitoBean
     private ExamControllerService service;
+
+    @MockitoBean
+    private CsvExportService csvExportService;
 
     @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
@@ -359,5 +365,81 @@ class ProfessorControllerTest {
                 .andExpect(redirectedUrl("/professor/listExams"))
                 .andExpect(flash().attribute("success", false))
                 .andExpect(flash().attribute("message", "Exam am laufen!"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Export einer Exam ist erfolgreich")
+    void downloadExam_01() throws Exception {
+        UUID examId = UUID.randomUUID();
+        ExamDTO exam = mock(ExamDTO.class);
+        when(service.getExamByUUID(examId)).thenReturn(exam);
+        when(exam.title()).thenReturn("Title");
+
+        ExamExportDTO export = new ExamExportDTO();
+        when(service.getExamExport(examId)).thenReturn(List.of(export));
+
+        byte[] csvBytes = "examTitle;points\nTitle;10\n".getBytes();
+        when(csvExportService.exportExamToCsv(List.of(export))).thenReturn(csvBytes);
+
+        mvc.perform(get("/professor/downloadExam/{examId}", examId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/csv"))
+                .andExpect(header().string(
+                        "Content-Disposition",
+                        "attachment; filename=\"Title.csv\""
+                ))
+                .andExpect(content().bytes(csvBytes));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Exception wird geworfen beim Download eines Exams")
+    void downloadExam_02() throws Exception {
+        UUID examId = UUID.randomUUID();
+
+        when(service.getExamExport(examId))
+                .thenThrow(new RuntimeException());
+
+        mvc.perform(get("/professor/downloadExam/{examId}", examId))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Export einer Bewertung ist erfolgreich")
+    void downloadReview_01() throws Exception {
+        UUID examId = UUID.randomUUID();
+        ExamDTO exam = mock(ExamDTO.class);
+        when(service.getExamByUUID(examId)).thenReturn(exam);
+        when(exam.title()).thenReturn("Title");
+
+        ReviewExportDTO export = new ReviewExportDTO();
+        when(service.getReviewExport(examId, "Student")).thenReturn(List.of(export));
+
+        byte[] csvBytes = "examTitle;points\nTitle;10\n".getBytes();
+        when(csvExportService.exportReviewToCsv(List.of(export))).thenReturn(csvBytes);
+
+        mvc.perform(get("/professor/downloadReview/{examId}/{studentName}", examId, "Student"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/csv"))
+                .andExpect(header().string(
+                        "Content-Disposition",
+                        "attachment; filename=\"Title_Student.csv\""
+                ))
+                .andExpect(content().bytes(csvBytes));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Exception wird geworfen beim Download eines Exams")
+    void downloadReview_02() throws Exception {
+        UUID examId = UUID.randomUUID();
+
+        when(service.getReviewExport(examId, "Student"))
+                .thenThrow(new RuntimeException());
+
+        mvc.perform(get("/professor/downloadReview/{examId}/{studentName}", examId, "Student"))
+                .andExpect(status().isNotFound());
     }
 }

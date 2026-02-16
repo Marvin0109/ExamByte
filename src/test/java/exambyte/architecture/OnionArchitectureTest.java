@@ -7,6 +7,7 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.library.Architectures;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ class OnionArchitectureTest {
             .adapter("repository", "exambyte.infrastructure.persistence.repository..")
             .adapter("controller", "exambyte.web.controllers..")
             .adapter("mapper", "exambyte.infrastructure.mapper..",
-                    "exambyte.infrastructure.persistence.mapper..");
+                    "exambyte.infrastructure.persistence.mapper..", "exambyte.application.mapper..");
         rule.check(klassen);
     }
 
@@ -90,6 +91,13 @@ class OnionArchitectureTest {
         .and().haveSimpleNameEndingWith("Controller")
         .should()
         .beAnnotatedWith(Controller.class);
+
+    @ArchTest
+    ArchRule allMapperShouldBeAnnotatedWithController = classes()
+        .that()
+        .haveSimpleNameEndingWith("MapperImpl")
+        .should()
+        .beAnnotatedWith(Component.class);
 
     @ArchTest
     ArchRule domainClassesHasPrivateFields = fields()
