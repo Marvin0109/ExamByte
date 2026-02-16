@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 13.02.2026
+>**aktualisiert am:** 16.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -613,3 +613,10 @@
 **Bereich**: UI / UX / Test / Dependency
 - Ergebnisübersicht vollständig implementiert und getestet
 - Spring Boot Version auf **3.5.8** aktualisiert (Testcontainer funktionierte nicht auf Github Actions)
+
+---
+
+### 15.02.2026 - 16.02.2026
+**Bereich**: UI / UX / Feature / Test
+- CSV-Download von Prüfungen sowie Ergebnisse eines Studenten implementiert und getestet
+- Delete-Exam Logik verbessert

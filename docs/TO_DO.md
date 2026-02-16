@@ -1,7 +1,7 @@
 # TODO für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 13.02.2026
+> **aktualisiert am:** 16.02.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
@@ -13,9 +13,10 @@
   - [X] **Korrektur von Freitextantworten**
   - [X] **Neuer Testdurchlauf mit bestehenden Antworten**
   - [X] **Zulassungslogik für Testteilnahmen**
+  - [ ] **Bewertung von Antworten als Professor**
 
 - **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
-  - [ ] **CSV-Export**: Formular exportieren
+  - [X] **CSV-Export**: Formular exportieren
   - [X] **Testantwort-Einsicht**: Einsicht in Testergebnisse für Admins/Lehrkräfte
   - [X] **HTML-Inhalte**: Überarbeiten hinsichtlich Benutzerfreundlichkeit
   - [X] **Accessiblity**: Überprüfung auf Accessibility
@@ -52,4 +53,6 @@ und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 8. [X] Zulassungslogik
 9. [X] Testdurchlauf mit alten Antworten
 10. [X] Einsicht auf Testergebnisse
-11. [ ] CSV-Export einführen
+11. [X] CSV-Export einführen
+12. [ ] Bewertung von Antworten als Professor
+13. [ ] Sicherstellung von Codekonventionen
