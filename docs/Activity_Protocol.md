@@ -620,3 +620,10 @@
 **Bereich**: UI / UX / Feature / Test
 - CSV-Download von Prüfungen sowie Ergebnisse eines Studenten implementiert und getestet
 - Delete-Exam Logik verbessert
+
+---
+
+### 17.02.2026
+**Bereich**: UI / UX
+- Lange Antwortmöglichkeiten in MC/SC Fragen werden richtig abgebildet
+- Nutzungshinweise zu der Erstellung von MC/SC-Aufgaben hinzugefügt
