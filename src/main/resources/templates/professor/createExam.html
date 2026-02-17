@@ -90,7 +90,7 @@
 
 
             <!-- Antwortmöglichkeiten -->
-            <label for="mc_choices_1">Antwortmöglichkeiten (eine pro Zeile):</label>
+            <label for="mc_choices_1">Antwortmöglichkeiten (durch Enter getrennt):</label>
             <textarea rows="6" id="mc_choices_1" th:field="*{questions[0].choices}" class="form-control"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
             <small class="text-danger" th:if="${#fields.hasErrors('questions[0].choices')}"
@@ -98,7 +98,7 @@
 
 
             <!-- Lösungen -->
-            <label for="mc_correctAnswers_1">Richtige Antworten (eine pro Zeile):</label>
+            <label for="mc_correctAnswers_1">Richtige Antworten (durch Enter getrennt):</label>
             <textarea rows="6" id="mc_correctAnswers_1" th:field="*{questions[0].correctAnswers}" class="form-control"
                       placeholder="Richtige 1&#10;Richtige 2"></textarea>
             <small class="text-danger" th:if="${#fields.hasErrors('questions[0].correctAnswers')}"
@@ -145,7 +145,7 @@
                                        th:errors="*{questions[2].questionText}"></small>
 
             <!-- Antwortmöglichkeiten -->
-            <label for="sc_choices_3">Antwortmöglichkeiten (eine pro Zeile):</label>
+            <label for="sc_choices_3">Antwortmöglichkeiten (durch Enter getrennt):</label>
             <textarea id="sc_choices_3" th:field="*{questions[2].choices}" class="form-control" rows="4"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
             <small class="text-danger" th:if="${#fields.hasErrors('questions[2].choices')}"
@@ -179,14 +179,14 @@
                                        th:errors="*{questions[3].questionText}"></small>
 
             <!-- Antwortmöglichkeiten -->
-            <label for="mc_choices_4">Antwortmöglichkeiten (eine pro Zeile):</label>
+            <label for="mc_choices_4">Antwortmöglichkeiten (durch Enter getrennt):</label>
             <textarea rows="6" id="mc_choices_4" th:field="*{questions[3].choices}" class="form-control"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
             <small class="text-danger" th:if="${#fields.hasErrors('questions[3].choices')}"
                                        th:errors="*{questions[3].choices}"></small>
 
             <!-- Lösungen -->
-            <label for="mc_correctAnswers_4">Richtige Antworten (eine pro Zeile):</label>
+            <label for="mc_correctAnswers_4">Richtige Antworten (durch Enter getrennt):</label>
             <textarea rows="6" id="mc_correctAnswers_4" th:field="*{questions[3].correctAnswers}" class="form-control"
                       placeholder="Richtige 1&#10;Richtige 2"></textarea>
             <small class="text-danger" th:if="${#fields.hasErrors('questions[3].correctAnswers')}"
@@ -213,7 +213,7 @@
                                        th:errors="*{questions[4].questionText}"></small>
 
             <!-- Antwortmöglichkeiten -->
-            <label for="sc_choices_5">Antwortmöglichkeiten (eine pro Zeile):</label>
+            <label for="sc_choices_5">Antwortmöglichkeiten (durch Enter getrennt):</label>
             <textarea id="sc_choices_5" th:field="*{questions[4].choices}" class="form-control" rows="4"
                       placeholder="Antwort 1&#10;Antwort 2"></textarea>
             <small class="text-danger" th:if="${#fields.hasErrors('questions[4].choices')}"
