@@ -39,13 +39,15 @@
 
                     <!-- Multiple Choice -->
                     <div class="mb-2" th:if="${frage.type == 'MC'}">
-                        <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                            <input type="checkbox"
+                        <div class="form-check mb-2"
+                             th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                            <input class="form-check-input"
+                                   type="checkbox"
                                    th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                                    th:name="${frage.fachId}"
                                    th:field="*{answers[__${frage.fachId}__]}"
                                    th:value="${antwort}" />
-                            <label class="form-check-label"
+                            <label class="form-check-label w-100"
                                    th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                                    th:text="${antwort.replace('ĸ', ',')}">
                             </label>
@@ -54,13 +56,15 @@
 
                     <!-- Single Choice -->
                     <div class="mb-2" th:if="${frage.type == 'SC'}">
-                        <div th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
-                            <input type="radio"
+                        <div class="form-check mb-2"
+                             th:each="antwort : ${#strings.arraySplit(frage.choices, ',')}">
+                            <input class="form-check-input"
+                                   type="radio"
                                    th:id="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                                    th:name="${frage.fachId}"
                                    th:field="*{answers[__${frage.fachId}__]}"
                                    th:value="${antwort}" />
-                            <label class="form-check-label"
+                            <label class="form-check-label w-100"
                                    th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}"
                                    th:text="${antwort.replace('ĸ', ',')}">
                             </label>
@@ -69,7 +73,7 @@
 
                     <!-- Freitext -->
                     <div class="mb-2" th:if="${frage.type == 'FREITEXT'}">
-                        <label class="form-check-label"
+                        <label class="form-label"
                                th:for="'antwort-' + ${frage.fachId} + '-' + ${iterStat.index}">
                         </label>
                         <textarea th:name="${frage.fachId}"

@@ -44,18 +44,15 @@
                     </small>
                 </p>
                 <p class="card-text" th:text="${antwort.antwort}">Antwort des Studenten</p>
-                <h5 class="card-title">Bewertung</h5>
-                <label class="form-check-label" th:for="'Bewertung' + ${iterStat.index}"></label>
-                <textarea class="form-control mb-5" rows="6"
+                <label class="form-label" th:for="'Bewertung' + ${iterStat.index}">Bewertungstext</label>
+                <textarea class="form-control mb-2" rows="6"
                         th:id="'Bewertung' + ${iterStat.index}"
                         th:field="*{bewertung}">
                 </textarea>
                 <small class="text-danger" th:if="${#fields.hasErrors('bewertung')}"
                        th:errors="*{bewertung}"></small>
-
-                <h6 class="card-subtitle text-muted">Punkte</h6>
-                <label th:for="'Punkte' + ${iterStat.index}"></label>
-                <input class="form-control mb-5" type="number" th:id="'Punkte' + ${iterStat.index}"
+                <label th:for="'Punkte' + ${iterStat.index}">Punkte</label>
+                <input class="form-control mb-2" type="number" th:id="'Punkte' + ${iterStat.index}"
                        th:field="*{punkteVergeben}" min="0" th:max="${antwort.maxPunkte}">
                 <small class="text-danger" th:if="${#fields.hasErrors('punkteVergeben')}"
                        th:errors="*{punkteVergeben}"></small>
