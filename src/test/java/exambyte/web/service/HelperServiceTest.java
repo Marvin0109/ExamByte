@@ -183,6 +183,11 @@ class HelperServiceTest {
                 ),
 
                 Arguments.of(
+                        LocalDateTime.of(2026, 1, 2, 10, 0),
+                        "1 Tag"
+                ),
+
+                Arguments.of(
                         LocalDateTime.of(2026, 1, 14, 12, 5),
                         "13 Tage 2 Stunden 5 Minuten"
                 ),
