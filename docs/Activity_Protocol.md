@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 16.02.2026
+>**aktualisiert am:** 19.02.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -627,3 +627,10 @@
 **Bereich**: UI / UX
 - Lange Antwortmöglichkeiten in MC/SC Fragen werden richtig abgebildet
 - Nutzungshinweise zu der Erstellung von MC/SC-Aufgaben hinzugefügt
+
+---
+
+### 19.02.2026
+**Bereich**: UX / Feature
+- Die Anzahl an Fragetypen für Prüfungen ist jetzt benutzerdefiniert
+- `showReview` ist erfolgreich auch bei nicht eingereichten Antworten
