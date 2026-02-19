@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -26,9 +27,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -62,6 +63,82 @@ class ProfessorControllerTest {
     private CsvExportService csvExportService;
 
     @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Seite für die Eingabe von Anzahl der Fragetypen ist erreichbar mit entsprechender Rolle")
+    void questionSettings() throws Exception {
+        mvc.perform(get("/professor/questionSettings"))
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"))
+            .andExpect(model().attributeExists("questionForm"))
+            .andExpect(model().attributeExists("currentPath"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Valide Eingabedaten für Generierung von Prüfungsformular")
+    void generateQuestions_01() throws Exception {
+        MvcResult result = mvc.perform(post("/professor/generateQuestions")
+                    .with(csrf())
+                .param("mcCount", "1")
+                .param("scCount", "4")
+                .param("freitextCount", "5"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/professor/createExam"))
+            .andReturn();
+
+        MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
+
+        assertNotNull(session);
+        assertNotNull(session.getAttribute("questionForm"));
+
+        verify(service).createQuestionTypeList(1, 4, 5);
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Invalide Eingabedaten für die Generierung von Prüfungsformular (0 MC Fragen)")
+    void generateQuestions_02() throws Exception {
+        mvc.perform(post("/professor/generateQuestions")
+                    .with(csrf())
+                .param("mcCount", "0")
+                .param("scCount", "1")
+                .param("freitextCount", "1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/professor/questionSettings"))
+            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
+            .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Invalide Eingabedaten für die Generierung von Prüfungsformular (11 Freitext Fragen)")
+    void generateQuestions_03() throws Exception {
+        mvc.perform(post("/professor/generateQuestions")
+                    .with(csrf())
+                .param("mcCount", "1")
+                .param("scCount", "1")
+                .param("freitextCount", "11"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/professor/questionSettings"))
+            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
+            .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Invalide Eingabedaten für die Generierung von Prüfungsformular (SC Fragen fehlen)")
+    void generateQuestions_04() throws Exception {
+        mvc.perform(post("/professor/generateQuestions")
+                    .with(csrf())
+                .param("mcCount", "1")
+                .param("freitextCount", "1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/professor/questionSettings"))
+            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
+            .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
     @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void showCreateExamForm_01() throws Exception {
 
@@ -78,14 +155,36 @@ class ProfessorControllerTest {
     void showCreateExamForm_02() throws Exception {
 
         ExamForm form = new ExamForm();
-        when(service.createExamForm()).thenReturn(form);
+        when(service.createExamForm(anyInt())).thenReturn(form);
 
-        mvc.perform(get("/professor/createExam"))
+        mvc.perform(get("/professor/createExam")
+                .param("mcCount", "1")
+                .param("scCount", "1")
+                .param("freitextCount", "1"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("examForm"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(view().name("professor/createExam"));
+
+        verify(service).createExamForm(3);
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Die Seite zum Erstellen von Prüfungen ist nicht sichtbar (Invalide Eingabedaten in ModelAttribute)")
+    void showCreateExamForm_03() throws Exception {
+
+        mvc.perform(get("/professor/createExam")
+                .param("mcCount", "0")
+                .param("scCount", "1")
+                .param("freitextCount", "1"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/professor/questionSettings"))
+            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
+            .andExpect(flash().attribute("success", false));
+
+        verify(service, never()).createExamForm(2);
     }
 
     @Test
@@ -117,51 +216,12 @@ class ProfessorControllerTest {
                 .param("questions[2].questionText", "Text")
                 .param("questions[2].choices", "Antwort1\nAntwort2")
                 .param("questions[2].correctAnswer", "Antwort1")
-
-                .param("questions[3].punkte", "1")
-                .param("questions[3].type", "MC")
-                .param("questions[3].questionText", "Text")
-                .param("questions[3].choices", "Antwort1\nAntwort2")
-                .param("questions[3].correctAnswers", "Antwort1\nAntwort2")
-
-                .param("questions[4].punkte", "1")
-                .param("questions[4].type", "SC")
-                .param("questions[4].questionText", "Text")
-                .param("questions[4].choices", "Antwort1\nAntwort2")
-                .param("questions[4].correctAnswer", "Antwort1")
-
-                .param("questions[5].punkte", "1")
-                .param("questions[5].type", "FREITEXT")
-                .param("questions[5].questionText", "Text")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/createExam"))
+            .andExpect(redirectedUrl("/professor/questionSettings"))
             .andExpect(flash().attribute("message", "Prüfung und Fragen erfolgreich erstellt!"))
-            .andExpect(flash().attribute("success", true));
-    }
-
-    @Test
-    @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Das erstellen eines Tests mit zu wenig Fragen ist nicht erfolgreich")
-    void createExam_02() throws Exception {
-
-        mvc.perform(post("/professor/createExam")
-                .with(csrf())
-                .param("title", "Test")
-                .param("start", "2020-01-01T00:00")
-                .param("end", "2020-01-01T01:00")
-                .param("result", "2020-01-01T02:00")
-
-                .param("questions[0].punkte", "1")
-                .param("questions[0].type", "MC")
-                .param("questions[0].questionText", "Text")
-                .param("questions[0].choices", "Antwort1\nAntwort2")
-                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
-            )
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/createExam"))
-            .andExpect(flash().attribute("message", "Weniger Fragen als sonst."))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(flash().attribute("success", true))
+            .andExpect(request().sessionAttributeDoesNotExist("questionForm"));
     }
 
     @Test
@@ -169,7 +229,7 @@ class ProfessorControllerTest {
     @DisplayName("Eine Frage bekommt 0 Punkte")
     void createExam_03() throws Exception {
 
-        mvc.perform(post("/professor/createExam")
+        MvcResult result = mvc.perform(post("/professor/createExam")
                 .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
@@ -192,27 +252,17 @@ class ProfessorControllerTest {
                 .param("questions[2].questionText", "Text")
                 .param("questions[2].choices", "Antwort1\nAntwort2")
                 .param("questions[2].correctAnswer", "Antwort1")
-
-                .param("questions[3].punkte", "1")
-                .param("questions[3].type", "MC")
-                .param("questions[3].questionText", "Text")
-                .param("questions[3].choices", "Antwort1\nAntwort2")
-                .param("questions[3].correctAnswers", "Antwort1\nAntwort2")
-
-                .param("questions[4].punkte", "1")
-                .param("questions[4].type", "SC")
-                .param("questions[4].questionText", "Text")
-                .param("questions[4].choices", "Antwort1\nAntwort2")
-                .param("questions[4].correctAnswer", "Antwort1")
-
-                .param("questions[5].punkte", "1")
-                .param("questions[5].type", "FREITEXT")
-                .param("questions[5].questionText", "Text")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/createExam"))
+            .andExpect(redirectedUrl("/professor/questionSettings"))
             .andExpect(flash().attribute("message", "Fehlerhafte Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(flash().attribute("success", false))
+            .andReturn();
+
+        MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
+
+        assertNotNull(session);
+        assertNotNull(session.getAttribute("questionForm"));
     }
 
     @Test
@@ -222,7 +272,7 @@ class ProfessorControllerTest {
 
         when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Error Nachricht");
 
-        mvc.perform(post("/professor/createExam")
+        MvcResult result = mvc.perform(post("/professor/createExam")
                 .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
@@ -244,27 +294,17 @@ class ProfessorControllerTest {
                 .param("questions[2].questionText", "Text")
                 .param("questions[2].choices", "Antwort1\nAntwort2")
                 .param("questions[2].correctAnswer", "Antwort1")
-
-                .param("questions[3].punkte", "1")
-                .param("questions[3].type", "MC")
-                .param("questions[3].questionText", "Text")
-                .param("questions[3].choices", "Antwort1\nAntwort2")
-                .param("questions[3].correctAnswers", "Antwort1\nAntwort2")
-
-                .param("questions[4].punkte", "1")
-                .param("questions[4].type", "SC")
-                .param("questions[4].questionText", "Text")
-                .param("questions[4].choices", "Antwort1\nAntwort2")
-                .param("questions[4].correctAnswer", "Antwort1")
-
-                .param("questions[5].punkte", "1")
-                .param("questions[5].type", "FREITEXT")
-                .param("questions[5].questionText", "Text")
             )
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/createExam"))
+            .andExpect(redirectedUrl("/professor/questionSettings"))
             .andExpect(flash().attribute("message", "Error Nachricht"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(flash().attribute("success", false))
+            .andReturn();
+
+        MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
+
+        assertNotNull(session);
+        assertNotNull(session.getAttribute("questionForm"));
     }
 
     @Test
