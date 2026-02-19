@@ -4,6 +4,7 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamFacadeService;
+import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.info.ExamTimeInfo;
@@ -20,10 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,7 +60,7 @@ class ExamControllerServiceTest {
     @DisplayName("ExamForm wird erfolgreich erstellt")
     void createExamForm_01() {
         // Act
-        ExamForm form = service.createExamForm();
+        ExamForm form = service.createExamForm(6);
         QuestionData q = form.getQuestions().getFirst();
 
         // Assert
@@ -412,5 +410,16 @@ class ExamControllerServiceTest {
         Map<FrageDTO, AntwortDTO> map = service.getFreitextAntwortenForExamAndStudent(EXAM_ID, studentId);
 
         assertThat(map).isEmpty();
+    }
+
+    @Test
+    void createQuestionTypeList() {
+        List<QuestionTypeWeb> result = service.createQuestionTypeList(3, 5, 1);
+
+        assertThat(result).hasSize(9);
+
+        assertThat(Collections.frequency(result, QuestionTypeWeb.MC)).isEqualTo(3);
+        assertThat(Collections.frequency(result, QuestionTypeWeb.SC)).isEqualTo(5);
+        assertThat(Collections.frequency(result, QuestionTypeWeb.FREITEXT)).isEqualTo(1);
     }
 }

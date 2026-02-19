@@ -123,16 +123,7 @@ public class HelperServiceImpl implements HelperService {
         AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
         KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
 
-        if (antwort != null && (frage.type().name().equals("MC") || frage.type().name().equals("SC"))) {
-            String normalized = normalizeAnswerForFrontend(antwort.antwortText());
-            antwort = new AntwortDTO(
-                    antwort.fachId(),
-                    normalized,
-                    antwort.frageFachId(),
-                    antwort.studentFachId(),
-                    antwort.antwortZeitpunkt()
-            );
-
+        if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
             String optionen = k.antwortOptionen();
             String optionenNormalized = normalizeAnswerForFrontend(optionen);
 
@@ -145,6 +136,17 @@ public class HelperServiceImpl implements HelperService {
                     optionenNormalized,
                     k.frageFachId()
             );
+
+            if (antwort != null) {
+                String normalized = normalizeAnswerForFrontend(antwort.antwortText());
+                antwort = new AntwortDTO(
+                        antwort.fachId(),
+                        normalized,
+                        antwort.frageFachId(),
+                        antwort.studentFachId(),
+                        antwort.antwortZeitpunkt()
+                );
+            }
         }
 
         return new PreparedFrageData(frage, antwort, k);
@@ -166,13 +168,29 @@ public class HelperServiceImpl implements HelperService {
 
             KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
 
-            ReviewDTO review = null;
             if (antwort != null) {
-                review = service.getReviewForAntwort(antwort.fachId());
+                ReviewDTO review = service.getReviewForAntwort(antwort.fachId());
                 if (review != null) korrektoren.add(review.korrektorFachId());
-            }
+                componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
+            } else {
+                AntwortDTO emptyAntwort = new AntwortDTO(
+                        null,
+                        "",
+                        frage.fachId(),
+                        studentId,
+                        null
+                );
 
-            componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
+                ReviewDTO emptyReview = new ReviewDTO(
+                        null,
+                        null,
+                        null,
+                        "Keine Bewertung",
+                        0
+                );
+
+                componentList.add(new ReviewAggregateDTO(frage, emptyAntwort, emptyReview, k));
+            }
         }
 
         String korrektorNames = korrektoren.stream()

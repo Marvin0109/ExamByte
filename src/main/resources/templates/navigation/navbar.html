@@ -34,11 +34,11 @@
                 <!-- Link für Professoren -->
                 <li class="nav-item"  th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
 
-                    <a class="nav-link" th:classappend="${currentPath == '/professor/createExam'} ? ' active' : ''"
-                        href="/professor/createExam">
+                    <a class="nav-link" th:classappend="${currentPath == '/professor/questionSettings'} ? ' active' : ''"
+                        href="/professor/questionSettings">
                         <i class="fas fa-file-circle-plus me-1"></i>
                         Tests erstellen
-                        <span class="visually-hidden" th:if="${currentPath == '/professor/createExam'}">(current)
+                        <span class="visually-hidden" th:if="${currentPath == '/professor/questionSettings'}">(current)
                         </span>
                     </a>
                 </li>

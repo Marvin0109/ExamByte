@@ -199,9 +199,21 @@ class AntwortQueryServiceTest {
         // Assert
         assertThat(result).isEqualTo(dto);
 
-        verify(antwortService)
+        verify(antwortService, times(2))
                 .findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
         verify(antwortDTOMapper)
                 .toDTO(domainAntwort);
+    }
+
+    @Test
+    void findByStudentAndFrage_notFound() {
+        when(antwortService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID))
+                .thenReturn(null);
+
+        AntwortDTO result = antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
+
+        assertThat(result).isNull();
+
+        verify(antwortService).findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
     }
 }

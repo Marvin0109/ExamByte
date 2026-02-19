@@ -27,6 +27,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     private final ExamFacadeService service;
     private final HelperService helperService;
+    private static final double EXAM_COUNT = 12;
 
     public ExamControllerServiceImpl(ExamFacadeService service, HelperService helperService) {
         this.service = service;
@@ -34,10 +35,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public ExamForm createExamForm() {
+    public ExamForm createExamForm(int countQuestions) {
         ExamForm examForm = new ExamForm();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < countQuestions; i++) {
             QuestionData q = new QuestionData();
             q.setQuestionText("");
             q.setType("");
@@ -171,8 +172,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     public double getZulassungsProgress(String studentLogin) {
         List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
-        double size = 12;
-        double progressForSuccessAttempt = 100.0 / size;
+        double progressForSuccessAttempt = 100.0 / EXAM_COUNT;
         double progress = 0.0;
         for (VersuchDTO v : allValidAttempts) {
             if (v.erreichtePunkte() >= v.maxPunkte() * 0.5) {
@@ -247,7 +247,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             }
         }
 
-        return  submitInfoList;
+        return submitInfoList;
     }
 
     @Override
@@ -348,5 +348,18 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public List<ReviewExportDTO> getReviewExport(UUID examId, String studentName) {
         return service.getReviewExportDTOs(examId, studentName);
+    }
+
+    @Override
+    public List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount) {
+        List<QuestionTypeWeb> questionTypeWebList = new ArrayList<>();
+
+        questionTypeWebList.addAll(Collections.nCopies(mcCount, QuestionTypeWeb.MC));
+        questionTypeWebList.addAll(Collections.nCopies(scCount, QuestionTypeWeb.SC));
+        questionTypeWebList.addAll(Collections.nCopies(freitextCount, QuestionTypeWeb.FREITEXT));
+
+        Collections.shuffle(questionTypeWebList);
+
+        return questionTypeWebList;
     }
 }
