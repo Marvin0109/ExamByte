@@ -199,7 +199,7 @@ class AntwortQueryServiceTest {
         // Assert
         assertThat(result).isEqualTo(dto);
 
-        verify(antwortService)
+        verify(antwortService, times(2))
                 .findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
         verify(antwortDTOMapper)
                 .toDTO(domainAntwort);
