@@ -39,7 +39,6 @@ public class ProfessorController {
     private final ExamControllerService service;
     private final CsvExportService csvExportService;
 
-    private static final int INT_QUESTIONS_COUNT = 6;
     private static final String LOGIN_NAME = "login";
     private static final String CURRENT_PATH = "currentPath";
     private static final String TIME_NOW = "timeNow";
@@ -153,14 +152,6 @@ public class ProfessorController {
                     false,
                     REDIRECT_QUESTION_SETTINGS);
         }
-
-//        if (form.getQuestions().size() < INT_QUESTIONS_COUNT){
-//            return redirectWithMessage(
-//                    redirectAttributes,
-//                    "Weniger Fragen als sonst.",
-//                    false,
-//                    REDIRECT_CREATE_EXAM);
-//        }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
         UUID profFachID = service.getProfFachIDByName(name).orElse(null);
