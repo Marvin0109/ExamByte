@@ -204,4 +204,16 @@ class AntwortQueryServiceTest {
         verify(antwortDTOMapper)
                 .toDTO(domainAntwort);
     }
+
+    @Test
+    void findByStudentAndFrage_notFound() {
+        when(antwortService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID))
+                .thenReturn(null);
+
+        AntwortDTO result = antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
+
+        assertThat(result).isNull();
+
+        verify(antwortService).findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
+    }
 }

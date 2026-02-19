@@ -63,6 +63,9 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
 
     @Override
     public AntwortDTO findByStudentAndFrage(UUID studentId, UUID frageId) {
+        if (antwortService.findByStudentAndFrage(studentId, frageId) == null) {
+            return null;
+        }
         return antwortDTOMapper.toDTO(antwortService.findByStudentAndFrage(studentId, frageId));
     }
 

@@ -311,6 +311,34 @@ class HelperServiceTest {
     }
 
     @Test
+    void prepareFrageData_antwortNull() {
+        FrageDTO frageDTO = new FrageDTO(
+                HELPER_FRAGE_ID,
+                "Frage",
+                2,
+                UUID.randomUUID(),
+                UUID.randomUUID(),
+                QuestionTypeDTO.MC
+        );
+
+        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
+                UUID.randomUUID(),
+                "A\nB",
+                "A\nB\nC\nD",
+                frageDTO.fachId()
+        );
+
+        when(examFacadeService.getAntwortForFrageAndStudent(eq(frageDTO.fachId()), any())).thenReturn(null);
+        when(examFacadeService.getLoesungForFrage(frageDTO.fachId())).thenReturn(korrekteAntwortenDTO);
+
+        PreparedFrageData result = helperService.prepareFrageData(frageDTO, UUID.randomUUID());
+
+        assertThat(result.korrekteAntwortenDTO()).isNotNull();
+        assertThat(result.frage()).isEqualTo(frageDTO);
+        assertThat(result.antwort()).isNull();
+    }
+
+    @Test
     void prepareReviewViewForm() {
         // Arrange
         UUID examId = UUID.randomUUID();
@@ -474,6 +502,10 @@ class HelperServiceTest {
         assertThat(result.erreichtePunkte()).isEqualTo(0.0);
         assertThat(result.maxPunkte()).isEqualTo(20.0);
         assertThat(result.components()).hasSize(1);
+
+        var element = result.components().getFirst();
+        assertThat(element.review().bewertung()).isEqualTo("Keine Bewertung");
+        assertThat(element.antwort().antwortText()).isEmpty();
     }
 
     @Test

@@ -27,6 +27,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     private final ExamFacadeService service;
     private final HelperService helperService;
+    private static final double EXAM_COUNT = 12;
 
     public ExamControllerServiceImpl(ExamFacadeService service, HelperService helperService) {
         this.service = service;
@@ -171,8 +172,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     public double getZulassungsProgress(String studentLogin) {
         List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
-        double size = 12;
-        double progressForSuccessAttempt = 100.0 / size;
+        double progressForSuccessAttempt = 100.0 / EXAM_COUNT;
         double progress = 0.0;
         for (VersuchDTO v : allValidAttempts) {
             if (v.erreichtePunkte() >= v.maxPunkte() * 0.5) {
@@ -247,7 +247,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             }
         }
 
-        return  submitInfoList;
+        return submitInfoList;
     }
 
     @Override
