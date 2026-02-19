@@ -34,17 +34,23 @@
     <h1>Einstellung von Prüfungsfragen</h1>
 
     <form method="post" th:action="@{/professor/generateQuestions}" th:object="${questionForm}">
-        <h2>Anzahl der Fragetypen auswählen</h2>
+        <h2 class="mb-4">Anzahl der Fragetypen auswählen</h2>
 
-        <label for="MC">MC-Aufgaben (Multiple-Choice):</label>
-        <input type="number" id="MC" class="form-control" min="1" max="10" th:field="*{mcCount}" required>
+        <div class="mb-3">
+            <label for="MC">MC-Aufgaben (Multiple-Choice):</label>
+            <input type="number" id="MC" class="form-control" min="1" max="10" th:field="*{mcCount}" required>
+        </div>
 
-        <label for="SC">SC-Aufgaben (Single-Choice):</label>
-        <input type="number" id="SC" class="form-control" min="1" max="10" th:field="*{scCount}" required>
+        <div class="mb-3">
+            <label for="SC">SC-Aufgaben (Single-Choice):</label>
+            <input type="number" id="SC" class="form-control" min="1" max="10" th:field="*{scCount}" required>
+        </div>
 
-        <label for="FREITEXT">Freitextaufgaben:</label>
-        <input type="number" id="FREITEXT" class="form-control" min="1" max="10" th:field="*{freitextCount}" required>
-        <br>
+        <div class="mb-3">
+            <label for="FREITEXT">Freitextaufgaben:</label>
+            <input type="number" id="FREITEXT" class="form-control" min="1" max="10" th:field="*{freitextCount}" required>
+        </div>
+
         <button class="btn btn-primary" type="submit">Generiere Prüfungsformular</button>
     </form>
 </main>
