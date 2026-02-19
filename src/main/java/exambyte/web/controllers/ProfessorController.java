@@ -5,7 +5,9 @@ import exambyte.application.dto.csv_dto.ExamExportDTO;
 import exambyte.application.dto.csv_dto.ReviewExportDTO;
 import exambyte.application.service.CsvExportService;
 import exambyte.application.service.ExamControllerService;
+import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_exam.ExamForm;
+import exambyte.web.form.create_exam.QuestionSettings;
 import exambyte.web.form.info.SubmitInfo;
 import exambyte.web.form.show_review.ReviewViewForm;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,20 +20,20 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/professor")
+@SessionAttributes("questionForm")
 @Secured("ROLE_ADMIN")
 public class ProfessorController {
 
@@ -43,6 +45,7 @@ public class ProfessorController {
     private static final String CURRENT_PATH = "currentPath";
     private static final String TIME_NOW = "timeNow";
     private static final String REDIRECT_CREATE_EXAM = "redirect:/professor/createExam";
+    private static final String REDIRECT_QUESTION_SETTINGS = "redirect:/professor/questionSettings";
     private static final String REDIRECT_LIST_EXAMS = "redirect:/professor/listExams";
 
     private final Clock clock;
@@ -65,16 +68,70 @@ public class ProfessorController {
         return redirectedUrl;
     }
 
+    @ModelAttribute("questionForm")
+    public QuestionSettings createQuestionSettingsForm() {
+        return new QuestionSettings();
+    }
+
+    @GetMapping("/questionSettings")
+    public String questionSettings(
+            Model model,
+            HttpServletRequest request) {
+
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        return "professor/questionSettings";
+    }
+
+    @PostMapping("/generateQuestions")
+    public String generateQuestions(
+            @Valid @ModelAttribute("questionForm") QuestionSettings questionSettings,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Invalide Eingabedaten!",
+                    false,
+                    REDIRECT_QUESTION_SETTINGS);
+        }
+
+        List<QuestionTypeWeb> typeList = service.createQuestionTypeList(
+                questionSettings.getMcCount(),
+                questionSettings.getScCount(),
+                questionSettings.getFreitextCount()
+        );
+
+        questionSettings.setQuestionTypeList(typeList);
+
+        return REDIRECT_CREATE_EXAM;
+    }
+
     @GetMapping("/createExam")
     public String showCreateExamForm(
+            @Valid @ModelAttribute("questionForm") QuestionSettings questionSettings,
+            BindingResult bindingResult,
             Model model,
             OAuth2AuthenticationToken auth,
-            HttpServletRequest request) {
+            HttpServletRequest request,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            return redirectWithMessage(
+                    redirectAttributes,
+                    "Invalide Eingabedaten!",
+                    false,
+                    REDIRECT_QUESTION_SETTINGS);
+        }
 
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
 
-        ExamForm examForm = service.createExamForm();
+        int sum = questionSettings.getMcCount()
+                + questionSettings.getScCount()
+                + questionSettings.getFreitextCount();
+
+        ExamForm examForm = service.createExamForm(sum);
 
         model.addAttribute("name", name);
         model.addAttribute("examForm", examForm);
@@ -87,23 +144,24 @@ public class ProfessorController {
             @Valid ExamForm form,
             BindingResult bindingResult,
             OAuth2AuthenticationToken auth,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            SessionStatus status) {
 
         if (bindingResult.hasErrors()) {
             return redirectWithMessage(
                     redirectAttributes,
                     "Fehlerhafte Eingabedaten!",
                     false,
-                    REDIRECT_CREATE_EXAM);
+                    REDIRECT_QUESTION_SETTINGS);
         }
 
-        if (form.getQuestions().size() < INT_QUESTIONS_COUNT){
-            return redirectWithMessage(
-                    redirectAttributes,
-                    "Weniger Fragen als sonst.",
-                    false,
-                    REDIRECT_CREATE_EXAM);
-        }
+//        if (form.getQuestions().size() < INT_QUESTIONS_COUNT){
+//            return redirectWithMessage(
+//                    redirectAttributes,
+//                    "Weniger Fragen als sonst.",
+//                    false,
+//                    REDIRECT_CREATE_EXAM);
+//        }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
         UUID profFachID = service.getProfFachIDByName(name).orElse(null);
@@ -115,18 +173,20 @@ public class ProfessorController {
                     redirectAttributes,
                     message,
                     false,
-                    REDIRECT_CREATE_EXAM);
+                    REDIRECT_QUESTION_SETTINGS);
         }
 
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
         service.createQuestions(form, profFachID, examUUID);
 
+        status.setComplete();
+
         return redirectWithMessage(
                 redirectAttributes,
                 "Prüfung und Fragen erfolgreich erstellt!",
                 true,
-                REDIRECT_CREATE_EXAM);
+                REDIRECT_QUESTION_SETTINGS);
     }
 
     @GetMapping("/listExams")

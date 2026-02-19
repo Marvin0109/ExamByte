@@ -3,6 +3,7 @@ package exambyte.application.service;
 import exambyte.application.dto.*;
 import exambyte.application.dto.csv_dto.ExamExportDTO;
 import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 public interface ExamControllerService {
 
-    ExamForm createExamForm();
+    ExamForm createExamForm(int countQuestions);
 
     ExamForm fillExamForm(UUID examUUID);
 
@@ -84,4 +85,6 @@ public interface ExamControllerService {
     List<ExamExportDTO> getExamExport(UUID examId);
 
     List<ReviewExportDTO> getReviewExport(UUID examId, String studentName);
+
+    List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount);
 }

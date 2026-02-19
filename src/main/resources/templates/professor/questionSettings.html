@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Einstellungen zu Prüfungsfragen">
+    <meta name="author" content="Marvin0109">
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
+
+    <title>Einstellungen von Fragen</title>
+
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
+</head>
+
+<body>
+
+<!-- Navigation -->
+<header th:replace="~{navigation/navbar.html}"> </header>
+
+<main role="main" class="container mt-5 pt-5">
+
+    <!-- Flash Message anzeigen -->
+    <div th:if="${message}" class="alert"
+         th:classappend="${success} ? 'alert-success' : 'alert-danger'" role="alert">
+        <span th:text="${message}"></span>
+    </div>
+
+    <h1>Einstellung von Prüfungsfragen</h1>
+
+    <form method="post" th:action="@{/professor/generateQuestions}" th:object="${questionForm}">
+        <h2>Anzahl der Fragetypen auswählen</h2>
+
+        <label for="MC">MC-Aufgaben (Multiple-Choice):</label>
+        <input type="number" id="MC" class="form-control" min="1" max="10" th:field="*{mcCount}" required>
+
+        <label for="SC">SC-Aufgaben (Single-Choice):</label>
+        <input type="number" id="SC" class="form-control" min="1" max="10" th:field="*{scCount}" required>
+
+        <label for="FREITEXT">Freitextaufgaben:</label>
+        <input type="number" id="FREITEXT" class="form-control" min="1" max="10" th:field="*{freitextCount}" required>
+        <br>
+        <button class="btn btn-primary" type="submit">Generiere Prüfungsformular</button>
+    </form>
+</main>
+
+<!-- Navigation -->
+<header th:replace="~{navigation/navbarDown.html}"> </header>
+
+<!-- js Imports -->
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

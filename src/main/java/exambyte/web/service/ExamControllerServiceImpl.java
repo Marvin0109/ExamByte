@@ -34,10 +34,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public ExamForm createExamForm() {
+    public ExamForm createExamForm(int countQuestions) {
         ExamForm examForm = new ExamForm();
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < countQuestions; i++) {
             QuestionData q = new QuestionData();
             q.setQuestionText("");
             q.setType("");
@@ -348,5 +348,18 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public List<ReviewExportDTO> getReviewExport(UUID examId, String studentName) {
         return service.getReviewExportDTOs(examId, studentName);
+    }
+
+    @Override
+    public List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount) {
+        List<QuestionTypeWeb> questionTypeWebList = new ArrayList<>();
+
+        questionTypeWebList.addAll(Collections.nCopies(mcCount, QuestionTypeWeb.MC));
+        questionTypeWebList.addAll(Collections.nCopies(scCount, QuestionTypeWeb.SC));
+        questionTypeWebList.addAll(Collections.nCopies(freitextCount, QuestionTypeWeb.FREITEXT));
+
+        Collections.shuffle(questionTypeWebList);
+
+        return questionTypeWebList;
     }
 }
