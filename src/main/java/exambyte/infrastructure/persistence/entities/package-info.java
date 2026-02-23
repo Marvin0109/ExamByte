@@ -13,6 +13,6 @@
  *     <li>Nutzen das Builder-Pattern zur Erstellung von Entitäten.</li>
  * </ul>
  * </p>
- * @see exambyte.persistence.entities
+ * @see exambyte.infrastructure.persistence.entities
  */
 package exambyte.infrastructure.persistence.entities;
