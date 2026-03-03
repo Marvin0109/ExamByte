@@ -194,7 +194,6 @@ class StudentControllerTest {
             .andExpect(flash().attribute("message", "Fehler beim Einreichen der Antworten."))
             .andExpect(flash().attribute("success", false));
 
-        verify(service).examIsAlreadySubmitted(examId, "username");
         verify(service).submitExam(eq("username"), any(), eq(examId));
     }
 
@@ -289,7 +288,6 @@ class StudentControllerTest {
                 .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
                 .andExpect(flash().attribute("success", true));
 
-        verify(service).examIsAlreadySubmitted(examId, "username");
         verify(service).submitExam(eq("username"), any(), eq(examId));
     }
 

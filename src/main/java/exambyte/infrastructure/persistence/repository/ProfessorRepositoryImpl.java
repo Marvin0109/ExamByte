@@ -38,4 +38,9 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
         Optional<ProfessorEntity> entity = dao.findByName(name);
         return entity.map(mapper::toDomain);
     }
+
+    @Override
+    public void deleteAll() {
+        dao.deleteAll();
+    }
 }

@@ -38,4 +38,9 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
         Optional<KorrektorEntity> entity = dao.findByName(name);
         return entity.map(mapper::toDomain);
     }
+
+    @Override
+    public void deleteAll() {
+        dao.deleteAll();
+    }
 }

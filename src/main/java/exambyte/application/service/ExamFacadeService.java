@@ -41,8 +41,6 @@ public interface ExamFacadeService {
 
     boolean reset();
 
-    void removeOldAnswers(UUID examId, String name);
-
     VersuchDTO getSubmission(UUID examId, String studentLogin);
 
     void saveAutomaticReviewer();

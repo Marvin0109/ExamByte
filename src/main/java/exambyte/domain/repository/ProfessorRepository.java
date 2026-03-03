@@ -12,4 +12,6 @@ public interface ProfessorRepository {
     Optional<Professor> findById(UUID id);
 
     void save(Professor professor);
+
+    void deleteAll();
 }

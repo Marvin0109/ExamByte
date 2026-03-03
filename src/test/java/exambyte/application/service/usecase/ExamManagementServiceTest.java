@@ -13,6 +13,9 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -318,45 +321,6 @@ class ExamManagementServiceTest {
                 review.antwortId(),
                 review.korrektorId()
         );
-    }
-
-    @Test
-    void removeOldAnswers_success() {
-        // Arrange
-        String studentName = "Max";
-        FrageDTO frage1 = mock(FrageDTO.class);
-        when(frage1.id()).thenReturn(FRAGE_ID1);
-        FrageDTO frage2 = mock(FrageDTO.class);
-        when(frage2.id()).thenReturn(FRAGE_ID2);
-
-        UUID antwortId1 = UUID.randomUUID();
-        UUID antwortId2 = UUID.randomUUID();
-
-        AntwortDTO antwort1 = mock(AntwortDTO.class);
-        when(antwort1.id()).thenReturn(antwortId1);
-        AntwortDTO antwort2 = mock(AntwortDTO.class);
-        when(antwort2.id()).thenReturn(antwortId2);
-
-        UUID reviewId1 = UUID.randomUUID();
-
-        when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
-        when(frageQueryService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage1, frage2));
-
-        when(antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1)).thenReturn(antwort1);
-        when(antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID2)).thenReturn(antwort2);
-
-        when(reviewQueryService.antwortHasReview(antwortId1)).thenReturn(true);
-        when(reviewQueryService.getReviewIdByAntwortId(antwortId1)).thenReturn(reviewId1);
-        when(reviewQueryService.antwortHasReview(antwortId2)).thenReturn(false);
-
-        // Act
-        examManagementService.removeOldAnswers(EXAM_ID, studentName);
-
-        // Verify
-        verify(antwortQueryService).deleteAntwort(antwortId1);
-        verify(antwortQueryService).deleteAntwort(antwortId2);
-        verify(reviewQueryService).deleteReview(reviewId1);
-        verify(reviewQueryService, never()).deleteReview(antwortId2);
     }
 
     @Test

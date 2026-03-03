@@ -12,4 +12,6 @@ public interface KorrektorRepository {
     Optional<Korrektor> findById(UUID id);
 
     void save(Korrektor korrektor);
+
+    void deleteAll();
 }

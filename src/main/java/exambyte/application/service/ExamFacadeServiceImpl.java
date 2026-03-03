@@ -132,11 +132,6 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void removeOldAnswers(UUID examId, String name) {
-        examManagementService.removeOldAnswers(examId, name);
-    }
-
-    @Override
     public VersuchDTO getSubmission(UUID examId, String studentLogin) {
         return examManagementService.getSubmission(examId, studentLogin);
     }

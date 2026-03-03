@@ -133,12 +133,6 @@ public class StudentController {
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
 
-        boolean submitted = service.examIsAlreadySubmitted(examId, name);
-
-        if (submitted) {
-            service.removeOldAnswersAndReviews(examId, name);
-        }
-
         boolean success = service.submitExam(name, submitForm.getAnswers(), examId);
 
         String redirectMsg;

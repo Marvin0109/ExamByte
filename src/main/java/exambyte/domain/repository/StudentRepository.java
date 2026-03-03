@@ -14,4 +14,6 @@ public interface StudentRepository {
     Optional<UUID> findIdByName(String name);
 
     void save(Student student);
+
+    void deleteAll();
 }

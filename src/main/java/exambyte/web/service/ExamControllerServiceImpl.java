@@ -225,11 +225,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void removeOldAnswersAndReviews(UUID examUUID, String name) {
-        service.removeOldAnswers(examUUID, name);
-    }
-
-    @Override
     public boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUID) {
         return service.submitExam(name, answers, examUUID);
     }

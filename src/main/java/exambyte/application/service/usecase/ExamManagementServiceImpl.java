@@ -3,7 +3,9 @@ package exambyte.application.service.usecase;
 import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -93,6 +95,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         return "";
     }
 
+    @Transactional(rollbackFor = {Exception.class, NichtVorhandenException.class})
     @Override
     public SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
         UUID studentId = resolveStudent(studentName);
@@ -144,36 +147,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 reviewDTO.antwortId(),
                 reviewDTO.korrektorId()
         );
-    }
-
-    @Override
-    public void removeOldAnswers(UUID examId, String name) {
-        UUID studentID = studentQueryService.getStudentIdByName(name);
-
-        List<FrageDTO> fragenDTOList = frageQueryService.getFragenForExam(examId);
-
-        List<UUID> antwortenToDelete = new ArrayList<>();
-        for (FrageDTO frageDTO : fragenDTOList) {
-            antwortenToDelete.add(
-                    antwortQueryService.findByStudentAndFrage(
-                            studentID, frageDTO.id())
-                            .id());
-        }
-
-        List<UUID> reviewsToDelete = new ArrayList<>();
-        for (UUID id : antwortenToDelete) {
-            if (reviewQueryService.antwortHasReview(id)) {
-                reviewsToDelete.add(reviewQueryService.getReviewIdByAntwortId(id));
-            }
-        }
-
-        for (UUID id : antwortenToDelete) {
-            antwortQueryService.deleteAntwort(id);
-        }
-
-        for (UUID id : reviewsToDelete) {
-            reviewQueryService.deleteReview(id);
-        }
     }
 
     @Override

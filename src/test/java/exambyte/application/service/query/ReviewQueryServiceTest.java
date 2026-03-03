@@ -47,9 +47,10 @@ class ReviewQueryServiceTest {
     }
 
     @Test
-    void createReview_withCorrectParams() {
+    void createReview_withCorrectParams_noExistingReview() {
         // Arrange
         when(reviewDTOMapper.toDomain(any())).thenReturn(review);
+        when(reviewService.getReviewByAntwortId(ANTWORT_ID)).thenReturn(null);
 
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
@@ -62,6 +63,27 @@ class ReviewQueryServiceTest {
 
         assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
         assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getId()).isNull();
+    }
+
+    @Test
+    void createReview_withCorrectParams_existingReview() {
+        // Arrange
+        when(reviewDTOMapper.toDomain(any())).thenReturn(review);
+        when(reviewService.getReviewByAntwortId(ANTWORT_ID)).thenReturn(review);
+
+        ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
+
+        // Act
+        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, KORREKTOR_ID);
+
+        // Assert
+        verify(reviewService).addReview(captor.capture());
+        Review result = captor.getValue();
+
+        assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
+        assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getId()).isEqualTo(review.getId());
     }
 
     @Test

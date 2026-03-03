@@ -46,8 +46,6 @@ public interface ExamControllerService {
 
     ExamTimeInfo getExamTimeInfo(ExamDTO examDTO);
 
-    void removeOldAnswersAndReviews(UUID examUUID, String name);
-
     boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUiD);
 
     List<SubmitInfo> getSubmitInfo(UUID examUUID);

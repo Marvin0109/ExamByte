@@ -50,7 +50,7 @@ class AntwortQueryServiceTest {
     void saveAnswers_success() {
         // Arrange
 
-        Map<String , List<String>> antworten = Map.of(
+        Map<String, List<String>> antworten = Map.of(
                 FRAGE1_ID.toString(), List.of("Antwort 1", "Antwort 2"),
                 FRAGE2_ID.toString(), List.of("Antwort A")
         );
@@ -58,6 +58,8 @@ class AntwortQueryServiceTest {
         AntwortDTO dto1 = new AntwortDTO(null, "Antwort 1\nAntwort 2", FRAGE1_ID, STUDENT_ID, TIME);
         AntwortDTO dto2 = new AntwortDTO(null, "Antwort A", FRAGE2_ID, STUDENT_ID, TIME);
 
+        when(antwortService.findByStudentAndFrage(FRAGE1_ID, STUDENT_ID)).thenReturn(null);
+        when(antwortService.findByStudentAndFrage(FRAGE2_ID, STUDENT_ID)).thenReturn(null);
         when(antwortDTOMapper.toDomain(dto1)).thenReturn(mock());
         when(antwortDTOMapper.toDomain(dto2)).thenReturn(mock());
 

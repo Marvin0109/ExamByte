@@ -44,4 +44,9 @@ public class StudentRepositoryImpl implements StudentRepository {
         if (loaded != null) return Optional.of(loaded.getId());
         return Optional.empty();
     }
+
+    @Override
+    public void deleteAll() {
+        dao.deleteAll();
+    }
 }

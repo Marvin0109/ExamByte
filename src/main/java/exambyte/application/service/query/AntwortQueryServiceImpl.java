@@ -2,6 +2,7 @@ package exambyte.application.service.query;
 
 import exambyte.application.dto.AntwortDTO;
 import exambyte.domain.mapper.AntwortDTOMapper;
+import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.service.AntwortService;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,12 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
                 UUID frageId = UUID.fromString(entry.getKey());
                 String antwortText = String.join("\n", entry.getValue());
                 String replaced = antwortText.replace("ĸ", ",");
-                AntwortDTO dto = new AntwortDTO(null, replaced, frageId, studentId, null);
+
+                Antwort loaded = antwortService.findByStudentAndFrage(studentId, frageId);
+
+                UUID antwortId = loaded != null ? loaded.getId() : null;
+
+                AntwortDTO dto = new AntwortDTO(antwortId, replaced, frageId, studentId, null);
                 antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
             }
             return true;
