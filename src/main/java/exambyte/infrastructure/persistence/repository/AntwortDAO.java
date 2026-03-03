@@ -19,17 +19,14 @@ public interface AntwortDAO extends CrudRepository<AntwortEntity, UUID> {
     @Transactional
     @Modifying
     @Query("""
-        INSERT INTO antwort (student_id, frage_id, antwort_text)
-        VALUES (:studentId, :frageId, :text)
+        INSERT INTO antwort (student_id, frage_id, antwort_text, antwort_zeitpunkt)
+        VALUES (:studentId, :frageId, :text, CURRENT_TIMESTAMP)
         ON CONFLICT (student_id, frage_id)
-        DO UPDATE SET antwort_text = EXCLUDED.antwort_text
+        DO UPDATE
+            SET antwort_text = EXCLUDED.antwort_text,
+                antwort_zeitpunkt = CURRENT_TIMESTAMP
     """)
     void upsertAntwort(@Param("studentId") UUID studentId,
                        @Param("frageId") UUID frageId,
                        @Param("text") String antwortText);
-
-    @Transactional
-    @Modifying
-    @Query("UPDATE antwort SET antwort_zeitpunkt = CURRENT_TIMESTAMP WHERE id = :id")
-    void updateTimestamp(@Param("id") UUID id);
 }

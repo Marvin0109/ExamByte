@@ -39,8 +39,6 @@ public class AntwortRepositoryImpl implements AntwortRepository {
         dao.upsertAntwort(antwortEntity.getStudentId(),
                 antwortEntity.getFrageId(),
                 antwortEntity.getAntwortText());
-
-        updateAntwortZeitpunkt(antwortEntity.getId());
     }
 
     @Override
@@ -58,10 +56,5 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     @Override
     public void deleteAnswer(UUID id) {
         dao.deleteById(id);
-    }
-
-    @Override
-    public void updateAntwortZeitpunkt(UUID id) {
-        dao.updateTimestamp(id);
     }
 }
