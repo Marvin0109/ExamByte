@@ -17,8 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AntwortQueryServiceTest {
@@ -82,10 +81,9 @@ class AntwortQueryServiceTest {
                 .thenThrow(new RuntimeException("Error Message"));
 
         // Act
-        boolean result = antwortQueryService.saveAnswers(STUDENT_ID, antworten);
+        assertThrows(Exception.class, () -> antwortQueryService.saveAnswers(STUDENT_ID, antworten));
 
         // Assert
-        assertFalse(result);
         verify(antwortService, never()).addAntwort(any());
     }
 

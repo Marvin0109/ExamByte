@@ -45,7 +45,7 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
             return true;
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
-            return false;
+            throw e;
         }
     }
 

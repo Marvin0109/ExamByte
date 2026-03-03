@@ -13,9 +13,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.*;
 import java.util.*;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -228,17 +225,13 @@ class ExamManagementServiceTest {
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
-        when(antwortQueryService.saveAnswers(any(), any()))
-                .thenReturn(false);
+        when(antwortQueryService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
 
-        SubmitExamResult result = examManagementService.submitExam(
+        assertThrows(Exception.class, () -> examManagementService.submitExam(
                 "Max",
                 Map.of("q1", List.of("A")),
-                UUID.randomUUID()
+                UUID.randomUUID())
         );
-
-        assertThat(result).isEqualTo(SubmitExamResult.SAVE_ANSWERS_FAILED);
-        verify(frageQueryService, never()).getFragenForExam(any());
     }
 
     @Test

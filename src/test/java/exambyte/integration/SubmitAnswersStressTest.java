@@ -12,8 +12,7 @@ import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.*;
 import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -61,22 +60,12 @@ class SubmitAnswersStressTest {
     @Autowired
     private ExamControllerService examControllerService;
 
-    @AfterEach
-    void tearDown() {
-        studentRepository.deleteAll();
-        professorRepository.deleteAll();
-        korrektorRepository.deleteAll();
-    }
+    private UUID frageIdSC;
+    private UUID frageIdFreitext;
+    private UUID examId;
 
-    @Test
-    void stressTestSubmitExam() throws InterruptedException {
-        List<Student> students = new ArrayList<>();
-        for (int i = 0; i < 500; i++) {
-            studentRepository.save(new Student.StudentBuilder().name("Student " + i).build());
-            students.add(studentRepository.findByName("Student " + i).orElseThrow());
-            assertThat(students.get(i)).isNotNull();
-        }
-
+    @BeforeEach
+    void setUp() {
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
         korrektorRepository.save(new Korrektor.KorrektorBuilder()
                 .name("Automatischer Korrektor")
@@ -96,7 +85,7 @@ class SubmitAnswersStressTest {
                 .title("Exam")
                 .build());
 
-        UUID examId = examControllerService.getExamUUIDByStartTime(start);
+        examId = examControllerService.getExamUUIDByStartTime(start);
 
         frageRepository.save(new Frage.FrageBuilder()
                 .frageText("Frage")
@@ -112,25 +101,47 @@ class SubmitAnswersStressTest {
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreitext = frageRepository.findAll().stream()
+        Optional<UUID> frageIdFreitextLoaded = frageRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.FREITEXT))
                 .map(Frage::getId)
                 .findFirst();
 
-        assert(frageIdFreitext.isPresent());
+        assert(frageIdFreitextLoaded.isPresent());
+        frageIdFreitext = frageIdFreitextLoaded.get();
 
-        Optional<UUID> frageIdSC = frageRepository.findAll().stream()
+        Optional<UUID> frageIdSCLoaded = frageRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
                 .map(Frage::getId)
                 .findFirst();
 
-        assert(frageIdSC.isPresent());
+        assert(frageIdSCLoaded.isPresent());
+        frageIdSC = frageIdSCLoaded.get();
 
         korrekteAntwortenRepository.save(new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .frageId(frageIdSC.get())
+                .frageId(frageIdSC)
                 .antwortOptionen("A\nB\nC\nD")
                 .loesungen("B")
                 .build());
+    }
+
+    @AfterEach
+    void tearDown() {
+        studentRepository.deleteAll();
+        professorRepository.deleteAll();
+        korrektorRepository.deleteAll();
+    }
+
+    @Test
+    @DisplayName("500 Studenten submitten gleichzeitig")
+    void stressTestSubmitExam() throws InterruptedException {
+        List<Student> students = new ArrayList<>();
+        for (int i = 0; i < 500; i++) {
+            studentRepository.save(new Student.StudentBuilder().name("Student " + i).build());
+            students.add(studentRepository.findByName("Student " + i).orElseThrow());
+            assertThat(students.get(i)).isNotNull();
+        }
+
+
 
         // Stress tests starts here
 
@@ -145,7 +156,7 @@ class SubmitAnswersStressTest {
                 final String studentName = s.getName();
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC.get(), frageIdFreitext.get());
+                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreitext);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -166,14 +177,63 @@ class SubmitAnswersStressTest {
 
         for (Student s : students) {
             assertThat(antwortRepository.findByStudentIdAndFrageId(
-                    s.id(), frageIdFreitext.get())).isPresent();
+                    s.id(), frageIdFreitext)).isPresent();
 
             Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
-                    s.id(), frageIdSC.get());
+                    s.id(), frageIdSC);
             assertThat(sc).isPresent();
 
             assertThat(reviewRepository.findByAntwortId(sc.get().getId())).isNotNull();
         }
+    }
+
+    @Test
+    @DisplayName("50 gleichzeitige Submits eines Studenten")
+    void stressTestSubmitExam_02() throws InterruptedException {
+        studentRepository.save(new Student.StudentBuilder().name("Student 0").build());
+        Student loaded = studentRepository.findByName("Student 0").orElseThrow();
+        assertThat(loaded).isNotNull();
+
+        // Stress tests starts here
+
+        int threadCount = 50;
+        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        List<Exception> exceptions = Collections.synchronizedList(new ArrayList<>());
+
+        try {
+            for (int i = 0; i < threadCount; i++) {
+                final String studentName = "Student 0";
+                executor.submit(() -> {
+                    try {
+                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreitext);
+                        managementService.submitExam(studentName, answers, examId);
+                    } catch (Exception e) {
+                        exceptions.add(e);
+                    } finally {
+                        latch.countDown();
+                    }
+                });
+            }
+            latch.await();
+        } finally {
+            executor.shutdown();
+            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        }
+
+        assertThat(exceptions).isEmpty();
+
+        assertThat(antwortRepository.findByStudentIdAndFrageId(
+                loaded.id(), frageIdFreitext)).isPresent();
+
+        Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
+                loaded.id(), frageIdSC);
+        assertThat(sc).isPresent();
+
+        assertThat(reviewRepository.findByAntwortId(sc.get().getId())).isNotNull();
     }
 
     private Map<String, List<String>> generateAnswers(UUID frage1Id, UUID frage2Id) {

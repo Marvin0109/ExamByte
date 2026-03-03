@@ -36,7 +36,10 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     @Override
     public void save(Antwort antwort) {
         AntwortEntity antwortEntity = mapper.toEntity(antwort);
-        dao.save(antwortEntity);
+        dao.upsertAntwort(antwortEntity.getStudentId(),
+                antwortEntity.getFrageId(),
+                antwortEntity.getAntwortText());
+
         updateAntwortZeitpunkt(antwortEntity.getId());
     }
 
