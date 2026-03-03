@@ -17,8 +17,8 @@ public class AntwortServiceImpl implements AntwortService {
     }
 
     @Override
-    public Antwort findByFrageFachId(UUID frageFachId) {
-        return repository.findByFrageFachId(frageFachId);
+    public Antwort findByFrageId(UUID frageId) {
+        return repository.findByFrageId(frageId);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AntwortServiceImpl implements AntwortService {
 
     @Override
     public Antwort findByStudentAndFrage(UUID studentId, UUID examId) {
-        return repository.findByStudentFachIdAndFrageFachId(studentId, examId)
+        return repository.findByStudentIdAndFrageId(studentId, examId)
                 .orElse(null);
     }
 

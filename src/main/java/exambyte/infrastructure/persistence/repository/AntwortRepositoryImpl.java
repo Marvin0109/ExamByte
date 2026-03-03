@@ -21,28 +21,29 @@ public class AntwortRepositoryImpl implements AntwortRepository {
     }
 
     @Override
-    public Optional<Antwort> findByFachId(UUID id) {
-        Optional<AntwortEntity> entity = dao.findByFachId(id);
+    public Optional<Antwort> findById(UUID id) {
+        Optional<AntwortEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 
     @Override
-    public Optional<Antwort> findByStudentFachIdAndFrageFachId(UUID studentFachId, UUID fachId) {
+    public Optional<Antwort> findByStudentIdAndFrageId(UUID studentId, UUID id) {
         Optional<AntwortEntity> entity = dao
-                .findByStudentFachIdAndFrageFachId(studentFachId, fachId);
+                .findByStudentIdAndFrageId(studentId, id);
         return entity.map(mapper::toDomain);
     }
 
     @Override
     public void save(Antwort antwort) {
         AntwortEntity antwortEntity = mapper.toEntity(antwort);
-        dao.save(antwortEntity);
-        dao.updateTimestamp(antwortEntity.getFachId());
+        dao.upsertAntwort(antwortEntity.getStudentId(),
+                antwortEntity.getFrageId(),
+                antwortEntity.getAntwortText());
     }
 
     @Override
-    public Antwort findByFrageFachId(UUID id) {
-        Optional<AntwortEntity> entity = dao.findByFrageFachId(id);
+    public Antwort findByFrageId(UUID id) {
+        Optional<AntwortEntity> entity = dao.findByFrageId(id);
         return entity.map(mapper::toDomain)
                 .orElse(null);
     }
@@ -54,11 +55,6 @@ public class AntwortRepositoryImpl implements AntwortRepository {
 
     @Override
     public void deleteAnswer(UUID id) {
-        dao.deleteByFachId(id);
-    }
-
-    @Override
-    public void updateAntwortZeitpunkt(UUID id) {
-        dao.updateTimestamp(id);
+        dao.deleteById(id);
     }
 }

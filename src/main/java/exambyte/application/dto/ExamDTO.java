@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ExamDTO(
-        UUID fachId,
+        UUID id,
         String title,
-        UUID professorFachId,
+        UUID professorId,
         LocalDateTime startTime,
         LocalDateTime endTime,
         LocalDateTime resultTime) {}

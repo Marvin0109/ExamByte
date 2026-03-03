@@ -77,7 +77,6 @@ class ExamControllerServiceTest {
                 UUID.randomUUID(),
                 "F1",
                 2,
-                UUID.randomUUID(),
                 EXAM_ID,
                 QuestionTypeDTO.FREITEXT);
 
@@ -100,13 +99,12 @@ class ExamControllerServiceTest {
                 UUID.randomUUID(),
                 "F1",
                 2,
-                UUID.randomUUID(),
                 EXAM_ID,
                 QuestionTypeDTO.MC);
 
         when(examFacadeService.getExam(EXAM_ID)).thenReturn(exam);
         when(examFacadeService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getChoiceForFrage(frage.fachId())).thenReturn("A, B\nC\nD");
+        when(examFacadeService.getChoiceForFrage(frage.id())).thenReturn("A, B\nC\nD");
 
         // Act
         ExamForm form = service.fillExamForm(EXAM_ID);
@@ -143,7 +141,7 @@ class ExamControllerServiceTest {
         form.setQuestions(List.of(q1, q2, q3));
 
         // Act
-        service.createQuestions(form, PROF_ID, EXAM_ID);
+        service.createQuestions(form, EXAM_ID);
 
         // Assert
         verify(examFacadeService).createFrage(argThat(f -> f.frageText().equals("F1")));
@@ -163,7 +161,7 @@ class ExamControllerServiceTest {
         form.setQuestions(List.of(q1));
 
         // Act
-        assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, PROF_ID, EXAM_ID));
+        assertThrows(IllegalArgumentException.class, () -> service.createQuestions(form, EXAM_ID));
 
         // Assert
         verify(examFacadeService, never()).createFrage(any());
@@ -212,8 +210,8 @@ class ExamControllerServiceTest {
         when(examFacadeService.getStudentSubmittedExam(EXAM_ID))
                 .thenReturn(List.of(student1, student2));
 
-        when(examFacadeService.isSubmitBeingReviewed(EXAM_ID, student1.fachId())).thenReturn(true);
-        when(examFacadeService.isSubmitBeingReviewed(EXAM_ID, student2.fachId())).thenReturn(false);
+        when(examFacadeService.isSubmitBeingReviewed(EXAM_ID, student1.id())).thenReturn(true);
+        when(examFacadeService.isSubmitBeingReviewed(EXAM_ID, student2.id())).thenReturn(false);
 
         // Act
         List<SubmitInfo> result = service.getSubmitInfo(EXAM_ID);
@@ -223,17 +221,17 @@ class ExamControllerServiceTest {
 
         SubmitInfo info1 = result.getFirst();
         assertEquals("Alice", info1.name());
-        assertEquals(student1.fachId(), info1.fachId());
+        assertEquals(student1.id(), info1.id());
         assertTrue(info1.reviewStatus());
 
         SubmitInfo info2 = result.get(1);
         assertEquals("Bob", info2.name());
-        assertEquals(student2.fachId(), info2.fachId());
+        assertEquals(student2.id(), info2.id());
         assertFalse(info2.reviewStatus());
 
         verify(examFacadeService).getStudentSubmittedExam(EXAM_ID);
-        verify(examFacadeService).isSubmitBeingReviewed(EXAM_ID, student1.fachId());
-        verify(examFacadeService).isSubmitBeingReviewed(EXAM_ID, student2.fachId());
+        verify(examFacadeService).isSubmitBeingReviewed(EXAM_ID, student1.id());
+        verify(examFacadeService).isSubmitBeingReviewed(EXAM_ID, student2.id());
     }
 
     @ParameterizedTest(name = "{index} => erreichtePunkte={1}, maxPunkte={2}, expectedProgress={3}")
@@ -317,7 +315,6 @@ class ExamControllerServiceTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 2,
-                UUID.randomUUID(),
                 EXAM_ID,
                 QuestionTypeDTO.FREITEXT);
 
@@ -325,14 +322,13 @@ class ExamControllerServiceTest {
                 UUID.randomUUID(),
                 "Frage 2",
                 1,
-                UUID.randomUUID(),
                 EXAM_ID,
                 QuestionTypeDTO.FREITEXT);
 
         AntwortDTO antwort1 = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort 1",
-                frage1.fachId(),
+                frage1.id(),
                 studentUUID,
                 time
         );
@@ -340,7 +336,7 @@ class ExamControllerServiceTest {
         AntwortDTO antwort2 = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort 2",
-                frage2.fachId(),
+                frage2.id(),
                 studentUUID,
                 time
         );
@@ -359,7 +355,7 @@ class ExamControllerServiceTest {
         assertThat(form.getFrageText()).isEqualTo("Frage 1");
         assertThat(form.getAntwort()).isEqualTo("Antwort 1");
         assertThat(form.getMaxPunkte()).isEqualTo(2);
-        assertThat(form.getAntwortFachId()).isEqualTo(antwort1.fachId());
+        assertThat(form.getAntwortId()).isEqualTo(antwort1.id());
     }
 
     @Test
@@ -370,7 +366,6 @@ class ExamControllerServiceTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 2,
-                PROF_ID,
                 EXAM_ID,
                 QuestionTypeDTO.FREITEXT
         );
@@ -378,7 +373,7 @@ class ExamControllerServiceTest {
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort",
-                frage.fachId(),
+                frage.id(),
                 studentId,
                 null
         );
@@ -399,7 +394,6 @@ class ExamControllerServiceTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 2,
-                PROF_ID,
                 EXAM_ID,
                 QuestionTypeDTO.FREITEXT
         );

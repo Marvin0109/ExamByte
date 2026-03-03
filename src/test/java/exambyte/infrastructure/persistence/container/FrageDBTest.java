@@ -43,7 +43,7 @@ class FrageDBTest {
     @DisplayName("Eine Frage kann gespeichert und wieder geladen werden, außerdem kann der Professor extrahiert werden")
     void test_01() {
         // Act
-        Optional<Frage> geladen = frageRepository.findByFachId(FRAGEUUID);
+        Optional<Frage> geladen = frageRepository.findById(FRAGEUUID);
 
         // Assert
         assertThat(geladen).isPresent();

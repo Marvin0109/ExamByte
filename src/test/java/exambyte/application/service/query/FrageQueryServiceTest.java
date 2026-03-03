@@ -58,15 +58,13 @@ class FrageQueryServiceTest {
                 "Frage",
                 10,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.FREITEXT);
 
         frageFreitext = new Frage.FrageBuilder()
-                .fachId(frageDTOFreitext.fachId())
+                .id(frageDTOFreitext.id())
                 .frageText("Frage")
                 .maxPunkte(10)
-                .professorUUID(frageDTOFreitext.profUUID())
-                .examUUID(frageDTOFreitext.examUUID())
+                .examId(frageDTOFreitext.examId())
                 .type(QuestionType.FREITEXT)
                 .build();
 
@@ -75,28 +73,26 @@ class FrageQueryServiceTest {
                 "Frage",
                 10,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         frageMC = new Frage.FrageBuilder()
-                .fachId(frageDTOMC.fachId())
+                .id(frageDTOMC.id())
                 .frageText("Frage")
                 .maxPunkte(10)
-                .professorUUID(frageDTOMC.profUUID())
-                .examUUID(frageDTOMC.examUUID())
+                .examId(frageDTOMC.examId())
                 .build();
     }
 
     @Test
     void createChoiceFrageWithCorrectParams() {
         KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .frageFachId(frageDTOMC.fachId())
+                .frageId(frageDTOMC.id())
                 .loesungen("A")
                 .antwortOptionen("A, B")
                 .build();
 
         when(frageDTOMapper.toDomain(frageDTOMC)).thenReturn(frageMC);
-        when(frageService.addFrage(any())).thenReturn(frageDTOMC.fachId());
+        when(frageService.addFrage(any())).thenReturn(frageDTOMC.id());
         when(korrekteAntwortenDTOMapper.toDomain(any())).thenReturn(domain);
 
         frageQueryService.createChoiceFrage(frageDTOMC, "A", "A, B");
@@ -107,7 +103,7 @@ class FrageQueryServiceTest {
         KorrekteAntworten captured = captor.getValue();
         assertEquals("A", captured.getLoesungen());
         assertEquals("A, B", captured.getAntwortOptionen());
-        assertEquals(frageDTOMC.fachId(), captured.getFrageFachId());
+        assertEquals(frageDTOMC.id(), captured.getFrageId());
     }
 
     @Test

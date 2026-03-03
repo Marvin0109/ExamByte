@@ -38,7 +38,7 @@ public interface ExamControllerService {
 
     boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin);
 
-    void createQuestions(ExamForm form, UUID profFachID, UUID examUUID);
+    void createQuestions(ExamForm form, UUID examUUID);
 
     VersuchDTO getAttempt(UUID examUUID, String studentLogin);
 
@@ -46,21 +46,19 @@ public interface ExamControllerService {
 
     ExamTimeInfo getExamTimeInfo(ExamDTO examDTO);
 
-    void removeOldAnswersAndReviews(UUID examUUID, String name);
-
     boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUiD);
 
     List<SubmitInfo> getSubmitInfo(UUID examUUID);
 
     void saveAutomaticReviewer();
 
-    Optional<UUID> getProfFachIDByName(String name);
+    Optional<UUID> getProfIdByName(String name);
 
     boolean reset();
 
     boolean deleteExam(UUID examUUID);
 
-    ProfessorDTO getProfessorByFachId(UUID fachId);
+    ProfessorDTO getProfessorById(UUID id);
 
     double getZulassungsProgress(String studentName);
 
@@ -70,7 +68,7 @@ public interface ExamControllerService {
 
     List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map);
 
-    void createReview(ReviewForm reviewForm, UUID antwortFachId, UUID korrektorFachId);
+    void createReview(ReviewForm reviewForm, UUID antwortId, UUID korrektorId);
 
     UUID getReviewerByName(String name);
 

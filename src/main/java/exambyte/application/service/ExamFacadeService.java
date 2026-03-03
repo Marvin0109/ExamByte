@@ -17,49 +17,47 @@ public interface ExamFacadeService {
 
     List<ExamDTO> getAllExams();
 
-    boolean isExamAlreadySubmitted(UUID examFachId, String studentName);
+    boolean isExamAlreadySubmitted(UUID examId, String studentName);
 
-    boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId);
+    boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examId);
 
-    ExamDTO getExam(UUID examFachId);
+    ExamDTO getExam(UUID examId);
 
-    List<FrageDTO> getFragenForExam(UUID examFachId);
+    List<FrageDTO> getFragenForExam(UUID examId);
 
     Optional<UUID> getProfIDByName(String name);
 
-    ProfessorDTO getProfessor(UUID profFachId);
+    ProfessorDTO getProfessor(UUID profId);
 
     void createFrage(FrageDTO frageDTO);
 
     void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);
 
-    String getChoiceForFrage(UUID frageFachId);
+    String getChoiceForFrage(UUID frageId);
 
     UUID getExamByStartTime(LocalDateTime startTime);
 
-    boolean deleteById(UUID examFachId);
+    boolean deleteById(UUID examId);
 
     boolean reset();
 
-    void removeOldAnswers(UUID examFachId, String name);
-
-    VersuchDTO getSubmission(UUID examFachId, String studentLogin);
+    VersuchDTO getSubmission(UUID examId, String studentLogin);
 
     void saveAutomaticReviewer();
 
-    double reviewCoverage(UUID examFachId);
+    double reviewCoverage(UUID examId);
 
-    List<StudentDTO> getStudentSubmittedExam(UUID examFachId);
+    List<StudentDTO> getStudentSubmittedExam(UUID examId);
 
-    boolean isSubmitBeingReviewed(UUID examFachId, UUID studentId);
+    boolean isSubmitBeingReviewed(UUID examId, UUID studentId);
 
-    List<FrageDTO> getFreitextFragen(UUID examFachId);
+    List<FrageDTO> getFreitextFragen(UUID examId);
 
-    List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId);
+    List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
 
     boolean antwortHasReview(AntwortDTO antwort);
 
-    void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId);
+    void createReview(String bewertung, int punkte, UUID antwortId, UUID korrektorId);
 
     UUID getReviewerByName(String name);
 
@@ -67,11 +65,11 @@ public interface ExamFacadeService {
 
     AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId);
 
-    ReviewDTO getReviewForAntwort(UUID antwortFachId);
+    ReviewDTO getReviewForAntwort(UUID antwortId);
 
     KorrekteAntwortenDTO getLoesungForFrage(UUID frageId);
 
-    boolean timeReachedToViewReview(UUID examFachId);
+    boolean timeReachedToViewReview(UUID examId);
 
     KorrektorDTO getReviewerById(UUID reviewerId);
 

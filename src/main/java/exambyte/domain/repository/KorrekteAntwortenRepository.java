@@ -7,9 +7,9 @@ import java.util.UUID;
 
 public interface KorrekteAntwortenRepository {
 
-    Optional<KorrekteAntworten> findByFachId(UUID fachId);
+    Optional<KorrekteAntworten> findById(UUID id);
 
-    Optional<KorrekteAntworten> findByFrageFachID(UUID frageFachID);
+    Optional<KorrekteAntworten> findByFrageId(UUID frageID);
 
     void save(KorrekteAntworten antworten);
 

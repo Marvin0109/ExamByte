@@ -10,21 +10,18 @@ import java.util.UUID;
 public class StudentEntity {
 
     @Id
-    private Long id;
-
-    @Column("fach_id")
-    private final UUID fachId;
+    private UUID id;
 
     @Column("name")
     private String name;
 
-    private StudentEntity(UUID fachId, String name) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+    private StudentEntity(UUID id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public void setName(String name) {
@@ -36,11 +33,11 @@ public class StudentEntity {
     }
 
     public static class StudentEntityBuilder {
-        private UUID fachId;
+        private UUID id;
         private String name;
 
-        public StudentEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public StudentEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -53,7 +50,7 @@ public class StudentEntity {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name fehlt");
             }
-            return new StudentEntity(fachId, name);
+            return new StudentEntity(id, name);
         }
     }
 }

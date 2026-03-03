@@ -22,8 +22,8 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public Optional<Professor> findByFachId(UUID fachId) {
-        Optional<ProfessorEntity> entity = dao.findByFachId(fachId);
+    public Optional<Professor> findById(UUID id) {
+        Optional<ProfessorEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 
@@ -37,5 +37,10 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     public Optional<Professor> findByName(String name) {
         Optional<ProfessorEntity> entity = dao.findByName(name);
         return entity.map(mapper::toDomain);
+    }
+
+    @Override
+    public void deleteAll() {
+        dao.deleteAll();
     }
 }

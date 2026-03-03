@@ -4,24 +4,24 @@ import java.util.UUID;
 
 public class KorrekteAntworten {
 
-    private final UUID fachId;
+    private final UUID id;
     private final String loesungen;
     private final String antwortOptionen;
-    private final UUID frageFachId;
+    private final UUID frageId;
 
-    private KorrekteAntworten(UUID fachId, UUID frageFachId, String loesungen, String antwortOptionen) {
-        this.fachId = fachId;
-        this.frageFachId = frageFachId;
+    private KorrekteAntworten(UUID id, UUID frageId, String loesungen, String antwortOptionen) {
+        this.id = id;
+        this.frageId = frageId;
         this.loesungen = loesungen;
         this.antwortOptionen = antwortOptionen;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
-    public UUID getFrageFachId() {
-        return frageFachId;
+    public UUID getFrageId() {
+        return frageId;
     }
 
     public String getLoesungen() {
@@ -31,18 +31,18 @@ public class KorrekteAntworten {
     public String getAntwortOptionen() { return antwortOptionen; }
 
     public static class KorrekteAntwortenBuilder {
-        private UUID fachId;
-        private UUID frageFachId;
+        private UUID id;
+        private UUID frageId;
         private String loesungen;
         private String antwortOptionen;
 
-        public KorrekteAntwortenBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public KorrekteAntwortenBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
-        public KorrekteAntwortenBuilder frageFachId(UUID frageFachId) {
-            this.frageFachId = frageFachId;
+        public KorrekteAntwortenBuilder frageId(UUID frageId) {
+            this.frageId = frageId;
             return this;
         }
 
@@ -57,7 +57,7 @@ public class KorrekteAntworten {
         }
 
         public KorrekteAntworten build() {
-            return new KorrekteAntworten(fachId, frageFachId, loesungen, antwortOptionen);
+            return new KorrekteAntworten(id, frageId, loesungen, antwortOptionen);
         }
     }
 }

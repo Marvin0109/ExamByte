@@ -24,14 +24,14 @@ class KorrekteAntwortDTOMapperTest {
     @DisplayName("toDTO Test")
     void test_01() {
         // Arrange
-        UUID fachID = UUID.randomUUID();
-        UUID frageFachID = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
         String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .fachId(fachID)
-                .frageFachId(frageFachID)
+                .id(id)
+                .frageId(frageId)
                 .loesungen(korrekteAntworten)
                 .antwortOptionen(antwortOptionen)
                 .build();
@@ -40,8 +40,8 @@ class KorrekteAntwortDTOMapperTest {
         KorrekteAntwortenDTO dto = mapper.toDTO(antworten);
 
         // Assert
-        assertThat(dto.fachId()).isEqualTo(fachID);
-        assertThat(dto.frageFachId()).isEqualTo(frageFachID);
+        assertThat(dto.id()).isEqualTo(id);
+        assertThat(dto.frageId()).isEqualTo(frageId);
         assertThat(dto.antworten()).contains(korrekteAntworten);
         assertThat(dto.antwortOptionen()).contains(antwortOptionen);
     }
@@ -50,23 +50,23 @@ class KorrekteAntwortDTOMapperTest {
     @DisplayName("toDomain Test")
     void test_02() {
         // Arrange
-        UUID fachID = UUID.randomUUID();
-        UUID frageFachID = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
         String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(
-                fachID,
+                id,
                 korrekteAntworten,
                 antwortOptionen,
-                frageFachID);
+                frageId);
 
         // Act
         KorrekteAntworten result = mapper.toDomain(dto);
 
         // Assert
-        assertThat(result.getFachId()).isEqualTo(fachID);
-        assertThat(result.getFrageFachId()).isEqualTo(frageFachID);
+        assertThat(result.getId()).isEqualTo(id);
+        assertThat(result.getFrageId()).isEqualTo(frageId);
         assertThat(result.getLoesungen()).contains(korrekteAntworten);
         assertThat(result.getAntwortOptionen()).contains(antwortOptionen);
     }

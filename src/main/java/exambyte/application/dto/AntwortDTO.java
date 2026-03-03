@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record AntwortDTO (
-        UUID fachId,
+        UUID id,
         String antwortText,
-        UUID frageFachId,
-        UUID studentFachId,
+        UUID frageId,
+        UUID studentId,
         LocalDateTime antwortZeitpunkt) {}

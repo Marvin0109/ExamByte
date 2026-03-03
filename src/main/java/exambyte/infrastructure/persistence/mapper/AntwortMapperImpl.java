@@ -12,22 +12,22 @@ public class AntwortMapperImpl implements AntwortMapper {
     public Antwort toDomain(AntwortEntity entity) {
 
         return new Antwort.AntwortBuilder()
-            .fachId(entity.getFachId())
-            .antwortText(entity.getAntwortText())
-            .frageFachId(entity.getFrageFachId())
-            .studentFachId(entity.getStudentFachId())
-            .antwortZeitpunkt(entity.getAntwortZeitpunkt())
-            .build();
+                .id(entity.getId())
+                .antwortText(entity.getAntwortText())
+                .frageId(entity.getFrageId())
+                .studentId(entity.getStudentId())
+                .antwortZeitpunkt(entity.getAntwortZeitpunkt())
+                .build();
     }
 
     @Override
     public AntwortEntity toEntity(Antwort antwort) {
 
         return new AntwortEntity.AntwortEntityBuilder()
-                .fachId(antwort.getFachId())
+                .id(antwort.getId())
                 .antwortText(antwort.getAntwortText())
-                .frageFachId(antwort.getFrageFachId())
-                .studentFachId(antwort.getStudentUUID())
+                .frageId(antwort.getFrageId())
+                .studentId(antwort.getStudentUUID())
                 .antwortZeitpunkt(antwort.getAntwortZeitpunkt())
                 .build();
     }

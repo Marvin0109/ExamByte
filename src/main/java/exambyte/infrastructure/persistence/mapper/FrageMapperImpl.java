@@ -14,12 +14,11 @@ public class FrageMapperImpl implements FrageMapper {
     public Frage toDomain(FrageEntity entity) {
 
         return new Frage.FrageBuilder()
-                .fachId(entity.getFachId())
+                .id(entity.getId())
                 .frageText(entity.getFrageText())
                 .maxPunkte(entity.getMaxPunkte())
                 .type(QuestionType.valueOf(entity.getType().name()))
-                .professorUUID(entity.getProfessorFachId())
-                .examUUID(entity.getExamFachId())
+                .examId(entity.getExamId())
                 .build();
     }
 
@@ -27,12 +26,11 @@ public class FrageMapperImpl implements FrageMapper {
     public FrageEntity toEntity(Frage frage) {
 
         return new FrageEntity.FrageEntityBuilder()
-                .fachId(frage.getFachId())
+                .id(frage.getId())
                 .frageText(frage.getFrageText())
                 .maxPunkte(frage.getMaxPunkte())
                 .type(QuestionTypeEntity.valueOf(frage.getType().name()))
-                .professorFachId(frage.getProfessorUUID())
-                .examFachId(frage.getExamUUID())
+                .examId(frage.getExamId())
                 .build();
     }
 }

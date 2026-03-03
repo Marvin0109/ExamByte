@@ -22,9 +22,9 @@ class AntwortRepositoryTest {
 
     private AntwortRepository repository;
 
-    private static final UUID ANTWORT_FACH_ID = UUID.randomUUID();
-    private static final UUID FRAGE_FACH_ID = UUID.randomUUID();
-    private static final UUID STUDENT_FACH_ID = UUID.randomUUID();
+    private static final UUID ANTWORT__ID = UUID.randomUUID();
+    private static final UUID FRAGE__ID = UUID.randomUUID();
+    private static final UUID STUDENT__ID = UUID.randomUUID();
     private static final LocalDateTime TIMESTAMP =
             LocalDateTime.of(2020, 1, 1, 0, 0);
 
@@ -34,26 +34,26 @@ class AntwortRepositoryTest {
     }
 
     @Test
-    void findByFrageFachId_exists() {
+    void findByFrageId_exists() {
         // Arrange
         AntwortEntity entity = new AntwortEntity.AntwortEntityBuilder()
                 .antwortText("Antwort")
-                .frageFachId(FRAGE_FACH_ID)
-                .studentFachId(STUDENT_FACH_ID)
+                .frageId(FRAGE__ID)
+                .studentId(STUDENT__ID)
                 .antwortZeitpunkt(TIMESTAMP)
                 .build();
         Antwort domain = new Antwort.AntwortBuilder()
                 .antwortText("Antwort")
-                .frageFachId(FRAGE_FACH_ID)
-                .studentFachId(STUDENT_FACH_ID)
+                .frageId(FRAGE__ID)
+                .studentId(STUDENT__ID)
                 .antwortZeitpunkt(TIMESTAMP)
                 .build();
 
-        when(antwortDAO.findByFrageFachId(ANTWORT_FACH_ID)).thenReturn(Optional.of(entity));
+        when(antwortDAO.findByFrageId(ANTWORT__ID)).thenReturn(Optional.of(entity));
         when(antwortMapper.toDomain(entity)).thenReturn(domain);
 
         // Act
-        Antwort result = repository.findByFrageFachId(ANTWORT_FACH_ID);
+        Antwort result = repository.findByFrageId(ANTWORT__ID);
 
         // Assert
         assertNotNull(result);
@@ -61,12 +61,12 @@ class AntwortRepositoryTest {
     }
 
     @Test
-    void findByFrageFachId_notExists_returnsNull() {
+    void findByFrageId_notExists_returnsNull() {
         // Arrange
-        when(antwortDAO.findByFrageFachId(ANTWORT_FACH_ID)).thenReturn(Optional.empty());
+        when(antwortDAO.findByFrageId(ANTWORT__ID)).thenReturn(Optional.empty());
 
         // Act
-        Antwort result = repository.findByFrageFachId(ANTWORT_FACH_ID);
+        Antwort result = repository.findByFrageId(ANTWORT__ID);
 
         // Assert
         assertNull(result);

@@ -33,9 +33,9 @@ public class ScoringServiceImpl implements ScoringService {
     public double berechneErreichtePunkte(List<AntwortDTO> antworten, Map<UUID, FrageDTO> fragen, LocalDateTime result) {
         return antworten.stream()
                 .mapToDouble(a -> {
-                    FrageDTO f = fragen.get(a.frageFachId());
+                    FrageDTO f = fragen.get(a.frageId());
                     if (f == null) return 0;
-                    Review review = reviewService.getReviewByAntwortFachId(a.fachId());
+                    Review review = reviewService.getReviewByAntwortId(a.id());
 
                     UUID automaticReviewer = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
@@ -44,7 +44,7 @@ public class ScoringServiceImpl implements ScoringService {
                         return 0;
                     }
 
-                    boolean isAutomaticReview = review.getKorrektorFachId().equals(automaticReviewer);
+                    boolean isAutomaticReview = review.getKorrektorId().equals(automaticReviewer);
 
                     boolean resultTimeReached = !currentTime.isBefore(result);
 

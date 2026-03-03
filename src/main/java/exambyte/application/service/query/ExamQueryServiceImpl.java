@@ -56,7 +56,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
         for (ExamDTO examDTO : examList) {
             if (start.truncatedTo(ChronoUnit.MINUTES)
                     .equals(examDTO.startTime().truncatedTo(ChronoUnit.MINUTES))) {
-                return examDTO.fachId();
+                return examDTO.id();
             }
         }
 
@@ -73,17 +73,17 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
     @Override
     public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
-        UUID studentFachId = studentService.getStudentFachId(studentName);
+        UUID studentId = studentService.getStudentId(studentName);
         List<FrageDTO> fragen = frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examId));
 
         return fragen.stream()
                 .anyMatch(frage ->
-                        antwortService.findByStudentAndFrage(studentFachId, frage.fachId()) != null);
+                        antwortService.findByStudentAndFrage(studentId, frage.id()) != null);
     }
 
     @Override
-    public void deleteByFachId(UUID examId) {
-        examService.deleteByFachId(examId);
+    public void deleteById(UUID examId) {
+        examService.deleteById(examId);
     }
 
     @Transactional

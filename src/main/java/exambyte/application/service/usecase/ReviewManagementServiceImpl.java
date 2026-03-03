@@ -23,13 +23,13 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
     }
 
     @Override
-    public double getReviewCoverage(UUID examFachId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examFachId);
+    public double getReviewCoverage(UUID examId) {
+        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examId);
 
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
         for (AntwortDTO antwortDTO : antworten) {
-            ReviewDTO reviewDTO = reviewQueryService.getReviewByAntwortId(antwortDTO.fachId());
+            ReviewDTO reviewDTO = reviewQueryService.getReviewByAntwortId(antwortDTO.id());
             if (reviewDTO != null) {
                 reviewsTotal.add(reviewDTO);
             }
@@ -43,12 +43,12 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
     }
 
     @Override
-    public boolean submitHasReview(UUID examFachId, UUID studentId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examFachId);
+    public boolean submitHasReview(UUID examId, UUID studentId) {
+        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examId);
 
         List<UUID> studentAntwortList = antworten.stream()
-                .filter(a -> a.studentFachId().equals(studentId))
-                .map(AntwortDTO::fachId)
+                .filter(a -> a.studentId().equals(studentId))
+                .map(AntwortDTO::id)
                 .toList();
 
         for (UUID uuid : studentAntwortList) {

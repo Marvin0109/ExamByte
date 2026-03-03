@@ -1,21 +1,15 @@
 package exambyte.infrastructure.persistence.repository;
 
 import exambyte.infrastructure.persistence.entities.FrageEntity;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
-import java.util.Optional;
 import java.util.UUID;
 
-public interface FrageDAO extends CrudRepository<FrageEntity, Long> {
+public interface FrageDAO extends CrudRepository<FrageEntity, UUID> {
 
-    Collection<FrageEntity> findByExamFachId(UUID examFachId);
+    Collection<FrageEntity> findByExamId(UUID examId);
 
-    Collection<FrageEntity> findAll();
-
-    Optional<FrageEntity> findByFachId(UUID id);
-
-    FrageEntity save(FrageEntity frageEntity);
-
-    void deleteAll();
+    @NotNull Collection<FrageEntity> findAll();
 }

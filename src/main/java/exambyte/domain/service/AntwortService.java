@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface AntwortService {
 
-    Antwort findByFrageFachId(UUID frageFachId);
+    Antwort findByFrageId(UUID frageId);
 
     void addAntwort(Antwort antwort);
 

@@ -21,7 +21,7 @@ public class ProfessorQueryServiceImpl implements ProfessorQueryService {
 
     @Override
     public Optional<UUID> getProfIdByName(String name) {
-        return professorService.getProfessorFachIdByName(name);
+        return professorService.getProfessorIdByName(name);
     }
 
     @Override

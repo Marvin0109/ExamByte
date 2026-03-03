@@ -225,31 +225,27 @@ class ExamManagementServiceTest {
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
-        when(antwortQueryService.saveAnswers(any(), any()))
-                .thenReturn(false);
+        when(antwortQueryService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
 
-        SubmitExamResult result = examManagementService.submitExam(
+        assertThrows(Exception.class, () -> examManagementService.submitExam(
                 "Max",
                 Map.of("q1", List.of("A")),
-                UUID.randomUUID()
+                UUID.randomUUID())
         );
-
-        assertThat(result).isEqualTo(SubmitExamResult.SAVE_ANSWERS_FAILED);
-        verify(frageQueryService, never()).getFragenForExam(any());
     }
 
     @Test
     void submitExam_reviewSaveFails() {
         FrageDTO frage = mock(FrageDTO.class);
-        when(frage.fachId()).thenReturn(FRAGE_ID1);
+        when(frage.id()).thenReturn(FRAGE_ID1);
 
         AntwortDTO antwort = mock(AntwortDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
         when(review.bewertung()).thenReturn("Test");
         when(review.punkte()).thenReturn(1);
-        when(review.antwortFachId()).thenReturn(UUID.randomUUID());
-        when(review.korrektorFachId()).thenReturn(UUID.randomUUID());
+        when(review.antwortId()).thenReturn(UUID.randomUUID());
+        when(review.korrektorId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
@@ -286,7 +282,7 @@ class ExamManagementServiceTest {
     @Test
     void submitExam_success() {
         FrageDTO frage = mock(FrageDTO.class);
-        when(frage.fachId()).thenReturn(FRAGE_ID1);
+        when(frage.id()).thenReturn(FRAGE_ID1);
 
         AntwortDTO antwort = mock(AntwortDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
@@ -294,8 +290,8 @@ class ExamManagementServiceTest {
         // Review-Stub
         when(review.bewertung()).thenReturn("OK");
         when(review.punkte()).thenReturn(5);
-        when(review.antwortFachId()).thenReturn(UUID.randomUUID());
-        when(review.korrektorFachId()).thenReturn(UUID.randomUUID());
+        when(review.antwortId()).thenReturn(UUID.randomUUID());
+        when(review.korrektorId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
 
@@ -315,48 +311,9 @@ class ExamManagementServiceTest {
         verify(reviewQueryService).createReview(
                 review.bewertung(),
                 review.punkte(),
-                review.antwortFachId(),
-                review.korrektorFachId()
+                review.antwortId(),
+                review.korrektorId()
         );
-    }
-
-    @Test
-    void removeOldAnswers_success() {
-        // Arrange
-        String studentName = "Max";
-        FrageDTO frage1 = mock(FrageDTO.class);
-        when(frage1.fachId()).thenReturn(FRAGE_ID1);
-        FrageDTO frage2 = mock(FrageDTO.class);
-        when(frage2.fachId()).thenReturn(FRAGE_ID2);
-
-        UUID antwortId1 = UUID.randomUUID();
-        UUID antwortId2 = UUID.randomUUID();
-
-        AntwortDTO antwort1 = mock(AntwortDTO.class);
-        when(antwort1.fachId()).thenReturn(antwortId1);
-        AntwortDTO antwort2 = mock(AntwortDTO.class);
-        when(antwort2.fachId()).thenReturn(antwortId2);
-
-        UUID reviewId1 = UUID.randomUUID();
-
-        when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
-        when(frageQueryService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage1, frage2));
-
-        when(antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1)).thenReturn(antwort1);
-        when(antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID2)).thenReturn(antwort2);
-
-        when(reviewQueryService.antwortHasReview(antwortId1)).thenReturn(true);
-        when(reviewQueryService.getReviewIdByAntwortId(antwortId1)).thenReturn(reviewId1);
-        when(reviewQueryService.antwortHasReview(antwortId2)).thenReturn(false);
-
-        // Act
-        examManagementService.removeOldAnswers(EXAM_ID, studentName);
-
-        // Verify
-        verify(antwortQueryService).deleteAntwort(antwortId1);
-        verify(antwortQueryService).deleteAntwort(antwortId2);
-        verify(reviewQueryService).deleteReview(reviewId1);
-        verify(reviewQueryService, never()).deleteReview(antwortId2);
     }
 
     @Test

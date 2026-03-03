@@ -13,9 +13,7 @@ public interface ExamManagementService {
 
     SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId);
 
-    void removeOldAnswers(UUID examId, String name);
-
-    VersuchDTO getSubmission(UUID examFachId, String studentName);
+    VersuchDTO getSubmission(UUID examId, String studentName);
 
     List<ExamDTO> getAllExams();
 

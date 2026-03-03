@@ -11,7 +11,7 @@ public class ProfessorDTOMapperImpl implements ProfessorDTOMapper {
     @Override
     public ProfessorDTO toDTO(Professor professor) {
         return new ProfessorDTO(
-                professor.uuid(),
+                professor.id(),
                 professor.getName());
     }
 }

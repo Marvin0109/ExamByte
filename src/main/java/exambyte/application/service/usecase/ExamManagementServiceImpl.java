@@ -3,7 +3,9 @@ package exambyte.application.service.usecase;
 import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
+import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -62,7 +64,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                              LocalDateTime end,
                              LocalDateTime result) {
 
-        UUID profFachId = professorQueryService.getProfIdByName(profName)
+        UUID profId = professorQueryService.getProfIdByName(profName)
                 .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + profName));
 
         if (start.isAfter(end) || start.isEqual(end)) {
@@ -88,21 +90,25 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return "Ein Exam mit der selben Startzeit ist schon vorhanden!";
         }
 
-        ExamDTO examDTO = new ExamDTO(null, title, profFachId, start, end, result);
+        ExamDTO examDTO = new ExamDTO(null, title, profId, start, end, result);
         examQueryService.addExam(examDTO);
         return "";
     }
 
+    @Transactional(rollbackFor = {Exception.class, NichtVorhandenException.class})
     @Override
     public SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
-        UUID studentFachId = resolveStudent(studentName);
-        if (studentFachId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
+        UUID studentId = resolveStudent(studentName);
+        if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
-        if(!antwortQueryService.saveAnswers(studentFachId, antworten)) {
-            return SubmitExamResult.SAVE_ANSWERS_FAILED;
+        try {
+            antwortQueryService.saveAnswers(studentId, antworten);
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
+            throw e;
         }
 
-        return generateAndSaveReviews(studentFachId, examId);
+        return generateAndSaveReviews(studentId, examId);
     }
 
     private UUID resolveStudent(String studentName) {
@@ -119,7 +125,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<FrageDTO> fragenList = frageQueryService.getFragenForExam(examId);
 
         List<AntwortDTO> antwortList = fragenList.stream()
-                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.fachId()))
+                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -141,48 +147,18 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         reviewQueryService.createReview(
                 reviewDTO.bewertung(),
                 reviewDTO.punkte(),
-                reviewDTO.antwortFachId(),
-                reviewDTO.korrektorFachId()
+                reviewDTO.antwortId(),
+                reviewDTO.korrektorId()
         );
     }
 
     @Override
-    public void removeOldAnswers(UUID examId, String name) {
-        UUID studentFachID = studentQueryService.getStudentIdByName(name);
+    public VersuchDTO getSubmission(UUID examId, String studentName) {
+        UUID studentId = studentQueryService.getStudentIdByName(studentName);
 
-        List<FrageDTO> fragenDTOList = frageQueryService.getFragenForExam(examId);
-
-        List<UUID> antwortenToDelete = new ArrayList<>();
-        for (FrageDTO frageDTO : fragenDTOList) {
-            antwortenToDelete.add(
-                    antwortQueryService.findByStudentAndFrage(
-                            studentFachID, frageDTO.fachId())
-                            .fachId());
-        }
-
-        List<UUID> reviewsToDelete = new ArrayList<>();
-        for (UUID id : antwortenToDelete) {
-            if (reviewQueryService.antwortHasReview(id)) {
-                reviewsToDelete.add(reviewQueryService.getReviewIdByAntwortId(id));
-            }
-        }
-
-        for (UUID id : antwortenToDelete) {
-            antwortQueryService.deleteAntwort(id);
-        }
-
-        for (UUID id : reviewsToDelete) {
-            reviewQueryService.deleteReview(id);
-        }
-    }
-
-    @Override
-    public VersuchDTO getSubmission(UUID examFachId, String studentName) {
-        UUID studentFachId = studentQueryService.getStudentIdByName(studentName);
-
-        ExamDTO exam = examQueryService.getExam(examFachId);
-        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examFachId);
-        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentFachId, frageMap.keySet());
+        ExamDTO exam = examQueryService.getExam(examId);
+        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examId);
+        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentId, frageMap.keySet());
 
         // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
@@ -233,7 +209,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         ExamDTO exam = examQueryService.getExam(id);
 
         if (now().isBefore(exam.startTime()) || exam.resultTime().isBefore(now())) {
-            examQueryService.deleteByFachId(exam.fachId());
+            examQueryService.deleteById(exam.id());
             return true;
         }
         return false;

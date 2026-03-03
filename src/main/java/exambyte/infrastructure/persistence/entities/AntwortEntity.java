@@ -11,46 +11,47 @@ import java.util.UUID;
 public class AntwortEntity {
 
     @Id
-    private Long id;
+    private UUID id;
 
     @Column("antwort_text")
-    private final String antwortText;
+    private String antwortText;
 
-    @Column("fach_id")
-    private final UUID fachId;
+    @Column("frage_id")
+    private final UUID frageId;
 
-    @Column("frage_antwort_id")
-    private final UUID frageFachId;
-
-    @Column("student_fach_id")
-    private final UUID studentFachId;
+    @Column("student_id")
+    private final UUID studentId;
 
     @Column("antwort_zeitpunkt")
     private final LocalDateTime antwortZeitpunkt;
 
-    private AntwortEntity(UUID fachId, String antwortText, UUID frageFachId, UUID studentFachId,
+    private AntwortEntity(UUID id, String antwortText, UUID frageId, UUID studentId,
                           LocalDateTime antwortZeitpunkt) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+        this.id = id;
         this.antwortText = antwortText;
-        this.frageFachId = frageFachId;
-        this.studentFachId = studentFachId;
+        this.frageId = frageId;
+        this.studentId = studentId;
         this.antwortZeitpunkt = antwortZeitpunkt;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getAntwortText() {
         return antwortText;
     }
 
-    public UUID getFrageFachId() {
-        return frageFachId;
+    public void setAntwortText(String antwortText) {
+        this.antwortText = antwortText;
     }
 
-    public UUID getStudentFachId() {
-        return studentFachId;
+    public UUID getFrageId() {
+        return frageId;
+    }
+
+    public UUID getStudentId() {
+        return studentId;
     }
 
     public LocalDateTime getAntwortZeitpunkt() {
@@ -58,24 +59,24 @@ public class AntwortEntity {
     }
 
     public static class AntwortEntityBuilder {
-        private UUID fachId;
-        private UUID frageFachId;
+        private UUID id;
+        private UUID frageId;
         private String antwortText;
-        private UUID studentFachId;
+        private UUID studentId;
         private LocalDateTime antwortZeitpunkt;
 
-        public AntwortEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public AntwortEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
-        public AntwortEntityBuilder frageFachId(UUID frageFachId) {
-            this.frageFachId = frageFachId;
+        public AntwortEntityBuilder frageId(UUID frageId) {
+            this.frageId = frageId;
             return this;
         }
 
-        public AntwortEntityBuilder studentFachId(UUID studentFachId) {
-            this.studentFachId = studentFachId;
+        public AntwortEntityBuilder studentId(UUID studentId) {
+            this.studentId = studentId;
             return this;
         }
 
@@ -93,13 +94,13 @@ public class AntwortEntity {
             if (antwortText == null || antwortText.isBlank()) {
                 throw new IllegalStateException("Antworttext fehlt");
             }
-            if (frageFachId == null) {
-                throw new IllegalStateException("Frage-Fach-ID fehlt");
+            if (frageId == null) {
+                throw new IllegalStateException("Frage-ID fehlt");
             }
-            if (studentFachId == null) {
-                throw new IllegalStateException("Student-Fach-ID fehlt");
+            if (studentId == null) {
+                throw new IllegalStateException("Student-ID fehlt");
             }
-            return new AntwortEntity(fachId, antwortText, frageFachId, studentFachId,  antwortZeitpunkt);
+            return new AntwortEntity(id, antwortText, frageId, studentId,  antwortZeitpunkt);
         }
     }
 }

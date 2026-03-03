@@ -1,7 +1,5 @@
 package exambyte.architecture;
 
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
@@ -11,16 +9,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import java.util.UUID;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 /**
  * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
  */
-@AnalyzeClasses(packages = "exambyte")
+@AnalyzeClasses(
+        packages = "exambyte",
+        importOptions = ImportOption.DoNotIncludeTests.class)
 class OnionArchitectureTest {
 
     /**
@@ -31,26 +30,25 @@ class OnionArchitectureTest {
      * verwendet, um sicherzustellen, dass die vorgegebene Schichtenarchitektur und andere Richtlinien
      * eingehalten werden.
      */
-    private final JavaClasses klassen = new ClassFileImporter()
-            .withImportOption(ImportOption.Predefined.DO_NOT_INCLUDE_TESTS)
-            .importPackages("exambyte");
 
-    @Test
-    @DisplayName("Die ExamByte Anwendung hat eine Onion Architektur")
-    void onionArchitecture() {
-        ArchRule rule = Architectures.onionArchitecture()
-            .domainModels("exambyte.domain..")
-            .domainServices("exambyte.domain.service..")
-            .applicationServices("exambyte.application.service..")
-            .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
-            .adapter("service", "exambyte.infrastructure.service..",
-                    "exambyte.infrastructure.config..", "exambyte.web.service..")
-            .adapter("repository", "exambyte.infrastructure.persistence.repository..")
-            .adapter("controller", "exambyte.web.controllers..")
-            .adapter("mapper", "exambyte.infrastructure.mapper..",
-                    "exambyte.infrastructure.persistence.mapper..", "exambyte.application.mapper..");
-        rule.check(klassen);
-    }
+    @ArchTest
+    ArchRule onionArchitecture = Architectures.onionArchitecture()
+        .domainModels("exambyte.domain..")
+        .domainServices("exambyte.domain.service..")
+        .applicationServices("exambyte.application.service..")
+        .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
+        .adapter("service", "exambyte.infrastructure.service..",
+                "exambyte.infrastructure.config..", "exambyte.web.service..")
+        .adapter("repository", "exambyte.infrastructure.persistence.repository..")
+        .adapter("controller", "exambyte.web.controllers..")
+        .adapter("mapper", "exambyte.infrastructure.mapper..",
+                "exambyte.infrastructure.persistence.mapper..", "exambyte.application.mapper..");
+
+
+    @ArchTest
+    ArchRule noRandomUUIDUsage = noClasses()
+            .should()
+            .callMethod(UUID.class, "randomUUID");
 
     @ArchTest
     ArchRule allClassesInInfrastructureServiceShouldBeAnnotatedWithService = classes()

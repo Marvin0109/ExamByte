@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 19.02.2026
+>**aktualisiert am:** 03.03.2026
 
 *Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
@@ -634,3 +634,12 @@
 **Bereich**: UX / Feature
 - Die Anzahl an Fragetypen für Prüfungen ist jetzt benutzerdefiniert
 - `showReview` ist erfolgreich auch bei nicht eingereichten Antworten
+
+---
+
+### 03.03.2026
+**Bereich**: Race Condition / Datenbankoptimierung
+- Ursprünglichen Primärschlüssel durch Fach-ID (`UUID`) ersetzt
+- Transaktionen von `submitExam` optimiert (vorher: Find + Delete + Insert, jetzt: Upsert)
+- Stresstests implementiert für `submitExam`
+- Extras

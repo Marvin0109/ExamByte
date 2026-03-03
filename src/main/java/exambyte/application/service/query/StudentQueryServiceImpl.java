@@ -31,8 +31,8 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
         return antworten.stream()
                 .collect(Collectors.toMap(
-                        AntwortDTO::studentFachId,
-                        a -> studentService.getStudent(a.studentFachId()),
+                        AntwortDTO::studentId,
+                        a -> studentService.getStudent(a.studentId()),
                         (existing, duplicate) -> existing
                 ))
                 .values()
@@ -43,6 +43,6 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
     @Override
     public UUID getStudentIdByName(String studentName) {
-        return studentService.getStudentFachId(studentName);
+        return studentService.getStudentId(studentName);
     }
 }

@@ -31,7 +31,7 @@ public class ExamForm {
     @NotEmpty
     private List<@Valid QuestionData> questions = new ArrayList<>();
 
-    private UUID fachId;
+    private UUID id;
 
     public String getTitle() {
         return title;
@@ -73,11 +73,11 @@ public class ExamForm {
     this.questions = new ArrayList<>(questions);
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
-    public void setFachId(UUID fachId) {
-        this.fachId = fachId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

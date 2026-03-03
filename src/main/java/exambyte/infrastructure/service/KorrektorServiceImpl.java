@@ -19,28 +19,18 @@ public class KorrektorServiceImpl  implements KorrektorService {
     }
 
     @Override
-    public Korrektor getKorrektor(UUID fachId) {
-        return repository.findByFachId(fachId)
+    public Korrektor getKorrektor(UUID id) {
+        return repository.findById(id)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
     @Override
     public void saveKorrektor(String name) {
-        if (name.equals("Automatischer Korrektor")) {
-            UUID automatic = UUID.fromString("11111111-1111-1111-1111-111111111111");
-            Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                    .fachId(automatic)
-                    .name(name)
-                    .build();
+        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+            .name(name)
+            .build();
 
-            repository.save(korrektor);
-        } else {
-            Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .name(name)
-                .build();
-
-            repository.save(korrektor);
-        }
+        repository.save(korrektor);
     }
 
     @Override

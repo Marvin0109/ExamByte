@@ -33,7 +33,7 @@ public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
             e.setPunkte(frage.maxPunkte());
 
             KorrekteAntwortenDTO k = loesungen.stream()
-                    .filter(l -> l.frageFachId().equals(frage.fachId()))
+                    .filter(l -> l.frageId().equals(frage.id()))
                     .findAny()
                     .orElse(null);
 

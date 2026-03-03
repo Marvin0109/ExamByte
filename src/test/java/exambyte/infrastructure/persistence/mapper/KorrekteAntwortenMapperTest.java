@@ -22,12 +22,12 @@ class KorrekteAntwortenMapperTest {
     @Test
     void toEntity() {
         // Arrange
-        UUID frageFachID = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         String korrekteAntworten = "Lösung 1\nLösung 2";
         String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
 
         KorrekteAntworten antworten = new KorrekteAntworten.KorrekteAntwortenBuilder()
-            .frageFachId(frageFachID)
+            .frageId(frageId)
             .loesungen(korrekteAntworten)
             .antwortOptionen(antwortOptionen)
             .build();
@@ -36,7 +36,7 @@ class KorrekteAntwortenMapperTest {
         KorrekteAntwortenEntity entity = korrekteAntwortenMapper.toEntity(antworten);
 
         // Assert
-        assertThat(entity.getFrageFachID()).isEqualTo(antworten.getFrageFachId());
+        assertThat(entity.getFrageId()).isEqualTo(antworten.getFrageId());
         assertThat(entity.getRichtigeAntwort()).contains(korrekteAntworten);
         assertThat(entity.getAntwortOptionen()).contains(antwortOptionen);
     }
@@ -44,11 +44,11 @@ class KorrekteAntwortenMapperTest {
     @Test
     void toDomain() {
         // Arrange
-        UUID frageFachID = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         String antworten = "Lösung 1\nLösung 2";
         String antwortOptionen = "Lösung 1\nLösung 2\nLösung 3";
         KorrekteAntwortenEntity entity = new KorrekteAntwortenEntity.KorrekteAntwortenEntityBuilder()
-                .frageFachID(frageFachID)
+                .frageId(frageId)
                 .antwortOptionen(antwortOptionen)
                 .richtigeAntwort(antworten).build();
 
@@ -56,7 +56,7 @@ class KorrekteAntwortenMapperTest {
         KorrekteAntworten korrekteAntworten = korrekteAntwortenMapper.toDomain(entity);
 
         // Assert
-        assertThat(korrekteAntworten.getFrageFachId()).isEqualTo(frageFachID);
+        assertThat(korrekteAntworten.getFrageId()).isEqualTo(frageId);
         assertThat(korrekteAntworten.getLoesungen()).contains(antworten);
         assertThat(korrekteAntworten.getAntwortOptionen()).contains(antwortOptionen);
     }

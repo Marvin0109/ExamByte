@@ -26,30 +26,31 @@ class StudentRepositoryTest {
     }
 
     @Test
-    void findFachIdByName_exists() {
+    void findIdByName_exists() {
         // Arrange
         String name = "Name";
         StudentEntity student = new StudentEntity.StudentEntityBuilder()
+                .id(UUID.randomUUID())
                 .name(name)
                 .build();
 
-        when(studentDAO.findFachIdByName(name)).thenReturn(Optional.of(student));
+        when(studentDAO.findIdByName(name)).thenReturn(Optional.of(student));
 
         // Act
-        Optional<UUID> result = repository.findFachIdByName(name);
+        Optional<UUID> result = repository.findIdByName(name);
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get()).isEqualByComparingTo(student.getFachId());
+        assertThat(result.get()).isEqualByComparingTo(student.getId());
     }
 
     @Test
-    void findFachIdByName_notFound() {
+    void findIdByName_notFound() {
         // Arrange
-        when(studentDAO.findFachIdByName("Name")).thenReturn(Optional.empty());
+        when(studentDAO.findIdByName("Name")).thenReturn(Optional.empty());
 
         // Act
-        Optional<UUID> result = repository.findFachIdByName("Name");
+        Optional<UUID> result = repository.findIdByName("Name");
 
         // Assert
         assertThat(result).isEmpty();

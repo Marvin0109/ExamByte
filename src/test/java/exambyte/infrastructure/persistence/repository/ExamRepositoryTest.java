@@ -34,7 +34,8 @@ class ExamRepositoryTest {
     void findByStartTime_exists() {
         // Arrange
         ExamEntity examEntity = new ExamEntity.ExamEntityBuilder()
-                .professorFachId(UUID.randomUUID())
+                .id(UUID.randomUUID())
+                .professorId(UUID.randomUUID())
                 .title("Exam")
                 .startZeitpunkt(TIMESTAMP)
                 .endZeitpunkt(TIMESTAMP.plusHours(1))
@@ -48,7 +49,7 @@ class ExamRepositoryTest {
 
         // Assert
         assertThat(result).isPresent();
-        assertEquals(result.get(), examEntity.getFachId());
+        assertEquals(result.get(), examEntity.getId());
     }
 
     @Test

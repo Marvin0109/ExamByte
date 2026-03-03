@@ -22,15 +22,15 @@ class AntwortServiceTest {
     void test_01() {
         // Arrange
         UUID studentId = UUID.randomUUID();
-        UUID frageFachId = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
 
-        when(antwortRepository.findByStudentFachIdAndFrageFachId(studentId, frageFachId)).thenReturn(Optional.empty());
+        when(antwortRepository.findByStudentIdAndFrageId(studentId, frageId)).thenReturn(Optional.empty());
 
         // Act
-        Antwort result = service.findByStudentAndFrage(studentId, frageFachId);
+        Antwort result = service.findByStudentAndFrage(studentId, frageId);
 
         // Assert
         assertNull(result);
-        verify(antwortRepository).findByStudentFachIdAndFrageFachId(studentId, frageFachId);
+        verify(antwortRepository).findByStudentIdAndFrageId(studentId, frageId);
     }
 }

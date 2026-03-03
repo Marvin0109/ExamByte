@@ -46,7 +46,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
         List<AntwortDTO> antworten = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
-            AntwortDTO a = antwortQueryService.findByStudentAndFrage(studentId, frage.fachId());
+            AntwortDTO a = antwortQueryService.findByStudentAndFrage(studentId, frage.id());
             antworten.add(a);
         }
 
@@ -59,11 +59,11 @@ public class ReviewExportServiceImpl implements ReviewExportService {
         StringBuilder sb = new StringBuilder();
 
         for (AntwortDTO antwort : antworten) {
-            ReviewDTO r = reviewQueryService.getReviewByAntwortId(antwort.fachId());
+            ReviewDTO r = reviewQueryService.getReviewByAntwortId(antwort.id());
 
             if (r != null) {
                 reviews.add(r);
-                KorrektorDTO korrektorDTO = korrektorQueryService.getReviewerById(r.korrektorFachId());
+                KorrektorDTO korrektorDTO = korrektorQueryService.getReviewerById(r.korrektorId());
 
                 if (!korrektorDTO.name().equals("Automatischer Korrektor")) {
 

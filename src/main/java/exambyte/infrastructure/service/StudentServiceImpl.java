@@ -19,8 +19,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public Student getStudent(UUID fachId) {
-        return repository.findByFachId(fachId)
+    public Student getStudent(UUID id) {
+        return repository.findById(id)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
@@ -38,8 +38,8 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public UUID getStudentFachId(String name) {
-        Optional<UUID> loadedFachID = repository.findFachIdByName(name);
-        return loadedFachID.orElse(null);
+    public UUID getStudentId(String name) {
+        Optional<UUID> loadedID = repository.findIdByName(name);
+        return loadedID.orElse(null);
     }
 }

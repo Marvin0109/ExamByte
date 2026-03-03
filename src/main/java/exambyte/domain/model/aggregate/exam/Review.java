@@ -4,29 +4,29 @@ import java.util.UUID;
 
 public class Review {
 
-    private final UUID fachId;
-    private final UUID antwortFachId;
+    private final UUID id;
+    private final UUID antwortId;
     private final UUID korrektorId;
     private final String bewertung;
     private final int punkte;
 
-    private Review(UUID fachId, UUID antwortFachId, UUID korrektorId, String bewertung, int punkte) {
-        this.fachId = fachId;
-        this.antwortFachId = antwortFachId;
+    private Review(UUID id, UUID antwortId, UUID korrektorId, String bewertung, int punkte) {
+        this.id = id;
+        this.antwortId = antwortId;
         this.korrektorId = korrektorId;
         this.bewertung = bewertung;
         this.punkte = punkte;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
-    public UUID getAntwortFachId() {
-        return antwortFachId;
+    public UUID getAntwortId() {
+        return antwortId;
     }
 
-    public UUID getKorrektorFachId() {
+    public UUID getKorrektorId() {
         return korrektorId;
     }
 
@@ -39,23 +39,23 @@ public class Review {
     }
 
     public static class ReviewBuilder {
-        private UUID fachId;
-        private UUID antwortFachId;
+        private UUID id;
+        private UUID antwortId;
         private UUID korrektorId;
         private String bewertung;
         private int punkte;
 
-        public ReviewBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public ReviewBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
-        public ReviewBuilder antwortFachId(UUID antwortFachId) {
-            this.antwortFachId = antwortFachId;
+        public ReviewBuilder antwortId(UUID antwortId) {
+            this.antwortId = antwortId;
             return this;
         }
 
-        public ReviewBuilder korrektorFachId(UUID korrektorId) {
+        public ReviewBuilder korrektorId(UUID korrektorId) {
             this.korrektorId = korrektorId;
             return this;
         }
@@ -71,7 +71,7 @@ public class Review {
         }
 
         public Review build() {
-            return new Review(fachId, antwortFachId, korrektorId, bewertung, punkte);
+            return new Review(id, antwortId, korrektorId, bewertung, punkte);
         }
     }
 }

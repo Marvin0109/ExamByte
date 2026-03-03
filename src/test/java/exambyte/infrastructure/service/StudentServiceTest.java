@@ -18,12 +18,12 @@ class StudentServiceTest {
     private final StudentService studentService = new StudentServiceImpl(studentRepository);
 
     @Test
-    @DisplayName("Ein Student kann nicht gefunden werden mit einer FachID")
+    @DisplayName("Ein Student kann nicht gefunden werden mit einer ID")
     void test_01() {
-        UUID studentFachId = UUID.randomUUID();
-        when(studentRepository.findByFachId(studentFachId)).thenReturn(Optional.empty());
+        UUID studentId = UUID.randomUUID();
+        when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
 
-        assertThrows(NichtVorhandenException.class, () -> studentService.getStudent(studentFachId));
-        verify(studentRepository).findByFachId(studentFachId);
+        assertThrows(NichtVorhandenException.class, () -> studentService.getStudent(studentId));
+        verify(studentRepository).findById(studentId);
     }
 }

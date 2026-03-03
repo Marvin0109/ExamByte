@@ -13,7 +13,7 @@ public class StudentDTOMapperImpl implements StudentDTOMapper {
     @Override
     public StudentDTO toDTO(Student student) {
         return new StudentDTO(
-                student.uuid(),
+                student.id(),
                 student.getName());
     }
 

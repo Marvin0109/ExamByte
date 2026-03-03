@@ -9,11 +9,11 @@ public interface ExamService {
 
     List<Exam> allExams();
 
-    Exam getExam(UUID fachId);
+    Exam getExam(UUID id);
 
     void addExam(Exam exam);
 
-    void deleteByFachId(UUID fachId);
+    void deleteById(UUID id);
 
     void deleteAll();
 }

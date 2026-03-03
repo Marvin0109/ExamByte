@@ -76,8 +76,7 @@ class ExamExportServiceTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 6,
-                profId,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.MC
         );
 
@@ -85,8 +84,7 @@ class ExamExportServiceTest {
                 UUID.randomUUID(),
                 "Frage 2",
                 2,
-                profId,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.FREITEXT
         );
 
@@ -94,16 +92,16 @@ class ExamExportServiceTest {
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
-                frage.fachId()
+                frage.id()
         );
     }
 
     @Test
     void createExamExport() {
-        when(examQueryService.getExam(exam.fachId())).thenReturn(exam);
+        when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
-        when(frageQueryService.getFragenForExam(exam.fachId())).thenReturn(List.of(frage));
-        when(korrekteAntwortenQueryService.getLoesungForFrage(frage.fachId())).thenReturn(korrekteAntworten);
+        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage));
+        when(korrekteAntwortenQueryService.getLoesungForFrage(frage.id())).thenReturn(korrekteAntworten);
         when(examExportDTOMapper.mapDTOToExport(
                 exam,
                 professor.name(),
@@ -112,7 +110,7 @@ class ExamExportServiceTest {
                 List.of(korrekteAntworten)))
                 .thenReturn(mock());
 
-        service.createExamExport(exam.fachId());
+        service.createExamExport(exam.id());
 
         verify(examExportDTOMapper).mapDTOToExport(
                 exam,
@@ -124,12 +122,12 @@ class ExamExportServiceTest {
 
     @Test
     void createExamExport_nullKorrekteAntworten() {
-        when(examQueryService.getExam(exam.fachId())).thenReturn(exam);
+        when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
-        when(frageQueryService.getFragenForExam(exam.fachId())).thenReturn(List.of(frage2));
-        when(korrekteAntwortenQueryService.getLoesungForFrage(frage2.fachId())).thenReturn(null);
+        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage2));
+        when(korrekteAntwortenQueryService.getLoesungForFrage(frage2.id())).thenReturn(null);
 
-        service.createExamExport(exam.fachId());
+        service.createExamExport(exam.id());
 
         verify(examExportDTOMapper).mapDTOToExport(
                 exam,

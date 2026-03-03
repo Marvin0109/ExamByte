@@ -43,7 +43,7 @@ class StudentDBTest {
     @DisplayName("Ein Student kann geladen werden")
     void test_01() {
         // Act
-        Optional<Student> geladen = repository.findByFachId(STUDENTUUID);
+        Optional<Student> geladen = repository.findById(STUDENTUUID);
 
         // Assert
         assertThat(geladen).isPresent();

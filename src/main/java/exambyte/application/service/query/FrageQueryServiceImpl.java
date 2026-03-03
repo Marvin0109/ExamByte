@@ -45,8 +45,8 @@ public class FrageQueryServiceImpl implements FrageQueryService {
 
     @Override
     public void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices) {
-        UUID frageFachId = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
-        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null, correctAnswer, choices, frageFachId);
+        UUID frageId = frageService.addFrage(frageDTOMapper.toDomain(frageDTO));
+        KorrekteAntwortenDTO dto = new KorrekteAntwortenDTO(null, correctAnswer, choices, frageId);
         korrekteAntwortenService.addKorrekteAntwort(korrekteAntwortenDTOMapper.toDomain(dto));
     }
 
@@ -56,8 +56,8 @@ public class FrageQueryServiceImpl implements FrageQueryService {
     }
 
     @Override
-    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
-        List<Frage> fragen = frageService.getFragenForExam(examFachId);
+    public List<FrageDTO> getFreitextFragen(UUID examId) {
+        List<Frage> fragen = frageService.getFragenForExam(examId);
 
         return fragen.stream()
                 .filter(frage -> QuestionType.FREITEXT == frage.getType())
@@ -69,6 +69,6 @@ public class FrageQueryServiceImpl implements FrageQueryService {
     public Map<UUID, FrageDTO> getFragenUUIDMap(UUID examId) {
         return frageService.getFragenForExam(examId).stream()
                 .map(frageDTOMapper::toDTO)
-                .collect(Collectors.toMap(FrageDTO::fachId, f -> f));
+                .collect(Collectors.toMap(FrageDTO::id, f -> f));
     }
 }

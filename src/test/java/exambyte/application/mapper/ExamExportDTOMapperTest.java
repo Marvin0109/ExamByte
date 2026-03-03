@@ -40,8 +40,7 @@ class ExamExportDTOMapperTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 5,
-                null,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.FREITEXT
         );
 
@@ -49,8 +48,7 @@ class ExamExportDTOMapperTest {
                 UUID.randomUUID(),
                 "Frage 2",
                 4,
-                null,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.MC
         );
 
@@ -58,7 +56,7 @@ class ExamExportDTOMapperTest {
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
-                frage2.fachId()
+                frage2.id()
         );
     }
 

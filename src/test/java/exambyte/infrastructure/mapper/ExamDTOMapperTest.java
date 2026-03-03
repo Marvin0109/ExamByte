@@ -22,14 +22,14 @@ class ExamDTOMapperTest {
     @DisplayName("Test ExamDTOMapper 'toDTO'")
     void test_01() {
         //Arrange
-        LocalDateTime now = LocalDateTime.now();
-        UUID fachId = UUID.randomUUID();
+        LocalDateTime now = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        UUID id = UUID.randomUUID();
         UUID profId = UUID.randomUUID();
 
         Exam exam = new Exam.ExamBuilder()
-                .fachId(fachId)
+                .id(id)
                 .title("Test Exam")
-                .professorFachId(profId)
+                .professorId(profId)
                 .startTime(now)
                 .endTime(now.plusHours(2))
                 .resultTime(now.plusDays(1))
@@ -39,9 +39,9 @@ class ExamDTOMapperTest {
         ExamDTO dto = mapper.toDTO(exam);
 
         // Assert
-        assertEquals(fachId, dto.fachId());
+        assertEquals(id, dto.id());
         assertEquals("Test Exam", dto.title());
-        assertEquals(profId, dto.professorFachId());
+        assertEquals(profId, dto.professorId());
         assertEquals(now, dto.startTime());
         assertEquals(now.plusHours(2), dto.endTime());
         assertEquals(now.plusDays(1), dto.resultTime());
@@ -58,24 +58,24 @@ class ExamDTOMapperTest {
     @DisplayName("toExamDTOList Test")
     void test_03() {
         // Arrange
-        LocalDateTime now = LocalDateTime.now();
-        UUID fachId = UUID.randomUUID();
-        UUID fachId2 = UUID.randomUUID();
+        LocalDateTime now = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
+        UUID id = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
         UUID profId = UUID.randomUUID();
 
         Exam exam1 = new Exam.ExamBuilder()
-                .fachId(fachId)
+                .id(id)
                 .title("Test Exam 1")
-                .professorFachId(profId)
+                .professorId(profId)
                 .startTime(now)
                 .endTime(now.plusHours(2))
                 .resultTime(now.plusDays(1))
                 .build();
 
         Exam exam2 = new Exam.ExamBuilder()
-                .fachId(fachId2)
+                .id(id2)
                 .title("Test Exam 2")
-                .professorFachId(profId)
+                .professorId(profId)
                 .startTime(now)
                 .endTime(now.plusHours(2))
                 .resultTime(now.plusDays(1))
@@ -88,27 +88,27 @@ class ExamDTOMapperTest {
 
         // Assert
         assertEquals(2, examDTOList.size());
-        assertThat(examDTOList.getFirst().fachId()).isEqualTo(fachId);
+        assertThat(examDTOList.getFirst().id()).isEqualTo(id);
         assertThat(examDTOList.getFirst().title()).isEqualTo("Test Exam 1");
-        assertThat(examDTOList.getFirst().professorFachId()).isEqualTo(profId);
-        assertThat(examDTOList.get(1).fachId()).isEqualTo(fachId2);
+        assertThat(examDTOList.getFirst().professorId()).isEqualTo(profId);
+        assertThat(examDTOList.get(1).id()).isEqualTo(id2);
         assertThat(examDTOList.get(1).title()).isEqualTo("Test Exam 2");
-        assertThat(examDTOList.get(1).professorFachId()).isEqualTo(profId);
+        assertThat(examDTOList.get(1).professorId()).isEqualTo(profId);
     }
 
     @Test
     @DisplayName("toDomain Test")
     void test_04() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
-        UUID profFachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID profId = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 1, 1);
         LocalDateTime end = LocalDateTime.of(2020, 1, 1, 1, 2);
         LocalDateTime resultTime = LocalDateTime.of(2020, 1, 1, 1, 3);
         ExamDTO dto = new ExamDTO(
-                fachId,
+                id,
                 "Exam 1",
-                profFachId,
+                profId,
                 start,
                 end,
                 resultTime);
@@ -117,9 +117,9 @@ class ExamDTOMapperTest {
         Exam exam = mapper.toDomain(dto);
 
         // Assert
-        assertEquals(fachId, exam.getFachId());
+        assertEquals(id, exam.getId());
         assertEquals("Exam 1", exam.getTitle());
-        assertEquals(profFachId, exam.getProfessorFachId());
+        assertEquals(profId, exam.getProfessorId());
         assertEquals(start, exam.getStartTime());
         assertEquals(end, exam.getEndTime());
         assertEquals(resultTime, exam.getResultTime());

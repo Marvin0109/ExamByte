@@ -10,25 +10,23 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface AntwortDAO extends CrudRepository<AntwortEntity, Long> {
+public interface AntwortDAO extends CrudRepository<AntwortEntity, UUID> {
 
-    Optional<AntwortEntity> findByFrageFachId(UUID id);
+    Optional<AntwortEntity> findByStudentIdAndFrageId(UUID studentId, UUID frageId);
 
-    Optional<AntwortEntity> findByStudentFachIdAndFrageFachId(UUID studentId, UUID examId);
-
-    Optional<AntwortEntity> findByFachId(UUID id);
-
-    AntwortEntity save(AntwortEntity entity);
+    Optional<AntwortEntity> findByFrageId(UUID frageId);
 
     @Transactional
     @Modifying
-    @Query("UPDATE antwort SET antwort_zeitpunkt = CURRENT_TIMESTAMP WHERE fach_id = :fachId")
-    void updateTimestamp(@Param("fachId") UUID fachId);
-
-    void deleteAll();
-
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM antwort a WHERE a.fach_id = :fachId")
-    void deleteByFachId(@Param("fachId") UUID fachId);
+    @Query("""
+        INSERT INTO antwort (student_id, frage_id, antwort_text, antwort_zeitpunkt)
+        VALUES (:studentId, :frageId, :text, CURRENT_TIMESTAMP)
+        ON CONFLICT (student_id, frage_id)
+        DO UPDATE
+            SET antwort_text = EXCLUDED.antwort_text,
+                antwort_zeitpunkt = CURRENT_TIMESTAMP
+    """)
+    void upsertAntwort(@Param("studentId") UUID studentId,
+                       @Param("frageId") UUID frageId,
+                       @Param("text") String antwortText);
 }

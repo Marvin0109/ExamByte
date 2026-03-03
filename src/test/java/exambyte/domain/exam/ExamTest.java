@@ -14,25 +14,25 @@ class ExamTest {
     @Test
     @DisplayName("Exam Builder Test")
     void test_01() {
-        UUID fachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         String title = "Math Exam";
-        UUID professorFachId = UUID.randomUUID();
+        UUID professorId = UUID.randomUUID();
         LocalDateTime startTime = LocalDateTime.now();
         LocalDateTime endTime = startTime.plusHours(2);
         LocalDateTime resultTime = endTime.plusDays(1);
 
         Exam exam = new Exam.ExamBuilder()
-                .fachId(fachId)
+                .id(id)
                 .title(title)
-                .professorFachId(professorFachId)
+                .professorId(professorId)
                 .startTime(startTime)
                 .endTime(endTime)
                 .resultTime(resultTime)
                 .build();
 
-        assertEquals(fachId, exam.getFachId());
+        assertEquals(id, exam.getId());
         assertEquals(title, exam.getTitle());
-        assertEquals(professorFachId, exam.getProfessorFachId());
+        assertEquals(professorId, exam.getProfessorId());
         assertEquals(startTime, exam.getStartTime());
         assertEquals(endTime, exam.getEndTime());
         assertEquals(resultTime, exam.getResultTime());

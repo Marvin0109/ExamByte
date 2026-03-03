@@ -154,7 +154,7 @@ public class ProfessorController {
         }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
-        UUID profFachID = service.getProfFachIDByName(name).orElse(null);
+        UUID profID = service.getProfIdByName(name).orElse(null);
 
         String message = service.createExam(form, name);
 
@@ -168,7 +168,7 @@ public class ProfessorController {
 
         UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
 
-        service.createQuestions(form, profFachID, examUUID);
+        service.createQuestions(form, examUUID);
 
         status.setComplete();
 

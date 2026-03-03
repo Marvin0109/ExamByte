@@ -7,7 +7,7 @@ public class AnswerForm {
     private String frageText;
     private int maxPunkte;
     private String antwort;
-    private UUID antwortFachId;
+    private UUID antwortId;
 
     public  String getFrageText() {
         return frageText;
@@ -33,11 +33,11 @@ public class AnswerForm {
         this.antwort = antwort;
     }
 
-    public UUID getAntwortFachId() {
-        return antwortFachId;
+    public UUID getAntwortId() {
+        return antwortId;
     }
 
-    public void setAntwortFachId(UUID antwortFachId) {
-        this.antwortFachId = antwortFachId;
+    public void setAntwortId(UUID antwortId) {
+        this.antwortId = antwortId;
     }
 }

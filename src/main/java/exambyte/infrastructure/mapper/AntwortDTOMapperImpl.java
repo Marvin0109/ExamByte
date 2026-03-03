@@ -12,9 +12,9 @@ public class AntwortDTOMapperImpl implements AntwortDTOMapper {
 
     @Override
     public AntwortDTO toDTO(Antwort antwort) {
-        return new AntwortDTO(antwort.getFachId(),
+        return new AntwortDTO(antwort.getId(),
                 antwort.getAntwortText(),
-                antwort.getFrageFachId(),
+                antwort.getFrageId(),
                 antwort.getStudentUUID(),
                 antwort.getAntwortZeitpunkt());
     }
@@ -29,10 +29,10 @@ public class AntwortDTOMapperImpl implements AntwortDTOMapper {
     @Override
     public Antwort toDomain(AntwortDTO dto) {
         return new Antwort.AntwortBuilder()
-                .fachId(dto.fachId())
+                .id(dto.id())
                 .antwortText(dto.antwortText())
-                .frageFachId(dto.frageFachId())
-                .studentFachId(dto.studentFachId())
+                .frageId(dto.frageId())
+                .studentId(dto.studentId())
                 .antwortZeitpunkt(dto.antwortZeitpunkt())
                 .build();
     }

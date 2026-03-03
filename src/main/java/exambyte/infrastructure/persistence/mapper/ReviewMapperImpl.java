@@ -11,9 +11,9 @@ public class ReviewMapperImpl implements ReviewMapper {
     @Override
     public Review toDomain(ReviewEntity entity) {
         return new Review.ReviewBuilder()
-                .fachId(entity.getFachId())
-                .antwortFachId(entity.getAntwortFachId())
-                .korrektorFachId(entity.getKorrektorFachId())
+                .id(entity.getId())
+                .antwortId(entity.getAntwortId())
+                .korrektorId(entity.getKorrektorId())
                 .bewertung(entity.getBewertung())
                 .punkte(entity.getPunkte())
                 .build();
@@ -22,9 +22,9 @@ public class ReviewMapperImpl implements ReviewMapper {
     @Override
     public ReviewEntity toEntity(Review review) {
         return new ReviewEntity.ReviewEntityBuilder()
-                .fachId(review.getFachId())
-                .antwortFachId(review.getAntwortFachId())
-                .korrektorFachId(review.getKorrektorFachId())
+                .id(review.getId())
+                .antwortId(review.getAntwortId())
+                .korrektorId(review.getKorrektorId())
                 .bewertung(review.getBewertung())
                 .punkte(review.getPunkte())
                 .build();

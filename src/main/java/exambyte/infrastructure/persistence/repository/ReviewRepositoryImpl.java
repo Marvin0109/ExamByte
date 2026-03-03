@@ -21,8 +21,8 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public Optional<Review> findByFachId(UUID fachId) {
-        Optional<ReviewEntity> entity = dao.findByFachId(fachId);
+    public Optional<Review> findById(UUID id) {
+        Optional<ReviewEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 
@@ -33,8 +33,8 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public Review findByAntwortFachId(UUID fachId) {
-        Optional<ReviewEntity> entity = dao.findByAntwortFachId(fachId);
+    public Review findByAntwortId(UUID id) {
+        Optional<ReviewEntity> entity = dao.findByAntwortId(id);
         return entity.map(mapper::toDomain)
                 .orElse(null);
     }
@@ -46,6 +46,6 @@ public class ReviewRepositoryImpl implements ReviewRepository {
 
     @Override
     public void deleteReview(UUID id) {
-        dao.deleteByFachId(id);
+        dao.deleteById(id);
     }
 }

@@ -21,29 +21,35 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public UUID getReviewIdByAntwortId(UUID antwortId) {
-        return reviewService.getReviewByAntwortFachId(antwortId).getAntwortFachId();
+        return reviewService.getReviewByAntwortId(antwortId).getAntwortId();
     }
 
     @Override
     public boolean antwortHasReview(UUID antwortId) {
-        return reviewService.getReviewByAntwortFachId(antwortId) != null;
+        return reviewService.getReviewByAntwortId(antwortId) != null;
     }
 
     @Override
     public void createReview(String bewertung, int punkte, UUID antwortId, UUID korrektorId) {
-        ReviewDTO review = new ReviewDTO(
-                null,
-                antwortId,
-                korrektorId,
-                bewertung,
-                punkte);
+        Review loaded = reviewService.getReviewByAntwortId(antwortId);
 
-        reviewService.addReview(reviewDTOMapper.toDomain(review));
+        UUID reviewId = loaded != null ? loaded.getId() : null;
+
+        Review review = reviewDTOMapper.toDomain(
+                new ReviewDTO(
+                        reviewId,
+                        antwortId,
+                        korrektorId,
+                        bewertung,
+                        punkte)
+        );
+
+        reviewService.addReview(review);
     }
 
     @Override
     public ReviewDTO getReviewByAntwortId(UUID antwortId) {
-        Review review = reviewService.getReviewByAntwortFachId(antwortId);
+        Review review = reviewService.getReviewByAntwortId(antwortId);
         if (review != null) {
             return reviewDTOMapper.toDTO(review);
         }

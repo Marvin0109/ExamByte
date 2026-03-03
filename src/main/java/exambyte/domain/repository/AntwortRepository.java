@@ -7,17 +7,15 @@ import java.util.UUID;
 
 public interface AntwortRepository {
 
-    Antwort findByFrageFachId(UUID id);
+    Antwort findByFrageId(UUID id);
 
-    Optional<Antwort> findByFachId(UUID id);
+    Optional<Antwort> findById(UUID id);
 
-    Optional<Antwort> findByStudentFachIdAndFrageFachId(UUID studentFachId, UUID examFachId);
+    Optional<Antwort> findByStudentIdAndFrageId(UUID studentFachId, UUID examFachId);
 
     void save(Antwort antwort);
 
     void deleteAll();
 
     void deleteAnswer(UUID fachId);
-
-    void updateAntwortZeitpunkt(UUID fachId);
 }

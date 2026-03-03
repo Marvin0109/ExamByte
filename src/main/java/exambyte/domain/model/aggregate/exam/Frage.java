@@ -6,36 +6,30 @@ import java.util.UUID;
 
 public class Frage {
 
-    private final UUID fachId;
+    private final UUID id;
     private final String frageText;
     private final int maxPunkte;
     private final QuestionType type;
-    private final UUID professorUUID;
-    private final UUID examUUID;
+    private final UUID examId;
 
-    private Frage(UUID fachId,String frageText, int maxPunkte, QuestionType type, UUID professorUUID, UUID examUUID) {
-        this.fachId = fachId;
+    private Frage(UUID id, String frageText, int maxPunkte, QuestionType type, UUID examId) {
+        this.id = id;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
         this.type = type;
-        this.professorUUID = professorUUID;
-        this.examUUID = examUUID;
-    }
-
-    public UUID getProfessorUUID() {
-        return professorUUID;
+        this.examId = examId;
     }
 
     public String getFrageText() {
         return frageText;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
-    public UUID getExamUUID() {
-        return examUUID;
+    public UUID getExamId() {
+        return examId;
     }
 
     public int getMaxPunkte() {
@@ -45,15 +39,14 @@ public class Frage {
     public QuestionType getType() { return type; }
 
     public static class FrageBuilder {
-        private UUID fachId;
+        private UUID id;
         private String frageText;
         private int maxPunkte;
         private QuestionType type;
-        private UUID professorUUID;
-        private UUID examUUID;
+        private UUID examId;
 
-        public FrageBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public FrageBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -72,18 +65,13 @@ public class Frage {
             return this;
         }
 
-        public FrageBuilder professorUUID(UUID professorUUID) {
-            this.professorUUID = professorUUID;
-            return this;
-        }
-
-        public FrageBuilder examUUID(UUID examUUID) {
-            this.examUUID = examUUID;
+        public FrageBuilder examId(UUID examId) {
+            this.examId = examId;
             return this;
         }
 
         public Frage build() {
-            return new Frage(fachId, frageText, maxPunkte, type, professorUUID, examUUID);
+            return new Frage(id, frageText, maxPunkte, type, examId);
         }
     }
 }

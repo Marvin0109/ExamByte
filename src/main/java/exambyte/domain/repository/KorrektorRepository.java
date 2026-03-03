@@ -9,7 +9,9 @@ public interface KorrektorRepository {
 
     Optional<Korrektor> findByName(String name);
 
-    Optional<Korrektor> findByFachId(UUID fachId);
+    Optional<Korrektor> findById(UUID id);
 
     void save(Korrektor korrektor);
+
+    void deleteAll();
 }

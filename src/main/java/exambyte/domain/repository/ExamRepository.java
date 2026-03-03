@@ -11,13 +11,13 @@ public interface ExamRepository {
 
     Collection<Exam> findAll();
 
-    Optional<Exam> findByFachId(UUID id);
+    Optional<Exam> findById(UUID id);
 
     void save(Exam test);
 
     Optional<UUID> findByStartTime(LocalDateTime startTime);
 
-    void deleteByFachId(UUID id);
+    void deleteById(UUID id);
 
     void deleteAll();
 }

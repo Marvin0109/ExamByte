@@ -43,7 +43,7 @@ class KorrektorDBTest {
     @DisplayName("Ein kann geladen werden")
     void test1() {
         // Act
-        Optional<Korrektor> geladen = repository.findByFachId(KORREKTORUUID);
+        Optional<Korrektor> geladen = repository.findById(KORREKTORUUID);
 
         // Assert
         assertThat(geladen).isPresent();

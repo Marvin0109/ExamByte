@@ -11,7 +11,7 @@ public class StudentMapperImpl implements StudentMapper {
     @Override
     public Student toDomain(StudentEntity entity) {
         return new Student.StudentBuilder()
-                .fachId(entity.getFachId())
+                .id(entity.getId())
                 .name(entity.getName())
                 .build();
     }
@@ -19,7 +19,7 @@ public class StudentMapperImpl implements StudentMapper {
     @Override
     public StudentEntity toEntity(Student student) {
         return new StudentEntity.StudentEntityBuilder()
-                .fachId(student.uuid())
+                .id(student.id())
                 .name(student.getName())
                 .build();
     }

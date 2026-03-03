@@ -44,7 +44,7 @@ class ReviewDBTest {
     @DisplayName("Laden der Daten erfolgreich")
     void test_01() {
         // Act
-        Optional<Review> geladenReview = reviewRepository.findByFachId(REVIEWUUID);
+        Optional<Review> geladenReview = reviewRepository.findById(REVIEWUUID);
 
         // Assert
         assertThat(geladenReview).isPresent();

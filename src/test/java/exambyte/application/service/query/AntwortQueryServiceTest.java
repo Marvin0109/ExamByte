@@ -17,8 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AntwortQueryServiceTest {
@@ -50,7 +49,7 @@ class AntwortQueryServiceTest {
     void saveAnswers_success() {
         // Arrange
 
-        Map<String , List<String>> antworten = Map.of(
+        Map<String, List<String>> antworten = Map.of(
                 FRAGE1_ID.toString(), List.of("Antwort 1", "Antwort 2"),
                 FRAGE2_ID.toString(), List.of("Antwort A")
         );
@@ -58,6 +57,8 @@ class AntwortQueryServiceTest {
         AntwortDTO dto1 = new AntwortDTO(null, "Antwort 1\nAntwort 2", FRAGE1_ID, STUDENT_ID, TIME);
         AntwortDTO dto2 = new AntwortDTO(null, "Antwort A", FRAGE2_ID, STUDENT_ID, TIME);
 
+        when(antwortService.findByStudentAndFrage(FRAGE1_ID, STUDENT_ID)).thenReturn(null);
+        when(antwortService.findByStudentAndFrage(FRAGE2_ID, STUDENT_ID)).thenReturn(null);
         when(antwortDTOMapper.toDomain(dto1)).thenReturn(mock());
         when(antwortDTOMapper.toDomain(dto2)).thenReturn(mock());
 
@@ -80,10 +81,9 @@ class AntwortQueryServiceTest {
                 .thenThrow(new RuntimeException("Error Message"));
 
         // Act
-        boolean result = antwortQueryService.saveAnswers(STUDENT_ID, antworten);
+        assertThrows(Exception.class, () -> antwortQueryService.saveAnswers(STUDENT_ID, antworten));
 
         // Assert
-        assertFalse(result);
         verify(antwortService, never()).addAntwort(any());
     }
 
@@ -142,11 +142,11 @@ class AntwortQueryServiceTest {
         Antwort domainAntwort = mock(Antwort.class);
         AntwortDTO dto = mock(AntwortDTO.class);
 
-        when(frageDTO.fachId()).thenReturn(FRAGE1_ID);
+        when(frageDTO.id()).thenReturn(FRAGE1_ID);
         when(frageQueryService.getFreitextFragen(examId))
                 .thenReturn(List.of(frageDTO));
 
-        when(antwortService.findByFrageFachId(FRAGE1_ID))
+        when(antwortService.findByFrageId(FRAGE1_ID))
                 .thenReturn(domainAntwort);
 
         when(antwortDTOMapper.toDTO(domainAntwort))
@@ -165,12 +165,12 @@ class AntwortQueryServiceTest {
         UUID examId = UUID.randomUUID();
 
         FrageDTO frageDTO = mock(FrageDTO.class);
-        when(frageDTO.fachId()).thenReturn(FRAGE1_ID);
+        when(frageDTO.id()).thenReturn(FRAGE1_ID);
 
         when(frageQueryService.getFreitextFragen(examId))
                 .thenReturn(List.of(frageDTO));
 
-        when(antwortService.findByFrageFachId(FRAGE1_ID))
+        when(antwortService.findByFrageId(FRAGE1_ID))
                 .thenReturn(null);
 
         // Act
