@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface KorrekteAntwortenService {
     void addKorrekteAntwort(KorrekteAntworten korrekteAntwort);
-    KorrekteAntworten findKorrekteAntwort(UUID frageFachId);
+    KorrekteAntworten findKorrekteAntwort(UUID frageId);
     void deleteAll();
 }

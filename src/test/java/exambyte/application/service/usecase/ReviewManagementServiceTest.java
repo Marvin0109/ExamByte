@@ -47,7 +47,7 @@ class ReviewManagementServiceTest {
 
         reviewDTO = new ReviewDTO(
                 UUID.randomUUID(),
-                antwortDTO.fachId(),
+                antwortDTO.id(),
                 UUID.randomUUID(),
                 "Bewertung",
                 1);
@@ -56,7 +56,7 @@ class ReviewManagementServiceTest {
     @Test
     void getReviewCoverage_100Percent() {
         when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.fachId())).thenReturn(reviewDTO);
+        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(reviewDTO);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -73,8 +73,8 @@ class ReviewManagementServiceTest {
                 LocalDateTime.of(2000, 1, 1, 0, 0));
 
         when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.fachId())).thenReturn(null);
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO2.fachId())).thenReturn(reviewDTO);
+        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(null);
+        when(reviewQueryService.getReviewByAntwortId(antwortDTO2.id())).thenReturn(reviewDTO);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -84,7 +84,7 @@ class ReviewManagementServiceTest {
     @Test
     void getReviewCoverage_0Percent() {
         when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.fachId())).thenReturn(null);
+        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(null);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -94,7 +94,7 @@ class ReviewManagementServiceTest {
     @Test
     void submitHasReview_true() {
         when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.fachId())).thenReturn(reviewDTO);
+        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(reviewDTO);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
 
@@ -104,7 +104,7 @@ class ReviewManagementServiceTest {
     @Test
     void submitHasReview_false() {
         when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.fachId())).thenReturn(null);
+        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(null);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
 

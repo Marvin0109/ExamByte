@@ -44,7 +44,7 @@ class UserCreationServiceTest {
         // Arrange
         String username = "student123";
         Student student = new Student.StudentBuilder()
-                .fachId(null)
+                .id(null)
                 .name(username)
                 .build();
         when(studentService.getStudentByName(username)).thenReturn(Optional.of(student));
@@ -76,7 +76,7 @@ class UserCreationServiceTest {
         // Arrange
         String username = "korrektor123";
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .fachId(null)
+                .id(null)
                 .name(username)
                 .build();
         when(korrektorService.getKorrektorByName(username)).thenReturn(Optional.of(korrektor));
@@ -108,7 +108,7 @@ class UserCreationServiceTest {
         // Arrange
         String username = "professor123";
         Professor professor = new Professor.ProfessorBuilder()
-                .fachId(null)
+                .id(null)
                 .name(username)
                 .build();
         when(professorService.getProfessorByName(username)).thenReturn(Optional.of(professor));

@@ -30,10 +30,10 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
     public boolean saveAnswers(UUID studentId, Map<String, List<String>> antworten) {
         try {
             for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
-                UUID frageFachId = UUID.fromString(entry.getKey());
+                UUID frageId = UUID.fromString(entry.getKey());
                 String antwortText = String.join("\n", entry.getValue());
                 String replaced = antwortText.replace("ĸ", ",");
-                AntwortDTO dto = new AntwortDTO(null, replaced, frageFachId, studentId, null);
+                AntwortDTO dto = new AntwortDTO(null, replaced, frageId, studentId, null);
                 antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
             }
             return true;
@@ -44,9 +44,9 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
     }
 
     @Override
-    public List<AntwortDTO> getAntworten(UUID studentFachId, Set<UUID> frageFachIds) {
-        return frageFachIds.stream()
-                .map(id -> antwortService.findByStudentAndFrage(studentFachId, id))
+    public List<AntwortDTO> getAntworten(UUID studentId, Set<UUID> frageIds) {
+        return frageIds.stream()
+                .map(id -> antwortService.findByStudentAndFrage(studentId, id))
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)
                 .toList();
@@ -55,7 +55,7 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
     @Override
     public List<AntwortDTO> getFreitextAntwortenForExam(UUID examId) {
         return frageQueryService.getFreitextFragen(examId).stream()
-                .map(frageDTO -> antwortService.findByFrageFachId(frageDTO.fachId()))
+                .map(frageDTO -> antwortService.findByFrageId(frageDTO.id()))
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)
                 .toList();

@@ -10,21 +10,18 @@ import java.util.UUID;
 public class KorrektorEntity {
 
     @Id
-    private Long id;
-
-    @Column("fach_id")
-    private final UUID fachId;
+    private UUID id;
 
     @Column("name")
     private final String name;
 
-    private KorrektorEntity(UUID fachId, String name) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+    private KorrektorEntity(UUID id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -32,11 +29,11 @@ public class KorrektorEntity {
     }
 
     public static class KorrektorEntityBuilder {
-        private UUID fachId;
+        private UUID id;
         private String name;
 
-        public KorrektorEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public KorrektorEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -49,7 +46,7 @@ public class KorrektorEntity {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name darf nicht leer sein");
             }
-            return new KorrektorEntity(fachId, name);
+            return new KorrektorEntity(id, name);
         }
     }
 }

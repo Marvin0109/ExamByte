@@ -21,10 +21,10 @@ class KorrektorDTOMapperTest {
     @DisplayName("Test KorrektorDTOMapper 'toDTO'")
     void test_01() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
 
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .fachId(fachId)
+                .id(id)
                 .name("Korrektorname")
                 .build();
 
@@ -32,7 +32,7 @@ class KorrektorDTOMapperTest {
         KorrektorDTO dto = mapper.toDTO(korrektor);
 
         // Assert
-        assertEquals(fachId, dto.fachId());
+        assertEquals(id, dto.id());
         assertEquals("Korrektorname", dto.name());
     }
 
@@ -46,16 +46,16 @@ class KorrektorDTOMapperTest {
     @DisplayName("toKorrektorDTOList Test")
     void test_03() {
         // Arrange
-        UUID fachId1 = UUID.randomUUID();
-        UUID fachId2 = UUID.randomUUID();
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
 
         Korrektor korrektor1 = new Korrektor.KorrektorBuilder()
-                .fachId(fachId1)
+                .id(id1)
                 .name("Korrektor 1")
                 .build();
 
         Korrektor korrektor2 = new Korrektor.KorrektorBuilder()
-                .fachId(fachId2)
+                .id(id2)
                 .name("Korrektor 2")
                 .build();
 
@@ -67,8 +67,8 @@ class KorrektorDTOMapperTest {
         // Assert
         assertEquals(2, korrektorDTOList.size());
         assertThat(korrektorDTOList.getFirst().name()).isEqualTo("Korrektor 1");
-        assertThat(korrektorDTOList.getFirst().fachId()).isEqualTo(fachId1);
+        assertThat(korrektorDTOList.getFirst().id()).isEqualTo(id1);
         assertThat(korrektorDTOList.getLast().name()).isEqualTo("Korrektor 2");
-        assertThat(korrektorDTOList.getLast().fachId()).isEqualTo(fachId2);
+        assertThat(korrektorDTOList.getLast().id()).isEqualTo(id2);
     }
 }

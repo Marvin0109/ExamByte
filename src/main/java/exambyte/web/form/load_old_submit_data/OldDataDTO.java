@@ -7,5 +7,4 @@ import exambyte.application.dto.KorrekteAntwortenDTO;
 public record OldDataDTO(
         FrageDTO fragen,
         KorrekteAntwortenDTO korrekteAntworten,
-        AntwortDTO antwort
-) {}
+        AntwortDTO antwort) {}

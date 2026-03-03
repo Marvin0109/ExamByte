@@ -15,7 +15,7 @@ public interface ExamQueryService {
 
     boolean hasStudentSubmittedExam(UUID examId, String studentName);
 
-    void deleteByFachId(UUID examId);
+    void deleteById(UUID examId);
 
     void resetAllExamDataCascade();
 

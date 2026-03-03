@@ -21,8 +21,8 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<Student> findByFachId(UUID fachId) {
-        Optional<StudentEntity> entity = dao.findByFachId(fachId);
+    public Optional<Student> findById(UUID id) {
+        Optional<StudentEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 
@@ -39,9 +39,9 @@ public class StudentRepositoryImpl implements StudentRepository {
     }
 
     @Override
-    public Optional<UUID> findFachIdByName(String name) {
-        StudentEntity loaded =  dao.findFachIdByName(name).orElse(null);
-        if (loaded != null) return Optional.of(loaded.getFachId());
+    public Optional<UUID> findIdByName(String name) {
+        StudentEntity loaded = dao.findIdByName(name).orElse(null);
+        if (loaded != null) return Optional.of(loaded.getId());
         return Optional.empty();
     }
 }

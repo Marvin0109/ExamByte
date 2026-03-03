@@ -21,11 +21,11 @@ class KorrektorServiceTest {
     @Test
     @DisplayName("Ein Korrektor kann nicht gefunden werden")
     void test_01() {
-        UUID fachId = UUID.randomUUID();
-        when(korrektorRepository.findByFachId(fachId)).thenReturn(Optional.empty());
+        UUID id = UUID.randomUUID();
+        when(korrektorRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NichtVorhandenException.class, () -> service.getKorrektor(fachId));
-        verify(korrektorRepository).findByFachId(fachId);
+        assertThrows(NichtVorhandenException.class, () -> service.getKorrektor(id));
+        verify(korrektorRepository).findById(id);
     }
 
     @Test

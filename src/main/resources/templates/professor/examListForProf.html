@@ -48,7 +48,7 @@
                 <tbody>
                 <tr th:each="exam : ${exams}">
                     <td>
-                        <a th:href="@{/professor/listParticipants/{examId}(examId=${exam.fachId})}"
+                        <a th:href="@{/professor/listParticipants/{examId}(examId=${exam.id})}"
                            th:text="${exam.title}">
                         </a>
                     </td>
@@ -85,7 +85,7 @@
                     </td>
                     <td>
                         <form method="get"
-                              th:action="@{/professor/downloadExam/{examId}(examId=${exam.fachId})}">
+                              th:action="@{/professor/downloadExam/{examId}(examId=${exam.id})}">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-download"></i>
                                 Download
@@ -94,7 +94,7 @@
                     </td>
                     <td>
                         <form method="post"
-                              th:action="@{/professor/deleteExam/{examId}(examId=${exam.fachId})}">
+                              th:action="@{/professor/deleteExam/{examId}(examId=${exam.id})}">
                             <input type="hidden"
                                    th:name="${_csrf.parameterName}"
                                    th:value="${_csrf.token}"/>

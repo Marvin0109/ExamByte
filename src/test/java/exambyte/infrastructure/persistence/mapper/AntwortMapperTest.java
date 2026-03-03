@@ -17,14 +17,14 @@ class AntwortMapperTest {
     @Test
     void toEntity() {
         // Arrange
-        UUID frageFachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
+        UUID studentId = UUID.randomUUID();
         LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
             .antwortText("Antworttext")
-            .frageFachId(frageFachId)
-            .studentFachId(studentFachId)
+            .frageId(frageId)
+            .studentId(studentId)
             .antwortZeitpunkt(antwortZeit)
             .build();
 
@@ -33,22 +33,22 @@ class AntwortMapperTest {
 
         // Assert
         assertThat(antwortEntity.getAntwortText()).isEqualTo("Antworttext");
-        assertThat(antwortEntity.getFrageFachId()).isEqualTo(frageFachId);
-        assertThat(antwortEntity.getStudentFachId()).isEqualTo(studentFachId);
+        assertThat(antwortEntity.getFrageId()).isEqualTo(frageId);
+        assertThat(antwortEntity.getStudentId()).isEqualTo(studentId);
         assertThat(antwortEntity.getAntwortZeitpunkt()).isEqualTo(antwort.getAntwortZeitpunkt());
     }
 
     @Test
     void toDomain() {
         // Arrange
-        UUID frageFachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
+        UUID studentId = UUID.randomUUID();
         LocalDateTime antwortZeit = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         AntwortEntity antwortEntity = new AntwortEntity.AntwortEntityBuilder()
             .antwortText("Antworttext")
-            .frageFachId(frageFachId)
-            .studentFachId(studentFachId)
+            .frageId(frageId)
+            .studentId(studentId)
             .antwortZeitpunkt(antwortZeit)
             .build();
 
@@ -57,8 +57,8 @@ class AntwortMapperTest {
 
         // Assert
         assertThat(antwort.getAntwortText()).isEqualTo("Antworttext");
-        assertThat(antwort.getFrageFachId()).isEqualTo(frageFachId);
-        assertThat(antwort.getStudentUUID()).isEqualTo(studentFachId);
+        assertThat(antwort.getFrageId()).isEqualTo(frageId);
+        assertThat(antwort.getStudentUUID()).isEqualTo(studentId);
         assertThat(antwort.getAntwortZeitpunkt()).isEqualTo(antwortEntity.getAntwortZeitpunkt());
     }
 }

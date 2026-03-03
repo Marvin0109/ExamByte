@@ -22,8 +22,8 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     }
 
     @Override
-    public Optional<Professor> findByFachId(UUID fachId) {
-        Optional<ProfessorEntity> entity = dao.findByFachId(fachId);
+    public Optional<Professor> findById(UUID id) {
+        Optional<ProfessorEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 

@@ -62,7 +62,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                              LocalDateTime end,
                              LocalDateTime result) {
 
-        UUID profFachId = professorQueryService.getProfIdByName(profName)
+        UUID profId = professorQueryService.getProfIdByName(profName)
                 .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + profName));
 
         if (start.isAfter(end) || start.isEqual(end)) {
@@ -88,21 +88,21 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return "Ein Exam mit der selben Startzeit ist schon vorhanden!";
         }
 
-        ExamDTO examDTO = new ExamDTO(null, title, profFachId, start, end, result);
+        ExamDTO examDTO = new ExamDTO(null, title, profId, start, end, result);
         examQueryService.addExam(examDTO);
         return "";
     }
 
     @Override
     public SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
-        UUID studentFachId = resolveStudent(studentName);
-        if (studentFachId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
+        UUID studentId = resolveStudent(studentName);
+        if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
-        if(!antwortQueryService.saveAnswers(studentFachId, antworten)) {
+        if(!antwortQueryService.saveAnswers(studentId, antworten)) {
             return SubmitExamResult.SAVE_ANSWERS_FAILED;
         }
 
-        return generateAndSaveReviews(studentFachId, examId);
+        return generateAndSaveReviews(studentId, examId);
     }
 
     private UUID resolveStudent(String studentName) {
@@ -119,7 +119,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<FrageDTO> fragenList = frageQueryService.getFragenForExam(examId);
 
         List<AntwortDTO> antwortList = fragenList.stream()
-                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.fachId()))
+                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -141,14 +141,14 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         reviewQueryService.createReview(
                 reviewDTO.bewertung(),
                 reviewDTO.punkte(),
-                reviewDTO.antwortFachId(),
-                reviewDTO.korrektorFachId()
+                reviewDTO.antwortId(),
+                reviewDTO.korrektorId()
         );
     }
 
     @Override
     public void removeOldAnswers(UUID examId, String name) {
-        UUID studentFachID = studentQueryService.getStudentIdByName(name);
+        UUID studentID = studentQueryService.getStudentIdByName(name);
 
         List<FrageDTO> fragenDTOList = frageQueryService.getFragenForExam(examId);
 
@@ -156,8 +156,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         for (FrageDTO frageDTO : fragenDTOList) {
             antwortenToDelete.add(
                     antwortQueryService.findByStudentAndFrage(
-                            studentFachID, frageDTO.fachId())
-                            .fachId());
+                            studentID, frageDTO.id())
+                            .id());
         }
 
         List<UUID> reviewsToDelete = new ArrayList<>();
@@ -177,12 +177,12 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public VersuchDTO getSubmission(UUID examFachId, String studentName) {
-        UUID studentFachId = studentQueryService.getStudentIdByName(studentName);
+    public VersuchDTO getSubmission(UUID examId, String studentName) {
+        UUID studentId = studentQueryService.getStudentIdByName(studentName);
 
-        ExamDTO exam = examQueryService.getExam(examFachId);
-        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examFachId);
-        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentFachId, frageMap.keySet());
+        ExamDTO exam = examQueryService.getExam(examId);
+        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examId);
+        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentId, frageMap.keySet());
 
         // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
@@ -233,7 +233,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         ExamDTO exam = examQueryService.getExam(id);
 
         if (now().isBefore(exam.startTime()) || exam.resultTime().isBefore(now())) {
-            examQueryService.deleteByFachId(exam.fachId());
+            examQueryService.deleteById(exam.id());
             return true;
         }
         return false;

@@ -77,8 +77,7 @@ class ReviewExportServiceTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 4,
-                null,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.FREITEXT
         );
 
@@ -86,15 +85,14 @@ class ReviewExportServiceTest {
                 UUID.randomUUID(),
                 "Frage 2",
                 1,
-                null,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.SC
         );
 
         antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort",
-                frage.fachId(),
+                frage.id(),
                 studentId,
                 null
         );
@@ -102,14 +100,14 @@ class ReviewExportServiceTest {
         antwort2 = new AntwortDTO(
                 UUID.randomUUID(),
                 "A",
-                frage2.fachId(),
+                frage2.id(),
                 studentId,
                 null
         );
 
         review = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort.fachId(),
+                antwort.id(),
                 UUID.randomUUID(),
                 "Bewertung",
                 4
@@ -117,7 +115,7 @@ class ReviewExportServiceTest {
 
         review2 = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort2.fachId(),
+                antwort2.id(),
                 UUID.randomUUID(),
                 "Bewertung",
                 1
@@ -126,20 +124,20 @@ class ReviewExportServiceTest {
 
     @Test
     void createReviewExport() {
-        when(examQueryService.getExam(exam.fachId())).thenReturn(exam);
+        when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(frageQueryService.getFragenForExam(exam.fachId())).thenReturn(List.of(frage));
+        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage));
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(antwortQueryService.findByStudentAndFrage(studentId, frage.fachId())).thenReturn(antwort);
+        when(antwortQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
 
-        when(reviewQueryService.getReviewByAntwortId(antwort.fachId())).thenReturn(review);
+        when(reviewQueryService.getReviewByAntwortId(antwort.id())).thenReturn(review);
 
-        when(korrektorQueryService.getReviewerById(review.korrektorFachId()))
+        when(korrektorQueryService.getReviewerById(review.korrektorId()))
                 .thenReturn(new KorrektorDTO(UUID.randomUUID(), "Korrektor"));
 
-        service.createReviewExport(exam.fachId(), "Student");
+        service.createReviewExport(exam.id(), "Student");
 
         verify(mapper).mapDTOToExport(
                 exam,
@@ -152,24 +150,24 @@ class ReviewExportServiceTest {
 
     @Test
     void createReviewExport_excludingAutomaticReviewerName() {
-        when(examQueryService.getExam(exam.fachId())).thenReturn(exam);
+        when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(frageQueryService.getFragenForExam(exam.fachId())).thenReturn(List.of(frage, frage2));
+        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage, frage2));
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(antwortQueryService.findByStudentAndFrage(studentId, frage.fachId())).thenReturn(antwort);
-        when(antwortQueryService.findByStudentAndFrage(studentId, frage2.fachId())).thenReturn(antwort2);
+        when(antwortQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
+        when(antwortQueryService.findByStudentAndFrage(studentId, frage2.id())).thenReturn(antwort2);
 
-        when(reviewQueryService.getReviewByAntwortId(antwort.fachId())).thenReturn(review);
-        when(reviewQueryService.getReviewByAntwortId(antwort2.fachId())).thenReturn(review2);
+        when(reviewQueryService.getReviewByAntwortId(antwort.id())).thenReturn(review);
+        when(reviewQueryService.getReviewByAntwortId(antwort2.id())).thenReturn(review2);
 
-        when(korrektorQueryService.getReviewerById(review.korrektorFachId()))
+        when(korrektorQueryService.getReviewerById(review.korrektorId()))
                 .thenReturn(new KorrektorDTO(UUID.randomUUID(), "Korrektor"));
-        when(korrektorQueryService.getReviewerById(review2.korrektorFachId()))
+        when(korrektorQueryService.getReviewerById(review2.korrektorId()))
                 .thenReturn(new KorrektorDTO(UUID.randomUUID(), "Automatischer Korrektor"));
 
-        service.createReviewExport(exam.fachId(), "Student");
+        service.createReviewExport(exam.id(), "Student");
 
         verify(mapper).mapDTOToExport(
                 exam,

@@ -13,9 +13,9 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
     @Override
     public ReviewDTO toDTO(Review review) {
         return new ReviewDTO(
-                review.getFachId(),
-                review.getAntwortFachId(),
-                review.getKorrektorFachId(),
+                review.getId(),
+                review.getAntwortId(),
+                review.getKorrektorId(),
                 review.getBewertung(),
                 review.getPunkte());
     }
@@ -30,9 +30,9 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
     @Override
     public Review toDomain(ReviewDTO dto) {
         return new Review.ReviewBuilder()
-                .fachId(dto.fachId())
-                .antwortFachId(dto.antwortFachId())
-                .korrektorFachId(dto.korrektorFachId())
+                .id(dto.id())
+                .antwortId(dto.antwortId())
+                .korrektorId(dto.korrektorId())
                 .bewertung(dto.bewertung())
                 .punkte(dto.punkte())
                 .build();

@@ -44,6 +44,7 @@ class CreateExamIT {
     @Test
     void createExamAndQuestions() {
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
+        System.out.println("Professor: " + professorRepository.findByName("Professor").toString());
 
         QuestionData q1 = new QuestionData();
         QuestionData q2 = new QuestionData();
@@ -79,11 +80,11 @@ class CreateExamIT {
 
         String createExamMessage = examControllerService.createExam(examForm, "Professor");
         UUID examId = examControllerService.getExamUUIDByStartTime(start);
-        Optional<UUID> profID = examControllerService.getProfFachIDByName("Professor");
+        Optional<UUID> profID = examControllerService.getProfIdByName("Professor");
 
         assertThat(profID).isPresent();
 
-        examControllerService.createQuestions(examForm, profID.get(), examId);
+        examControllerService.createQuestions(examForm, examId);
 
         assertThat(createExamMessage).isEmpty();
 
@@ -93,11 +94,11 @@ class CreateExamIT {
         Optional<UUID> frageId = frageRepository.findAll()
                 .stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getFachId)
+                .map(Frage::getId)
                 .findFirst();
 
         assertThat(frageId).isPresent();
 
-        assertThat(korrekteAntwortenRepository.findByFrageFachID(frageId.get())).isPresent();
+        assertThat(korrekteAntwortenRepository.findByFrageId(frageId.get())).isPresent();
     }
 }

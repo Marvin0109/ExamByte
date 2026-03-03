@@ -69,13 +69,13 @@ public class KorrektorController {
         return "korrektor/examListForReviewer";
     }
 
-    @GetMapping("/showExamSubmits/{examFachId}")
+    @GetMapping("/showExamSubmits/{examId}")
     public String showExamSubmits(
             Model model,
-            @PathVariable UUID examFachId,
+            @PathVariable UUID examId,
             RedirectAttributes redirectAttributes) {
 
-        ExamDTO examDTO = service.getExamByUUID(examFachId);
+        ExamDTO examDTO = service.getExamByUUID(examId);
         LocalDateTime now = LocalDateTime.now();
 
         if (now.isBefore(examDTO.endTime())) {
@@ -85,7 +85,7 @@ public class KorrektorController {
                     false);
         }
 
-        List<SubmitInfo> submitInfoList = service.getSubmitInfo(examFachId);
+        List<SubmitInfo> submitInfoList = service.getSubmitInfo(examId);
 
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", examDTO);
@@ -93,14 +93,14 @@ public class KorrektorController {
         return "korrektor/examSubmitsView";
     }
 
-    @GetMapping("/showSubmit/{examFachId}/{studentFachId}")
+    @GetMapping("/showSubmit/{examId}/{studentId}")
     public String showSubmit(
             Model model,
-            @PathVariable UUID examFachId,
-            @PathVariable UUID studentFachId) {
+            @PathVariable UUID examId,
+            @PathVariable UUID studentId) {
 
         Map<FrageDTO, AntwortDTO> frageAntwortMap =
-                service.getFreitextAntwortenForExamAndStudent(examFachId, studentFachId);
+                service.getFreitextAntwortenForExamAndStudent(examId, studentId);
 
         List<AnswerForm> antwortForm = service.createAnswerForm(frageAntwortMap);
         ReviewForm reviewForm = new ReviewForm();
@@ -110,11 +110,11 @@ public class KorrektorController {
         return "korrektor/showSubmit";
     }
 
-    @PostMapping("/createReview/{antwortFachId}")
+    @PostMapping("/createReview/{antwortId}")
     public String createReview(
             @Valid ReviewForm reviewForm,
             BindingResult bindingResult,
-            @PathVariable UUID antwortFachId,
+            @PathVariable UUID antwortId,
             RedirectAttributes redirectAttributes,
             OAuth2AuthenticationToken auth) {
 
@@ -128,8 +128,8 @@ public class KorrektorController {
 
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
-        UUID korrektorFachId = service.getReviewerByName(name);
-        service.createReview(reviewForm, antwortFachId, korrektorFachId);
+        UUID korrektorId = service.getReviewerByName(name);
+        service.createReview(reviewForm, antwortId, korrektorId);
 
         return redirectWithMessage(
                 redirectAttributes,

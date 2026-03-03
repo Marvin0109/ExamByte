@@ -39,8 +39,8 @@ class ReviewQueryServiceTest {
         reviewQueryService = new ReviewQueryServiceImpl(reviewService, reviewDTOMapper);
 
         review = new Review.ReviewBuilder()
-                .antwortFachId(ANTWORT_ID)
-                .korrektorFachId(KORREKTOR_ID)
+                .antwortId(ANTWORT_ID)
+                .korrektorId(KORREKTOR_ID)
                 .bewertung("Bewertung")
                 .punkte(1)
                 .build();
@@ -60,20 +60,20 @@ class ReviewQueryServiceTest {
         verify(reviewService).addReview(captor.capture());
         Review result = captor.getValue();
 
-        assertThat(result.getAntwortFachId()).isEqualTo(ANTWORT_ID);
-        assertThat(result.getKorrektorFachId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
+        assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
     }
 
     @Test
     void getReviewByAntwortId_success() {
         ReviewDTO reviewDTO = new ReviewDTO(
-                review.getFachId(),
+                review.getId(),
                 ANTWORT_ID,
                 KORREKTOR_ID,
                 review.getBewertung(),
                 review.getPunkte());
 
-        when(reviewService.getReviewByAntwortFachId(any())).thenReturn(review);
+        when(reviewService.getReviewByAntwortId(any())).thenReturn(review);
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
         ReviewDTO result = reviewQueryService.getReviewByAntwortId(ANTWORT_ID);
@@ -83,7 +83,7 @@ class ReviewQueryServiceTest {
 
     @Test
     void getReviewByAntwortId_notFound() {
-        when(reviewService.getReviewByAntwortFachId(any())).thenReturn(null);
+        when(reviewService.getReviewByAntwortId(any())).thenReturn(null);
         ReviewDTO result = reviewQueryService.getReviewByAntwortId(ANTWORT_ID);
         assertNull(result);
     }

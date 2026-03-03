@@ -5,33 +5,33 @@ import java.util.UUID;
 
 public class Exam {
 
-    private final UUID fachId;
+    private final UUID id;
     private final String title;
-    private final UUID professorFachId;
+    private final UUID professorId;
     private final LocalDateTime startTime;
     private final LocalDateTime endTime;
     private final LocalDateTime resultTime;
 
-    private Exam(UUID fachId, String title, UUID professorFachId,
+    private Exam(UUID id, String title, UUID professorId,
                  LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
-        this.fachId = fachId;
+        this.id = id;
         this.title = title;
-        this.professorFachId = professorFachId;
+        this.professorId = professorId;
         this.startTime = startTime;
         this.endTime = endTime;
         this.resultTime = resultTime;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public UUID getProfessorFachId() {
-        return professorFachId;
+    public UUID getProfessorId() {
+        return professorId;
     }
 
     public LocalDateTime getStartTime() {
@@ -47,15 +47,15 @@ public class Exam {
     }
 
     public static class ExamBuilder {
-        private UUID fachId;
+        private UUID id;
         private String title;
-        private UUID professorFachId;
+        private UUID professorId;
         private LocalDateTime startTime;
         private LocalDateTime endTime;
         private LocalDateTime resultTime;
 
-        public ExamBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public ExamBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -64,8 +64,8 @@ public class Exam {
             return this;
         }
 
-        public ExamBuilder professorFachId(UUID professorFachId) {
-            this.professorFachId = professorFachId;
+        public ExamBuilder professorId(UUID professorId) {
+            this.professorId = professorId;
             return this;
         }
 
@@ -85,7 +85,7 @@ public class Exam {
         }
 
         public Exam build() {
-            return new Exam(fachId, title, professorFachId, startTime, endTime, resultTime);
+            return new Exam(id, title, professorId, startTime, endTime, resultTime);
         }
     }
 }

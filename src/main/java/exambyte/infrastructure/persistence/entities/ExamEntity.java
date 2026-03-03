@@ -11,16 +11,13 @@ import java.util.UUID;
 public class ExamEntity {
 
     @Id
-    private Long id;
-
-    @Column("fach_id")
-    private final UUID fachId;
+    private UUID id;
 
     @Column("title")
     private String title;
 
-    @Column("professor_fach_id")
-    private final UUID professorFachId;
+    @Column("professor_id")
+    private final UUID professorId;
 
     @Column("start_time")
     private final LocalDateTime startZeitpunkt;
@@ -31,18 +28,18 @@ public class ExamEntity {
     @Column("result_time")
     private final LocalDateTime resultZeitpunkt;
 
-    private ExamEntity(UUID fachId, String title, UUID professorFachId,
+    private ExamEntity(UUID id, String title, UUID professorId,
                       LocalDateTime startZeitpunkt, LocalDateTime endZeitpunkt, LocalDateTime resultZeitpunkt) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+        this.id = id;
         this.title = title;
-        this.professorFachId = professorFachId;
+        this.professorId = professorId;
         this.startZeitpunkt = startZeitpunkt;
         this.endZeitpunkt = endZeitpunkt;
         this.resultZeitpunkt = resultZeitpunkt;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -53,8 +50,8 @@ public class ExamEntity {
         this.title = title;
     }
 
-    public UUID getProfessorFachId() {
-        return professorFachId;
+    public UUID getProfessorId() {
+        return professorId;
     }
 
     public LocalDateTime getStartZeitpunkt() {
@@ -70,15 +67,15 @@ public class ExamEntity {
     }
 
     public static class ExamEntityBuilder {
-        private UUID fachId;
+        private UUID id;
         private String title;
-        private UUID professorFachId;
+        private UUID professorId;
         private LocalDateTime startZeitpunkt;
         private LocalDateTime endZeitpunkt;
         private LocalDateTime resultZeitpunkt;
 
-        public ExamEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public ExamEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -87,8 +84,8 @@ public class ExamEntity {
             return this;
         }
 
-        public ExamEntityBuilder professorFachId(UUID professorFachId) {
-            this.professorFachId = professorFachId;
+        public ExamEntityBuilder professorId(UUID professorId) {
+            this.professorId = professorId;
             return this;
         }
 
@@ -112,11 +109,11 @@ public class ExamEntity {
                 throw new IllegalStateException("Titel fehlt");
             }
 
-            checkNotNull(professorFachId, "Professor-Fach-ID fehlt");
+            checkNotNull(professorId, "Professor-ID fehlt");
             checkNotNull(startZeitpunkt, "Start-Zeitpunkt fehlt");
             checkNotNull(endZeitpunkt, "End-Zeitpunkt fehlt");
             checkNotNull(resultZeitpunkt, "Ergebnis-Zeitpunkt fehlt");
-            return new ExamEntity(fachId, title, professorFachId, startZeitpunkt, endZeitpunkt, resultZeitpunkt);
+            return new ExamEntity(id, title, professorId, startZeitpunkt, endZeitpunkt, resultZeitpunkt);
         }
 
         private static void checkNotNull(Object object, String message) {

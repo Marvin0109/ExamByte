@@ -18,14 +18,12 @@ class FrageMapperTest {
     @Test
     void toEntity() {
         // Arrange
-        UUID profFachId = UUID.randomUUID();
-        UUID examFachId = UUID.randomUUID();
+        UUID examId = UUID.randomUUID();
         Frage frage = new Frage.FrageBuilder()
                 .frageText("Fragetext")
                 .maxPunkte(5)
                 .type(QuestionType.FREITEXT)
-                .professorUUID(profFachId)
-                .examUUID(examFachId)
+                .examId(examId)
                 .build();
 
         // Act
@@ -35,30 +33,27 @@ class FrageMapperTest {
         assertThat(entity.getFrageText()).isEqualTo("Fragetext");
         assertThat(entity.getMaxPunkte()).isEqualTo(5);
         assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREITEXT);
-        assertThat(entity.getProfessorFachId()).isEqualTo(profFachId);
-        assertThat(entity.getExamFachId()).isEqualTo(examFachId);
+        assertThat(entity.getExamId()).isEqualTo(examId);
     }
 
     @Test
     void toDomain() {
         // Arrange
-        UUID professorFachId = UUID.randomUUID();
-        UUID examFachId = UUID.randomUUID();
+        UUID examId = UUID.randomUUID();
         FrageEntity frageEntity = new FrageEntity.FrageEntityBuilder()
                 .frageText("Fragetext")
                 .maxPunkte(5)
                 .type(QuestionTypeEntity.FREITEXT)
-                .professorFachId(professorFachId)
-                .examFachId(examFachId)
+                .examId(examId)
                 .build();
 
         // Act
         Frage frage = mapper.toDomain(frageEntity);
 
+        // Assert
         assertThat(frage.getFrageText()).isEqualTo("Fragetext");
         assertThat(frage.getType()).isEqualTo(QuestionType.FREITEXT);
         assertThat(frage.getMaxPunkte()).isEqualTo(5);
-        assertThat(frage.getProfessorUUID()).isEqualTo(professorFachId);
-        assertThat(frage.getExamUUID()).isEqualTo(examFachId);
+        assertThat(frage.getExamId()).isEqualTo(examId);
     }
 }

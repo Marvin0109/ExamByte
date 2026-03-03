@@ -2,4 +2,4 @@ package exambyte.web.form.info;
 
 import java.util.UUID;
 
-public record SubmitInfo(String name, UUID fachId, boolean reviewStatus) {}
+public record SubmitInfo(String name, UUID id, boolean reviewStatus) {}

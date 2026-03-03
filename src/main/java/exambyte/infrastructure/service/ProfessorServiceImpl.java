@@ -19,8 +19,8 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Professor getProfessor(UUID fachId) {
-        return repository.findByFachId(fachId)
+    public Professor getProfessor(UUID id) {
+        return repository.findById(id)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
@@ -38,8 +38,8 @@ public class ProfessorServiceImpl implements ProfessorService {
     }
 
     @Override
-    public Optional<UUID> getProfessorFachIdByName(String name) {
+    public Optional<UUID> getProfessorIdByName(String name) {
         Optional<Professor> professor = repository.findByName(name);
-        return professor.map(Professor::uuid);
+        return professor.map(Professor::id);
     }
 }

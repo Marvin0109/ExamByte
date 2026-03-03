@@ -43,7 +43,7 @@ class AntwortDBTest {
     @DisplayName("Laden der Daten erfolgreich")
     void test_01() {
         // Act
-        Optional<Antwort> geladen = antwortRepository.findByFachId(ANTWORTUUID);
+        Optional<Antwort> geladen = antwortRepository.findById(ANTWORTUUID);
 
         // Assert
         assertThat(geladen).isPresent();

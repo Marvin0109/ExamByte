@@ -2,26 +2,14 @@ package exambyte.infrastructure.entities;
 
 import exambyte.infrastructure.persistence.entities.StudentEntity;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class StudentEntityTest {
-
-    @Test
-    @DisplayName("StudentEntity-Fach-ID wird immer generiert")
-    void createStudentEntity_success() {
-        StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
-                .name("Student")
-                .build();
-
-        assertThat(studentEntity.getFachId()).isNotNull();
-    }
 
     @ParameterizedTest
     @DisplayName("Pflichtfeld fehlt -> IllegalStateException")

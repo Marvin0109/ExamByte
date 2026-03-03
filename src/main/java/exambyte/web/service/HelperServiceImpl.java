@@ -40,7 +40,7 @@ public class HelperServiceImpl implements HelperService {
         List<VersuchDTO> allValidAttempts = new ArrayList<>();
 
         for (ExamDTO exam : exams) {
-            VersuchDTO v = service.getSubmission(exam.fachId(), studentName);
+            VersuchDTO v = service.getSubmission(exam.id(), studentName);
             if (exam.resultTime().isBefore(now())) {
                 allValidAttempts.add(v);
             }
@@ -120,8 +120,8 @@ public class HelperServiceImpl implements HelperService {
 
     @Override
     public PreparedFrageData prepareFrageData(FrageDTO frage, UUID studentId) {
-        AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.fachId(), studentId);
-        KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.fachId());
+        AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.id(), studentId);
+        KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.id());
 
         if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
             String optionen = k.antwortOptionen();
@@ -131,19 +131,19 @@ public class HelperServiceImpl implements HelperService {
             String loesungNormalized = normalizeAnswerForFrontend(loesung);
 
             k = new KorrekteAntwortenDTO(
-                    k.fachId(),
+                    k.id(),
                     loesungNormalized,
                     optionenNormalized,
-                    k.frageFachId()
+                    k.frageId()
             );
 
             if (antwort != null) {
                 String normalized = normalizeAnswerForFrontend(antwort.antwortText());
                 antwort = new AntwortDTO(
-                        antwort.fachId(),
+                        antwort.id(),
                         normalized,
-                        antwort.frageFachId(),
-                        antwort.studentFachId(),
+                        antwort.frageId(),
+                        antwort.studentId(),
                         antwort.antwortZeitpunkt()
                 );
             }
@@ -169,14 +169,14 @@ public class HelperServiceImpl implements HelperService {
             KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
 
             if (antwort != null) {
-                ReviewDTO review = service.getReviewForAntwort(antwort.fachId());
-                if (review != null) korrektoren.add(review.korrektorFachId());
+                ReviewDTO review = service.getReviewForAntwort(antwort.id());
+                if (review != null) korrektoren.add(review.korrektorId());
                 componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
             } else {
                 AntwortDTO emptyAntwort = new AntwortDTO(
                         null,
                         "",
-                        frage.fachId(),
+                        frage.id(),
                         studentId,
                         null
                 );
@@ -242,7 +242,7 @@ public class HelperServiceImpl implements HelperService {
 
         for (OldDataDTO oldDataDTO : oldDataDTOList) {
 
-            String frageId = String.valueOf(oldDataDTO.fragen().fachId());
+            String frageId = String.valueOf(oldDataDTO.fragen().id());
             boolean answerIsPresent = oldDataDTO.antwort() != null && oldDataDTO.antwort().antwortText() != null;
 
             if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {

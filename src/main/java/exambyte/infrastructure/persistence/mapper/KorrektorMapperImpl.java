@@ -11,7 +11,7 @@ public class KorrektorMapperImpl implements KorrektorMapper {
     @Override
     public Korrektor toDomain(KorrektorEntity entity) {
         return new Korrektor.KorrektorBuilder()
-                .fachId(entity.getFachId())
+                .id(entity.getId())
                 .name(entity.getName())
                 .build();
     }
@@ -19,7 +19,7 @@ public class KorrektorMapperImpl implements KorrektorMapper {
     @Override
     public KorrektorEntity toEntity(Korrektor korrektor) {
         return new KorrektorEntity.KorrektorEntityBuilder()
-                .fachId(korrektor.uuid())
+                .id(korrektor.id())
                 .name(korrektor.getName())
                 .build();
     }

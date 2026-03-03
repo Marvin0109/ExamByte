@@ -20,7 +20,7 @@ public class FrageServiceImpl implements FrageService {
 
     @Override
     public List<Frage> getFragenForExam(UUID examId) {
-        return repository.findByExamFachId(examId);
+        return repository.findByExamId(examId);
     }
 
     @Override
@@ -29,8 +29,8 @@ public class FrageServiceImpl implements FrageService {
     }
 
     @Override
-    public Optional<Frage> getFrage(UUID frageId) {
-        return repository.findByFachId(frageId);
+    public Optional<Frage> getFrage(UUID id) {
+        return repository.findById(id);
     }
 
     @Override

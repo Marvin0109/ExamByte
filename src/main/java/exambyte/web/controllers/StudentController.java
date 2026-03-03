@@ -69,26 +69,26 @@ public class StudentController {
         return "student/examListForStudent";
     }
 
-    @GetMapping("/startExam/{examFachId}/menu")
+    @GetMapping("/startExam/{examId}/menu")
     public String examMenu(
-            @PathVariable UUID examFachId,
+            @PathVariable UUID examId,
             Model model,
             OAuth2AuthenticationToken auth) {
 
         OAuth2User user = auth.getPrincipal();
         String studentLogin = user.getAttribute(LOGIN_NAME);
-        ExamDTO examDTO = service.getExamByUUID(examFachId);
-        boolean alreadySubmitted = service.examIsAlreadySubmitted(examFachId, studentLogin);
+        ExamDTO examDTO = service.getExamByUUID(examId);
+        boolean alreadySubmitted = service.examIsAlreadySubmitted(examId, studentLogin);
 
-        UUID profFachId = examDTO.professorFachId();
-        ProfessorDTO prof = service.getProfessorByFachId(profFachId);
+        UUID profId = examDTO.professorId();
+        ProfessorDTO prof = service.getProfessorById(profId);
 
         if (alreadySubmitted) {
-            VersuchDTO attempt = service.getAttempt(examFachId, studentLogin);
+            VersuchDTO attempt = service.getAttempt(examId, studentLogin);
             model.addAttribute("attempt", attempt);
         }
 
-        boolean reviewPermission = service.checkTimeForReviewView(examFachId);
+        boolean reviewPermission = service.checkTimeForReviewView(examId);
 
         ExamTimeInfo examTimeInfo = service.getExamTimeInfo(examDTO);
 
@@ -101,12 +101,12 @@ public class StudentController {
         return "student/examMenu";
     }
 
-    @GetMapping("/startExam/{examFachId}")
+    @GetMapping("/startExam/{examId}")
     public String startExam(
-            @PathVariable UUID examFachId,
+            @PathVariable UUID examId,
             Model model) {
 
-        ExamForm form = service.fillExamForm(examFachId);
+        ExamForm form = service.fillExamForm(examId);
 
         SubmitForm submitForm = new SubmitForm();
 
@@ -115,9 +115,9 @@ public class StudentController {
         return "student/startExam";
     }
 
-    @PostMapping("/submit/{examFachId}")
+    @PostMapping("/submit/{examId}")
     public String submitExam(
-            @PathVariable UUID examFachId,
+            @PathVariable UUID examId,
             @Valid @ModelAttribute("submitForm") SubmitForm submitForm,
             BindingResult bindingResult,
             OAuth2AuthenticationToken auth,
@@ -133,13 +133,13 @@ public class StudentController {
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
 
-        boolean submitted = service.examIsAlreadySubmitted(examFachId, name);
+        boolean submitted = service.examIsAlreadySubmitted(examId, name);
 
         if (submitted) {
-            service.removeOldAnswersAndReviews(examFachId, name);
+            service.removeOldAnswersAndReviews(examId, name);
         }
 
-        boolean success = service.submitExam(name, submitForm.getAnswers(), examFachId);
+        boolean success = service.submitExam(name, submitForm.getAnswers(), examId);
 
         String redirectMsg;
 
@@ -148,16 +148,16 @@ public class StudentController {
         return redirectWithMessage(redirectAttributes, redirectMsg, success);
     }
 
-    @GetMapping("/startWithData/{examFachId}")
+    @GetMapping("/startWithData/{examId}")
     public String startWithData(
-            @PathVariable UUID examFachId,
+            @PathVariable UUID examId,
             Model model,
             OAuth2AuthenticationToken auth) {
 
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
 
-        OldDataForm form = service.fillOldDataForm(examFachId, name);
+        OldDataForm form = service.fillOldDataForm(examId, name);
         SubmitForm submitForm = service.fillSubmitFormWithData(form);
 
         model.addAttribute("exam", form);
@@ -165,14 +165,14 @@ public class StudentController {
         return "student/startExamWithData";
     }
 
-    @GetMapping("/showReview/{examFachId}")
+    @GetMapping("/showReview/{examId}")
     public String showReview(
-            @PathVariable UUID examFachId,
+            @PathVariable UUID examId,
             Model model,
             OAuth2AuthenticationToken auth,
             RedirectAttributes redirectAttributes) {
 
-        boolean allowedToShowReview = service.checkTimeForReviewView(examFachId);
+        boolean allowedToShowReview = service.checkTimeForReviewView(examId);
 
         if (!allowedToShowReview) {
             return redirectWithMessage(
@@ -184,7 +184,7 @@ public class StudentController {
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
 
-        ReviewViewForm view = service.prepareReviewViewForm(examFachId, name);
+        ReviewViewForm view = service.prepareReviewViewForm(examId, name);
 
         model.addAttribute("view", view);
         return "student/showReview";

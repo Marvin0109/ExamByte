@@ -8,7 +8,7 @@ public interface ReviewService {
 
     void addReview(Review review);
 
-    Review getReviewByAntwortFachId(UUID antwortFachId);
+    Review getReviewByAntwortId(UUID antwortId);
 
     void deleteAll();
 

@@ -5,18 +5,18 @@ import java.util.UUID;
 
 public class Antwort {
 
-    private final UUID fachId;
+    private final UUID id;
     private final String antwortText;
-    private final UUID frageFachId;
-    private final UUID studentFachId;
+    private final UUID frageId;
+    private final UUID studentId;
     private final LocalDateTime antwortZeitpunkt;
 
-    private Antwort(UUID fachId, String antwortText, UUID frageFachId, UUID studentFachID,
+    private Antwort(UUID id, String antwortText, UUID frageId, UUID studentId,
                     LocalDateTime antwortZeitpunkt) {
-        this.fachId = fachId;
+        this.id = id;
         this.antwortText = antwortText;
-        this.frageFachId = frageFachId;
-        this.studentFachId = studentFachID;
+        this.frageId = frageId;
+        this.studentId = studentId;
         this.antwortZeitpunkt = antwortZeitpunkt;
     }
 
@@ -24,26 +24,26 @@ public class Antwort {
         return antwortText;
     }
 
-    public UUID getFrageFachId() {
-        return frageFachId;
+    public UUID getFrageId() {
+        return frageId;
     }
 
     public UUID getStudentUUID() {
-        return studentFachId;
+        return studentId;
     }
-    public UUID getFachId() { return fachId; }
+    public UUID getId() { return id; }
 
     public LocalDateTime getAntwortZeitpunkt() { return antwortZeitpunkt; }
 
     public static class AntwortBuilder {
-        private UUID fachId;
+        private UUID id;
         private String antwortText;
-        private UUID frageFachId;
-        private UUID studentFachId;
+        private UUID frageId;
+        private UUID studentId;
         private LocalDateTime antwortZeitpunkt;
 
-        public AntwortBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public AntwortBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -52,13 +52,13 @@ public class Antwort {
             return this;
         }
 
-        public AntwortBuilder frageFachId(UUID frageFachId) {
-            this.frageFachId = frageFachId;
+        public AntwortBuilder frageId(UUID frageId) {
+            this.frageId = frageId;
             return this;
         }
 
-        public AntwortBuilder studentFachId(UUID studentFachId) {
-            this.studentFachId = studentFachId;
+        public AntwortBuilder studentId(UUID studentId) {
+            this.studentId = studentId;
             return this;
         }
 
@@ -68,7 +68,7 @@ public class Antwort {
         }
 
         public Antwort build() {
-            return new Antwort(fachId, antwortText, frageFachId, studentFachId,  antwortZeitpunkt);
+            return new Antwort(id, antwortText, frageId, studentId,  antwortZeitpunkt);
         }
     }
 }

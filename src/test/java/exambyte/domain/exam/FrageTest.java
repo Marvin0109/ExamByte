@@ -14,27 +14,24 @@ class FrageTest {
     @Test
     @DisplayName("FrageBuilder Test")
     void test_01() {
-        UUID fachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         String frageText = "Test question";
         int maxPunkte = 10;
         QuestionType type = QuestionType.FREITEXT;
-        UUID professorUUID = UUID.randomUUID();
-        UUID examUUID = UUID.randomUUID();
+        UUID examId = UUID.randomUUID();
 
         Frage frage = new Frage.FrageBuilder()
-                .fachId(fachId)
+                .id(id)
                 .frageText(frageText)
                 .maxPunkte(maxPunkte)
                 .type(type)
-                .professorUUID(professorUUID)
-                .examUUID(examUUID)
+                .examId(examId)
                 .build();
 
-        assertEquals(fachId, frage.getFachId());
+        assertEquals(id, frage.getId());
         assertEquals(frageText, frage.getFrageText());
         assertEquals(maxPunkte, frage.getMaxPunkte());
         assertEquals(type, frage.getType());
-        assertEquals(professorUUID, frage.getProfessorUUID());
-        assertEquals(examUUID, frage.getExamUUID());
+        assertEquals(examId, frage.getExamId());
     }
 }

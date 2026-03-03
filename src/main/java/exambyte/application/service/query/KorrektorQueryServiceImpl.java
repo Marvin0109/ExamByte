@@ -30,7 +30,7 @@ public class KorrektorQueryServiceImpl implements KorrektorQueryService {
     @Override
     public UUID getReviewerIdByName(String name) {
         Optional<KorrektorDTO> k = korrektorService.getKorrektorByName(name).map(korrektorDTOMapper::toDTO);
-        return k.map(KorrektorDTO::fachId).orElse(null);
+        return k.map(KorrektorDTO::id).orElse(null);
     }
 
     @Override

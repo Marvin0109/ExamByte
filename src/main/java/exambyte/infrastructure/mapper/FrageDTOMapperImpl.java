@@ -15,11 +15,10 @@ public class FrageDTOMapperImpl implements FrageDTOMapper {
     @Override
     public FrageDTO toDTO(Frage frage) {
         return new FrageDTO(
-                frage.getFachId(),
+                frage.getId(),
                 frage.getFrageText(),
                 frage.getMaxPunkte(),
-                frage.getProfessorUUID(),
-                frage.getExamUUID(),
+                frage.getExamId(),
                 QuestionTypeDTO.valueOf(frage.getType().name()));
     }
 
@@ -33,12 +32,11 @@ public class FrageDTOMapperImpl implements FrageDTOMapper {
     @Override
     public Frage toDomain(FrageDTO dto) {
         return new Frage.FrageBuilder()
-                .fachId(dto.fachId())
+                .id(dto.id())
                 .frageText(dto.frageText())
                 .maxPunkte(dto.maxPunkte())
                 .type(QuestionType.valueOf(dto.type().name()))
-                .professorUUID(dto.profUUID())
-                .examUUID(dto.examUUID())
+                .examId(dto.examId())
                 .build();
     }
 }

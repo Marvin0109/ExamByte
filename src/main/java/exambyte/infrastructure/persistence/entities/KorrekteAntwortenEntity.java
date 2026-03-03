@@ -10,13 +10,10 @@ import java.util.UUID;
 public class KorrekteAntwortenEntity {
 
     @Id
-    private Long id;
-
-    @Column("fach_id")
-    private final UUID fachID;
+    private UUID id;
 
     @Column("frage_id")
-    private final UUID frageFachID;
+    private final UUID frageId;
 
     @Column("richtige_antwort")
     private final String richtigeAntwort;
@@ -24,19 +21,19 @@ public class KorrekteAntwortenEntity {
     @Column("antwort_optionen")
     private final String antwortOptionen;
 
-    private KorrekteAntwortenEntity(UUID fachID, UUID frageFachID, String richtigeAntwort, String antwortOptionen) {
-        this.fachID = fachID != null ? fachID : UUID.randomUUID();
-        this.frageFachID = frageFachID;
+    private KorrekteAntwortenEntity(UUID id, UUID frageId, String richtigeAntwort, String antwortOptionen) {
+        this.id = id;
+        this.frageId = frageId;
         this.richtigeAntwort = richtigeAntwort;
         this.antwortOptionen = antwortOptionen;
     }
 
-    public UUID getFachID() {
-        return fachID;
+    public UUID getId() {
+        return id;
     }
 
-    public UUID getFrageFachID() {
-        return frageFachID;
+    public UUID getFrageId() {
+        return frageId;
     }
 
     public String getRichtigeAntwort() {
@@ -46,18 +43,18 @@ public class KorrekteAntwortenEntity {
     public String getAntwortOptionen() { return antwortOptionen; }
 
     public static class KorrekteAntwortenEntityBuilder {
-        private UUID fachID;
-        private UUID frageFachID;
+        private UUID id;
+        private UUID frageId;
         private String richtigeAntwort;
         private String antwortOptionen;
 
-        public KorrekteAntwortenEntityBuilder fachID(UUID fachID) {
-            this.fachID = fachID;
+        public KorrekteAntwortenEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
-        public KorrekteAntwortenEntityBuilder frageFachID(UUID frageFachID) {
-            this.frageFachID = frageFachID;
+        public KorrekteAntwortenEntityBuilder frageId(UUID frageId) {
+            this.frageId = frageId;
             return this;
         }
 
@@ -72,12 +69,12 @@ public class KorrekteAntwortenEntity {
         }
 
         public KorrekteAntwortenEntity build() {
-            if (frageFachID == null) {
-                throw new IllegalStateException("Frage-Fach-ID fehlt");
+            if (frageId == null) {
+                throw new IllegalStateException("Frage-ID fehlt");
             }
             checkStringField(richtigeAntwort, "Lösungen fehlen");
             checkStringField(antwortOptionen, "Antwort Optionen fehlen");
-            return new KorrekteAntwortenEntity(fachID, frageFachID, richtigeAntwort, antwortOptionen);
+            return new KorrekteAntwortenEntity(id, frageId, richtigeAntwort, antwortOptionen);
         }
 
         private static void checkStringField(String field, String message) {

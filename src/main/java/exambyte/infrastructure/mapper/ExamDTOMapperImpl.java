@@ -13,9 +13,9 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
     @Override
     public ExamDTO toDTO(Exam exam) {
         return new ExamDTO(
-                exam.getFachId(),
+                exam.getId(),
                 exam.getTitle(),
-                exam.getProfessorFachId(),
+                exam.getProfessorId(),
                 exam.getStartTime(),
                 exam.getEndTime(),
                 exam.getResultTime());
@@ -31,9 +31,9 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
     @Override
     public Exam toDomain(ExamDTO examDTO) {
         return new Exam.ExamBuilder()
-                .fachId(examDTO.fachId())
+                .id(examDTO.id())
                 .title(examDTO.title())
-                .professorFachId(examDTO.professorFachId())
+                .professorId(examDTO.professorId())
                 .startTime(examDTO.startTime())
                 .endTime(examDTO.endTime())
                 .resultTime(examDTO.resultTime())

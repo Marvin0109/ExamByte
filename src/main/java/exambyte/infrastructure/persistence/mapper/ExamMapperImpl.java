@@ -11,9 +11,9 @@ public class ExamMapperImpl implements ExamMapper {
     @Override
     public Exam toDomain(ExamEntity entity) {
         return new Exam.ExamBuilder()
-                .fachId(entity.getFachId())
+                .id(entity.getId())
                 .title(entity.getTitle())
-                .professorFachId(entity.getProfessorFachId())
+                .professorId(entity.getProfessorId())
                 .startTime(entity.getStartZeitpunkt())
                 .endTime(entity.getEndZeitpunkt())
                 .resultTime(entity.getResultZeitpunkt())
@@ -22,13 +22,13 @@ public class ExamMapperImpl implements ExamMapper {
 
     @Override
     public ExamEntity toEntity(Exam exam) {
-    return new ExamEntity.ExamEntityBuilder()
-            .fachId(exam.getFachId())
-            .title(exam.getTitle())
-            .professorFachId(exam.getProfessorFachId())
-            .startZeitpunkt(exam.getStartTime())
-            .endZeitpunkt(exam.getEndTime())
-            .resultZeitpunkt(exam.getResultTime())
-            .build();
+        return new ExamEntity.ExamEntityBuilder()
+                .id(exam.getId())
+                .title(exam.getTitle())
+                .professorId(exam.getProfessorId())
+                .startZeitpunkt(exam.getStartTime())
+                .endZeitpunkt(exam.getEndTime())
+                .resultZeitpunkt(exam.getResultTime())
+                .build();
     }
 }

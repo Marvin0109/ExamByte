@@ -59,18 +59,17 @@ class SubmitAnswersIT {
         studentRepository.save(new Student.StudentBuilder().name("Student").build());
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
         korrektorRepository.save(new Korrektor.KorrektorBuilder()
-                .fachId(UUID.fromString("11111111-1111-1111-1111-111111111111"))
                 .name("Automatischer Korrektor")
                 .build());
 
-        Optional<UUID> profId = examControllerService.getProfFachIDByName("Professor");
+        Optional<UUID> profId = examControllerService.getProfIdByName("Professor");
 
         assert(profId.isPresent());
 
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
 
         examRepository.save(new Exam.ExamBuilder()
-                .professorFachId(profId.get())
+                .professorId(profId.get())
                 .startTime(start)
                 .endTime(start.plusDays(1))
                 .resultTime(start.plusDays(2))
@@ -81,36 +80,34 @@ class SubmitAnswersIT {
 
         frageRepository.save(new Frage.FrageBuilder()
                 .frageText("Frage")
-                .professorUUID(profId.get())
                 .type(QuestionType.SC)
                 .maxPunkte(1)
-                .examUUID(examId)
+                .examId(examId)
                 .build());
 
         frageRepository.save(new Frage.FrageBuilder()
                 .frageText("Frage 2")
-                .professorUUID(profId.get())
                 .type(QuestionType.FREITEXT)
                 .maxPunkte(2)
-                .examUUID(examId)
+                .examId(examId)
                 .build());
 
         Optional<UUID> frageIdFreitext = frageRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.FREITEXT))
-                .map(Frage::getFachId)
+                .map(Frage::getId)
                 .findFirst();
 
         assert(frageIdFreitext.isPresent());
 
         Optional<UUID> frageIdSC = frageRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getFachId)
+                .map(Frage::getId)
                 .findFirst();
 
         assert(frageIdSC.isPresent());
 
         korrekteAntwortenRepository.save(new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .frageFachId(frageIdSC.get())
+                .frageId(frageIdSC.get())
                 .antwortOptionen("A\nB\nC\nD")
                 .loesungen("B")
                 .build());
@@ -125,11 +122,11 @@ class SubmitAnswersIT {
         boolean success = examControllerService.submitExam("Student", answers, examId);
         assertThat(success).isTrue();
 
-        Antwort antwort = antwortRepository.findByFrageFachId(frageIdSC.get());
+        Antwort antwort = antwortRepository.findByFrageId(frageIdSC.get());
 
-        assertThat(antwortRepository.findByFrageFachId(frageIdFreitext.get())).isNotNull();
-        assertThat(antwortRepository.findByFrageFachId(frageIdSC.get())).isNotNull();
+        assertThat(antwortRepository.findByFrageId(frageIdFreitext.get())).isNotNull();
+        assertThat(antwortRepository.findByFrageId(frageIdSC.get())).isNotNull();
 
-        assertThat(reviewRepository.findByAntwortFachId(antwort.getFachId())).isNotNull();
+        assertThat(reviewRepository.findByAntwortId(antwort.getId())).isNotNull();
     }
 }

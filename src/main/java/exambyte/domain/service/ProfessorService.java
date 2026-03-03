@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public interface ProfessorService {
 
-    Professor getProfessor(UUID fachId);
+    Professor getProfessor(UUID id);
 
     void saveProfessor(String name);
 
     Optional<Professor> getProfessorByName(String name);
 
-    Optional<UUID> getProfessorFachIdByName(String name);
+    Optional<UUID> getProfessorIdByName(String name);
 }

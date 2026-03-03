@@ -11,17 +11,17 @@ public class KorrekteAntwortenDTOMapperImpl implements KorrekteAntwortenDTOMappe
     @Override
     public KorrekteAntwortenDTO toDTO(KorrekteAntworten antworten) {
         return new KorrekteAntwortenDTO(
-                antworten.getFachId(),
+                antworten.getId(),
                 antworten.getLoesungen(),
                 antworten.getAntwortOptionen(),
-                antworten.getFrageFachId());
+                antworten.getFrageId());
     }
 
     @Override
     public KorrekteAntworten toDomain(KorrekteAntwortenDTO dto) {
         return new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .fachId(dto.fachId())
-                .frageFachId(dto.frageFachId())
+                .id(dto.id())
+                .frageId(dto.frageId())
                 .loesungen(dto.antworten())
                 .antwortOptionen(dto.antwortOptionen())
                 .build();

@@ -21,12 +21,12 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public UUID getReviewIdByAntwortId(UUID antwortId) {
-        return reviewService.getReviewByAntwortFachId(antwortId).getAntwortFachId();
+        return reviewService.getReviewByAntwortId(antwortId).getAntwortId();
     }
 
     @Override
     public boolean antwortHasReview(UUID antwortId) {
-        return reviewService.getReviewByAntwortFachId(antwortId) != null;
+        return reviewService.getReviewByAntwortId(antwortId) != null;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
     @Override
     public ReviewDTO getReviewByAntwortId(UUID antwortId) {
-        Review review = reviewService.getReviewByAntwortFachId(antwortId);
+        Review review = reviewService.getReviewByAntwortId(antwortId);
         if (review != null) {
             return reviewDTOMapper.toDTO(review);
         }

@@ -13,7 +13,7 @@ public class KorrektorDTOMapperImpl implements KorrektorDTOMapper {
     @Override
     public KorrektorDTO toDTO(Korrektor korrektor) {
         return new KorrektorDTO(
-                korrektor.uuid(),
+                korrektor.id(),
                 korrektor.getName());
     }
 

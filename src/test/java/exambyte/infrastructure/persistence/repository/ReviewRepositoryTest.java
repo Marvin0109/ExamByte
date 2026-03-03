@@ -27,42 +27,42 @@ class ReviewRepositoryTest {
     }
 
     @Test
-    void findByAntwortFachId_exists() {
+    void findByAntwortId_exists() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
         ReviewEntity reviewEntity = new ReviewEntity.ReviewEntityBuilder()
                 .bewertung("B")
-                .antwortFachId(UUID.randomUUID())
-                .korrektorFachId(UUID.randomUUID())
+                .antwortId(UUID.randomUUID())
+                .korrektorId(UUID.randomUUID())
                 .punkte(1)
                 .build();
 
         Review review = new Review.ReviewBuilder()
                 .bewertung("B")
-                .fachId(reviewEntity.getFachId())
-                .antwortFachId(reviewEntity.getAntwortFachId())
-                .korrektorFachId(reviewEntity.getKorrektorFachId())
+                .id(reviewEntity.getId())
+                .antwortId(reviewEntity.getAntwortId())
+                .korrektorId(reviewEntity.getKorrektorId())
                 .punkte(1)
                 .build();
 
-        when(reviewDAO.findByAntwortFachId(fachId)).thenReturn(Optional.of(reviewEntity));
+        when(reviewDAO.findByAntwortId(id)).thenReturn(Optional.of(reviewEntity));
         when(reviewMapper.toDomain(reviewEntity)).thenReturn(review);
 
         // Act
-        Review result = repository.findByAntwortFachId(fachId);
+        Review result = repository.findByAntwortId(id);
 
         // Assert
         assertThat(result).isNotNull();
     }
 
     @Test
-    void findByAntwortFachId_notFound() {
+    void findByAntwortId_notFound() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
-        when(reviewDAO.findByAntwortFachId(fachId)).thenReturn(Optional.empty());
+        UUID id = UUID.randomUUID();
+        when(reviewDAO.findByAntwortId(id)).thenReturn(Optional.empty());
 
         // Act
-        Review result = repository.findByAntwortFachId(fachId);
+        Review result = repository.findByAntwortId(id);
 
         // Assert
         assertThat(result).isNull();

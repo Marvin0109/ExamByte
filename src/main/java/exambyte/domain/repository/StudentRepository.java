@@ -9,9 +9,9 @@ public interface StudentRepository {
 
     Optional<Student> findByName(String name);
 
-    Optional<Student> findByFachId(UUID fachId);
+    Optional<Student> findById(UUID id);
 
-    Optional<UUID> findFachIdByName(String name);
+    Optional<UUID> findIdByName(String name);
 
     void save(Student student);
 }

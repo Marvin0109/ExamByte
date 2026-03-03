@@ -30,8 +30,8 @@ public class FrageRepositoryImpl implements FrageRepository {
     }
 
     @Override
-    public Optional<Frage> findByFachId(UUID fachId) {
-        Optional<FrageEntity> entity = frageDAO.findByFachId(fachId);
+    public Optional<Frage> findById(UUID id) {
+        Optional<FrageEntity> entity = frageDAO.findById(id);
         return entity.map(frageMapper::toDomain);
     }
 
@@ -39,12 +39,12 @@ public class FrageRepositoryImpl implements FrageRepository {
     public UUID save(Frage frage) {
         FrageEntity entity = frageMapper.toEntity(frage);
         frageDAO.save(entity);
-        return entity.getFachId();
+        return entity.getId();
     }
 
     @Override
-    public List<Frage> findByExamFachId(UUID examId) {
-        return frageDAO.findByExamFachId(examId).stream()
+    public List<Frage> findByExamId(UUID examId) {
+        return frageDAO.findByExamId(examId).stream()
                 .map(frageMapper::toDomain)
                 .toList();
     }

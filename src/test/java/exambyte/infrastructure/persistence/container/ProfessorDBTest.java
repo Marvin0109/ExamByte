@@ -43,19 +43,19 @@ class ProfessorDBTest {
     @DisplayName("Laden der Daten erfolgreich")
     void test_01() {
         // Act
-        Optional<Professor> geladen = repository.findByFachId(PROFUUID);
+        Optional<Professor> geladen = repository.findById(PROFUUID);
 
         // Assert
         assertThat(geladen).isPresent();
     }
 
     @Test
-    @DisplayName("Die FachId eines Professor kann nach dem Namen gefunden werden")
+    @DisplayName("Die Id eines Professor kann nach dem Namen gefunden werden")
     void test_02() {
         // Act
-        Optional<Professor> fachId = repository.findByName("ProfTestName");
+        Optional<Professor> id = repository.findByName("ProfTestName");
 
         // Assert
-        assertThat(fachId).isPresent();
+        assertThat(id).isPresent();
     }
 }

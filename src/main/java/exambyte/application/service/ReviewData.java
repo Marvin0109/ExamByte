@@ -36,16 +36,16 @@ public class ReviewData {
                 .toList();
 
         List<UUID> frageIds = fragen.stream()
-                .map(FrageDTO::fachId)
+                .map(FrageDTO::id)
                 .toList();
 
         antworten = antworten.stream()
-                .filter(a -> frageIds.contains(a.frageFachId()))
+                .filter(a -> frageIds.contains(a.frageId()))
                 .toList();
 
         korrekteAntworten = fragen.stream()
                 .map(f -> korrekteAntwortenDTOMapper.toDTO(
-                        korrekteAntwortenService.findKorrekteAntwort(f.fachId())))
+                        korrekteAntwortenService.findKorrekteAntwort(f.id())))
                 .toList();
     }
 

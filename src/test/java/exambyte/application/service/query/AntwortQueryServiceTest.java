@@ -142,11 +142,11 @@ class AntwortQueryServiceTest {
         Antwort domainAntwort = mock(Antwort.class);
         AntwortDTO dto = mock(AntwortDTO.class);
 
-        when(frageDTO.fachId()).thenReturn(FRAGE1_ID);
+        when(frageDTO.id()).thenReturn(FRAGE1_ID);
         when(frageQueryService.getFreitextFragen(examId))
                 .thenReturn(List.of(frageDTO));
 
-        when(antwortService.findByFrageFachId(FRAGE1_ID))
+        when(antwortService.findByFrageId(FRAGE1_ID))
                 .thenReturn(domainAntwort);
 
         when(antwortDTOMapper.toDTO(domainAntwort))
@@ -165,12 +165,12 @@ class AntwortQueryServiceTest {
         UUID examId = UUID.randomUUID();
 
         FrageDTO frageDTO = mock(FrageDTO.class);
-        when(frageDTO.fachId()).thenReturn(FRAGE1_ID);
+        when(frageDTO.id()).thenReturn(FRAGE1_ID);
 
         when(frageQueryService.getFreitextFragen(examId))
                 .thenReturn(List.of(frageDTO));
 
-        when(antwortService.findByFrageFachId(FRAGE1_ID))
+        when(antwortService.findByFrageId(FRAGE1_ID))
                 .thenReturn(null);
 
         // Act

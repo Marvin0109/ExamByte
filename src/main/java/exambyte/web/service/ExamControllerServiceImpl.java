@@ -62,7 +62,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         form.setEnd(examDTO.endTime());
         form.setEnd(examDTO.endTime());
         form.setTitle(examDTO.title());
-        form.setFachId(examUUID);
+        form.setId(examUUID);
 
         List<QuestionData> questions = new ArrayList<>();
 
@@ -71,9 +71,9 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             questionData.setQuestionText(frage.frageText());
             questionData.setPunkte(frage.maxPunkte());
             questionData.setType(frage.type().toString());
-            questionData.setFachId(frage.fachId());
+            questionData.setId(frage.id());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
-                String choice = service.getChoiceForFrage(frage.fachId());
+                String choice = service.getChoiceForFrage(frage.id());
                 String normalized = helperService.normalizeAnswerForFrontend(choice);
                 questionData.setChoices(normalized);
             }
@@ -122,12 +122,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public ProfessorDTO getProfessorByFachId(UUID fachId) {
-        return service.getProfessor(fachId);
+    public ProfessorDTO getProfessorById(UUID id) {
+        return service.getProfessor(id);
     }
 
     @Override
-    public void createQuestions(ExamForm form, UUID profFachID, UUID examUUID) {
+    public void createQuestions(ExamForm form, UUID examUUID) {
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
             QuestionTypeWeb frageTyp;
@@ -143,17 +143,17 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             switch(frageTyp) {
                 case QuestionTypeWeb.FREITEXT:
                     service.createFrage(new FrageDTO(null, frageText,
-                            maxPunkte, profFachID, examUUID, QuestionTypeDTO.valueOf(frageTyp.name())));
+                            maxPunkte, examUUID, QuestionTypeDTO.valueOf(frageTyp.name())));
                     break;
                 case QuestionTypeWeb.SC:
                     String correctAnswer = q.getCorrectAnswer();
-                    FrageDTO f1 = new FrageDTO(null, frageText, maxPunkte, profFachID, examUUID,
+                    FrageDTO f1 = new FrageDTO(null, frageText, maxPunkte, examUUID,
                             QuestionTypeDTO.valueOf(frageTyp.name()));
                     service.createChoiceFrage(f1, correctAnswer, q.getChoices());
                     break;
                 case QuestionTypeWeb.MC:
                     String correctAnswers = q.getCorrectAnswers();
-                    FrageDTO f2 = new FrageDTO(null, frageText, maxPunkte, profFachID, examUUID,
+                    FrageDTO f2 = new FrageDTO(null, frageText, maxPunkte, examUUID,
                             QuestionTypeDTO.valueOf(frageTyp.name()));
                     service.createChoiceFrage(f2, correctAnswers, q.getChoices());
                     break;
@@ -199,7 +199,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     public List<ReviewCoverageForm> getReviewCoverage(List<ExamDTO> examDTOList) {
         List<Double> reviewCoverageList = new ArrayList<>();
         for (ExamDTO examDTO : examDTOList) {
-            reviewCoverageList.add(service.reviewCoverage(examDTO.fachId()));
+            reviewCoverageList.add(service.reviewCoverage(examDTO.id()));
         }
 
         List<ReviewCoverageForm> covList = new ArrayList<>();
@@ -240,10 +240,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         List<SubmitInfo> submitInfoList = new ArrayList<>();
 
         for (StudentDTO student : students) {
-            if (service.isSubmitBeingReviewed(examUUID, student.fachId())) {
-                submitInfoList.add(new SubmitInfo(student.name(), student.fachId(),  true));
+            if (service.isSubmitBeingReviewed(examUUID, student.id())) {
+                submitInfoList.add(new SubmitInfo(student.name(), student.id(),  true));
             } else {
-                submitInfoList.add(new SubmitInfo(student.name(), student.fachId(), false));
+                submitInfoList.add(new SubmitInfo(student.name(), student.id(), false));
             }
         }
 
@@ -256,7 +256,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public Optional<UUID> getProfFachIDByName(String name) {
+    public Optional<UUID> getProfIdByName(String name) {
         return service.getProfIDByName(name);
     }
 
@@ -266,16 +266,16 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examFachId, UUID studentFachId) {
-        List<FrageDTO> fragen = service.getFreitextFragen(examFachId);
-        List<AntwortDTO> antworten = service.getFreitextAntwortenForExam(examFachId);
+    public Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examId, UUID studentId) {
+        List<FrageDTO> fragen = service.getFreitextFragen(examId);
+        List<AntwortDTO> antworten = service.getFreitextAntwortenForExam(examId);
 
         Map<FrageDTO, AntwortDTO> resultMap = new HashMap<>();
 
         for (FrageDTO frage : fragen) {
             antworten.stream()
-                    .filter(a -> a.frageFachId().equals(frage.fachId()))
-                    .filter(a -> a.studentFachId().equals(studentFachId))
+                    .filter(a -> a.frageId().equals(frage.id()))
+                    .filter(a -> a.studentId().equals(studentId))
                     .findFirst().ifPresent(ans -> resultMap.put(frage, ans));
         }
 
@@ -292,7 +292,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 answerForm.setFrageText(entry.getKey().frageText());
                 answerForm.setAntwort(entry.getValue().antwortText());
                 answerForm.setMaxPunkte(entry.getKey().maxPunkte());
-                answerForm.setAntwortFachId(entry.getValue().fachId());
+                answerForm.setAntwortId(entry.getValue().id());
 
                 answerFormList.add(answerForm);
             }
@@ -302,12 +302,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void createReview(ReviewForm reviewForm, UUID antwortFachId, UUID korrektorFachId) {
+    public void createReview(ReviewForm reviewForm, UUID antwortId, UUID korrektorId) {
         service.createReview(
                 reviewForm.getBewertung(),
                 reviewForm.getPunkteVergeben(),
-                antwortFachId,
-                korrektorFachId);
+                antwortId,
+                korrektorId);
     }
 
     @Override

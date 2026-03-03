@@ -31,8 +31,8 @@ public class ExamRepositoryImpl implements ExamRepository {
     }
 
     @Override
-    public Optional<Exam> findByFachId(UUID fachId) {
-        Optional<ExamEntity> entity = dao.findByFachId(fachId);
+    public Optional<Exam> findById(UUID id) {
+        Optional<ExamEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 
@@ -45,13 +45,13 @@ public class ExamRepositoryImpl implements ExamRepository {
     @Override
     public Optional<UUID> findByStartTime(LocalDateTime startTime) {
         ExamEntity loaded =  dao.findByStartZeitpunkt(startTime).orElse(null);
-        if (loaded != null) return Optional.of(loaded.getFachId());
+        if (loaded != null) return Optional.of(loaded.getId());
         return Optional.empty();
     }
 
     @Override
-    public void deleteByFachId(UUID id) {
-        dao.deleteByFachId(id);
+    public void deleteById(UUID id) {
+        dao.deleteById(id);
     }
 
     @Override

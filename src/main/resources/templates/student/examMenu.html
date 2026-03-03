@@ -40,7 +40,7 @@
 
         <div class="d-flex">
             <form th:if="${timeLeftBool and !alreadySubmitted}"
-                  th:action="@{/student/startExam/{examFachId}(examFachId=${exam.fachId})}" method="get">
+                  th:action="@{/student/startExam/{examFachId}(examFachId=${exam.id})}" method="get">
                 <button type="submit" class="btn btn-primary">Test starten</button>
             </form>
         </div>
@@ -49,9 +49,9 @@
              th:if="${timeLeftBool and alreadySubmitted}">
 
             <form method="get"
-                  th:action="@{/student/startExam/{examFachId}(examFachId=${exam.fachId})}"
+                  th:action="@{/student/startExam/{examFachId}(examFachId=${exam.id})}"
                   style="margin-right: 1rem;">
-                <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
+                <input type="hidden" name="examFachId" th:value="${exam.id}" />
                 <button type="submit" class="btn btn-outline-primary">
                     <i class="fas fa-redo"></i>
                     Test neu starten
@@ -61,8 +61,8 @@
             <p>
 
             <form method="get"
-                  th:action="@{/student/startWithData/{examFachId}(examFachId=${exam.fachId})}">
-                <input type="hidden" name="examFachId" th:value="${exam.fachId}" />
+                  th:action="@{/student/startWithData/{examFachId}(examFachId=${exam.id})}">
+                <input type="hidden" name="examFachId" th:value="${exam.id}" />
                 <button type="submit" class="btn btn-outline-secondary">
                     Letzten Versuch ändern
                 </button>
@@ -101,7 +101,7 @@
         <div class="card-body">
             <form th:if="${reviewPermission}"
                   method="get"
-                  th:action="@{/student/showReview/{examFachId}(examFachId=${exam.fachId})}">
+                  th:action="@{/student/showReview/{examFachId}(examFachId=${exam.id})}">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-clipboard-check"></i>
                     Korrektur anzeigen

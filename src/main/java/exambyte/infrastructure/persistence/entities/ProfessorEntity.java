@@ -10,33 +10,34 @@ import java.util.UUID;
 public class ProfessorEntity {
 
     @Id
-    private Long id;
-
-    @Column("fach_id")
-    private final UUID fachId;
+    private UUID id;
 
     @Column("name")
-    private final String name;
+    private String name;
 
-    public ProfessorEntity(UUID fachId, String name) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+    public ProfessorEntity(UUID id, String name) {
+        this.id = id;
         this.name = name;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public static class ProfessorEntityBuilder {
-        private UUID fachId;
+        private UUID id;
         private String name;
 
-        public ProfessorEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public ProfessorEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -49,7 +50,7 @@ public class ProfessorEntity {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name darf nicht leer sein");
             }
-            return new ProfessorEntity(fachId, name);
+            return new ProfessorEntity(id, name);
         }
     }
 }

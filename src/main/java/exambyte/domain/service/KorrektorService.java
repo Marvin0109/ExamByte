@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface KorrektorService {
 
-    Korrektor getKorrektor(UUID fachId);
+    Korrektor getKorrektor(UUID id);
 
     void saveKorrektor(String name);
 

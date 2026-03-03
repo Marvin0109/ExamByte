@@ -1,20 +1,22 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE student (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name                    VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE professor (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name                    VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE korrektor (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name                    VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE exam (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     title                   VARCHAR(100) NOT NULL,
     professor_id            UUID NOT NULL,
     start_time              TIMESTAMP NOT NULL,
@@ -25,7 +27,7 @@ CREATE TABLE exam (
 );
 
 CREATE TABLE frage (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     frage_text              TEXT NOT NULL,
     exam_id                 UUID NOT NULL,
     max_punkte              INT NOT NULL,
@@ -34,7 +36,7 @@ CREATE TABLE frage (
 );
 
 CREATE TABLE antwort (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     frage_id                UUID NOT NULL,
     antwort_text            VARCHAR(500),
     student_id              UUID NOT NULL,
@@ -45,7 +47,7 @@ CREATE TABLE antwort (
 );
 
 CREATE TABLE review (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     antwort_id              UUID NOT NULL,
     korrektor_id            UUID,
     bewertung               TEXT NOT NULL,
@@ -56,7 +58,7 @@ CREATE TABLE review (
 );
 
 CREATE TABLE correct_answers (
-    id                      UUID PRIMARY KEY,
+    id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     frage_id                UUID NOT NULL,
     richtige_antwort        TEXT NOT NULL,
     antwort_optionen        TEXT NOT NULL,
@@ -66,3 +68,18 @@ CREATE TABLE correct_answers (
 
 CREATE INDEX idx_antwort_frage_student ON antwort(frage_id, student_id);
 CREATE INDEX idx_review_antwort ON review(antwort_id);
+
+CREATE OR REPLACE FUNCTION set_automatischer_korrektor_uuid()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.name = 'Automatischer Korrektor' THEN
+        NEW.id := '11111111-1111-1111-1111-111111111111';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_set_korrektor_uuid
+BEFORE INSERT ON korrektor
+FOR EACH ROW
+EXECUTE FUNCTION set_automatischer_korrektor_uuid();

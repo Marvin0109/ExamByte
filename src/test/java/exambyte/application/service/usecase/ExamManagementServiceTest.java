@@ -241,15 +241,15 @@ class ExamManagementServiceTest {
     @Test
     void submitExam_reviewSaveFails() {
         FrageDTO frage = mock(FrageDTO.class);
-        when(frage.fachId()).thenReturn(FRAGE_ID1);
+        when(frage.id()).thenReturn(FRAGE_ID1);
 
         AntwortDTO antwort = mock(AntwortDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
         when(review.bewertung()).thenReturn("Test");
         when(review.punkte()).thenReturn(1);
-        when(review.antwortFachId()).thenReturn(UUID.randomUUID());
-        when(review.korrektorFachId()).thenReturn(UUID.randomUUID());
+        when(review.antwortId()).thenReturn(UUID.randomUUID());
+        when(review.korrektorId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
@@ -286,7 +286,7 @@ class ExamManagementServiceTest {
     @Test
     void submitExam_success() {
         FrageDTO frage = mock(FrageDTO.class);
-        when(frage.fachId()).thenReturn(FRAGE_ID1);
+        when(frage.id()).thenReturn(FRAGE_ID1);
 
         AntwortDTO antwort = mock(AntwortDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
@@ -294,8 +294,8 @@ class ExamManagementServiceTest {
         // Review-Stub
         when(review.bewertung()).thenReturn("OK");
         when(review.punkte()).thenReturn(5);
-        when(review.antwortFachId()).thenReturn(UUID.randomUUID());
-        when(review.korrektorFachId()).thenReturn(UUID.randomUUID());
+        when(review.antwortId()).thenReturn(UUID.randomUUID());
+        when(review.korrektorId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
 
@@ -315,8 +315,8 @@ class ExamManagementServiceTest {
         verify(reviewQueryService).createReview(
                 review.bewertung(),
                 review.punkte(),
-                review.antwortFachId(),
-                review.korrektorFachId()
+                review.antwortId(),
+                review.korrektorId()
         );
     }
 
@@ -325,17 +325,17 @@ class ExamManagementServiceTest {
         // Arrange
         String studentName = "Max";
         FrageDTO frage1 = mock(FrageDTO.class);
-        when(frage1.fachId()).thenReturn(FRAGE_ID1);
+        when(frage1.id()).thenReturn(FRAGE_ID1);
         FrageDTO frage2 = mock(FrageDTO.class);
-        when(frage2.fachId()).thenReturn(FRAGE_ID2);
+        when(frage2.id()).thenReturn(FRAGE_ID2);
 
         UUID antwortId1 = UUID.randomUUID();
         UUID antwortId2 = UUID.randomUUID();
 
         AntwortDTO antwort1 = mock(AntwortDTO.class);
-        when(antwort1.fachId()).thenReturn(antwortId1);
+        when(antwort1.id()).thenReturn(antwortId1);
         AntwortDTO antwort2 = mock(AntwortDTO.class);
-        when(antwort2.fachId()).thenReturn(antwortId2);
+        when(antwort2.id()).thenReturn(antwortId2);
 
         UUID reviewId1 = UUID.randomUUID();
 

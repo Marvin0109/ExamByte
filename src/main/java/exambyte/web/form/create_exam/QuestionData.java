@@ -19,7 +19,7 @@ public class QuestionData {
     private String correctAnswer;
     private String correctAnswers;
 
-    private UUID fachId;
+    private UUID id;
 
     public String getQuestionText() {
         return questionText;
@@ -45,12 +45,12 @@ public class QuestionData {
         this.punkte = punkte;
     }
 
-    public void setFachId(UUID fachId) {
-        this.fachId = fachId;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getChoices() {

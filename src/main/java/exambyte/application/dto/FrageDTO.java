@@ -5,9 +5,8 @@ import exambyte.application.common.QuestionTypeDTO;
 import java.util.UUID;
 
 public record FrageDTO (
-        UUID fachId,
+        UUID id,
         String frageText,
         int maxPunkte,
-        UUID profUUID,
-        UUID examUUID,
+        UUID examId,
         QuestionTypeDTO type) {}

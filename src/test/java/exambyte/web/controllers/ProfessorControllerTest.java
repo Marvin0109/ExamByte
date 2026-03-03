@@ -335,7 +335,7 @@ class ProfessorControllerTest {
         );
 
         when(service.getExamByUUID(any())).thenReturn(exam);
-        when(service.getSubmitInfo(exam.fachId())).thenReturn(List.of());
+        when(service.getSubmitInfo(exam.id())).thenReturn(List.of());
 
         mvc.perform(get("/professor/listParticipants/{examId}", UUID.randomUUID()))
                 .andExpect(status().isOk())

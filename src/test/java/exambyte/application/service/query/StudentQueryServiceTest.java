@@ -42,7 +42,7 @@ class StudentQueryServiceTest {
         studentQueryService = new StudentQueryServiceImpl(antwortQueryService, studentService, studentDTOMapper);
 
         student = new Student.StudentBuilder()
-                .fachId(STUDENT_ID)
+                .id(STUDENT_ID)
                 .name("StudentName")
                 .build();
 

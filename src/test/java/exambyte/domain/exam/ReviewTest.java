@@ -13,23 +13,23 @@ class ReviewTest {
     @Test
     @DisplayName("ReviewBuilder Test")
     void test_01() {
-        UUID fachId = UUID.randomUUID();
-        UUID antwortFachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID antwortId = UUID.randomUUID();
         UUID korrektorId = UUID.randomUUID();
         String bewertung = "Good work";
         int punkte = 85;
 
         Review review = new Review.ReviewBuilder()
-                .fachId(fachId)
-                .antwortFachId(antwortFachId)
-                .korrektorFachId(korrektorId)
+                .id(id)
+                .antwortId(antwortId)
+                .korrektorId(korrektorId)
                 .bewertung(bewertung)
                 .punkte(punkte)
                 .build();
 
-        assertEquals(fachId, review.getFachId());
-        assertEquals(antwortFachId, review.getAntwortFachId());
-        assertEquals(korrektorId, review.getKorrektorFachId());
+        assertEquals(id, review.getId());
+        assertEquals(antwortId, review.getAntwortId());
+        assertEquals(korrektorId, review.getKorrektorId());
         assertEquals(bewertung, review.getBewertung());
         assertEquals(punkte, review.getPunkte());
     }

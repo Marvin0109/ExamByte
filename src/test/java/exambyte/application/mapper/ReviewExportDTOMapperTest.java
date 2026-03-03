@@ -44,8 +44,7 @@ class ReviewExportDTOMapperTest {
                 UUID.randomUUID(),
                 "Frage 1",
                 6,
-                null,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.FREITEXT
         );
 
@@ -53,15 +52,14 @@ class ReviewExportDTOMapperTest {
                 UUID.randomUUID(),
                 "Frage 2",
                 1,
-                null,
-                exam.fachId(),
+                exam.id(),
                 QuestionTypeDTO.SC
         );
 
         antwort1 = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort 1",
-                frage1.fachId(),
+                frage1.id(),
                 null,
                 null
         );
@@ -69,14 +67,14 @@ class ReviewExportDTOMapperTest {
         antwort2 = new AntwortDTO(
                 UUID.randomUUID(),
                 "A",
-                frage2.fachId(),
+                frage2.id(),
                 null,
                 null
         );
 
         review1 = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort1.fachId(),
+                antwort1.id(),
                 null,
                 "Bewertung 1",
                 6
@@ -84,7 +82,7 @@ class ReviewExportDTOMapperTest {
 
         review2 = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort2.fachId(),
+                antwort2.id(),
                 null,
                 "Bewertung 2",
                 1

@@ -17,19 +17,19 @@ class ReviewServiceTest {
     private final ReviewService reviewService = new ReviewServiceImpl(reviewRepository);
 
     @Test
-    @DisplayName("Eine Bewertung kann gefunden werden mit der Antwort-FachID")
+    @DisplayName("Eine Bewertung kann gefunden werden mit der Antwort-ID")
     void test_01() {
         // Arrange
-        UUID antwortFachId = UUID.randomUUID();
-        var review = new Review.ReviewBuilder().antwortFachId(antwortFachId).build();
+        UUID antwortId = UUID.randomUUID();
+        var review = new Review.ReviewBuilder().antwortId(antwortId).build();
 
-        when(reviewRepository.findByAntwortFachId(antwortFachId)).thenReturn(review);
+        when(reviewRepository.findByAntwortId(antwortId)).thenReturn(review);
 
         // Act
-        Review result = reviewService.getReviewByAntwortFachId(antwortFachId);
+        Review result = reviewService.getReviewByAntwortId(antwortId);
 
         // Assert
-        assertThat(result.getAntwortFachId()).isEqualTo(antwortFachId);
-        verify(reviewRepository).findByAntwortFachId(antwortFachId);
+        assertThat(result.getAntwortId()).isEqualTo(antwortId);
+        verify(reviewRepository).findByAntwortId(antwortId);
     }
 }

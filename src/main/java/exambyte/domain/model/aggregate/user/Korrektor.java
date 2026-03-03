@@ -4,17 +4,17 @@ import java.util.UUID;
 
 public class Korrektor implements Person {
 
-    private final UUID fachId;
+    private final UUID id;
     private final String name;
 
-    private Korrektor(UUID fachId, String name) {
-        this.fachId = fachId;
+    private Korrektor(UUID id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     @Override
-    public UUID uuid() {
-        return fachId;
+    public UUID id() {
+        return id;
     }
 
     @Override
@@ -23,11 +23,11 @@ public class Korrektor implements Person {
     }
 
     public static class KorrektorBuilder {
-        private UUID fachId;
+        private UUID id;
         private String name;
 
-        public KorrektorBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public KorrektorBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -37,7 +37,7 @@ public class Korrektor implements Person {
         }
 
         public Korrektor build() {
-            return new Korrektor(fachId, name);
+            return new Korrektor(id, name);
         }
     }
 }

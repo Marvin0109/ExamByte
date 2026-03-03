@@ -22,8 +22,8 @@ public class KorrektorRepositoryImpl implements KorrektorRepository {
     }
 
     @Override
-    public Optional<Korrektor> findByFachId(UUID fachId) {
-        Optional<KorrektorEntity> entity = dao.findByFachId(fachId);
+    public Optional<Korrektor> findById(UUID id) {
+        Optional<KorrektorEntity> entity = dao.findById(id);
         return entity.map(mapper::toDomain);
     }
 

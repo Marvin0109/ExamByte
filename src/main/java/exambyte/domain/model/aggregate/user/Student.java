@@ -4,16 +4,16 @@ import java.util.UUID;
 
 public class Student implements Person {
 
-    private final UUID fachId;
+    private final UUID id;
     private final String name;
 
-    private Student(UUID fachId, String name) {
-        this.fachId = fachId;
+    private Student(UUID id, String name) {
+        this.id = id;
         this.name = name;
     }
 
     @Override
-    public UUID uuid() { return fachId; }
+    public UUID id() { return id; }
 
     @Override
     public String getName() {
@@ -21,11 +21,11 @@ public class Student implements Person {
     }
 
     public static class StudentBuilder {
-        private UUID fachId;
+        private UUID id;
         private String name;
 
-        public StudentBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public StudentBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -35,7 +35,7 @@ public class Student implements Person {
         }
 
         public Student build() {
-            return new Student(fachId, name);
+            return new Student(id, name);
         }
     }
 }

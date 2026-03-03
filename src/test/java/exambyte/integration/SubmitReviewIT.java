@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,61 +56,73 @@ class SubmitReviewIT {
 
     @Test
     void submitReview() {
+        // Student
         Student student = new Student.StudentBuilder()
-                .fachId(UUID.randomUUID())
                 .name("Student")
                 .build();
         studentRepository.save(student);
+        Optional<UUID> studentId = studentRepository.findIdByName(student.getName());
+        assertThat(studentId).isPresent();
 
+        // Professor
         Professor professor = new Professor.ProfessorBuilder()
-                .fachId(UUID.randomUUID())
                 .name("Professor")
                 .build();
         professorRepository.save(professor);
+        Optional<Professor> profLoaded = professorRepository.findByName("Professor");
+        assertThat(profLoaded).isPresent();
 
+        // Korrektor
         Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .fachId(UUID.randomUUID())
                 .name("Korrektor")
                 .build();
         korrektorRepository.save(korrektor);
+        Optional<Korrektor> korrektorLoaded = korrektorRepository.findByName("Korrektor");
+        assertThat(korrektorLoaded).isPresent();
 
+        // Exam
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
         Exam exam = new Exam.ExamBuilder()
-                .fachId(UUID.randomUUID())
                 .title("Exam")
-                .professorFachId(professor.uuid())
+                .professorId(profLoaded.get().id())
                 .startTime(start)
                 .endTime(start.plusDays(1))
                 .resultTime(start.plusDays(2))
                 .build();
         examRepository.save(exam);
+        Optional<UUID> examId = examRepository.findByStartTime(start);
+        assertThat(examId).isPresent();
 
+        // Frage
         Frage frage = new Frage.FrageBuilder()
-                .fachId(UUID.randomUUID())
-                .examUUID(exam.getFachId())
+                .examId(examId.get())
                 .frageText("Frage")
                 .maxPunkte(5)
-                .professorUUID(professor.uuid())
                 .type(QuestionType.FREITEXT)
                 .build();
         frageRepository.save(frage);
+        List<Frage> frageLoaded = frageRepository.findByExamId(examId.get());
+        assertThat(frageLoaded).isNotEmpty();
 
+        // Antwort
         Antwort antwort = new Antwort.AntwortBuilder()
-                .fachId(UUID.randomUUID())
-                .frageFachId(frage.getFachId())
+                .frageId(frageLoaded.getFirst().getId())
                 .antwortText("Antwort")
-                .studentFachId(student.uuid())
+                .studentId(studentId.get())
                 .antwortZeitpunkt(LocalDateTime.of(2026, 1, 1, 1, 0))
                 .build();
         antwortRepository.save(antwort);
+        Optional<Antwort> antwortLoaded = antwortRepository
+                .findByStudentIdAndFrageId(studentId.get(), frageLoaded.getFirst().getId());
+        assertThat(antwortLoaded).isPresent();
 
         ReviewForm form = new ReviewForm();
         form.setBewertung("Bewertung");
         form.setPunkteVergeben(5);
 
-        examControllerService.createReview(form, antwort.getFachId(), korrektor.uuid());
+        examControllerService.createReview(form, antwortLoaded.get().getId(), korrektorLoaded.get().id());
 
-        Review review = reviewRepository.findByAntwortFachId(antwort.getFachId());
+        Review review = reviewRepository.findByAntwortId(antwortLoaded.get().getId());
 
         assertThat(review).isNotNull();
         assertThat(review.getPunkte()).isEqualTo(5);

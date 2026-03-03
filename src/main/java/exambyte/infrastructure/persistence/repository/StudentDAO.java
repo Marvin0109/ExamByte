@@ -6,13 +6,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface StudentDAO extends CrudRepository<StudentEntity, Long> {
+public interface StudentDAO extends CrudRepository<StudentEntity, UUID> {
 
     Optional<StudentEntity> findByName(String name);
 
-    Optional<StudentEntity> findByFachId(UUID fachId);
-
-    Optional<StudentEntity> findFachIdByName(String name);
-
-    StudentEntity save(StudentEntity student);
+    Optional<StudentEntity> findIdByName(String name);
 }

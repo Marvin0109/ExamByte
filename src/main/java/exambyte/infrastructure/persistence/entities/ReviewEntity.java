@@ -10,16 +10,13 @@ import java.util.UUID;
 public class ReviewEntity {
 
     @Id
-    private Long id;
+    private UUID id;
 
-    @Column("fach_id")
-    private final UUID fachId;
+    @Column("antwort_id")
+    private final UUID antwortId;
 
-    @Column("antwort_fach_id")
-    private final UUID antwortFachId;
-
-    @Column("korrektor_fach_id")
-    private final UUID korrektorFachId;
+    @Column("korrektor_id")
+    private final UUID korrektorId;
 
     @Column("bewertung")
     private String bewertung;
@@ -27,24 +24,24 @@ public class ReviewEntity {
     @Column("punkte")
     private int punkte;
 
-    private ReviewEntity(UUID fachId, UUID antwortFachId, UUID korrektorFachId, String bewertung, int punkte) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+    private ReviewEntity(UUID id, UUID antwortId, UUID korrektorId, String bewertung, int punkte) {
+        this.id = id;
         this.bewertung = bewertung;
         this.punkte = punkte;
-        this.antwortFachId = antwortFachId;
-        this.korrektorFachId = korrektorFachId;
+        this.antwortId = antwortId;
+        this.korrektorId = korrektorId;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
-    public UUID getAntwortFachId() {
-        return antwortFachId;
+    public UUID getAntwortId() {
+        return antwortId;
     }
 
-    public UUID getKorrektorFachId() {
-        return korrektorFachId;
+    public UUID getKorrektorId() {
+        return korrektorId;
     }
 
     public String getBewertung() {
@@ -64,14 +61,14 @@ public class ReviewEntity {
     }
 
     public static class ReviewEntityBuilder {
-        private UUID fachId;
+        private UUID id;
         private String bewertung;
         private int punkte;
-        private UUID antwortFachId;
-        private UUID korrektorFachId;
+        private UUID antwortId;
+        private UUID korrektorId;
 
-        public ReviewEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public ReviewEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -85,30 +82,30 @@ public class ReviewEntity {
             return this;
         }
 
-        public ReviewEntityBuilder antwortFachId(UUID antwortFachId) {
-            this.antwortFachId = antwortFachId;
+        public ReviewEntityBuilder antwortId(UUID antwortId) {
+            this.antwortId = antwortId;
             return this;
         }
 
-        public ReviewEntityBuilder korrektorFachId(UUID korrektorFachId) {
-            this.korrektorFachId = korrektorFachId;
+        public ReviewEntityBuilder korrektorId(UUID korrektorId) {
+            this.korrektorId = korrektorId;
             return this;
         }
 
         public ReviewEntity build() {
-            checkFachID(antwortFachId, "Antwort-Fach-ID fehlt");
-            checkFachID(korrektorFachId, "Korrektor-Fach-ID fehlt");
+            checkID(antwortId, "Antwort-ID fehlt");
+            checkID(korrektorId, "Korrektor-ID fehlt");
             if (bewertung == null || bewertung.isBlank()) {
                 throw new IllegalStateException("Bewertung fehlt");
             }
             if (punkte < 0) {
                 throw new IllegalStateException("Punkte dürfen nicht negativ sein");
             }
-            return new ReviewEntity(fachId, antwortFachId, korrektorFachId, bewertung, punkte);
+            return new ReviewEntity(id, antwortId, korrektorId, bewertung, punkte);
         }
 
-        private static void checkFachID(UUID fachId, String message) {
-            if (fachId == null) {
+        private static void checkID(UUID id, String message) {
+            if (id == null) {
                 throw new IllegalStateException(message);
             }
         }

@@ -9,7 +9,7 @@ public interface ProfessorRepository {
 
     Optional<Professor> findByName(String name);
 
-    Optional<Professor> findByFachId(UUID fachId);
+    Optional<Professor> findById(UUID id);
 
     void save(Professor professor);
 }

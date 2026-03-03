@@ -10,40 +10,32 @@ import java.util.UUID;
 
 @Table("frage")
 public class FrageEntity {
-
+    
     @Id
-    private Long id;
-
+    private UUID id;
+    
     @Column("frage_text")
     private String frageText;
-
-    @Column("fach_id")
-    private final UUID fachId;
 
     @Column("type")
     private final QuestionTypeEntity type;
 
-    @Column("professor_fach_id")
-    private final UUID professorFachId;
-
-    @Column("exam_fach_id")
-    private final UUID examFachId;
+    @Column("exam_id")
+    private final UUID examId;
 
     @Column("max_punkte")
     private int maxPunkte;
 
-    private FrageEntity(UUID fachId, String frageText, int maxPunkte, QuestionTypeEntity type,
-                        UUID professorFachId, UUID examFachId) {
-        this.fachId = fachId != null ? fachId : UUID.randomUUID();
+    private FrageEntity(UUID id, String frageText, int maxPunkte, QuestionTypeEntity type, UUID examId) {
+        this.id = id;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
         this.type = type;
-        this.professorFachId = professorFachId;
-        this.examFachId = examFachId;
+        this.examId = examId;
     }
 
-    public UUID getFachId() {
-        return fachId;
+    public UUID getId() {
+        return id;
     }
 
     public String getFrageText() {
@@ -66,24 +58,19 @@ public class FrageEntity {
         return type;
     }
 
-    public UUID getProfessorFachId() {
-        return professorFachId;
-    }
-
-    public UUID getExamFachId() {
-        return examFachId;
+    public UUID getExamId() {
+        return examId;
     }
 
     public static class FrageEntityBuilder {
-        private UUID fachId;
+        private UUID id;
         private String frageText;
         private int maxPunkte;
         private QuestionTypeEntity type;
-        private UUID professorFachId;
-        private UUID examFachId;
+        private UUID examId;
 
-        public FrageEntityBuilder fachId(UUID fachId) {
-            this.fachId = fachId;
+        public FrageEntityBuilder id(UUID id) {
+            this.id = id;
             return this;
         }
 
@@ -102,13 +89,8 @@ public class FrageEntity {
             return this;
         }
 
-        public FrageEntityBuilder professorFachId(UUID professorFachId) {
-            this.professorFachId = professorFachId;
-            return this;
-        }
-
-        public FrageEntityBuilder examFachId(UUID examFachId) {
-            this.examFachId = examFachId;
+        public FrageEntityBuilder examId(UUID examId) {
+            this.examId = examId;
             return this;
         }
 
@@ -119,13 +101,10 @@ public class FrageEntity {
             if (maxPunkte <= 0) {
                 throw new IllegalStateException("Punkte dürfen nicht 0 oder negativ sein");
             }
-            if (professorFachId == null) {
-                throw new IllegalStateException("Professor-Fach-ID fehlt");
+            if (examId == null) {
+                throw new IllegalStateException("Exam-ID fehlt");
             }
-            if (examFachId == null) {
-                throw new IllegalStateException("Exam-Fach-ID fehlt");
-            }
-            return new FrageEntity(fachId, frageText, maxPunkte, type, professorFachId, examFachId);
+            return new FrageEntity(id, frageText, maxPunkte, type, examId);
         }
     }
 }

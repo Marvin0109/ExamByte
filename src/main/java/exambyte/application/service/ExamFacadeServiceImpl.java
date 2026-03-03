@@ -71,24 +71,24 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public boolean isExamAlreadySubmitted(UUID examFachId, String studentName) {
-        return examManagementService.hasStudentSubmittedExam(examFachId, studentName);
+    public boolean isExamAlreadySubmitted(UUID examId, String studentName) {
+        return examManagementService.hasStudentSubmittedExam(examId, studentName);
     }
 
     @Override
-    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examFachId) {
-        SubmitExamResult result = examManagementService.submitExam(studentLogin, antworten, examFachId);
+    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examId) {
+        SubmitExamResult result = examManagementService.submitExam(studentLogin, antworten, examId);
         return result.equals(SubmitExamResult.SUCCESS);
     }
 
     @Override
-    public ExamDTO getExam(UUID examFachId) {
-        return examManagementService.getExam(examFachId);
+    public ExamDTO getExam(UUID examId) {
+        return examManagementService.getExam(examId);
     }
 
     @Override
-    public List<FrageDTO> getFragenForExam(UUID examFachId) {
-        return frageQueryService.getFragenForExam(examFachId);
+    public List<FrageDTO> getFragenForExam(UUID examId) {
+        return frageQueryService.getFragenForExam(examId);
     }
 
     @Override
@@ -97,8 +97,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public ProfessorDTO getProfessor(UUID profFachId) {
-        return professorQueryService.getProfessorById(profFachId);
+    public ProfessorDTO getProfessor(UUID profId) {
+        return professorQueryService.getProfessorById(profId);
     }
 
     @Override
@@ -112,8 +112,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public String getChoiceForFrage(UUID frageFachId) {
-         return frageQueryService.getChoiceForFrage(frageFachId);
+    public String getChoiceForFrage(UUID frageId) {
+         return frageQueryService.getChoiceForFrage(frageId);
     }
 
     @Override
@@ -132,13 +132,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void removeOldAnswers(UUID examFachId, String name) {
-        examManagementService.removeOldAnswers(examFachId, name);
+    public void removeOldAnswers(UUID examId, String name) {
+        examManagementService.removeOldAnswers(examId, name);
     }
 
     @Override
-    public VersuchDTO getSubmission(UUID examFachId, String studentLogin) {
-        return examManagementService.getSubmission(examFachId, studentLogin);
+    public VersuchDTO getSubmission(UUID examId, String studentLogin) {
+        return examManagementService.getSubmission(examId, studentLogin);
     }
 
     @Override
@@ -147,38 +147,38 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public double reviewCoverage(UUID examFachId) {
-        return reviewManagementService.getReviewCoverage(examFachId);
+    public double reviewCoverage(UUID examId) {
+        return reviewManagementService.getReviewCoverage(examId);
     }
 
     @Override
-    public List<StudentDTO> getStudentSubmittedExam(UUID examFachId) {
-        return studentQueryService.getStudentSubmittedExam(examFachId);
+    public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
+        return studentQueryService.getStudentSubmittedExam(examId);
     }
 
     @Override
-    public boolean isSubmitBeingReviewed(UUID examFachId, UUID studentId) {
-        return reviewManagementService.submitHasReview(examFachId, studentId);
+    public boolean isSubmitBeingReviewed(UUID examId, UUID studentId) {
+        return reviewManagementService.submitHasReview(examId, studentId);
     }
 
     @Override
-    public List<FrageDTO> getFreitextFragen(UUID examFachId) {
-        return frageQueryService.getFreitextFragen(examFachId);
+    public List<FrageDTO> getFreitextFragen(UUID examId) {
+        return frageQueryService.getFreitextFragen(examId);
     }
 
     @Override
-    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examFachId) {
-        return antwortQueryService.getFreitextAntwortenForExam(examFachId);
+    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examId) {
+        return antwortQueryService.getFreitextAntwortenForExam(examId);
     }
 
     @Override
     public boolean antwortHasReview(AntwortDTO antwort) {
-       return reviewQueryService.antwortHasReview(antwort.fachId());
+       return reviewQueryService.antwortHasReview(antwort.id());
     }
 
     @Override
-    public void createReview(String bewertung, int punkte, UUID antwortFachId, UUID korrektorFachId) {
-        reviewQueryService.createReview(bewertung, punkte, antwortFachId, korrektorFachId);
+    public void createReview(String bewertung, int punkte, UUID antwortId, UUID korrektorId) {
+        reviewQueryService.createReview(bewertung, punkte, antwortId, korrektorId);
     }
 
     @Override
@@ -197,8 +197,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public ReviewDTO getReviewForAntwort(UUID antwortFachId) {
-        return reviewQueryService.getReviewByAntwortId(antwortFachId);
+    public ReviewDTO getReviewForAntwort(UUID antwortId) {
+        return reviewQueryService.getReviewByAntwortId(antwortId);
     }
 
     @Override
@@ -207,8 +207,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public boolean timeReachedToViewReview(UUID examFachId) {
-        return examManagementService.allowedToViewReview(examFachId);
+    public boolean timeReachedToViewReview(UUID examId) {
+        return examManagementService.allowedToViewReview(examId);
     }
 
     @Override

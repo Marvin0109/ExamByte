@@ -90,18 +90,18 @@ class ExamQueryServiceTest {
                 START.plusHours(3));
 
         exam1 = new Exam.ExamBuilder()
-                .fachId(examDTO1.fachId())
+                .id(examDTO1.id())
                 .title("Exam 1")
-                .professorFachId(examDTO1.professorFachId())
+                .professorId(examDTO1.professorId())
                 .startTime(START)
                 .endTime(START.plusHours(1))
                 .resultTime(START.plusHours(2))
                 .build();
 
         exam2 = new Exam.ExamBuilder()
-                .fachId(examDTO2.fachId())
+                .id(examDTO2.id())
                 .title("Exam 2")
-                .professorFachId(examDTO2.professorFachId())
+                .professorId(examDTO2.professorId())
                 .startTime(START.plusHours(1))
                 .endTime(START.plusHours(2))
                 .resultTime(START.plusHours(3))
@@ -111,24 +111,22 @@ class ExamQueryServiceTest {
                 UUID.randomUUID(),
                 "Frage",
                 10,
-                exam1.getProfessorFachId(),
-                exam1.getFachId(),
+                exam1.getId(),
                 QuestionTypeDTO.FREITEXT);
 
         frage = new Frage.FrageBuilder()
-                .fachId(frageDTO.fachId())
+                .id(frageDTO.id())
                 .frageText("Frage")
                 .maxPunkte(10)
-                .professorUUID(exam1.getProfessorFachId())
-                .examUUID(exam1.getFachId())
+                .examId(exam1.getId())
                 .type(QuestionType.FREITEXT)
                 .build();
 
         antwort = new Antwort.AntwortBuilder()
-                .fachId(UUID.randomUUID())
+                .id(UUID.randomUUID())
                 .antwortText("Antwort")
-                .studentFachId(STUDENT_ID)
-                .frageFachId(frage.getFachId())
+                .studentId(STUDENT_ID)
+                .frageId(frage.getId())
                 .antwortZeitpunkt(START)
                 .build();
     }
@@ -141,7 +139,7 @@ class ExamQueryServiceTest {
 
         UUID result = examQueryService.getExamIdByStartTime(START);
 
-        assertEquals(exam1.getFachId(), result);
+        assertEquals(exam1.getId(), result);
     }
 
     @Test
@@ -166,24 +164,24 @@ class ExamQueryServiceTest {
 
     @Test
     void hasStudentSubmittedExam_returnsTrue() {
-        when(studentService.getStudentFachId("Student")).thenReturn(STUDENT_ID);
+        when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
         when(frageService.getFragenForExam(any())).thenReturn(List.of(frage));
         when(frageDTOMapper.toFrageDTOList(any())).thenReturn(List.of(frageDTO));
-        when(antwortService.findByStudentAndFrage(STUDENT_ID, frage.getFachId())).thenReturn(antwort);
+        when(antwortService.findByStudentAndFrage(STUDENT_ID, frage.getId())).thenReturn(antwort);
 
-        boolean result = examQueryService.hasStudentSubmittedExam(exam1.getFachId(), "Student");
+        boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
 
         assertTrue(result);
     }
 
     @Test
     void hasStudentSubmittedExam_returnsFalse() {
-        when(studentService.getStudentFachId("Student")).thenReturn(STUDENT_ID);
+        when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
         when(frageService.getFragenForExam(any())).thenReturn(List.of(frage));
         when(frageDTOMapper.toFrageDTOList(any())).thenReturn(List.of(frageDTO));
-        when(antwortService.findByStudentAndFrage(STUDENT_ID, frage.getFachId())).thenReturn(null);
+        when(antwortService.findByStudentAndFrage(STUDENT_ID, frage.getId())).thenReturn(null);
 
-        boolean result = examQueryService.hasStudentSubmittedExam(exam1.getFachId(), "Student");
+        boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
 
         assertFalse(result);
     }

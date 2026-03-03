@@ -50,14 +50,13 @@ class AutomaticReviewServiceTest {
                 "Fragetext",
                 maxPunkte,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.MC
         );
 
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 studentAntwort,
-                frage.fachId(),
+                frage.id(),
                 studentUUID,
                 antwortTime
         );
@@ -66,7 +65,7 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 korrekteAntwort,
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.fachId()
+                frage.id()
         );
 
         // Act
@@ -135,14 +134,13 @@ class AutomaticReviewServiceTest {
                 "Fragetext",
                 maxPunkte,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.SC
         );
 
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 studentAntwort,
-                frage.fachId(),
+                frage.id(),
                 studentUUID,
                 antwortTime
         );
@@ -151,7 +149,7 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 korrekteAntwort,
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.fachId()
+                frage.id()
         );
 
         // Act
@@ -197,14 +195,13 @@ class AutomaticReviewServiceTest {
                 "Fragetext 1",
                 3,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 4\nAntwort 5",
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.fachId());
+                frage.id());
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
@@ -228,13 +225,12 @@ class AutomaticReviewServiceTest {
                 "Fragetext 1",
                 3,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 3\nAntwort 4",
-                frage.fachId(),
+                frage.id(),
                 studentUUID,
                 antwortTime);
 
@@ -260,14 +256,13 @@ class AutomaticReviewServiceTest {
                 "Fragetext 1",
                 3,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 4\nAntwort 5",
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.fachId());
+                frage.id());
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
@@ -291,13 +286,12 @@ class AutomaticReviewServiceTest {
                 "Fragetext 1",
                 3,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         AntwortDTO antwort = new AntwortDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 3\nAntwort 4",
-                frage.fachId(),
+                frage.id(),
                 studentUUID,
                 antwortTime);
 

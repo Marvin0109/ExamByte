@@ -20,30 +20,30 @@ class ProfessorServiceTest {
     private final ProfessorService service = new ProfessorServiceImpl(profRepo);
 
     @Test
-    @DisplayName("Ein Professor kann geladen werden mit profFachID")
+    @DisplayName("Ein Professor kann geladen werden mit profID")
     void test_01() {
         // Arrange
-        var profFachId = UUID.randomUUID();
-        Professor prof = new Professor.ProfessorBuilder().fachId(profFachId).build();
+        var profId = UUID.randomUUID();
+        Professor prof = new Professor.ProfessorBuilder().id(profId).build();
 
-        when(profRepo.findByFachId(profFachId)).thenReturn(Optional.of(prof));
+        when(profRepo.findById(profId)).thenReturn(Optional.of(prof));
 
         // Act
-        var result = service.getProfessor(profFachId);
+        var result = service.getProfessor(profId);
 
         // Assert
         assertThat(result).isNotNull();
-        assertThat(result.uuid()).isEqualTo(profFachId);
-        verify(profRepo).findByFachId(profFachId);
+        assertThat(result.id()).isEqualTo(profId);
+        verify(profRepo).findById(profId);
     }
 
     @Test
     @DisplayName("Ein Professor wurde nicht gefunden")
     void test_02() {
-        UUID profFachID = UUID.randomUUID();
-        when(profRepo.findByFachId(profFachID)).thenReturn(Optional.empty());
-        assertThrows(NichtVorhandenException.class, () -> service.getProfessor(profFachID));
-        verify(profRepo).findByFachId(profFachID);
+        UUID profID = UUID.randomUUID();
+        when(profRepo.findById(profID)).thenReturn(Optional.empty());
+        assertThrows(NichtVorhandenException.class, () -> service.getProfessor(profID));
+        verify(profRepo).findById(profID);
     }
 
     @Test

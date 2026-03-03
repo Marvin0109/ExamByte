@@ -41,7 +41,7 @@ public class ExamExportServiceImpl implements ExamExportService {
     @Override
     public List<ExamExportDTO> createExamExport(UUID examId) {
         ExamDTO exam = examQueryService.getExam(examId);
-        ProfessorDTO prof = professorQueryService.getProfessorById(exam.professorFachId());
+        ProfessorDTO prof = professorQueryService.getProfessorById(exam.professorId());
         List<FrageDTO> fragen = frageQueryService.getFragenForExam(examId);
 
         int punkte = fragen.stream()
@@ -51,7 +51,7 @@ public class ExamExportServiceImpl implements ExamExportService {
         List<KorrekteAntwortenDTO> loesungen = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
-            KorrekteAntwortenDTO k = korrekteAntwortenQueryService.getLoesungForFrage(frage.fachId());
+            KorrekteAntwortenDTO k = korrekteAntwortenQueryService.getLoesungForFrage(frage.id());
             if (k != null) {
                 loesungen.add(k);
             }

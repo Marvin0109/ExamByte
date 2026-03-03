@@ -43,7 +43,7 @@ class ExamDBTest {
     @DisplayName("Laden der Daten erfolgreich")
     void test_01() {
         // Act
-        Optional<Exam> geladenExam = examRepository.findByFachId(EXAMUUID);
+        Optional<Exam> geladenExam = examRepository.findById(EXAMUUID);
 
         // Assert
         assertThat(geladenExam).isPresent();
@@ -60,13 +60,13 @@ class ExamDBTest {
     }
 
     @Test
-    @DisplayName("deleteByFachId")
+    @DisplayName("deleteById")
     void test_03() {
         // Act
-        examRepository.deleteByFachId(EXAMUUID);
+        examRepository.deleteById(EXAMUUID);
 
         // Assert
-        assertThat(examRepository.findByFachId(EXAMUUID)).isEmpty();
+        assertThat(examRepository.findById(EXAMUUID)).isEmpty();
     }
 
     @Test

@@ -24,8 +24,8 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public Exam getExam(UUID fachId) {
-        return repository.findByFachId(fachId)
+    public Exam getExam(UUID id) {
+        return repository.findById(id)
                 .orElseThrow(NichtVorhandenException::new);
     }
 
@@ -40,7 +40,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
-    public void deleteByFachId(UUID fachId) {
-        repository.deleteByFachId(fachId);
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
     }
 }

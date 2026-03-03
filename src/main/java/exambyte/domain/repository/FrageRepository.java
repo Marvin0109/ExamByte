@@ -11,9 +11,9 @@ public interface FrageRepository {
 
     Collection<Frage> findAll();
 
-    Optional<Frage> findByFachId(UUID fachId);
+    Optional<Frage> findById(UUID id);
 
-    List<Frage> findByExamFachId(UUID examFachId);
+    List<Frage> findByExamId(UUID examId);
 
     UUID save(Frage frage);
 

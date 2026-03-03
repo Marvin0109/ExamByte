@@ -64,14 +64,12 @@ class ScoringServiceTest {
                 "Frage",
                 5,
                 UUID.randomUUID(),
-                UUID.randomUUID(),
                 QuestionTypeDTO.FREITEXT);
 
         frage2 = new FrageDTO(
                 FRAGE_2_ID,
                 "Frage",
                 3,
-                UUID.randomUUID(),
                 UUID.randomUUID(),
                 QuestionTypeDTO.SC);
 
@@ -90,25 +88,25 @@ class ScoringServiceTest {
                 ANTWORT_TIME);
 
         review1 = new Review.ReviewBuilder()
-                .korrektorFachId(UUID.randomUUID())
+                .korrektorId(UUID.randomUUID())
                 .bewertung("Bewertung")
                 .punkte(5)
-                .antwortFachId(ANTWORT_1_ID)
+                .antwortId(ANTWORT_1_ID)
                 .build();
 
         review2 = new Review.ReviewBuilder()
-                .korrektorFachId(AUTOMATIC_REVIEWER)
+                .korrektorId(AUTOMATIC_REVIEWER)
                 .bewertung("Bewertung")
                 .punkte(3)
-                .antwortFachId(ANTWORT_2_ID)
+                .antwortId(ANTWORT_2_ID)
                 .build();
     }
 
     @Test
     void shouldCountPoints_resultTimeReached() {
-        when(reviewService.getReviewByAntwortFachId(ANTWORT_1_ID))
+        when(reviewService.getReviewByAntwortId(ANTWORT_1_ID))
                 .thenReturn(review1);
-        when(reviewService.getReviewByAntwortFachId(ANTWORT_2_ID))
+        when(reviewService.getReviewByAntwortId(ANTWORT_2_ID))
                 .thenReturn(review2);
 
         LocalDateTime resultTime =
@@ -125,9 +123,9 @@ class ScoringServiceTest {
 
     @Test
     void shouldCountPoints_resultTimeNotReachedYet() {
-        when(reviewService.getReviewByAntwortFachId(ANTWORT_1_ID))
+        when(reviewService.getReviewByAntwortId(ANTWORT_1_ID))
                 .thenReturn(review1);
-        when(reviewService.getReviewByAntwortFachId(ANTWORT_2_ID))
+        when(reviewService.getReviewByAntwortId(ANTWORT_2_ID))
                 .thenReturn(review2);
 
         LocalDateTime resultTime =

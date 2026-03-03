@@ -21,10 +21,10 @@ class ProfessorDTOMapperTest {
     @DisplayName("Test ProfessorDTOMapper 'toDTO'")
     void test_01() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
 
         Professor professor = new Professor.ProfessorBuilder()
-                .fachId(fachId)
+                .id(id)
                 .name("Prof name")
                 .build();
 
@@ -32,7 +32,7 @@ class ProfessorDTOMapperTest {
         ProfessorDTO professorDTO = mapper.toDTO(professor);
 
         // Assert
-        assertEquals(professorDTO.fachId(), fachId);
+        assertEquals(professorDTO.id(), id);
         assertEquals("Prof name", professorDTO.name());
     }
 
@@ -46,16 +46,16 @@ class ProfessorDTOMapperTest {
     @DisplayName("toProfessorDTOList Test")
     void test_03() {
         // Arrange
-        UUID fachId1 = UUID.randomUUID();
-        UUID fachId2 = UUID.randomUUID();
+        UUID id1 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
 
         Professor professor1 = new Professor.ProfessorBuilder()
-                .fachId(fachId1)
+                .id(id1)
                 .name("Prof 1")
                 .build();
 
         Professor professor2 = new Professor.ProfessorBuilder()
-                .fachId(fachId2)
+                .id(id2)
                 .name("Prof 2")
                 .build();
 
@@ -65,8 +65,8 @@ class ProfessorDTOMapperTest {
         // Assert
         assertEquals(2, professoren.size());
         assertThat(professoren.getFirst().getName()).isEqualTo("Prof 1");
-        assertThat(professoren.getFirst().uuid()).isEqualTo(fachId1);
+        assertThat(professoren.getFirst().id()).isEqualTo(id1);
         assertThat(professoren.getLast().getName()).isEqualTo("Prof 2");
-        assertThat(professoren.getLast().uuid()).isEqualTo(fachId2);
+        assertThat(professoren.getLast().id()).isEqualTo(id2);
     }
 }

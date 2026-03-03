@@ -21,16 +21,16 @@ class AntwortDTOMapperTest {
     @DisplayName("Test AntwortDTOMapper 'toDTO'")
     void test_01() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
-        UUID frageFachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID studentId = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
-                .fachId(fachId)
+                .id(id)
                 .antwortText("Antwort")
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
+                .frageId(frageId)
+                .studentId(studentId)
                 .antwortZeitpunkt(antwortTime)
                 .build();
 
@@ -38,9 +38,9 @@ class AntwortDTOMapperTest {
         AntwortDTO dto = mapper.toDTO(antwort);
 
         // Assert
-        assertEquals(fachId, dto.fachId());
-        assertEquals(studentFachId, dto.studentFachId());
-        assertEquals(frageFachId, dto.frageFachId());
+        assertEquals(id, dto.id());
+        assertEquals(studentId, dto.studentId());
+        assertEquals(frageId, dto.frageId());
         assertEquals("Antwort", dto.antwortText());
         assertEquals(antwortTime, dto.antwortZeitpunkt());
     }
@@ -55,29 +55,29 @@ class AntwortDTOMapperTest {
     @DisplayName("toAntwortDTOList Test")
     void test_03() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
-        UUID frageFachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID studentId = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
-        UUID fachId2 = UUID.randomUUID();
-        UUID studentFachId2 = UUID.randomUUID();
-        UUID frageFachId2 = UUID.randomUUID();
+        UUID id2 = UUID.randomUUID();
+        UUID studentId2 = UUID.randomUUID();
+        UUID frageId2 = UUID.randomUUID();
         LocalDateTime antwortTime2 = LocalDateTime.of(2020, 1, 1, 1, 0);
 
         Antwort antwort = new Antwort.AntwortBuilder()
-                .fachId(fachId)
+                .id(id)
                 .antwortText("Antwort")
-                .frageFachId(frageFachId)
-                .studentFachId(studentFachId)
+                .frageId(frageId)
+                .studentId(studentId)
                 .antwortZeitpunkt(antwortTime)
                 .build();
 
         Antwort antwort2 = new Antwort.AntwortBuilder()
-                .fachId(fachId2)
+                .id(id2)
                 .antwortText("Antwort2")
-                .frageFachId(frageFachId2)
-                .studentFachId(studentFachId2)
+                .frageId(frageId2)
+                .studentId(studentId2)
                 .antwortZeitpunkt(antwortTime2)
                 .build();
 
@@ -88,14 +88,14 @@ class AntwortDTOMapperTest {
 
         // Assert
         assertEquals(2, dto.size());
-        assertEquals(fachId, dto.getFirst().fachId());
-        assertEquals(studentFachId, dto.getFirst().studentFachId());
-        assertEquals(frageFachId, dto.getFirst().frageFachId());
+        assertEquals(id, dto.getFirst().id());
+        assertEquals(studentId, dto.getFirst().studentId());
+        assertEquals(frageId, dto.getFirst().frageId());
         assertEquals(antwortTime, dto.getFirst().antwortZeitpunkt());
 
-        assertEquals(fachId2, dto.getLast().fachId());
-        assertEquals(studentFachId2, dto.getLast().studentFachId());
-        assertEquals(frageFachId2, dto.getLast().frageFachId());
+        assertEquals(id2, dto.getLast().id());
+        assertEquals(studentId2, dto.getLast().studentId());
+        assertEquals(frageId2, dto.getLast().frageId());
         assertEquals(antwortTime2, dto.getLast().antwortZeitpunkt());
     }
 
@@ -103,25 +103,25 @@ class AntwortDTOMapperTest {
     @DisplayName("toDomain Test")
     void test_04() {
         // Arrange
-        UUID fachId = UUID.randomUUID();
-        UUID studentFachId = UUID.randomUUID();
-        UUID frageFachId = UUID.randomUUID();
+        UUID id = UUID.randomUUID();
+        UUID studentId = UUID.randomUUID();
+        UUID frageId = UUID.randomUUID();
         LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         AntwortDTO dto = new AntwortDTO(
-                fachId,
+                id,
                 "Antwort",
-                frageFachId,
-                studentFachId,
+                frageId,
+                studentId,
                 antwortTime);
 
         // Act
         Antwort antwort = mapper.toDomain(dto);
 
         // Assert
-        assertEquals(fachId, antwort.getFachId());
-        assertEquals(studentFachId, antwort.getStudentUUID());
-        assertEquals(frageFachId, antwort.getFrageFachId());
+        assertEquals(id, antwort.getId());
+        assertEquals(studentId, antwort.getStudentUUID());
+        assertEquals(frageId, antwort.getFrageId());
         assertEquals(antwortTime, antwort.getAntwortZeitpunkt());
         assertEquals("Antwort", antwort.getAntwortText());
     }
