@@ -131,6 +131,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     public void createQuestions(ExamForm form, UUID examUUID) {
         for (QuestionData q : form.getQuestions()) {
             String frageText = q.getQuestionText();
+            frageText = frageText.replace("\\n", "\n");
             QuestionTypeWeb frageTyp;
 
             try {

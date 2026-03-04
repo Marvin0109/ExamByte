@@ -24,7 +24,75 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <h1> Vorschau hier </h1>
+    <h1 th:text="${exam.examTitle}">Testtitel</h1>
+
+    <h5 th:text="'Autor: ' + ${exam.authorName}">Autor</h5>
+
+    <h5 th:text="'Gesamtpunktzahl: ' + ${exam.maxPunkte}">Punkte</h5>
+
+    <div th:each="viewItem, iterStat : ${exam.questions}" class="mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
+                <p class="card-text" th:text="${viewItem.frage.frageText}">Fragestellung</p>
+
+                <!-- Multiple Choice -->
+                <div class="mb-2" th:if="${viewItem.frage.type.name == 'MC'}">
+                    <p class="card-text">Lösung:</p>
+                    <div class="form-check mb-2"
+                         th:each="antwort : ${#strings.arraySplit(viewItem.korrekteAntworten.antwortOptionen, ',')}">
+                        <input class="form-check-input"
+                               type="checkbox"
+                               disabled="disabled"
+                               th:id="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
+                               th:name="${viewItem.frage.id}"
+                               th:checked="${#arrays.contains(
+                               #strings.arraySplit(viewItem.korrekteAntworten.antworten, ','),
+                               antwort)}"
+                               th:value="${antwort}" />
+                        <label class="form-check-label w-100"
+                               th:for="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
+                               th:text="${antwort.replace('ĸ', ',')}">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Single Choice -->
+                <div class="mb-2" th:if="${viewItem.frage.type.name == 'SC'}">
+                    <p class="card-text">Lösung:</p>
+                    <div class="form-check mb-2"
+                         th:each="antwort : ${#strings.arraySplit(viewItem.korrekteAntworten.antwortOptionen, ',')}">
+                        <input class="form-check-input"
+                               type="radio"
+                               disabled="disabled"
+                               th:id="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
+                               th:name="${viewItem.frage.id}"
+                               th:checked="${#arrays.contains(
+                               #strings.arraySplit(viewItem.korrekteAntworten.antworten, ','),
+                               antwort)}"
+                               th:value="${antwort}" />
+                        <label class="form-check-label w-100"
+                               th:for="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
+                               th:text="${antwort.replace('ĸ', ',')}">
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Freitext -->
+                <div class="mb-2" th:if="${viewItem.frage.type.name == 'FREITEXT'}">
+                    <label class="form-label"
+                           th:for="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}">
+                        Antwort:
+                    </label>
+                    <textarea th:name="${viewItem.frage.id}"
+                              th:id="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
+                              class="form-control"
+                              disabled="disabled">
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </main>
 

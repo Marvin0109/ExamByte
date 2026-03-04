@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.testcontainers.shaded.org.checkerframework.checker.units.qual.K;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -723,9 +724,16 @@ class HelperServiceTest {
                 )
         );
 
+        KorrekteAntwortenDTO k = new KorrekteAntwortenDTO(
+                UUID.randomUUID(),
+                "A",
+                "A\nB\nC",
+                frage1Id
+        );
+
         when(examFacadeService.getFragenForExam(any())).thenReturn(fragen);
 
-        when(examFacadeService.getLoesungForFrage(frage1Id)).thenReturn(mock(KorrekteAntwortenDTO.class));
+        when(examFacadeService.getLoesungForFrage(frage1Id)).thenReturn(k);
         when(examFacadeService.getLoesungForFrage(frage2Id)).thenReturn(null);
 
         // Act
