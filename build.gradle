@@ -76,6 +76,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
 	testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.testcontainers:postgresql'
+	testImplementation "org.mockito:mockito-core:5.+"
+	testRuntimeOnly "net.bytebuddy:byte-buddy-agent:1.14.+"
 
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
@@ -85,6 +87,10 @@ dependencies {
 	// Development
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+}
+
+test {
+	jvmArgs "-javaagent:${configurations.testRuntimeClasspath.find { it.name.contains('byte-buddy-agent') }}"
 }
 
 tasks.named('test') {
