@@ -15,6 +15,7 @@ import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
+import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 import org.springframework.stereotype.Service;
@@ -356,5 +357,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
         Collections.shuffle(questionTypeWebList);
 
         return questionTypeWebList;
+    }
+
+    @Override
+    public ExamViewForm getExamView(UUID examId) {
+        return helperService.prepareExamViewForm(examId);
     }
 }

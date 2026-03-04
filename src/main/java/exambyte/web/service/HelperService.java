@@ -4,6 +4,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.VersuchDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
+import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 
@@ -27,4 +28,6 @@ public interface HelperService {
     OldDataForm fillOldDataForm(UUID examId, String studentName);
 
     SubmitForm fillSubmitFormWithData(OldDataForm form);
+
+    ExamViewForm prepareExamViewForm(UUID examId);
 }

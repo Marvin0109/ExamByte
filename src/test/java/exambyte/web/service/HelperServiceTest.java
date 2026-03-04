@@ -5,6 +5,8 @@ import exambyte.application.dto.*;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.form.load_old_submit_data.OldDataDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
+import exambyte.web.form.show_exam.ExamAggregateDTO;
+import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,8 +38,6 @@ class HelperServiceTest {
 
     @Mock
     private ExamFacadeService examFacadeService;
-
-
 
     @BeforeEach
     void setUp() {
@@ -688,7 +688,57 @@ class HelperServiceTest {
                 );
     }
 
+    @Test
+    void prepareExamViewForm() {
+        // Arrange
+        ExamDTO mockExam = mock(ExamDTO.class);
+        when(mockExam.professorId()).thenReturn(UUID.randomUUID());
+        when(mockExam.title()).thenReturn("Exam");
 
+        when(examFacadeService.getExam(any())).thenReturn(mockExam);
 
+        ProfessorDTO mockProf = mock(ProfessorDTO.class);
+        when(mockProf.name()).thenReturn("Professor");
 
+        when(examFacadeService.getProfessor(any())).thenReturn(mockProf);
+
+        UUID frage1Id = UUID.randomUUID();
+        UUID frage2Id = UUID.randomUUID();
+
+        List<FrageDTO> fragen = List.of(
+                new FrageDTO(
+                        frage1Id,
+                        "Frage 1",
+                        1,
+                        UUID.randomUUID(),
+                        QuestionTypeDTO.SC
+                ),
+
+                new FrageDTO(
+                        frage2Id,
+                        "Frage 2",
+                        4,
+                        UUID.randomUUID(),
+                        QuestionTypeDTO.FREITEXT
+                )
+        );
+
+        when(examFacadeService.getFragenForExam(any())).thenReturn(fragen);
+
+        when(examFacadeService.getLoesungForFrage(frage1Id)).thenReturn(mock(KorrekteAntwortenDTO.class));
+        when(examFacadeService.getLoesungForFrage(frage2Id)).thenReturn(null);
+
+        // Act
+        ExamViewForm result = helperService.prepareExamViewForm(UUID.randomUUID());
+        List<ExamAggregateDTO> resultComponents = result.questions();
+
+        // Assert
+        assertThat(result.examTitle()).isEqualTo("Exam");
+        assertThat(result.authorName()).isEqualTo("Professor");
+        assertThat(result.maxPunkte()).isEqualTo(5 );
+
+        assertThat(resultComponents).hasSize(2);
+        assertThat(resultComponents.getFirst().korrekteAntworten()).isNotNull();
+        assertThat(resultComponents.getLast().korrekteAntworten()).isNull();
+    }
 }

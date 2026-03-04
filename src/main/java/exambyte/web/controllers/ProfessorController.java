@@ -9,6 +9,7 @@ import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionSettings;
 import exambyte.web.form.info.SubmitInfo;
+import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewViewForm;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -196,7 +197,7 @@ public class ProfessorController {
             @PathVariable UUID examId,
             Model model) {
 
-        ExamView exam = service.getExamView(examId);
+        ExamViewForm exam = service.getExamView(examId);
 
         model.addAttribute("exam", exam);
         return "professor/examView";

@@ -10,6 +10,7 @@ import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.application.service.ExamControllerService;
+import exambyte.web.form.show_exam.ExamViewForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -487,7 +488,7 @@ class ProfessorControllerTest {
     @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Vorschau eines Exams ist erfolgreich")
     void showExam() throws Exception {
-        when(service.getExamView(any())).thenReturn(mock(ExamView.class));
+        when(service.getExamView(any())).thenReturn(mock(ExamViewForm.class));
 
         mvc.perform(get("/professor/showExam/{examId}", UUID.randomUUID()))
                 .andExpect(status().isOk())

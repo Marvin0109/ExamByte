@@ -11,6 +11,7 @@ import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ReviewCoverageForm;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
+import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
 
@@ -85,4 +86,6 @@ public interface ExamControllerService {
     List<ReviewExportDTO> getReviewExport(UUID examId, String studentName);
 
     List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount);
+
+    ExamViewForm getExamView(UUID examId);
 }

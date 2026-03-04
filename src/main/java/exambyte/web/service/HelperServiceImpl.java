@@ -5,6 +5,8 @@ import exambyte.application.dto.*;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.form.load_old_submit_data.OldDataDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
+import exambyte.web.form.show_exam.ExamAggregateDTO;
+import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewAggregateDTO;
 import exambyte.web.form.show_review.ReviewViewForm;
 import exambyte.web.form.submit_answers.SubmitForm;
@@ -269,5 +271,33 @@ public class HelperServiceImpl implements HelperService {
 
         submitForm.setAnswers(answers);
         return submitForm;
+    }
+
+    @Override
+    public ExamViewForm prepareExamViewForm(UUID examId) {
+        ExamDTO exam = service.getExam(examId);
+        ProfessorDTO prof = service.getProfessor(exam.professorId());
+        List<FrageDTO> fragen = service.getFragenForExam(examId);
+
+        List<ExamAggregateDTO> components = new ArrayList<>();
+
+        double maxPunkte = 0;
+
+        for (FrageDTO frage : fragen) {
+            maxPunkte += frage.maxPunkte();
+            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.id());
+
+            if (k != null) {
+                components.add(new ExamAggregateDTO(frage, k));
+            } else {
+                components.add(new ExamAggregateDTO(frage, null));
+            }
+        }
+
+        return new ExamViewForm(
+                exam.title(),
+                prof.name(),
+                maxPunkte,
+                components);
     }
 }
