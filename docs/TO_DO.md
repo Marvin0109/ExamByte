@@ -1,44 +1,27 @@
 # TODO für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 16.02.2026
+> **aktualisiert am:** 04.03.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
 ### Priorität: Hoch
-- **Testing**
-  - [X] **Logik-Tests**: Erweiterung der Logik-Tests basierend auf Jacoco Coverage Report
-
 - **Use Case-Erweiterungen**
-  - [X] **Korrektur von Freitextantworten**
-  - [X] **Neuer Testdurchlauf mit bestehenden Antworten**
-  - [X] **Zulassungslogik für Testteilnahmen**
+  - [ ] **Automatisches speichern und Zwischenspeicherung von Antworten**
   - [ ] **Bewertung von Antworten als Professor**
 
 - **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
-  - [X] **CSV-Export**: Formular exportieren
-  - [X] **Testantwort-Einsicht**: Einsicht in Testergebnisse für Admins/Lehrkräfte
-  - [X] **HTML-Inhalte**: Überarbeiten hinsichtlich Benutzerfreundlichkeit
-  - [X] **Accessiblity**: Überprüfung auf Accessibility
+  - [ ] **Zulassungsübersicht**: Einsicht in Zulassungsstatus für Professoren
+  - [ ] **Vorschau von Prüfungen als Professor**
 
-- **Dokumentation**
-  - [X] **arc42 Dokumentation**: Architektur-Dokumentation aktualisieren
- 
-- **Authentifizierung**
-  - [X] **Rollenverteilung**: Erweiterung des Rollenmodells um dynamische Rollenaktivierung (RBAC)
+- **Testing**
+  - [ ] **Manuelles Testen**: Features aus Endnutzersicht systematisch testen und überprüfen
 
 ---
 
 ### Priorität: Mittel
 - [ ] **Java-Konventionen**: Sicherstellung von Codekonventionen (Styleguide)
-- [X] **Codequalität**: Komponenten mithilfe von SonarQube analysiert 
-und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
-
----
-
-### Priorität: Niedrig
-- [ ] **CD**: Experimentelles Setup mit Railway
-- [ ] **Threading**: Analyse und Optimierung hinsichtlich Nebenläufigkeit und Skalierbarkeit bei parallelen Userzugriffen
+- [ ] **Code Clean Up**: Einheitliche Sprache wählen für Codebase
 
 ---
 
@@ -54,5 +37,10 @@ und refaktoriert, um Wartbarkeit und Code-Standards sicherzustellen
 9. [X] Testdurchlauf mit alten Antworten
 10. [X] Einsicht auf Testergebnisse
 11. [X] CSV-Export einführen
-12. [ ] Bewertung von Antworten als Professor
-13. [ ] Sicherstellung von Codekonventionen
+12. [X] Datenbankoptimierung und Stresstests
+13. [ ] Vorschau von Prüfung für Professor
+14. [ ] Bewertung von Antworten als Professor
+15. [ ] Zulassungsübersicht für Professoren
+16. [ ] Automatisches speichern und Zwischenspeichern von Antworten
+17. [ ] Ausreichendes manuelles Testen der Anwendung
+18. [ ] Sicherstellung von Codekonventionen und Clean Up
