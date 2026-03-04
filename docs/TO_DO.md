@@ -12,7 +12,7 @@
 
 - **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
   - [ ] **Zulassungsübersicht**: Einsicht in Zulassungsstatus für Professoren
-  - [ ] **Vorschau von Prüfungen als Professor**
+  - [X] **Vorschau von Prüfungen als Professor**
 
 - **Testing**
   - [ ] **Manuelles Testen**: Features aus Endnutzersicht systematisch testen und überprüfen
@@ -38,7 +38,7 @@
 10. [X] Einsicht auf Testergebnisse
 11. [X] CSV-Export einführen
 12. [X] Datenbankoptimierung und Stresstests
-13. [ ] Vorschau von Prüfung für Professor
+13. [X] Vorschau von Prüfung für Professor
 14. [ ] Bewertung von Antworten als Professor
 15. [ ] Zulassungsübersicht für Professoren
 16. [ ] Automatisches speichern und Zwischenspeichern von Antworten
