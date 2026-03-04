@@ -154,7 +154,6 @@ public class ProfessorController {
         }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);
-        UUID profID = service.getProfIdByName(name).orElse(null);
 
         String message = service.createExam(form, name);
 
@@ -190,6 +189,17 @@ public class ProfessorController {
         model.addAttribute("exams", examDTOs);
         model.addAttribute(TIME_NOW, now());
         return "professor/examListForProf";
+    }
+
+    @GetMapping("/showExam/{examId}")
+    public String showExamForm(
+            @PathVariable UUID examId,
+            Model model) {
+
+        ExamView exam = service.getExamView(examId);
+
+        model.addAttribute("exam", exam);
+        return "professor/examView";
     }
 
     @GetMapping("/listParticipants/{examId}")

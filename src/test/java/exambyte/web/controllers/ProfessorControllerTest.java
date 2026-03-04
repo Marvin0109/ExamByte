@@ -482,4 +482,16 @@ class ProfessorControllerTest {
         mvc.perform(get("/professor/downloadReview/{examId}/{studentName}", examId, "Student"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Vorschau eines Exams ist erfolgreich")
+    void showExam() throws Exception {
+        when(service.getExamView(any())).thenReturn(mock(ExamView.class));
+
+        mvc.perform(get("/professor/showExam/{examId}", UUID.randomUUID()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exam"))
+                .andExpect(view().name("professor/examView"));
+    }
 }
