@@ -4,7 +4,7 @@
 > **aktualisiert am:** 12.03.2026
 
 > [!IMPORTANT]
-> Die Tasks sollen in der gegebenen Reihenfolge bearbeiten wie sie aufgelistet sind.
+> Die Tasks sollen in der gegebenen Reihenfolge bearbeitet werden wie sie aufgelistet sind.
 
 1. [X] arc42-Doc aktualisieren
 2. [X] Code Refactoring mithilfe von SonarQube
