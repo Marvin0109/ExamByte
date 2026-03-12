@@ -3,7 +3,8 @@
 >**Autor:** Marvin0109,
 >**aktualisiert am:** 04.03.2026
 
-*Hinweis*: Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
+> [!NOTE]
+> Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 
 ## Aktivitätsprotokoll
 
