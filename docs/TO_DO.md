@@ -1,7 +1,7 @@
 # TODO für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 04.03.2026
+> **aktualisiert am:** 12.03.2026
 
 ## 1. Offene Aufgaben (To-Do-Liste)
 
@@ -25,7 +25,7 @@
 
 ---
 
-## 2. Nächste Schritte (Empfohlene Reihenfolge)
+## 2. Nächste Schritte
 1. [X] arc42-Doc aktualisieren
 2. [X] Code Refactoring mithilfe von SonarQube
 3. [X] Rollenverteilungs-Feature
@@ -39,8 +39,12 @@
 11. [X] CSV-Export einführen
 12. [X] Datenbankoptimierung und Stresstests
 13. [X] Vorschau von Prüfung für Professor
-14. [ ] Bewertung von Antworten als Professor
-15. [ ] Zulassungsübersicht für Professoren
-16. [ ] Automatisches speichern und Zwischenspeichern von Antworten
-17. [ ] Ausreichendes manuelles Testen der Anwendung
-18. [ ] Sicherstellung von Codekonventionen und Clean Up
+14. [ ] Erstellen von Review überarbeiten
+    1. [ ] Nur ein Nutzer darf eine Antwort korrigieren (Zugriff wird verweigert für alle anderen)
+    2. [ ] Erstellung von Reviews Thread-sicher machen
+    3. [ ] Lasttests
+15. [ ] Bewertung von Antworten als Professor
+16. [ ] Zulassungsübersicht für Professoren
+17. [ ] Automatisches speichern und Zwischenspeichern von Antworten
+18. [ ] Ausreichendes manuelles Testen der Anwendung
+19. [ ] Sicherstellung von Codekonventionen und Clean Up
