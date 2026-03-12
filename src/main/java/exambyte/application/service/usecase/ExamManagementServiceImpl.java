@@ -101,12 +101,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         UUID studentId = resolveStudent(studentName);
         if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
-        try {
-            antwortQueryService.saveAnswers(studentId, antworten);
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
-            throw e;
-        }
+        antwortQueryService.saveAnswers(studentId, antworten);
 
         return generateAndSaveReviews(studentId, examId);
     }

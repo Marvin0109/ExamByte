@@ -6,7 +6,6 @@ import exambyte.domain.repository.KorrekteAntwortenRepository;
 import exambyte.infrastructure.persistence.entities.KorrekteAntwortenEntity;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

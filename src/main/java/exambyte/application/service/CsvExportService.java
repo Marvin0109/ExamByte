@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface CsvExportService {
 
-    byte[] exportExamToCsv(List<ExamExportDTO> examExportDTO) throws Exception;
-    byte[] exportReviewToCsv(List<ReviewExportDTO> reviewExportDTO) throws Exception;
+    byte[] exportExamToCsv(List<ExamExportDTO> examExportDTO);
+    byte[] exportReviewToCsv(List<ReviewExportDTO> reviewExportDTO);
 }

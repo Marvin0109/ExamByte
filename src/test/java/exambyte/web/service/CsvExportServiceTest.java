@@ -22,7 +22,7 @@ class CsvExportServiceTest {
     }
 
     @Test
-    void exportExamToCsv() throws Exception {
+    void exportExamToCsv() {
         ExamExportDTO dto = new ExamExportDTO();
         dto.setExamTitle("Test 1");
         dto.setMaxPunkte(10);
@@ -40,7 +40,7 @@ class CsvExportServiceTest {
     }
 
     @Test
-    void exportExamToCsv_emptyList() throws Exception {
+    void exportExamToCsv_emptyList() {
         List<ExamExportDTO> list = List.of();
 
         byte[] result = service.exportExamToCsv(list);
@@ -52,7 +52,7 @@ class CsvExportServiceTest {
     }
 
     @Test
-    void exportReviewToCsv() throws Exception {
+    void exportReviewToCsv() {
         ReviewExportDTO dto = new ReviewExportDTO();
         dto.setExamTitle("Test 1");
         dto.setMaxPunkte(10);
@@ -70,7 +70,7 @@ class CsvExportServiceTest {
     }
 
     @Test
-    void exportReviewToCsv_emptyList() throws Exception {
+    void exportReviewToCsv_emptyList() {
         List<ReviewExportDTO> list = List.of();
 
         byte[] result = service.exportReviewToCsv(list);

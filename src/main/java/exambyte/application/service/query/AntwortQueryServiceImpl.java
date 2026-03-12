@@ -7,8 +7,6 @@ import exambyte.domain.service.AntwortService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Service
 public class AntwortQueryServiceImpl implements AntwortQueryService {
@@ -16,8 +14,6 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
     private final FrageQueryService frageQueryService;
     private final AntwortService antwortService;
     private final AntwortDTOMapper antwortDTOMapper;
-
-    private static final Logger logger = Logger.getLogger(AntwortQueryServiceImpl.class.getName());
 
     public AntwortQueryServiceImpl(FrageQueryService frageQueryService,
                                    AntwortService antwortService,
@@ -29,24 +25,19 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
 
     @Override
     public boolean saveAnswers(UUID studentId, Map<String, List<String>> antworten) {
-        try {
-            for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
-                UUID frageId = UUID.fromString(entry.getKey());
-                String antwortText = String.join("\n", entry.getValue());
-                String replaced = antwortText.replace("ĸ", ",");
+        for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
+            UUID frageId = UUID.fromString(entry.getKey());
+            String antwortText = String.join("\n", entry.getValue());
+            String replaced = antwortText.replace("ĸ", ",");
 
-                Antwort loaded = antwortService.findByStudentAndFrage(studentId, frageId);
+            Antwort loaded = antwortService.findByStudentAndFrage(studentId, frageId);
 
-                UUID antwortId = loaded != null ? loaded.getId() : null;
+            UUID antwortId = loaded != null ? loaded.getId() : null;
 
-                AntwortDTO dto = new AntwortDTO(antwortId, replaced, frageId, studentId, null);
-                antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
-            }
-            return true;
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Antworten", e);
-            throw e;
+            AntwortDTO dto = new AntwortDTO(antwortId, replaced, frageId, studentId, null);
+            antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
         }
+        return true;
     }
 
     @Override
