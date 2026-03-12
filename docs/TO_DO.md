@@ -1,31 +1,11 @@
-# TODO für ExamByte
+# Todo für ExamByte
 
 > **Autor:** Marvin0109,
 > **aktualisiert am:** 12.03.2026
 
-## 1. Offene Aufgaben (To-Do-Liste)
+> [!IMPORTANT]
+> Die Tasks sollen in der gegebenen Reihenfolge bearbeiten wie sie aufgelistet sind.
 
-### Priorität: Hoch
-- **Use Case-Erweiterungen**
-  - [ ] **Automatisches speichern und Zwischenspeicherung von Antworten**
-  - [ ] **Bewertung von Antworten als Professor**
-
-- **Frontend-Erweiterungen (UI/UX, Admin-Funktionen)**
-  - [ ] **Zulassungsübersicht**: Einsicht in Zulassungsstatus für Professoren
-  - [X] **Vorschau von Prüfungen als Professor**
-
-- **Testing**
-  - [ ] **Manuelles Testen**: Features aus Endnutzersicht systematisch testen und überprüfen
-
----
-
-### Priorität: Mittel
-- [ ] **Java-Konventionen**: Sicherstellung von Codekonventionen (Styleguide)
-- [ ] **Code Clean Up**: Einheitliche Sprache wählen für Codebase
-
----
-
-## 2. Nächste Schritte
 1. [X] arc42-Doc aktualisieren
 2. [X] Code Refactoring mithilfe von SonarQube
 3. [X] Rollenverteilungs-Feature

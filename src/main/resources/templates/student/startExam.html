@@ -26,8 +26,6 @@
 
     <form th:action="@{/student/submit/{examFachId}(examFachId=${exam.id})}" method="post" th:object="${submitForm}">
 
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
         <h1 th:text="${exam.title}">Testtitel</h1>
 
         <div th:each="frage, iterStat : ${exam.questions}" class="mb-3">

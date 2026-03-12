@@ -2,13 +2,13 @@
 
 ## Metainformationen
 
-- **Titel**: ExamByte - Architektur-Dokumentation (arc42)
-- **Autor**: Marvin0109
-- **Version**: 1.3
-- **Erstellt am**: 03. Februar 2025
-- **Aktualisiert am**: 21. Januar 2026
-- **Zielgruppen**: Entwickler, Benutzer
-- **Verwendete Werkzeuge**: PlantUML
+> - **Titel**: ExamByte - Architektur-Dokumentation (arc42)
+> - **Autor**: Marvin0109
+> - **Version**: 1.3
+> - **Erstellt am**: 03. Februar 2025
+> - **Aktualisiert am**: 21. Januar 2026
+> - **Zielgruppen**: Entwickler, Benutzer
+> - **Verwendete Werkzeuge**: PlantUML
 
 ## 1. Einführung und Ziele
 
@@ -52,14 +52,14 @@ Administrator:innen.
 ### 2.2 Organisatorisch
 
 | Randbedingung                    | Erläuterung                                                                                                                                                                                                                                                                                                                                      |
-|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Team                             | Marvin0109                                                                                                                                                                                                                                                                                                                                              |
-| Zeitplan                         | Beginn der Entwicklung Anfang November 2024                                                                                                                                                                                                                                                                                                             |
+|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Team                             | Marvin0109                                                                                                                                                                                                                                                                                                                                       |
+| Zeitplan                         | Beginn der Entwicklung Anfang November 2024                                                                                                                                                                                                                                                                                                      |
 | Vorgehensmodell                  | Das Projekt wurde parallel zur Vorlesung *Programmierpraktikum 2* entwickelt. Methoden wie *Domain Storytelling* wurden erst im Laufe der Veranstaltung eingeführt und standen daher zu Projektbeginn **nicht** zur Verfügung, was Auswirkungen hatte auf die Entwicklungszeit. <br/> Zur Dokumentation der Architektur kommt arc42 zum Einsatz. |
-| Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](Activity_Protocol.md) gesammelt worden. Erstellung von Java-Quellcode in IntelliJ Ultimate.                                                                                                                              |
-| Versionsverwaltung               | Git, Github                                                                                                                                                                                                                                                                                                                                             |
-| Testwerkzeuge und -prozesse      | JUnit, ArchUnit, Integrationstests, WebMvcTests und Testcontainer für Datenbanktests.                                                                                                                                                                                                                                                                   |
-| Veröffentlichung als Open Source | N/A                                                                                                                                                                                                                                                                                                                                                     |
+| Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](Activity_Protocol.md) gesammelt worden. Erstellung von Java-Quellcode in IntelliJ Ultimate.                                                                                                                       |
+| Versionsverwaltung               | Git, Github                                                                                                                                                                                                                                                                                                                                      |
+| Testwerkzeuge und -prozesse      | JUnit, ArchUnit, Integrationstests, WebMvcTests und Testcontainer für Datenbanktests.                                                                                                                                                                                                                                                            |
+| Veröffentlichung als Open Source | N/A                                                                                                                                                                                                                                                                                                                                              |
 
 ### 2.3 Konventionen
 
@@ -114,7 +114,7 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 
 ### 6.2 Testdurchführung
 
-1. Studierende melden sich mit ihren Github-Account an.
+1. Studierende melden sich mit ihrem Github-Account an.
 2. Sie gehen zur Testübersicht und starten einen aktiven Test.
 3. Sie beantworten die Fragen und das Ergebnis der automatischen Korrektur ist sichtbar.
 4. Unzählige Testdurchläufe sind seitdem möglich, bewertet für die Zulassung wird aber nur der letzte Versuch.
@@ -125,7 +125,7 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 
 1. MC-/SC-Fragen werden automatisch bewertet.
 2. Freitextantworten können die Korrektoren einsehen und bewerten.
-3. Nach Bedarf kann auch der Professor:in eine neue Bewertung erstellen, dies gilt auch für den Korrektoren.
+3. Nach Bedarf kann auch der Professor:in eine neue Bewertung erstellen, dies gilt auch für Korrektoren.
 
 ### 6.4 Zulassungsstatus
 
@@ -140,11 +140,11 @@ Zulassung erreicht wurde oder nicht.
 
 ## 8 Qualitätsszenarien
 
-| Qualitätsziel  | Szenario                                                                                                                                                         |
-|----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Sicherheit     | Ein nicht authentifizierter Benutzer versucht, einen Test zu starten. Das System verweigert den Zugriff und leitet zur Login-Seite weiter.                       |
-| Skalierbarkeit | Das System ist derzeit für eine begrenzte Anzahl gleichzeitiger Nutzer ausgelegt. Hohe Lastsituationen (z. B. sehr große Kurse) stellen ein bekanntes Risiko dar.|
-| Verfügbarkeit  | Während eines laufenden Tests ist das System erreichbar und Ausfälle führen nicht zum Verlust bereits abgegebener Antworten.                                     |
+| Qualitätsziel  | Szenario                                                                                                                                                          |
+|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Sicherheit     | Ein nicht authentifizierter Benutzer versucht, einen Test zu starten. Das System verweigert den Zugriff und leitet zur Login-Seite weiter.                        |
+| Skalierbarkeit | Das System ist derzeit für eine begrenzte Anzahl gleichzeitiger Nutzer ausgelegt. Hohe Lastsituationen (z. B. sehr große Kurse) stellen ein bekanntes Risiko dar. |
+| Verfügbarkeit  | Während eines laufenden Tests ist das System erreichbar und Ausfälle führen nicht zum Verlust bereits abgegebener Antworten.                                      |
 
 
 ## 9 Risiken und technische Schulden

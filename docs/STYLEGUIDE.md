@@ -2,18 +2,23 @@
 
 >**Autor**: Marvin0109,
 >**erstellt am**: 08.01.2025,
->**aktualisiert am**: 16.02.2026
+>**aktualisiert am**: 12.03.2026
 
-Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
+> [!NOTE]
+> Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
-Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktuell jedoch von einer Person gepflegt und angepasst, die das Projekt privat weiterführt.
+Er wurde ursprünglich für ein Team von 5 Entwickler:innen erstellt, wird aktuell jedoch von einer Person gepflegt 
+und angepasst, die das Projekt privat weiterführt.
 
 ## Allgemeine Regeln
 
 ### Sprache
 - Wir programmieren hauptsächlich in **Java** und verwenden **HTML** für die Weboberfläche.  
-  Für die Datenhaltung kommt die **PostgreSQL-Datenbank** zum Einsatz.
+- Für die Datenhaltung kommt die **PostgreSQL-Datenbank** zum Einsatz.
 - Alle Kommentare und Dokumentationen sind auf **Deutsch** zu schreiben.
+
+> [!NOTE]
+> Codesprache auf Englisch sofern möglich.
 
 ### Dateinamen
 - Verwende **UpperCamelCase** für Java Dateien (z.B. 'HelloWorld.java').
@@ -57,8 +62,8 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
   (Scanning tool für Erkennen von Code Smells)
 
 ### Entwicklungsumgebung
-- **IDE:** Wir verwenden IntelliJ IDEA, am besten die Ultimate-Edition, für die andere Versionen siehe zusätzliche
-  Informationen beim Reiter **Datenbanken**.
+- **IDE:** Wir verwenden IntelliJ IDEA, am besten die Ultimate-Edition, für die andere Versionen bezüglich Datenbanken
+siehe [hier.](#datenbank)
 
 ### Docker
 - **Docker Desktop:** Wir verwenden **Docker Desktop** für das Erstellen, Testen und Ausführen von 
@@ -83,25 +88,26 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
         POSTGRES_DB: mydb
 
 ### Datenbank
-- **Datenbank:** Das Projekt nutzt **postgres:15-alpine**
-- Nicht Ultimate-Versionen sollten Datenbank-Tools wie DBeaver-Community verwenden → https://dbeaver.io/download/
+- **Datenbank:** Das Projekt nutzt `postgres:15-alpine`
+- Nicht Ultimate-Versionen sollten Datenbank-Tools wie [DBeaver-Community.](https://dbeaver.io/download/)
+- Oder halt andere DB-Tools mit denen Sie vertraut sind.
 
 ## Code-Stil
 
 ### Variablennamen
 - Nutze **camelCase**.
-  - Beispiel: 'chainBuilder'.
+  - Beispiel: `chainBuilder`
 
 ### Klassennamen
 - Nutze **UpperCamelCase**.
-  - Beispiel: 'AppUserService', 'SecurityConfig'
+  - Beispiel: `AppUserService`, `SecurityConfig`
 
 ### Konstanten
 - Schreibweise in **UPPER_CASE**.
-  - Beispiel: 'MAX_ATTEMPTS', 'DEFAULT_TIMEOUT'.
+  - Beispiel: `MAX_ATTEMPTS`, `DEFAULT_TIMEOUT`.
 
 ### Kommentare und Dokumentation
-- Dokumentation am **Anfang** der Klasse, was sie macht und wofür sie da ist.
+- Dokumentation am **Anfang** der Klasse, was sie macht und wofür sie da ist, falls nötig.
 - Nutze JavaDoc für die Dokumentation:
   ```java
     /**
@@ -114,49 +120,51 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
      */
 
 - Nach Bedarf auch *@link* und *@see* verwenden im Beschreibungstext für Verweise auf Variablen, Klassen oder sonstiges.
-- Testklassen auch dokumentieren bei Bedarf
-- Notwendig sind die JavaDoc-Annotationen nicht
+- Testklassen auch dokumentieren bei Bedarf, siehe [hier.](#dokumentation-der-tests)
 
 ## Versionierung
 
 ### Branch-Namen
-- Aktuell: Nur 'main'
+- Aktueller Hauptbranch: `main`
 - Für mögliche Erweiterungen: Branches nach [feature], [bugfix], etc. benennen.
   - Beispiel: `feature/user-login`, `bugfix/login-error`.
 
 ### Commit-Messages
-- Format: [Typ] Beschreibung
-  - Beispiel: [Feature] Added user login API
+- Format: `[Typ] Beschreibung`
+  - Beispiel: `[Feature] Added user login API`
 - Übersicht aller Typen mit Beispielen:
   - [Feature]: Neue Funktionen oder Features werden hinzugefügt.
-    - Bsp: [Feature] Add user authentication module
+    - Bsp: `[Feature] Add user authentication module`
   - [Bug]: Bug Bericht erstellen mit **Issue Tracker**
-    - s. Issue Tracker
+    - siehe [hier](#issue-tracker)
   - [BugFix]: Fehlerbehebungen, um bestehende Probleme zu lösen.
-    - Bsp: [BugFix] Fix login validation issue. Closes #x
+    - Bsp: `[BugFix] Fix login validation issue. Closes #x`
   - [Docs]: Änderungen an der Dokumentation oder das Hinzufügen von Dokumentationsdateien.
-    - Bsp: [Docs] Update STYLEGUIDE with new setup instructions
+    - Bsp: `[Docs] Update STYLEGUIDE with new setup instructions`
   - [Refactor]: Codeänderungen, die die Struktur verbessern, ohne das Verhalten zu ändern.
-    - Bsp: [Refactor] Simplify authentication service
+    - Bsp: `[Refactor] Simplify authentication service`
   - [Test]: Hinzufügen oder Ändern von Tests.
-    - Bsp: [Test] Add unit tests for login service
+    - Bsp: `[Test] Add unit tests for login service`
   - [Chore]: Änderungen, die keine neue Funktionalität oder Fehlerbehebung betreffen, wie z. B. Konfigurationsänderungen
     oder das Hinzufügen von Tools.
-    - Bsp: [Chore] Update dependencies
+    - Bsp: `[Chore] Update dependencies`
+
+> [!NOTE]
+> Für Commit-Messages in anderen Branches ist die Verwendung von `[...] <commit message>` nicht zwingend nötig.
 
 ### Issue Tracker
 1. **Issue erstellen auf GitHub**
    - Gehe zu GitHub → Repository → Issues → New Issues
    - Title: *Login button funktioniert nicht*
    - Description: *Login button funktioniert nicht, wenn man ihn auf der Startseite anklickt.*
-   - Img: Verwende Bilder für bessere Nachvollziehbarkeit
-   - GitHub wird ein Ticket erstellen, mit dem man bei Commits referenzieren kann z.B.: #1
+   - Images: Verwende Bilder für bessere Nachvollziehbarkeit
+   - GitHub wird ein Ticket erstellen, mit dem man bei Commits referenzieren kann z.B.: `#1`
 
 2. **Committe zuerst den Bug**
    - Arbeite am Code und speichere deine Arbeit mit git add
 
 3. **Referenziere dem Issue**
-   - Erstelle einen Commit und referenziere es mit dem Issue #1
+   - Erstelle einen Commit und referenziere es mit dem Issue `#1`
    ```
    git commit -m "[Bug]: Login Issue (#1)"
    
@@ -166,20 +174,21 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
    git commit -m "[BugFix]: Fix login button issue. Closes #1"
 
 ### Testing
-- Wir verwenden **JUnit**, **spring-security-test**, **ArchUnit**, **spring-boot-starter-test** und **Testcontainers**.
+- Wir verwenden **JUnit**, **Mockito**, **ArchUnit** und **Testcontainers**.
 
 ### Namenskonventionen für Tests
 - Testmethoden werden nach den zu testenden Methoden benannt.
   - Beispiel: 
   ```java
   void multiplicationSuccess_03() { ... }
-- Im Namen soll auch sehr kurz erwähnt werden, welche Logik getestet wird
+- Im Namen soll auch sehr kurz erwähnt werden, welche Logik getestet wird.
   - Beispiel: 
   ```java
   void login_unauthorized_01() { ... }
 
 ### Dokumentation der Tests
-- Wir verwenden **@DisplayName** für eine **kurze** Beschreibung der jeweiligen Testfälle, falls der Methodenname nicht mehr ausreichen tut
+- Wir verwenden **@DisplayName** für eine **kurze** Beschreibung der jeweiligen Testfälle, falls der Methodenname nicht 
+mehr ausreicht.
   - Beispiel:
   ```java
   @Test
@@ -187,7 +196,12 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
   void test_01() { ... }
 
 ### Codeabdeckung
-- Ziel: **80 % der Funktionen** sollen durch Tests abgedeckt werden als auch die Logik sollte bei **80 %** Test-Abdeckung sein.
+- **> 90 %** Abdeckung bei *Instructions* (Code wurde mind. einmal in einem Test durchlaufen)
+- **> 80 %** Abdeckung bei *Branches* (Randfälle, Logik, Exceptions, ...)
+
+> [!TIP]
+> Führen sie alle Tests vorher aus, damit die Testabdeckung auf dem neuesten Stand ist. 
+> Unter `build/jacocoHtml/index.html` ist die Testabdeckung zu finden.
 
 ## Tools
 
@@ -201,23 +215,59 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 
 ## HTML-Regeln
 
-### Grundlegende Struktur
-- Jeder HTML-Code sollte mit der '<!DOCTYPE html>'-Deklaration beginnen.
-- Das '<html>'-Tag muss das 'lang'-Attribut enthalten, um die Sprache der Seite zu definieren (z.B. '<html lang="de">').
-- Der Code sollte klar in '<head>' und '<body>' unterteilt sein.
-- Unsere Anwendung hat eine Navigationsleiste, welche man hinzufügen sollte auf HTML-Seiten, die die Navigationsleiste 
-  anzeigen sollen.
-  - Einbindung der Navigationsleiste auf einer beliebigen HTML-Seite:
-    ```html
-    <header th:replace="~{navigation/navbar.html}"> </header>
+### Muster-HTML Seite
+
+```html
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Description here">    <!-- Replace -->
+    <meta name="author" content="Author name">              <!-- Replace -->
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
+
+    <title>Title</title>
+
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
+</head>
+
+<body>
+<!-- Navigation top -->
+<header th:replace="~{navigation/navbar.html}"> </header>
+
+<main role="main" class="container mt-5 pt-5">
+
+  <h1> Content here </h1>
+  
+</main>
+
+<!-- Navigation bottom -->
+<header th:replace="~{navigation/navbarDown.html}"> </header>
+
+<!-- js Imports -->
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+```
+
+> [!TIP]
+> Verfügbar [hier.](../src/main/resources/templates/example/example.html)
 
 ### Einrückung und Formatierung
-- Verwende **1 Tab** für die Einrückung.
+- Verwende **2 Tab** für die Einrückung.
 - Jede Öffnung eines neuen Elements sollte eingerückt sein, um die Struktur lesbar zu machen.
   - Beispiel:
   ```html
   <div>
-       <p>Beispieltext</p>
+      <p>Beispieltext</p>
   </div>
 
 ### Tags
@@ -225,7 +275,7 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 
 ### Attribute
 - Alle Attribute in **Kleinbuchstaben** schreiben.
-- Doppelte Anführungszeichen (") für Attributwerte verwenden.
+- Doppelte Anführungszeichen (`"`) für Attributwerte verwenden.
   - Beispiel:
   ```html
   <input type="text" name="username" />
@@ -281,7 +331,7 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
   - Beispiel:
   ```html
   <ul>
-    <li th:each="item : ${items}" th:text="${item}">Eintrag</li>
+      <li th:each="item : ${items}" th:text="${item}">Eintrag</li>
   </ul>
   
 - Beispiel für Bedingungen:
@@ -295,7 +345,7 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
   ```html
   <p th:text="${user.name ?: 'Gast'}">Gast</p>
 
-- **Niemals** `th:utext` verwenden! Es rendert den Inhalt **ungefiltert**, was ein Sicherheitsrisiko ist.
+- **Niemals** `th:utext` verwenden! Weitere Informationen [hier.](#xss-cross-site-scripting)
 
 ### HTML-Kommentare
 - Thymeleaf biete eigene Kommentar-Syntax, die beim Rendern entfernt wird:
@@ -310,6 +360,74 @@ Er wurde ursprünglich für ein Team von 2 Entwickler:innen erstellt, wird aktue
 ### Strukturierte Templates
 - Error-Pages in `templates.error`
 - Webseiten in `templates`
+
+## Sicherheit
+
+### CSRF (Cross-Site Request Forgery)
+
+Um unsere Anwendung durch [CSRF-Angriffe](https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery) zu schützen,
+verwenden wir `Spring Security` und Thymeleaf auf alle Anfragen (`POST`).
+
+**Beispiel:**
+
+```html
+<form th:action="@{/post-x}" method="post"> <!-- Mit th:action arbeiten -->
+    <input type="text" name="name"/>
+</form>
+```
+
+> [!NOTE]
+> Spring Security und Thymeleaf fügen **automatisch** ein *hidden* CSRF-Input ein, wenn CSRF aktiv ist.
+> Nicht nötig wäre dann sowas:
+> ```html
+> <form th:action="@{/post-x}" method="post">
+>    <!-- nicht nötig, wird automatisch erzeugt -->
+>    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+> 
+>    <input type="text" name="name"/>
+> </form>
+> ```
+
+### XSS (Cross-Site Scripting)
+
+[XSS-Angriff](https://developer.mozilla.org/de/docs/Web/Security/Attacks/XSS) ist eine weitere Möglichkeit, unsere
+Anwendung zu schaden. Wird schützen unsere Anwendung durch die Verwendung von Thymeleaf.
+
+**Beispiel:**
+
+Ein Nutzer gibt Folgendes ein:
+
+```javascript
+<script>alert('Hacked!')</script>
+```
+
+Mit `th:text`:
+```html
+<p th:text="${user.input}"></p>
+```
+
+Wird gerendert als:
+```html
+<p>&lt;script&gt;alert('Hacked!')&lt;/script&gt;</p>
+```
+
+Das eingefügte Script wird nicht ausgeführt.
+
+> [!CAUTION]
+> Verwende nie `th:utext` !
+> Warum? Mal das vorherige Beispiel, aber mit `th:utext`:
+> ```html
+> <p th:utext="${user.input}"></p>
+> ```
+> 
+> Wird gerendert als:
+> ```html
+> <p><script>alert('Hacked!')</script></p>
+> ```
+> 
+> Script wird ausgeführt, XSS-Angriff ist dann hiermit erfolgreich!
+> 
+> `th:utext` behandelt alles als `raw` statt wie `th:text`.
 
 ## Ressourcen
 
