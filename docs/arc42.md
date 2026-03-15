@@ -1,12 +1,12 @@
 # ExamByte - Architektur-Dokumentation (arc42)
 
-## Metainformationen
+## Meta-Informationen
 
 > - **Titel**: ExamByte - Architektur-Dokumentation (arc42)
 > - **Autor**: Marvin0109
 > - **Version**: 1.3
 > - **Erstellt am**: 03. Februar 2025
-> - **Aktualisiert am**: 21. Januar 2026
+> - **Aktualisiert am**: 15. März 2026
 > - **Zielgruppen**: Entwickler, Benutzer
 > - **Verwendete Werkzeuge**: PlantUML
 
@@ -17,13 +17,13 @@
 ExamByte ist eine Webanwendung zur Verwaltung und Durchführung von Prüfungen im Programmierpraktikum. 
 Sie ersetzt Ilias als System zur Zulassung für die Abschlussprüfung. Die Anwendung ermöglicht die Durchführung von Tests, 
 manuelle Bewertung von Freitextaufgaben durch Korrektor:innen und eine Ergebnisauswertung für Studierende und 
-Administrator:innen.
+[Administrator:innen](#10-glossar).
 
 ### 1.2 Qualitätsziele
 
 **Bereits umgesetzt / teilweise umgesetzt:**
 - **Benutzerfreundlich:** Die Bedienung ist größtenteils intuitiv für Studierende, Korrektor:innen und Administrator:innen; weitere Optimierungen sind noch möglich.
-- **Sicherheit:** Anmeldung erfolgt über Github OAuth zur sicheren Authentifizierung.
+- **Sicherheit:** Anmeldung erfolgt über Github [OAuth](#10-glossar) zur sicheren Authentifizierung.
 - **Automatisierung:** Multiple-Choice- und Single-Choice-Aufgaben werden automatisch bewertet.
 
 **Geplante / noch nicht vollständig umgesetzte Ziele:**
@@ -38,6 +38,8 @@ Administrator:innen.
 | Korrektor:innen     | Bewertung von Freitextaufgaben                  |
 | Administrator:innen | Testverwaltung, Ergebnisse überprüfen           |
 | Entwickler:innen    | Wartung und Weiterentwicklung                   |
+
+---
 
 ## 2. Randbedingung
 
@@ -70,6 +72,8 @@ Administrator:innen.
 
 Alles Weitere an Konventionen: [Styleguide hier](STYLEGUIDE.md)
 
+---
+
 ## 3 Kontextabgrenzung
 
 ### 3.1 Fachlicher Kontext
@@ -79,6 +83,8 @@ Alles Weitere an Konventionen: [Styleguide hier](STYLEGUIDE.md)
 *Abbildung 1: Kontextabgrenzungsdiagramm von ExamByte*
 
 Das Diagramm zeigt ExamByte im Zentrum, die externen Akteure (Studierende, Korrektor:innen, Administrator:innen) sowie externe Systeme (Github OAuth2, PostgreSQL) und deren Interaktionen.
+
+---
 
 ## 4 Lösungssicht
 
@@ -94,8 +100,10 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 
 - **Benutzermanagement:** Rollenverwaltung, Github-Login
 - **Testverwaltung:** Erstellung, Bearbeitung und Veröffentlichung von Tests
-- **Bewertungssystem:** Automatische MC-/SC-Bewertung, manuelle Freitextbewertung
+- **Bewertungssystem:** Automatische [MC-/SC](#10-glossar)-Bewertung, manuelle Korrektur von Freitextaufgaben
 - **Ergebnisanzeige:** Visualisierung der Testergebnisse für alle Beteiligten
+
+---
 
 ## 5 Bausteinsicht
 
@@ -103,14 +111,17 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 - **Service-Schicht:** Geschäftslogik und Validierung
 - **Datenbank-Schicht:** Speicherung und Abruf von Daten
 
+---
+
 ## 6 Laufzeitsicht
 
 ### 6.1 Erstellung eines Tests
 
-1. Administrator:innen (besser gesagt: Professor:innen) erstellen einen Test.
-2. Sie füllen das Testformular aus mit Fragestellungen, Antwortmöglichkeiten, Punkte, ...
-3. Sie setzen die relevanten Zeiten fest (Startzeit, Frist, Veröffentlichung der Ergebnisse).
-4. Das Exportieren eines Tests erfolgt über einer anderen Seiten.
+1. Professoren:innen setzen die Anzahl an Fragetypen fest und lassen vom Server das
+Formular generieren,
+2. Sie setzen die relevanten Zeiten fest (Startzeit, Frist, Veröffentlichung der Ergebnisse).
+3. Sie füllen das Testformular aus mit Fragestellungen, Antwortmöglichkeiten, Punkte, etc. und senden das Formular ab.
+4. Das Exportieren und Vorschau eines Tests erfolgt über einer anderen Seiten.
 
 ### 6.2 Testdurchführung
 
@@ -124,7 +135,7 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 ### 6.3 Bewertung eines Tests
 
 1. MC-/SC-Fragen werden automatisch bewertet.
-2. Freitextantworten können die Korrektoren einsehen und bewerten.
+2. Antworten für Freitextaufgaben können die Korrektoren einsehen und bewerten.
 3. Nach Bedarf kann auch der Professor:in eine neue Bewertung erstellen, dies gilt auch für Korrektoren.
 
 ### 6.4 Zulassungsstatus
@@ -132,33 +143,39 @@ Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
 Nach einer bestimmten Anzahl an Tests (12 Tests) wird der Zulassungsstatus aktualisiert und gibt bekannt, ob die 
 Zulassung erreicht wurde oder nicht.
 
+---
+
 ## 7 Verteilungssicht
 
 - **Client:** Webbrowser (führt HTML/CSS aus, stellt HTTP-Anfragen)
 - **Applikationsserver:** Spring-Boot-Anwendung (Spring MVC, Geschäftslogik, Thymeleaf-Rendering)
 - **Datenbankserver:** PostgreSQL-Datenbank
 
+---
+
 ## 8 Qualitätsszenarien
 
-| Qualitätsziel  | Szenario                                                                                                                                                          |
-|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Sicherheit     | Ein nicht authentifizierter Benutzer versucht, einen Test zu starten. Das System verweigert den Zugriff und leitet zur Login-Seite weiter.                        |
-| Skalierbarkeit | Das System ist derzeit für eine begrenzte Anzahl gleichzeitiger Nutzer ausgelegt. Hohe Lastsituationen (z. B. sehr große Kurse) stellen ein bekanntes Risiko dar. |
-| Verfügbarkeit  | Während eines laufenden Tests ist das System erreichbar und Ausfälle führen nicht zum Verlust bereits abgegebener Antworten.                                      |
+| Qualitätsziel  | Szenario                                                                                                                                                                               |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Sicherheit     | Ein nicht authentifizierter Benutzer versucht, einen Test zu starten. Das System verweigert den Zugriff und leitet zur Login-Seite weiter.                                             |
+| Skalierbarkeit | Das System ist derzeit für eine typische Anzahl gleichzeitiger Nutzer ausgelegt. Hohe Lastsituationen (z. B. sehr große Kurse bis zu 800 Studenten) stellen kein bekanntes Risiko dar. |
+| Verfügbarkeit  | Während eines laufenden Tests ist das System erreichbar und Ausfälle führen nicht zum Verlust bereits abgegebener Antworten.                                                           |
 
+---
 
 ## 9 Risiken und technische Schulden
 
 - **Mögliche Risiken:**
-  - **Überlastung der Server bei hoher Nutzerzahl**, da derzeit keine horizontale Skalierung oder Lastverteilung implementiert ist.
-  - **Sicherheit der GitHub-OAuth-Integration**, insbesondere im Umgang mit Tokens und Zugriffsbeschränkungen.
+  - **Verfügbarkeit der GitHub-OAuth-Integration**, insbesondere die Abhängigkeit von der OAuth-App 
+  (keine Anmeldung möglich bei Github-Ausfall)
+
+---
 
 ## 10 Glossar
 
 | Begriff             | Bedeutung                                                                                                                         |
 |---------------------|-----------------------------------------------------------------------------------------------------------------------------------|
 | MC                  | Multiple-Choice                                                                                                                   |
+| SC                  | Single-Choice                                                                                                                     |
 | Administrator:innen | Da es sich um eine Anwendung zwischen Studierende und Professoren handelt, ist hier der Administrator:in mit Professor:in gemeint |
 | OAuth               | Offenes Authentifizierungsprotokoll                                                                                               |
-| SC                  | Single-Choice                                                                                                                     |
-
