@@ -12,6 +12,8 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Verwaltung von Testergebnissen** für Studierende und Organisator:innen
 - **Benutzerverwaltung** mit GitHub-Authentifizierung
 
+---
+
 ## Funktionen
 
 - **Testverwaltung**: Erstellen, Vorschau und Durchführung von Tests
@@ -20,7 +22,9 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Ergebnisübersichten**: Organisator:innen haben eine Gesamtübersicht der Testergebnisse
 - **Exportfunktion**: Testergebnisse als CSV-Datei herunterladen
 
-## Installation & Nutzung
+---
+
+## Installation
 
 1. **Voraussetzungen**
     - Java 21
@@ -32,35 +36,52 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 2. **Projekt klonen mit SSH**
    ```
    $ git clone git@github.com:Marvin0109/ExamByte.git
+   ```
 
 3. **Container starten**
    ```
    $ docker compose up -d
+   ```
    
 4. **Jar File bauen und starten**
    ```
    $ ./gradlew build
    $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
+   ```
+   
+   > [!WARNING]
+   > Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
+   > Workaround:
+   > - Docker aktualisieren
+   > - Spring Boot aktualisieren
+   > - Temporär die API-Version manuell setzen (**langfristig nicht empfohlen**)
+   >   ```
+   >   $ echo api.version=1.44 >> ~/.docker-java.properties
+   >   ```
+   >   
+   >   Quellen:
+   > - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
+   > - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
    
 5. **Runterfahren (`strg+c`) und Container mit Volumes löschen**
    ```
    $ docker compose down -v
+   ```
+   
+---
+
+## Nutzung
+
+---
    
 ## Dokumentation
 
 Die ausführliche Architektur-Dokumentation finden Sie [hier](docs/arc42.md).
 
-## Troubleshooting
+---
 
-### Testcontainer-Tests funktionieren nicht
+## Mitwirkende
 
-Temporärer Workaround:
-```
-$ echo api.version=1.44 >> ~/.docker-java.properties
-```
-
-Quellen:
-
-- [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
-- [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
+- Marvin0109 - Hauptentwicklung und Wartung
+- muz70wuc - Mitentwicklung in der Anfangsphase
 
