@@ -49,7 +49,7 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
    $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
    ```
    
-   > [!WARNING]
+   > [!NOTE]
    > Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
    > Workaround:
    > - Docker aktualisieren
