@@ -22,28 +22,30 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 
 ## Installation
 
-1. **Voraussetzungen**
-    - Java 21
-    - Github-Account für Authentifizierung
-    - Docker für die Datenbank
-    - SSH Key für das Klonen des Repository
-    - Einsetzen der Credentials in `example.env`
+### Voraussetzungen
+- Java 21
+- Github-Account für Authentifizierung
+- Docker für die Datenbank
+- Einrichtung von SSH für das Klonen des Repository (optional)
+- Einsetzen der Credentials in einer `.env`-Datei (verwende hier für `.env.example`)
 
-2. **Projekt klonen mit SSH**
-   ```
-   $ git clone git@github.com:Marvin0109/ExamByte.git
-   ```
+### Projekt klonen mit SSH
+```
+$ git clone git@github.com:Marvin0109/ExamByte.git
+```
 
-3. **Container starten**
-   ```
-   $ docker compose up -d
-   ```
+### Container starten
+> [!IMPORTANT]
+> Docker Container **immer** vor der Ausführung der `.jar` starten, ansonsten wird die Anwendung nicht starten.
+```
+$ docker compose up -d
+```
    
-4. **Jar File bauen und starten**
-   ```
-   $ ./gradlew build
-   $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
-   ```
+### JAR-File bauen und starten
+```
+$ ./gradlew build
+$ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
+```
    
 > [!WARNING]
 > Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
@@ -59,22 +61,26 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 > - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
 > - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
    
-5. **Runterfahren**
-   ```
-   $ ^C (= strg+c)
-   $ docker compose down
-   ```
+### Runterfahren
+```
+$ ^C # Verwende strg+c
+$ docker compose down
+```
+
 > [!TIP]
 > Falls auch die DB-Daten gelöscht werden sollen, verwende Argument `-v`
 > ```
-> $ docker compose down -v
+> $ docker compose down -v # Volumes werden gelöscht
 > ```
 
 ## Nutzung
    
 ## Dokumentation
 
-Die ausführliche Architektur-Dokumentation finden Sie [hier](docs/arc42.md).
+- [arc42-Architekturdokumentation](docs/arc42.md)
+- [Aktivitätsprotokoll](docs/Activity_Protocol.md)
+- [TODO](docs/TO_DO.md)
+- [Styleguide](docs/STYLEGUIDE.md)
 
 ## Mitwirkende
 
