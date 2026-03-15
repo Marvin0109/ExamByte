@@ -49,23 +49,19 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
    $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
    ```
    
-   > [!NOTE]
-   > Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
-   > Workaround:
-   > - Docker aktualisieren
-   > - Spring Boot aktualisieren
-   > - Temporär die API-Version manuell setzen (**langfristig nicht empfohlen**)
-   >   ```
-   >   $ echo api.version=1.44 >> ~/.docker-java.properties
-   >   ```
-   >   
-   >   Quellen:
-   > - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
-   > - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
-   
-
-> [!WARNING]
-> Test
+> [!NOTE]
+> Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
+> Workaround:
+> - Docker aktualisieren
+> - Spring Boot aktualisieren
+> - Temporär die API-Version manuell setzen (**langfristig nicht empfohlen**)
+>   ```
+>   $ echo api.version=1.44 >> ~/.docker-java.properties
+>   ```
+>   
+>   Quellen:
+> - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
+> - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
    
 5. **Runterfahren (`strg+c`) und Container mit Volumes löschen**
    ```
