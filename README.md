@@ -12,8 +12,6 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Verwaltung von Testergebnissen** für Studierende und Organisator:innen
 - **Benutzerverwaltung** mit GitHub-Authentifizierung
 
----
-
 ## Funktionen
 
 - **Testverwaltung**: Erstellen, Vorschau und Durchführung von Tests
@@ -21,8 +19,6 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Zulassungsstatus**: Studierende sehen ihren Fortschritt und den aktuellen Zulassungsstand
 - **Ergebnisübersichten**: Organisator:innen haben eine Gesamtübersicht der Testergebnisse
 - **Exportfunktion**: Testergebnisse als CSV-Datei herunterladen
-
----
 
 ## Installation
 
@@ -49,7 +45,7 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
    $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
    ```
    
-> [!NOTE]
+> [!WARNING]
 > Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
 > Workaround:
 > - Docker aktualisieren
@@ -63,22 +59,22 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 > - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
 > - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
    
-5. **Runterfahren (`strg+c`) und Container mit Volumes löschen**
+5. **Runterfahren**
    ```
-   $ docker compose down -v
+   $ ^C (= strg+c)
+   $ docker compose down
    ```
-   
----
+> [!TIP]
+> Falls auch die DB-Daten gelöscht werden sollen, verwende Argument `-v`
+> ```
+> $ docker compose down -v
+> ```
 
 ## Nutzung
-
----
    
 ## Dokumentation
 
 Die ausführliche Architektur-Dokumentation finden Sie [hier](docs/arc42.md).
-
----
 
 ## Mitwirkende
 
