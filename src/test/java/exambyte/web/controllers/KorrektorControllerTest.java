@@ -152,7 +152,7 @@ class KorrektorControllerTest {
         mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
                 .with(csrf())
                 .param("bewertung", "Bewertung")
-                .param("punkteVergeben", "1"))
+                .param("punkteVergeben", "1.5"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
             .andExpect(flash().attribute("message", "Bewertung erfolgreich!"))
@@ -184,6 +184,20 @@ class KorrektorControllerTest {
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
             .andExpect(flash().attribute("message", "Punkte dürfen nicht negativ sein"))
+            .andExpect(flash().attribute("success", false));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"REVIEWER"})
+    @DisplayName("Erstellen einer Bewertung schlägt fehl (Ungültige Punktzahl vergeben)")
+    void createReview_05() throws Exception {
+        mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
+                .with(csrf())
+                .param("bewertung", "B")
+                .param("punkteVergeben", "0.25"))
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
+            .andExpect(flash().attribute("message", "Nur halbe Punkte erlaubt (0.5 Schritte)"))
             .andExpect(flash().attribute("success", false));
     }
 }

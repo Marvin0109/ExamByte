@@ -39,10 +39,10 @@ class AutomaticReviewServiceTest {
     @DisplayName("MC automatische Bewertung")
     void automatischeReviewMC(
             String bewertung,
-            int maxPunkte,
+            double maxPunkte,
             String studentAntwort,
             String korrekteAntwort,
-            int expectedPunkte
+            double expectedPunkte
     ) {
         // Arrange
         FrageDTO frage = new FrageDTO(
@@ -64,7 +64,7 @@ class AutomaticReviewServiceTest {
         KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
                 UUID.randomUUID(),
                 korrekteAntwort,
-                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
+                "A\nB\nC\nD\nE\nF\nG\nH",
                 frage.id()
         );
 
@@ -84,37 +84,26 @@ class AutomaticReviewServiceTest {
 
     static Stream<Arguments> mcTestCases() {
         return Stream.of(
-                Arguments.of(
-                        "Richtig",
-                        5,
-                        "Antwort 1\nAntwort 2",
-                        "Antwort 1\nAntwort 2",
-                        5
-                ),
+                Arguments.of("Alles richtig", 4.0, "A\nB\nC\nD", "A\nB\nC\nD", 4.0),
+                Arguments.of("3 richtig, 0 falsch", 4.0, "A\nB\nC", "A\nB\nC\nD", 3.0),
+                Arguments.of("3 richtig, 1 falsch", 4.0, "A\nB\nC\nE", "A\nB\nC\nD", 2.0),
+                Arguments.of("2 richtig, 0 falsch", 4.0, "A\nB", "A\nB\nC\nD", 2.0),
+                Arguments.of("2 richtig, 1 falsch", 4.0, "A\nB\nE", "A\nB\nC\nD", 1.0),
+                Arguments.of("2 richtig, 2 falsch", 4.0, "A\nB\nE\nF", "A\nB\nC\nD", 0.0),
+                Arguments.of("1 richtig, 0 falsch", 4.0, "A", "A\nB\nC\nD", 1.0),
+                Arguments.of("1 richtig, 1 falsch", 4.0, "A\nE", "A\nB\nC\nD", 0.0),
+                Arguments.of("0 richtig, 0 falsch", 4.0, "", "A\nB\nC\nD", 0.0),
+                Arguments.of("Alles falsch", 4.0, "E\nF\nG\nH", "A\nB\nC\nD", 0.0),
 
-                Arguments.of(
-                        "Falsch",
-                        5,
-                        "Antwort 1\nAntwort 2",
-                        "Antwort 3\nAntwort 4",
-                        0
-                ),
+                Arguments.of("Alles richtig", 3.5, "A\nB\nC\nD", "A\nB\nC\nD", 3.5),
+                Arguments.of("3 richtig, 0 falsch", 3.5, "A\nB\nC\nD", "A\nB\nC", 2.5),
+                Arguments.of("3 richtig, 1 falsch", 3.5, "A\nB\nC\nD", "A\nB\nC\nE", 2.0),
+                Arguments.of("2 richtig, 1 falsch", 3.5, "A\nB\nC\nD", "A\nB\nE", 0.0),
+                Arguments.of("1 richtig, 1 falsch", 3.5, "A\nB\nC\nD", "A\nE", 0.0),
+                Arguments.of("Alles falsch", 3.5, "A\nB\nC\nD", "E\nF\nG\nH", 0.0),
 
-                Arguments.of(
-                        "1 richtig, 1 falsch -> 0 Punkte",
-                        2,
-                        "Antwort 1\nAntwort 2",
-                        "Antwort 2\nAntwort 4",
-                        0
-                ),
-
-                Arguments.of(
-                        "2 richtig, 1 falsch -> 1 Punkt",
-                        3,
-                        "Antwort 2\nAntwort 3\nAntwort 4",
-                        "Antwort 2\nAntwort 4\nAntwort 5",
-                        1
-                )
+                Arguments.of("3 richtig, 1 falsch", 2.0, "A\nB\nC\nE", "A\nB\nC\nD", 1.0),
+                Arguments.of("2 richtig, 1 falsch", 2.0, "A\nB\nE", "A\nB\nC\nD", 0.5)
         );
     }
 
@@ -123,10 +112,10 @@ class AutomaticReviewServiceTest {
     @DisplayName("SC automatische Bewertung")
     void automatischeReviewSC(
             String bewertung,
-            int maxPunkte,
+            double maxPunkte,
             String studentAntwort,
             String korrekteAntwort,
-            int expectedPunkte
+            double expectedPunkte
     ) {
         // Arrange
         FrageDTO frage = new FrageDTO(
@@ -148,7 +137,7 @@ class AutomaticReviewServiceTest {
         KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
                 UUID.randomUUID(),
                 korrekteAntwort,
-                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
+                "A\nB\nC\nD",
                 frage.id()
         );
 
@@ -168,21 +157,9 @@ class AutomaticReviewServiceTest {
 
     static Stream<Arguments> scTestCases() {
         return Stream.of(
-                Arguments.of(
-                        "Alles richtig",
-                        5,
-                        "Antwort 1",
-                        "Antwort 1",
-                        5
-                ),
-
-                Arguments.of(
-                        "Alles falsch",
-                        5,
-                        "Antwort 2",
-                        "Antwort 3",
-                        0
-                )
+                Arguments.of("Richtig", 1, "A", "A", 1),
+                Arguments.of("Richtig", 0.5, "A", "A", 0.5),
+                Arguments.of("Falsch", 1, "B", "A", 0)
         );
     }
 

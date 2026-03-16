@@ -1,5 +1,6 @@
 package exambyte.web.form.create_review;
 
+import exambyte.web.form.HalfPoints;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
@@ -8,8 +9,9 @@ public class ReviewForm {
     @NotBlank(message = "Ein Bewertungstext muss vorhanden sein")
     private String bewertung;
 
+    @HalfPoints
     @Min(value = 0, message = "Punkte dürfen nicht negativ sein")
-    private int punkteVergeben;
+    private double punkteVergeben;
 
     public String getBewertung() {
         return bewertung;
@@ -19,11 +21,11 @@ public class ReviewForm {
         this.bewertung = bewertung;
     }
 
-    public int getPunkteVergeben() {
+    public double getPunkteVergeben() {
         return punkteVergeben;
     }
 
-    public void setPunkteVergeben(int punkteVergeben) {
+    public void setPunkteVergeben(double punkteVergeben) {
         this.punkteVergeben = punkteVergeben;
     }
 }

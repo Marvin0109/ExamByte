@@ -43,7 +43,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             QuestionData q = new QuestionData();
             q.setQuestionText("");
             q.setType("");
-            q.setPunkte(0);
+            q.setPunkte(0.0);
             q.setChoices("");
             q.setCorrectAnswers("");
             q.setCorrectAnswer("");
@@ -140,7 +140,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
                 throw new IllegalArgumentException("Fehlender Fragetyp im ENUM: " + q.getType(), e);
             }
 
-            int maxPunkte = q.getPunkte();
+            double maxPunkte = q.getPunkte();
 
             switch(frageTyp) {
                 case QuestionTypeWeb.FREITEXT:

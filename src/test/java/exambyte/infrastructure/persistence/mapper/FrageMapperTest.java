@@ -5,6 +5,7 @@ import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.entitymapper.FrageMapper;
 import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
 import exambyte.infrastructure.persistence.entities.FrageEntity;
+import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -21,7 +22,7 @@ class FrageMapperTest {
         UUID examId = UUID.randomUUID();
         Frage frage = new Frage.FrageBuilder()
                 .frageText("Fragetext")
-                .maxPunkte(5)
+                .maxPunkte(5.5)
                 .type(QuestionType.FREITEXT)
                 .examId(examId)
                 .build();
@@ -31,7 +32,7 @@ class FrageMapperTest {
 
         // Assert
         assertThat(entity.getFrageText()).isEqualTo("Fragetext");
-        assertThat(entity.getMaxPunkte()).isEqualTo(5);
+        assertThat(entity.getMaxPunkte()).isEqualTo(11);
         assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREITEXT);
         assertThat(entity.getExamId()).isEqualTo(examId);
     }
@@ -53,7 +54,7 @@ class FrageMapperTest {
         // Assert
         assertThat(frage.getFrageText()).isEqualTo("Fragetext");
         assertThat(frage.getType()).isEqualTo(QuestionType.FREITEXT);
-        assertThat(frage.getMaxPunkte()).isEqualTo(5);
+        assertThat(frage.getMaxPunkte()).isCloseTo(2.5, Offset.offset(0.001));
         assertThat(frage.getExamId()).isEqualTo(examId);
     }
 }

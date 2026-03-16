@@ -202,7 +202,7 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                .param("questions[0].punkte", "1")
+                .param("questions[0].punkte", "2.5")
                 .param("questions[0].type", "MC")
                 .param("questions[0].questionText", "Text")
                 .param("questions[0].choices", "Antwort1\nAntwort2")
@@ -256,7 +256,48 @@ class ProfessorControllerTest {
             )
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Fehlerhafte Eingabedaten!"))
+            .andExpect(flash().attribute("message", "Punkte müssen mehr als 0.5 sein"))
+            .andExpect(flash().attribute("success", false))
+            .andReturn();
+
+        MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
+
+        assertNotNull(session);
+        assertNotNull(session.getAttribute("questionForm"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    @DisplayName("Eine Frage bekommt 0.25 Punkte")
+    void createExam_04() throws Exception {
+
+        MvcResult result = mvc.perform(post("/professor/createExam")
+                .with(csrf())
+                .param("title", "Test")
+                .param("start", "2020-01-01T00:00")
+                .param("end", "2020-01-01T01:00")
+                .param("result", "2020-01-01T02:00")
+
+                // Fragen 1 Punkte auf 0.25 gesetzt
+                .param("questions[0].punkte", "0.25")
+                .param("questions[0].type", "MC")
+                .param("questions[0].questionText", "Text")
+                .param("questions[0].choices", "Antwort1\nAntwort2")
+                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
+
+                .param("questions[1].punkte", "1")
+                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].questionText", "Text")
+
+                .param("questions[2].punkte", "1")
+                .param("questions[2].type", "SC")
+                .param("questions[2].questionText", "Text")
+                .param("questions[2].choices", "Antwort1\nAntwort2")
+                .param("questions[2].correctAnswer", "Antwort1")
+            )
+            .andExpect(status().is3xxRedirection())
+            .andExpect(redirectedUrl("/professor/questionSettings"))
+            .andExpect(flash().attribute("message", "Punkte müssen mehr als 0.5 sein"))
             .andExpect(flash().attribute("success", false))
             .andReturn();
 
@@ -269,7 +310,7 @@ class ProfessorControllerTest {
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Ein Exam mit der selben Startzeit existiert bereits / Maximale Kapazität ist überschritten worden")
-    void createExam_04() throws Exception {
+    void createExam_05() throws Exception {
 
         when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Error Nachricht");
 

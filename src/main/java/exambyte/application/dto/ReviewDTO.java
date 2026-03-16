@@ -7,4 +7,4 @@ public record ReviewDTO (
         UUID antwortId,
         UUID korrektorId,
         String bewertung,
-        int punkte) {}
+        double punkte) {}

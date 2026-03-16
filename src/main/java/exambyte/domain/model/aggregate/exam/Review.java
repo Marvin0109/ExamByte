@@ -8,9 +8,9 @@ public class Review {
     private final UUID antwortId;
     private final UUID korrektorId;
     private final String bewertung;
-    private final int punkte;
+    private final double punkte;
 
-    private Review(UUID id, UUID antwortId, UUID korrektorId, String bewertung, int punkte) {
+    private Review(UUID id, UUID antwortId, UUID korrektorId, String bewertung, double punkte) {
         this.id = id;
         this.antwortId = antwortId;
         this.korrektorId = korrektorId;
@@ -34,7 +34,7 @@ public class Review {
         return bewertung;
     }
 
-    public int getPunkte() {
+    public double getPunkte() {
         return punkte;
     }
 
@@ -43,7 +43,7 @@ public class Review {
         private UUID antwortId;
         private UUID korrektorId;
         private String bewertung;
-        private int punkte;
+        private double punkte;
 
         public ReviewBuilder id(UUID id) {
             this.id = id;
@@ -65,7 +65,7 @@ public class Review {
             return this;
         }
 
-        public ReviewBuilder punkte(int punkte) {
+        public ReviewBuilder punkte(double punkte) {
             this.punkte = punkte;
             return this;
         }

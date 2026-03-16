@@ -16,7 +16,7 @@ public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
     @Override
     public List<ExamExportDTO> mapDTOToExport(ExamDTO exam,
                                               String profName,
-                                              int punkte,
+                                              double punkte,
                                               List<FrageDTO> fragen,
                                               List<KorrekteAntwortenDTO> loesungen) {
 

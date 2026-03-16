@@ -45,15 +45,22 @@
                 </p>
                 <p class="card-text" th:text="${antwort.antwort}">Antwort des Studenten</p>
                 <label class="form-label" th:for="'Bewertung' + ${iterStat.index}">Bewertungstext</label>
-                <textarea class="form-control mb-2" rows="6"
+                <textarea class="form-control mb-2"
+                          rows="6"
                         th:id="'Bewertung' + ${iterStat.index}"
                         th:field="*{bewertung}">
                 </textarea>
-                <small class="text-danger" th:if="${#fields.hasErrors('bewertung')}"
+                <small class="text-danger"
+                       th:if="${#fields.hasErrors('bewertung')}"
                        th:errors="*{bewertung}"></small>
                 <label th:for="'Punkte' + ${iterStat.index}">Punkte</label>
-                <input class="form-control mb-2" type="number" th:id="'Punkte' + ${iterStat.index}"
-                       th:field="*{punkteVergeben}" min="0" th:max="${antwort.maxPunkte}">
+                <input class="form-control mb-2"
+                       type="number"
+                       th:id="'Punkte' + ${iterStat.index}"
+                       th:field="*{punkteVergeben}"
+                       min="0"
+                       step="0.5"
+                       th:max="${antwort.maxPunkte}">
                 <small class="text-danger" th:if="${#fields.hasErrors('punkteVergeben')}"
                        th:errors="*{punkteVergeben}"></small>
 

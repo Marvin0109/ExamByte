@@ -16,7 +16,7 @@ public class FrageMapperImpl implements FrageMapper {
         return new Frage.FrageBuilder()
                 .id(entity.getId())
                 .frageText(entity.getFrageText())
-                .maxPunkte(entity.getMaxPunkte())
+                .maxPunkte(entity.getMaxPunkte() / 2.0)
                 .type(QuestionType.valueOf(entity.getType().name()))
                 .examId(entity.getExamId())
                 .build();
@@ -24,11 +24,12 @@ public class FrageMapperImpl implements FrageMapper {
 
     @Override
     public FrageEntity toEntity(Frage frage) {
+        int punkte = (int) Math.round(frage.getMaxPunkte() * 2.0);
 
         return new FrageEntity.FrageEntityBuilder()
                 .id(frage.getId())
                 .frageText(frage.getFrageText())
-                .maxPunkte(frage.getMaxPunkte())
+                .maxPunkte(punkte)
                 .type(QuestionTypeEntity.valueOf(frage.getType().name()))
                 .examId(frage.getExamId())
                 .build();

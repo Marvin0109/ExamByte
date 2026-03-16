@@ -17,7 +17,7 @@ class ReviewTest {
         UUID antwortId = UUID.randomUUID();
         UUID korrektorId = UUID.randomUUID();
         String bewertung = "Good work";
-        int punkte = 85;
+        double punkte = 85;
 
         Review review = new Review.ReviewBuilder()
                 .id(id)

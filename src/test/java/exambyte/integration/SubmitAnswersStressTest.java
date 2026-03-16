@@ -141,8 +141,6 @@ class SubmitAnswersStressTest {
             assertThat(students.get(i)).isNotNull();
         }
 
-
-
         // Stress tests starts here
 
         int threadCount = students.size();

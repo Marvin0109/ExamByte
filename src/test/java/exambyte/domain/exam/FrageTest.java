@@ -16,7 +16,7 @@ class FrageTest {
     void test_01() {
         UUID id = UUID.randomUUID();
         String frageText = "Test question";
-        int maxPunkte = 10;
+        double maxPunkte = 10;
         QuestionType type = QuestionType.FREITEXT;
         UUID examId = UUID.randomUUID();
 

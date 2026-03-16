@@ -11,7 +11,7 @@ public interface ExamExportDTOMapper {
 
     List<ExamExportDTO> mapDTOToExport(ExamDTO examDTO,
                                  String profName,
-                                 int punkte,
+                                 double punkte,
                                  List<FrageDTO> fragen,
                                  List<KorrekteAntwortenDTO> loesungen);
 }

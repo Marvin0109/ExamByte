@@ -8,11 +8,11 @@ public class Frage {
 
     private final UUID id;
     private final String frageText;
-    private final int maxPunkte;
+    private final double maxPunkte;
     private final QuestionType type;
     private final UUID examId;
 
-    private Frage(UUID id, String frageText, int maxPunkte, QuestionType type, UUID examId) {
+    private Frage(UUID id, String frageText, double maxPunkte, QuestionType type, UUID examId) {
         this.id = id;
         this.frageText = frageText;
         this.maxPunkte = maxPunkte;
@@ -32,7 +32,7 @@ public class Frage {
         return examId;
     }
 
-    public int getMaxPunkte() {
+    public double getMaxPunkte() {
         return maxPunkte;
     }
 
@@ -41,7 +41,7 @@ public class Frage {
     public static class FrageBuilder {
         private UUID id;
         private String frageText;
-        private int maxPunkte;
+        private double maxPunkte;
         private QuestionType type;
         private UUID examId;
 
@@ -55,7 +55,7 @@ public class Frage {
             return this;
         }
 
-        public FrageBuilder maxPunkte(int maxPunkte) {
+        public FrageBuilder maxPunkte(double maxPunkte) {
             this.maxPunkte = maxPunkte;
             return this;
         }

@@ -54,7 +54,7 @@ class CreateExamIT {
         q2.setQuestionText("Question 2");
         q3.setQuestionText("Question 3");
 
-        q1.setPunkte(1);
+        q1.setPunkte(1.5);
         q2.setPunkte(2);
         q3.setPunkte(3);
 

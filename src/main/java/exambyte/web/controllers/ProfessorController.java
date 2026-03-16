@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -147,9 +148,14 @@ public class ProfessorController {
             SessionStatus status) {
 
         if (bindingResult.hasErrors()) {
+            String message = bindingResult.getFieldErrors().stream()
+                    .findFirst()
+                    .map(FieldError::getDefaultMessage)
+                    .orElse("Fehlerhafte Eingabedaten!");
+
             return redirectWithMessage(
                     redirectAttributes,
-                    "Fehlerhafte Eingabedaten!",
+                    message,
                     false,
                     REDIRECT_QUESTION_SETTINGS);
         }
