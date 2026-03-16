@@ -172,7 +172,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void createReview(String bewertung, int punkte, UUID antwortId, UUID korrektorId) {
+    public void createReview(String bewertung, double punkte, UUID antwortId, UUID korrektorId) {
         reviewQueryService.createReview(bewertung, punkte, antwortId, korrektorId);
     }
 

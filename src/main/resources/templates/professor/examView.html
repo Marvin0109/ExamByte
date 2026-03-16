@@ -34,7 +34,8 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
-                <p class="card-text" th:text="${viewItem.frage.frageText}">Fragestellung</p>
+                <p class="card-text" th:text="'Fragestellung: ' + ${viewItem.frage.frageText}">Fragestellung</p>
+                <p th:text="'Punkte: ' + ${viewItem.frage.maxPunkte}">Punkte</p>
 
                 <!-- Multiple Choice -->
                 <div class="mb-2" th:if="${viewItem.frage.type.name == 'MC'}">

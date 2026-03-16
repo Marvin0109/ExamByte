@@ -243,7 +243,7 @@ class ExamManagementServiceTest {
         ReviewDTO review = mock(ReviewDTO.class);
 
         when(review.bewertung()).thenReturn("Test");
-        when(review.punkte()).thenReturn(1);
+        when(review.punkte()).thenReturn(1.0);
         when(review.antwortId()).thenReturn(UUID.randomUUID());
         when(review.korrektorId()).thenReturn(UUID.randomUUID());
 
@@ -267,7 +267,7 @@ class ExamManagementServiceTest {
 
         doThrow(new RuntimeException("DB error"))
                 .when(reviewQueryService)
-                .createReview(anyString(), anyInt(), any(), any());
+                .createReview(anyString(), anyDouble(), any(), any());
 
         SubmitExamResult result = examManagementService.submitExam(
                 "Max",
@@ -289,7 +289,7 @@ class ExamManagementServiceTest {
 
         // Review-Stub
         when(review.bewertung()).thenReturn("OK");
-        when(review.punkte()).thenReturn(5);
+        when(review.punkte()).thenReturn(5.0);
         when(review.antwortId()).thenReturn(UUID.randomUUID());
         when(review.korrektorId()).thenReturn(UUID.randomUUID());
 
@@ -323,10 +323,10 @@ class ExamManagementServiceTest {
         LocalDateTime resultTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         FrageDTO frage1 = mock(FrageDTO.class);
-        when(frage1.maxPunkte()).thenReturn(5);
+        when(frage1.maxPunkte()).thenReturn(5.0);
 
         FrageDTO frage2 = mock(FrageDTO.class);
-        when(frage2.maxPunkte()).thenReturn(10);
+        when(frage2.maxPunkte()).thenReturn(10.0);
 
         ExamDTO exam = mock(ExamDTO.class);
 

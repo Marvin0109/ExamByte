@@ -9,8 +9,8 @@ public class ReviewExportDTO {
     private String examTitle;
     private String author;
     private String frageText;
-    private int maxPunkte;
-    private int punkte;
+    private double maxPunkte;
+    private double punkte;
     private String frageTyp;
     private String studiAntworten;
     private String bewertung;
@@ -40,11 +40,11 @@ public class ReviewExportDTO {
         this.frageText = frageText;
     }
 
-    public int getMaxPunkte() {
+    public double getMaxPunkte() {
         return maxPunkte;
     }
 
-    public void setMaxPunkte(int maxPunkte) {
+    public void setMaxPunkte(double maxPunkte) {
         this.maxPunkte = maxPunkte;
     }
 
@@ -80,11 +80,11 @@ public class ReviewExportDTO {
         this.erreichtePunkte = erreichtePunkte;
     }
 
-    public int getPunkte() {
+    public double getPunkte() {
         return punkte;
     }
 
-    public void setPunkte(int punkte) {
+    public void setPunkte(double punkte) {
         this.punkte = punkte;
     }
 }

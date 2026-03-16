@@ -9,9 +9,9 @@ public class ExamExportDTO {
     private String examTitle;
     private String author;
     private String frageText;
-    private int maxPunkte;
+    private double maxPunkte;
     private String frageTyp;
-    private int punkte;
+    private double punkte;
     private String antwortMoeglichkeiten;
     private String loesungen;
 
@@ -39,11 +39,11 @@ public class ExamExportDTO {
         this.frageText = frageText;
     }
 
-    public int getMaxPunkte() {
+    public double getMaxPunkte() {
         return maxPunkte;
     }
 
-    public void setMaxPunkte(int maxPunkte) {
+    public void setMaxPunkte(double maxPunkte) {
         this.maxPunkte = maxPunkte;
     }
 
@@ -71,11 +71,11 @@ public class ExamExportDTO {
         this.loesungen = loesungen;
     }
 
-    public int getPunkte() {
+    public double getPunkte() {
         return punkte;
     }
 
-    public void setPunkte(int punkte) {
+    public void setPunkte(double punkte) {
         this.punkte = punkte;
     }
 }

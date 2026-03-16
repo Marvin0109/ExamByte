@@ -17,7 +17,7 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
     @Override
     public List<ReviewExportDTO> mapDTOToExport(ExamDTO exam,
                                           String reviewerName,
-                                          int maxPunkte,
+                                          double maxPunkte,
                                           List<FrageDTO> fragen,
                                           List<AntwortDTO> antworten,
                                           List<ReviewDTO> reviews) {

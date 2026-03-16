@@ -30,7 +30,7 @@ CREATE TABLE frage (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     frage_text              TEXT NOT NULL,
     exam_id                 UUID NOT NULL,
-    max_punkte              INT NOT NULL,
+    max_punkte              INT NOT NULL, -- Punkte * 2
     type                    TEXT NOT NULL,
     FOREIGN KEY(exam_id) REFERENCES exam(id) ON DELETE CASCADE
 );
@@ -51,7 +51,7 @@ CREATE TABLE review (
     antwort_id              UUID NOT NULL,
     korrektor_id            UUID,
     bewertung               TEXT NOT NULL,
-    punkte                  INT NOT NULL,
+    punkte                  INT NOT NULL, -- Punkte * 2
     FOREIGN KEY(antwort_id) REFERENCES antwort(id) ON DELETE CASCADE,
     FOREIGN KEY(korrektor_id) REFERENCES korrektor(id) ON DELETE SET NULL,
     CONSTRAINT unique_review UNIQUE (antwort_id)
@@ -83,3 +83,28 @@ CREATE TRIGGER trg_set_korrektor_uuid
 BEFORE INSERT ON korrektor
 FOR EACH ROW
 EXECUTE FUNCTION set_automatischer_korrektor_uuid();
+
+CREATE OR REPLACE FUNCTION check_max_punkte_with_punkte_vergeben()
+RETURNS TRIGGER AS $$
+DECLARE
+    max_punkte_frage INT;
+BEGIN
+
+    SELECT f.max_punkte
+    INTO max_punkte_frage
+    FROM frage f
+    JOIN antwort a ON a.frage_id = f.id
+    WHERE a.id = NEW.antwort_id;
+
+    IF NEW.punkte > max_punkte_frage THEN
+        RAISE EXCEPTION 'Zu viele Punkte vergeben';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER review_points_check
+BEFORE INSERT OR UPDATE ON review
+FOR EACH ROW
+EXECUTE FUNCTION check_max_punkte_with_punkte_vergeben();

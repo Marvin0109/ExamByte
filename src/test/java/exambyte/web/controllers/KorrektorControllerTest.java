@@ -8,6 +8,8 @@ import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.application.service.ExamControllerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
@@ -152,7 +154,7 @@ class KorrektorControllerTest {
         mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
                 .with(csrf())
                 .param("bewertung", "Bewertung")
-                .param("punkteVergeben", "1"))
+                .param("punkteVergeben", "1.5"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
             .andExpect(flash().attribute("message", "Bewertung erfolgreich!"))
@@ -173,17 +175,21 @@ class KorrektorControllerTest {
             .andExpect(flash().attribute("success", false));
     }
 
-    @Test
+    @ParameterizedTest(name = "punkteVergeben={0} -> message={1}")
+    @CsvSource({
+            "-1, Punkte dürfen nicht negativ sein",
+            "0.25, Nur halbe Punkte erlaubt (0.5 Schritte)",
+            "'', Punkte müssen angegeben werden"
+    })
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Erstellen einer Bewertung schlägt fehl (Ungültige Punktzahl vergeben)")
-    void createReview_04() throws Exception {
+    void createReview_parameterizedTest(String punkteVergeben, String expectedMessage) throws Exception {
         mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
                 .with(csrf())
                 .param("bewertung", "B")
-                .param("punkteVergeben", "-1"))
+                .param("punkteVergeben", punkteVergeben))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
-            .andExpect(flash().attribute("message", "Punkte dürfen nicht negativ sein"))
+            .andExpect(flash().attribute("message", expectedMessage))
             .andExpect(flash().attribute("success", false));
     }
 }

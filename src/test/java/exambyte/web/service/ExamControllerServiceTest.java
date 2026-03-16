@@ -121,19 +121,19 @@ class ExamControllerServiceTest {
         QuestionData q1 = new QuestionData();
         q1.setQuestionText("F1");
         q1.setType("FREITEXT");
-        q1.setPunkte(1);
+        q1.setPunkte(1.0);
 
         QuestionData q2 = new QuestionData();
         q2.setQuestionText("F2");
         q2.setType("MC");
-        q2.setPunkte(2);
+        q2.setPunkte(2.0);
         q2.setChoices("A\nB");
         q2.setCorrectAnswers("A");
 
         QuestionData q3 = new QuestionData();
         q3.setQuestionText("F3");
         q3.setType("SC");
-        q3.setPunkte(1);
+        q3.setPunkte(1.0);
         q3.setChoices("A\nB");
         q3.setCorrectAnswer("A");
 
@@ -155,7 +155,7 @@ class ExamControllerServiceTest {
         QuestionData q1 = new QuestionData();
         q1.setQuestionText("F1");
         q1.setType("OTHER_TYPE");
-        q1.setPunkte(1);
+        q1.setPunkte(1.0);
 
         ExamForm form = new ExamForm();
         form.setQuestions(List.of(q1));

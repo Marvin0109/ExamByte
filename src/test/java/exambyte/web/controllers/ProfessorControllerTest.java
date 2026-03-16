@@ -13,6 +13,8 @@ import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.show_exam.ExamViewForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -104,10 +106,8 @@ class ProfessorControllerTest {
                 .param("mcCount", "0")
                 .param("scCount", "1")
                 .param("freitextCount", "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
@@ -119,10 +119,8 @@ class ProfessorControllerTest {
                 .param("mcCount", "1")
                 .param("scCount", "1")
                 .param("freitextCount", "11"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
@@ -133,10 +131,8 @@ class ProfessorControllerTest {
                     .with(csrf())
                 .param("mcCount", "1")
                 .param("freitextCount", "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
@@ -180,10 +176,8 @@ class ProfessorControllerTest {
                 .param("mcCount", "0")
                 .param("scCount", "1")
                 .param("freitextCount", "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
 
         verify(service, never()).createExamForm(2);
     }
@@ -202,7 +196,7 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                .param("questions[0].punkte", "1")
+                .param("questions[0].punkte", "2.5")
                 .param("questions[0].type", "MC")
                 .param("questions[0].questionText", "Text")
                 .param("questions[0].choices", "Antwort1\nAntwort2")
@@ -225,11 +219,15 @@ class ProfessorControllerTest {
             .andExpect(request().sessionAttributeDoesNotExist("questionForm"));
     }
 
-    @Test
+    @ParameterizedTest(name = "Choices={0} -> Solution={1}")
+    @DisplayName("createExam() schlägt fehl bei ungültigen Antwortoptionen und Lösungen")
+    @CsvSource({
+            "'A\\nB\\nC\\nD', 'E'",
+            "'', 'A'",
+            "'A', ''"
+    })
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Eine Frage bekommt 0 Punkte")
-    void createExam_03() throws Exception {
-
+    void createExam_parameterizedTest_withMcChoices(String choices, String solution) throws Exception {
         MvcResult result = mvc.perform(post("/professor/createExam")
                 .with(csrf())
                 .param("title", "Test")
@@ -237,12 +235,11 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                // Fragen 1 Punkte auf 0 gesetzt
-                .param("questions[0].punkte", "0")
+                .param("questions[0].punkte", "2.5")
                 .param("questions[0].type", "MC")
                 .param("questions[0].questionText", "Text")
-                .param("questions[0].choices", "Antwort1\nAntwort2")
-                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
+                .param("questions[0].choices", choices != null ? choices : "")
+                .param("questions[0].correctAnswers", solution != null ? solution : "")
 
                 .param("questions[1].punkte", "1")
                 .param("questions[1].type", "FREITEXT")
@@ -254,14 +251,56 @@ class ProfessorControllerTest {
                 .param("questions[2].choices", "Antwort1\nAntwort2")
                 .param("questions[2].correctAnswer", "Antwort1")
             )
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Fehlerhafte Eingabedaten!"))
-            .andExpect(flash().attribute("success", false))
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/createExam"))
             .andReturn();
 
         MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
+        assertNotNull(session);
+        assertNotNull(session.getAttribute("questionForm"));
+    }
 
+    @ParameterizedTest(name = "Punkte={0}")
+    @DisplayName("createExam() schlägt fehl bei ungültige Angabe von Punkten")
+    @CsvSource({
+            "0",
+            "0.25",
+            "0.75",
+            "''"
+    })
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    void createExam_parameterizedTest_withPunkte(String punkte) throws Exception {
+        MvcResult result = mvc.perform(post("/professor/createExam")
+                    .with(csrf())
+                .param("title", "Test")
+                .param("start", "2020-01-01T00:00")
+                .param("end", "2020-01-01T01:00")
+                .param("result", "2020-01-01T02:00")
+
+                // erste Frage mit variablem Punktewert
+                .param("questions[0].punkte", punkte != null ? punkte : "")
+                .param("questions[0].type", "MC")
+                .param("questions[0].questionText", "Text")
+                .param("questions[0].choices", "Antwort1\nAntwort2")
+                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
+
+                // zweite Frage
+                .param("questions[1].punkte", "1")
+                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].questionText", "Text")
+
+                // dritte Frage
+                .param("questions[2].punkte", "1")
+                .param("questions[2].type", "SC")
+                .param("questions[2].questionText", "Text")
+                .param("questions[2].choices", "Antwort1\nAntwort2")
+                .param("questions[2].correctAnswer", "Antwort1")
+            )
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/createExam"))
+            .andReturn();
+
+        MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
         assertNotNull(session);
         assertNotNull(session.getAttribute("questionForm"));
     }
@@ -269,7 +308,7 @@ class ProfessorControllerTest {
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
     @DisplayName("Ein Exam mit der selben Startzeit existiert bereits / Maximale Kapazität ist überschritten worden")
-    void createExam_04() throws Exception {
+    void createExam_06() throws Exception {
 
         when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Error Nachricht");
 

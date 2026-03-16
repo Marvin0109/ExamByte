@@ -44,9 +44,9 @@ public class ExamExportServiceImpl implements ExamExportService {
         ProfessorDTO prof = professorQueryService.getProfessorById(exam.professorId());
         List<FrageDTO> fragen = frageQueryService.getFragenForExam(examId);
 
-        int punkte = fragen.stream()
-                .map(FrageDTO::maxPunkte)
-                .reduce(0, Integer::sum);
+        double punkte = fragen.stream()
+                .mapToDouble(FrageDTO::maxPunkte)
+                .sum();
 
         List<KorrekteAntwortenDTO> loesungen = new ArrayList<>();
 

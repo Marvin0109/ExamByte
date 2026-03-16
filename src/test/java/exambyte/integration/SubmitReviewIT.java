@@ -118,7 +118,7 @@ class SubmitReviewIT {
 
         ReviewForm form = new ReviewForm();
         form.setBewertung("Bewertung");
-        form.setPunkteVergeben(5);
+        form.setPunkteVergeben(5.0);
 
         examControllerService.createReview(form, antwortLoaded.get().getId(), korrektorLoaded.get().id());
 

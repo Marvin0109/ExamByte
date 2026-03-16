@@ -7,6 +7,6 @@ import java.util.UUID;
 public record FrageDTO (
         UUID id,
         String frageText,
-        int maxPunkte,
+        double maxPunkte,
         UUID examId,
         QuestionTypeDTO type) {}

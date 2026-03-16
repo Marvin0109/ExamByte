@@ -5,7 +5,7 @@ import java.util.UUID;
 public class AnswerForm {
 
     private String frageText;
-    private int maxPunkte;
+    private double maxPunkte;
     private String antwort;
     private UUID antwortId;
 
@@ -17,11 +17,11 @@ public class AnswerForm {
         this.frageText = frageText;
     }
 
-    public int getMaxPunkte() {
+    public double getMaxPunkte() {
         return maxPunkte;
     }
 
-    public void setMaxPunkte(int maxPunkte) {
+    public void setMaxPunkte(double maxPunkte) {
         this.maxPunkte = maxPunkte;
     }
 

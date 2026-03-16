@@ -241,13 +241,10 @@ public class HelperServiceImpl implements HelperService {
     @Override
     public SubmitForm fillSubmitFormWithData(OldDataForm form) {
         SubmitForm submitForm = new SubmitForm();
-
         Map<String, List<String>> answers = new HashMap<>();
-
         List<OldDataDTO> oldDataDTOList = form.components();
 
         for (OldDataDTO oldDataDTO : oldDataDTOList) {
-
             String frageId = String.valueOf(oldDataDTO.fragen().id());
             boolean answerIsPresent = oldDataDTO.antwort() != null && oldDataDTO.antwort().antwortText() != null;
 
@@ -293,7 +290,6 @@ public class HelperServiceImpl implements HelperService {
 
             if (k != null) {
                 k = normalizeKorrekteAntworten(k);
-
                 components.add(new ExamAggregateDTO(frage, k));
             } else {
                 components.add(new ExamAggregateDTO(frage, null));

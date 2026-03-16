@@ -50,9 +50,9 @@ public class ReviewExportServiceImpl implements ReviewExportService {
             antworten.add(a);
         }
 
-        int maxPunkte = fragen.stream()
-                .map(FrageDTO::maxPunkte)
-                .reduce(0, Integer::sum);
+        double maxPunkte = fragen.stream()
+                .mapToDouble(FrageDTO::maxPunkte)
+                .sum();
 
         List<ReviewDTO> reviews = new ArrayList<>();
 
