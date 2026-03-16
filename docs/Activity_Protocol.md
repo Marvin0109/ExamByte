@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 04.03.2026
+>**aktualisiert am:** 16.03.2026
 
 > [!NOTE]
 > Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
@@ -652,3 +652,30 @@
 - Vorschau von Prüfungen für Professor implementiert
 - Fragestellungen mit Trennzeilen werden jetzt richtig angezeigt
 - Extras und zugehörige Tests
+
+---
+
+### 12.03.2026
+**Bereich**: Dokumentation
+- Info Annotation in Markdown Dateien verwendet
+- Dokumentationen aktualisiert
+
+---
+
+### 15.03.2026
+**Bereich**: Dokumentation / UI
+- Die Anzeige von mehrzeiligen Fragestellungen korrigiert
+- `README` aktualisiert und Extras
+
+---
+
+### 16.03.2026
+**Bereich**: DB / Feature / Validation / UX
+- Die Anwendung verwendet konsistent `double` für die Punkteberechnung (halbe Punkte erlaubt)
+- Einsatz von Trigger für `maxPunkte >= reviewPunkte`
+- Für die DB werden die Punkte von `double` zu `int` verdoppelt
+- Eingabevalidierungen erweitert für `createExam` (`typeMismatch`, Antwortoptionen und Lösungen, ...)
+- Statt eine Umleitung bei invaliden Eingaben wird man auf das aktuelle Formular zurückverwiesen (Anzeige von
+Validierung Informationen)
+- Punkteberechnung in `AutomaticReviewService` aktualisiert
+- Nötige Tests implementiert
