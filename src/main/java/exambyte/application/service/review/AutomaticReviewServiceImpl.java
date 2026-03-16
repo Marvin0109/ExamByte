@@ -111,7 +111,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
         if (totalCorrectAnswers <= 0) return 0.0;
 
         double pointsPerCorrect = maxPunkte / totalCorrectAnswers;
-        double points = correctAnswers * pointsPerCorrect - wrongAnswers * pointsPerCorrect;
+        double points = (correctAnswers - wrongAnswers) * pointsPerCorrect;
         points = Math.max(0.0, points);
 
         // Auf 0.5 Punkte runden
