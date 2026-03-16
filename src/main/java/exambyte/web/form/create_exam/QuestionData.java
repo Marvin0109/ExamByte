@@ -1,8 +1,9 @@
 package exambyte.web.form.create_exam;
 
-import exambyte.web.form.HalfPoints;
+import exambyte.web.form.validation.HalfPoints;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
@@ -13,9 +14,10 @@ public class QuestionData {
 
     private String type;
 
+    @NotNull(message = "Punkte müssen angegeben werden")
     @HalfPoints
     @DecimalMin(value = "0.5", message = "Punkte müssen mehr als 0.5 sein")
-    private double punkte;
+    private Double punkte;
 
     private String choices;
     private String correctAnswer;
@@ -39,11 +41,11 @@ public class QuestionData {
         this.type = type;
     }
 
-    public double getPunkte() {
+    public Double getPunkte() {
         return punkte;
     }
 
-    public void setPunkte(double punkte) {
+    public void setPunkte(Double punkte) {
         this.punkte = punkte;
     }
 

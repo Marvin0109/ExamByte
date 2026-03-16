@@ -1,4 +1,4 @@
-package exambyte.web.form;
+package exambyte.web.form.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -6,10 +6,10 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 
 @Documented
-@Constraint(validatedBy = HalfPointsValidator.class)
+@Constraint(validatedBy = HalfPointsAboveZeroValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HalfPoints {
+public @interface HalfPointsAboveZero {
     String message() default "Nur halbe Punkte erlaubt (0.5 Schritte)";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
