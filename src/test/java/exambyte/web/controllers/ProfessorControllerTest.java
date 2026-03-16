@@ -27,7 +27,6 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.time.*;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -107,10 +106,8 @@ class ProfessorControllerTest {
                 .param("mcCount", "0")
                 .param("scCount", "1")
                 .param("freitextCount", "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
@@ -122,10 +119,8 @@ class ProfessorControllerTest {
                 .param("mcCount", "1")
                 .param("scCount", "1")
                 .param("freitextCount", "11"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
@@ -136,10 +131,8 @@ class ProfessorControllerTest {
                     .with(csrf())
                 .param("mcCount", "1")
                 .param("freitextCount", "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
@@ -183,10 +176,8 @@ class ProfessorControllerTest {
                 .param("mcCount", "0")
                 .param("scCount", "1")
                 .param("freitextCount", "1"))
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Invalide Eingabedaten!"))
-            .andExpect(flash().attribute("success", false));
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/questionSettings"));
 
         verify(service, never()).createExamForm(2);
     }
@@ -228,17 +219,17 @@ class ProfessorControllerTest {
             .andExpect(request().sessionAttributeDoesNotExist("questionForm"));
     }
 
-    @ParameterizedTest(name = "Punkte={0} -> message={1}")
+    @ParameterizedTest(name = "Punkte={0}")
     @CsvSource({
-            "0, Punkte müssen mehr als 0.5 sein",
-            "0.25, Punkte müssen mehr als 0.5 sein",
-            "0.75, Nur halbe Punkte erlaubt (0.5 Schritte)",
-            "'', Punkte müssen angegeben werden"
+            "0",
+            "0.25",
+            "0.75",
+            "''"
     })
     @WithMockOAuth2User(roles = {"ADMIN"})
-    void creatExam_parameterizedTest(String punkte, String expectedMessage) throws Exception {
+    void creatExam_parameterizedTest(String punkte) throws Exception {
         MvcResult result = mvc.perform(post("/professor/createExam")
-                .with(csrf())
+                    .with(csrf())
                 .param("title", "Test")
                 .param("start", "2020-01-01T00:00")
                 .param("end", "2020-01-01T01:00")
@@ -263,10 +254,8 @@ class ProfessorControllerTest {
                 .param("questions[2].choices", "Antwort1\nAntwort2")
                 .param("questions[2].correctAnswer", "Antwort1")
             )
-            .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", expectedMessage))
-            .andExpect(flash().attribute("success", false))
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/createExam"))
             .andReturn();
 
         MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);

@@ -21,7 +21,6 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -44,9 +43,9 @@ public class ProfessorController {
     private static final String LOGIN_NAME = "login";
     private static final String CURRENT_PATH = "currentPath";
     private static final String TIME_NOW = "timeNow";
-    private static final String REDIRECT_CREATE_EXAM = "redirect:/professor/createExam";
     private static final String REDIRECT_QUESTION_SETTINGS = "redirect:/professor/questionSettings";
     private static final String REDIRECT_LIST_EXAMS = "redirect:/professor/listExams";
+    private static final String QUESTION_SETTINGS = "professor/questionSettings";
 
     private final Clock clock;
 
@@ -79,21 +78,16 @@ public class ProfessorController {
             HttpServletRequest request) {
 
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        return "professor/questionSettings";
+        return QUESTION_SETTINGS;
     }
 
     @PostMapping("/generateQuestions")
     public String generateQuestions(
             @Valid @ModelAttribute("questionForm") QuestionSettings questionSettings,
-            BindingResult bindingResult,
-            RedirectAttributes redirectAttributes) {
+            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return redirectWithMessage(
-                    redirectAttributes,
-                    "Invalide Eingabedaten!",
-                    false,
-                    REDIRECT_QUESTION_SETTINGS);
+            return QUESTION_SETTINGS;
         }
 
         List<QuestionTypeWeb> typeList = service.createQuestionTypeList(
@@ -104,7 +98,7 @@ public class ProfessorController {
 
         questionSettings.setQuestionTypeList(typeList);
 
-        return REDIRECT_CREATE_EXAM;
+        return "redirect:/professor/createExam";
     }
 
     @GetMapping("/createExam")
@@ -113,15 +107,10 @@ public class ProfessorController {
             BindingResult bindingResult,
             Model model,
             OAuth2AuthenticationToken auth,
-            HttpServletRequest request,
-            RedirectAttributes redirectAttributes) {
+            HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
-            return redirectWithMessage(
-                    redirectAttributes,
-                    "Invalide Eingabedaten!",
-                    false,
-                    REDIRECT_QUESTION_SETTINGS);
+            return QUESTION_SETTINGS;
         }
 
         OAuth2User user = auth.getPrincipal();
@@ -148,16 +137,7 @@ public class ProfessorController {
             SessionStatus status) {
 
         if (bindingResult.hasErrors()) {
-            String message = bindingResult.getFieldErrors().stream()
-                    .findFirst()
-                    .map(FieldError::getDefaultMessage)
-                    .orElse("Fehlerhafte Eingabedaten!");
-
-            return redirectWithMessage(
-                    redirectAttributes,
-                    message,
-                    false,
-                    REDIRECT_QUESTION_SETTINGS);
+            return "professor/createExam";
         }
 
         String name = auth.getPrincipal().getAttribute(LOGIN_NAME);

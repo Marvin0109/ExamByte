@@ -38,17 +38,29 @@
 
         <div class="mb-3">
             <label for="MC">MC-Aufgaben (Multiple-Choice):</label>
-            <input type="number" id="MC" class="form-control" min="1" max="10" th:field="*{mcCount}" required>
+            <input type="number" id="MC" class="form-control"
+                   min="1" max="10" th:field="*{mcCount}" required>
+            <small class="text-danger d-block"
+                   th:if="${#fields.hasErrors('mcCount')}"
+                   th:errors="*{mcCount}"></small>
         </div>
 
         <div class="mb-3">
             <label for="SC">SC-Aufgaben (Single-Choice):</label>
-            <input type="number" id="SC" class="form-control" min="1" max="10" th:field="*{scCount}" required>
+            <input type="number" id="SC" class="form-control"
+                   min="1" max="10" th:field="*{scCount}" required>
+            <small class="text-danger d-block"
+                   th:if="${#fields.hasErrors('scCount')}"
+                   th:errors="*{scCount}"></small>
         </div>
 
         <div class="mb-3">
             <label for="FREITEXT">Freitextaufgaben:</label>
-            <input type="number" id="FREITEXT" class="form-control" min="1" max="10" th:field="*{freitextCount}" required>
+            <input type="number" id="FREITEXT" class="form-control"
+                   min="1" max="10" th:field="*{freitextCount}" required>
+            <small class="text-danger d-block"
+                   th:if="${#fields.hasErrors('freitextCount')}"
+                   th:errors="*{freitextCount}"></small>
         </div>
 
         <button class="btn btn-primary" type="submit">Generiere Prüfungsformular</button>
