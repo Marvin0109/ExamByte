@@ -1,12 +1,14 @@
 package exambyte.web.form.create_exam;
 
 import exambyte.web.form.validation.HalfPoints;
+import exambyte.web.form.validation.ValidQuestion;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.UUID;
 
+@ValidQuestion
 public class QuestionData {
 
     @NotBlank(message = "Fragetext darf nicht leer sein!")

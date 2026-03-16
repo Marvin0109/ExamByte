@@ -219,7 +219,49 @@ class ProfessorControllerTest {
             .andExpect(request().sessionAttributeDoesNotExist("questionForm"));
     }
 
+    @ParameterizedTest(name = "Choices={0} -> Solution={1}")
+    @DisplayName("createExam() schlägt fehl bei ungültigen Antwortoptionen und Lösungen")
+    @CsvSource({
+            "'A\\nB\\nC\\nD', 'E'",
+            "'', 'A'",
+            "'A', ''"
+    })
+    @WithMockOAuth2User(roles = {"ADMIN"})
+    void createExam_parameterizedTest_withMcChoices(String choices, String solution) throws Exception {
+        MvcResult result = mvc.perform(post("/professor/createExam")
+                .with(csrf())
+                .param("title", "Test")
+                .param("start", "2020-01-01T00:00")
+                .param("end", "2020-01-01T01:00")
+                .param("result", "2020-01-01T02:00")
+
+                .param("questions[0].punkte", "2.5")
+                .param("questions[0].type", "MC")
+                .param("questions[0].questionText", "Text")
+                .param("questions[0].choices", choices != null ? choices : "")
+                .param("questions[0].correctAnswers", solution != null ? solution : "")
+
+                .param("questions[1].punkte", "1")
+                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].questionText", "Text")
+
+                .param("questions[2].punkte", "1")
+                .param("questions[2].type", "SC")
+                .param("questions[2].questionText", "Text")
+                .param("questions[2].choices", "Antwort1\nAntwort2")
+                .param("questions[2].correctAnswer", "Antwort1")
+            )
+            .andExpect(status().isOk())
+            .andExpect(view().name("professor/createExam"))
+            .andReturn();
+
+        MockHttpSession session = (MockHttpSession) result.getRequest().getSession(false);
+        assertNotNull(session);
+        assertNotNull(session.getAttribute("questionForm"));
+    }
+
     @ParameterizedTest(name = "Punkte={0}")
+    @DisplayName("createExam() schlägt fehl bei ungültige Angabe von Punkten")
     @CsvSource({
             "0",
             "0.25",
@@ -227,7 +269,7 @@ class ProfessorControllerTest {
             "''"
     })
     @WithMockOAuth2User(roles = {"ADMIN"})
-    void creatExam_parameterizedTest(String punkte) throws Exception {
+    void createExam_parameterizedTest_withPunkte(String punkte) throws Exception {
         MvcResult result = mvc.perform(post("/professor/createExam")
                     .with(csrf())
                 .param("title", "Test")
