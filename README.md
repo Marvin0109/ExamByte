@@ -75,9 +75,15 @@ $ docker compose down
 
 ## Nutzung
 
-<video src="src/main/resources/static/public/demo/Login.mp4" width="500" autoplay muted loop></video>
+> [!NOTE]
+> Bei einigen GIF-Dateien kommt es zum Flackern aufgrund der Skalierung in Hinsicht auf Dateigröße.
+> 
+> Die GIF-Animationen zeigen die grundlegenden Features von ExamByte vom Stand 17.03.2026.
+> 
+> Weitere Feature-Demos folgen.
 
-Restliche Demos folgen ...
+<h3>Login</h3>
+<img src="src/main/resources/static/public/demo/Login.gif" width="800">
 
 ## Architektur
 
