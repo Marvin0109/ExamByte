@@ -74,7 +74,77 @@ $ docker compose down
 > ```
 
 ## Nutzung
-   
+
+## Architektur
+
+### Datenfluss und API-Calls
+```mermaid
+flowchart TD
+    n1[Controller] -->|Request| n2[Service]
+    n2 -->|Process Task| n3[Repository]
+    n3 -->|Read/Write| n4[(Database)]
+    n4 -->|Data| n3
+    n3 -->|Result| n2
+    n2 -->|Response| n1
+
+    style n1 fill:#FF914D,stroke:#000,color:#000000
+    style n2 fill:#7ED957,stroke:#000,color:#000000
+    style n3 fill:#0097B2,stroke:#000,color:#000000
+    style n4 fill:#CB6CE6,stroke:#000,color:#000000
+```
+
+### Abhängigkeiten der Layers (Onion Architektur)
+
+```mermaid
+flowchart TD
+    classDef web fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef application fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef infrastructure fill:#bfb,stroke:#333,stroke-width:2px;
+    classDef domain fill:#ffeb99,stroke:#333,stroke-width:2px;
+
+%% Layer
+    subgraph Web [Web Layer]
+        direction TB
+        Controller[Controller]:::web
+    end
+
+    subgraph Application [Application Layer]
+        direction TB
+        Service[Business Logic / Services]:::application
+    end
+
+    subgraph Infrastructure [Infrastructure Layer]
+        direction TB
+        Repository[Repository / DB Access]:::infrastructure
+    end
+
+    subgraph Domain [Domain Layer]
+        direction TB
+        Entity[Model / Core Logic]:::domain
+    end
+
+%% Flow
+    Controller
+    Service
+    Service
+    Repository
+    Repository
+    Entity
+    Controller
+    Application
+    Service["Business Logic / Services"]
+    Infrastructure
+    Repository["Repository / DB Access"]
+    Domain
+    style Controller color:#000000
+    style Service color:#000000
+    style Repository color:#000000
+    style Entity color:#000000
+    Web --- Application
+    Application --- Infrastructure
+    Infrastructure --- Domain
+```
+
 ## Dokumentation
 
 - [arc42-Architekturdokumentation](docs/arc42.md)
