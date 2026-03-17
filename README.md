@@ -75,6 +75,9 @@ $ docker compose down
 
 ## Nutzung
 
+<h3>Login</h3>
+<img src="src/main/resources/static/public/demo/Login Demo.gif" alt="Login Demo" width="600">
+
 ## Architektur
 
 ### Datenfluss und API-Calls
