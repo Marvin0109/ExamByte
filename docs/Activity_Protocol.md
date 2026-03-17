@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 16.03.2026
+>**aktualisiert am:** 17.03.2026
 
 > [!NOTE]
 > Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
@@ -679,3 +679,11 @@
 Validierung Informationen)
 - Punkteberechnung in `AutomaticReviewService` aktualisiert
 - Nötige Tests implementiert
+
+---
+
+### 17.03.2026
+**Bereich**: Dokumentation / Feature
+- Flowchart für Softwarearchitektur und API-Calls erstellt
+- Login Demo angehängt
+- Start von `feature/review-lock`-Branch
