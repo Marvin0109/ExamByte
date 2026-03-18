@@ -93,7 +93,7 @@
                 <!-- Bewertung -->
                 <div class="mt-3 p-2 bg-light border rounded" th:if="${viewItem.review != null}">
                     <strong>Bewertung:</strong>
-                    <span th:text="${viewItem.review.bewertung}">
+                    <span th:text="${viewItem.review.bewertung}" style="white-space: pre-line;">
                         Bewertungstext
                     </span>
                     <p>
