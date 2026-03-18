@@ -1,13 +1,7 @@
-//import com.github.spotbugs.snom.Confidence
-//import com.github.spotbugs.snom.Effort
-//import com.github.spotbugs.snom.SpotBugsTask
-import org.flywaydb.gradle.task.FlywayRepairTask
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.8'
 	id 'io.spring.dependency-management' version '1.1.6'
-	// id 'com.github.spotbugs' version '6.1.1' Disabled for now!
 	id 'jacoco'
 	id 'org.flywaydb.flyway' version '11.2.0'
 	id 'org.sonarqube' version "7.2.2.6593"
@@ -31,13 +25,6 @@ java {
 repositories {
 	mavenCentral()
 }
-
-//spotbugs {
-//	toolVersion = '4.9.1'
-//	ignoreFailures = false
-//	effort = Effort.DEFAULT
-//	reportLevel = Confidence.valueOf("MEDIUM")
-//}
 
 jacoco {
 	toolVersion = '0.8.12'
@@ -102,13 +89,6 @@ tasks.named('test') {
 	environment "DB_USERNAME", "test_user"
 	environment "DB_PASSWORD", "test_password"
 }
-
-//tasks.withType(SpotBugsTask).configureEach {
-//	reports {
-//		xml.required = false
-//		html.required = true
-//	}
-//}
 
 jacocoTestReport {
 	dependsOn test
