@@ -15,7 +15,14 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 > [!NOTE]
 > Die Weiterentwicklung von ExamByte endete am 18.03.2026. 
 > 
-> Gegebenenfalls werden Wartungen durchgeführt oder kleine Fixes gemacht.
+> Nach umfangreicher Entwicklungszeit wurde entschieden, die aktuelle Version als final zu betrachten und
+> keine weiteren Features oder Anpassungen mehr umzusetzen.
+> Offene oder geplante Erweiterungen werden nicht weiterverfolgt.
+>
+> Der zugehörige Entwicklungs-Branch `feature/review-lock` wurde nicht gemerged und entsprechend verworfen.
+> Der aktuelle Stand wird als abgeschlossen betrachtet.
+>
+> Finale Codeüberprüfung wird noch stattfinden, für mehr Details siehe [TODO](TO_DO.md).
 
 ## Funktionen
 
