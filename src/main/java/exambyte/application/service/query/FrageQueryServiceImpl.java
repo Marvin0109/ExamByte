@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -70,5 +71,11 @@ public class FrageQueryServiceImpl implements FrageQueryService {
         return frageService.getFragenForExam(examId).stream()
                 .map(frageDTOMapper::toDTO)
                 .collect(Collectors.toMap(FrageDTO::id, f -> f));
+    }
+
+    @Override
+    public FrageDTO getFrage(UUID frageId) {
+        Optional<Frage> frage = frageService.getFrage(frageId);
+        return frage.map(frageDTOMapper::toDTO).orElse(null);
     }
 }

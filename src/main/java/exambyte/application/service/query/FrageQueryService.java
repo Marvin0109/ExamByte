@@ -19,4 +19,6 @@ public interface FrageQueryService {
     List<FrageDTO> getFreitextFragen(UUID examId);
 
     Map<UUID, FrageDTO> getFragenUUIDMap(UUID examId);
+
+    FrageDTO getFrage(UUID frageId);
 }

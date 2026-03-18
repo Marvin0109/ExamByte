@@ -1,6 +1,7 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.FrageDTO;
 import exambyte.domain.mapper.AntwortDTOMapper;
 import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.service.AntwortService;
@@ -27,14 +28,24 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
     public boolean saveAnswers(UUID studentId, Map<String, List<String>> antworten) {
         for (Map.Entry<String, List<String>> entry : antworten.entrySet()) {
             UUID frageId = UUID.fromString(entry.getKey());
-            String antwortText = String.join("\n", entry.getValue());
-            String replaced = antwortText.replace("ĸ", ",");
+            String antwortText;
+            String replaced;
+            AntwortDTO dto;
 
             Antwort loaded = antwortService.findByStudentAndFrage(studentId, frageId);
 
             UUID antwortId = loaded != null ? loaded.getId() : null;
 
-            AntwortDTO dto = new AntwortDTO(antwortId, replaced, frageId, studentId, null);
+            FrageDTO loadedFrage = frageQueryService.getFrage(frageId);
+            if (!loadedFrage.type().name().equals("FREITEXT")) {
+                antwortText = String.join("\n", entry.getValue());
+                replaced = antwortText.replace("ĸ", ",");
+                dto = new AntwortDTO(antwortId, replaced, frageId, studentId, null);
+            } else {
+                antwortText = String.join(", ", entry.getValue());
+                dto = new AntwortDTO(antwortId, antwortText, frageId, studentId, null);
+            }
+
             antwortService.addAntwort(antwortDTOMapper.toDomain(dto));
         }
         return true;
