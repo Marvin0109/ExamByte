@@ -1,5 +1,6 @@
 package exambyte.application.service.query;
 
+import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AntwortDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.domain.mapper.AntwortDTOMapper;
@@ -48,10 +49,25 @@ class AntwortQueryServiceTest {
     @Test
     void saveAnswers_success() {
         // Arrange
+        FrageDTO frage1 = new FrageDTO(
+                FRAGE1_ID,
+                "Frage",
+                10.0,
+                null,
+                QuestionTypeDTO.MC
+        );
+
+        FrageDTO frage2 = new FrageDTO(
+                FRAGE2_ID,
+                "Frage",
+                5.0,
+                null,
+                QuestionTypeDTO.FREITEXT
+        );
 
         Map<String, List<String>> antworten = Map.of(
                 FRAGE1_ID.toString(), List.of("Antwort 1", "Antwort 2"),
-                FRAGE2_ID.toString(), List.of("Antwort A")
+                FRAGE2_ID.toString(), List.of("Antwort A, Antwort B\nAntwort C")
         );
 
         AntwortDTO dto1 = new AntwortDTO(null, "Antwort 1\nAntwort 2", FRAGE1_ID, STUDENT_ID, TIME);
@@ -61,6 +77,8 @@ class AntwortQueryServiceTest {
         when(antwortService.findByStudentAndFrage(FRAGE2_ID, STUDENT_ID)).thenReturn(null);
         when(antwortDTOMapper.toDomain(dto1)).thenReturn(mock());
         when(antwortDTOMapper.toDomain(dto2)).thenReturn(mock());
+        when(frageQueryService.getFrage(FRAGE1_ID)).thenReturn(frage1);
+        when(frageQueryService.getFrage(FRAGE2_ID)).thenReturn(frage2);
 
         // Act
         boolean result = antwortQueryService.saveAnswers(STUDENT_ID, antworten);
