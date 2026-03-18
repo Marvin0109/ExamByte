@@ -76,14 +76,20 @@ $ docker compose down
 ## Nutzung
 
 > [!NOTE]
-> Bei einigen GIF-Dateien kommt es zum Flackern aufgrund der Skalierung in Hinsicht auf Dateigröße.
 > 
-> Die GIF-Animationen zeigen die grundlegenden Features von ExamByte vom Stand 17.03.2026.
-> 
-> Weitere Feature-Demos folgen.
+> Die Screenshots zeigen die grundlegenden Features von ExamByte vom Stand 17.03.2026.
 
-<h3>Login</h3>
-<img src="src/main/resources/static/public/demo/Login.gif" width="800">
+### Prüfung erstellen
+
+![Prüfung erstellen Teil 1](src/main/resources/static/public/demo/createExam_1.png)
+![Prüfung erstellen Teil 2](src/main/resources/static/public/demo/createExam_2.png)
+
+### Prüfung bearbeiten
+
+
+### Prüfung korrigieren
+
+
 
 ## Architektur
 

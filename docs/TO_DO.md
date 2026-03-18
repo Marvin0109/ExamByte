@@ -21,6 +21,8 @@
 13. [X] Vorschau von Prüfung für Professor
 14. [ ] Sicherstellung von Codekonventionen und Clean Up
 
+---
+
 > [!NOTE]
 > Mit dem Abschluss der Anwendung sind diese unten genannten Features Ideen, die man umsetzen könnte, aber nicht
 > obligatorisch für die erste funktionierende Version von ExamByte.
