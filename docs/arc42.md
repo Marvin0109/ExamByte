@@ -6,7 +6,7 @@
 > - **Autor**: Marvin0109
 > - **Version**: 1.3
 > - **Erstellt am**: 03. Februar 2025
-> - **Aktualisiert am**: 15. März 2026
+> - **Aktualisiert am**: 18. März 2026
 > - **Zielgruppen**: Entwickler, Benutzer
 > - **Verwendete Werkzeuge**: PlantUML
 
@@ -61,7 +61,6 @@ manuelle Bewertung von Freitextaufgaben durch Korrektor:innen und eine Ergebnisa
 | Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](Activity_Protocol.md) gesammelt worden. Erstellung von Java-Quellcode in IntelliJ Ultimate.                                                                                                                       |
 | Versionsverwaltung               | Git, Github                                                                                                                                                                                                                                                                                                                                      |
 | Testwerkzeuge und -prozesse      | JUnit, ArchUnit, Integrationstests, WebMvcTests und Testcontainer für Datenbanktests.                                                                                                                                                                                                                                                            |
-| Veröffentlichung als Open Source | N/A                                                                                                                                                                                                                                                                                                                                              |
 
 ### 2.3 Konventionen
 
@@ -168,6 +167,7 @@ Zulassung erreicht wurde oder nicht.
 - **Mögliche Risiken:**
   - **Verfügbarkeit der GitHub-OAuth-Integration**, insbesondere die Abhängigkeit von der OAuth-App 
   (keine Anmeldung möglich bei Github-Ausfall)
+  - **Gleichzeitige Korrektur von einer Aufgabe**, race condition möglich.
 
 ---
 

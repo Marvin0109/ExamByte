@@ -1,7 +1,7 @@
 # Todo für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 12.03.2026
+> **aktualisiert am:** 18.03.2026
 
 > [!IMPORTANT]
 > Die Tasks sollen in der gegebenen Reihenfolge bearbeitet werden wie sie aufgelistet sind.
@@ -19,12 +19,15 @@
 11. [X] CSV-Export einführen
 12. [X] Datenbankoptimierung und Stresstests
 13. [X] Vorschau von Prüfung für Professor
-14. [ ] Erstellen von Review überarbeiten
+14. [ ] Sicherstellung von Codekonventionen und Clean Up
+
+> [!NOTE]
+> Mit dem Abschluss der Anwendung sind diese unten genannten Features Ideen, die man umsetzen könnte, aber nicht
+> obligatorisch für die erste funktionierende Version von ExamByte.
+1. [ ] Erstellen von Review überarbeiten
     1. [ ] Nur ein Nutzer darf eine Antwort korrigieren (Zugriff wird verweigert für alle anderen)
     2. [ ] Erstellung von Reviews Thread-sicher machen
     3. [ ] Lasttests
-15. [ ] Bewertung von Antworten als Professor
-16. [ ] Zulassungsübersicht für Professoren
-17. [ ] Automatisches speichern und Zwischenspeichern von Antworten
-18. [ ] Ausreichendes manuelles Testen der Anwendung
-19. [ ] Sicherstellung von Codekonventionen und Clean Up
+2. [ ] Bewertung von Antworten als Professor
+3. [ ] Zulassungsübersicht für Professoren
+4. [ ] Automatisches speichern und Zwischenspeichern von Antworten
