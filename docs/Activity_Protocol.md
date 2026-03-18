@@ -1,10 +1,16 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 17.03.2026
+>**aktualisiert am:** 18.03.2026
 
 > [!NOTE]
 > Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
+> 
+> **UPDATE**:
+> 
+> Seit dem 18.03.26 wird die Weiterentwicklung von ExamByte eingestellt. Das nächste Update wäre die Vereinheitlichung
+> der Sprache vom Quellcode auf Englisch sowie die Überprüfung der restlichen Codekonventionen 
+> gemäß [Styleguide](STYLEGUIDE.md).
 
 ## Aktivitätsprotokoll
 
@@ -687,3 +693,12 @@ Validierung Informationen)
 - Flowchart für Softwarearchitektur und API-Calls erstellt
 - Login Demo angehängt
 - Start von `feature/review-lock`-Branch
+
+---
+
+### 18.03.2026
+**Bereich:** Dokumentation / UI / Entwicklungsabschluss
+- Paar UI-Fixes (korrekte Anzeige von mehrzeiligen Sätzen)
+- Implementierung von `feature/review-lock` verworfen (Branch wird nicht gemerged und wurde gelöscht) → nicht
+obligatorisch für die Grundfunktion von ExamByte in seiner ersten vollständigen Version
+- Dokumentationen aktualisiert, Screenshots angehängt als visuelle Demonstration von Grundfunktionen

@@ -12,6 +12,11 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Verwaltung von Testergebnissen** für Studierende und Organisator:innen
 - **Benutzerverwaltung** mit GitHub-Authentifizierung
 
+> [!NOTE]
+> Die Weiterentwicklung von ExamByte endete am 18.03.2026. 
+> 
+> Gegebenenfalls werden Wartungen durchgeführt oder kleine Fixes gemacht.
+
 ## Funktionen
 
 - **Testverwaltung**: Erstellen, Vorschau und Durchführung von Tests
@@ -77,19 +82,24 @@ $ docker compose down
 
 > [!NOTE]
 > 
-> Die Screenshots zeigen die grundlegenden Features von ExamByte vom Stand 17.03.2026.
-
+> Die Screenshots zeigen die grundlegenden Features von ExamByte vom Stand 18.03.2026.
+> 
+> Weitere Screenshots sind [hier](src/main/resources/static/public/demo).
 ### Prüfung erstellen
 
-![Prüfung erstellen Teil 1](src/main/resources/static/public/demo/createExam_1.png)
-![Prüfung erstellen Teil 2](src/main/resources/static/public/demo/createExam_2.png)
+![Prüfung erstellen](src/main/resources/static/public/demo/createExam_1.png)
 
 ### Prüfung bearbeiten
 
+![Prüfung bearbeiten](src/main/resources/static/public/demo/submitExam.png)
 
 ### Prüfung korrigieren
 
+![Korrektur einer Studenten Antwort](src/main/resources/static/public/demo/review.png)
 
+### Ergebnis
+
+![Ergebnisanzeige](src/main/resources/static/public/demo/showReview.png)
 
 ## Architektur
 

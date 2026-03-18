@@ -2,7 +2,7 @@
 
 >**Autor**: Marvin0109,
 >**erstellt am**: 08.01.2025,
->**aktualisiert am**: 12.03.2026
+>**aktualisiert am**: 18.03.2026
 
 > [!NOTE]
 > Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
@@ -173,7 +173,7 @@ siehe [hier.](#datenbank)
    ```
    git commit -m "[BugFix]: Fix login button issue. Closes #1"
 
-### Testing
+### Testing und Qualitätssicherung
 - Wir verwenden **JUnit**, **Mockito**, **ArchUnit** und **Testcontainers**.
 
 ### Namenskonventionen für Tests
@@ -198,11 +198,17 @@ mehr ausreicht.
 ### Codeabdeckung
 - **> 90 %** Abdeckung bei *Instructions* (Code wurde mind. einmal in einem Test durchlaufen)
 - **> 80 %** Abdeckung bei *Branches* (Randfälle, Logik, Exceptions, ...)
+- So soll ein guter [JacocoTestReport](#jacocotestreport) aussehen
 
 > [!TIP]
 > Führen sie alle Tests vorher aus, damit die Testabdeckung auf dem neuesten Stand ist. 
 > Unter `build/jacocoHtml/index.html` ist die Testabdeckung zu finden.
 
+### SonarQube
+- Verwende SonarQube für automatischen Code-Review in Hinblick auf Code Smells, Bugs, Vulnerabilities usw.
+- Um einen bestandenen Gesamtstatus zu erreichen, sind sämtliche Hinweise 
+von Sonar zu berücksichtigen und die Testabdeckung in einem guten Bereich zu halten.
+- Siehe aktuelle [Sonar Übersicht](#sonarqube-übersicht)
 ## Tools
 
 ### Versionskontrolle
@@ -429,6 +435,16 @@ Das eingefügte Script wird nicht ausgeführt.
 > 
 > `th:utext` behandelt alles als `raw` statt wie `th:text`.
 
+## Quality Assurance
+
+## JacocoTestReport
+
+![JacocoTestReport](/src/main/resources/static/public/pictures/quality_assurance/JacocoTest_Report-18-03-2026.png)
+
+## SonarQube Übersicht
+
+![SonarQube Overview](/src/main/resources/static/public/pictures/quality_assurance/sonarOverview.png)
+
 ## Ressourcen
 
 ### Bilder, GIFS, Videos, usw.
@@ -444,56 +460,56 @@ Das eingefügte Script wird nicht ausgeführt.
 ### Codelines Statistik
 
 Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
-Hier die Statistik vom 08.02.2026 (`JSON`, `YAML` `CSS` usw. wegen *FontAwesome* und *Bootstrap*):
+Hier die Statistik vom 18.03.2026 (`JSON`, `YAML` `CSS` usw. wegen *FontAwesome* und *Bootstrap*):
 ```
 $ cloc .
 
-github.com/AlDanial/cloc v 1.98  T=3.91 s (1298.9 files/s, 132165.1 lines/s)
+github.com/AlDanial/cloc v 1.98  T=3.28 s (1559.5 files/s, 157817.1 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 JSON                             3              0              0         225011
 YAML                             8              9              0         113720
-CSS                             42           9296            266          60372
+CSS                             42           9297            266          60375
 JavaScript                      23           1620           2779          30956
-HTML                           424           1724            117          20969
+HTML                           444           1657            121          20769
 SVG                           4180              0             30          16726
-Java                           267           3356            625          12525
+Java                           279           3462            642          13014
 SCSS                            20             98             85           7718
-XML                             96             27              0           7023
-Markdown                         6            317              2           1083
+XML                            100             25              0           7227
+Markdown                         6            386              7           1323
 Text                             4             61              0            158
-SQL                              2             14              0            112
+SQL                              2             23              0            132
 Bourne Shell                     1             28            118            105
 Maven                            1              9              9             88
-Gradle                           2             22             25             79
+Gradle                           2             23             25             84
 DOS Batch                        1             21              2             71
 PlantUML                         2              5              1             20
-Properties                       3              0              1             11
+Properties                       4              0              1             12
 -------------------------------------------------------------------------------
-SUM:                          5085          16607           4060         496747
+SUM:                          5122          16724           4086         497509
 -------------------------------------------------------------------------------
 
 $ cloc src/main/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.08 s (2413.0 files/s, 101996.9 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.09 s (2151.7 files/s, 89464.7 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           185           1708            304           5808
+Java                           195           1746            301           6061
 -------------------------------------------------------------------------------
-SUM:                           185           1708            304           5808
+SUM:                           195           1746            301           6061
 -------------------------------------------------------------------------------
 
 $ cloc src/test/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.05 s (1501.4 files/s, 159037.7 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.06 s (1341.4 files/s, 143876.8 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            82           1648            321           6717
+Java                            84           1716            341           6953
 -------------------------------------------------------------------------------
-SUM:                            82           1648            321           6717
+SUM:                            84           1716            341           6953
 -------------------------------------------------------------------------------
 ```
 
@@ -600,11 +616,9 @@ Fast-forward
  create mode 100644 src/test/java/exambyte/application/service/usecase/ScoringServiceTest.java
 ```
 
-## JacocoTestReport
-
-![JacocoTestReport](/src/main/resources/static/public/pictures/JacocoTest_Report-16-02-2026.jpg)
-
 ## Schlussbemerkung
-- Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeiteten schließlich nur noch ich als alleiniger Entwickler weiter.
+- Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeiteten 
+schließlich nur noch ich als alleiniger Entwickler weiter.
 - Vielen Dank an alle ursprünglichen Teammitglieder für ihre Unterstützung und Beiträge.
-- Die Weiterentwicklung des Projekts wird derzeit von mir allein durchgeführt. Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich fortzuführen.
+- Die Weiterentwicklung des Projekts wird derzeit von mir allein durchgeführt. 
+Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich abzuschließen.
