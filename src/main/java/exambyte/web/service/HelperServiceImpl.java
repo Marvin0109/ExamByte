@@ -166,7 +166,7 @@ public class HelperServiceImpl implements HelperService {
 
         List<FrageDTO> fragen = service.getFragenForExam(examId);
         List<ReviewAggregateDTO> componentList = new ArrayList<>();
-        List<UUID> korrektoren = new ArrayList<>();
+        List<UUID> reviewers = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
             PreparedFrageData preparedFrageData = prepareFrageData(frage, studentId);
@@ -176,7 +176,7 @@ public class HelperServiceImpl implements HelperService {
 
             if (antwort != null) {
                 ReviewDTO review = service.getReviewForAntwort(antwort.id());
-                if (review != null) korrektoren.add(review.korrektorId());
+                if (review != null) reviewers.add(review.reviewerId());
                 componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
             } else {
                 AntwortDTO emptyAntwort = new AntwortDTO(
@@ -199,16 +199,16 @@ public class HelperServiceImpl implements HelperService {
             }
         }
 
-        String korrektorNames = korrektoren.stream()
+        String reviewerNames = reviewers.stream()
                 .map(service::getReviewerById)
-                .map(KorrektorDTO::name)
-                .filter(name -> !name.equals("Automatischer Korrektor"))
+                .map(ReviewerDTO::name)
+                .filter(name -> !name.equals("Automatischer Reviewer"))
                 .distinct()
                 .collect(Collectors.joining(", "));
 
         return new ReviewViewForm(
                 exam.title(),
-                korrektorNames,
+                reviewerNames,
                 versuch.erreichtePunkte(),
                 versuch.maxPunkte(),
                 componentList);

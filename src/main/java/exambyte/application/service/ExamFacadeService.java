@@ -57,7 +57,7 @@ public interface ExamFacadeService {
 
     boolean antwortHasReview(AntwortDTO antwort);
 
-    void createReview(String bewertung, double punkte, UUID antwortId, UUID korrektorId);
+    void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId);
 
     UUID getReviewerByName(String name);
 
@@ -71,7 +71,7 @@ public interface ExamFacadeService {
 
     boolean timeReachedToViewReview(UUID examId);
 
-    KorrektorDTO getReviewerById(UUID reviewerId);
+    ReviewerDTO getReviewerById(UUID reviewerId);
 
     List<ExamExportDTO> getExamExportDTOs(UUID examId);
 

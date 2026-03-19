@@ -15,7 +15,7 @@ class ReviewMapperTest {
     private final ReviewMapper reviewMapper = new ReviewMapperImpl();
     private static final UUID REVIEW_ID = UUID.randomUUID();
     private static final UUID ANTWORT_ID = UUID.randomUUID();
-    private static final UUID KORREKTOR_ID = UUID.randomUUID();
+    private static final UUID REVIEWER_ID = UUID.randomUUID();
 
     @Test
     void toEntity() {
@@ -23,7 +23,7 @@ class ReviewMapperTest {
         Review review = new Review.ReviewBuilder()
                 .id(REVIEW_ID)
                 .antwortId(ANTWORT_ID)
-                .korrektorId(KORREKTOR_ID)
+                .reviewerId(REVIEWER_ID)
                 .bewertung("Bewertung")
                 .punkte(0.5)
                 .build();
@@ -34,7 +34,7 @@ class ReviewMapperTest {
         // Assert
         assertThat(result.getId()).isEqualTo(REVIEW_ID);
         assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
-        assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
         assertThat(result.getBewertung()).isEqualTo("Bewertung");
         assertThat(result.getPunkte()).isEqualTo(1);
     }
@@ -45,7 +45,7 @@ class ReviewMapperTest {
         ReviewEntity entity = new ReviewEntity.ReviewEntityBuilder()
                 .id(REVIEW_ID)
                 .antwortId(ANTWORT_ID)
-                .korrektorId(KORREKTOR_ID)
+                .reviewerId(REVIEWER_ID)
                 .bewertung("Bewertung")
                 .punkte(13)
                 .build();
@@ -56,7 +56,7 @@ class ReviewMapperTest {
         // Assert
         assertThat(result.getId()).isEqualTo(REVIEW_ID);
         assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
-        assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
         assertThat(result.getBewertung()).isEqualTo("Bewertung");
         assertThat(result.getPunkte()).isCloseTo(6.5, Offset.offset(0.001));
     }

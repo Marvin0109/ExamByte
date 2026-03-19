@@ -245,7 +245,7 @@ class ExamManagementServiceTest {
         when(review.bewertung()).thenReturn("Test");
         when(review.punkte()).thenReturn(1.0);
         when(review.antwortId()).thenReturn(UUID.randomUUID());
-        when(review.korrektorId()).thenReturn(UUID.randomUUID());
+        when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
@@ -291,7 +291,7 @@ class ExamManagementServiceTest {
         when(review.bewertung()).thenReturn("OK");
         when(review.punkte()).thenReturn(5.0);
         when(review.antwortId()).thenReturn(UUID.randomUUID());
-        when(review.korrektorId()).thenReturn(UUID.randomUUID());
+        when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
 
@@ -312,7 +312,7 @@ class ExamManagementServiceTest {
                 review.bewertung(),
                 review.punkte(),
                 review.antwortId(),
-                review.korrektorId()
+                review.reviewerId()
         );
     }
 

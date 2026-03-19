@@ -8,7 +8,7 @@ import java.util.Set;
 public interface UserCreationService {
     boolean checkStudent(String username);
 
-    boolean checkKorrektor(String username);
+    boolean checkReviewer(String username);
 
     boolean checkProfessor(String username);
 

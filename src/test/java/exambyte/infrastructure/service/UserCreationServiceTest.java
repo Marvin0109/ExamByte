@@ -1,10 +1,10 @@
 package exambyte.infrastructure.service;
 
 import exambyte.application.service.UserCreationService;
-import exambyte.domain.model.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Student;
-import exambyte.domain.service.KorrektorService;
+import exambyte.domain.service.ReviewerService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,17 +24,17 @@ import static org.mockito.Mockito.*;
 class UserCreationServiceTest {
 
     private StudentService studentService;
-    private KorrektorService korrektorService;
+    private ReviewerService reviewerService;
     private ProfessorService professorService;
     private UserCreationService userCreationService;
 
     @BeforeEach
     void setUp() {
         studentService = mock(StudentServiceImpl.class);
-        korrektorService = mock(KorrektorServiceImpl.class);
+        reviewerService = mock(ReviewerServiceImpl.class);
         professorService = mock(ProfessorServiceImpl.class);
         userCreationService = new UserCreationServiceImpl(studentService,
-                                                      korrektorService,
+                                                      reviewerService,
                                                       professorService);
     }
 
@@ -71,32 +71,32 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Korrektor wurde gefunden")
+    @DisplayName("Ein geladener Reviewer wurde gefunden")
     void test_03() {
         // Arrange
-        String username = "korrektor123";
-        Korrektor korrektor = new Korrektor.KorrektorBuilder()
+        String username = "reviewer123";
+        Reviewer reviewer = new Reviewer.ReviewerBuilder()
                 .id(null)
                 .name(username)
                 .build();
-        when(korrektorService.getKorrektorByName(username)).thenReturn(Optional.of(korrektor));
+        when(reviewerService.getReviewerByName(username)).thenReturn(Optional.of(reviewer));
 
         // Act
-        boolean result = userCreationService.checkKorrektor(username);
+        boolean result = userCreationService.checkReviewer(username);
 
         // Assert
         assertTrue(result);
     }
 
     @Test
-    @DisplayName("Ein geladener Korrektor wurde nicht gefunden")
+    @DisplayName("Ein geladener Reviewer wurde nicht gefunden")
     void test_04() {
         // Arrange
-        String username = "korrektor123";
-        when(korrektorService.getKorrektorByName(username)).thenReturn(Optional.empty());
+        String username = "reviewer123";
+        when(reviewerService.getReviewerByName(username)).thenReturn(Optional.empty());
 
         // Act
-        boolean result = userCreationService.checkKorrektor(username);
+        boolean result = userCreationService.checkReviewer(username);
 
         // Assert
         assertFalse(result);
@@ -163,7 +163,7 @@ class UserCreationServiceTest {
         userCreationService.createUser(mockOauth2User, authorities);
 
         // Assert
-        verify(korrektorService).saveKorrektor(login);
+        verify(reviewerService).saveReviewer(login);
     }
 
     @Test

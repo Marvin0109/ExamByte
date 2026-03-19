@@ -1,14 +1,14 @@
 package exambyte.application.service.query;
 
-import exambyte.application.dto.KorrektorDTO;
+import exambyte.application.dto.ReviewerDTO;
 
 import java.util.UUID;
 
-public interface KorrektorQueryService {
+public interface ReviewerQueryService {
 
     void saveAutomaticReviewer();
 
     UUID getReviewerIdByName(String name);
 
-    KorrektorDTO getReviewerById(UUID reviewerId);
+    ReviewerDTO getReviewerById(UUID reviewerId);
 }

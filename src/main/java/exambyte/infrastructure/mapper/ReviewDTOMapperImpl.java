@@ -15,7 +15,7 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
         return new ReviewDTO(
                 review.getId(),
                 review.getAntwortId(),
-                review.getKorrektorId(),
+                review.getReviewerId(),
                 review.getBewertung(),
                 review.getPunkte());
     }
@@ -32,7 +32,7 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
         return new Review.ReviewBuilder()
                 .id(dto.id())
                 .antwortId(dto.antwortId())
-                .korrektorId(dto.korrektorId())
+                .reviewerId(dto.reviewerId())
                 .bewertung(dto.bewertung())
                 .punkte(dto.punkte())
                 .build();

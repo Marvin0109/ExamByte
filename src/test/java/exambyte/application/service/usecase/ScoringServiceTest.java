@@ -88,14 +88,14 @@ class ScoringServiceTest {
                 ANTWORT_TIME);
 
         review1 = new Review.ReviewBuilder()
-                .korrektorId(UUID.randomUUID())
+                .reviewerId(UUID.randomUUID())
                 .bewertung("Bewertung")
                 .punkte(5)
                 .antwortId(ANTWORT_1_ID)
                 .build();
 
         review2 = new Review.ReviewBuilder()
-                .korrektorId(AUTOMATIC_REVIEWER)
+                .reviewerId(AUTOMATIC_REVIEWER)
                 .bewertung("Bewertung")
                 .punkte(3)
                 .antwortId(ANTWORT_2_ID)

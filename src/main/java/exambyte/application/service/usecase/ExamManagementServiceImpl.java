@@ -143,7 +143,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 reviewDTO.bewertung(),
                 reviewDTO.punkte(),
                 reviewDTO.antwortId(),
-                reviewDTO.korrektorId()
+                reviewDTO.reviewerId()
         );
     }
 

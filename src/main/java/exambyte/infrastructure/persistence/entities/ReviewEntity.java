@@ -15,8 +15,8 @@ public class ReviewEntity {
     @Column("antwort_id")
     private final UUID antwortId;
 
-    @Column("korrektor_id")
-    private final UUID korrektorId;
+    @Column("reviewer_id")
+    private final UUID reviewerId;
 
     @Column("bewertung")
     private String bewertung;
@@ -24,12 +24,12 @@ public class ReviewEntity {
     @Column("punkte")
     private int punkte;
 
-    private ReviewEntity(UUID id, UUID antwortId, UUID korrektorId, String bewertung, int punkte) {
+    private ReviewEntity(UUID id, UUID antwortId, UUID reviewerId, String bewertung, int punkte) {
         this.id = id;
         this.bewertung = bewertung;
         this.punkte = punkte;
         this.antwortId = antwortId;
-        this.korrektorId = korrektorId;
+        this.reviewerId = reviewerId;
     }
 
     public UUID getId() {
@@ -40,8 +40,8 @@ public class ReviewEntity {
         return antwortId;
     }
 
-    public UUID getKorrektorId() {
-        return korrektorId;
+    public UUID getReviewerId() {
+        return reviewerId;
     }
 
     public String getBewertung() {
@@ -65,7 +65,7 @@ public class ReviewEntity {
         private String bewertung;
         private int punkte;
         private UUID antwortId;
-        private UUID korrektorId;
+        private UUID reviewerId;
 
         public ReviewEntityBuilder id(UUID id) {
             this.id = id;
@@ -87,21 +87,21 @@ public class ReviewEntity {
             return this;
         }
 
-        public ReviewEntityBuilder korrektorId(UUID korrektorId) {
-            this.korrektorId = korrektorId;
+        public ReviewEntityBuilder reviewerId(UUID reviewerId) {
+            this.reviewerId = reviewerId;
             return this;
         }
 
         public ReviewEntity build() {
             checkID(antwortId, "Antwort-ID fehlt");
-            checkID(korrektorId, "Korrektor-ID fehlt");
+            checkID(reviewerId, "Reviewer-ID fehlt");
             if (bewertung == null || bewertung.isBlank()) {
                 throw new IllegalStateException("Bewertung fehlt");
             }
             if (punkte < 0) {
                 throw new IllegalStateException("Punkte dürfen nicht negativ sein");
             }
-            return new ReviewEntity(id, antwortId, korrektorId, bewertung, punkte);
+            return new ReviewEntity(id, antwortId, reviewerId, bewertung, punkte);
         }
 
         private static void checkID(UUID id, String message) {

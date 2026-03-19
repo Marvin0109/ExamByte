@@ -6,8 +6,8 @@ import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
-import exambyte.domain.model.aggregate.user.Korrektor;
 import exambyte.domain.model.aggregate.user.Professor;
+import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.*;
@@ -37,7 +37,7 @@ class SubmitAnswersStressTest {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private KorrektorRepository korrektorRepository;
+    private ReviewerRepository reviewerRepository;
 
     @Autowired
     private ExamRepository examRepository;
@@ -67,8 +67,8 @@ class SubmitAnswersStressTest {
     @BeforeEach
     void setUp() {
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
-        korrektorRepository.save(new Korrektor.KorrektorBuilder()
-                .name("Automatischer Korrektor")
+        reviewerRepository.save(new Reviewer.ReviewerBuilder()
+                .name("Automatischer Reviewer")
                 .build());
 
         Optional<UUID> profId = examControllerService.getProfIdByName("Professor");
@@ -128,7 +128,7 @@ class SubmitAnswersStressTest {
     void tearDown() {
         studentRepository.deleteAll();
         professorRepository.deleteAll();
-        korrektorRepository.deleteAll();
+        reviewerRepository.deleteAll();
     }
 
     @Test

@@ -69,7 +69,7 @@ public interface ExamControllerService {
 
     List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map);
 
-    void createReview(ReviewForm reviewForm, UUID antwortId, UUID korrektorId);
+    void createReview(ReviewForm reviewForm, UUID antwortId, UUID reviewerId);
 
     UUID getReviewerByName(String name);
 

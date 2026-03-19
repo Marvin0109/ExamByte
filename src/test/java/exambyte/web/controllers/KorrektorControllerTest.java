@@ -29,9 +29,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(KorrektorController.class)
+@WebMvcTest(ReviewerController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-class KorrektorControllerTest {
+class ReviewerControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -45,7 +45,7 @@ class KorrektorControllerTest {
     @Test
     @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
     void listExamsForReviewer_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/korrektor/examListForReviewer"))
+        MvcResult mvcResult = mvc.perform(get("/reviewer/examListForReviewer"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -57,19 +57,19 @@ class KorrektorControllerTest {
     @DisplayName("Die Seite zur gesamten Korrekturübersicht ist erfolgreich")
     void listExamsForReviewer_02() throws Exception {
 
-        mvc.perform(get("/korrektor/examListForReviewer"))
+        mvc.perform(get("/reviewer/examListForReviewer"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("reviewCoverage"))
             .andExpect(model().attributeExists("currentPath"))
             .andExpect(model().attributeExists("timeNow"))
-            .andExpect(view().name("korrektor/examListForReviewer"));
+            .andExpect(view().name("reviewer/examListForReviewer"));
     }
 
     @Test
     @DisplayName("Seite zur Korrekturübersicht eines bestimmten Exams ist nicht erreichbar ohne Authentifizierung")
     void showExamSubmits_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/korrektor/showExamSubmits/{examId}", UUID.randomUUID()))
+        MvcResult mvcResult = mvc.perform(get("/reviewer/showExamSubmits/{examId}", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
         assertThat(mvcResult.getResponse().getRedirectedUrl())
@@ -88,11 +88,11 @@ class KorrektorControllerTest {
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
 
-        mvc.perform(get("/korrektor/showExamSubmits/{examId}", examId))
+        mvc.perform(get("/reviewer/showExamSubmits/{examId}", examId))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attribute("message", "Die Prüfung läuft noch! Keine Korrektur erlaubt."))
                 .andExpect(flash().attribute("success", false))
-                .andExpect(redirectedUrl("/korrektor/examListForReviewer"));
+                .andExpect(redirectedUrl("/reviewer/examListForReviewer"));
     }
 
     @Test
@@ -108,18 +108,18 @@ class KorrektorControllerTest {
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
         when(service.getSubmitInfo(examId)).thenReturn(List.of());
 
-        mvc.perform(get("/korrektor/showExamSubmits/{examId}", examId))
+        mvc.perform(get("/reviewer/showExamSubmits/{examId}", examId))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("exam", examDTO))
                 .andExpect(model().attributeExists("submitInfoList"))
                 .andExpect(model().attributeExists("timeNow"))
-                .andExpect(view().name("korrektor/examSubmitsView"));
+                .andExpect(view().name("reviewer/examSubmitsView"));
     }
 
     @Test
     @DisplayName("Seite zur Korrektur erfolgt nicht ohne Authentifizierung")
     void showSubmit_01() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/korrektor/showSubmit/{examId}/{studentId}",
+        MvcResult mvcResult = mvc.perform(get("/reviewer/showSubmit/{examId}/{studentId}",
                         UUID.randomUUID(), UUID.randomUUID()))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
@@ -133,17 +133,17 @@ class KorrektorControllerTest {
     void showSubmit_02() throws Exception {
         UUID examId = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
-        mvc.perform(get("/korrektor/showSubmit/{examId}/{studentId}", examId, studentId))
+        mvc.perform(get("/reviewer/showSubmit/{examId}/{studentId}", examId, studentId))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("antworten"))
             .andExpect(model().attributeExists("reviewForm"))
-            .andExpect(view().name("korrektor/showSubmit"));
+            .andExpect(view().name("reviewer/showSubmit"));
     }
 
     @Test
     @DisplayName("Das erstellen der Reviews erfolgt nicht ohne Authentifizierung")
     void createReview_01() throws Exception {
-        mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID()))
+        mvc.perform(post("/reviewer/createReview/{antwortId}", UUID.randomUUID()))
                 .andExpect(status().isForbidden());
     }
 
@@ -151,12 +151,12 @@ class KorrektorControllerTest {
     @WithMockOAuth2User(roles = {"REVIEWER"})
     @DisplayName("Erstellen einer Bewertung ist erfolgreich")
     void createReview_02() throws Exception {
-        mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
+        mvc.perform(post("/reviewer/createReview/{antwortId}", UUID.randomUUID())
                 .with(csrf())
                 .param("bewertung", "Bewertung")
                 .param("punkteVergeben", "1.5"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
+            .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
             .andExpect(flash().attribute("message", "Bewertung erfolgreich!"))
             .andExpect(flash().attribute("success", true));
     }
@@ -165,12 +165,12 @@ class KorrektorControllerTest {
     @WithMockOAuth2User(roles = {"REVIEWER"})
     @DisplayName("Erstellen einer Bewertung schlägt fehl (Bewertungstext fehlt)")
     void createReview_03() throws Exception {
-        mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
+        mvc.perform(post("/reviewer/createReview/{antwortId}", UUID.randomUUID())
                 .with(csrf())
                 .param("bewertung", "")
                 .param("punkteVergeben", "1"))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
+            .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
             .andExpect(flash().attribute("message", "Ein Bewertungstext muss vorhanden sein"))
             .andExpect(flash().attribute("success", false));
     }
@@ -183,12 +183,12 @@ class KorrektorControllerTest {
     })
     @WithMockOAuth2User(roles = {"REVIEWER"})
     void createReview_parameterizedTest(String punkteVergeben, String expectedMessage) throws Exception {
-        mvc.perform(post("/korrektor/createReview/{antwortId}", UUID.randomUUID())
+        mvc.perform(post("/reviewer/createReview/{antwortId}", UUID.randomUUID())
                 .with(csrf())
                 .param("bewertung", "B")
                 .param("punkteVergeben", punkteVergeben))
             .andExpect(status().is3xxRedirection())
-            .andExpect(redirectedUrl("/korrektor/examListForReviewer"))
+            .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
             .andExpect(flash().attribute("message", expectedMessage))
             .andExpect(flash().attribute("success", false));
     }

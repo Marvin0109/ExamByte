@@ -42,7 +42,7 @@ class ExamFacadeServiceTest {
     private ReviewQueryService reviewQueryService;
 
     @Mock
-    private KorrektorQueryService korrektorQueryService;
+    private ReviewerQueryService reviewerQueryService;
 
     @Mock
     private KorrekteAntwortenQueryService korrekteAntwortenQueryService;
@@ -64,7 +64,7 @@ class ExamFacadeServiceTest {
                 reviewExportService,
                 frageQueryService,
                 professorQueryService,
-                korrektorQueryService,
+                reviewerQueryService,
                 studentQueryService,
                 antwortQueryService,
                 reviewQueryService,
@@ -89,8 +89,8 @@ class ExamFacadeServiceTest {
     @Test
     void createReviewWithCorrectParams() {
         UUID antwortId = UUID.randomUUID();
-        UUID korrektorId = UUID.randomUUID();
-        examFacadeService.createReview("Bewertung", 1, antwortId, korrektorId);
-        verify(reviewQueryService).createReview("Bewertung", 1, antwortId, korrektorId);
+        UUID reviewerId = UUID.randomUUID();
+        examFacadeService.createReview("Bewertung", 1, antwortId, reviewerId);
+        verify(reviewQueryService).createReview("Bewertung", 1, antwortId, reviewerId);
     }
 }

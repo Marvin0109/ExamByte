@@ -1,41 +1,41 @@
 package exambyte.infrastructure.persistence.mapper;
 
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.entitymapper.KorrektorMapper;
-import exambyte.infrastructure.persistence.entities.KorrektorEntity;
+import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.domain.entitymapper.ReviewerMapper;
+import exambyte.infrastructure.persistence.entities.ReviewerEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class KorrektorMapperTest {
+class ReviewerMapperTest {
 
-    private final KorrektorMapper korrektorMapper = new KorrektorMapperImpl();
+    private final ReviewerMapper reviewerMapper = new ReviewerMapperImpl();
 
     @Test
     void toEntity() {
         // Arrange
-        Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .name("Korrektor1")
+        Reviewer reviewer = new Reviewer.ReviewerBuilder()
+                .name("Reviewer1")
                 .build();
 
         // Act
-        KorrektorEntity korrektorEntity = korrektorMapper.toEntity(korrektor);
+        ReviewerEntity reviewerEntity = reviewerMapper.toEntity(reviewer);
 
         // Assert
-        assertThat(korrektorEntity.getName()).isEqualTo("Korrektor1");
+        assertThat(reviewerEntity.getName()).isEqualTo("Reviewer1");
     }
 
     @Test
     void toDomain() {
         // Arrange
-        KorrektorEntity korrektorEntity = new KorrektorEntity.KorrektorEntityBuilder()
-                .name("Korrektor2")
+        ReviewerEntity reviewerEntity = new ReviewerEntity.ReviewerEntityBuilder()
+                .name("Reviewer2")
                 .build();
 
         // Act
-        Korrektor korrektor = korrektorMapper.toDomain(korrektorEntity);
+        Reviewer reviewer = reviewerMapper.toDomain(reviewerEntity);
 
         // Assert
-        assertThat(korrektor.getName()).isEqualTo("Korrektor2");
+        assertThat(reviewer.getName()).isEqualTo("Reviewer2");
     }
 }

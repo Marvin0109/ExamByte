@@ -44,7 +44,7 @@ public class ScoringServiceImpl implements ScoringService {
                         return 0;
                     }
 
-                    boolean isAutomaticReview = review.getKorrektorId().equals(automaticReviewer);
+                    boolean isAutomaticReview = review.getReviewerId().equals(automaticReviewer);
 
                     boolean resultTimeReached = !currentTime.isBefore(result);
 

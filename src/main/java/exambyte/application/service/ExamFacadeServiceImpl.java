@@ -23,7 +23,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ReviewExportService reviewExportService;
     private final FrageQueryService frageQueryService;
     private final ProfessorQueryService professorQueryService;
-    private final KorrektorQueryService korrektorQueryService;
+    private final ReviewerQueryService reviewerQueryService;
     private final StudentQueryService studentQueryService;
     private final AntwortQueryService antwortQueryService;
     private final ReviewQueryService reviewQueryService;
@@ -36,7 +36,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ReviewExportService reviewExportService,
                                  FrageQueryService frageQueryService,
                                  ProfessorQueryService professorQueryService,
-                                 KorrektorQueryService korrektorQueryService,
+                                 ReviewerQueryService reviewerQueryService,
                                  StudentQueryService studentQueryService,
                                  AntwortQueryService antwortQueryService,
                                  ReviewQueryService reviewQueryService,
@@ -48,7 +48,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.reviewExportService = reviewExportService;
         this.frageQueryService = frageQueryService;
         this.professorQueryService = professorQueryService;
-        this.korrektorQueryService = korrektorQueryService;
+        this.reviewerQueryService = reviewerQueryService;
         this.studentQueryService = studentQueryService;
         this.antwortQueryService = antwortQueryService;
         this.reviewQueryService = reviewQueryService;
@@ -138,7 +138,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public void saveAutomaticReviewer() {
-        korrektorQueryService.saveAutomaticReviewer();
+        reviewerQueryService.saveAutomaticReviewer();
     }
 
     @Override
@@ -172,13 +172,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID antwortId, UUID korrektorId) {
-        reviewQueryService.createReview(bewertung, punkte, antwortId, korrektorId);
+    public void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId) {
+        reviewQueryService.createReview(bewertung, punkte, antwortId, reviewerId);
     }
 
     @Override
     public UUID getReviewerByName(String name) {
-        return korrektorQueryService.getReviewerIdByName(name);
+        return reviewerQueryService.getReviewerIdByName(name);
     }
 
     @Override
@@ -207,8 +207,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public KorrektorDTO getReviewerById(UUID reviewerId) {
-        return korrektorQueryService.getReviewerById(reviewerId);
+    public ReviewerDTO getReviewerById(UUID reviewerId) {
+        return reviewerQueryService.getReviewerById(reviewerId);
     }
 
     @Override

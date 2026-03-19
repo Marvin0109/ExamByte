@@ -1,7 +1,7 @@
 package exambyte.infrastructure.service;
 
 import exambyte.application.service.UserCreationService;
-import exambyte.domain.service.KorrektorService;
+import exambyte.domain.service.ReviewerService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 public class UserCreationServiceImpl implements UserCreationService {
 
     private final StudentService studentService;
-    private final KorrektorService korrektorService;
+    private final ReviewerService reviewerService;
     private final ProfessorService professorService;
 
     public UserCreationServiceImpl(StudentService studentService,
-                                   KorrektorService korrektorService,
+                                   ReviewerService reviewerService,
                                    ProfessorService professorService) {
         this.studentService = studentService;
-        this.korrektorService = korrektorService;
+        this.reviewerService = reviewerService;
         this.professorService = professorService;
     }
 
@@ -30,8 +30,8 @@ public class UserCreationServiceImpl implements UserCreationService {
         return studentService.getStudentByName(username).isPresent();
     }
 
-    public boolean checkKorrektor(String username) {
-        return korrektorService.getKorrektorByName(username).isPresent();
+    public boolean checkReviewer(String username) {
+        return reviewerService.getReviewerByName(username).isPresent();
     }
 
     public boolean checkProfessor(String username) {
@@ -50,8 +50,8 @@ public class UserCreationServiceImpl implements UserCreationService {
                     }
                     break;
                 case Role.REVIEWER:
-                    if (!checkKorrektor(name)) {
-                        createKorrektor(name);
+                    if (!checkReviewer(name)) {
+                        createReviewer(name);
                     }
                     break;
                 case Role.STUDENT:
@@ -73,8 +73,8 @@ public class UserCreationServiceImpl implements UserCreationService {
                 .collect(Collectors.toSet());
     }
 
-    private void createKorrektor(String name) {
-        korrektorService.saveKorrektor(name);
+    private void createReviewer(String name) {
+        reviewerService.saveReviewer(name);
     }
 
     private void createProfessor(String name) {

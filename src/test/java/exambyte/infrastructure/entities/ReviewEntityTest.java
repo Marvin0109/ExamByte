@@ -24,31 +24,31 @@ class ReviewEntityTest {
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("")
                         .antwortId(UUID.randomUUID())
-                        .korrektorId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung(" ")
                         .antwortId(UUID.randomUUID())
-                        .korrektorId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("Bewertung")
                         .antwortId(null)
-                        .korrektorId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("Bewertung")
                         .antwortId(UUID.randomUUID())
-                        .korrektorId(null)
+                        .reviewerId(null)
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("Bewertung")
                         .antwortId(UUID.randomUUID())
-                        .korrektorId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
                         .punkte(-1)
         );
     }

@@ -5,7 +5,7 @@ import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
-import exambyte.domain.model.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.model.common.QuestionType;
@@ -37,7 +37,7 @@ class SubmitReviewIT {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private KorrektorRepository korrektorRepository;
+    private ReviewerRepository reviewerRepository;
 
     @Autowired
     private ExamRepository examRepository;
@@ -72,13 +72,13 @@ class SubmitReviewIT {
         Optional<Professor> profLoaded = professorRepository.findByName("Professor");
         assertThat(profLoaded).isPresent();
 
-        // Korrektor
-        Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .name("Korrektor")
+        // Reviewer
+        Reviewer reviewer = new Reviewer.ReviewerBuilder()
+                .name("Reviewer")
                 .build();
-        korrektorRepository.save(korrektor);
-        Optional<Korrektor> korrektorLoaded = korrektorRepository.findByName("Korrektor");
-        assertThat(korrektorLoaded).isPresent();
+        reviewerRepository.save(reviewer);
+        Optional<Reviewer> reviewerLoaded = reviewerRepository.findByName("Reviewer");
+        assertThat(reviewerLoaded).isPresent();
 
         // Exam
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
@@ -120,7 +120,7 @@ class SubmitReviewIT {
         form.setBewertung("Bewertung");
         form.setPunkteVergeben(5.0);
 
-        examControllerService.createReview(form, antwortLoaded.get().getId(), korrektorLoaded.get().id());
+        examControllerService.createReview(form, antwortLoaded.get().getId(),reviewerLoaded.get().id());
 
         Review review = reviewRepository.findByAntwortId(antwortLoaded.get().getId());
 

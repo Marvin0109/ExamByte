@@ -23,12 +23,12 @@ class ReviewDTOMapperTest {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID antwortId = UUID.randomUUID();
-        UUID korrektorId = UUID.randomUUID();
+        UUID reviewerId = UUID.randomUUID();
 
         Review review = new Review.ReviewBuilder()
                 .id(id)
                 .antwortId(antwortId)
-                .korrektorId(korrektorId)
+                .reviewerId(reviewerId)
                 .bewertung("Bewertung")
                 .punkte(3)
                 .build();
@@ -39,7 +39,7 @@ class ReviewDTOMapperTest {
         // Assert
         assertEquals(id, reviewDTO.id());
         assertEquals(antwortId, reviewDTO.antwortId());
-        assertEquals(korrektorId, reviewDTO.korrektorId());
+        assertEquals(reviewerId, reviewDTO.reviewerId());
         assertEquals("Bewertung", reviewDTO.bewertung());
         assertEquals(3, reviewDTO.punkte());
     }
@@ -56,16 +56,16 @@ class ReviewDTOMapperTest {
         // Arrange
         UUID id1 = UUID.randomUUID();
         UUID antwortId1 = UUID.randomUUID();
-        UUID korrektorId1 = UUID.randomUUID();
+        UUID reviewerId1 = UUID.randomUUID();
 
         UUID id2 = UUID.randomUUID();
         UUID antwortId2 = UUID.randomUUID();
-        UUID korrektorId2 = UUID.randomUUID();
+        UUID reviewerId2 = UUID.randomUUID();
 
         Review review1 = new Review.ReviewBuilder()
                 .id(id1)
                 .antwortId(antwortId1)
-                .korrektorId(korrektorId1)
+                .reviewerId(reviewerId1)
                 .bewertung("Bewertung 1")
                 .punkte(3)
                 .build();
@@ -73,7 +73,7 @@ class ReviewDTOMapperTest {
         Review review2 = new Review.ReviewBuilder()
                 .id(id2)
                 .antwortId(antwortId2)
-                .korrektorId(korrektorId2)
+                .reviewerId(reviewerId2)
                 .bewertung("Bewertung 2")
                 .punkte(6)
                 .build();
@@ -87,13 +87,13 @@ class ReviewDTOMapperTest {
         assertEquals(2, reviewDTOs.size());
         assertThat(reviewDTOs.getFirst().id()).isEqualTo(id1);
         assertThat(reviewDTOs.getFirst().antwortId()).isEqualTo(antwortId1);
-        assertThat(reviewDTOs.getFirst().korrektorId()).isEqualTo(korrektorId1);
+        assertThat(reviewDTOs.getFirst().reviewerId()).isEqualTo(reviewerId1);
         assertThat(reviewDTOs.getFirst().bewertung()).isEqualTo("Bewertung 1");
         assertThat(reviewDTOs.getFirst().punkte()).isEqualTo(3);
 
         assertThat(reviewDTOs.getLast().id()).isEqualTo(id2);
         assertThat(reviewDTOs.getLast().antwortId()).isEqualTo(antwortId2);
-        assertThat(reviewDTOs.getLast().korrektorId()).isEqualTo(korrektorId2);
+        assertThat(reviewDTOs.getLast().reviewerId()).isEqualTo(reviewerId2);
         assertThat(reviewDTOs.getLast().bewertung()).isEqualTo("Bewertung 2");
         assertThat(reviewDTOs.getLast().punkte()).isEqualTo(6);
     }

@@ -33,7 +33,7 @@ class ReviewRepositoryTest {
         ReviewEntity reviewEntity = new ReviewEntity.ReviewEntityBuilder()
                 .bewertung("B")
                 .antwortId(UUID.randomUUID())
-                .korrektorId(UUID.randomUUID())
+                .reviewerId(UUID.randomUUID())
                 .punkte(1)
                 .build();
 
@@ -41,7 +41,7 @@ class ReviewRepositoryTest {
                 .bewertung("B")
                 .id(reviewEntity.getId())
                 .antwortId(reviewEntity.getAntwortId())
-                .korrektorId(reviewEntity.getKorrektorId())
+                .reviewerId(reviewEntity.getReviewerId())
                 .punkte(1)
                 .build();
 

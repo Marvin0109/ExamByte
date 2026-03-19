@@ -25,7 +25,7 @@ class ReviewQueryServiceTest {
 
     private Review review;
     private static final UUID ANTWORT_ID = UUID.randomUUID();
-    private static final UUID KORREKTOR_ID = UUID.randomUUID();
+    private static final UUID REVIEWER_ID = UUID.randomUUID();
 
     @Mock
     private ReviewService reviewService;
@@ -40,7 +40,7 @@ class ReviewQueryServiceTest {
 
         review = new Review.ReviewBuilder()
                 .antwortId(ANTWORT_ID)
-                .korrektorId(KORREKTOR_ID)
+                .reviewerId(REVIEWER_ID)
                 .bewertung("Bewertung")
                 .punkte(1)
                 .build();
@@ -55,14 +55,14 @@ class ReviewQueryServiceTest {
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
         // Act
-        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, KORREKTOR_ID);
+        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, REVIEWER_ID);
 
         // Assert
         verify(reviewService).addReview(captor.capture());
         Review result = captor.getValue();
 
         assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
-        assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
         assertThat(result.getId()).isNull();
     }
 
@@ -75,14 +75,14 @@ class ReviewQueryServiceTest {
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
         // Act
-        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, KORREKTOR_ID);
+        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, REVIEWER_ID);
 
         // Assert
         verify(reviewService).addReview(captor.capture());
         Review result = captor.getValue();
 
         assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
-        assertThat(result.getKorrektorId()).isEqualTo(KORREKTOR_ID);
+        assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
         assertThat(result.getId()).isEqualTo(review.getId());
     }
 
@@ -91,7 +91,7 @@ class ReviewQueryServiceTest {
         ReviewDTO reviewDTO = new ReviewDTO(
                 review.getId(),
                 ANTWORT_ID,
-                KORREKTOR_ID,
+                REVIEWER_ID,
                 review.getBewertung(),
                 review.getPunkte());
 

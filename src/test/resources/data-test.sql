@@ -4,8 +4,8 @@ VALUES ('11111111-1111-1111-1111-111111111111', 'ProfTestName');
 INSERT INTO student (id, name)
 VALUES ('22222222-2222-2222-2222-222222222222', 'StudentTestName');
 
-INSERT INTO korrektor(id, name)
-VALUES ('33333333-3333-3333-3333-333333333333', 'KorrektorTestName');
+INSERT INTO reviewer(id, name)
+VALUES ('33333333-3333-3333-3333-333333333333', 'ReviewerTestName');
 
 INSERT INTO exam (id, title, professor_id, start_time, end_time, result_time)
 VALUES ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
@@ -36,7 +36,7 @@ VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         '2025-06-20 08:10:00'
         );
 
-INSERT INTO review (id, antwort_id, korrektor_id, bewertung, punkte)
+INSERT INTO review (id, antwort_id, reviewer_id, bewertung, punkte)
 VALUES ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
         'dddddddd-dddd-dddd-dddd-dddddddddddd',
         '33333333-3333-3333-3333-333333333333',

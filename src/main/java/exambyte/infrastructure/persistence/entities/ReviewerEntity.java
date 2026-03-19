@@ -6,8 +6,8 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.UUID;
 
-@Table("korrektor")
-public class KorrektorEntity {
+@Table("reviewer")
+public class ReviewerEntity {
 
     @Id
     private UUID id;
@@ -15,7 +15,7 @@ public class KorrektorEntity {
     @Column("name")
     private final String name;
 
-    private KorrektorEntity(UUID id, String name) {
+    private ReviewerEntity(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -28,25 +28,25 @@ public class KorrektorEntity {
         return name;
     }
 
-    public static class KorrektorEntityBuilder {
+    public static class ReviewerEntityBuilder {
         private UUID id;
         private String name;
 
-        public KorrektorEntityBuilder id(UUID id) {
+        public ReviewerEntityBuilder id(UUID id) {
             this.id = id;
             return this;
         }
 
-        public KorrektorEntityBuilder name(String name) {
+        public ReviewerEntityBuilder name(String name) {
             this.name = name;
             return this;
         }
 
-        public KorrektorEntity build() {
+        public ReviewerEntity build() {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name darf nicht leer sein");
             }
-            return new KorrektorEntity(id, name);
+            return new ReviewerEntity(id, name);
         }
     }
 }

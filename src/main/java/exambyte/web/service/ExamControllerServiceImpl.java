@@ -299,12 +299,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void createReview(ReviewForm reviewForm, UUID antwortId, UUID korrektorId) {
+    public void createReview(ReviewForm reviewForm, UUID antwortId, UUID reviewerId) {
         service.createReview(
                 reviewForm.getBewertung(),
                 reviewForm.getPunkteVergeben(),
                 antwortId,
-                korrektorId);
+                reviewerId);
     }
 
     @Override

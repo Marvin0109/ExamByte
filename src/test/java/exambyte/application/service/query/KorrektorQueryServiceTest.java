@@ -1,8 +1,8 @@
 package exambyte.application.service.query;
 
-import exambyte.domain.mapper.KorrektorDTOMapper;
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.service.KorrektorService;
+import exambyte.domain.mapper.ReviewerDTOMapper;
+import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.domain.service.ReviewerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,34 +12,34 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-class KorrektorQueryServiceTest {
+class ReviewerQueryServiceTest {
 
-    private KorrektorQueryService korrektorQueryService;
-
-    @Mock
-    private KorrektorService korrektorService;
+    private ReviewerQueryService reviewerQueryService;
 
     @Mock
-    private KorrektorDTOMapper korrektorDTOMapper;
+    private ReviewerService reviewerService;
+
+    @Mock
+    private ReviewerDTOMapper reviewerDTOMapper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        korrektorQueryService = new KorrektorQueryServiceImpl(korrektorService, korrektorDTOMapper);
+        reviewerQueryService = new ReviewerQueryServiceImpl(reviewerService, reviewerDTOMapper);
     }
 
     @Test
     void saveAutomaticReviewer_automaticReviewerFound() {
-        Korrektor korrektor = new Korrektor.KorrektorBuilder().name("Automatischer Korrektor").build();
-        when(korrektorService.getKorrektorByName("Automatischer Korrektor")).thenReturn(Optional.of(korrektor));
-        korrektorQueryService.saveAutomaticReviewer();
-        verify(korrektorService, never()).saveKorrektor("Automatischer Korrektor");
+        Reviewer reviewer = new Reviewer.ReviewerBuilder().name("Automatischer Reviewer").build();
+        when(reviewerService.getReviewerByName("Automatischer Reviewer")).thenReturn(Optional.of(reviewer));
+        reviewerQueryService.saveAutomaticReviewer();
+        verify(reviewerService, never()).saveReviewer("Automatischer Reviewer");
     }
 
     @Test
     void saveAutomaticReviewer_automaticReviewerNotFound() {
-        when(korrektorService.getKorrektorByName("Automatischer Korrektor")).thenReturn(Optional.empty());
-        korrektorQueryService.saveAutomaticReviewer();
-        verify(korrektorService).saveKorrektor("Automatischer Korrektor");
+        when(reviewerService.getReviewerByName("Automatischer Reviewer")).thenReturn(Optional.empty());
+        reviewerQueryService.saveAutomaticReviewer();
+        verify(reviewerService).saveReviewer("Automatischer Reviewer");
     }
 }

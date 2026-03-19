@@ -1,8 +1,8 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.repository.KorrektorRepository;
-import exambyte.domain.service.KorrektorService;
+import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.domain.repository.ReviewerRepository;
+import exambyte.domain.service.ReviewerService;
 import exambyte.infrastructure.exceptions.NichtVorhandenException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,25 +13,25 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-class KorrektorServiceTest {
+class ReviewerServiceTest {
 
-    private final KorrektorRepository korrektorRepository = mock(KorrektorRepository.class);
-    private final KorrektorService service = new KorrektorServiceImpl(korrektorRepository);
+    private final ReviewerRepository reviewerRepository = mock(ReviewerRepository.class);
+    private final ReviewerService service = new ReviewerServiceImpl(reviewerRepository);
 
     @Test
-    @DisplayName("Ein Korrektor kann nicht gefunden werden")
+    @DisplayName("Ein Reviewer kann nicht gefunden werden")
     void test_01() {
         UUID id = UUID.randomUUID();
-        when(korrektorRepository.findById(id)).thenReturn(Optional.empty());
+        when(reviewerRepository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NichtVorhandenException.class, () -> service.getKorrektor(id));
-        verify(korrektorRepository).findById(id);
+        assertThrows(NichtVorhandenException.class, () -> service.getReviewer(id));
+        verify(reviewerRepository).findById(id);
     }
 
     @Test
     @DisplayName("Der Automatische Korrektur wird erfolgreich gespeichert")
     void test_02() {
-        service.saveKorrektor("Automatischer Korrektor");
-        verify(korrektorRepository).save(any(Korrektor.class));
+        service.saveReviewer("Automatischer Reviewer");
+        verify(reviewerRepository).save(any(Reviewer.class));
     }
 }

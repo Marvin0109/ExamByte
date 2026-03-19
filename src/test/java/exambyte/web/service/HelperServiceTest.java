@@ -378,13 +378,13 @@ class HelperServiceTest {
         );
         when(examFacadeService.getLoesungForFrage(frage.id())).thenReturn(k);
 
-        KorrektorDTO korrektor = new KorrektorDTO(UUID.randomUUID(), "Automatischer Korrektor");
-        when(examFacadeService.getReviewerById(korrektor.id())).thenReturn(korrektor);
+        ReviewerDTO reviewer = new ReviewerDTO(UUID.randomUUID(), "Automatischer Reviewer");
+        when(examFacadeService.getReviewerById(reviewer.id())).thenReturn(reviewer);
 
         ReviewDTO reviewDTO = new ReviewDTO(
                 UUID.randomUUID(),
                 antwortDTO.id(),
-                korrektor.id(),
+                reviewer.id(),
                 "Lösung: A; B",
                 10
         );

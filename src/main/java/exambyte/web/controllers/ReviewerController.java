@@ -29,24 +29,24 @@ import java.util.Map;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/korrektor")
+@RequestMapping("/reviewer")
 @Secured("ROLE_REVIEWER")
-public class KorrektorController {
+public class ReviewerController {
 
     private final ExamControllerService service;
     private static final String LOGIN_NAME = "login";
     private static final String CURRENT_PATH = "currentPath";
     private static final String TIME_NOW = "timeNow";
-    private static final String REDIRECT_EXAM_KORREKTOR = "redirect:/korrektor/examListForReviewer";
+    private static final String REDIRECT_EXAM_REVIEWER = "redirect:/reviewer/examListForReviewer";
 
-    public KorrektorController(ExamControllerService service) {
+    public ReviewerController(ExamControllerService service) {
         this.service = service;
     }
 
     private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("success", success);
-        return REDIRECT_EXAM_KORREKTOR;
+        return REDIRECT_EXAM_REVIEWER;
     }
 
     @GetMapping("/examListForReviewer")
@@ -66,7 +66,7 @@ public class KorrektorController {
         model.addAttribute("reviewCoverage", covList);
         model.addAttribute(TIME_NOW, now);
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        return "korrektor/examListForReviewer";
+        return "reviewer/examListForReviewer";
     }
 
     @GetMapping("/showExamSubmits/{examId}")
@@ -90,7 +90,7 @@ public class KorrektorController {
         model.addAttribute("submitInfoList", submitInfoList);
         model.addAttribute("exam", examDTO);
         model.addAttribute(TIME_NOW, now);
-        return "korrektor/examSubmitsView";
+        return "reviewer/examSubmitsView";
     }
 
     @GetMapping("/showSubmit/{examId}/{studentId}")
@@ -107,7 +107,7 @@ public class KorrektorController {
 
         model.addAttribute("antworten", antwortForm);
         model.addAttribute("reviewForm", reviewForm);
-        return "korrektor/showSubmit";
+        return "reviewer/showSubmit";
     }
 
     @PostMapping("/createReview/{antwortId}")
@@ -128,8 +128,8 @@ public class KorrektorController {
 
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
-        UUID korrektorId = service.getReviewerByName(name);
-        service.createReview(reviewForm, antwortId, korrektorId);
+        UUID reviewerId = service.getReviewerByName(name);
+        service.createReview(reviewForm, antwortId, reviewerId);
 
         return redirectWithMessage(
                 redirectAttributes,

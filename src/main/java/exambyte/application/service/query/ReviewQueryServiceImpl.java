@@ -30,7 +30,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID antwortId, UUID korrektorId) {
+    public void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId) {
         Review loaded = reviewService.getReviewByAntwortId(antwortId);
 
         UUID reviewId = loaded != null ? loaded.getId() : null;
@@ -39,7 +39,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
                 new ReviewDTO(
                         reviewId,
                         antwortId,
-                        korrektorId,
+                        reviewerId,
                         bewertung,
                         punkte)
         );

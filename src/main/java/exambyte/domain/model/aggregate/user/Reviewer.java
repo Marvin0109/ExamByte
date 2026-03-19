@@ -2,12 +2,12 @@ package exambyte.domain.model.aggregate.user;
 
 import java.util.UUID;
 
-public class Korrektor implements Person {
+public class Reviewer implements Person {
 
     private final UUID id;
     private final String name;
 
-    private Korrektor(UUID id, String name) {
+    private Reviewer(UUID id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -22,22 +22,22 @@ public class Korrektor implements Person {
         return name;
     }
 
-    public static class KorrektorBuilder {
+    public static class ReviewerBuilder {
         private UUID id;
         private String name;
 
-        public KorrektorBuilder id(UUID id) {
+        public ReviewerBuilder id(UUID id) {
             this.id = id;
             return this;
         }
 
-        public KorrektorBuilder name(String name) {
+        public ReviewerBuilder name(String name) {
             this.name = name;
             return this;
         }
 
-        public Korrektor build() {
-            return new Korrektor(id, name);
+        public Reviewer build() {
+            return new Reviewer(id, name);
         }
     }
 }

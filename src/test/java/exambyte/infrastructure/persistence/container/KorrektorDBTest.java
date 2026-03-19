@@ -1,11 +1,11 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.entitymapper.KorrektorMapper;
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.repository.KorrektorRepository;
-import exambyte.infrastructure.persistence.mapper.KorrektorMapperImpl;
-import exambyte.infrastructure.persistence.repository.KorrektorDAO;
-import exambyte.infrastructure.persistence.repository.KorrektorRepositoryImpl;
+import exambyte.domain.entitymapper.ReviewerMapper;
+import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.domain.repository.ReviewerRepository;
+import exambyte.infrastructure.persistence.mapper.ReviewerMapperImpl;
+import exambyte.infrastructure.persistence.repository.ReviewerDAO;
+import exambyte.infrastructure.persistence.repository.ReviewerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,26 +24,26 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
 @Sql("/data-test.sql")
-class KorrektorDBTest {
+class ReviewerDBTest {
 
     @Autowired
-    private KorrektorDAO korrektorDAO;
+    private ReviewerDAO reviewerDAO;
 
-    private KorrektorRepository repository;
+    private ReviewerRepository repository;
 
-    private static final UUID KORREKTORUUID = UUID.fromString("33333333-3333-3333-3333-333333333333");
+    private static final UUID REVIEWER_ID = UUID.fromString("33333333-3333-3333-3333-333333333333");
 
     @BeforeEach
     void setUp() {
-        KorrektorMapper mapper = new KorrektorMapperImpl();
-        repository = new KorrektorRepositoryImpl(korrektorDAO, mapper);
+        ReviewerMapper mapper = new ReviewerMapperImpl();
+        repository = new ReviewerRepositoryImpl(reviewerDAO, mapper);
     }
 
     @Test
     @DisplayName("Ein kann geladen werden")
     void test1() {
         // Act
-        Optional<Korrektor> geladen = repository.findById(KORREKTORUUID);
+        Optional<Reviewer> geladen = repository.findById(REVIEWER_ID);
 
         // Assert
         assertThat(geladen).isPresent();

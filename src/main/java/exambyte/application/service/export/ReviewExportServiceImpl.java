@@ -17,7 +17,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     private final FrageQueryService frageQueryService;
     private final StudentQueryService studentQueryService;
     private final AntwortQueryService antwortQueryService;
-    private final KorrektorQueryService korrektorQueryService;
+    private final ReviewerQueryService reviewerQueryService;
     private final ReviewQueryService reviewQueryService;
     private final ReviewExportDTOMapper mapper;
 
@@ -25,14 +25,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
                                    FrageQueryService frageQueryService,
                                    StudentQueryService studentQueryService,
                                    AntwortQueryService antwortQueryService,
-                                   KorrektorQueryService korrektorQueryService,
+                                   ReviewerQueryService reviewerQueryService,
                                    ReviewQueryService reviewQueryService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
         this.frageQueryService = frageQueryService;
         this.studentQueryService = studentQueryService;
         this.antwortQueryService = antwortQueryService;
-        this.korrektorQueryService = korrektorQueryService;
+        this.reviewerQueryService = reviewerQueryService;
         this.reviewQueryService = reviewQueryService;
         this.mapper = mapper;
     }
@@ -63,15 +63,15 @@ public class ReviewExportServiceImpl implements ReviewExportService {
 
             if (r != null) {
                 reviews.add(r);
-                KorrektorDTO korrektorDTO = korrektorQueryService.getReviewerById(r.korrektorId());
+                ReviewerDTO reviewerDTO = reviewerQueryService.getReviewerById(r.reviewerId());
 
-                if (!korrektorDTO.name().equals("Automatischer Korrektor")) {
+                if (!reviewerDTO.name().equals("Automatischer Reviewer")) {
 
                     if (!sb.isEmpty()) {
                         sb.append(", ");
                     }
 
-                    sb.append(korrektorDTO.name());
+                    sb.append(reviewerDTO.name());
                 }
             }
         }

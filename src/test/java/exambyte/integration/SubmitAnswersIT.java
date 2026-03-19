@@ -5,7 +5,7 @@ import exambyte.domain.model.aggregate.exam.Antwort;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
-import exambyte.domain.model.aggregate.user.Korrektor;
+import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Student;
 import exambyte.domain.model.common.QuestionType;
@@ -34,7 +34,7 @@ class SubmitAnswersIT {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private KorrektorRepository korrektorRepository;
+    private ReviewerRepository reviewerRepository;
 
     @Autowired
     private ExamRepository examRepository;
@@ -58,8 +58,8 @@ class SubmitAnswersIT {
     void submitAnswers_generateReviews() {
         studentRepository.save(new Student.StudentBuilder().name("Student").build());
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
-        korrektorRepository.save(new Korrektor.KorrektorBuilder()
-                .name("Automatischer Korrektor")
+        reviewerRepository.save(new Reviewer.ReviewerBuilder()
+                .name("Automatischer Reviewer")
                 .build());
 
         Optional<UUID> profId = examControllerService.getProfIdByName("Professor");

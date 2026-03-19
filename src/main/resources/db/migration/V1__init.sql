@@ -10,7 +10,7 @@ CREATE TABLE professor (
     name                    VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE korrektor (
+CREATE TABLE reviewer (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     name                    VARCHAR(100) NOT NULL
 );
@@ -49,11 +49,11 @@ CREATE TABLE antwort (
 CREATE TABLE review (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     antwort_id              UUID NOT NULL,
-    korrektor_id            UUID,
+    reviewer_id            UUID,
     bewertung               TEXT NOT NULL,
     punkte                  INT NOT NULL, -- Punkte * 2
     FOREIGN KEY(antwort_id) REFERENCES antwort(id) ON DELETE CASCADE,
-    FOREIGN KEY(korrektor_id) REFERENCES korrektor(id) ON DELETE SET NULL,
+    FOREIGN KEY(reviewer_id) REFERENCES reviewer(id) ON DELETE SET NULL,
     CONSTRAINT unique_review UNIQUE (antwort_id)
 );
 
@@ -69,20 +69,20 @@ CREATE TABLE correct_answers (
 CREATE INDEX idx_antwort_frage_student ON antwort(frage_id, student_id);
 CREATE INDEX idx_review_antwort ON review(antwort_id);
 
-CREATE OR REPLACE FUNCTION set_automatischer_korrektor_uuid()
+CREATE OR REPLACE FUNCTION set_automatischer_reviewer_uuid()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.name = 'Automatischer Korrektor' THEN
+    IF NEW.name = 'Automatischer Reviewer' THEN
         NEW.id := '11111111-1111-1111-1111-111111111111';
     END IF;
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trg_set_korrektor_uuid
-BEFORE INSERT ON korrektor
+CREATE TRIGGER trg_set_reviewer_uuid
+BEFORE INSERT ON reviewer
 FOR EACH ROW
-EXECUTE FUNCTION set_automatischer_korrektor_uuid();
+EXECUTE FUNCTION set_automatischer_reviewer_uuid();
 
 CREATE OR REPLACE FUNCTION check_max_punkte_with_punkte_vergeben()
 RETURNS TRIGGER AS $$
