@@ -1,5 +1,5 @@
 package exambyte.application.common;
 
 public enum QuestionTypeDTO {
-    MC, SC, FREITEXT
+    MC, SC, FREE_RESPONSE
 }

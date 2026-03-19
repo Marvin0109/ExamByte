@@ -51,9 +51,9 @@ public interface ExamFacadeService {
 
     boolean isSubmitBeingReviewed(UUID examId, UUID studentId);
 
-    List<FrageDTO> getFreitextFragen(UUID examId);
+    List<FrageDTO> getFreeResponseFragen(UUID examId);
 
-    List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
+    List<AntwortDTO> getFreeResponseAntwortenForExam(UUID examId);
 
     boolean antwortHasReview(AntwortDTO antwort);
 

@@ -16,7 +16,7 @@ public interface FrageQueryService {
 
     String getChoiceForFrage(UUID frageId);
 
-    List<FrageDTO> getFreitextFragen(UUID examId);
+    List<FrageDTO> getFreeResponseFragen(UUID examId);
 
     Map<UUID, FrageDTO> getFragenUUIDMap(UUID examId);
 

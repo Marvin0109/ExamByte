@@ -80,7 +80,7 @@
                 <span th:switch="${question.name()}">
                     <span th:case="'MC'">Multiple Choice</span>
                     <span th:case="'SC'">Single Choice</span>
-                    <span th:case="'FREITEXT'">Freitext</span>
+                    <span th:case="'FREE_RESPONSE'">Freitext</span>
                 </span>
             </h3>
 
@@ -198,12 +198,12 @@
                 </div>
             </div>
 
-            <div class="mb-4" th:if="${question.name() == 'FREITEXT'}">
+            <div class="mb-4" th:if="${question.name() == 'FREE_RESPONSE'}">
                 <!-- Punkte -->
                 <div class="mb-3">
-                    <label th:for="'freitext_points_' + ${iterStat.index}">Punkte:</label>
+                    <label th:for="'freeResponse_points_' + ${iterStat.index}">Punkte:</label>
                     <input type="number"
-                           th:id="'freitext_points' + ${iterStat.index}"
+                           th:id="'freeResponse_points' + ${iterStat.index}"
                            th:field="*{questions[__${iterStat.index}__].punkte}"
                            class="form-control"
                            min="0.5"
@@ -213,12 +213,12 @@
                            th:errors="*{questions[__${iterStat.index}__].punkte}"></small>
                 </div>
 
-                <!-- Frageart (wird automatisch auf FREITEXT gesetzt) -->
-                <input type="hidden" th:name="|questions[${iterStat.index}].type|" th:value="FREITEXT"/>
+                <!-- Frageart (wird automatisch auf FREE_RESPONSE gesetzt) -->
+                <input type="hidden" th:name="|questions[${iterStat.index}].type|" th:value="FREE_RESPONSE"/>
 
                 <!-- Fragetext -->
                 <div class="mb-3">
-                    <label th:for="'freitext_question_' + ${iterStat.index}">Frage:</label>
+                    <label th:for="'freeResponse_question_' + ${iterStat.index}">Frage:</label>
                     <textarea th:id="'ft_question_' + ${iterStat.index}"
                               th:field="*{questions[__${iterStat.index}__].questionText}"
                               class="form-control"

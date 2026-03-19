@@ -26,10 +26,10 @@ class FrageQueryServiceTest {
 
     private FrageQueryService frageQueryService;
 
-    private FrageDTO frageDTOFreitext;
+    private FrageDTO frageDTOFreeResponse;
     private FrageDTO frageDTOMC;
     private Frage frageMC;
-    private Frage frageFreitext;
+    private Frage frageFreeResponse;
 
     @Mock
     private FrageService frageService;
@@ -53,19 +53,19 @@ class FrageQueryServiceTest {
                 frageDTOMapper,
                 korrekteAntwortenDTOMapper);
 
-        frageDTOFreitext = new FrageDTO(
+        frageDTOFreeResponse = new FrageDTO(
                 UUID.randomUUID(),
                 "Frage",
                 10,
                 UUID.randomUUID(),
-                QuestionTypeDTO.FREITEXT);
+                QuestionTypeDTO.FREE_RESPONSE);
 
-        frageFreitext = new Frage.FrageBuilder()
-                .id(frageDTOFreitext.id())
+        frageFreeResponse = new Frage.FrageBuilder()
+                .id(frageDTOFreeResponse.id())
                 .frageText("Frage")
                 .maxPunkte(10)
-                .examId(frageDTOFreitext.examId())
-                .type(QuestionType.FREITEXT)
+                .examId(frageDTOFreeResponse.examId())
+                .type(QuestionType.FREE_RESPONSE)
                 .build();
 
         frageDTOMC = new FrageDTO(
@@ -107,14 +107,14 @@ class FrageQueryServiceTest {
     }
 
     @Test
-    void getFreitextFragenReturnsOnlyFreitext() {
-        when(frageService.getFragenForExam(any())).thenReturn(List.of(frageMC, frageFreitext));
-        when(frageDTOMapper.toDTO(frageFreitext)).thenReturn(frageDTOFreitext);
+    void getFreeResponseFragenReturnsOnlyFreeResponse() {
+        when(frageService.getFragenForExam(any())).thenReturn(List.of(frageMC, frageFreeResponse));
+        when(frageDTOMapper.toDTO(frageFreeResponse)).thenReturn(frageDTOFreeResponse);
 
-        List<FrageDTO> result = frageQueryService.getFreitextFragen(UUID.randomUUID());
+        List<FrageDTO> result = frageQueryService.getFreeResponseFragen(UUID.randomUUID());
 
         assertEquals(1, result.size());
-        verify(frageDTOMapper).toDTO(frageFreitext);
+        verify(frageDTOMapper).toDTO(frageFreeResponse);
         verify(frageDTOMapper, never()).toDTO(frageMC);
     }
 }

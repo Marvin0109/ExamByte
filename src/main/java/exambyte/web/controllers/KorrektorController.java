@@ -100,7 +100,7 @@ public class KorrektorController {
             @PathVariable UUID studentId) {
 
         Map<FrageDTO, AntwortDTO> frageAntwortMap =
-                service.getFreitextAntwortenForExamAndStudent(examId, studentId);
+                service.getFreeResponseAntwortenForExamAndStudent(examId, studentId);
 
         List<AnswerForm> antwortForm = service.createAnswerForm(frageAntwortMap);
         ReviewForm reviewForm = new ReviewForm();

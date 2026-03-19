@@ -78,7 +78,7 @@ class ReviewExportServiceTest {
                 "Frage 1",
                 4,
                 exam.id(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
         frage2 = new FrageDTO(

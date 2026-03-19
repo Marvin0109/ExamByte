@@ -78,7 +78,7 @@ class ExamControllerServiceTest {
                 "F1",
                 2,
                 EXAM_ID,
-                QuestionTypeDTO.FREITEXT);
+                QuestionTypeDTO.FREE_RESPONSE);
 
         when(examFacadeService.getExam(EXAM_ID)).thenReturn(exam);
         when(examFacadeService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage));
@@ -88,7 +88,7 @@ class ExamControllerServiceTest {
 
         // Assert
         assertThat(form.getQuestions()).hasSize(1);
-        assertThat(form.getQuestions().getFirst().getType()).isEqualTo("FREITEXT");
+        assertThat(form.getQuestions().getFirst().getType()).isEqualTo("FREE_RESPONSE");
     }
 
     @Test
@@ -120,7 +120,7 @@ class ExamControllerServiceTest {
         // Arrange
         QuestionData q1 = new QuestionData();
         q1.setQuestionText("F1");
-        q1.setType("FREITEXT");
+        q1.setType("FREE_RESPONSE");
         q1.setPunkte(1.0);
 
         QuestionData q2 = new QuestionData();
@@ -316,14 +316,14 @@ class ExamControllerServiceTest {
                 "Frage 1",
                 2,
                 EXAM_ID,
-                QuestionTypeDTO.FREITEXT);
+                QuestionTypeDTO.FREE_RESPONSE);
 
         FrageDTO frage2 = new FrageDTO(
                 UUID.randomUUID(),
                 "Frage 2",
                 1,
                 EXAM_ID,
-                QuestionTypeDTO.FREITEXT);
+                QuestionTypeDTO.FREE_RESPONSE);
 
         AntwortDTO antwort1 = new AntwortDTO(
                 UUID.randomUUID(),
@@ -359,7 +359,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    void getFreitextAntwortenForExamAndStudent() {
+    void getFreeResponseAntwortenForExamAndStudent() {
         UUID studentId = UUID.randomUUID();
 
         FrageDTO frage = new FrageDTO(
@@ -367,7 +367,7 @@ class ExamControllerServiceTest {
                 "Frage 1",
                 2,
                 EXAM_ID,
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
         AntwortDTO antwort = new AntwortDTO(
@@ -378,16 +378,16 @@ class ExamControllerServiceTest {
                 null
         );
 
-        when(examFacadeService.getFreitextFragen(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getFreitextAntwortenForExam(EXAM_ID)).thenReturn(List.of(antwort));
+        when(examFacadeService.getFreeResponseFragen(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getFreeResponseAntwortenForExam(EXAM_ID)).thenReturn(List.of(antwort));
 
-        Map<FrageDTO, AntwortDTO> map = service.getFreitextAntwortenForExamAndStudent(EXAM_ID, studentId);
+        Map<FrageDTO, AntwortDTO> map = service.getFreeResponseAntwortenForExamAndStudent(EXAM_ID, studentId);
 
         assertThat(map).hasSize(1);
     }
 
     @Test
-    void getFreitextAntwortenForExamAndStudent_noAnswer() {
+    void getFreeResponseAntwortenForExamAndStudent_noAnswer() {
         UUID studentId = UUID.randomUUID();
 
         FrageDTO frage = new FrageDTO(
@@ -395,13 +395,13 @@ class ExamControllerServiceTest {
                 "Frage 1",
                 2,
                 EXAM_ID,
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
-        when(examFacadeService.getFreitextFragen(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getFreitextAntwortenForExam(EXAM_ID)).thenReturn(List.of());
+        when(examFacadeService.getFreeResponseFragen(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getFreeResponseAntwortenForExam(EXAM_ID)).thenReturn(List.of());
 
-        Map<FrageDTO, AntwortDTO> map = service.getFreitextAntwortenForExamAndStudent(EXAM_ID, studentId);
+        Map<FrageDTO, AntwortDTO> map = service.getFreeResponseAntwortenForExamAndStudent(EXAM_ID, studentId);
 
         assertThat(map).isEmpty();
     }
@@ -414,6 +414,6 @@ class ExamControllerServiceTest {
 
         assertThat(Collections.frequency(result, QuestionTypeWeb.MC)).isEqualTo(3);
         assertThat(Collections.frequency(result, QuestionTypeWeb.SC)).isEqualTo(5);
-        assertThat(Collections.frequency(result, QuestionTypeWeb.FREITEXT)).isEqualTo(1);
+        assertThat(Collections.frequency(result, QuestionTypeWeb.FREE_RESPONSE)).isEqualTo(1);
     }
 }

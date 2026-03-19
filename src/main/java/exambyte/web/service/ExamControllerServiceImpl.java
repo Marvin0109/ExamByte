@@ -143,7 +143,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
             double maxPunkte = q.getPunkte();
 
             switch(frageTyp) {
-                case QuestionTypeWeb.FREITEXT:
+                case QuestionTypeWeb.FREE_RESPONSE:
                     service.createFrage(new FrageDTO(null, frageText,
                             maxPunkte, examUUID, QuestionTypeDTO.valueOf(frageTyp.name())));
                     break;
@@ -263,9 +263,9 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examId, UUID studentId) {
-        List<FrageDTO> fragen = service.getFreitextFragen(examId);
-        List<AntwortDTO> antworten = service.getFreitextAntwortenForExam(examId);
+    public Map<FrageDTO, AntwortDTO> getFreeResponseAntwortenForExamAndStudent(UUID examId, UUID studentId) {
+        List<FrageDTO> fragen = service.getFreeResponseFragen(examId);
+        List<AntwortDTO> antworten = service.getFreeResponseAntwortenForExam(examId);
 
         Map<FrageDTO, AntwortDTO> resultMap = new HashMap<>();
 
@@ -348,12 +348,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount) {
+    public List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freeResponseCount) {
         List<QuestionTypeWeb> questionTypeWebList = new ArrayList<>();
 
         questionTypeWebList.addAll(Collections.nCopies(mcCount, QuestionTypeWeb.MC));
         questionTypeWebList.addAll(Collections.nCopies(scCount, QuestionTypeWeb.SC));
-        questionTypeWebList.addAll(Collections.nCopies(freitextCount, QuestionTypeWeb.FREITEXT));
+        questionTypeWebList.addAll(Collections.nCopies(freeResponseCount, QuestionTypeWeb.FREE_RESPONSE));
 
         Collections.shuffle(questionTypeWebList);
 

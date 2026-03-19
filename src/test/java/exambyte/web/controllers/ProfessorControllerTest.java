@@ -84,7 +84,7 @@ class ProfessorControllerTest {
                     .with(csrf())
                 .param("mcCount", "1")
                 .param("scCount", "4")
-                .param("freitextCount", "5"))
+                .param("freeResponseCount", "5"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/professor/createExam"))
             .andReturn();
@@ -105,7 +105,7 @@ class ProfessorControllerTest {
                     .with(csrf())
                 .param("mcCount", "0")
                 .param("scCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
     }
@@ -118,7 +118,7 @@ class ProfessorControllerTest {
                     .with(csrf())
                 .param("mcCount", "1")
                 .param("scCount", "1")
-                .param("freitextCount", "11"))
+                .param("freeResponseCount", "11"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
     }
@@ -130,7 +130,7 @@ class ProfessorControllerTest {
         mvc.perform(post("/professor/generateQuestions")
                     .with(csrf())
                 .param("mcCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
     }
@@ -157,7 +157,7 @@ class ProfessorControllerTest {
         mvc.perform(get("/professor/createExam")
                 .param("mcCount", "1")
                 .param("scCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("examForm"))
@@ -175,7 +175,7 @@ class ProfessorControllerTest {
         mvc.perform(get("/professor/createExam")
                 .param("mcCount", "0")
                 .param("scCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
 
@@ -203,7 +203,7 @@ class ProfessorControllerTest {
                 .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
 
                 .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].type", "FREE_RESPONSE")
                 .param("questions[1].questionText", "Text")
 
                 .param("questions[2].punkte", "1")
@@ -242,7 +242,7 @@ class ProfessorControllerTest {
                 .param("questions[0].correctAnswers", solution != null ? solution : "")
 
                 .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].type", "FREE_RESPONSE")
                 .param("questions[1].questionText", "Text")
 
                 .param("questions[2].punkte", "1")
@@ -286,7 +286,7 @@ class ProfessorControllerTest {
 
                 // zweite Frage
                 .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].type", "FREE_RESPONSE")
                 .param("questions[1].questionText", "Text")
 
                 // dritte Frage
@@ -326,7 +326,7 @@ class ProfessorControllerTest {
                 .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
 
                 .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
+                .param("questions[1].type", "FREE_RESPONSE")
                 .param("questions[1].questionText", "Text")
 
                 .param("questions[2].punkte", "1")

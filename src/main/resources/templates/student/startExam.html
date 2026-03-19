@@ -69,8 +69,8 @@
                         </div>
                     </div>
 
-                    <!-- Freitext -->
-                    <div class="mb-2" th:if="${frage.type == 'FREITEXT'}">
+                    <!-- FREE_RESPONSE -->
+                    <div class="mb-2" th:if="${frage.type == 'FREE_RESPONSE'}">
                         <label class="form-label"
                                th:for="'antwort-' + ${frage.id} + '-' + ${iterStat.index}">
                         </label>

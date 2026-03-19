@@ -27,7 +27,7 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
     @Override
     public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examId);
+        List<AntwortDTO> antworten = antwortQueryService.getFreeResponseAntwortenForExam(examId);
 
         return antworten.stream()
                 .collect(Collectors.toMap(

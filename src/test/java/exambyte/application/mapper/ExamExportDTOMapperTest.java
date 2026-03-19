@@ -41,7 +41,7 @@ class ExamExportDTOMapperTest {
                 "Frage 1",
                 5,
                 exam.id(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
         frage2 = new FrageDTO(

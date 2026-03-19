@@ -1,5 +1,5 @@
 package exambyte.web.common;
 
 public enum QuestionTypeWeb {
-    MC, SC, FREITEXT
+    MC, SC, FREE_RESPONSE
 }

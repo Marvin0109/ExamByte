@@ -65,7 +65,7 @@ public interface ExamControllerService {
 
     boolean hasAnyFailedAttempt(String studentName);
 
-    Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examUUID, UUID studentUUID);
+    Map<FrageDTO, AntwortDTO> getFreeResponseAntwortenForExamAndStudent(UUID examUUID, UUID studentUUID);
 
     List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map);
 
@@ -85,7 +85,7 @@ public interface ExamControllerService {
 
     List<ReviewExportDTO> getReviewExport(UUID examId, String studentName);
 
-    List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount);
+    List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freeResponseCount);
 
     ExamViewForm getExamView(UUID examId);
 }

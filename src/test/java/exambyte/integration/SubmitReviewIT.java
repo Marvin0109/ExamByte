@@ -98,7 +98,7 @@ class SubmitReviewIT {
                 .examId(examId.get())
                 .frageText("Frage")
                 .maxPunkte(5)
-                .type(QuestionType.FREITEXT)
+                .type(QuestionType.FREE_RESPONSE)
                 .build();
         frageRepository.save(frage);
         List<Frage> frageLoaded = frageRepository.findByExamId(examId.get());

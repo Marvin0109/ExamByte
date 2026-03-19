@@ -85,7 +85,7 @@ class ExamExportServiceTest {
                 "Frage 2",
                 2,
                 exam.id(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
         korrekteAntworten = new KorrekteAntwortenDTO(

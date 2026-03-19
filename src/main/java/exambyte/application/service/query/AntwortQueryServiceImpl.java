@@ -37,7 +37,7 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
             UUID antwortId = loaded != null ? loaded.getId() : null;
 
             FrageDTO loadedFrage = frageQueryService.getFrage(frageId);
-            if (!loadedFrage.type().name().equals("FREITEXT")) {
+            if (!loadedFrage.type().name().equals("FREE_RESPONSE")) {
                 antwortText = String.join("\n", entry.getValue());
                 replaced = antwortText.replace("ĸ", ",");
                 dto = new AntwortDTO(antwortId, replaced, frageId, studentId, null);
@@ -61,8 +61,8 @@ public class AntwortQueryServiceImpl implements AntwortQueryService {
     }
 
     @Override
-    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examId) {
-        return frageQueryService.getFreitextFragen(examId).stream()
+    public List<AntwortDTO> getFreeResponseAntwortenForExam(UUID examId) {
+        return frageQueryService.getFreeResponseFragen(examId).stream()
                 .map(frageDTO -> antwortService.findByFrageId(frageDTO.id()))
                 .filter(Objects::nonNull)
                 .map(antwortDTOMapper::toDTO)

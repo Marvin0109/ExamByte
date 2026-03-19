@@ -61,7 +61,7 @@ class SubmitAnswersStressTest {
     private ExamControllerService examControllerService;
 
     private UUID frageIdSC;
-    private UUID frageIdFreitext;
+    private UUID frageIdFreeResponse;
     private UUID examId;
 
     @BeforeEach
@@ -96,18 +96,18 @@ class SubmitAnswersStressTest {
 
         frageRepository.save(new Frage.FrageBuilder()
                 .frageText("Frage 2")
-                .type(QuestionType.FREITEXT)
+                .type(QuestionType.FREE_RESPONSE)
                 .maxPunkte(2)
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreitextLoaded = frageRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.FREITEXT))
+        Optional<UUID> frageIdFreeResponseLoaded = frageRepository.findAll().stream()
+                .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
                 .map(Frage::getId)
                 .findFirst();
 
-        assert(frageIdFreitextLoaded.isPresent());
-        frageIdFreitext = frageIdFreitextLoaded.get();
+        assert(frageIdFreeResponseLoaded.isPresent());
+        frageIdFreeResponse = frageIdFreeResponseLoaded.get();
 
         Optional<UUID> frageIdSCLoaded = frageRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
@@ -154,7 +154,7 @@ class SubmitAnswersStressTest {
                 final String studentName = s.getName();
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreitext);
+                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreeResponse);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -175,7 +175,7 @@ class SubmitAnswersStressTest {
 
         for (Student s : students) {
             assertThat(antwortRepository.findByStudentIdAndFrageId(
-                    s.id(), frageIdFreitext)).isPresent();
+                    s.id(), frageIdFreeResponse)).isPresent();
 
             Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
                     s.id(), frageIdSC);
@@ -205,7 +205,7 @@ class SubmitAnswersStressTest {
                 final String studentName = "Student 0";
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreitext);
+                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreeResponse);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -225,7 +225,7 @@ class SubmitAnswersStressTest {
         assertThat(exceptions).isEmpty();
 
         assertThat(antwortRepository.findByStudentIdAndFrageId(
-                loaded.id(), frageIdFreitext)).isPresent();
+                loaded.id(), frageIdFreeResponse)).isPresent();
 
         Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
                 loaded.id(), frageIdSC);
@@ -237,7 +237,7 @@ class SubmitAnswersStressTest {
     private Map<String, List<String>> generateAnswers(UUID frage1Id, UUID frage2Id) {
         Map<String, List<String>> answers = new HashMap<>();
         answers.put(frage1Id.toString(), List.of("A"));
-        answers.put(frage2Id.toString(), List.of("Freitext"));
+        answers.put(frage2Id.toString(), List.of("FreeResponse"));
         return answers;
     }
 }

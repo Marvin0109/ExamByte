@@ -71,8 +71,8 @@
                         </div>
                     </div>
 
-                    <!-- Freitext -->
-                    <div class="mb-2" th:if="${component.fragen.type.name == 'FREITEXT'}">
+                    <!-- FREE_RESPONSE -->
+                    <div class="mb-2" th:if="${component.fragen.type.name == 'FREE_RESPONSE'}">
                         <label class="form-label"
                                th:for="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}">
                         </label>

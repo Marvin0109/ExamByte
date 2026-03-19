@@ -62,7 +62,7 @@ class AntwortQueryServiceTest {
                 "Frage",
                 5.0,
                 null,
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
         Map<String, List<String>> antworten = Map.of(
@@ -152,7 +152,7 @@ class AntwortQueryServiceTest {
     }
 
     @Test
-    void getFreitextAntwortenForExam_success() {
+    void getFreeResponseAntwortenForExam_success() {
         // Arrange
         UUID examId = UUID.randomUUID();
 
@@ -161,7 +161,7 @@ class AntwortQueryServiceTest {
         AntwortDTO dto = mock(AntwortDTO.class);
 
         when(frageDTO.id()).thenReturn(FRAGE1_ID);
-        when(frageQueryService.getFreitextFragen(examId))
+        when(frageQueryService.getFreeResponseFragen(examId))
                 .thenReturn(List.of(frageDTO));
 
         when(antwortService.findByFrageId(FRAGE1_ID))
@@ -171,28 +171,28 @@ class AntwortQueryServiceTest {
                 .thenReturn(dto);
 
         // Act
-        List<AntwortDTO> result = antwortQueryService.getFreitextAntwortenForExam(examId);
+        List<AntwortDTO> result = antwortQueryService.getFreeResponseAntwortenForExam(examId);
 
         // Assert
         assertThat(result).containsExactly(dto);
     }
 
     @Test
-    void getFreitextAntwortenForExam_nullFiltered() {
+    void getFreeResponseAntwortenForExam_nullFiltered() {
         // Arrange
         UUID examId = UUID.randomUUID();
 
         FrageDTO frageDTO = mock(FrageDTO.class);
         when(frageDTO.id()).thenReturn(FRAGE1_ID);
 
-        when(frageQueryService.getFreitextFragen(examId))
+        when(frageQueryService.getFreeResponseFragen(examId))
                 .thenReturn(List.of(frageDTO));
 
         when(antwortService.findByFrageId(FRAGE1_ID))
                 .thenReturn(null);
 
         // Act
-        List<AntwortDTO> result = antwortQueryService.getFreitextAntwortenForExam(examId);
+        List<AntwortDTO> result = antwortQueryService.getFreeResponseAntwortenForExam(examId);
 
         // Assert
         assertThat(result).isEmpty();

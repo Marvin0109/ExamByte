@@ -231,13 +231,13 @@ class HelperServiceTest {
     }
 
     @Test
-    void prepareFrageData_freitext() {
+    void prepareFrageData_freeResponse() {
         FrageDTO frageDTO = new FrageDTO(
                 HELPER_FRAGE_ID,
                 "Frage",
                 2,
                 UUID.randomUUID(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
         AntwortDTO antwortDTO = new AntwortDTO(
@@ -423,7 +423,7 @@ class HelperServiceTest {
                 "Frage",
                 20,
                 UUID.randomUUID(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
         when(examFacadeService.getFragenForExam(examId)).thenReturn(List.of(frage));
 
@@ -479,7 +479,7 @@ class HelperServiceTest {
                 "Frage",
                 20,
                 UUID.randomUUID(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
         when(examFacadeService.getFragenForExam(examId)).thenReturn(List.of(frage));
 
@@ -625,14 +625,14 @@ class HelperServiceTest {
     }
 
     @Test
-    void fillSubmitForm_freitextAntwort() {
+    void fillSubmitForm_freeResponseAntwort() {
         OldDataDTO dto = new OldDataDTO(
                 new FrageDTO(
                         UUID.randomUUID(),
                         "Frage",
                         1,
                         UUID.randomUUID(),
-                        QuestionTypeDTO.FREITEXT
+                        QuestionTypeDTO.FREE_RESPONSE
                 ),
                 null,
                 new AntwortDTO(
@@ -660,14 +660,14 @@ class HelperServiceTest {
     }
 
     @Test
-    void fillSubmitForm_freitextWithoutAntwort() {
+    void fillSubmitForm_freeResponseWithoutAntwort() {
         OldDataDTO dto = new OldDataDTO(
                 new FrageDTO(
                         UUID.randomUUID(),
                         "Frage",
                         1,
                         UUID.randomUUID(),
-                        QuestionTypeDTO.FREITEXT
+                        QuestionTypeDTO.FREE_RESPONSE
                 ),
                 null,
                 null
@@ -719,7 +719,7 @@ class HelperServiceTest {
                         "Frage 2",
                         4,
                         UUID.randomUUID(),
-                        QuestionTypeDTO.FREITEXT
+                        QuestionTypeDTO.FREE_RESPONSE
                 )
         );
 

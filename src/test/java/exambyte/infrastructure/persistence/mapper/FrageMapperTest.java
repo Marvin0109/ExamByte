@@ -23,7 +23,7 @@ class FrageMapperTest {
         Frage frage = new Frage.FrageBuilder()
                 .frageText("Fragetext")
                 .maxPunkte(5.5)
-                .type(QuestionType.FREITEXT)
+                .type(QuestionType.FREE_RESPONSE)
                 .examId(examId)
                 .build();
 
@@ -33,7 +33,7 @@ class FrageMapperTest {
         // Assert
         assertThat(entity.getFrageText()).isEqualTo("Fragetext");
         assertThat(entity.getMaxPunkte()).isEqualTo(11);
-        assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREITEXT);
+        assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREE_RESPONSE);
         assertThat(entity.getExamId()).isEqualTo(examId);
     }
 
@@ -44,7 +44,7 @@ class FrageMapperTest {
         FrageEntity frageEntity = new FrageEntity.FrageEntityBuilder()
                 .frageText("Fragetext")
                 .maxPunkte(5)
-                .type(QuestionTypeEntity.FREITEXT)
+                .type(QuestionTypeEntity.FREE_RESPONSE)
                 .examId(examId)
                 .build();
 
@@ -53,7 +53,7 @@ class FrageMapperTest {
 
         // Assert
         assertThat(frage.getFrageText()).isEqualTo("Fragetext");
-        assertThat(frage.getType()).isEqualTo(QuestionType.FREITEXT);
+        assertThat(frage.getType()).isEqualTo(QuestionType.FREE_RESPONSE);
         assertThat(frage.getMaxPunkte()).isCloseTo(2.5, Offset.offset(0.001));
         assertThat(frage.getExamId()).isEqualTo(examId);
     }

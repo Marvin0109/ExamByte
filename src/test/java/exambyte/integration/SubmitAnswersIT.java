@@ -87,17 +87,17 @@ class SubmitAnswersIT {
 
         frageRepository.save(new Frage.FrageBuilder()
                 .frageText("Frage 2")
-                .type(QuestionType.FREITEXT)
+                .type(QuestionType.FREE_RESPONSE)
                 .maxPunkte(2)
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreitext = frageRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.FREITEXT))
+        Optional<UUID> frageIdFreeResponse = frageRepository.findAll().stream()
+                .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
                 .map(Frage::getId)
                 .findFirst();
 
-        assert(frageIdFreitext.isPresent());
+        assert(frageIdFreeResponse.isPresent());
 
         Optional<UUID> frageIdSC = frageRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
@@ -113,7 +113,7 @@ class SubmitAnswersIT {
                 .build());
 
         Map<String, List<String>> answers = new HashMap<>();
-        answers.put(frageIdFreitext.get().toString(), List.of("Antwort Text"));
+        answers.put(frageIdFreeResponse.get().toString(), List.of("Antwort Text"));
         answers.put(frageIdSC.get().toString(), List.of("B"));
 
         boolean submitted = examControllerService.examIsAlreadySubmitted(examId, "Student");
@@ -124,7 +124,7 @@ class SubmitAnswersIT {
 
         Antwort antwort = antwortRepository.findByFrageId(frageIdSC.get());
 
-        assertThat(antwortRepository.findByFrageId(frageIdFreitext.get())).isNotNull();
+        assertThat(antwortRepository.findByFrageId(frageIdFreeResponse.get())).isNotNull();
         assertThat(antwortRepository.findByFrageId(frageIdSC.get())).isNotNull();
 
         assertThat(reviewRepository.findByAntwortId(antwort.getId())).isNotNull();

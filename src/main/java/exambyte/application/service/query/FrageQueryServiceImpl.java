@@ -57,11 +57,11 @@ public class FrageQueryServiceImpl implements FrageQueryService {
     }
 
     @Override
-    public List<FrageDTO> getFreitextFragen(UUID examId) {
+    public List<FrageDTO> getFreeResponseFragen(UUID examId) {
         List<Frage> fragen = frageService.getFragenForExam(examId);
 
         return fragen.stream()
-                .filter(frage -> QuestionType.FREITEXT == frage.getType())
+                .filter(frage -> QuestionType.FREE_RESPONSE == frage.getType())
                 .map(frageDTOMapper::toDTO)
                 .toList();
     }

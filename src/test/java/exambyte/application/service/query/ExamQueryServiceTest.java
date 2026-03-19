@@ -112,14 +112,14 @@ class ExamQueryServiceTest {
                 "Frage",
                 10,
                 exam1.getId(),
-                QuestionTypeDTO.FREITEXT);
+                QuestionTypeDTO.FREE_RESPONSE);
 
         frage = new Frage.FrageBuilder()
                 .id(frageDTO.id())
                 .frageText("Frage")
                 .maxPunkte(10)
                 .examId(exam1.getId())
-                .type(QuestionType.FREITEXT)
+                .type(QuestionType.FREE_RESPONSE)
                 .build();
 
         antwort = new Antwort.AntwortBuilder()

@@ -157,13 +157,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public List<FrageDTO> getFreitextFragen(UUID examId) {
-        return frageQueryService.getFreitextFragen(examId);
+    public List<FrageDTO> getFreeResponseFragen(UUID examId) {
+        return frageQueryService.getFreeResponseFragen(examId);
     }
 
     @Override
-    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examId) {
-        return antwortQueryService.getFreitextAntwortenForExam(examId);
+    public List<AntwortDTO> getFreeResponseAntwortenForExam(UUID examId) {
+        return antwortQueryService.getFreeResponseAntwortenForExam(examId);
     }
 
     @Override

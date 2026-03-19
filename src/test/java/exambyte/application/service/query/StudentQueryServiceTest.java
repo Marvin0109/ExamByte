@@ -67,7 +67,7 @@ class StudentQueryServiceTest {
 
     @Test
     void getStudentSumbittedExam_OneAnswer() {
-        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
         when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
 
@@ -79,7 +79,7 @@ class StudentQueryServiceTest {
 
     @Test
     void getStudentSumbittedExam_TwoAnswers() {
-        when(antwortQueryService.getFreitextAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
+        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
         when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
 

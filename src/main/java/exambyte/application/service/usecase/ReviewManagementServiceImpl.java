@@ -24,7 +24,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     @Override
     public double getReviewCoverage(UUID examId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examId);
+        List<AntwortDTO> antworten = antwortQueryService.getFreeResponseAntwortenForExam(examId);
 
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     @Override
     public boolean submitHasReview(UUID examId, UUID studentId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreitextAntwortenForExam(examId);
+        List<AntwortDTO> antworten = antwortQueryService.getFreeResponseAntwortenForExam(examId);
 
         List<UUID> studentAntwortList = antworten.stream()
                 .filter(a -> a.studentId().equals(studentId))

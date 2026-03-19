@@ -60,7 +60,7 @@ class CreateExamIT {
 
         q1.setType("SC");
         q2.setType("MC");
-        q3.setType("FREITEXT");
+        q3.setType("FREE_RESPONSE");
 
         q1.setChoices("A\nB");
         q2.setChoices("A\nB\nC\nD");

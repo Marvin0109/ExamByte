@@ -17,7 +17,7 @@ class FrageTest {
         UUID id = UUID.randomUUID();
         String frageText = "Test question";
         double maxPunkte = 10;
-        QuestionType type = QuestionType.FREITEXT;
+        QuestionType type = QuestionType.FREE_RESPONSE;
         UUID examId = UUID.randomUUID();
 
         Frage frage = new Frage.FrageBuilder()

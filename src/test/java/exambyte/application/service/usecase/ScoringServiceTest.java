@@ -64,7 +64,7 @@ class ScoringServiceTest {
                 "Frage",
                 5,
                 UUID.randomUUID(),
-                QuestionTypeDTO.FREITEXT);
+                QuestionTypeDTO.FREE_RESPONSE);
 
         frage2 = new FrageDTO(
                 FRAGE_2_ID,

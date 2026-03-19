@@ -93,7 +93,7 @@ public class ProfessorController {
         List<QuestionTypeWeb> typeList = service.createQuestionTypeList(
                 questionSettings.getMcCount(),
                 questionSettings.getScCount(),
-                questionSettings.getFreitextCount()
+                questionSettings.getFreeResponseCount()
         );
 
         questionSettings.setQuestionTypeList(typeList);
@@ -118,7 +118,7 @@ public class ProfessorController {
 
         int sum = questionSettings.getMcCount()
                 + questionSettings.getScCount()
-                + questionSettings.getFreitextCount();
+                + questionSettings.getFreeResponseCount();
 
         ExamForm examForm = service.createExamForm(sum);
 

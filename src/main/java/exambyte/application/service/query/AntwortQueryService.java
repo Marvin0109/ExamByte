@@ -13,7 +13,7 @@ public interface AntwortQueryService {
 
     List<AntwortDTO> getAntworten(UUID studentId, Set<UUID> frageIds);
 
-    List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
+    List<AntwortDTO> getFreeResponseAntwortenForExam(UUID examId);
 
     AntwortDTO findByStudentAndFrage(UUID studentId, UUID frageId);
 
