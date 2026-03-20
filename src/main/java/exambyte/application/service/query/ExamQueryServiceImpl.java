@@ -4,7 +4,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
 import exambyte.domain.mapper.FrageDTOMapper;
-import exambyte.domain.service.AntwortService;
+import exambyte.domain.service.AnswerService;
 import exambyte.domain.service.ExamService;
 import exambyte.domain.service.FrageService;
 import exambyte.domain.service.StudentService;
@@ -23,7 +23,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     private final ExamService examService;
     private final StudentService studentService;
     private final FrageService frageService;
-    private final AntwortService antwortService;
+    private final AnswerService answerService;
 
     private final ExamDTOMapper examDTOMapper;
     private final FrageDTOMapper frageDTOMapper;
@@ -31,13 +31,13 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     public ExamQueryServiceImpl(ExamService examService,
                                 StudentService studentService,
                                 FrageService frageService,
-                                AntwortService antwortService,
+                                AnswerService answerService,
                                 ExamDTOMapper examDTOMapper,
                                 FrageDTOMapper frageDTOMapper) {
         this.examService = examService;
         this.studentService = studentService;
         this.frageService = frageService;
-        this.antwortService = antwortService;
+        this.answerService = answerService;
         this.examDTOMapper = examDTOMapper;
         this.frageDTOMapper = frageDTOMapper;
     }
@@ -78,7 +78,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
         return fragen.stream()
                 .anyMatch(frage ->
-                        antwortService.findByStudentAndFrage(studentId, frage.id()) != null);
+                        answerService.findByStudentAndFrage(studentId, frage.id()) != null);
     }
 
     @Override

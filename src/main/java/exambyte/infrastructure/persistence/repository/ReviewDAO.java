@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface ReviewDAO extends CrudRepository<ReviewEntity, UUID> {
 
-    Optional<ReviewEntity> findByAntwortId(UUID id);
+    Optional<ReviewEntity> findByAnswerId(UUID id);
 }

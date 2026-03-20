@@ -13,7 +13,7 @@ public class ReviewMapperImpl implements ReviewMapper {
 
         return new Review.ReviewBuilder()
                 .id(entity.getId())
-                .antwortId(entity.getAntwortId())
+                .answerId(entity.getAnswerId())
                 .reviewerId(entity.getReviewerId())
                 .bewertung(entity.getBewertung())
                 .punkte(entity.getPunkte() / 2.0)
@@ -26,7 +26,7 @@ public class ReviewMapperImpl implements ReviewMapper {
 
         return new ReviewEntity.ReviewEntityBuilder()
                 .id(review.getId())
-                .antwortId(review.getAntwortId())
+                .answerId(review.getAnswerId())
                 .reviewerId(review.getReviewerId())
                 .bewertung(review.getBewertung())
                 .punkte(punkte)

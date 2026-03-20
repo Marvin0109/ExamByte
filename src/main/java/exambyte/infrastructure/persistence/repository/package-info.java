@@ -12,7 +12,7 @@
  * </ul>
  * </p>
  *
- * @see exambyte.infrastructure.persistence.repository.AntwortDAO
+ * @see exambyte.infrastructure.persistence.repository.AnswerDAO
  * @see org.springframework.data.repository.CrudRepository
  */
 package exambyte.infrastructure.persistence.repository;

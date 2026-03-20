@@ -22,13 +22,13 @@ VALUES ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         10,
         'SC');
 
-INSERT INTO correct_answers (id, frage_id, richtige_antwort, antwort_optionen)
+INSERT INTO correct_answers (id, frage_id, solution, choices)
 VALUES ('cccccccc-cccc-cccc-cccc-cccccccccccc',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'Loesung1',
         'Loesung1\nLoesung2');
 
-INSERT INTO antwort (id, frage_id, antwort_text, student_id, antwort_zeitpunkt)
+INSERT INTO answer (id, frage_id, answer, student_id, submit_time)
 VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'Loesung1',
@@ -36,7 +36,7 @@ VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         '2025-06-20 08:10:00'
         );
 
-INSERT INTO review (id, antwort_id, reviewer_id, bewertung, punkte)
+INSERT INTO review (id, answer_id, reviewer_id, bewertung, punkte)
 VALUES ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
         'dddddddd-dddd-dddd-dddd-dddddddddddd',
         '33333333-3333-3333-3333-333333333333',

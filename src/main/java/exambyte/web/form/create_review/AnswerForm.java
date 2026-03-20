@@ -6,8 +6,8 @@ public class AnswerForm {
 
     private String frageText;
     private double maxPunkte;
-    private String antwort;
-    private UUID antwortId;
+    private String answer;
+    private UUID answerId;
 
     public  String getFrageText() {
         return frageText;
@@ -25,19 +25,19 @@ public class AnswerForm {
         this.maxPunkte = maxPunkte;
     }
 
-    public String getAntwort() {
-        return antwort;
+    public String getAnswer() {
+        return answer;
     }
 
-    public void setAntwort(String antwort) {
-        this.antwort = antwort;
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
-    public UUID getAntwortId() {
-        return antwortId;
+    public UUID getAnswerId() {
+        return answerId;
     }
 
-    public void setAntwortId(UUID antwortId) {
-        this.antwortId = antwortId;
+    public void setAnswerId(UUID answerId) {
+        this.answerId = answerId;
     }
 }

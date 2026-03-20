@@ -3,7 +3,7 @@ package exambyte.application.mapper;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.csv_dto.ExamExportDTO;
 import exambyte.domain.export_mapper.ExamExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ class ExamExportDTOMapperTest {
     private ExamDTO exam;
     private FrageDTO frage1;
     private FrageDTO frage2;
-    private KorrekteAntwortenDTO korrekteAntworten;
+    private CorrectAnswersDTO correctAnswers;
 
     @BeforeEach
     void setUp() {
@@ -52,7 +52,7 @@ class ExamExportDTOMapperTest {
                 QuestionTypeDTO.MC
         );
 
-        korrekteAntworten = new KorrekteAntwortenDTO(
+        correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
@@ -67,7 +67,7 @@ class ExamExportDTOMapperTest {
                 "Professor",
                 9,
                 List.of(frage1, frage2),
-                List.of(korrekteAntworten));
+                List.of(correctAnswers));
 
         assertThat(result).hasSize(2);
 

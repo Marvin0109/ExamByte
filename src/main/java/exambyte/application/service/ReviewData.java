@@ -1,11 +1,11 @@
 package exambyte.application.service;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
-import exambyte.domain.service.KorrekteAntwortenService;
+import exambyte.application.dto.CorrectAnswersDTO;
+import exambyte.domain.mapper.CorrectAnswersDTOMapper;
+import exambyte.domain.service.CorrectAnswersService;
 
 
 import java.util.ArrayList;
@@ -15,19 +15,19 @@ import java.util.UUID;
 public class ReviewData {
 
     private List<FrageDTO> fragen;
-    private List<AntwortDTO> antworten;
-    private List<KorrekteAntwortenDTO> korrekteAntworten;
-    private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
-    private final KorrekteAntwortenService korrekteAntwortenService;
+    private List<AnswerDTO> answers;
+    private List<CorrectAnswersDTO> correctAnswers;
+    private final CorrectAnswersDTOMapper correctAnswersDTOMapper;
+    private final CorrectAnswersService correctAnswersService;
 
-    public ReviewData(List<FrageDTO> fragen, List<AntwortDTO> antworten,
-                      KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper,
-                      KorrekteAntwortenService korrekteAntwortenService) {
+    public ReviewData(List<FrageDTO> fragen, List<AnswerDTO> answers,
+                      CorrectAnswersDTOMapper correctAnswersDTOMapper,
+                      CorrectAnswersService correctAnswersService) {
         this.fragen = fragen;
-        this.antworten = antworten;
-        this.korrekteAntwortenDTOMapper = korrekteAntwortenDTOMapper;
-        this.korrekteAntwortenService = korrekteAntwortenService;
-        this.korrekteAntworten = new ArrayList<>();
+        this.answers = answers;
+        this.correctAnswersDTOMapper = correctAnswersDTOMapper;
+        this.correctAnswersService = correctAnswersService;
+        this.correctAnswers = new ArrayList<>();
     }
 
     public void filterToType(QuestionTypeDTO type){
@@ -39,13 +39,13 @@ public class ReviewData {
                 .map(FrageDTO::id)
                 .toList();
 
-        antworten = antworten.stream()
+        answers = answers.stream()
                 .filter(a -> frageIds.contains(a.frageId()))
                 .toList();
 
-        korrekteAntworten = fragen.stream()
-                .map(f -> korrekteAntwortenDTOMapper.toDTO(
-                        korrekteAntwortenService.findKorrekteAntwort(f.id())))
+        correctAnswers = fragen.stream()
+                .map(f -> correctAnswersDTOMapper.toDTO(
+                        correctAnswersService.findSolution(f.id())))
                 .toList();
     }
 
@@ -53,11 +53,11 @@ public class ReviewData {
         return fragen;
     }
 
-    public List<AntwortDTO> getAntworten() {
-        return antworten;
+    public List<AnswerDTO> getAnswers() {
+        return answers;
     }
 
-    public List<KorrekteAntwortenDTO> getKorrekteAntworten() {
-        return korrekteAntworten;
+    public List<CorrectAnswersDTO> getCorrectAnswers() {
+        return correctAnswers;
     }
 }

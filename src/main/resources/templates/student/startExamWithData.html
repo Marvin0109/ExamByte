@@ -40,7 +40,7 @@
                     <!-- Multiple Choice -->
                     <div class="mb-2" th:if="${component.fragen.type.name == 'MC'}">
                         <div class="form-check mb-2"
-                             th:each="antwort : ${#strings.arraySplit(component.korrekteAntworten.antwortOptionen, ',')}">
+                             th:each="antwort : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
                             <input class="form-check-input"
                                    type="checkbox"
                                    th:id="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"
@@ -57,7 +57,7 @@
                     <!-- Single Choice -->
                     <div class="mb-2" th:if="${component.fragen.type.name == 'SC'}">
                         <div class="form-check mb-2"
-                             th:each="antwort : ${#strings.arraySplit(component.korrekteAntworten.antwortOptionen, ',')}">
+                             th:each="antwort : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
                             <input class="form-check-input"
                                    type="radio"
                                    th:id="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"

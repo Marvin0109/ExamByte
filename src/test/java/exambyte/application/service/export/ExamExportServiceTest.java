@@ -3,11 +3,11 @@ package exambyte.application.service.export;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.service.query.ExamQueryService;
 import exambyte.application.service.query.FrageQueryService;
-import exambyte.application.service.query.KorrekteAntwortenQueryService;
+import exambyte.application.service.query.CorrectAnswersQueryService;
 import exambyte.application.service.query.ProfessorQueryService;
 import exambyte.domain.export_mapper.ExamExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class ExamExportServiceTest {
     private ProfessorDTO professor;
     private FrageDTO frage;
     private FrageDTO frage2;
-    private KorrekteAntwortenDTO korrekteAntworten;
+    private CorrectAnswersDTO correctAnswers;
 
     @Mock
     private ExamQueryService examQueryService;
@@ -41,7 +41,7 @@ class ExamExportServiceTest {
     private ProfessorQueryService profQueryService;
 
     @Mock
-    private KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+    private CorrectAnswersQueryService correctAnswersQueryService;
 
     @Mock
     private ExamExportDTOMapper examExportDTOMapper;
@@ -54,7 +54,7 @@ class ExamExportServiceTest {
                 examQueryService,
                 frageQueryService,
                 profQueryService,
-                korrekteAntwortenQueryService,
+                correctAnswersQueryService,
                 examExportDTOMapper
         );
 
@@ -88,7 +88,7 @@ class ExamExportServiceTest {
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        korrekteAntworten = new KorrekteAntwortenDTO(
+        correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
@@ -101,13 +101,13 @@ class ExamExportServiceTest {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage));
-        when(korrekteAntwortenQueryService.getLoesungForFrage(frage.id())).thenReturn(korrekteAntworten);
+        when(correctAnswersQueryService.getSolutionForFrage(frage.id())).thenReturn(correctAnswers);
         when(examExportDTOMapper.mapDTOToExport(
                 exam,
                 professor.name(),
                 6,
                 List.of(frage),
-                List.of(korrekteAntworten)))
+                List.of(correctAnswers)))
                 .thenReturn(mock());
 
         service.createExamExport(exam.id());
@@ -117,15 +117,15 @@ class ExamExportServiceTest {
                 professor.name(),
                 6,
                 List.of(frage),
-                List.of(korrekteAntworten));
+                List.of(correctAnswers));
     }
 
     @Test
-    void createExamExport_nullKorrekteAntworten() {
+    void createExamExport_nullCorrectAnswers() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage2));
-        when(korrekteAntwortenQueryService.getLoesungForFrage(frage2.id())).thenReturn(null);
+        when(correctAnswersQueryService.getSolutionForFrage(frage2.id())).thenReturn(null);
 
         service.createExamExport(exam.id());
 

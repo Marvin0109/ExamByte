@@ -1,8 +1,8 @@
 package exambyte.application.service.usecase;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.query.AntwortQueryService;
+import exambyte.application.service.query.AnswerQueryService;
 import exambyte.application.service.query.ReviewQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +19,13 @@ import static org.mockito.Mockito.*;
 class ReviewManagementServiceTest {
 
     private ReviewManagementService reviewManagementService;
-    private AntwortDTO antwortDTO;
+    private AnswerDTO answer;
     private ReviewDTO reviewDTO;
 
     private static final UUID STUDENT_UUID = UUID.randomUUID();
 
     @Mock
-    private AntwortQueryService antwortQueryService;
+    private AnswerQueryService answerQueryService;
 
     @Mock
     private ReviewQueryService reviewQueryService;
@@ -36,9 +36,9 @@ class ReviewManagementServiceTest {
 
         reviewManagementService = new ReviewManagementServiceImpl(
                 reviewQueryService,
-                antwortQueryService);
+                answerQueryService);
 
-        antwortDTO = new AntwortDTO(
+        answer = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
                 UUID.randomUUID(),
@@ -47,7 +47,7 @@ class ReviewManagementServiceTest {
 
         reviewDTO = new ReviewDTO(
                 UUID.randomUUID(),
-                antwortDTO.id(),
+                answer.id(),
                 UUID.randomUUID(),
                 "Bewertung",
                 1);
@@ -55,8 +55,8 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_100Percent() {
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(reviewDTO);
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
+        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(reviewDTO);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -65,16 +65,16 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_50Percent() {
-        AntwortDTO antwortDTO2 = new AntwortDTO(
+        AnswerDTO answerDTO2 = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
                 UUID.randomUUID(),
                 STUDENT_UUID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));
 
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(null);
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO2.id())).thenReturn(reviewDTO);
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer, answerDTO2));
+        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(null);
+        when(reviewQueryService.getReviewByAnswerId(answerDTO2.id())).thenReturn(reviewDTO);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -83,8 +83,8 @@ class ReviewManagementServiceTest {
 
     @Test
     void getReviewCoverage_0Percent() {
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(null);
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
+        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(null);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -93,8 +93,8 @@ class ReviewManagementServiceTest {
 
     @Test
     void submitHasReview_true() {
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(reviewDTO);
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
+        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(reviewDTO);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
 
@@ -103,8 +103,8 @@ class ReviewManagementServiceTest {
 
     @Test
     void submitHasReview_false() {
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
-        when(reviewQueryService.getReviewByAntwortId(antwortDTO.id())).thenReturn(null);
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
+        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(null);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
 

@@ -27,12 +27,12 @@ class ReviewRepositoryTest {
     }
 
     @Test
-    void findByAntwortId_exists() {
+    void findByAnswerId_exists() {
         // Arrange
         UUID id = UUID.randomUUID();
         ReviewEntity reviewEntity = new ReviewEntity.ReviewEntityBuilder()
                 .bewertung("B")
-                .antwortId(UUID.randomUUID())
+                .answerId(UUID.randomUUID())
                 .reviewerId(UUID.randomUUID())
                 .punkte(1)
                 .build();
@@ -40,29 +40,29 @@ class ReviewRepositoryTest {
         Review review = new Review.ReviewBuilder()
                 .bewertung("B")
                 .id(reviewEntity.getId())
-                .antwortId(reviewEntity.getAntwortId())
+                .answerId(reviewEntity.getAnswerId())
                 .reviewerId(reviewEntity.getReviewerId())
                 .punkte(1)
                 .build();
 
-        when(reviewDAO.findByAntwortId(id)).thenReturn(Optional.of(reviewEntity));
+        when(reviewDAO.findByAnswerId(id)).thenReturn(Optional.of(reviewEntity));
         when(reviewMapper.toDomain(reviewEntity)).thenReturn(review);
 
         // Act
-        Review result = repository.findByAntwortId(id);
+        Review result = repository.findByAnswerId(id);
 
         // Assert
         assertThat(result).isNotNull();
     }
 
     @Test
-    void findByAntwortId_notFound() {
+    void findByAnswerId_notFound() {
         // Arrange
         UUID id = UUID.randomUUID();
-        when(reviewDAO.findByAntwortId(id)).thenReturn(Optional.empty());
+        when(reviewDAO.findByAnswerId(id)).thenReturn(Optional.empty());
 
         // Act
-        Review result = repository.findByAntwortId(id);
+        Review result = repository.findByAnswerId(id);
 
         // Assert
         assertThat(result).isNull();

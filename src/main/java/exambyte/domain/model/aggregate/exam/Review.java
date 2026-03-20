@@ -5,14 +5,14 @@ import java.util.UUID;
 public class Review {
 
     private final UUID id;
-    private final UUID antwortId;
+    private final UUID answerId;
     private final UUID reviewerId;
     private final String bewertung;
     private final double punkte;
 
-    private Review(UUID id, UUID antwortId, UUID reviewerId, String bewertung, double punkte) {
+    private Review(UUID id, UUID answerId, UUID reviewerId, String bewertung, double punkte) {
         this.id = id;
-        this.antwortId = antwortId;
+        this.answerId = answerId;
         this.reviewerId = reviewerId;
         this.bewertung = bewertung;
         this.punkte = punkte;
@@ -22,8 +22,8 @@ public class Review {
         return id;
     }
 
-    public UUID getAntwortId() {
-        return antwortId;
+    public UUID getAnswerId() {
+        return answerId;
     }
 
     public UUID getReviewerId() {
@@ -40,7 +40,7 @@ public class Review {
 
     public static class ReviewBuilder {
         private UUID id;
-        private UUID antwortId;
+        private UUID answerId;
         private UUID reviewerId;
         private String bewertung;
         private double punkte;
@@ -50,8 +50,8 @@ public class Review {
             return this;
         }
 
-        public ReviewBuilder antwortId(UUID antwortId) {
-            this.antwortId = antwortId;
+        public ReviewBuilder answerId(UUID answerId) {
+            this.answerId = answerId;
             return this;
         }
 
@@ -71,7 +71,7 @@ public class Review {
         }
 
         public Review build() {
-            return new Review(id, antwortId, reviewerId, bewertung, punkte);
+            return new Review(id, answerId, reviewerId, bewertung, punkte);
         }
     }
 }

@@ -1,6 +1,6 @@
 package exambyte.application.mapper;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
@@ -19,7 +19,7 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
                                           String reviewerName,
                                           double maxPunkte,
                                           List<FrageDTO> fragen,
-                                          List<AntwortDTO> antworten,
+                                          List<AnswerDTO> answers,
                                           List<ReviewDTO> reviews) {
 
         List<ReviewExportDTO> export = new ArrayList<>();
@@ -34,16 +34,16 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
             r.setFrageTyp(frage.type().name());
             r.setPunkte(frage.maxPunkte());
 
-            AntwortDTO a = antworten.stream()
-                    .filter(antwort -> antwort.frageId().equals(frage.id()))
+            AnswerDTO answer = answers.stream()
+                    .filter(a -> a.frageId().equals(frage.id()))
                     .findAny()
                     .orElse(null);
 
-            r.setStudiAntworten(a == null ? "" : a.antwortText());
+            r.setStudiAntworten(answer == null ? "" : answer.answer());
 
-            if (a != null) {
+            if (answer != null) {
                 ReviewDTO review = reviews.stream()
-                        .filter(reviewDTO -> reviewDTO.antwortId().equals(a.id()))
+                        .filter(reviewDTO -> reviewDTO.answerId().equals(answer.id()))
                         .findAny()
                         .orElse(null);
 

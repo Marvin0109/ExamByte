@@ -1,6 +1,6 @@
 package exambyte.application.service.query;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.StudentDTO;
 import exambyte.domain.mapper.StudentDTOMapper;
 import exambyte.domain.model.aggregate.user.Student;
@@ -24,11 +24,11 @@ class StudentQueryServiceTest {
     private static final UUID STUDENT_ID = UUID.randomUUID();
     private Student student;
     private StudentDTO studentDTO;
-    private AntwortDTO antwortDTO;
-    private AntwortDTO antwortDTO2;
+    private AnswerDTO answer1;
+    private AnswerDTO answer2;
 
     @Mock
-    private AntwortQueryService antwortQueryService;
+    private AnswerQueryService answerQueryService;
 
     @Mock
     private StudentService studentService;
@@ -39,7 +39,7 @@ class StudentQueryServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        studentQueryService = new StudentQueryServiceImpl(antwortQueryService, studentService, studentDTOMapper);
+        studentQueryService = new StudentQueryServiceImpl(answerQueryService, studentService, studentDTOMapper);
 
         student = new Student.StudentBuilder()
                 .id(STUDENT_ID)
@@ -50,16 +50,16 @@ class StudentQueryServiceTest {
                 STUDENT_ID,
                 "StudentName");
 
-        antwortDTO = new AntwortDTO(
+        answer1 = new AnswerDTO(
                 null,
-                "Antwort 1",
+                "Answer 1",
                 UUID.randomUUID(),
                 STUDENT_ID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));
 
-        antwortDTO2 = new AntwortDTO(
+        answer2 = new AnswerDTO(
                 null,
-                "Antwort 2",
+                "Answer 2",
                 UUID.randomUUID(),
                 STUDENT_ID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));
@@ -67,7 +67,7 @@ class StudentQueryServiceTest {
 
     @Test
     void getStudentSumbittedExam_OneAnswer() {
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO));
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
         when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
 
@@ -79,7 +79,7 @@ class StudentQueryServiceTest {
 
     @Test
     void getStudentSumbittedExam_TwoAnswers() {
-        when(antwortQueryService.getFreeResponseAntwortenForExam(any())).thenReturn(List.of(antwortDTO, antwortDTO2));
+        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1, answer2));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
         when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
 

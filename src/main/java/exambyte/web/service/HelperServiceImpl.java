@@ -122,37 +122,34 @@ public class HelperServiceImpl implements HelperService {
 
     @Override
     public PreparedFrageData prepareFrageData(FrageDTO frage, UUID studentId) {
-        AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.id(), studentId);
-        KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.id());
+        AnswerDTO answer = service.getAnswerForFrageAndStudent(frage.id(), studentId);
+        CorrectAnswersDTO k = service.getLoesungForFrage(frage.id());
 
         if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
-            k = normalizeKorrekteAntworten(k);
+            k = normalizeCorrectAnswers(k);
 
-            if (antwort != null) {
-                String normalized = normalizeAnswerForFrontend(antwort.antwortText());
-                antwort = new AntwortDTO(
-                        antwort.id(),
+            if (answer != null) {
+                String normalized = normalizeAnswerForFrontend(answer.answer());
+                answer = new AnswerDTO(
+                        answer.id(),
                         normalized,
-                        antwort.frageId(),
-                        antwort.studentId(),
-                        antwort.antwortZeitpunkt()
+                        answer.frageId(),
+                        answer.studentId(),
+                        answer.submitTime()
                 );
             }
         }
 
-        return new PreparedFrageData(frage, antwort, k);
+        return new PreparedFrageData(frage, answer, k);
     }
 
-    private KorrekteAntwortenDTO normalizeKorrekteAntworten(KorrekteAntwortenDTO k) {
-        String optionen = k.antwortOptionen();
-        String optionenNormalized = normalizeAnswerForFrontend(optionen);
+    private CorrectAnswersDTO normalizeCorrectAnswers(CorrectAnswersDTO k) {
+        String optionenNormalized = normalizeAnswerForFrontend(k.choices());
+        String solutionNormalized = normalizeAnswerForFrontend(k.solution());
 
-        String loesung = k.antworten();
-        String loesungNormalized = normalizeAnswerForFrontend(loesung);
-
-        return new KorrekteAntwortenDTO(
+        return new CorrectAnswersDTO(
                 k.id(),
-                loesungNormalized,
+                solutionNormalized,
                 optionenNormalized,
                 k.frageId()
         );
@@ -170,16 +167,16 @@ public class HelperServiceImpl implements HelperService {
 
         for (FrageDTO frage : fragen) {
             PreparedFrageData preparedFrageData = prepareFrageData(frage, studentId);
-            AntwortDTO antwort = preparedFrageData.antwort();
+            AnswerDTO answer = preparedFrageData.answer();
 
-            KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
+            CorrectAnswersDTO k = preparedFrageData.correctAnswers();
 
-            if (antwort != null) {
-                ReviewDTO review = service.getReviewForAntwort(antwort.id());
+            if (answer != null) {
+                ReviewDTO review = service.getReviewForAnswer(answer.id());
                 if (review != null) reviewers.add(review.reviewerId());
-                componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
+                componentList.add(new ReviewAggregateDTO(frage, answer, review, k));
             } else {
-                AntwortDTO emptyAntwort = new AntwortDTO(
+                AnswerDTO emptyAnswer = new AnswerDTO(
                         null,
                         "",
                         frage.id(),
@@ -195,7 +192,7 @@ public class HelperServiceImpl implements HelperService {
                         0
                 );
 
-                componentList.add(new ReviewAggregateDTO(frage, emptyAntwort, emptyReview, k));
+                componentList.add(new ReviewAggregateDTO(frage, emptyAnswer, emptyReview, k));
             }
         }
 
@@ -229,8 +226,8 @@ public class HelperServiceImpl implements HelperService {
 
             OldDataDTO oldDataDTO = new OldDataDTO(
                     frage,
-                    preparedFrageData.korrekteAntwortenDTO(),
-                    preparedFrageData.antwort());
+                    preparedFrageData.correctAnswers(),
+                    preparedFrageData.answer());
 
             oldDataDTOList.add(oldDataDTO);
         }
@@ -246,11 +243,11 @@ public class HelperServiceImpl implements HelperService {
 
         for (OldDataDTO oldDataDTO : oldDataDTOList) {
             String frageId = String.valueOf(oldDataDTO.fragen().id());
-            boolean answerIsPresent = oldDataDTO.antwort() != null && oldDataDTO.antwort().antwortText() != null;
+            boolean answerIsPresent = oldDataDTO.answer() != null && oldDataDTO.answer().answer() != null;
 
             if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {
                 if (answerIsPresent) {
-                    String answer = oldDataDTO.antwort().antwortText();
+                    String answer = oldDataDTO.answer().answer();
                     List<String> choices = Arrays.stream(answer.split(","))
                             .map(String::trim)
                             .filter(s -> !s.isEmpty())
@@ -262,7 +259,7 @@ public class HelperServiceImpl implements HelperService {
                 }
             } else {
                 if (answerIsPresent) {
-                    String normalized = oldDataDTO.antwort().antwortText();
+                    String normalized = oldDataDTO.answer().answer();
                     answers.put(frageId, List.of(normalized));
                 } else {
                     answers.put(frageId, Collections.singletonList(""));
@@ -286,10 +283,10 @@ public class HelperServiceImpl implements HelperService {
 
         for (FrageDTO frage : fragen) {
             maxPunkte += frage.maxPunkte();
-            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.id());
+            CorrectAnswersDTO k = service.getLoesungForFrage(frage.id());
 
             if (k != null) {
-                k = normalizeKorrekteAntworten(k);
+                k = normalizeCorrectAnswers(k);
                 components.add(new ExamAggregateDTO(frage, k));
             } else {
                 components.add(new ExamAggregateDTO(frage, null));

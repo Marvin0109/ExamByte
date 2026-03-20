@@ -2,7 +2,7 @@ package exambyte.application.mapper;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.csv_dto.ExamExportDTO;
 import exambyte.domain.export_mapper.ExamExportDTOMapper;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
                                               String profName,
                                               double punkte,
                                               List<FrageDTO> fragen,
-                                              List<KorrekteAntwortenDTO> loesungen) {
+                                              List<CorrectAnswersDTO> correctAnswers) {
 
         List<ExamExportDTO> export = new ArrayList<>();
 
@@ -32,13 +32,13 @@ public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
             e.setFrageTyp(frage.type().name());
             e.setPunkte(frage.maxPunkte());
 
-            KorrekteAntwortenDTO k = loesungen.stream()
+            CorrectAnswersDTO k = correctAnswers.stream()
                     .filter(l -> l.frageId().equals(frage.id()))
                     .findAny()
                     .orElse(null);
 
-            e.setAntwortMoeglichkeiten(k == null ? "" : k.antwortOptionen());
-            e.setLoesungen(k == null ? "" : k.antworten());
+            e.setAntwortMoeglichkeiten(k == null ? "" : k.choices());
+            e.setLoesungen(k == null ? "" : k.solution());
 
             export.add(e);
         }

@@ -11,7 +11,7 @@ import java.util.UUID;
 public interface ExamManagementService {
     String createExam(String profName, String title, LocalDateTime start, LocalDateTime end, LocalDateTime result);
 
-    SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId);
+    SubmitExamResult submitExam(String studentName, Map<String, List<String>> answers, UUID examId);
 
     AttemptDTO getSubmission(UUID examId, String studentName);
 

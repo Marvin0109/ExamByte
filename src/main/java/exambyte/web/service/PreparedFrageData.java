@@ -1,10 +1,10 @@
 package exambyte.web.service;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 
 public record PreparedFrageData(
         FrageDTO frage,
-        AntwortDTO antwort,
-        KorrekteAntwortenDTO korrekteAntwortenDTO) {}
+        AnswerDTO answer,
+        CorrectAnswersDTO correctAnswers) {}

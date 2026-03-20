@@ -39,7 +39,7 @@ class CreateExamIT {
     private FrageRepository frageRepository;
 
     @Autowired
-    private KorrekteAntwortenRepository korrekteAntwortenRepository;
+    private CorrectAnswersRepository correctAnswersRepository;
 
     @Test
     void createExamAndQuestions() {
@@ -99,6 +99,6 @@ class CreateExamIT {
 
         assertThat(frageId).isPresent();
 
-        assertThat(korrekteAntwortenRepository.findByFrageId(frageId.get())).isPresent();
+        assertThat(correctAnswersRepository.findByFrageId(frageId.get())).isPresent();
     }
 }

@@ -1,6 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.service.ExamControllerService;
@@ -99,22 +99,22 @@ public class ReviewerController {
             @PathVariable UUID examId,
             @PathVariable UUID studentId) {
 
-        Map<FrageDTO, AntwortDTO> frageAntwortMap =
-                service.getFreeResponseAntwortenForExamAndStudent(examId, studentId);
+        Map<FrageDTO, AnswerDTO> frageAnswerMap =
+                service.getFreeResponseSolutionForExamAndStudent(examId, studentId);
 
-        List<AnswerForm> antwortForm = service.createAnswerForm(frageAntwortMap);
+        List<AnswerForm> answerForm = service.createAnswerForm(frageAnswerMap);
         ReviewForm reviewForm = new ReviewForm();
 
-        model.addAttribute("antworten", antwortForm);
+        model.addAttribute("answers", answerForm);
         model.addAttribute("reviewForm", reviewForm);
         return "reviewer/showSubmit";
     }
 
-    @PostMapping("/createReview/{antwortId}")
+    @PostMapping("/createReview/{answerId}")
     public String createReview(
             @Valid ReviewForm reviewForm,
             BindingResult bindingResult,
-            @PathVariable UUID antwortId,
+            @PathVariable UUID answerId,
             RedirectAttributes redirectAttributes,
             OAuth2AuthenticationToken auth) {
 
@@ -129,7 +129,7 @@ public class ReviewerController {
         OAuth2User user = auth.getPrincipal();
         String name = user.getAttribute(LOGIN_NAME);
         UUID reviewerId = service.getReviewerByName(name);
-        service.createReview(reviewForm, antwortId, reviewerId);
+        service.createReview(reviewForm, answerId, reviewerId);
 
         return redirectWithMessage(
                 redirectAttributes,

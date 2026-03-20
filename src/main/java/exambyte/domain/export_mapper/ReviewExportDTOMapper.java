@@ -1,6 +1,6 @@
 package exambyte.domain.export_mapper;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
@@ -14,6 +14,6 @@ public interface ReviewExportDTOMapper {
                                    String reviewerName,
                                    double maxPunkte,
                                    List<FrageDTO> fragen,
-                                   List<AntwortDTO> antworten,
+                                   List<AnswerDTO> answers,
                                    List<ReviewDTO> reviews);
 }

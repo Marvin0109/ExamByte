@@ -16,7 +16,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     private final ExamQueryService examQueryService;
     private final FrageQueryService frageQueryService;
     private final StudentQueryService studentQueryService;
-    private final AntwortQueryService antwortQueryService;
+    private final AnswerQueryService answerQueryService;
     private final ReviewerQueryService reviewerQueryService;
     private final ReviewQueryService reviewQueryService;
     private final ReviewExportDTOMapper mapper;
@@ -24,14 +24,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     public ReviewExportServiceImpl(ExamQueryService examQueryService,
                                    FrageQueryService frageQueryService,
                                    StudentQueryService studentQueryService,
-                                   AntwortQueryService antwortQueryService,
+                                   AnswerQueryService answerQueryService,
                                    ReviewerQueryService reviewerQueryService,
                                    ReviewQueryService reviewQueryService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
         this.frageQueryService = frageQueryService;
         this.studentQueryService = studentQueryService;
-        this.antwortQueryService = antwortQueryService;
+        this.answerQueryService = answerQueryService;
         this.reviewerQueryService = reviewerQueryService;
         this.reviewQueryService = reviewQueryService;
         this.mapper = mapper;
@@ -43,11 +43,11 @@ public class ReviewExportServiceImpl implements ReviewExportService {
         List<FrageDTO> fragen = frageQueryService.getFragenForExam(examId);
         UUID studentId = studentQueryService.getStudentIdByName(studentName);
 
-        List<AntwortDTO> antworten = new ArrayList<>();
+        List<AnswerDTO> answers = new ArrayList<>();
 
         for (FrageDTO frage : fragen) {
-            AntwortDTO a = antwortQueryService.findByStudentAndFrage(studentId, frage.id());
-            antworten.add(a);
+            AnswerDTO a = answerQueryService.findByStudentAndFrage(studentId, frage.id());
+            answers.add(a);
         }
 
         double maxPunkte = fragen.stream()
@@ -58,8 +58,8 @@ public class ReviewExportServiceImpl implements ReviewExportService {
 
         StringBuilder sb = new StringBuilder();
 
-        for (AntwortDTO antwort : antworten) {
-            ReviewDTO r = reviewQueryService.getReviewByAntwortId(antwort.id());
+        for (AnswerDTO answer : answers) {
+            ReviewDTO r = reviewQueryService.getReviewByAnswerId(answer.id());
 
             if (r != null) {
                 reviews.add(r);
@@ -76,6 +76,6 @@ public class ReviewExportServiceImpl implements ReviewExportService {
             }
         }
 
-        return mapper.mapDTOToExport(exam, sb.toString(), maxPunkte, fragen, antworten, reviews);
+        return mapper.mapDTOToExport(exam, sb.toString(), maxPunkte, fragen, answers, reviews);
     }
 }

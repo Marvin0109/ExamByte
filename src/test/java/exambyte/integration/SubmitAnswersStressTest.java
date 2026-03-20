@@ -2,10 +2,10 @@ package exambyte.integration;
 
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.usecase.ExamManagementService;
-import exambyte.domain.model.aggregate.exam.Antwort;
+import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Student;
@@ -46,10 +46,10 @@ class SubmitAnswersStressTest {
     private FrageRepository frageRepository;
 
     @Autowired
-    private KorrekteAntwortenRepository korrekteAntwortenRepository;
+    private CorrectAnswersRepository correctAnswersRepository;
 
     @Autowired
-    private AntwortRepository antwortRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -117,10 +117,10 @@ class SubmitAnswersStressTest {
         assert(frageIdSCLoaded.isPresent());
         frageIdSC = frageIdSCLoaded.get();
 
-        korrekteAntwortenRepository.save(new KorrekteAntworten.KorrekteAntwortenBuilder()
+        correctAnswersRepository.save(new CorrectAnswers.CorrectAnswersBuilder()
                 .frageId(frageIdSC)
-                .antwortOptionen("A\nB\nC\nD")
-                .loesungen("B")
+                .choices("A\nB\nC\nD")
+                .solution("B")
                 .build());
     }
 
@@ -174,14 +174,14 @@ class SubmitAnswersStressTest {
         assertThat(exceptions).isEmpty();
 
         for (Student s : students) {
-            assertThat(antwortRepository.findByStudentIdAndFrageId(
+            assertThat(answerRepository.findByStudentIdAndFrageId(
                     s.id(), frageIdFreeResponse)).isPresent();
 
-            Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
+            Optional<Answer> sc = answerRepository.findByStudentIdAndFrageId(
                     s.id(), frageIdSC);
             assertThat(sc).isPresent();
 
-            assertThat(reviewRepository.findByAntwortId(sc.get().getId())).isNotNull();
+            assertThat(reviewRepository.findByAnswerId(sc.get().getId())).isNotNull();
         }
     }
 
@@ -224,14 +224,14 @@ class SubmitAnswersStressTest {
 
         assertThat(exceptions).isEmpty();
 
-        assertThat(antwortRepository.findByStudentIdAndFrageId(
+        assertThat(answerRepository.findByStudentIdAndFrageId(
                 loaded.id(), frageIdFreeResponse)).isPresent();
 
-        Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
+        Optional<Answer> sc = answerRepository.findByStudentIdAndFrageId(
                 loaded.id(), frageIdSC);
         assertThat(sc).isPresent();
 
-        assertThat(reviewRepository.findByAntwortId(sc.get().getId())).isNotNull();
+        assertThat(reviewRepository.findByAnswerId(sc.get().getId())).isNotNull();
     }
 
     private Map<String, List<String>> generateAnswers(UUID frage1Id, UUID frage2Id) {

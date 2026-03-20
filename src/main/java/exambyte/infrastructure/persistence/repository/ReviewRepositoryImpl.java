@@ -33,8 +33,8 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public Review findByAntwortId(UUID id) {
-        Optional<ReviewEntity> entity = dao.findByAntwortId(id);
+    public Review findByAnswerId(UUID id) {
+        Optional<ReviewEntity> entity = dao.findByAnswerId(id);
         return entity.map(mapper::toDomain)
                 .orElse(null);
     }

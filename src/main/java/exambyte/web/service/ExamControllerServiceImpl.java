@@ -263,14 +263,14 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public Map<FrageDTO, AntwortDTO> getFreeResponseAntwortenForExamAndStudent(UUID examId, UUID studentId) {
+    public Map<FrageDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examId, UUID studentId) {
         List<FrageDTO> fragen = service.getFreeResponseFragen(examId);
-        List<AntwortDTO> antworten = service.getFreeResponseAntwortenForExam(examId);
+        List<AnswerDTO> answers = service.getFreeResponseSolutionForExam(examId);
 
-        Map<FrageDTO, AntwortDTO> resultMap = new HashMap<>();
+        Map<FrageDTO, AnswerDTO> resultMap = new HashMap<>();
 
         for (FrageDTO frage : fragen) {
-            antworten.stream()
+            answers.stream()
                     .filter(a -> a.frageId().equals(frage.id()))
                     .filter(a -> a.studentId().equals(studentId))
                     .findFirst().ifPresent(ans -> resultMap.put(frage, ans));
@@ -280,16 +280,16 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map) {
+    public List<AnswerForm> createAnswerForm(Map<FrageDTO, AnswerDTO> map) {
         List<AnswerForm> answerFormList = new ArrayList<>();
 
-        for (Map.Entry<FrageDTO, AntwortDTO> entry : map.entrySet()) {
-            if (!service.antwortHasReview(entry.getValue())) {
+        for (Map.Entry<FrageDTO, AnswerDTO> entry : map.entrySet()) {
+            if (!service.answerHasReview(entry.getValue())) {
                 AnswerForm answerForm = new AnswerForm();
                 answerForm.setFrageText(entry.getKey().frageText());
-                answerForm.setAntwort(entry.getValue().antwortText());
+                answerForm.setAnswer(entry.getValue().answer());
                 answerForm.setMaxPunkte(entry.getKey().maxPunkte());
-                answerForm.setAntwortId(entry.getValue().id());
+                answerForm.setAnswerId(entry.getValue().id());
 
                 answerFormList.add(answerForm);
             }
@@ -299,11 +299,11 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void createReview(ReviewForm reviewForm, UUID antwortId, UUID reviewerId) {
+    public void createReview(ReviewForm reviewForm, UUID answerId, UUID reviewerId) {
         service.createReview(
                 reviewForm.getBewertung(),
                 reviewForm.getPunkteVergeben(),
-                antwortId,
+                answerId,
                 reviewerId);
     }
 

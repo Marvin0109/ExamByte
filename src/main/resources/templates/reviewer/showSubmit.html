@@ -33,17 +33,17 @@
         Für nachreichende Korrekturen wenden Sie sich am Modulverantwortlichen.
     </div>
 
-    <div th:each="antwort, iterStat : ${antworten}" class="card mb-3">
-        <form th:action="@{/reviewer/createReview/{antwortId}(antwortId=${antwort.antwortId})}" method="post"
+    <div th:each="answer, iterStat : ${answers}" class="card mb-3">
+        <form th:action="@{/reviewer/createReview/{answerId}(answerId=${answer.answerId})}" method="post"
               th:object="${reviewForm}">
             <div class="card-body">
-                <h5 class="card-text" th:text="${antwort.frageText}">Fragestellung</h5>
+                <h5 class="card-text" th:text="${answer.frageText}">Fragestellung</h5>
                 <p class="card-text">
-                    <small class="text-muted" th:text="${antwort.maxPunkte} + ' Punkte'">
+                    <small class="text-muted" th:text="${answer.maxPunkte} + ' Punkte'">
                         Punkte für Frage
                     </small>
                 </p>
-                <p class="card-text" th:text="${antwort.antwort}">Antwort des Studenten</p>
+                <p class="card-text" th:text="${answer.answer}">Antwort des Studenten</p>
                 <label class="form-label" th:for="'Bewertung' + ${iterStat.index}">Bewertungstext</label>
                 <textarea class="form-control mb-2"
                           rows="6"
@@ -60,7 +60,7 @@
                        th:field="*{punkteVergeben}"
                        min="0"
                        step="0.5"
-                       th:max="${antwort.maxPunkte}">
+                       th:max="${answer.maxPunkte}">
                 <small class="text-danger" th:if="${#fields.hasErrors('punkteVergeben')}"
                        th:errors="*{punkteVergeben}"></small>
 

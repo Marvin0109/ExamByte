@@ -1,10 +1,10 @@
 package exambyte.web.form.load_old_submit_data;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 
 public record OldDataDTO(
         FrageDTO fragen,
-        KorrekteAntwortenDTO korrekteAntworten,
-        AntwortDTO antwort) {}
+        CorrectAnswersDTO correctAnswers,
+        AnswerDTO answer) {}

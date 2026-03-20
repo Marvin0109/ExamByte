@@ -31,7 +31,7 @@ class ExamManagementServiceTest {
     private static final UUID FRAGE_ID2 = UUID.randomUUID();
 
     @Mock
-    private AntwortQueryService antwortQueryService;
+    private AnswerQueryService answerQueryService;
 
     @Mock
     private ReviewGenerationService reviewGenerationService;
@@ -64,7 +64,7 @@ class ExamManagementServiceTest {
         );
 
         examManagementService = new ExamManagementServiceImpl(
-                antwortQueryService,
+                answerQueryService,
                 reviewGenerationService,
                 frageQueryService,
                 scoringService,
@@ -225,7 +225,7 @@ class ExamManagementServiceTest {
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
-        when(antwortQueryService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
+        when(answerQueryService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
 
         assertThrows(Exception.class, () -> examManagementService.submitExam(
                 "Max",
@@ -239,24 +239,24 @@ class ExamManagementServiceTest {
         FrageDTO frage = mock(FrageDTO.class);
         when(frage.id()).thenReturn(FRAGE_ID1);
 
-        AntwortDTO antwort = mock(AntwortDTO.class);
+        AnswerDTO antwort = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
         when(review.bewertung()).thenReturn("Test");
         when(review.punkte()).thenReturn(1.0);
-        when(review.antwortId()).thenReturn(UUID.randomUUID());
+        when(review.answerId()).thenReturn(UUID.randomUUID());
         when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
-        when(antwortQueryService.saveAnswers(any(UUID.class), any()))
+        when(answerQueryService.saveAnswers(any(UUID.class), any()))
                 .thenReturn(true);
 
         when(frageQueryService.getFragenForExam(EXAM_ID))
                 .thenReturn(List.of(frage));
 
-        when(antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1))
+        when(answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1))
                 .thenReturn(antwort);
 
         when(reviewGenerationService.generateReviews(
@@ -284,22 +284,22 @@ class ExamManagementServiceTest {
         FrageDTO frage = mock(FrageDTO.class);
         when(frage.id()).thenReturn(FRAGE_ID1);
 
-        AntwortDTO antwort = mock(AntwortDTO.class);
+        AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
         // Review-Stub
         when(review.bewertung()).thenReturn("OK");
         when(review.punkte()).thenReturn(5.0);
-        when(review.antwortId()).thenReturn(UUID.randomUUID());
+        when(review.answerId()).thenReturn(UUID.randomUUID());
         when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
         when(studentQueryService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
 
-        when(antwortQueryService.saveAnswers(any(UUID.class), any())).thenReturn(true);
+        when(answerQueryService.saveAnswers(any(UUID.class), any())).thenReturn(true);
 
         when(frageQueryService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage));
 
-        when(antwortQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1)).thenReturn(antwort);
+        when(answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1)).thenReturn(answer);
 
         when(reviewGenerationService.generateReviews(eq(STUDENT_ID), anyList(), anyList()))
                 .thenReturn(List.of(review));
@@ -311,7 +311,7 @@ class ExamManagementServiceTest {
         verify(reviewQueryService).createReview(
                 review.bewertung(),
                 review.punkte(),
-                review.antwortId(),
+                review.answerId(),
                 review.reviewerId()
         );
     }
@@ -335,22 +335,22 @@ class ExamManagementServiceTest {
                 FRAGE_ID2, frage2
         );
 
-        AntwortDTO antwort1 = mock(AntwortDTO.class);
-        LocalDateTime zeit1 = LocalDateTime.of(2025, 1, 1, 10, 0);
-        when(antwort1.antwortZeitpunkt()).thenReturn(zeit1);
+        AnswerDTO answer1 = mock(AnswerDTO.class);
+        LocalDateTime submitTime1 = LocalDateTime.of(2025, 1, 1, 10, 0);
+        when(answer1.submitTime()).thenReturn(submitTime1);
 
-        AntwortDTO antwort2 = mock(AntwortDTO.class);
-        LocalDateTime zeit2 = LocalDateTime.of(2025, 1, 1, 11, 0);
-        when(antwort2.antwortZeitpunkt()).thenReturn(zeit2);
+        AnswerDTO answer2= mock(AnswerDTO.class);
+        LocalDateTime submitTime2 = LocalDateTime.of(2025, 1, 1, 11, 0);
+        when(answer2.submitTime()).thenReturn(submitTime2);
 
-        List<AntwortDTO> alleAntworten = List.of(antwort1, antwort2);
+        List<AnswerDTO> answerList = List.of(answer1, answer2);
 
         when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
         when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
         when(exam.resultTime()).thenReturn(resultTime);
         when(frageQueryService.getFragenUUIDMap(EXAM_ID)).thenReturn(frageMap);
-        when(antwortQueryService.getAntworten(STUDENT_ID, frageMap.keySet())).thenReturn(alleAntworten);
-        when(scoringService.berechneErreichtePunkte(alleAntworten, frageMap, resultTime)).thenReturn(12.0);
+        when(answerQueryService.getAnswers(STUDENT_ID, frageMap.keySet())).thenReturn(answerList);
+        when(scoringService.berechneErreichtePunkte(answerList, frageMap, resultTime)).thenReturn(12.0);
 
         // Act
         AttemptDTO result = examManagementService.getSubmission(EXAM_ID, studentName);
@@ -359,12 +359,12 @@ class ExamManagementServiceTest {
         assertThat(result.maxPunkte()).isEqualTo(15.0);
         assertThat(result.erreichtePunkte()).isEqualTo(12.0);
         assertThat(result.prozent()).isCloseTo(80.0, within(0.0001));
-        assertThat(result.lastChanges()).isEqualTo(zeit2);
+        assertThat(result.lastChanges()).isEqualTo(submitTime2);
 
         verify(studentQueryService).getStudentIdByName(studentName);
         verify(frageQueryService).getFragenUUIDMap(EXAM_ID);
-        verify(antwortQueryService).getAntworten(STUDENT_ID, frageMap.keySet());
-        verify(scoringService).berechneErreichtePunkte(alleAntworten, frageMap, resultTime);
+        verify(answerQueryService).getAnswers(STUDENT_ID, frageMap.keySet());
+        verify(scoringService).berechneErreichtePunkte(answerList, frageMap, resultTime);
     }
 
     @Test

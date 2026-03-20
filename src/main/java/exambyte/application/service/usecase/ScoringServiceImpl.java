@@ -1,6 +1,6 @@
 package exambyte.application.service.usecase;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.service.ReviewService;
@@ -30,12 +30,12 @@ public class ScoringServiceImpl implements ScoringService {
     }
 
     @Override
-    public double berechneErreichtePunkte(List<AntwortDTO> antworten, Map<UUID, FrageDTO> fragen, LocalDateTime result) {
-        return antworten.stream()
+    public double berechneErreichtePunkte(List<AnswerDTO> answers, Map<UUID, FrageDTO> fragen, LocalDateTime result) {
+        return answers.stream()
                 .mapToDouble(a -> {
                     FrageDTO f = fragen.get(a.frageId());
                     if (f == null) return 0;
-                    Review review = reviewService.getReviewByAntwortId(a.id());
+                    Review review = reviewService.getReviewByAnswerId(a.id());
 
                     UUID automaticReviewer = UUID.fromString("11111111-1111-1111-1111-111111111111");
 

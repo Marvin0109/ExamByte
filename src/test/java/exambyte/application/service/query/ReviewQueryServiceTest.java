@@ -24,7 +24,7 @@ class ReviewQueryServiceTest {
     private ReviewQueryService reviewQueryService;
 
     private Review review;
-    private static final UUID ANTWORT_ID = UUID.randomUUID();
+    private static final UUID ANSWER_ID = UUID.randomUUID();
     private static final UUID REVIEWER_ID = UUID.randomUUID();
 
     @Mock
@@ -39,7 +39,7 @@ class ReviewQueryServiceTest {
         reviewQueryService = new ReviewQueryServiceImpl(reviewService, reviewDTOMapper);
 
         review = new Review.ReviewBuilder()
-                .antwortId(ANTWORT_ID)
+                .answerId(ANSWER_ID)
                 .reviewerId(REVIEWER_ID)
                 .bewertung("Bewertung")
                 .punkte(1)
@@ -50,18 +50,18 @@ class ReviewQueryServiceTest {
     void createReview_withCorrectParams_noExistingReview() {
         // Arrange
         when(reviewDTOMapper.toDomain(any())).thenReturn(review);
-        when(reviewService.getReviewByAntwortId(ANTWORT_ID)).thenReturn(null);
+        when(reviewService.getReviewByAnswerId(ANSWER_ID)).thenReturn(null);
 
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
         // Act
-        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, REVIEWER_ID);
+        reviewQueryService.createReview("Bewertung", 1, ANSWER_ID, REVIEWER_ID);
 
         // Assert
         verify(reviewService).addReview(captor.capture());
         Review result = captor.getValue();
 
-        assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
+        assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
         assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
         assertThat(result.getId()).isNull();
     }
@@ -70,18 +70,18 @@ class ReviewQueryServiceTest {
     void createReview_withCorrectParams_existingReview() {
         // Arrange
         when(reviewDTOMapper.toDomain(any())).thenReturn(review);
-        when(reviewService.getReviewByAntwortId(ANTWORT_ID)).thenReturn(review);
+        when(reviewService.getReviewByAnswerId(ANSWER_ID)).thenReturn(review);
 
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
         // Act
-        reviewQueryService.createReview("Bewertung", 1, ANTWORT_ID, REVIEWER_ID);
+        reviewQueryService.createReview("Bewertung", 1, ANSWER_ID, REVIEWER_ID);
 
         // Assert
         verify(reviewService).addReview(captor.capture());
         Review result = captor.getValue();
 
-        assertThat(result.getAntwortId()).isEqualTo(ANTWORT_ID);
+        assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
         assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
         assertThat(result.getId()).isEqualTo(review.getId());
     }
@@ -90,23 +90,23 @@ class ReviewQueryServiceTest {
     void getReviewByAntwortId_success() {
         ReviewDTO reviewDTO = new ReviewDTO(
                 review.getId(),
-                ANTWORT_ID,
+                ANSWER_ID,
                 REVIEWER_ID,
                 review.getBewertung(),
                 review.getPunkte());
 
-        when(reviewService.getReviewByAntwortId(any())).thenReturn(review);
+        when(reviewService.getReviewByAnswerId(any())).thenReturn(review);
         when(reviewDTOMapper.toDTO(review)).thenReturn(reviewDTO);
 
-        ReviewDTO result = reviewQueryService.getReviewByAntwortId(ANTWORT_ID);
+        ReviewDTO result = reviewQueryService.getReviewByAnswerId(ANSWER_ID);
 
         assertNotNull(result);
     }
 
     @Test
     void getReviewByAntwortId_notFound() {
-        when(reviewService.getReviewByAntwortId(any())).thenReturn(null);
-        ReviewDTO result = reviewQueryService.getReviewByAntwortId(ANTWORT_ID);
+        when(reviewService.getReviewByAnswerId(any())).thenReturn(null);
+        ReviewDTO result = reviewQueryService.getReviewByAnswerId(ANSWER_ID);
         assertNull(result);
     }
 }

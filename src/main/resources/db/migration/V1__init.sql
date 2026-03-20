@@ -35,39 +35,39 @@ CREATE TABLE frage (
     FOREIGN KEY(exam_id) REFERENCES exam(id) ON DELETE CASCADE
 );
 
-CREATE TABLE antwort (
+CREATE TABLE answer (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     frage_id                UUID NOT NULL,
-    antwort_text            VARCHAR(500),
+    answer                  VARCHAR(500),
     student_id              UUID NOT NULL,
-    antwort_zeitpunkt       TIMESTAMP,
+    submit_time             TIMESTAMP,
     FOREIGN KEY(frage_id) REFERENCES frage(id) ON DELETE CASCADE,
     FOREIGN KEY(student_id) REFERENCES student(id) ON DELETE CASCADE,
-    CONSTRAINT unique_antwort UNIQUE (frage_id, student_id)
+    CONSTRAINT unique_answer UNIQUE (frage_id, student_id)
 );
 
 CREATE TABLE review (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    antwort_id              UUID NOT NULL,
-    reviewer_id            UUID,
+    answer_id               UUID NOT NULL,
+    reviewer_id             UUID,
     bewertung               TEXT NOT NULL,
     punkte                  INT NOT NULL, -- Punkte * 2
-    FOREIGN KEY(antwort_id) REFERENCES antwort(id) ON DELETE CASCADE,
+    FOREIGN KEY(answer_id) REFERENCES answer(id) ON DELETE CASCADE,
     FOREIGN KEY(reviewer_id) REFERENCES reviewer(id) ON DELETE SET NULL,
-    CONSTRAINT unique_review UNIQUE (antwort_id)
+    CONSTRAINT unique_review UNIQUE (answer_id)
 );
 
 CREATE TABLE correct_answers (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     frage_id                UUID NOT NULL,
-    richtige_antwort        TEXT NOT NULL,
-    antwort_optionen        TEXT NOT NULL,
+    solution                TEXT NOT NULL,
+    choices                 TEXT NOT NULL,
     FOREIGN KEY(frage_id) REFERENCES frage(id) ON DELETE CASCADE,
     CONSTRAINT unique_correct_answers UNIQUE (frage_id)
 );
 
-CREATE INDEX idx_antwort_frage_student ON antwort(frage_id, student_id);
-CREATE INDEX idx_review_antwort ON review(antwort_id);
+CREATE INDEX idx_answer_frage_student ON answer(frage_id, student_id);
+CREATE INDEX idx_review_answer ON review(answer_id);
 
 CREATE OR REPLACE FUNCTION set_auto_reviewer_uuid()
 RETURNS TRIGGER AS $$
@@ -93,8 +93,8 @@ BEGIN
     SELECT f.max_punkte
     INTO max_punkte_frage
     FROM frage f
-    JOIN antwort a ON a.frage_id = f.id
-    WHERE a.id = NEW.antwort_id;
+    JOIN answer a ON a.frage_id = f.id
+    WHERE a.id = NEW.answer_id;
 
     IF NEW.punkte > max_punkte_frage THEN
         RAISE EXCEPTION 'Zu viele Punkte vergeben';

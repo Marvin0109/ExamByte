@@ -1,9 +1,9 @@
 package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,8 +40,8 @@ class AutomaticReviewServiceTest {
     void autoReviewMC(
             String bewertung,
             double maxPunkte,
-            String studentAntwort,
-            String korrekteAntwort,
+            String studentAnswer,
+            String solution,
             double expectedPunkte
     ) {
         // Arrange
@@ -53,17 +53,17 @@ class AutomaticReviewServiceTest {
                 QuestionTypeDTO.MC
         );
 
-        AntwortDTO antwort = new AntwortDTO(
+        AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
-                studentAntwort,
+                studentAnswer,
                 frage.id(),
                 studentUUID,
                 antwortTime
         );
 
-        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
+        CorrectAnswersDTO correctAnswersDTO = new CorrectAnswersDTO(
                 UUID.randomUUID(),
-                korrekteAntwort,
+                solution,
                 "A\nB\nC\nD\nE\nF\nG\nH",
                 frage.id()
         );
@@ -71,8 +71,8 @@ class AutomaticReviewServiceTest {
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
-                List.of(antwort),
-                List.of(korrekteAntwortenDTO),
+                List.of(answer),
+                List.of(correctAnswersDTO),
                 studentUUID,
                 service
         );
@@ -113,8 +113,8 @@ class AutomaticReviewServiceTest {
     void autoReviewSC(
             String bewertung,
             double maxPunkte,
-            String studentAntwort,
-            String korrekteAntwort,
+            String studentAnswer,
+            String solution,
             double expectedPunkte
     ) {
         // Arrange
@@ -126,17 +126,17 @@ class AutomaticReviewServiceTest {
                 QuestionTypeDTO.SC
         );
 
-        AntwortDTO antwort = new AntwortDTO(
+        AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
-                studentAntwort,
+                studentAnswer,
                 frage.id(),
                 studentUUID,
                 antwortTime
         );
 
-        KorrekteAntwortenDTO korrekteAntwortenDTO = new KorrekteAntwortenDTO(
+        CorrectAnswersDTO correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
-                korrekteAntwort,
+                solution,
                 "A\nB\nC\nD",
                 frage.id()
         );
@@ -144,8 +144,8 @@ class AutomaticReviewServiceTest {
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
-                List.of(antwort),
-                List.of(korrekteAntwortenDTO),
+                List.of(answer),
+                List.of(correctAnswers),
                 studentUUID,
                 service
         );
@@ -174,7 +174,7 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
+        CorrectAnswersDTO correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 4\nAntwort 5",
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
@@ -184,7 +184,7 @@ class AutomaticReviewServiceTest {
         List<ReviewDTO> reviews = automaticReviewService.autoReviewSC(
                 List.of(frage),
                 List.of(),
-                List.of(korrekteAntworten),
+                List.of(correctAnswers),
                 studentUUID,
                 service
         );
@@ -195,7 +195,7 @@ class AutomaticReviewServiceTest {
 
     @Test
     @DisplayName("SC: KorrekteAntwort nicht existierend")
-    void autoReviewSC_korrekteAntwortNotFound() {
+    void autoReviewSC_correctAnswersNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -204,7 +204,7 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        AntwortDTO antwort = new AntwortDTO(
+        AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 3\nAntwort 4",
                 frage.id(),
@@ -214,7 +214,7 @@ class AutomaticReviewServiceTest {
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewSC(
                 List.of(frage),
-                List.of(antwort),
+                List.of(answer),
                 List.of(),
                 studentUUID,
                 service
@@ -225,8 +225,8 @@ class AutomaticReviewServiceTest {
     }
 
     @Test
-    @DisplayName("MC: StudentAntwort nicht existierend")
-    void autoReviewMC_studentAntwortNotFound() {
+    @DisplayName("MC: StudentAnswer nicht existierend")
+    void autoReviewMC_studentAnswerNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -235,7 +235,7 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        KorrekteAntwortenDTO korrekteAntworten = new KorrekteAntwortenDTO(
+        CorrectAnswersDTO correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 4\nAntwort 5",
                 "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
@@ -245,7 +245,7 @@ class AutomaticReviewServiceTest {
         List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
                 List.of(),
-                List.of(korrekteAntworten),
+                List.of(correctAnswers),
                 studentUUID,
                 service
         );
@@ -256,7 +256,7 @@ class AutomaticReviewServiceTest {
 
     @Test
     @DisplayName("MC: KorrekteAntwort nicht existierend")
-    void autoReviewMC_korrekteAntwortNotFound() {
+    void autoReviewMC_correctAnswersNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -265,7 +265,7 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        AntwortDTO antwort = new AntwortDTO(
+        AnswerDTO antwort = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort 2\nAntwort 3\nAntwort 4",
                 frage.id(),

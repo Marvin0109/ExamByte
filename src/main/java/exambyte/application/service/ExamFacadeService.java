@@ -19,7 +19,7 @@ public interface ExamFacadeService {
 
     boolean isExamAlreadySubmitted(UUID examId, String studentName);
 
-    boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examId);
+    boolean submitExam(String studentLogin, Map<String, List<String>> answer, UUID examId);
 
     ExamDTO getExam(UUID examId);
 
@@ -53,21 +53,21 @@ public interface ExamFacadeService {
 
     List<FrageDTO> getFreeResponseFragen(UUID examId);
 
-    List<AntwortDTO> getFreeResponseAntwortenForExam(UUID examId);
+    List<AnswerDTO> getFreeResponseSolutionForExam(UUID examId);
 
-    boolean antwortHasReview(AntwortDTO antwort);
+    boolean answerHasReview(AnswerDTO answer);
 
-    void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId);
+    void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId);
 
     UUID getReviewerByName(String name);
 
     UUID getStudentIdByName(String name);
 
-    AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId);
+    AnswerDTO getAnswerForFrageAndStudent(UUID frageId, UUID studentId);
 
-    ReviewDTO getReviewForAntwort(UUID antwortId);
+    ReviewDTO getReviewForAnswer(UUID answerId);
 
-    KorrekteAntwortenDTO getLoesungForFrage(UUID frageId);
+    CorrectAnswersDTO getLoesungForFrage(UUID frageId);
 
     boolean timeReachedToViewReview(UUID examId);
 

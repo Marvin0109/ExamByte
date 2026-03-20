@@ -1,12 +1,12 @@
 package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.ReviewData;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
-import exambyte.domain.service.KorrekteAntwortenService;
+import exambyte.domain.mapper.CorrectAnswersDTOMapper;
+import exambyte.domain.service.CorrectAnswersService;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
@@ -19,34 +19,34 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
 
     private final AutomaticReviewService automaticReviewService;
     private final ReviewService reviewService;
-    private final KorrekteAntwortenService korrekteAntwortenService;
-    private final KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
+    private final CorrectAnswersService correctAnswersService;
+    private final CorrectAnswersDTOMapper mapper;
 
     public ReviewGenerationServiceImpl(AutomaticReviewService automaticReviewService,
                                        ReviewService reviewService,
-                                       KorrekteAntwortenService korrekteAntwortenService,
-                                       KorrekteAntwortenDTOMapper antwortDTOMapper) {
+                                       CorrectAnswersService correctAnswersService,
+                                       CorrectAnswersDTOMapper mapper) {
         this.automaticReviewService = automaticReviewService;
         this.reviewService = reviewService;
-        this.korrekteAntwortenService = korrekteAntwortenService;
-        this.korrekteAntwortenDTOMapper = antwortDTOMapper;
+        this.correctAnswersService = correctAnswersService;
+        this.mapper = mapper;
     }
 
     @Override
-    public List<ReviewDTO> generateReviews(UUID studentId, List<FrageDTO> fragen, List<AntwortDTO> antworten) {
-        ReviewData mcData = new ReviewData(fragen, antworten,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
-        ReviewData scData = new ReviewData(fragen, antworten,
-                korrekteAntwortenDTOMapper, korrekteAntwortenService);
+    public List<ReviewDTO> generateReviews(UUID studentId, List<FrageDTO> fragen, List<AnswerDTO> answers) {
+        ReviewData mcData = new ReviewData(fragen, answers,
+                mapper, correctAnswersService);
+        ReviewData scData = new ReviewData(fragen, answers,
+                mapper, correctAnswersService);
 
         mcData.filterToType(QuestionTypeDTO.MC);
         scData.filterToType(QuestionTypeDTO.SC);
 
         List<ReviewDTO> reviewsMC = automaticReviewService.autoReviewMC(
-                mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentId,
+                mcData.getFragen(), mcData.getAnswers(), mcData.getCorrectAnswers(), studentId,
                 reviewService);
         List<ReviewDTO> reviewsSC = automaticReviewService.autoReviewSC(
-                scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentId,
+                scData.getFragen(), scData.getAnswers(), scData.getCorrectAnswers(), studentId,
                 reviewService);
 
         return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();

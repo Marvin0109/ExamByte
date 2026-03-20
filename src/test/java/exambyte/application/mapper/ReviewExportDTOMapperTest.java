@@ -1,7 +1,7 @@
 package exambyte.application.mapper;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
@@ -22,8 +22,8 @@ class ReviewExportDTOMapperTest {
     private ExamDTO exam;
     private FrageDTO frage1;
     private FrageDTO frage2;
-    private AntwortDTO antwort1;
-    private AntwortDTO antwort2;
+    private AnswerDTO answer1;
+    private AnswerDTO answer2;
     private ReviewDTO review1;
     private ReviewDTO review2;
 
@@ -56,7 +56,7 @@ class ReviewExportDTOMapperTest {
                 QuestionTypeDTO.SC
         );
 
-        antwort1 = new AntwortDTO(
+        answer1 = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort 1",
                 frage1.id(),
@@ -64,7 +64,7 @@ class ReviewExportDTOMapperTest {
                 null
         );
 
-        antwort2 = new AntwortDTO(
+        answer2 = new AnswerDTO(
                 UUID.randomUUID(),
                 "A",
                 frage2.id(),
@@ -74,7 +74,7 @@ class ReviewExportDTOMapperTest {
 
         review1 = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort1.id(),
+                answer1.id(),
                 null,
                 "Bewertung 1",
                 6
@@ -82,7 +82,7 @@ class ReviewExportDTOMapperTest {
 
         review2 = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort2.id(),
+                answer2.id(),
                 null,
                 "Bewertung 2",
                 1
@@ -96,7 +96,7 @@ class ReviewExportDTOMapperTest {
                 "Reviewer",
                 7,
                 List.of(frage1, frage2),
-                List.of(antwort1, antwort2),
+                List.of(answer1, answer2),
                 List.of(review1, review2));
 
         assertThat(result).hasSize(2);
@@ -128,7 +128,7 @@ class ReviewExportDTOMapperTest {
                 "Reviewer",
                 7,
                 List.of(frage1, frage2),
-                List.of(antwort1, antwort2),
+                List.of(answer1, answer2),
                 List.of(review2));
 
         assertThat(result).hasSize(2);

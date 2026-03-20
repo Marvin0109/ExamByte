@@ -3,12 +3,12 @@ package exambyte.application.service.query;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.domain.mapper.FrageDTOMapper;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
+import exambyte.domain.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.FrageService;
-import exambyte.domain.service.KorrekteAntwortenService;
+import exambyte.domain.service.CorrectAnswersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -35,13 +35,13 @@ class FrageQueryServiceTest {
     private FrageService frageService;
 
     @Mock
-    private KorrekteAntwortenService korrekteAntwortenService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
     private FrageDTOMapper frageDTOMapper;
 
     @Mock
-    private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
+    private CorrectAnswersDTOMapper correctAnswersDTOMapper;
 
     @BeforeEach
     void setUp() {
@@ -49,9 +49,9 @@ class FrageQueryServiceTest {
 
         frageQueryService = new FrageQueryServiceImpl(
                 frageService,
-                korrekteAntwortenService,
+                correctAnswersService,
                 frageDTOMapper,
-                korrekteAntwortenDTOMapper);
+                correctAnswersDTOMapper);
 
         frageDTOFreeResponse = new FrageDTO(
                 UUID.randomUUID(),
@@ -85,24 +85,24 @@ class FrageQueryServiceTest {
 
     @Test
     void createChoiceFrageWithCorrectParams() {
-        KorrekteAntworten domain = new KorrekteAntworten.KorrekteAntwortenBuilder()
+        CorrectAnswers domain = new CorrectAnswers.CorrectAnswersBuilder()
                 .frageId(frageDTOMC.id())
-                .loesungen("A")
-                .antwortOptionen("A, B")
+                .solution("A")
+                .choices("A, B")
                 .build();
 
         when(frageDTOMapper.toDomain(frageDTOMC)).thenReturn(frageMC);
         when(frageService.addFrage(any())).thenReturn(frageDTOMC.id());
-        when(korrekteAntwortenDTOMapper.toDomain(any())).thenReturn(domain);
+        when(correctAnswersDTOMapper.toDomain(any())).thenReturn(domain);
 
         frageQueryService.createChoiceFrage(frageDTOMC, "A", "A, B");
 
-        ArgumentCaptor<KorrekteAntworten> captor = ArgumentCaptor.forClass(KorrekteAntworten.class);
-        verify(korrekteAntwortenService).addKorrekteAntwort(captor.capture());
+        ArgumentCaptor<CorrectAnswers> captor = ArgumentCaptor.forClass(CorrectAnswers.class);
+        verify(correctAnswersService).addCorrectAnswer(captor.capture());
 
-        KorrekteAntworten captured = captor.getValue();
-        assertEquals("A", captured.getLoesungen());
-        assertEquals("A, B", captured.getAntwortOptionen());
+        CorrectAnswers captured = captor.getValue();
+        assertEquals("A", captured.getSolution());
+        assertEquals("A, B", captured.getChoices());
         assertEquals(frageDTOMC.id(), captured.getFrageId());
     }
 

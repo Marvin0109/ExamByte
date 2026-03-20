@@ -6,13 +6,13 @@ import java.util.UUID;
 
 public interface ReviewQueryService {
 
-    ReviewDTO getReviewByAntwortId(UUID antwortId);
+    ReviewDTO getReviewByAnswerId(UUID answerId);
 
-    boolean antwortHasReview(UUID antwortId);
+    boolean answerHasReview(UUID answerId);
 
-    void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId);
+    void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId);
 
-    UUID getReviewIdByAntwortId(UUID antwortId);
+    UUID getReviewIdByAnswerId(UUID answerId);
 
     void deleteReview(UUID id);
 }

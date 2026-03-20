@@ -20,25 +20,25 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     }
 
     @Override
-    public UUID getReviewIdByAntwortId(UUID antwortId) {
-        return reviewService.getReviewByAntwortId(antwortId).getAntwortId();
+    public UUID getReviewIdByAnswerId(UUID answerId) {
+        return reviewService.getReviewByAnswerId(answerId).getAnswerId();
     }
 
     @Override
-    public boolean antwortHasReview(UUID antwortId) {
-        return reviewService.getReviewByAntwortId(antwortId) != null;
+    public boolean answerHasReview(UUID answerId) {
+        return reviewService.getReviewByAnswerId(answerId) != null;
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId) {
-        Review loaded = reviewService.getReviewByAntwortId(antwortId);
+    public void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId) {
+        Review loaded = reviewService.getReviewByAnswerId(answerId);
 
         UUID reviewId = loaded != null ? loaded.getId() : null;
 
         Review review = reviewDTOMapper.toDomain(
                 new ReviewDTO(
                         reviewId,
-                        antwortId,
+                        answerId,
                         reviewerId,
                         bewertung,
                         punkte)
@@ -48,8 +48,8 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
     }
 
     @Override
-    public ReviewDTO getReviewByAntwortId(UUID antwortId) {
-        Review review = reviewService.getReviewByAntwortId(antwortId);
+    public ReviewDTO getReviewByAnswerId(UUID answerId) {
+        Review review = reviewService.getReviewByAnswerId(answerId);
         if (review != null) {
             return reviewDTOMapper.toDTO(review);
         }

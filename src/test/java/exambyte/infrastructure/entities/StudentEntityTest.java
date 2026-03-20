@@ -13,12 +13,12 @@ class StudentEntityTest {
 
     @ParameterizedTest
     @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
-    @MethodSource("ungueltigeBuilder")
+    @MethodSource("invalidBuilder")
     void createStudentEntity_fail(StudentEntity.StudentEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);
     }
 
-    private static Stream<StudentEntity.StudentEntityBuilder> ungueltigeBuilder() {
+    private static Stream<StudentEntity.StudentEntityBuilder> invalidBuilder() {
         return Stream.of(
                 new StudentEntity.StudentEntityBuilder()
                         .name(" "),

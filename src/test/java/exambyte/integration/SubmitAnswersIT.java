@@ -1,10 +1,10 @@
 package exambyte.integration;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.domain.model.aggregate.exam.Antwort;
+import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
+import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Student;
@@ -43,10 +43,10 @@ class SubmitAnswersIT {
     private FrageRepository frageRepository;
 
     @Autowired
-    private KorrekteAntwortenRepository korrekteAntwortenRepository;
+    private CorrectAnswersRepository correctAnswersRepository;
 
     @Autowired
-    private AntwortRepository antwortRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -106,10 +106,10 @@ class SubmitAnswersIT {
 
         assert(frageIdSC.isPresent());
 
-        korrekteAntwortenRepository.save(new KorrekteAntworten.KorrekteAntwortenBuilder()
+        correctAnswersRepository.save(new CorrectAnswers.CorrectAnswersBuilder()
                 .frageId(frageIdSC.get())
-                .antwortOptionen("A\nB\nC\nD")
-                .loesungen("B")
+                .choices("A\nB\nC\nD")
+                .solution("B")
                 .build());
 
         Map<String, List<String>> answers = new HashMap<>();
@@ -122,11 +122,11 @@ class SubmitAnswersIT {
         boolean success = examControllerService.submitExam("Student", answers, examId);
         assertThat(success).isTrue();
 
-        Antwort antwort = antwortRepository.findByFrageId(frageIdSC.get());
+        Answer answer = answerRepository.findByFrageId(frageIdSC.get());
 
-        assertThat(antwortRepository.findByFrageId(frageIdFreeResponse.get())).isNotNull();
-        assertThat(antwortRepository.findByFrageId(frageIdSC.get())).isNotNull();
+        assertThat(answerRepository.findByFrageId(frageIdFreeResponse.get())).isNotNull();
+        assertThat(answerRepository.findByFrageId(frageIdSC.get())).isNotNull();
 
-        assertThat(reviewRepository.findByAntwortId(antwort.getId())).isNotNull();
+        assertThat(reviewRepository.findByAnswerId(answer.getId())).isNotNull();
     }
 }

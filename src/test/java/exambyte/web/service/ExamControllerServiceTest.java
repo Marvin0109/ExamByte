@@ -325,41 +325,41 @@ class ExamControllerServiceTest {
                 EXAM_ID,
                 QuestionTypeDTO.FREE_RESPONSE);
 
-        AntwortDTO antwort1 = new AntwortDTO(
+        AnswerDTO answer1 = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort 1",
+                "Answer 1",
                 frage1.id(),
                 studentUUID,
                 time
         );
 
-        AntwortDTO antwort2 = new AntwortDTO(
+        AnswerDTO answer2 = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort 2",
+                "Answer 2",
                 frage2.id(),
                 studentUUID,
                 time
         );
 
-        Map<FrageDTO, AntwortDTO> map = new LinkedHashMap<>();
-        map.put(frage1, antwort1);
-        map.put(frage2, antwort2);
+        Map<FrageDTO, AnswerDTO> map = new LinkedHashMap<>();
+        map.put(frage1, answer1);
+        map.put(frage2, answer2);
 
-        when(examFacadeService.antwortHasReview(antwort1)).thenReturn(false);
-        when(examFacadeService.antwortHasReview(antwort2)).thenReturn(true);
+        when(examFacadeService.answerHasReview(answer1)).thenReturn(false);
+        when(examFacadeService.answerHasReview(answer2)).thenReturn(true);
 
         List<AnswerForm> result = service.createAnswerForm(map);
         AnswerForm form = result.getFirst();
 
         assertThat(result).hasSize(1);
         assertThat(form.getFrageText()).isEqualTo("Frage 1");
-        assertThat(form.getAntwort()).isEqualTo("Antwort 1");
+        assertThat(form.getAnswer()).isEqualTo("Answer 1");
         assertThat(form.getMaxPunkte()).isEqualTo(2);
-        assertThat(form.getAntwortId()).isEqualTo(antwort1.id());
+        assertThat(form.getAnswerId()).isEqualTo(answer1.id());
     }
 
     @Test
-    void getFreeResponseAntwortenForExamAndStudent() {
+    void getFreeResponseAnswersForExamAndStudent() {
         UUID studentId = UUID.randomUUID();
 
         FrageDTO frage = new FrageDTO(
@@ -370,7 +370,7 @@ class ExamControllerServiceTest {
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        AntwortDTO antwort = new AntwortDTO(
+        AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
                 frage.id(),
@@ -379,15 +379,15 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getFreeResponseFragen(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getFreeResponseAntwortenForExam(EXAM_ID)).thenReturn(List.of(antwort));
+        when(examFacadeService.getFreeResponseSolutionForExam(EXAM_ID)).thenReturn(List.of(answer));
 
-        Map<FrageDTO, AntwortDTO> map = service.getFreeResponseAntwortenForExamAndStudent(EXAM_ID, studentId);
+        Map<FrageDTO, AnswerDTO> map = service.getFreeResponseSolutionForExamAndStudent(EXAM_ID, studentId);
 
         assertThat(map).hasSize(1);
     }
 
     @Test
-    void getFreeResponseAntwortenForExamAndStudent_noAnswer() {
+    void getFreeResponseSolutionForExamAndStudent_noAnswer() {
         UUID studentId = UUID.randomUUID();
 
         FrageDTO frage = new FrageDTO(
@@ -399,9 +399,9 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getFreeResponseFragen(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getFreeResponseAntwortenForExam(EXAM_ID)).thenReturn(List.of());
+        when(examFacadeService.getFreeResponseSolutionForExam(EXAM_ID)).thenReturn(List.of());
 
-        Map<FrageDTO, AntwortDTO> map = service.getFreeResponseAntwortenForExamAndStudent(EXAM_ID, studentId);
+        Map<FrageDTO, AnswerDTO> map = service.getFreeResponseSolutionForExamAndStudent(EXAM_ID, studentId);
 
         assertThat(map).isEmpty();
     }

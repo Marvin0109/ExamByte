@@ -1,9 +1,9 @@
 package exambyte.application.service.usecase;
 
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.query.ReviewQueryService;
-import exambyte.application.service.query.AntwortQueryService;
+import exambyte.application.service.query.AnswerQueryService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,45 +14,45 @@ import java.util.UUID;
 public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     private final ReviewQueryService reviewQueryService;
-    private final AntwortQueryService antwortQueryService;
+    private final AnswerQueryService answerQueryService;
 
     public ReviewManagementServiceImpl(ReviewQueryService reviewQueryService,
-                                       AntwortQueryService antwortQueryService) {
+                                       AnswerQueryService answerQueryService) {
         this.reviewQueryService = reviewQueryService;
-        this.antwortQueryService = antwortQueryService;
+        this.answerQueryService = answerQueryService;
     }
 
     @Override
     public double getReviewCoverage(UUID examId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreeResponseAntwortenForExam(examId);
+        List<AnswerDTO> answers = answerQueryService.getFreeResponseAnswersForExam(examId);
 
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
-        for (AntwortDTO antwortDTO : antworten) {
-            ReviewDTO reviewDTO = reviewQueryService.getReviewByAntwortId(antwortDTO.id());
+        for (AnswerDTO answerDTO : answers) {
+            ReviewDTO reviewDTO = reviewQueryService.getReviewByAnswerId(answerDTO.id());
             if (reviewDTO != null) {
                 reviewsTotal.add(reviewDTO);
             }
         }
 
-        double coverage = antworten.isEmpty()
+        double coverage = answers.isEmpty()
                 ? 0.0
-                : (double) reviewsTotal.size() / antworten.size() * 100;
+                : (double) reviewsTotal.size() / answers.size() * 100;
 
         return Math.round(coverage * 100.0) / 100.0;
     }
 
     @Override
     public boolean submitHasReview(UUID examId, UUID studentId) {
-        List<AntwortDTO> antworten = antwortQueryService.getFreeResponseAntwortenForExam(examId);
+        List<AnswerDTO> answers = answerQueryService.getFreeResponseAnswersForExam(examId);
 
-        List<UUID> studentAntwortList = antworten.stream()
+        List<UUID> studentAnswerList = answers.stream()
                 .filter(a -> a.studentId().equals(studentId))
-                .map(AntwortDTO::id)
+                .map(AnswerDTO::id)
                 .toList();
 
-        for (UUID uuid : studentAntwortList) {
-            if (reviewQueryService.getReviewByAntwortId(uuid) == null) {
+        for (UUID uuid : studentAnswerList) {
+            if (reviewQueryService.getReviewByAnswerId(uuid) == null) {
                 return false;
             }
         }

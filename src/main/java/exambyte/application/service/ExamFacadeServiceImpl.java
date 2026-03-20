@@ -25,9 +25,9 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ProfessorQueryService professorQueryService;
     private final ReviewerQueryService reviewerQueryService;
     private final StudentQueryService studentQueryService;
-    private final AntwortQueryService antwortQueryService;
+    private final AnswerQueryService answerQueryService;
     private final ReviewQueryService reviewQueryService;
-    private final KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+    private final CorrectAnswersQueryService correctAnswersQueryService;
 
 
     public ExamFacadeServiceImpl(ReviewManagementService reviewManagementService,
@@ -38,9 +38,9 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ProfessorQueryService professorQueryService,
                                  ReviewerQueryService reviewerQueryService,
                                  StudentQueryService studentQueryService,
-                                 AntwortQueryService antwortQueryService,
+                                 AnswerQueryService answerQueryService,
                                  ReviewQueryService reviewQueryService,
-                                 KorrekteAntwortenQueryService korrekteAntwortenQueryService) {
+                                 CorrectAnswersQueryService correctAnswersQueryService) {
 
         this.reviewManagementService = reviewManagementService;
         this.examManagementService = examManagementService;
@@ -50,9 +50,9 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.professorQueryService = professorQueryService;
         this.reviewerQueryService = reviewerQueryService;
         this.studentQueryService = studentQueryService;
-        this.antwortQueryService = antwortQueryService;
+        this.answerQueryService = answerQueryService;
         this.reviewQueryService = reviewQueryService;
-        this.korrekteAntwortenQueryService = korrekteAntwortenQueryService;
+        this.correctAnswersQueryService = correctAnswersQueryService;
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examId) {
-        SubmitExamResult result = examManagementService.submitExam(studentLogin, antworten, examId);
+    public boolean submitExam(String studentLogin, Map<String, List<String>> answer, UUID examId) {
+        SubmitExamResult result = examManagementService.submitExam(studentLogin, answer, examId);
         return result.equals(SubmitExamResult.SUCCESS);
     }
 
@@ -162,18 +162,18 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public List<AntwortDTO> getFreeResponseAntwortenForExam(UUID examId) {
-        return antwortQueryService.getFreeResponseAntwortenForExam(examId);
+    public List<AnswerDTO> getFreeResponseSolutionForExam(UUID examId) {
+        return answerQueryService.getFreeResponseAnswersForExam(examId);
     }
 
     @Override
-    public boolean antwortHasReview(AntwortDTO antwort) {
-       return reviewQueryService.antwortHasReview(antwort.id());
+    public boolean answerHasReview(AnswerDTO answer) {
+       return reviewQueryService.answerHasReview(answer.id());
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID antwortId, UUID reviewerId) {
-        reviewQueryService.createReview(bewertung, punkte, antwortId, reviewerId);
+    public void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId) {
+        reviewQueryService.createReview(bewertung, punkte, answerId, reviewerId);
     }
 
     @Override
@@ -187,18 +187,18 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId) {
-        return antwortQueryService.findByStudentAndFrage(studentId, frageId);
+    public AnswerDTO getAnswerForFrageAndStudent(UUID frageId, UUID studentId) {
+        return answerQueryService.findByStudentAndFrage(studentId, frageId);
     }
 
     @Override
-    public ReviewDTO getReviewForAntwort(UUID antwortId) {
-        return reviewQueryService.getReviewByAntwortId(antwortId);
+    public ReviewDTO getReviewForAnswer(UUID answerId) {
+        return reviewQueryService.getReviewByAnswerId(answerId);
     }
 
     @Override
-    public KorrekteAntwortenDTO getLoesungForFrage(UUID frageId) {
-        return korrekteAntwortenQueryService.getLoesungForFrage(frageId);
+    public CorrectAnswersDTO getLoesungForFrage(UUID frageId) {
+        return correctAnswersQueryService.getSolutionForFrage(frageId);
     }
 
     @Override

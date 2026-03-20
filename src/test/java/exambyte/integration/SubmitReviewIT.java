@@ -1,7 +1,7 @@
 package exambyte.integration;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.domain.model.aggregate.exam.Antwort;
+import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.model.aggregate.exam.Frage;
 import exambyte.domain.model.aggregate.exam.Review;
@@ -46,7 +46,7 @@ class SubmitReviewIT {
     private FrageRepository frageRepository;
 
     @Autowired
-    private AntwortRepository antwortRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -104,25 +104,25 @@ class SubmitReviewIT {
         List<Frage> frageLoaded = frageRepository.findByExamId(examId.get());
         assertThat(frageLoaded).isNotEmpty();
 
-        // Antwort
-        Antwort antwort = new Antwort.AntwortBuilder()
+        // Answer
+        Answer answer = new Answer.AnswerBuilder()
                 .frageId(frageLoaded.getFirst().getId())
-                .antwortText("Antwort")
+                .answer("Answer")
                 .studentId(studentId.get())
-                .antwortZeitpunkt(LocalDateTime.of(2026, 1, 1, 1, 0))
+                .submitTime(LocalDateTime.of(2026, 1, 1, 1, 0))
                 .build();
-        antwortRepository.save(antwort);
-        Optional<Antwort> antwortLoaded = antwortRepository
+        answerRepository.save(answer);
+        Optional<Answer> answerLoaded = answerRepository
                 .findByStudentIdAndFrageId(studentId.get(), frageLoaded.getFirst().getId());
-        assertThat(antwortLoaded).isPresent();
+        assertThat(answerLoaded).isPresent();
 
         ReviewForm form = new ReviewForm();
         form.setBewertung("Bewertung");
         form.setPunkteVergeben(5.0);
 
-        examControllerService.createReview(form, antwortLoaded.get().getId(),reviewerLoaded.get().id());
+        examControllerService.createReview(form, answerLoaded.get().getId(),reviewerLoaded.get().id());
 
-        Review review = reviewRepository.findByAntwortId(antwortLoaded.get().getId());
+        Review review = reviewRepository.findByAnswerId(answerLoaded.get().getId());
 
         assertThat(review).isNotNull();
         assertThat(review.getPunkte()).isEqualTo(5);

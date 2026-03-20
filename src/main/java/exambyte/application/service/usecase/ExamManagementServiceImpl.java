@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
 
-    private final AntwortQueryService antwortQueryService;
+    private final AnswerQueryService answerQueryService;
     private final ReviewGenerationService reviewGenerationService;
     private final FrageQueryService frageQueryService;
     private final ScoringService scoringService;
@@ -31,7 +31,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
-    public ExamManagementServiceImpl(AntwortQueryService antwortQueryService,
+    public ExamManagementServiceImpl(AnswerQueryService answerQueryService,
                                      ReviewGenerationService reviewGenerationService,
                                      FrageQueryService frageQueryService,
                                      ScoringService scoringService,
@@ -41,7 +41,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ReviewQueryService reviewQueryService,
                                      Clock clock) {
 
-        this.antwortQueryService = antwortQueryService;
+        this.answerQueryService = answerQueryService;
         this.reviewGenerationService = reviewGenerationService;
         this.frageQueryService = frageQueryService;
         this.scoringService = scoringService;
@@ -97,11 +97,11 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Transactional(rollbackFor = {Exception.class, NichtVorhandenException.class})
     @Override
-    public SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
+    public SubmitExamResult submitExam(String studentName, Map<String, List<String>> answerMap, UUID examId) {
         UUID studentId = resolveStudent(studentName);
         if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
-        antwortQueryService.saveAnswers(studentId, antworten);
+        answerQueryService.saveAnswers(studentId, answerMap);
 
         return generateAndSaveReviews(studentId, examId);
     }
@@ -119,15 +119,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private SubmitExamResult generateAndSaveReviews(UUID studentId, UUID examId) {
         List<FrageDTO> fragenList = frageQueryService.getFragenForExam(examId);
 
-        List<AntwortDTO> antwortList = fragenList.stream()
-                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.id()))
+        List<AnswerDTO> answerList = fragenList.stream()
+                .map(f -> answerQueryService.findByStudentAndFrage(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
         List<ReviewDTO> allReviews = reviewGenerationService.generateReviews(
                 studentId,
                 fragenList,
-                antwortList);
+                answerList);
 
         try {
             allReviews.forEach(this::saveReviews);
@@ -142,7 +142,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         reviewQueryService.createReview(
                 reviewDTO.bewertung(),
                 reviewDTO.punkte(),
-                reviewDTO.antwortId(),
+                reviewDTO.answerId(),
                 reviewDTO.reviewerId()
         );
     }
@@ -153,21 +153,21 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
         ExamDTO exam = examQueryService.getExam(examId);
         Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examId);
-        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentId, frageMap.keySet());
+        List<AnswerDTO> allAnswers = answerQueryService.getAnswers(studentId, frageMap.keySet());
 
         // Gesamt-MaxPunkte
         double gesamtMaxPunkte = frageMap.values().stream()
                 .mapToDouble(FrageDTO::maxPunkte)
                 .sum();
 
-        double erreichtePunkte = scoringService.berechneErreichtePunkte(alleAntworten, frageMap, exam.resultTime());
+        double erreichtePunkte = scoringService.berechneErreichtePunkte(allAnswers, frageMap, exam.resultTime());
 
         double prozent = gesamtMaxPunkte > 0
                 ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
                 : 0.0;
 
-        LocalDateTime zeitpunkt = alleAntworten.stream()
-                .map(AntwortDTO::antwortZeitpunkt)
+        LocalDateTime zeitpunkt = allAnswers.stream()
+                .map(AnswerDTO::submitTime)
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 

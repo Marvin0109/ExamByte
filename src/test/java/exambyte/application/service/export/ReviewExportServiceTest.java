@@ -24,8 +24,8 @@ class ReviewExportServiceTest {
     private final UUID studentId = UUID.randomUUID();
     private FrageDTO frage;
     private FrageDTO frage2;
-    private AntwortDTO antwort;
-    private AntwortDTO antwort2;
+    private AnswerDTO antwort;
+    private AnswerDTO antwort2;
     private ReviewDTO review;
     private ReviewDTO review2;
 
@@ -39,7 +39,7 @@ class ReviewExportServiceTest {
     private StudentQueryService studentQueryService;
 
     @Mock
-    private AntwortQueryService antwortQueryService;
+    private AnswerQueryService answerQueryService;
 
     @Mock
     private ReviewerQueryService reviewerQueryService;
@@ -58,7 +58,7 @@ class ReviewExportServiceTest {
                 examQueryService,
                 frageQueryService,
                 studentQueryService,
-                antwortQueryService,
+                answerQueryService,
                 reviewerQueryService,
                 reviewQueryService,
                 mapper
@@ -89,15 +89,15 @@ class ReviewExportServiceTest {
                 QuestionTypeDTO.SC
         );
 
-        antwort = new AntwortDTO(
+        antwort = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
+                "Answer",
                 frage.id(),
                 studentId,
                 null
         );
 
-        antwort2 = new AntwortDTO(
+        antwort2 = new AnswerDTO(
                 UUID.randomUUID(),
                 "A",
                 frage2.id(),
@@ -130,9 +130,9 @@ class ReviewExportServiceTest {
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(antwortQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
+        when(answerQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
 
-        when(reviewQueryService.getReviewByAntwortId(antwort.id())).thenReturn(review);
+        when(reviewQueryService.getReviewByAnswerId(antwort.id())).thenReturn(review);
 
         when(reviewerQueryService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
@@ -156,11 +156,11 @@ class ReviewExportServiceTest {
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(antwortQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
-        when(antwortQueryService.findByStudentAndFrage(studentId, frage2.id())).thenReturn(antwort2);
+        when(answerQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
+        when(answerQueryService.findByStudentAndFrage(studentId, frage2.id())).thenReturn(antwort2);
 
-        when(reviewQueryService.getReviewByAntwortId(antwort.id())).thenReturn(review);
-        when(reviewQueryService.getReviewByAntwortId(antwort2.id())).thenReturn(review2);
+        when(reviewQueryService.getReviewByAnswerId(antwort.id())).thenReturn(review);
+        when(reviewQueryService.getReviewByAnswerId(antwort2.id())).thenReturn(review2);
 
         when(reviewerQueryService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));

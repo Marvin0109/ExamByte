@@ -14,40 +14,40 @@ class ReviewEntityTest {
 
     @ParameterizedTest
     @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
-    @MethodSource("ungueltigeBuilder")
+    @MethodSource("invalidBuilder")
     void createReviewEntity_fail(ReviewEntity.ReviewEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);
     }
 
-    static Stream<ReviewEntity.ReviewEntityBuilder> ungueltigeBuilder() {
+    static Stream<ReviewEntity.ReviewEntityBuilder> invalidBuilder() {
         return Stream.of(
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("")
-                        .antwortId(UUID.randomUUID())
+                        .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung(" ")
-                        .antwortId(UUID.randomUUID())
+                        .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("Bewertung")
-                        .antwortId(null)
+                        .answerId(null)
                         .reviewerId(UUID.randomUUID())
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("Bewertung")
-                        .antwortId(UUID.randomUUID())
+                        .answerId(UUID.randomUUID())
                         .reviewerId(null)
                         .punkte(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
                         .bewertung("Bewertung")
-                        .antwortId(UUID.randomUUID())
+                        .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
                         .punkte(-1)
         );

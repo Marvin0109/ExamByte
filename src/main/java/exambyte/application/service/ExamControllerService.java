@@ -65,11 +65,11 @@ public interface ExamControllerService {
 
     boolean hasAnyFailedAttempt(String studentName);
 
-    Map<FrageDTO, AntwortDTO> getFreeResponseAntwortenForExamAndStudent(UUID examUUID, UUID studentUUID);
+    Map<FrageDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examUUID, UUID studentUUID);
 
-    List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map);
+    List<AnswerForm> createAnswerForm(Map<FrageDTO, AnswerDTO> map);
 
-    void createReview(ReviewForm reviewForm, UUID antwortId, UUID reviewerId);
+    void createReview(ReviewForm reviewForm, UUID answerId, UUID reviewerId);
 
     UUID getReviewerByName(String name);
 

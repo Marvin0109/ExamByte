@@ -14,21 +14,21 @@ class ReviewTest {
     @DisplayName("ReviewBuilder Test")
     void test_01() {
         UUID id = UUID.randomUUID();
-        UUID antwortId = UUID.randomUUID();
+        UUID answerId = UUID.randomUUID();
         UUID reviewerId = UUID.randomUUID();
         String bewertung = "Good work";
         double punkte = 85;
 
         Review review = new Review.ReviewBuilder()
                 .id(id)
-                .antwortId(antwortId)
+                .answerId(answerId)
                 .reviewerId(reviewerId)
                 .bewertung(bewertung)
                 .punkte(punkte)
                 .build();
 
         assertEquals(id, review.getId());
-        assertEquals(antwortId, review.getAntwortId());
+        assertEquals(answerId, review.getAnswerId());
         assertEquals(reviewerId, review.getReviewerId());
         assertEquals(bewertung, review.getBewertung());
         assertEquals(punkte, review.getPunkte());

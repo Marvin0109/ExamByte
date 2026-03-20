@@ -1,11 +1,11 @@
 package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
+import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.FrageDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
-import exambyte.domain.service.KorrekteAntwortenService;
+import exambyte.domain.mapper.CorrectAnswersDTOMapper;
+import exambyte.domain.service.CorrectAnswersService;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +29,10 @@ class ReviewGenerationServiceTest {
     private static final LocalDateTime TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
 
     private FrageDTO frageDTOMC;
-    private AntwortDTO antwortDTOMC;
+    private AnswerDTO answerMC;
 
     private FrageDTO frageDTOSC;
-    private AntwortDTO antwortDTOSC;
+    private AnswerDTO answerSC;
 
     private ReviewDTO reviewDTOMC;
     private ReviewDTO reviewDTOSC;
@@ -44,10 +44,10 @@ class ReviewGenerationServiceTest {
     private ReviewService reviewService;
 
     @Mock
-    private KorrekteAntwortenService korrekteAntwortenService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
-    private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
+    private CorrectAnswersDTOMapper correctAnswersDTOMapper;
 
     @BeforeEach
     void setUp() {
@@ -55,8 +55,8 @@ class ReviewGenerationServiceTest {
         reviewGenerationService = new ReviewGenerationServiceImpl(
                 automaticReviewService,
                 reviewService,
-                korrekteAntwortenService,
-                korrekteAntwortenDTOMapper);
+                correctAnswersService,
+                correctAnswersDTOMapper);
 
         frageDTOMC = new FrageDTO(
                 UUID.randomUUID(),
@@ -65,7 +65,7 @@ class ReviewGenerationServiceTest {
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        antwortDTOMC = new AntwortDTO(
+        answerMC = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
                 frageDTOMC.id(),
@@ -79,7 +79,7 @@ class ReviewGenerationServiceTest {
                 UUID.randomUUID(),
                 QuestionTypeDTO.SC);
 
-        antwortDTOSC = new AntwortDTO(
+        answerSC = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
                 frageDTOSC.id(),
@@ -88,14 +88,14 @@ class ReviewGenerationServiceTest {
 
         reviewDTOMC = new ReviewDTO(
                 UUID.randomUUID(),
-                antwortDTOMC.id(),
+                answerMC.id(),
                 UUID.randomUUID(),
                 "Bewertung",
                 1);
 
         reviewDTOSC = new ReviewDTO(
                 UUID.randomUUID(),
-                antwortDTOSC.id(),
+                answerSC.id(),
                 UUID.randomUUID(),
                 "Bewertung",
                 1);
@@ -109,7 +109,7 @@ class ReviewGenerationServiceTest {
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
                 STUDENT_ID,
                 List.of(frageDTOMC),
-                List.of(antwortDTOMC));
+                List.of(answerMC));
 
         assertThat(result).hasSize(1);
     }
@@ -124,7 +124,7 @@ class ReviewGenerationServiceTest {
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
                 STUDENT_ID,
                 List.of(frageDTOMC, frageDTOSC),
-                List.of(antwortDTOMC, antwortDTOSC));
+                List.of(answerMC, answerSC));
 
         assertThat(result).hasSize(2);
     }
