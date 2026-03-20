@@ -317,7 +317,7 @@ class ExamManagementServiceTest {
     }
 
     @Test
-    void getSubmission_returnsCorrectVersuchDTO() {
+    void getSubmission_returnsCorrectAttemptDTO() {
         String studentName = "Max";
 
         LocalDateTime resultTime = LocalDateTime.of(2025, 1, 1, 12, 0);
@@ -353,7 +353,7 @@ class ExamManagementServiceTest {
         when(scoringService.berechneErreichtePunkte(alleAntworten, frageMap, resultTime)).thenReturn(12.0);
 
         // Act
-        VersuchDTO result = examManagementService.getSubmission(EXAM_ID, studentName);
+        AttemptDTO result = examManagementService.getSubmission(EXAM_ID, studentName);
 
         // Assert
         assertThat(result.maxPunkte()).isEqualTo(15.0);

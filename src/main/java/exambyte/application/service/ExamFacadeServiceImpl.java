@@ -132,7 +132,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public VersuchDTO getSubmission(UUID examId, String studentLogin) {
+    public AttemptDTO getSubmission(UUID examId, String studentLogin) {
         return examManagementService.getSubmission(examId, studentLogin);
     }
 

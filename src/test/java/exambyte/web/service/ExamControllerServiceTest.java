@@ -253,7 +253,7 @@ class ExamControllerServiceTest {
                         start.plusHours(2))
         );
 
-        VersuchDTO versuch = new VersuchDTO(
+        AttemptDTO attempt = new AttemptDTO(
                 start.plusHours(3),
                 erreichtePunkte,
                 maxPunkte,
@@ -261,7 +261,7 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getAllExams()).thenReturn(exams);
-        when(helperService.getValidAttempts("student")).thenReturn(List.of(versuch));
+        when(helperService.getValidAttempts("student")).thenReturn(List.of(attempt));
 
         // Act
         double result = service.getZulassungsProgress("student");
@@ -289,7 +289,7 @@ class ExamControllerServiceTest {
                         start.plusHours(2))
         );
 
-        VersuchDTO versuch = new VersuchDTO(
+        AttemptDTO attempt = new AttemptDTO(
                 start.plusHours(3),
                 erreichtePunkte,
                 maxPunkte,
@@ -297,7 +297,7 @@ class ExamControllerServiceTest {
         );
 
         when(examFacadeService.getAllExams()).thenReturn(exams);
-        when(helperService.getValidAttempts("student")).thenReturn(List.of(versuch));
+        when(helperService.getValidAttempts("student")).thenReturn(List.of(attempt));
 
         // Act
         boolean result = service.hasAnyFailedAttempt("student");

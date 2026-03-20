@@ -2,7 +2,7 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.AttemptDTO;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.application.service.AppUserService;
@@ -122,14 +122,14 @@ class StudentControllerTest {
         ExamDTO examDTO = new ExamDTO(examId, "Exam 1", profId,
                 start, start.plusHours(1), start.plusHours(2));
         ProfessorDTO p = new ProfessorDTO(profId, "ProfName");
-        VersuchDTO versuchDTO = mock(VersuchDTO.class);
+        AttemptDTO attemptDTO = mock(AttemptDTO.class);
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
         when(service.examIsAlreadySubmitted(examId, "username")).thenReturn(true);
         when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
         when(service.getProfessorById(profId)).thenReturn(p);
 
-        when(service.getAttempt(examId, "username")).thenReturn(versuchDTO);
+        when(service.getAttempt(examId, "username")).thenReturn(attemptDTO);
 
         mvc.perform(get("/student/startExam/{examId}/menu", examId))
             .andExpect(status().isOk())
@@ -138,7 +138,7 @@ class StudentControllerTest {
             .andExpect(model().attribute("timeLeft", "Anzeige"))
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", true))
-            .andExpect(model().attribute("attempt", versuchDTO))
+            .andExpect(model().attribute("attempt", attemptDTO))
             .andExpect(model().attributeExists("reviewPermission"))
             .andExpect(model().attribute("authorName", "ProfName"));
     }

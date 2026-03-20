@@ -1,7 +1,7 @@
 package exambyte.application.service.usecase;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.AttemptDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,7 +13,7 @@ public interface ExamManagementService {
 
     SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId);
 
-    VersuchDTO getSubmission(UUID examId, String studentName);
+    AttemptDTO getSubmission(UUID examId, String studentName);
 
     List<ExamDTO> getAllExams();
 

@@ -37,12 +37,12 @@ public class HelperServiceImpl implements HelperService {
     }
 
     @Override
-    public List<VersuchDTO> getValidAttempts(String studentName) {
+    public List<AttemptDTO> getValidAttempts(String studentName) {
         List<ExamDTO> exams = service.getAllExams();
-        List<VersuchDTO> allValidAttempts = new ArrayList<>();
+        List<AttemptDTO> allValidAttempts = new ArrayList<>();
 
         for (ExamDTO exam : exams) {
-            VersuchDTO v = service.getSubmission(exam.id(), studentName);
+            AttemptDTO v = service.getSubmission(exam.id(), studentName);
             if (exam.resultTime().isBefore(now())) {
                 allValidAttempts.add(v);
             }
@@ -162,7 +162,7 @@ public class HelperServiceImpl implements HelperService {
     public ReviewViewForm prepareReviewViewForm(UUID examId, String studentName) {
         ExamDTO exam = service.getExam(examId);
         UUID studentId = service.getStudentIdByName(studentName);
-        VersuchDTO versuch = service.getSubmission(examId, studentName);
+        AttemptDTO attempt = service.getSubmission(examId, studentName);
 
         List<FrageDTO> fragen = service.getFragenForExam(examId);
         List<ReviewAggregateDTO> componentList = new ArrayList<>();
@@ -209,8 +209,8 @@ public class HelperServiceImpl implements HelperService {
         return new ReviewViewForm(
                 exam.title(),
                 reviewerNames,
-                versuch.erreichtePunkte(),
-                versuch.maxPunkte(),
+                attempt.erreichtePunkte(),
+                attempt.maxPunkte(),
                 componentList);
     }
 

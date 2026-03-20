@@ -41,7 +41,7 @@ public interface ExamControllerService {
 
     void createQuestions(ExamForm form, UUID examUUID);
 
-    VersuchDTO getAttempt(UUID examUUID, String studentLogin);
+    AttemptDTO getAttempt(UUID examUUID, String studentLogin);
 
     List<ReviewCoverageForm> getReviewCoverage(List<ExamDTO> examDTOList);
 

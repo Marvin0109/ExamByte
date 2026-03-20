@@ -68,7 +68,7 @@ class HelperServiceTest {
                 result
         );
 
-        VersuchDTO versuchDTO = new VersuchDTO(
+        AttemptDTO attemptDTO = new AttemptDTO(
                 null,
                 1.0,
                 1.0,
@@ -76,9 +76,9 @@ class HelperServiceTest {
         );
 
         when(examFacadeService.getAllExams()).thenReturn(List.of(examDTO));
-        when(examFacadeService.getSubmission(any(), any())).thenReturn(versuchDTO);
+        when(examFacadeService.getSubmission(any(), any())).thenReturn(attemptDTO);
 
-        List<VersuchDTO> validAttempts = helperService.getValidAttempts("Studentname");
+        List<AttemptDTO> validAttempts = helperService.getValidAttempts("Studentname");
 
         assertThat(validAttempts).hasSize(size);
     }
@@ -347,10 +347,10 @@ class HelperServiceTest {
         UUID studentId = UUID.randomUUID();
         when(examFacadeService.getStudentIdByName("Student")).thenReturn(studentId);
 
-        VersuchDTO versuch = mock(VersuchDTO.class);
-        when(versuch.erreichtePunkte()).thenReturn(10.0);
-        when(versuch.maxPunkte()).thenReturn(20.0);
-        when(examFacadeService.getSubmission(examId, "Student")).thenReturn(versuch);
+        AttemptDTO attempt = mock(AttemptDTO.class);
+        when(attempt.erreichtePunkte()).thenReturn(10.0);
+        when(attempt.maxPunkte()).thenReturn(20.0);
+        when(examFacadeService.getSubmission(examId, "Student")).thenReturn(attempt);
 
         FrageDTO frage = new FrageDTO(
                 HELPER_FRAGE_ID,
@@ -413,10 +413,10 @@ class HelperServiceTest {
         UUID studentId = UUID.randomUUID();
         when(examFacadeService.getStudentIdByName("Student")).thenReturn(studentId);
 
-        VersuchDTO versuch = mock(VersuchDTO.class);
-        when(versuch.erreichtePunkte()).thenReturn(0.0);
-        when(versuch.maxPunkte()).thenReturn(20.0);
-        when(examFacadeService.getSubmission(examId, "Student")).thenReturn(versuch);
+        AttemptDTO attempt = mock(AttemptDTO.class);
+        when(attempt.erreichtePunkte()).thenReturn(0.0);
+        when(attempt.maxPunkte()).thenReturn(20.0);
+        when(examFacadeService.getSubmission(examId, "Student")).thenReturn(attempt);
 
         FrageDTO frage = new FrageDTO(
                 HELPER_FRAGE_ID,
@@ -469,10 +469,10 @@ class HelperServiceTest {
         UUID studentId = UUID.randomUUID();
         when(examFacadeService.getStudentIdByName("Student")).thenReturn(studentId);
 
-        VersuchDTO versuch = mock(VersuchDTO.class);
-        when(versuch.erreichtePunkte()).thenReturn(0.0);
-        when(versuch.maxPunkte()).thenReturn(20.0);
-        when(examFacadeService.getSubmission(examId, "Student")).thenReturn(versuch);
+        AttemptDTO attempt = mock(AttemptDTO.class);
+        when(attempt.erreichtePunkte()).thenReturn(0.0);
+        when(attempt.maxPunkte()).thenReturn(20.0);
+        when(examFacadeService.getSubmission(examId, "Student")).thenReturn(attempt);
 
         FrageDTO frage = new FrageDTO(
                 HELPER_FRAGE_ID,

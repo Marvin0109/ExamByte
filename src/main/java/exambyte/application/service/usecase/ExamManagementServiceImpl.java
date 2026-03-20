@@ -148,7 +148,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public VersuchDTO getSubmission(UUID examId, String studentName) {
+    public AttemptDTO getSubmission(UUID examId, String studentName) {
         UUID studentId = studentQueryService.getStudentIdByName(studentName);
 
         ExamDTO exam = examQueryService.getExam(examId);
@@ -171,7 +171,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 
-        return new VersuchDTO(
+        return new AttemptDTO(
                 zeitpunkt,
                 erreichtePunkte,
                 gesamtMaxPunkte,

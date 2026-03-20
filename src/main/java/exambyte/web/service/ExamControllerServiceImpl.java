@@ -166,17 +166,17 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public VersuchDTO getAttempt(UUID examUUID, String studentLogin) {
+    public AttemptDTO getAttempt(UUID examUUID, String studentLogin) {
         return service.getSubmission(examUUID, studentLogin);
     }
 
     @Override
     public double getZulassungsProgress(String studentLogin) {
-        List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
+        List<AttemptDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
         double progressForSuccessAttempt = 100.0 / EXAM_COUNT;
         double progress = 0.0;
-        for (VersuchDTO v : allValidAttempts) {
+        for (AttemptDTO v : allValidAttempts) {
             if (v.erreichtePunkte() >= v.maxPunkte() * 0.5) {
                 progress += progressForSuccessAttempt;
             }
@@ -187,9 +187,9 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public boolean hasAnyFailedAttempt(String studentLogin) {
-        List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
+        List<AttemptDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
-        for (VersuchDTO v : allValidAttempts) {
+        for (AttemptDTO v : allValidAttempts) {
             if (v.erreichtePunkte() < v.maxPunkte() * 0.5) {
                 return true;
             }

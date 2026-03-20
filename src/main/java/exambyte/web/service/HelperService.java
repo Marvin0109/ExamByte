@@ -2,7 +2,7 @@ package exambyte.web.service;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.AttemptDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_exam.ExamViewForm;
 import exambyte.web.form.show_review.ReviewViewForm;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public interface HelperService {
 
-    List<VersuchDTO> getValidAttempts(String studentName);
+    List<AttemptDTO> getValidAttempts(String studentName);
 
     String getExamAvailabilityNotice(ExamDTO dto);
 

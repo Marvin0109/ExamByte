@@ -2,7 +2,7 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.AttemptDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ExamTimeInfo;
@@ -84,7 +84,7 @@ public class StudentController {
         ProfessorDTO prof = service.getProfessorById(profId);
 
         if (alreadySubmitted) {
-            VersuchDTO attempt = service.getAttempt(examId, studentLogin);
+            AttemptDTO attempt = service.getAttempt(examId, studentLogin);
             model.addAttribute("attempt", attempt);
         }
 
