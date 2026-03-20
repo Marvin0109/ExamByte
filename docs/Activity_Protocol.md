@@ -1,7 +1,7 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 18.03.2026
+>**aktualisiert am:** 20.03.2026
 
 > [!NOTE]
 > Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
@@ -702,3 +702,15 @@ Validierung Informationen)
 - Implementierung von `feature/review-lock` verworfen (Branch wird nicht gemerged und wurde gelöscht) → nicht
 obligatorisch für die Grundfunktion von ExamByte in seiner ersten vollständigen Version
 - Dokumentationen aktualisiert, Screenshots angehängt als visuelle Demonstration von Grundfunktionen
+
+---
+
+### 19.03.2026 - 20.03.2026
+**Bereich:** Sprache
+- Wesentliche Änderungen im Quellcode:
+  - `Korrektor` → `Reviewer`
+  - `Antwort` → `Answer`
+  - `KorrekteAntworten` → `CorrectAnswers`
+- Zugehörige `Mapper`, `Entity`, `DTO` usw. dementsprechend geändert
+- Zustand der Anwendung mithilfe von Regressionstest und manuelles Testing
+überprüft worden
