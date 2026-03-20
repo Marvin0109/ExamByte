@@ -15,7 +15,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     private static final UUID AUTO_REVIEW_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
     @Override
-    public List<ReviewDTO> automatischeReviewSC(List<FrageDTO> fragen,
+    public List<ReviewDTO> autoReviewSC(List<FrageDTO> fragen,
                                                 List<AntwortDTO> antworten,
                                                 List<KorrekteAntwortenDTO> korrekteAntworten,
                                                 UUID studentUUID,
@@ -50,7 +50,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     }
 
     @Override
-    public List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen,
+    public List<ReviewDTO> autoReviewMC(List<FrageDTO> fragen,
                                                 List<AntwortDTO> antworten,
                                                 List<KorrekteAntwortenDTO> answers,
                                                 UUID studentUUID,

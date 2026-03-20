@@ -30,16 +30,16 @@ class ReviewerQueryServiceTest {
 
     @Test
     void saveAutomaticReviewer_automaticReviewerFound() {
-        Reviewer reviewer = new Reviewer.ReviewerBuilder().name("Automatischer Reviewer").build();
-        when(reviewerService.getReviewerByName("Automatischer Reviewer")).thenReturn(Optional.of(reviewer));
+        Reviewer reviewer = new Reviewer.ReviewerBuilder().name("Auto reviewer").build();
+        when(reviewerService.getReviewerByName("Auto reviewer")).thenReturn(Optional.of(reviewer));
         reviewerQueryService.saveAutomaticReviewer();
-        verify(reviewerService, never()).saveReviewer("Automatischer Reviewer");
+        verify(reviewerService, never()).saveReviewer("Auto reviewer");
     }
 
     @Test
     void saveAutomaticReviewer_automaticReviewerNotFound() {
-        when(reviewerService.getReviewerByName("Automatischer Reviewer")).thenReturn(Optional.empty());
+        when(reviewerService.getReviewerByName("Auto reviewer")).thenReturn(Optional.empty());
         reviewerQueryService.saveAutomaticReviewer();
-        verify(reviewerService).saveReviewer("Automatischer Reviewer");
+        verify(reviewerService).saveReviewer("Auto reviewer");
     }
 }

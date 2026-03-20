@@ -22,8 +22,8 @@ public class ReviewerQueryServiceImpl implements ReviewerQueryService {
 
     @Override
     public void saveAutomaticReviewer() {
-        if (reviewerService.getReviewerByName("Automatischer Reviewer").isEmpty()) {
-            reviewerService.saveReviewer("Automatischer Reviewer");
+        if (reviewerService.getReviewerByName("Auto reviewer").isEmpty()) {
+            reviewerService.saveReviewer("Auto reviewer");
         }
     }
 

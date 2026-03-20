@@ -202,7 +202,7 @@ public class HelperServiceImpl implements HelperService {
         String reviewerNames = reviewers.stream()
                 .map(service::getReviewerById)
                 .map(ReviewerDTO::name)
-                .filter(name -> !name.equals("Automatischer Reviewer"))
+                .filter(name -> !name.equals("Auto reviewer"))
                 .distinct()
                 .collect(Collectors.joining(", "));
 

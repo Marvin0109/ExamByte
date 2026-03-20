@@ -103,7 +103,7 @@ class ReviewGenerationServiceTest {
 
     @Test
     void generateReview_MCOnly() {
-        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
                 .thenReturn(List.of(reviewDTOMC));
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
@@ -116,9 +116,9 @@ class ReviewGenerationServiceTest {
 
     @Test
     void generateReview_MCWithSC() {
-        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
                 .thenReturn(List.of(reviewDTOMC));
-        when(automaticReviewService.automatischeReviewSC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewSC(any(), any(), any(), eq(STUDENT_ID), any()))
                 .thenReturn(List.of(reviewDTOSC));
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(

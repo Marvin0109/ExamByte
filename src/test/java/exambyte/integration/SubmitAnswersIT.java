@@ -59,7 +59,7 @@ class SubmitAnswersIT {
         studentRepository.save(new Student.StudentBuilder().name("Student").build());
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
         reviewerRepository.save(new Reviewer.ReviewerBuilder()
-                .name("Automatischer Reviewer")
+                .name("Auto reviewer")
                 .build());
 
         Optional<UUID> profId = examControllerService.getProfIdByName("Professor");

@@ -65,7 +65,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
                 reviews.add(r);
                 ReviewerDTO reviewerDTO = reviewerQueryService.getReviewerById(r.reviewerId());
 
-                if (!reviewerDTO.name().equals("Automatischer Reviewer")) {
+                if (!reviewerDTO.name().equals("Auto reviewer")) {
 
                     if (!sb.isEmpty()) {
                         sb.append(", ");

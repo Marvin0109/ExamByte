@@ -42,10 +42,10 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
         mcData.filterToType(QuestionTypeDTO.MC);
         scData.filterToType(QuestionTypeDTO.SC);
 
-        List<ReviewDTO> reviewsMC = automaticReviewService.automatischeReviewMC(
+        List<ReviewDTO> reviewsMC = automaticReviewService.autoReviewMC(
                 mcData.getFragen(), mcData.getAntworten(), mcData.getKorrekteAntworten(), studentId,
                 reviewService);
-        List<ReviewDTO> reviewsSC = automaticReviewService.automatischeReviewSC(
+        List<ReviewDTO> reviewsSC = automaticReviewService.autoReviewSC(
                 scData.getFragen(), scData.getAntworten(), scData.getKorrekteAntworten(), studentId,
                 reviewService);
 

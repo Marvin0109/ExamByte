@@ -11,11 +11,11 @@ import java.util.UUID;
 
 public interface AutomaticReviewService {
 
-    List<ReviewDTO> automatischeReviewSC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
+    List<ReviewDTO> autoReviewSC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
                                          List<KorrekteAntwortenDTO> korrekteAntworten, UUID studentUUID,
                                          ReviewService reviewService);
 
-    List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
+    List<ReviewDTO> autoReviewMC(List<FrageDTO> fragen, List<AntwortDTO> antworten,
                                          List<KorrekteAntwortenDTO> answers,
                                          UUID studentUUID, ReviewService reviewService);
 }

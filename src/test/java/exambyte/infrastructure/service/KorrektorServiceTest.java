@@ -31,7 +31,7 @@ class ReviewerServiceTest {
     @Test
     @DisplayName("Der Automatische Korrektur wird erfolgreich gespeichert")
     void test_02() {
-        service.saveReviewer("Automatischer Reviewer");
+        service.saveReviewer("Auto reviewer");
         verify(reviewerRepository).save(any(Reviewer.class));
     }
 }

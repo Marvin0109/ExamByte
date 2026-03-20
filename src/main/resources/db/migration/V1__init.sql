@@ -69,10 +69,10 @@ CREATE TABLE correct_answers (
 CREATE INDEX idx_antwort_frage_student ON antwort(frage_id, student_id);
 CREATE INDEX idx_review_antwort ON review(antwort_id);
 
-CREATE OR REPLACE FUNCTION set_automatischer_reviewer_uuid()
+CREATE OR REPLACE FUNCTION set_auto_reviewer_uuid()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF NEW.name = 'Automatischer Reviewer' THEN
+    IF NEW.name = 'Auto reviewer' THEN
         NEW.id := '11111111-1111-1111-1111-111111111111';
     END IF;
     RETURN NEW;
@@ -82,7 +82,7 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_set_reviewer_uuid
 BEFORE INSERT ON reviewer
 FOR EACH ROW
-EXECUTE FUNCTION set_automatischer_reviewer_uuid();
+EXECUTE FUNCTION set_auto_reviewer_uuid();
 
 CREATE OR REPLACE FUNCTION check_max_punkte_with_punkte_vergeben()
 RETURNS TRIGGER AS $$

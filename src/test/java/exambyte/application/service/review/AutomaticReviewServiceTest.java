@@ -37,7 +37,7 @@ class AutomaticReviewServiceTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("mcTestCases")
     @DisplayName("MC automatische Bewertung")
-    void automatischeReviewMC(
+    void autoReviewMC(
             String bewertung,
             double maxPunkte,
             String studentAntwort,
@@ -69,7 +69,7 @@ class AutomaticReviewServiceTest {
         );
 
         // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+        List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
                 List.of(antwort),
                 List.of(korrekteAntwortenDTO),
@@ -110,7 +110,7 @@ class AutomaticReviewServiceTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("scTestCases")
     @DisplayName("SC automatische Bewertung")
-    void automatischeReviewSC(
+    void autoReviewSC(
             String bewertung,
             double maxPunkte,
             String studentAntwort,
@@ -142,7 +142,7 @@ class AutomaticReviewServiceTest {
         );
 
         // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+        List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
                 List.of(antwort),
                 List.of(korrekteAntwortenDTO),
@@ -165,7 +165,7 @@ class AutomaticReviewServiceTest {
 
     @Test
     @DisplayName("SC: StudentAntwort nicht existierend")
-    void automatischeReviewSC_studentAntwortNotFound() {
+    void autoReviewSC_studentAntwortNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -181,7 +181,7 @@ class AutomaticReviewServiceTest {
                 frage.id());
 
         // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
+        List<ReviewDTO> reviews = automaticReviewService.autoReviewSC(
                 List.of(frage),
                 List.of(),
                 List.of(korrekteAntworten),
@@ -195,7 +195,7 @@ class AutomaticReviewServiceTest {
 
     @Test
     @DisplayName("SC: KorrekteAntwort nicht existierend")
-    void automatischeReviewSC_korrekteAntwortNotFound() {
+    void autoReviewSC_korrekteAntwortNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -212,7 +212,7 @@ class AutomaticReviewServiceTest {
                 antwortTime);
 
         // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewSC(
+        List<ReviewDTO> reviews = automaticReviewService.autoReviewSC(
                 List.of(frage),
                 List.of(antwort),
                 List.of(),
@@ -226,7 +226,7 @@ class AutomaticReviewServiceTest {
 
     @Test
     @DisplayName("MC: StudentAntwort nicht existierend")
-    void automatischeReviewMC_studentAntwortNotFound() {
+    void autoReviewMC_studentAntwortNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -242,7 +242,7 @@ class AutomaticReviewServiceTest {
                 frage.id());
 
         // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+        List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
                 List.of(),
                 List.of(korrekteAntworten),
@@ -256,7 +256,7 @@ class AutomaticReviewServiceTest {
 
     @Test
     @DisplayName("MC: KorrekteAntwort nicht existierend")
-    void automatischeReviewMC_korrekteAntwortNotFound() {
+    void autoReviewMC_korrekteAntwortNotFound() {
         // Arrange
         FrageDTO frage = new FrageDTO(
                 UUID.randomUUID(),
@@ -273,7 +273,7 @@ class AutomaticReviewServiceTest {
                 antwortTime);
 
         // Act
-        List<ReviewDTO> reviews = automaticReviewService.automatischeReviewMC(
+        List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
                 List.of(frage),
                 List.of(antwort),
                 List.of(),

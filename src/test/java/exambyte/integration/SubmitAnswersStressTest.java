@@ -68,7 +68,7 @@ class SubmitAnswersStressTest {
     void setUp() {
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
         reviewerRepository.save(new Reviewer.ReviewerBuilder()
-                .name("Automatischer Reviewer")
+                .name("Auto reviewer")
                 .build());
 
         Optional<UUID> profId = examControllerService.getProfIdByName("Professor");

@@ -165,7 +165,7 @@ class ReviewExportServiceTest {
         when(reviewerQueryService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
         when(reviewerQueryService.getReviewerById(review2.reviewerId()))
-            .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Automatischer Reviewer"));
+            .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Auto reviewer"));
 
         service.createReviewExport(exam.id(), "Student");
 

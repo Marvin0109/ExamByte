@@ -378,7 +378,7 @@ class HelperServiceTest {
         );
         when(examFacadeService.getLoesungForFrage(frage.id())).thenReturn(k);
 
-        ReviewerDTO reviewer = new ReviewerDTO(UUID.randomUUID(), "Automatischer Reviewer");
+        ReviewerDTO reviewer = new ReviewerDTO(UUID.randomUUID(), "Auto reviewer");
         when(examFacadeService.getReviewerById(reviewer.id())).thenReturn(reviewer);
 
         ReviewDTO reviewDTO = new ReviewDTO(
