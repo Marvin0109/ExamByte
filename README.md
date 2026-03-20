@@ -4,13 +4,15 @@
 
 # ExamByte
 
-ExamByte ist eine Webanwendung zur Durchführung und Bewertung von Tests im Programmierpraktikum. 
-Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
+## Übersicht
 
-- **Automatische Bewertung** von Multiple-Choice-Fragen
-- **Manuelle Korrektur** von Freitextaufgaben durch Korrektor:innen
-- **Verwaltung von Testergebnissen** für Studierende und Organisator:innen
-- **Benutzerverwaltung** mit GitHub-Authentifizierung
+- [Was ist ExamByte?](#was-ist-exambyte)
+- [Funktionen](#funktionen)
+- [Installation (Linux)](#installation-linux)
+- [Nutzung und Demo](#nutzung)
+- [Architektur](#architektur)
+- [Dokumentation](#dokumentation)
+- [Mitwirkende](#mitwirkende)
 
 > [!NOTE]
 > Die Weiterentwicklung von ExamByte endete am 18.03.2026. 
@@ -22,7 +24,18 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 > Der zugehörige Entwicklungs-Branch `feature/review-lock` wurde nicht gemerged und entsprechend verworfen.
 > Der aktuelle Stand wird als abgeschlossen betrachtet.
 >
-> Finale Codeüberprüfung wird noch stattfinden, für mehr Details siehe [TODO](TO_DO.md).
+> Finale Codeüberprüfung wird noch stattfinden, für mehr Details siehe [To-do](docs/TO_DO.md).
+> 
+
+## Was ist ExamByte?
+
+ExamByte ist eine Webanwendung zur Durchführung und Bewertung von Tests im Programmierpraktikum.
+Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
+
+- **Automatische Bewertung** von Multiple-Choice-Fragen
+- **Manuelle Korrektur** von Freitextaufgaben durch Korrektor:innen
+- **Verwaltung von Testergebnissen** für Studierende und Organisator:innen
+- **Benutzerverwaltung** mit GitHub-Authentifizierung
 
 ## Funktionen
 
@@ -32,7 +45,7 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Ergebnisübersichten**: Organisator:innen haben eine Gesamtübersicht der Testergebnisse
 - **Exportfunktion**: Testergebnisse als CSV-Datei herunterladen
 
-## Installation
+## Installation (Linux)
 
 ### Voraussetzungen
 - Java 21
@@ -73,7 +86,7 @@ $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
 > - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
 > - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
    
-### Runterfahren
+### Anwendung stoppen
 ```
 $ ^C # Verwende strg+c
 $ docker compose down
@@ -182,11 +195,13 @@ flowchart TD
 
 - [arc42-Architekturdokumentation](docs/arc42.md)
 - [Aktivitätsprotokoll](docs/Activity_Protocol.md)
-- [TODO](docs/TO_DO.md)
+- [To-Do](docs/TO_DO.md)
 - [Styleguide](docs/STYLEGUIDE.md)
 
 ## Mitwirkende
 
 - Marvin0109 - Hauptentwicklung und Wartung
 - muz70wuc - Mitentwicklung in der Anfangsphase
+
+[Zurück zur Übersicht.](#übersicht)
 
