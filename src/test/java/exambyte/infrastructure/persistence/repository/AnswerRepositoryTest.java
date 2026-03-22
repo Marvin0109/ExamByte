@@ -34,11 +34,11 @@ class AnswerRepositoryTest {
     }
 
     @Test
-    void findByFrageId_exists() {
+    void findByQuestionId_exists() {
         // Arrange
         AnswerEntity entity = new AnswerEntity.AnswerEntityBuilder()
                 .answer("Answer")
-                .frageId(FRAGE_ID)
+                .questionId(FRAGE_ID)
                 .studentId(STUDENT_ID)
                 .submitTime(TIMESTAMP)
                 .build();
@@ -49,11 +49,11 @@ class AnswerRepositoryTest {
                 .submitTime(TIMESTAMP)
                 .build();
 
-        when(answerDAO.findByFrageId(ANSWER_ID)).thenReturn(Optional.of(entity));
+        when(answerDAO.findByQuestionId(ANSWER_ID)).thenReturn(Optional.of(entity));
         when(answerMapper.toDomain(entity)).thenReturn(domain);
 
         // Act
-        Answer result = repository.findByFrageId(ANSWER_ID);
+        Answer result = repository.findByQuestionId(ANSWER_ID);
 
         // Assert
         assertNotNull(result);
@@ -61,12 +61,12 @@ class AnswerRepositoryTest {
     }
 
     @Test
-    void findByFrageId_notExists_returnsNull() {
+    void findByQuestionId_notExists_returnsNull() {
         // Arrange
-        when(answerDAO.findByFrageId(ANSWER_ID)).thenReturn(Optional.empty());
+        when(answerDAO.findByQuestionId(ANSWER_ID)).thenReturn(Optional.empty());
 
         // Act
-        Answer result = repository.findByFrageId(ANSWER_ID);
+        Answer result = repository.findByQuestionId(ANSWER_ID);
 
         // Assert
         assertNull(result);

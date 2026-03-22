@@ -25,27 +25,27 @@ class AnswerEntityTest {
         return Stream.of(
                 new AnswerEntity.AnswerEntityBuilder()
                         .answer(null)
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .studentId(studentId),
 
                 new AnswerEntity.AnswerEntityBuilder()
                         .answer("")
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .studentId(studentId),
 
                 new AnswerEntity.AnswerEntityBuilder()
                         .answer(" ")
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .studentId(studentId),
 
                 new AnswerEntity.AnswerEntityBuilder()
                         .answer("Answer")
-                        .frageId(null)
+                        .questionId(null)
                         .studentId(studentId),
 
                 new AnswerEntity.AnswerEntityBuilder()
                         .answer("Answer")
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .studentId(null)
         );
     }

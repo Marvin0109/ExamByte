@@ -2,7 +2,7 @@ package exambyte.application.mapper;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.csv_dto.ExamExportDTO;
 import exambyte.domain.export_mapper.ExamExportDTOMapper;
@@ -19,8 +19,8 @@ class ExamExportDTOMapperTest {
     private ExamExportDTOMapper mapper;
 
     private ExamDTO exam;
-    private FrageDTO frage1;
-    private FrageDTO frage2;
+    private QuestionDTO frage1;
+    private QuestionDTO frage2;
     private CorrectAnswersDTO correctAnswers;
 
     @BeforeEach
@@ -36,17 +36,17 @@ class ExamExportDTOMapperTest {
                 null
         );
 
-        frage1 = new FrageDTO(
+        frage1 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 1",
+                "Question 1",
                 5,
                 exam.id(),
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        frage2 = new FrageDTO(
+        frage2 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 2",
+                "Question 2",
                 4,
                 exam.id(),
                 QuestionTypeDTO.MC
@@ -73,19 +73,19 @@ class ExamExportDTOMapperTest {
 
         var firstElement = result.getFirst();
         assertThat(firstElement.getExamTitle()).isEqualTo("Title");
-        assertThat(firstElement.getMaxPunkte()).isEqualTo(9);
+        assertThat(firstElement.getTotalPoints()).isEqualTo(9);
         assertThat(firstElement.getAuthor()).isEqualTo("Professor");
 
-        assertThat(firstElement.getFrageText()).isEqualTo("Frage 1");
-        assertThat(firstElement.getFrageTyp()).isEqualTo(frage1.type().name());
-        assertThat(firstElement.getPunkte()).isEqualTo(5);
+        assertThat(firstElement.getQuestionText()).isEqualTo("Question 1");
+        assertThat(firstElement.getQuestionType()).isEqualTo(frage1.type().name());
+        assertThat(firstElement.getQuestionPoints()).isEqualTo(5);
 
-        assertThat(firstElement.getLoesungen()).isEmpty();
-        assertThat(firstElement.getAntwortMoeglichkeiten()).isEmpty();
+        assertThat(firstElement.getSolution()).isEmpty();
+        assertThat(firstElement.getChoices()).isEmpty();
 
         var secondElement = result.getLast();
 
-        assertThat(secondElement.getAntwortMoeglichkeiten()).isEqualTo("A\nB\nC\nD");
-        assertThat(secondElement.getLoesungen()).isEqualTo("A\nB");
+        assertThat(secondElement.getChoices()).isEqualTo("A\nB\nC\nD");
+        assertThat(secondElement.getSolution()).isEqualTo("A\nB");
     }
 }

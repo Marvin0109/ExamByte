@@ -2,7 +2,7 @@ package exambyte.application.mapper;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.dto.csv_dto.ReviewExportDTO;
 import exambyte.domain.export_mapper.ReviewExportDTOMapper;
@@ -18,28 +18,28 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
     public List<ReviewExportDTO> mapDTOToExport(ExamDTO exam,
                                           String reviewerName,
                                           double maxPunkte,
-                                          List<FrageDTO> fragen,
+                                          List<QuestionDTO> fragen,
                                           List<AnswerDTO> answers,
                                           List<ReviewDTO> reviews) {
 
         List<ReviewExportDTO> export = new ArrayList<>();
 
-        for(FrageDTO frage : fragen) {
+        for(QuestionDTO frage : fragen) {
             ReviewExportDTO r = new ReviewExportDTO();
             r.setExamTitle(exam.title());
             r.setAuthor(reviewerName);
-            r.setMaxPunkte(maxPunkte);
+            r.setTotalPoints(maxPunkte);
 
-            r.setFrageText(frage.frageText());
-            r.setFrageTyp(frage.type().name());
-            r.setPunkte(frage.maxPunkte());
+            r.setQuestionText(frage.text());
+            r.setQuestionType(frage.type().name());
+            r.setQuestionPoints(frage.points());
 
             AnswerDTO answer = answers.stream()
                     .filter(a -> a.frageId().equals(frage.id()))
                     .findAny()
                     .orElse(null);
 
-            r.setStudiAntworten(answer == null ? "" : answer.answer());
+            r.setStudentAnswer(answer == null ? "" : answer.answer());
 
             if (answer != null) {
                 ReviewDTO review = reviews.stream()
@@ -48,8 +48,8 @@ public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
                         .orElse(null);
 
                 if (review != null) {
-                    r.setBewertung(review.bewertung());
-                    r.setErreichtePunkte(review.punkte());
+                    r.setReviewText(review.text());
+                    r.setReviewPoints(review.points());
                 }
             }
 

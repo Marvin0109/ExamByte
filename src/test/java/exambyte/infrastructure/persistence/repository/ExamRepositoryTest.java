@@ -37,12 +37,12 @@ class ExamRepositoryTest {
                 .id(UUID.randomUUID())
                 .professorId(UUID.randomUUID())
                 .title("Exam")
-                .startZeitpunkt(TIMESTAMP)
-                .endZeitpunkt(TIMESTAMP.plusHours(1))
-                .resultZeitpunkt(TIMESTAMP.plusHours(2))
+                .start(TIMESTAMP)
+                .end(TIMESTAMP.plusHours(1))
+                .result(TIMESTAMP.plusHours(2))
                 .build();
 
-        when(examDAO.findByStartZeitpunkt(TIMESTAMP)).thenReturn(Optional.of(examEntity));
+        when(examDAO.findByStart(TIMESTAMP)).thenReturn(Optional.of(examEntity));
 
         // Act
         Optional<UUID> result = repository.findByStartTime(TIMESTAMP);
@@ -55,7 +55,7 @@ class ExamRepositoryTest {
     @Test
     void findByStartTime_notFound() {
         // Arrange
-        when(examDAO.findByStartZeitpunkt(TIMESTAMP)).thenReturn(Optional.empty());
+        when(examDAO.findByStart(TIMESTAMP)).thenReturn(Optional.empty());
 
         // Act
         Optional<UUID> result = repository.findByStartTime(TIMESTAMP);

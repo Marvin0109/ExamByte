@@ -4,24 +4,24 @@ import exambyte.domain.model.common.QuestionType;
 
 import java.util.UUID;
 
-public class Frage {
+public class Question {
 
     private final UUID id;
-    private final String frageText;
-    private final double maxPunkte;
+    private final String text;
+    private final double points;
     private final QuestionType type;
     private final UUID examId;
 
-    private Frage(UUID id, String frageText, double maxPunkte, QuestionType type, UUID examId) {
+    private Question(UUID id, String text, double points, QuestionType type, UUID examId) {
         this.id = id;
-        this.frageText = frageText;
-        this.maxPunkte = maxPunkte;
+        this.text = text;
+        this.points = points;
         this.type = type;
         this.examId = examId;
     }
 
-    public String getFrageText() {
-        return frageText;
+    public String getText() {
+        return text;
     }
 
     public UUID getId() {
@@ -32,16 +32,16 @@ public class Frage {
         return examId;
     }
 
-    public double getMaxPunkte() {
-        return maxPunkte;
+    public double getPoints() {
+        return points;
     }
 
     public QuestionType getType() { return type; }
 
     public static class FrageBuilder {
         private UUID id;
-        private String frageText;
-        private double maxPunkte;
+        private String text;
+        private double points;
         private QuestionType type;
         private UUID examId;
 
@@ -50,13 +50,13 @@ public class Frage {
             return this;
         }
 
-        public FrageBuilder frageText(String frageText) {
-            this.frageText = frageText;
+        public FrageBuilder text(String text) {
+            this.text = text;
             return this;
         }
 
-        public FrageBuilder maxPunkte(double maxPunkte) {
-            this.maxPunkte = maxPunkte;
+        public FrageBuilder points(double points) {
+            this.points = points;
             return this;
         }
 
@@ -70,8 +70,8 @@ public class Frage {
             return this;
         }
 
-        public Frage build() {
-            return new Frage(id, frageText, maxPunkte, type, examId);
+        public Question build() {
+            return new Question(id, text, points, type, examId);
         }
     }
 }

@@ -31,10 +31,10 @@ class ReviewRepositoryTest {
         // Arrange
         UUID id = UUID.randomUUID();
         ReviewEntity reviewEntity = new ReviewEntity.ReviewEntityBuilder()
-                .bewertung("B")
+                .text("B")
                 .answerId(UUID.randomUUID())
                 .reviewerId(UUID.randomUUID())
-                .punkte(1)
+                .points(1)
                 .build();
 
         Review review = new Review.ReviewBuilder()

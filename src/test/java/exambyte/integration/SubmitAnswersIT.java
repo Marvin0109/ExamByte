@@ -3,7 +3,7 @@ package exambyte.integration;
 import exambyte.application.service.ExamControllerService;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Question;
 import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Professor;
@@ -40,7 +40,7 @@ class SubmitAnswersIT {
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private CorrectAnswersRepository correctAnswersRepository;
@@ -78,30 +78,30 @@ class SubmitAnswersIT {
 
         UUID examId = examControllerService.getExamUUIDByStartTime(start);
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage")
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question")
                 .type(QuestionType.SC)
-                .maxPunkte(1)
+                .points(1)
                 .examId(examId)
                 .build());
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage 2")
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question 2")
                 .type(QuestionType.FREE_RESPONSE)
-                .maxPunkte(2)
+                .points(2)
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreeResponse = frageRepository.findAll().stream()
+        Optional<UUID> frageIdFreeResponse = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
-                .map(Frage::getId)
+                .map(Question::getId)
                 .findFirst();
 
         assert(frageIdFreeResponse.isPresent());
 
-        Optional<UUID> frageIdSC = frageRepository.findAll().stream()
+        Optional<UUID> frageIdSC = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getId)
+                .map(Question::getId)
                 .findFirst();
 
         assert(frageIdSC.isPresent());
@@ -122,10 +122,10 @@ class SubmitAnswersIT {
         boolean success = examControllerService.submitExam("Student", answers, examId);
         assertThat(success).isTrue();
 
-        Answer answer = answerRepository.findByFrageId(frageIdSC.get());
+        Answer answer = answerRepository.findByQuestionId(frageIdSC.get());
 
-        assertThat(answerRepository.findByFrageId(frageIdFreeResponse.get())).isNotNull();
-        assertThat(answerRepository.findByFrageId(frageIdSC.get())).isNotNull();
+        assertThat(answerRepository.findByQuestionId(frageIdFreeResponse.get())).isNotNull();
+        assertThat(answerRepository.findByQuestionId(frageIdSC.get())).isNotNull();
 
         assertThat(reviewRepository.findByAnswerId(answer.getId())).isNotNull();
     }

@@ -1,7 +1,7 @@
 package exambyte.web.service;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.AttemptDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_exam.ExamViewForm;
@@ -21,7 +21,7 @@ public interface HelperService {
 
     String normalizeAnswerForFrontend(String toSplit);
 
-    PreparedFrageData prepareFrageData(FrageDTO frage, UUID studentId);
+    PreparedFrageData prepareFrageData(QuestionDTO frage, UUID studentId);
 
     ReviewViewForm prepareReviewViewForm(UUID examId, String studentName);
 

@@ -37,7 +37,7 @@ class ExamManagementServiceTest {
     private ReviewGenerationService reviewGenerationService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionQueryService questionQueryService;
 
     @Mock
     private ScoringService scoringService;
@@ -66,7 +66,7 @@ class ExamManagementServiceTest {
         examManagementService = new ExamManagementServiceImpl(
                 answerQueryService,
                 reviewGenerationService,
-                frageQueryService,
+                questionQueryService,
                 scoringService,
                 professorQueryService,
                 studentQueryService,
@@ -236,14 +236,14 @@ class ExamManagementServiceTest {
 
     @Test
     void submitExam_reviewSaveFails() {
-        FrageDTO frage = mock(FrageDTO.class);
+        QuestionDTO frage = mock(QuestionDTO.class);
         when(frage.id()).thenReturn(FRAGE_ID1);
 
         AnswerDTO antwort = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
-        when(review.bewertung()).thenReturn("Test");
-        when(review.punkte()).thenReturn(1.0);
+        when(review.text()).thenReturn("Test");
+        when(review.points()).thenReturn(1.0);
         when(review.answerId()).thenReturn(UUID.randomUUID());
         when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
@@ -253,7 +253,7 @@ class ExamManagementServiceTest {
         when(answerQueryService.saveAnswers(any(UUID.class), any()))
                 .thenReturn(true);
 
-        when(frageQueryService.getFragenForExam(EXAM_ID))
+        when(questionQueryService.getQuestionsForExam(EXAM_ID))
                 .thenReturn(List.of(frage));
 
         when(answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1))
@@ -281,15 +281,15 @@ class ExamManagementServiceTest {
 
     @Test
     void submitExam_success() {
-        FrageDTO frage = mock(FrageDTO.class);
+        QuestionDTO frage = mock(QuestionDTO.class);
         when(frage.id()).thenReturn(FRAGE_ID1);
 
         AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
         // Review-Stub
-        when(review.bewertung()).thenReturn("OK");
-        when(review.punkte()).thenReturn(5.0);
+        when(review.text()).thenReturn("OK");
+        when(review.points()).thenReturn(5.0);
         when(review.answerId()).thenReturn(UUID.randomUUID());
         when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
@@ -297,7 +297,7 @@ class ExamManagementServiceTest {
 
         when(answerQueryService.saveAnswers(any(UUID.class), any())).thenReturn(true);
 
-        when(frageQueryService.getFragenForExam(EXAM_ID)).thenReturn(List.of(frage));
+        when(questionQueryService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(frage));
 
         when(answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1)).thenReturn(answer);
 
@@ -309,8 +309,8 @@ class ExamManagementServiceTest {
         assertThat(result).isEqualTo(SubmitExamResult.SUCCESS);
 
         verify(reviewQueryService).createReview(
-                review.bewertung(),
-                review.punkte(),
+                review.text(),
+                review.points(),
                 review.answerId(),
                 review.reviewerId()
         );
@@ -322,15 +322,15 @@ class ExamManagementServiceTest {
 
         LocalDateTime resultTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
-        FrageDTO frage1 = mock(FrageDTO.class);
-        when(frage1.maxPunkte()).thenReturn(5.0);
+        QuestionDTO frage1 = mock(QuestionDTO.class);
+        when(frage1.points()).thenReturn(5.0);
 
-        FrageDTO frage2 = mock(FrageDTO.class);
-        when(frage2.maxPunkte()).thenReturn(10.0);
+        QuestionDTO frage2 = mock(QuestionDTO.class);
+        when(frage2.points()).thenReturn(10.0);
 
         ExamDTO exam = mock(ExamDTO.class);
 
-        Map<UUID, FrageDTO> frageMap = Map.of(
+        Map<UUID, QuestionDTO> frageMap = Map.of(
                 FRAGE_ID1, frage1,
                 FRAGE_ID2, frage2
         );
@@ -347,8 +347,8 @@ class ExamManagementServiceTest {
 
         when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
         when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
-        when(exam.resultTime()).thenReturn(resultTime);
-        when(frageQueryService.getFragenUUIDMap(EXAM_ID)).thenReturn(frageMap);
+        when(exam.result()).thenReturn(resultTime);
+        when(questionQueryService.getQuestionUUIDMap(EXAM_ID)).thenReturn(frageMap);
         when(answerQueryService.getAnswers(STUDENT_ID, frageMap.keySet())).thenReturn(answerList);
         when(scoringService.berechneErreichtePunkte(answerList, frageMap, resultTime)).thenReturn(12.0);
 
@@ -362,7 +362,7 @@ class ExamManagementServiceTest {
         assertThat(result.lastChanges()).isEqualTo(submitTime2);
 
         verify(studentQueryService).getStudentIdByName(studentName);
-        verify(frageQueryService).getFragenUUIDMap(EXAM_ID);
+        verify(questionQueryService).getQuestionUUIDMap(EXAM_ID);
         verify(answerQueryService).getAnswers(STUDENT_ID, frageMap.keySet());
         verify(scoringService).berechneErreichtePunkte(answerList, frageMap, resultTime);
     }
@@ -469,7 +469,7 @@ class ExamManagementServiceTest {
     @Test
     void resetAllExamDataCascade_fail_only11Exam() {
         ExamDTO finishedExam = mock(ExamDTO.class);
-        when(finishedExam.endTime()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
+        when(finishedExam.end()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
 
         List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(11, finishedExam));
         when(examQueryService.getAllExams()).thenReturn(examList);
@@ -483,10 +483,10 @@ class ExamManagementServiceTest {
     @Test
     void resetAllExamDataCascade_fail_examRunning() {
         ExamDTO finishedExam = mock(ExamDTO.class);
-        when(finishedExam.endTime()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
+        when(finishedExam.end()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
 
         ExamDTO examRunning = mock(ExamDTO.class);
-        when(examRunning.endTime()).thenReturn(LocalDateTime.of(2026, 1, 1, 12, 0));
+        when(examRunning.end()).thenReturn(LocalDateTime.of(2026, 1, 1, 12, 0));
 
         List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(11, finishedExam));
         examList.add(examRunning);
@@ -501,7 +501,7 @@ class ExamManagementServiceTest {
     @Test
     void resetAllExamDataCascade_success_allExamDone() {
         ExamDTO finishedExam = mock(ExamDTO.class);
-        when(finishedExam.endTime()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
+        when(finishedExam.end()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
 
         List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(12, finishedExam));
         when(examQueryService.getAllExams()).thenReturn(examList);

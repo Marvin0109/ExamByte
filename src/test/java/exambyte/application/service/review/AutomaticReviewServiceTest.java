@@ -2,7 +2,7 @@ package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.domain.service.ReviewService;
@@ -45,7 +45,7 @@ class AutomaticReviewServiceTest {
             double expectedPunkte
     ) {
         // Arrange
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
                 "Fragetext",
                 maxPunkte,
@@ -79,7 +79,7 @@ class AutomaticReviewServiceTest {
 
         // Assert
         assertThat(reviews).hasSize(1);
-        assertThat(reviews.getFirst().punkte()).isEqualTo(expectedPunkte);
+        assertThat(reviews.getFirst().points()).isEqualTo(expectedPunkte);
     }
 
     static Stream<Arguments> mcTestCases() {
@@ -118,7 +118,7 @@ class AutomaticReviewServiceTest {
             double expectedPunkte
     ) {
         // Arrange
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
                 "Fragetext",
                 maxPunkte,
@@ -152,7 +152,7 @@ class AutomaticReviewServiceTest {
 
         // Assert
         assertThat(reviews).hasSize(1);
-        assertThat(reviews.getFirst().punkte()).isEqualTo(expectedPunkte);
+        assertThat(reviews.getFirst().points()).isEqualTo(expectedPunkte);
     }
 
     static Stream<Arguments> scTestCases() {
@@ -167,7 +167,7 @@ class AutomaticReviewServiceTest {
     @DisplayName("SC: StudentAntwort nicht existierend")
     void autoReviewSC_studentAntwortNotFound() {
         // Arrange
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
                 "Fragetext 1",
                 3,
@@ -197,7 +197,7 @@ class AutomaticReviewServiceTest {
     @DisplayName("SC: KorrekteAntwort nicht existierend")
     void autoReviewSC_correctAnswersNotFound() {
         // Arrange
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
                 "Fragetext 1",
                 3,
@@ -228,7 +228,7 @@ class AutomaticReviewServiceTest {
     @DisplayName("MC: StudentAnswer nicht existierend")
     void autoReviewMC_studentAnswerNotFound() {
         // Arrange
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
                 "Fragetext 1",
                 3,
@@ -258,7 +258,7 @@ class AutomaticReviewServiceTest {
     @DisplayName("MC: KorrekteAntwort nicht existierend")
     void autoReviewMC_correctAnswersNotFound() {
         // Arrange
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
                 "Fragetext 1",
                 3,

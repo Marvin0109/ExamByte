@@ -6,4 +6,4 @@ public record CorrectAnswersDTO (
         UUID id,
         String solution,
         String choices,
-        UUID frageId) {}
+        UUID questionId) {}

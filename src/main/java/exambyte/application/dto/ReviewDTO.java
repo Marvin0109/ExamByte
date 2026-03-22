@@ -6,5 +6,5 @@ public record ReviewDTO (
         UUID id,
         UUID answerId,
         UUID reviewerId,
-        String bewertung,
-        double punkte) {}
+        String text,
+        double points) {}

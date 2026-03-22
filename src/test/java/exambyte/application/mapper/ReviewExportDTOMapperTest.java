@@ -3,7 +3,7 @@ package exambyte.application.mapper;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.dto.csv_dto.ReviewExportDTO;
 import exambyte.domain.export_mapper.ReviewExportDTOMapper;
@@ -20,8 +20,8 @@ class ReviewExportDTOMapperTest {
     private ReviewExportDTOMapper mapper;
 
     private ExamDTO exam;
-    private FrageDTO frage1;
-    private FrageDTO frage2;
+    private QuestionDTO frage1;
+    private QuestionDTO frage2;
     private AnswerDTO answer1;
     private AnswerDTO answer2;
     private ReviewDTO review1;
@@ -40,17 +40,17 @@ class ReviewExportDTOMapperTest {
                 null
         );
 
-        frage1 = new FrageDTO(
+        frage1 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 1",
+                "Question 1",
                 6,
                 exam.id(),
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        frage2 = new FrageDTO(
+        frage2 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 2",
+                "Question 2",
                 1,
                 exam.id(),
                 QuestionTypeDTO.SC
@@ -105,16 +105,16 @@ class ReviewExportDTOMapperTest {
 
         assertThat(firstElement.getExamTitle()).isEqualTo("Title");
         assertThat(firstElement.getAuthor()).isEqualTo("Reviewer");
-        assertThat(firstElement.getMaxPunkte()).isEqualTo(7);
+        assertThat(firstElement.getTotalPoints()).isEqualTo(7);
 
-        assertThat(firstElement.getFrageText()).isEqualTo("Frage 1");
-        assertThat(firstElement.getFrageTyp()).isEqualTo(frage1.type().name());
-        assertThat(firstElement.getPunkte()).isEqualTo(6);
+        assertThat(firstElement.getQuestionText()).isEqualTo("Question 1");
+        assertThat(firstElement.getQuestionType()).isEqualTo(frage1.type().name());
+        assertThat(firstElement.getQuestionPoints()).isEqualTo(6);
 
-        assertThat(firstElement.getStudiAntworten()).isEqualTo("Antwort 1");
+        assertThat(firstElement.getStudentAnswer()).isEqualTo("Antwort 1");
 
-        assertThat(firstElement.getBewertung()).isEqualTo("Bewertung 1");
-        assertThat(firstElement.getErreichtePunkte()).isEqualTo(6);
+        assertThat(firstElement.getReviewText()).isEqualTo("Bewertung 1");
+        assertThat(firstElement.getReviewPoints()).isEqualTo(6);
 
         var secondElement = result.getLast();
 
@@ -135,12 +135,12 @@ class ReviewExportDTOMapperTest {
 
         var firstElement = result.getFirst();
 
-        assertThat(firstElement.getBewertung()).isNull();
-        assertThat(firstElement.getErreichtePunkte()).isEqualTo(0.0);
+        assertThat(firstElement.getReviewText()).isNull();
+        assertThat(firstElement.getReviewPoints()).isEqualTo(0.0);
 
         var secondElement = result.getLast();
 
         assertThat(secondElement).isNotNull();
-        assertThat(secondElement.getBewertung()).isNotEmpty();
+        assertThat(secondElement.getReviewText()).isNotEmpty();
     }
 }

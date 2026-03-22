@@ -33,7 +33,7 @@ class AnswerMapperTest {
 
         // Assert
         assertThat(answerEntity.getAnswer()).isEqualTo("Answer");
-        assertThat(answerEntity.getFrageId()).isEqualTo(frageId);
+        assertThat(answerEntity.getQuestionId()).isEqualTo(frageId);
         assertThat(answerEntity.getStudentId()).isEqualTo(studentId);
         assertThat(answerEntity.getSubmitTime()).isEqualTo(submitTime);
     }
@@ -47,7 +47,7 @@ class AnswerMapperTest {
 
         AnswerEntity answerEntity = new AnswerEntity.AnswerEntityBuilder()
             .answer("Answer")
-            .frageId(frageId)
+            .questionId(frageId)
             .studentId(studentId)
             .submitTime(submitTime)
             .build();

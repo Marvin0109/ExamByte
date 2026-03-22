@@ -34,9 +34,9 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
                 .id(examDTO.id())
                 .title(examDTO.title())
                 .professorId(examDTO.professorId())
-                .startTime(examDTO.startTime())
-                .endTime(examDTO.endTime())
-                .resultTime(examDTO.resultTime())
+                .startTime(examDTO.start())
+                .endTime(examDTO.end())
+                .resultTime(examDTO.result())
                 .build();
     }
 }

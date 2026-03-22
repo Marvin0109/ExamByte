@@ -26,32 +26,32 @@ CREATE TABLE exam (
     FOREIGN KEY(professor_id) REFERENCES professor(id) ON DELETE CASCADE
 );
 
-CREATE TABLE frage (
+CREATE TABLE question (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    frage_text              TEXT NOT NULL,
+    text                    TEXT NOT NULL,
     exam_id                 UUID NOT NULL,
-    max_punkte              INT NOT NULL, -- Punkte * 2
+    points                  INT NOT NULL, -- Punkte * 2
     type                    TEXT NOT NULL,
     FOREIGN KEY(exam_id) REFERENCES exam(id) ON DELETE CASCADE
 );
 
 CREATE TABLE answer (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    frage_id                UUID NOT NULL,
+    question_id             UUID NOT NULL,
     answer                  VARCHAR(500),
     student_id              UUID NOT NULL,
     submit_time             TIMESTAMP,
-    FOREIGN KEY(frage_id) REFERENCES frage(id) ON DELETE CASCADE,
+    FOREIGN KEY(question_id) REFERENCES question(id) ON DELETE CASCADE,
     FOREIGN KEY(student_id) REFERENCES student(id) ON DELETE CASCADE,
-    CONSTRAINT unique_answer UNIQUE (frage_id, student_id)
+    CONSTRAINT unique_answer UNIQUE (question_id, student_id)
 );
 
 CREATE TABLE review (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     answer_id               UUID NOT NULL,
     reviewer_id             UUID,
-    bewertung               TEXT NOT NULL,
-    punkte                  INT NOT NULL, -- Punkte * 2
+    text                    TEXT NOT NULL,
+    points                  INT NOT NULL, -- Punkte * 2
     FOREIGN KEY(answer_id) REFERENCES answer(id) ON DELETE CASCADE,
     FOREIGN KEY(reviewer_id) REFERENCES reviewer(id) ON DELETE SET NULL,
     CONSTRAINT unique_review UNIQUE (answer_id)
@@ -59,14 +59,14 @@ CREATE TABLE review (
 
 CREATE TABLE correct_answers (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    frage_id                UUID NOT NULL,
+    question_id             UUID NOT NULL,
     solution                TEXT NOT NULL,
     choices                 TEXT NOT NULL,
-    FOREIGN KEY(frage_id) REFERENCES frage(id) ON DELETE CASCADE,
-    CONSTRAINT unique_correct_answers UNIQUE (frage_id)
+    FOREIGN KEY(question_id) REFERENCES question(id) ON DELETE CASCADE,
+    CONSTRAINT unique_correct_answers UNIQUE (question_id)
 );
 
-CREATE INDEX idx_answer_frage_student ON answer(frage_id, student_id);
+CREATE INDEX idx_answer_question_student ON answer(question_id, student_id);
 CREATE INDEX idx_review_answer ON review(answer_id);
 
 CREATE OR REPLACE FUNCTION set_auto_reviewer_uuid()
@@ -84,19 +84,19 @@ BEFORE INSERT ON reviewer
 FOR EACH ROW
 EXECUTE FUNCTION set_auto_reviewer_uuid();
 
-CREATE OR REPLACE FUNCTION check_max_punkte_with_punkte_vergeben()
+CREATE OR REPLACE FUNCTION check_question_points_with_review_points()
 RETURNS TRIGGER AS $$
 DECLARE
-    max_punkte_frage INT;
+    question_points INT;
 BEGIN
 
-    SELECT f.max_punkte
-    INTO max_punkte_frage
-    FROM frage f
-    JOIN answer a ON a.frage_id = f.id
+    SELECT q.points
+    INTO question_points
+    FROM question q
+    JOIN answer a ON a.question_id = q.id
     WHERE a.id = NEW.answer_id;
 
-    IF NEW.punkte > max_punkte_frage THEN
+    IF NEW.points > question_points THEN
         RAISE EXCEPTION 'Zu viele Punkte vergeben';
     END IF;
 
@@ -107,4 +107,4 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER review_points_check
 BEFORE INSERT OR UPDATE ON review
 FOR EACH ROW
-EXECUTE FUNCTION check_max_punkte_with_punkte_vergeben();
+EXECUTE FUNCTION check_question_points_with_review_points();

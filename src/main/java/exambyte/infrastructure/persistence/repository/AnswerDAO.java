@@ -12,21 +12,25 @@ import java.util.UUID;
 
 public interface AnswerDAO extends CrudRepository<AnswerEntity, UUID> {
 
-    Optional<AnswerEntity> findByStudentIdAndFrageId(UUID studentId, UUID frageId);
+    @Query("SELECT * FROM answer WHERE question_id = :questionId AND student_id = :studentId")
+    Optional<AnswerEntity> findByStudentIdAndQuestionId(
+            @Param("studentId") UUID studentId,
+            @Param("questionId") UUID questionId);
 
-    Optional<AnswerEntity> findByFrageId(UUID frageId);
+    @Query("SELECT * FROM answer WHERE question_id = :questionId")
+    Optional<AnswerEntity> findByQuestionId(@Param("questionId") UUID questionId);
 
     @Transactional
     @Modifying
     @Query("""
-        INSERT INTO answer (student_id, frage_id, answer, submit_time)
-        VALUES (:studentId, :frageId, :answer, CURRENT_TIMESTAMP)
-        ON CONFLICT (student_id, frage_id)
+        INSERT INTO answer (student_id, question_id, answer, submit_time)
+        VALUES (:studentId, :questionId, :answer, CURRENT_TIMESTAMP)
+        ON CONFLICT (student_id, question_id)
         DO UPDATE
             SET answer = EXCLUDED.answer,
                 submit_time = CURRENT_TIMESTAMP
     """)
     void upsertAnswer(@Param("studentId") UUID studentId,
-                       @Param("frageId") UUID frageId,
+                       @Param("questionId") UUID questionId,
                        @Param("answer") String answer);
 }

@@ -28,37 +28,37 @@ class ExamEntityTest {
                 new ExamEntity.ExamEntityBuilder()
                         .title("")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(START_TIME)
+                        .end(START_TIME.plusHours(1))
+                        .result(START_TIME.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(null)
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(START_TIME)
+                        .end(START_TIME.plusHours(1))
+                        .result(START_TIME.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(null)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(null)
+                        .end(START_TIME.plusHours(1))
+                        .result(START_TIME.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(null)
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(START_TIME)
+                        .end(null)
+                        .result(START_TIME.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(null)
+                        .start(START_TIME)
+                        .end(START_TIME.plusHours(1))
+                        .result(null)
         );
     }
 }

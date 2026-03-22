@@ -18,16 +18,16 @@ public class ReviewEntity {
     @Column("reviewer_id")
     private final UUID reviewerId;
 
-    @Column("bewertung")
-    private String bewertung;
+    @Column("text")
+    private String text;
 
-    @Column("punkte")
-    private int punkte;
+    @Column("points")
+    private int points;
 
-    private ReviewEntity(UUID id, UUID answerId, UUID reviewerId, String bewertung, int punkte) {
+    private ReviewEntity(UUID id, UUID answerId, UUID reviewerId, String text, int points) {
         this.id = id;
-        this.bewertung = bewertung;
-        this.punkte = punkte;
+        this.text = text;
+        this.points = points;
         this.answerId = answerId;
         this.reviewerId = reviewerId;
     }
@@ -44,26 +44,26 @@ public class ReviewEntity {
         return reviewerId;
     }
 
-    public String getBewertung() {
-        return bewertung;
+    public String getText() {
+        return text;
     }
 
-    public void setBewertung(String bewertung) {
-        this.bewertung = bewertung;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public int getPunkte() {
-        return punkte;
+    public int getPoints() {
+        return points;
     }
 
-    public void setPunkte(int punkte) {
-        this.punkte = punkte;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public static class ReviewEntityBuilder {
         private UUID id;
-        private String bewertung;
-        private int punkte;
+        private String text;
+        private int points;
         private UUID answerId;
         private UUID reviewerId;
 
@@ -72,13 +72,13 @@ public class ReviewEntity {
             return this;
         }
 
-        public ReviewEntityBuilder bewertung(String bewertung) {
-            this.bewertung = bewertung;
+        public ReviewEntityBuilder text(String text) {
+            this.text = text;
             return this;
         }
 
-        public ReviewEntityBuilder punkte(int punkte) {
-            this.punkte = punkte;
+        public ReviewEntityBuilder points(int points) {
+            this.points = points;
             return this;
         }
 
@@ -95,13 +95,13 @@ public class ReviewEntity {
         public ReviewEntity build() {
             checkID(answerId, "Antwort-ID fehlt");
             checkID(reviewerId, "Reviewer-ID fehlt");
-            if (bewertung == null || bewertung.isBlank()) {
+            if (text == null || text.isBlank()) {
                 throw new IllegalStateException("Bewertung fehlt");
             }
-            if (punkte < 0) {
+            if (points < 0) {
                 throw new IllegalStateException("Punkte dürfen nicht negativ sein");
             }
-            return new ReviewEntity(id, answerId, reviewerId, bewertung, punkte);
+            return new ReviewEntity(id, answerId, reviewerId, text, points);
         }
 
         private static void checkID(UUID id, String message) {

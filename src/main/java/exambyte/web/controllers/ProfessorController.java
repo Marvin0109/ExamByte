@@ -197,7 +197,7 @@ public class ProfessorController {
 
         ExamDTO exam = service.getExamByUUID(examId);
 
-        if (now().isBefore(exam.resultTime())) {
+        if (now().isBefore(exam.result())) {
             return redirectWithMessage(
                     redirectAttributes,
                     "Ergebnisse noch nicht vorhanden!",

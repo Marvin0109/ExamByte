@@ -8,14 +8,14 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.UUID;
 
-@Table("frage")
-public class FrageEntity {
+@Table("question")
+public class QuestionEntity {
     
     @Id
     private UUID id;
     
-    @Column("frage_text")
-    private String frageText;
+    @Column("text")
+    private String text;
 
     @Column("type")
     private final QuestionTypeEntity type;
@@ -23,13 +23,13 @@ public class FrageEntity {
     @Column("exam_id")
     private final UUID examId;
 
-    @Column("max_punkte")
-    private int maxPunkte;
+    @Column("points")
+    private int points;
 
-    private FrageEntity(UUID id, String frageText, int maxPunkte, QuestionTypeEntity type, UUID examId) {
+    private QuestionEntity(UUID id, String text, int points, QuestionTypeEntity type, UUID examId) {
         this.id = id;
-        this.frageText = frageText;
-        this.maxPunkte = maxPunkte;
+        this.text = text;
+        this.points = points;
         this.type = type;
         this.examId = examId;
     }
@@ -38,20 +38,20 @@ public class FrageEntity {
         return id;
     }
 
-    public String getFrageText() {
-        return frageText;
+    public String getText() {
+        return text;
     }
 
-    public void setFrageText(String frageText) {
-        this.frageText = frageText;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public int getMaxPunkte() {
-        return maxPunkte;
+    public int getPoints() {
+        return points;
     }
 
-    public void setMaxPunkte(int maxPunkte) {
-        this.maxPunkte = maxPunkte;
+    public void setPoints(int points) {
+        this.points = points;
     }
 
     public QuestionTypeEntity getType() {
@@ -62,49 +62,49 @@ public class FrageEntity {
         return examId;
     }
 
-    public static class FrageEntityBuilder {
+    public static class QuestionEntityBuilder {
         private UUID id;
-        private String frageText;
-        private int maxPunkte;
+        private String text;
+        private int points;
         private QuestionTypeEntity type;
         private UUID examId;
 
-        public FrageEntityBuilder id(UUID id) {
+        public QuestionEntityBuilder id(UUID id) {
             this.id = id;
             return this;
         }
 
-        public FrageEntityBuilder frageText(String frageText) {
-            this.frageText = frageText;
+        public QuestionEntityBuilder text(String text) {
+            this.text = text;
             return this;
         }
 
-        public FrageEntityBuilder maxPunkte(int maxPunkte) {
-            this.maxPunkte = maxPunkte;
+        public QuestionEntityBuilder points(int points) {
+            this.points = points;
             return this;
         }
 
-        public FrageEntityBuilder type(QuestionTypeEntity type) {
+        public QuestionEntityBuilder type(QuestionTypeEntity type) {
             this.type = type;
             return this;
         }
 
-        public FrageEntityBuilder examId(UUID examId) {
+        public QuestionEntityBuilder examId(UUID examId) {
             this.examId = examId;
             return this;
         }
 
-        public FrageEntity build() {
-            if (frageText == null || frageText.isBlank()) {
+        public QuestionEntity build() {
+            if (text == null || text.isBlank()) {
                 throw new IllegalStateException("Fragetext fehlt");
             }
-            if (maxPunkte <= 0) {
+            if (points <= 0) {
                 throw new IllegalStateException("Punkte dürfen nicht 0 oder negativ sein");
             }
             if (examId == null) {
                 throw new IllegalStateException("Exam-ID fehlt");
             }
-            return new FrageEntity(id, frageText, maxPunkte, type, examId);
+            return new QuestionEntity(id, text, points, type, examId);
         }
     }
 }

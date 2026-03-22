@@ -22,34 +22,34 @@ class ReviewEntityTest {
     static Stream<ReviewEntity.ReviewEntityBuilder> invalidBuilder() {
         return Stream.of(
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("")
+                        .text("")
                         .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
-                        .punkte(1),
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung(" ")
+                        .text(" ")
                         .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
-                        .punkte(1),
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("Bewertung")
+                        .text("Bewertung")
                         .answerId(null)
                         .reviewerId(UUID.randomUUID())
-                        .punkte(1),
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("Bewertung")
+                        .text("Bewertung")
                         .answerId(UUID.randomUUID())
                         .reviewerId(null)
-                        .punkte(1),
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("Bewertung")
+                        .text("Bewertung")
                         .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
-                        .punkte(-1)
+                        .points(-1)
         );
     }
 }

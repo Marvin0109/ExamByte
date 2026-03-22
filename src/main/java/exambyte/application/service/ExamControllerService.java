@@ -35,7 +35,7 @@ public interface ExamControllerService {
 
     List<ExamDTO> getAllExams();
 
-    List<FrageDTO> getFragenForExam(UUID examUUID);
+    List<QuestionDTO> getQuestionForExam(UUID examUUID);
 
     boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin);
 
@@ -65,9 +65,9 @@ public interface ExamControllerService {
 
     boolean hasAnyFailedAttempt(String studentName);
 
-    Map<FrageDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examUUID, UUID studentUUID);
+    Map<QuestionDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examUUID, UUID studentUUID);
 
-    List<AnswerForm> createAnswerForm(Map<FrageDTO, AnswerDTO> map);
+    List<AnswerForm> createAnswerForm(Map<QuestionDTO, AnswerDTO> map);
 
     void createReview(ReviewForm reviewForm, UUID answerId, UUID reviewerId);
 

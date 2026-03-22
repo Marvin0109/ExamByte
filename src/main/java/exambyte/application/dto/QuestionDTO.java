@@ -4,9 +4,9 @@ import exambyte.application.common.QuestionTypeDTO;
 
 import java.util.UUID;
 
-public record FrageDTO (
+public record QuestionDTO(
         UUID id,
-        String frageText,
-        double maxPunkte,
+        String text,
+        double points,
         UUID examId,
         QuestionTypeDTO type) {}

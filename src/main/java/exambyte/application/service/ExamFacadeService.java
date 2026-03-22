@@ -23,17 +23,17 @@ public interface ExamFacadeService {
 
     ExamDTO getExam(UUID examId);
 
-    List<FrageDTO> getFragenForExam(UUID examId);
+    List<QuestionDTO> getQuestionsForExam(UUID examId);
 
     Optional<UUID> getProfIDByName(String name);
 
     ProfessorDTO getProfessor(UUID profId);
 
-    void createFrage(FrageDTO frageDTO);
+    void createQuestion(QuestionDTO questionDTO);
 
-    void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);
+    void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices);
 
-    String getChoiceForFrage(UUID frageId);
+    String getChoicesForQuestion(UUID questionId);
 
     UUID getExamByStartTime(LocalDateTime startTime);
 
@@ -51,7 +51,7 @@ public interface ExamFacadeService {
 
     boolean isSubmitBeingReviewed(UUID examId, UUID studentId);
 
-    List<FrageDTO> getFreeResponseFragen(UUID examId);
+    List<QuestionDTO> getFreeResponseQuestions(UUID examId);
 
     List<AnswerDTO> getFreeResponseSolutionForExam(UUID examId);
 
@@ -63,11 +63,11 @@ public interface ExamFacadeService {
 
     UUID getStudentIdByName(String name);
 
-    AnswerDTO getAnswerForFrageAndStudent(UUID frageId, UUID studentId);
+    AnswerDTO getAnswerForQuestionIdAndStudentId(UUID frageId, UUID studentId);
 
     ReviewDTO getReviewForAnswer(UUID answerId);
 
-    CorrectAnswersDTO getLoesungForFrage(UUID frageId);
+    CorrectAnswersDTO getCorrectAnswerForQuestion(UUID frageId);
 
     boolean timeReachedToViewReview(UUID examId);
 

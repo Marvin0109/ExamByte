@@ -16,8 +16,8 @@ public class AnswerEntity {
     @Column("answer")
     private String answer;
 
-    @Column("frage_id")
-    private final UUID frageId;
+    @Column("question_id")
+    private final UUID questionId;
 
     @Column("student_id")
     private final UUID studentId;
@@ -25,11 +25,11 @@ public class AnswerEntity {
     @Column("submit_time")
     private final LocalDateTime submitTime;
 
-    private AnswerEntity(UUID id, String answer, UUID frageId, UUID studentId,
-                          LocalDateTime submitTime) {
+    private AnswerEntity(UUID id, String answer, UUID questionId, UUID studentId,
+                         LocalDateTime submitTime) {
         this.id = id;
         this.answer = answer;
-        this.frageId = frageId;
+        this.questionId = questionId;
         this.studentId = studentId;
         this.submitTime = submitTime;
     }
@@ -46,8 +46,8 @@ public class AnswerEntity {
         this.answer = answer;
     }
 
-    public UUID getFrageId() {
-        return frageId;
+    public UUID getQuestionId() {
+        return questionId;
     }
 
     public UUID getStudentId() {
@@ -60,7 +60,7 @@ public class AnswerEntity {
 
     public static class AnswerEntityBuilder {
         private UUID id;
-        private UUID frageId;
+        private UUID questionId;
         private String answer;
         private UUID studentId;
         private LocalDateTime submitTime;
@@ -70,8 +70,8 @@ public class AnswerEntity {
             return this;
         }
 
-        public AnswerEntityBuilder frageId(UUID frageId) {
-            this.frageId = frageId;
+        public AnswerEntityBuilder questionId(UUID questionId) {
+            this.questionId = questionId;
             return this;
         }
 
@@ -94,13 +94,13 @@ public class AnswerEntity {
             if (answer == null || answer.isBlank()) {
                 throw new IllegalStateException("Antworttext fehlt");
             }
-            if (frageId == null) {
-                throw new IllegalStateException("Frage-ID fehlt");
+            if (questionId == null) {
+                throw new IllegalStateException("Question-ID fehlt");
             }
             if (studentId == null) {
                 throw new IllegalStateException("Student-ID fehlt");
             }
-            return new AnswerEntity(id, answer, frageId, studentId, submitTime);
+            return new AnswerEntity(id, answer, questionId, studentId, submitTime);
         }
     }
 }

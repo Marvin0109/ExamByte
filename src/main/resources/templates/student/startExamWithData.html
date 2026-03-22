@@ -35,50 +35,50 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
-                    <p class="card-text" th:text="${component.fragen.frageText}">Fragestellung</p>
+                    <p class="card-text" th:text="${component.question.text}">Fragestellung</p>
 
                     <!-- Multiple Choice -->
-                    <div class="mb-2" th:if="${component.fragen.type.name == 'MC'}">
+                    <div class="mb-2" th:if="${component.question.type.name == 'MC'}">
                         <div class="form-check mb-2"
-                             th:each="antwort : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
+                             th:each="answer : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
                             <input class="form-check-input"
                                    type="checkbox"
-                                   th:id="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"
-                                   th:name="${component.fragen.id}"
-                                   th:field="*{answers[__${component.fragen.id}__]}"
-                                   th:value="${antwort}" />
+                                   th:id="'answer-' + ${component.question.id} + '-' + ${iterStat.index}"
+                                   th:name="${component.question.id}"
+                                   th:field="*{answers[__${component.question.id}__]}"
+                                   th:value="${answer}" />
                             <label class="form-check-label w-100"
-                                   th:for="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"
-                                   th:text="${antwort.replace('ĸ', ',')}">
+                                   th:for="'answer-' + ${component.question.id} + '-' + ${iterStat.index}"
+                                   th:text="${answer.replace('ĸ', ',')}">
                             </label>
                         </div>
                     </div>
 
                     <!-- Single Choice -->
-                    <div class="mb-2" th:if="${component.fragen.type.name == 'SC'}">
+                    <div class="mb-2" th:if="${component.question.type.name == 'SC'}">
                         <div class="form-check mb-2"
-                             th:each="antwort : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
+                             th:each="answer : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
                             <input class="form-check-input"
                                    type="radio"
-                                   th:id="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"
-                                   th:name="${component.fragen.id}"
-                                   th:field="*{answers[__${component.fragen.id}__]}"
-                                   th:value="${antwort}" />
+                                   th:id="'answer-' + ${component.question.id} + '-' + ${iterStat.index}"
+                                   th:name="${component.question.id}"
+                                   th:field="*{answers[__${component.question.id}__]}"
+                                   th:value="${answer}" />
                             <label class="form-check-label w-100"
-                                   th:for="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"
-                                   th:text="${antwort.replace('ĸ', ',')}">
+                                   th:for="'answer-' + ${component.question.id} + '-' + ${iterStat.index}"
+                                   th:text="${answer.replace('ĸ', ',')}">
                             </label>
                         </div>
                     </div>
 
                     <!-- FREE_RESPONSE -->
-                    <div class="mb-2" th:if="${component.fragen.type.name == 'FREE_RESPONSE'}">
+                    <div class="mb-2" th:if="${component.question.type.name == 'FREE_RESPONSE'}">
                         <label class="form-label"
-                               th:for="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}">
+                               th:for="'answer-' + ${component.question.id} + '-' + ${iterStat.index}">
                         </label>
-                        <textarea th:name="${component.fragen.id}"
-                                  th:id="'antwort-' + ${component.fragen.id} + '-' + ${iterStat.index}"
-                                  th:field="*{answers[__${component.fragen.id}__]}"
+                        <textarea th:name="${component.question.id}"
+                                  th:id="'answer-' + ${component.question.id} + '-' + ${iterStat.index}"
+                                  th:field="*{answers[__${component.question.id}__]}"
                                   class="form-control" rows="6">
                         </textarea>
                     </div>

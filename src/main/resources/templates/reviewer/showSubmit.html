@@ -37,9 +37,9 @@
         <form th:action="@{/reviewer/createReview/{answerId}(answerId=${answer.answerId})}" method="post"
               th:object="${reviewForm}">
             <div class="card-body">
-                <h5 class="card-text" th:text="${answer.frageText}">Fragestellung</h5>
+                <h5 class="card-text" th:text="${answer.questionText}">Fragestellung</h5>
                 <p class="card-text">
-                    <small class="text-muted" th:text="${answer.maxPunkte} + ' Punkte'">
+                    <small class="text-muted" th:text="${answer.questionPoints} + ' Punkte'">
                         Punkte für Frage
                     </small>
                 </p>
@@ -48,21 +48,21 @@
                 <textarea class="form-control mb-2"
                           rows="6"
                         th:id="'Bewertung' + ${iterStat.index}"
-                        th:field="*{bewertung}">
+                        th:field="*{reviewText}">
                 </textarea>
                 <small class="text-danger"
-                       th:if="${#fields.hasErrors('bewertung')}"
-                       th:errors="*{bewertung}"></small>
+                       th:if="${#fields.hasErrors('reviewText')}"
+                       th:errors="*{reviewText}"></small>
                 <label th:for="'Punkte' + ${iterStat.index}">Punkte</label>
                 <input class="form-control mb-2"
                        type="number"
                        th:id="'Punkte' + ${iterStat.index}"
-                       th:field="*{punkteVergeben}"
+                       th:field="*{points}"
                        min="0"
                        step="0.5"
-                       th:max="${answer.maxPunkte}">
-                <small class="text-danger" th:if="${#fields.hasErrors('punkteVergeben')}"
-                       th:errors="*{punkteVergeben}"></small>
+                       th:max="${answer.questionPoints}">
+                <small class="text-danger" th:if="${#fields.hasErrors('points')}"
+                       th:errors="*{points}"></small>
 
                 <button type="submit" class="btn btn-primary">Korrektur speichern</button>
             </div>

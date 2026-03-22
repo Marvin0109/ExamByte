@@ -5,6 +5,6 @@ import java.util.List;
 public record ReviewViewForm(
         String examTitle,
         String authorName,
-        double erreichtePunkte,
-        double maxPunkte,
+        double reviewPoints,
+        double maxPoints,
         List<ReviewAggregateDTO> components) {}

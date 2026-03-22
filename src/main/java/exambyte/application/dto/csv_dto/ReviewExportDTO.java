@@ -1,20 +1,38 @@
 package exambyte.application.dto.csv_dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"examTitle", "author", "maxPunkte", "frageText", "frageTyp", "punkte",
-        "studiAntworten", "bewertung", "erreichtePunkte"})
+@JsonPropertyOrder({"Pruefungstitel", "Autor", "Gesamtpunktzahl", "Aufgabenstellung", "Aufgabentyp",
+        "Punkte_fuer_Aufgabe", "Studenten_Antwort", "Bewertungstext", "Punkte_vergeben"})
 public class ReviewExportDTO {
 
+    @JsonProperty("Pruefungstitel")
     private String examTitle;
+
+    @JsonProperty("Autor")
     private String author;
-    private String frageText;
-    private double maxPunkte;
-    private double punkte;
-    private String frageTyp;
-    private String studiAntworten;
-    private String bewertung;
-    private double erreichtePunkte;
+
+    @JsonProperty("Aufgabenstellung")
+    private String questionText;
+
+    @JsonProperty("Gesamtpunktzahl")
+    private double totalPoints;
+
+    @JsonProperty("Punkte_fuer_Aufgabe")
+    private double questionPoints;
+
+    @JsonProperty("Aufgabentyp")
+    private String questionType;
+
+    @JsonProperty("Studenten_Antwort")
+    private String studentAnswer;
+
+    @JsonProperty("Bewertungstext")
+    private String reviewText;
+
+    @JsonProperty("Punkte_vergeben")
+    private double reviewPoints;
 
     public String getExamTitle() {
         return examTitle;
@@ -32,59 +50,59 @@ public class ReviewExportDTO {
         this.author = author;
     }
 
-    public String getFrageText() {
-        return frageText;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setFrageText(String frageText) {
-        this.frageText = frageText;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
-    public double getMaxPunkte() {
-        return maxPunkte;
+    public double getTotalPoints() {
+        return totalPoints;
     }
 
-    public void setMaxPunkte(double maxPunkte) {
-        this.maxPunkte = maxPunkte;
+    public void setTotalPoints(double totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
-    public String getFrageTyp() {
-        return frageTyp;
+    public String getQuestionType() {
+        return questionType;
     }
 
-    public void setFrageTyp(String frageTyp) {
-        this.frageTyp = frageTyp;
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
     }
 
-    public String getStudiAntworten() {
-        return studiAntworten;
+    public String getStudentAnswer() {
+        return studentAnswer;
     }
 
-    public void setStudiAntworten(String studiAntworten) {
-        this.studiAntworten = studiAntworten;
+    public void setStudentAnswer(String studentAnswer) {
+        this.studentAnswer = studentAnswer;
     }
 
-    public String getBewertung() {
-        return bewertung;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    public void setBewertung(String bewertung) {
-        this.bewertung = bewertung;
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
     }
 
-    public double getErreichtePunkte() {
-        return erreichtePunkte;
+    public double getReviewPoints() {
+        return reviewPoints;
     }
 
-    public void setErreichtePunkte(double erreichtePunkte) {
-        this.erreichtePunkte = erreichtePunkte;
+    public void setReviewPoints(double reviewPoints) {
+        this.reviewPoints = reviewPoints;
     }
 
-    public double getPunkte() {
-        return punkte;
+    public double getQuestionPoints() {
+        return questionPoints;
     }
 
-    public void setPunkte(double punkte) {
-        this.punkte = punkte;
+    public void setQuestionPoints(double questionPoints) {
+        this.questionPoints = questionPoints;
     }
 }

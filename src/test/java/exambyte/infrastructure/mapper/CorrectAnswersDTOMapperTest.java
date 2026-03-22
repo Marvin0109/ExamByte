@@ -41,7 +41,7 @@ class CorrectAnswersDTOMapperTest {
 
         // Assert
         assertThat(dto.id()).isEqualTo(id);
-        assertThat(dto.frageId()).isEqualTo(frageId);
+        assertThat(dto.questionId()).isEqualTo(frageId);
         assertThat(dto.solution()).contains(solution);
         assertThat(dto.choices()).contains(choices);
     }

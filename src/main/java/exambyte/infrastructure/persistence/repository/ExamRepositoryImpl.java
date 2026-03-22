@@ -43,8 +43,8 @@ public class ExamRepositoryImpl implements ExamRepository {
     }
 
     @Override
-    public Optional<UUID> findByStartTime(LocalDateTime startTime) {
-        ExamEntity loaded =  dao.findByStartZeitpunkt(startTime).orElse(null);
+    public Optional<UUID> findByStartTime(LocalDateTime start) {
+        ExamEntity loaded =  dao.findByStart(start).orElse(null);
         if (loaded != null) return Optional.of(loaded.getId());
         return Optional.empty();
     }

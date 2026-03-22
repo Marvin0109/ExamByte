@@ -20,22 +20,22 @@ public class ExamEntity {
     private final UUID professorId;
 
     @Column("start_time")
-    private final LocalDateTime startZeitpunkt;
+    private final LocalDateTime start;
 
     @Column("end_time")
-    private final LocalDateTime endZeitpunkt;
+    private final LocalDateTime end;
 
     @Column("result_time")
-    private final LocalDateTime resultZeitpunkt;
+    private final LocalDateTime result;
 
     private ExamEntity(UUID id, String title, UUID professorId,
-                      LocalDateTime startZeitpunkt, LocalDateTime endZeitpunkt, LocalDateTime resultZeitpunkt) {
+                       LocalDateTime start, LocalDateTime end, LocalDateTime result) {
         this.id = id;
         this.title = title;
         this.professorId = professorId;
-        this.startZeitpunkt = startZeitpunkt;
-        this.endZeitpunkt = endZeitpunkt;
-        this.resultZeitpunkt = resultZeitpunkt;
+        this.start = start;
+        this.end = end;
+        this.result = result;
     }
 
     public UUID getId() {
@@ -54,25 +54,25 @@ public class ExamEntity {
         return professorId;
     }
 
-    public LocalDateTime getStartZeitpunkt() {
-        return startZeitpunkt;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public LocalDateTime getEndZeitpunkt() {
-        return endZeitpunkt;
+    public LocalDateTime getEnd() {
+        return end;
     }
 
-    public LocalDateTime getResultZeitpunkt() {
-        return resultZeitpunkt;
+    public LocalDateTime getResult() {
+        return result;
     }
 
     public static class ExamEntityBuilder {
         private UUID id;
         private String title;
         private UUID professorId;
-        private LocalDateTime startZeitpunkt;
-        private LocalDateTime endZeitpunkt;
-        private LocalDateTime resultZeitpunkt;
+        private LocalDateTime start;
+        private LocalDateTime end;
+        private LocalDateTime result;
 
         public ExamEntityBuilder id(UUID id) {
             this.id = id;
@@ -89,18 +89,18 @@ public class ExamEntity {
             return this;
         }
 
-        public ExamEntityBuilder startZeitpunkt(LocalDateTime startZeitpunkt) {
-            this.startZeitpunkt = startZeitpunkt;
+        public ExamEntityBuilder start(LocalDateTime start) {
+            this.start = start;
             return this;
         }
 
-        public ExamEntityBuilder endZeitpunkt(LocalDateTime endZeitpunkt) {
-            this.endZeitpunkt = endZeitpunkt;
+        public ExamEntityBuilder end(LocalDateTime end) {
+            this.end = end;
             return this;
         }
 
-        public ExamEntityBuilder resultZeitpunkt(LocalDateTime resultZeitpunkt) {
-            this.resultZeitpunkt = resultZeitpunkt;
+        public ExamEntityBuilder result(LocalDateTime result) {
+            this.result = result;
             return this;
         }
 
@@ -110,10 +110,10 @@ public class ExamEntity {
             }
 
             checkNotNull(professorId, "Professor-ID fehlt");
-            checkNotNull(startZeitpunkt, "Start-Zeitpunkt fehlt");
-            checkNotNull(endZeitpunkt, "End-Zeitpunkt fehlt");
-            checkNotNull(resultZeitpunkt, "Ergebnis-Zeitpunkt fehlt");
-            return new ExamEntity(id, title, professorId, startZeitpunkt, endZeitpunkt, resultZeitpunkt);
+            checkNotNull(start, "Start-Zeitpunkt fehlt");
+            checkNotNull(end, "End-Zeitpunkt fehlt");
+            checkNotNull(result, "Ergebnis-Zeitpunkt fehlt");
+            return new ExamEntity(id, title, professorId, start, end, result);
         }
 
         private static void checkNotNull(Object object, String message) {

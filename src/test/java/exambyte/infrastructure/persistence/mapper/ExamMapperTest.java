@@ -35,9 +35,9 @@ class ExamMapperTest {
         // Assert
         assertThat(examEntity.getTitle()).isEqualTo("Test 1");
         assertThat(examEntity.getProfessorId()).isNotNull();
-        assertThat(examEntity.getStartZeitpunkt()).isEqualTo(startTime);
-        assertThat(examEntity.getEndZeitpunkt()).isEqualTo(endTime);
-        assertThat(examEntity.getResultZeitpunkt()).isEqualTo(resultTime);
+        assertThat(examEntity.getStart()).isEqualTo(startTime);
+        assertThat(examEntity.getEnd()).isEqualTo(endTime);
+        assertThat(examEntity.getResult()).isEqualTo(resultTime);
     }
 
     @Test
@@ -50,9 +50,9 @@ class ExamMapperTest {
         ExamEntity examEntity = new ExamEntity.ExamEntityBuilder()
                 .title("Test 2")
                 .professorId(UUID.randomUUID())
-                .startZeitpunkt(startTime)
-                .endZeitpunkt(endTime)
-                .resultZeitpunkt(resultTime)
+                .start(startTime)
+                .end(endTime)
+                .result(resultTime)
                 .build();
 
         // Act
@@ -61,8 +61,8 @@ class ExamMapperTest {
         // Assert
         assertThat(exam.getTitle()).isEqualTo("Test 2");
         assertThat(exam.getProfessorId()).isNotNull();
-        assertThat(examEntity.getStartZeitpunkt()).isEqualTo(startTime);
-        assertThat(examEntity.getEndZeitpunkt()).isEqualTo(endTime);
-        assertThat(examEntity.getResultZeitpunkt()).isEqualTo(resultTime);
+        assertThat(examEntity.getStart()).isEqualTo(startTime);
+        assertThat(examEntity.getEnd()).isEqualTo(endTime);
+        assertThat(examEntity.getResult()).isEqualTo(resultTime);
     }
 }

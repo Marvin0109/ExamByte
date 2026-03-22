@@ -7,6 +7,6 @@ public record ExamDTO(
         UUID id,
         String title,
         UUID professorId,
-        LocalDateTime startTime,
-        LocalDateTime endTime,
-        LocalDateTime resultTime) {}
+        LocalDateTime start,
+        LocalDateTime end,
+        LocalDateTime result) {}

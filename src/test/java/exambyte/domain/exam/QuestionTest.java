@@ -1,7 +1,7 @@
 package exambyte.domain.exam;
 
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Question;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FrageTest {
+class QuestionTest {
 
     @Test
     @DisplayName("FrageBuilder Test")
@@ -20,18 +20,18 @@ class FrageTest {
         QuestionType type = QuestionType.FREE_RESPONSE;
         UUID examId = UUID.randomUUID();
 
-        Frage frage = new Frage.FrageBuilder()
+        Question question = new Question.FrageBuilder()
                 .id(id)
-                .frageText(frageText)
-                .maxPunkte(maxPunkte)
+                .text(frageText)
+                .points(maxPunkte)
                 .type(type)
                 .examId(examId)
                 .build();
 
-        assertEquals(id, frage.getId());
-        assertEquals(frageText, frage.getFrageText());
-        assertEquals(maxPunkte, frage.getMaxPunkte());
-        assertEquals(type, frage.getType());
-        assertEquals(examId, frage.getExamId());
+        assertEquals(id, question.getId());
+        assertEquals(frageText, question.getText());
+        assertEquals(maxPunkte, question.getPoints());
+        assertEquals(type, question.getType());
+        assertEquals(examId, question.getExamId());
     }
 }

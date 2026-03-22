@@ -13,5 +13,5 @@ public interface ExamDAO extends CrudRepository<ExamEntity, UUID> {
 
     @NotNull Collection<ExamEntity> findAll();
 
-    Optional<ExamEntity> findByStartZeitpunkt(LocalDateTime startZeitpunkt);
+    Optional<ExamEntity> findByStart(LocalDateTime start);
 }

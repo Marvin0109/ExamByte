@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface CorrectAnswersDAO extends CrudRepository<CorrectAnswersEntity, UUID> {
 
-    Optional<CorrectAnswersEntity> findByFrageId(UUID frageId);
+    Optional<CorrectAnswersEntity> findByQuestionId(UUID questionId);
 }

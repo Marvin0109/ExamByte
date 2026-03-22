@@ -19,7 +19,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     private final AnswerQueryService answerQueryService;
     private final ReviewGenerationService reviewGenerationService;
-    private final FrageQueryService frageQueryService;
+    private final QuestionQueryService questionQueryService;
     private final ScoringService scoringService;
     private final ProfessorQueryService professorQueryService;
     private final StudentQueryService studentQueryService;
@@ -33,7 +33,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     public ExamManagementServiceImpl(AnswerQueryService answerQueryService,
                                      ReviewGenerationService reviewGenerationService,
-                                     FrageQueryService frageQueryService,
+                                     QuestionQueryService questionQueryService,
                                      ScoringService scoringService,
                                      ProfessorQueryService professorQueryService,
                                      StudentQueryService studentQueryService,
@@ -43,7 +43,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
         this.answerQueryService = answerQueryService;
         this.reviewGenerationService = reviewGenerationService;
-        this.frageQueryService = frageQueryService;
+        this.questionQueryService = questionQueryService;
         this.scoringService = scoringService;
         this.professorQueryService = professorQueryService;
         this.studentQueryService = studentQueryService;
@@ -83,7 +83,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         }
 
         boolean startTimeExists = exams.stream()
-                .anyMatch(e -> e.startTime().truncatedTo(ChronoUnit.MINUTES)
+                .anyMatch(e -> e.start().truncatedTo(ChronoUnit.MINUTES)
                         .equals(start.truncatedTo(ChronoUnit.MINUTES)));
 
         if (startTimeExists) {
@@ -117,16 +117,16 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     private SubmitExamResult generateAndSaveReviews(UUID studentId, UUID examId) {
-        List<FrageDTO> fragenList = frageQueryService.getFragenForExam(examId);
+        List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
 
-        List<AnswerDTO> answerList = fragenList.stream()
+        List<AnswerDTO> answerList = questions.stream()
                 .map(f -> answerQueryService.findByStudentAndFrage(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
         List<ReviewDTO> allReviews = reviewGenerationService.generateReviews(
                 studentId,
-                fragenList,
+                questions,
                 answerList);
 
         try {
@@ -140,8 +140,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     private void saveReviews(ReviewDTO reviewDTO) {
         reviewQueryService.createReview(
-                reviewDTO.bewertung(),
-                reviewDTO.punkte(),
+                reviewDTO.text(),
+                reviewDTO.points(),
                 reviewDTO.answerId(),
                 reviewDTO.reviewerId()
         );
@@ -152,15 +152,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         UUID studentId = studentQueryService.getStudentIdByName(studentName);
 
         ExamDTO exam = examQueryService.getExam(examId);
-        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examId);
-        List<AnswerDTO> allAnswers = answerQueryService.getAnswers(studentId, frageMap.keySet());
+        Map<UUID, QuestionDTO> questionMap = questionQueryService.getQuestionUUIDMap(examId);
+        List<AnswerDTO> allAnswers = answerQueryService.getAnswers(studentId, questionMap.keySet());
 
         // Gesamt-MaxPunkte
-        double gesamtMaxPunkte = frageMap.values().stream()
-                .mapToDouble(FrageDTO::maxPunkte)
+        double gesamtMaxPunkte = questionMap.values().stream()
+                .mapToDouble(QuestionDTO::points)
                 .sum();
 
-        double erreichtePunkte = scoringService.berechneErreichtePunkte(allAnswers, frageMap, exam.resultTime());
+        double erreichtePunkte = scoringService.berechneErreichtePunkte(allAnswers, questionMap, exam.result());
 
         double prozent = gesamtMaxPunkte > 0
                 ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
@@ -195,15 +195,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     @Override
-    public UUID getExamIdByStartTime(LocalDateTime startTime) {
-        return examQueryService.getExamIdByStartTime(startTime);
+    public UUID getExamIdByStartTime(LocalDateTime start) {
+        return examQueryService.getExamIdByStartTime(start);
     }
 
     @Override
     public boolean deleteById(UUID id) {
         ExamDTO exam = examQueryService.getExam(id);
 
-        if (now().isBefore(exam.startTime()) || exam.resultTime().isBefore(now())) {
+        if (now().isBefore(exam.start()) || exam.result().isBefore(now())) {
             examQueryService.deleteById(exam.id());
             return true;
         }
@@ -217,7 +217,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         if (examList.size() != EXAM_COUNT) return false;
         else {
             for (ExamDTO exam : examList) {
-                if (exam.endTime().isAfter(now())) {
+                if (exam.end().isAfter(now())) {
                     return false;
                 }
             }
@@ -230,6 +230,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     @Override
     public boolean allowedToViewReview(UUID examId) {
         ExamDTO exam = examQueryService.getExam(examId);
-        return exam.resultTime().isBefore(now().truncatedTo(ChronoUnit.MINUTES));
+        return exam.result().isBefore(now().truncatedTo(ChronoUnit.MINUTES));
     }
 }

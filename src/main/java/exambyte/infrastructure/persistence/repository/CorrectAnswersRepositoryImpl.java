@@ -22,7 +22,7 @@ public class CorrectAnswersRepositoryImpl implements CorrectAnswersRepository {
 
     @Override
     public Optional<CorrectAnswers> findByFrageId(UUID frageId) {
-        Optional<CorrectAnswersEntity> entity = dao.findByFrageId(frageId);
+        Optional<CorrectAnswersEntity> entity = dao.findByQuestionId(frageId);
         return entity.map(mapper::toDomain);
     }
 

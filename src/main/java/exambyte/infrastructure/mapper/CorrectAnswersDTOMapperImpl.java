@@ -21,7 +21,7 @@ public class CorrectAnswersDTOMapperImpl implements CorrectAnswersDTOMapper {
     public CorrectAnswers toDomain(CorrectAnswersDTO dto) {
         return new CorrectAnswers.CorrectAnswersBuilder()
                 .id(dto.id())
-                .frageId(dto.frageId())
+                .frageId(dto.questionId())
                 .solution(dto.solution())
                 .choices(dto.choices())
                 .build();

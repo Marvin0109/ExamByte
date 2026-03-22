@@ -14,7 +14,7 @@ public class AnswerMapperImpl implements AnswerMapper {
         return new Answer.AnswerBuilder()
                 .id(entity.getId())
                 .answer(entity.getAnswer())
-                .frageId(entity.getFrageId())
+                .frageId(entity.getQuestionId())
                 .studentId(entity.getStudentId())
                 .submitTime(entity.getSubmitTime())
                 .build();
@@ -26,7 +26,7 @@ public class AnswerMapperImpl implements AnswerMapper {
         return new AnswerEntity.AnswerEntityBuilder()
                 .id(answer.getId())
                 .answer(answer.getAnswer())
-                .frageId(answer.getFrageId())
+                .questionId(answer.getFrageId())
                 .studentId(answer.getStudentUUID())
                 .submitTime(answer.getSubmitTime())
                 .build();

@@ -7,11 +7,11 @@ import java.util.UUID;
 
 public interface AnswerRepository {
 
-    Answer findByFrageId(UUID id);
+    Answer findByQuestionId(UUID id);
 
     Optional<Answer> findById(UUID id);
 
-    Optional<Answer> findByStudentIdAndFrageId(UUID studentFachId, UUID examFachId);
+    Optional<Answer> findByStudentIdAndQuestionId(UUID studentFachId, UUID examFachId);
 
     void save(Answer answer);
 

@@ -40,8 +40,8 @@ class ReviewDTOMapperTest {
         assertEquals(id, reviewDTO.id());
         assertEquals(answerId, reviewDTO.answerId());
         assertEquals(reviewerId, reviewDTO.reviewerId());
-        assertEquals("Bewertung", reviewDTO.bewertung());
-        assertEquals(3, reviewDTO.punkte());
+        assertEquals("Bewertung", reviewDTO.text());
+        assertEquals(3, reviewDTO.points());
     }
 
     @Test
@@ -88,13 +88,13 @@ class ReviewDTOMapperTest {
         assertThat(reviewDTOs.getFirst().id()).isEqualTo(id1);
         assertThat(reviewDTOs.getFirst().answerId()).isEqualTo(answerId1);
         assertThat(reviewDTOs.getFirst().reviewerId()).isEqualTo(reviewerId1);
-        assertThat(reviewDTOs.getFirst().bewertung()).isEqualTo("Bewertung 1");
-        assertThat(reviewDTOs.getFirst().punkte()).isEqualTo(3);
+        assertThat(reviewDTOs.getFirst().text()).isEqualTo("Bewertung 1");
+        assertThat(reviewDTOs.getFirst().points()).isEqualTo(3);
 
         assertThat(reviewDTOs.getLast().id()).isEqualTo(id2);
         assertThat(reviewDTOs.getLast().answerId()).isEqualTo(answerId2);
         assertThat(reviewDTOs.getLast().reviewerId()).isEqualTo(reviewerId2);
-        assertThat(reviewDTOs.getLast().bewertung()).isEqualTo("Bewertung 2");
-        assertThat(reviewDTOs.getLast().punkte()).isEqualTo(6);
+        assertThat(reviewDTOs.getLast().text()).isEqualTo("Bewertung 2");
+        assertThat(reviewDTOs.getLast().points()).isEqualTo(6);
     }
 }

@@ -33,8 +33,8 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
                 .id(dto.id())
                 .answerId(dto.answerId())
                 .reviewerId(dto.reviewerId())
-                .bewertung(dto.bewertung())
-                .punkte(dto.punkte())
+                .bewertung(dto.text())
+                .punkte(dto.points())
                 .build();
     }
 }

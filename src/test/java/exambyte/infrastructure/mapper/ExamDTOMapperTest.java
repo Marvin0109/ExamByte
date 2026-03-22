@@ -42,9 +42,9 @@ class ExamDTOMapperTest {
         assertEquals(id, dto.id());
         assertEquals("Test Exam", dto.title());
         assertEquals(profId, dto.professorId());
-        assertEquals(now, dto.startTime());
-        assertEquals(now.plusHours(2), dto.endTime());
-        assertEquals(now.plusDays(1), dto.resultTime());
+        assertEquals(now, dto.start());
+        assertEquals(now.plusHours(2), dto.end());
+        assertEquals(now.plusDays(1), dto.result());
     }
 
     // Handling null Exam input in toDTO method

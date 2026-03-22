@@ -1,7 +1,7 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.mapper.AnswerDTOMapper;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.service.AnswerService;
@@ -12,14 +12,14 @@ import java.util.*;
 @Service
 public class AnswerQueryServiceImpl implements AnswerQueryService {
 
-    private final FrageQueryService frageQueryService;
+    private final QuestionQueryService questionQueryService;
     private final AnswerService answerService;
     private final AnswerDTOMapper answerDTOMapper;
 
-    public AnswerQueryServiceImpl(FrageQueryService frageQueryService,
-                                   AnswerService answerService,
-                                   AnswerDTOMapper answerDTOMapper) {
-        this.frageQueryService = frageQueryService;
+    public AnswerQueryServiceImpl(QuestionQueryService questionQueryService,
+                                  AnswerService answerService,
+                                  AnswerDTOMapper answerDTOMapper) {
+        this.questionQueryService = questionQueryService;
         this.answerService = answerService;
         this.answerDTOMapper = answerDTOMapper;
     }
@@ -36,7 +36,7 @@ public class AnswerQueryServiceImpl implements AnswerQueryService {
 
             UUID answerId = loaded != null ? loaded.getId() : null;
 
-            FrageDTO loadedFrage = frageQueryService.getFrage(frageId);
+            QuestionDTO loadedFrage = questionQueryService.getQuestion(frageId);
             if (!loadedFrage.type().name().equals("FREE_RESPONSE")) {
                 answer = String.join("\n", entry.getValue());
                 replaced = answer.replace("ĸ", ",");
@@ -62,7 +62,7 @@ public class AnswerQueryServiceImpl implements AnswerQueryService {
 
     @Override
     public List<AnswerDTO> getFreeResponseAnswersForExam(UUID examId) {
-        return frageQueryService.getFreeResponseFragen(examId).stream()
+        return questionQueryService.getFreeResponseQuestions(examId).stream()
                 .map(frageDTO -> answerService.findByFrageId(frageDTO.id()))
                 .filter(Objects::nonNull)
                 .map(answerDTOMapper::toDTO)

@@ -1,7 +1,7 @@
 package exambyte.application.mapper;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.csv_dto.ExamExportDTO;
 import exambyte.domain.export_mapper.ExamExportDTOMapper;
@@ -16,29 +16,29 @@ public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
     @Override
     public List<ExamExportDTO> mapDTOToExport(ExamDTO exam,
                                               String profName,
-                                              double punkte,
-                                              List<FrageDTO> fragen,
+                                              double points,
+                                              List<QuestionDTO> questions,
                                               List<CorrectAnswersDTO> correctAnswers) {
 
         List<ExamExportDTO> export = new ArrayList<>();
 
-        for (FrageDTO frage : fragen) {
+        for (QuestionDTO question : questions) {
             ExamExportDTO e = new ExamExportDTO();
             e.setExamTitle(exam.title());
             e.setAuthor(profName);
-            e.setMaxPunkte(punkte);
+            e.setTotalPoints(points);
 
-            e.setFrageText(frage.frageText());
-            e.setFrageTyp(frage.type().name());
-            e.setPunkte(frage.maxPunkte());
+            e.setQuestionText(question.text());
+            e.setQuestionType(question.type().name());
+            e.setQuestionPoints(question.points());
 
             CorrectAnswersDTO k = correctAnswers.stream()
-                    .filter(l -> l.frageId().equals(frage.id()))
+                    .filter(l -> l.questionId().equals(question.id()))
                     .findAny()
                     .orElse(null);
 
-            e.setAntwortMoeglichkeiten(k == null ? "" : k.choices());
-            e.setLoesungen(k == null ? "" : k.solution());
+            e.setChoices(k == null ? "" : k.choices());
+            e.setSolution(k == null ? "" : k.solution());
 
             export.add(e);
         }

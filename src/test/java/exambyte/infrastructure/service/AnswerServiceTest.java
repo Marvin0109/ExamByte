@@ -24,13 +24,13 @@ class AnswerServiceTest {
         UUID studentId = UUID.randomUUID();
         UUID frageId = UUID.randomUUID();
 
-        when(repository.findByStudentIdAndFrageId(studentId, frageId)).thenReturn(Optional.empty());
+        when(repository.findByStudentIdAndQuestionId(studentId, frageId)).thenReturn(Optional.empty());
 
         // Act
         Answer result = service.findByStudentAndFrage(studentId, frageId);
 
         // Assert
         assertNull(result);
-        verify(repository).findByStudentIdAndFrageId(studentId, frageId);
+        verify(repository).findByStudentIdAndQuestionId(studentId, frageId);
     }
 }

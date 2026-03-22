@@ -4,25 +4,25 @@ import java.util.UUID;
 
 public class AnswerForm {
 
-    private String frageText;
-    private double maxPunkte;
+    private String questionText;
+    private double points;
     private String answer;
     private UUID answerId;
 
-    public  String getFrageText() {
-        return frageText;
+    public  String getQuestionText() {
+        return questionText;
     }
 
-    public void setFrageText(String frageText) {
-        this.frageText = frageText;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
-    public double getMaxPunkte() {
-        return maxPunkte;
+    public double getQuestionPoints() {
+        return points;
     }
 
-    public void setMaxPunkte(double maxPunkte) {
-        this.maxPunkte = maxPunkte;
+    public void setQuestionPoints(double points) {
+        this.points = points;
     }
 
     public String getAnswer() {

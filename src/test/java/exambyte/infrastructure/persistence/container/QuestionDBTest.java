@@ -1,11 +1,11 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.entitymapper.FrageMapper;
-import exambyte.infrastructure.persistence.mapper.FrageMapperImpl;
-import exambyte.domain.repository.FrageRepository;
-import exambyte.infrastructure.persistence.repository.FrageDAO;
-import exambyte.infrastructure.persistence.repository.FrageRepositoryImpl;
+import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.domain.entitymapper.QuestionMapper;
+import exambyte.infrastructure.persistence.mapper.QuestionMapperImpl;
+import exambyte.domain.repository.QuestionRepository;
+import exambyte.infrastructure.persistence.repository.QuestionDAO;
+import exambyte.infrastructure.persistence.repository.QuestionRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,26 +24,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TestcontainerConfiguration.class)
 @Sql(scripts = "/data-test.sql")
-class FrageDBTest {
+class QuestionDBTest {
 
     @Autowired
-    private FrageDAO frageDAO;
+    private QuestionDAO questionDAO;
 
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     private static final UUID FRAGEUUID = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
 
     @BeforeEach
     void setUp() {
-        FrageMapper frageMapper = new FrageMapperImpl();
-        frageRepository = new FrageRepositoryImpl(frageDAO, frageMapper);
+        QuestionMapper questionMapper = new QuestionMapperImpl();
+        questionRepository = new QuestionRepositoryImpl(questionDAO, questionMapper);
     }
 
     @Test
-    @DisplayName("Eine Frage kann gespeichert und wieder geladen werden, außerdem kann der Professor extrahiert werden")
+    @DisplayName("Eine Question kann gespeichert und wieder geladen werden, außerdem kann der Professor extrahiert werden")
     void test_01() {
         // Act
-        Optional<Frage> geladen = frageRepository.findById(FRAGEUUID);
+        Optional<Question> geladen = questionRepository.findById(FRAGEUUID);
 
         // Assert
         assertThat(geladen).isPresent();

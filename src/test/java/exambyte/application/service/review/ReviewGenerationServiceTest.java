@@ -2,7 +2,7 @@ package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.domain.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.service.CorrectAnswersService;
@@ -28,10 +28,10 @@ class ReviewGenerationServiceTest {
     private static final UUID STUDENT_ID = UUID.randomUUID();
     private static final LocalDateTime TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-    private FrageDTO frageDTOMC;
+    private QuestionDTO questionDTOMC;
     private AnswerDTO answerMC;
 
-    private FrageDTO frageDTOSC;
+    private QuestionDTO questionDTOSC;
     private AnswerDTO answerSC;
 
     private ReviewDTO reviewDTOMC;
@@ -58,9 +58,9 @@ class ReviewGenerationServiceTest {
                 correctAnswersService,
                 correctAnswersDTOMapper);
 
-        frageDTOMC = new FrageDTO(
+        questionDTOMC = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage",
+                "Question",
                 2,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
@@ -68,13 +68,13 @@ class ReviewGenerationServiceTest {
         answerMC = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
-                frageDTOMC.id(),
+                questionDTOMC.id(),
                 STUDENT_ID,
                 TIME);
 
-        frageDTOSC = new FrageDTO(
+        questionDTOSC = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage",
+                "Question",
                 1,
                 UUID.randomUUID(),
                 QuestionTypeDTO.SC);
@@ -82,7 +82,7 @@ class ReviewGenerationServiceTest {
         answerSC = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
-                frageDTOSC.id(),
+                questionDTOSC.id(),
                 STUDENT_ID,
                 TIME);
 
@@ -108,7 +108,7 @@ class ReviewGenerationServiceTest {
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
                 STUDENT_ID,
-                List.of(frageDTOMC),
+                List.of(questionDTOMC),
                 List.of(answerMC));
 
         assertThat(result).hasSize(1);
@@ -123,7 +123,7 @@ class ReviewGenerationServiceTest {
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
                 STUDENT_ID,
-                List.of(frageDTOMC, frageDTOSC),
+                List.of(questionDTOMC, questionDTOSC),
                 List.of(answerMC, answerSC));
 
         assertThat(result).hasSize(2);

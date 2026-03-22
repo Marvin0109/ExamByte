@@ -4,7 +4,7 @@ import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.usecase.ExamManagementService;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Question;
 import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.aggregate.user.Reviewer;
@@ -43,7 +43,7 @@ class SubmitAnswersStressTest {
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private CorrectAnswersRepository correctAnswersRepository;
@@ -87,31 +87,31 @@ class SubmitAnswersStressTest {
 
         examId = examControllerService.getExamUUIDByStartTime(start);
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage")
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question")
                 .type(QuestionType.SC)
-                .maxPunkte(1)
+                .points(1)
                 .examId(examId)
                 .build());
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage 2")
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question 2")
                 .type(QuestionType.FREE_RESPONSE)
-                .maxPunkte(2)
+                .points(2)
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreeResponseLoaded = frageRepository.findAll().stream()
+        Optional<UUID> frageIdFreeResponseLoaded = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
-                .map(Frage::getId)
+                .map(Question::getId)
                 .findFirst();
 
         assert(frageIdFreeResponseLoaded.isPresent());
         frageIdFreeResponse = frageIdFreeResponseLoaded.get();
 
-        Optional<UUID> frageIdSCLoaded = frageRepository.findAll().stream()
+        Optional<UUID> frageIdSCLoaded = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getId)
+                .map(Question::getId)
                 .findFirst();
 
         assert(frageIdSCLoaded.isPresent());
@@ -174,10 +174,10 @@ class SubmitAnswersStressTest {
         assertThat(exceptions).isEmpty();
 
         for (Student s : students) {
-            assertThat(answerRepository.findByStudentIdAndFrageId(
+            assertThat(answerRepository.findByStudentIdAndQuestionId(
                     s.id(), frageIdFreeResponse)).isPresent();
 
-            Optional<Answer> sc = answerRepository.findByStudentIdAndFrageId(
+            Optional<Answer> sc = answerRepository.findByStudentIdAndQuestionId(
                     s.id(), frageIdSC);
             assertThat(sc).isPresent();
 
@@ -224,10 +224,10 @@ class SubmitAnswersStressTest {
 
         assertThat(exceptions).isEmpty();
 
-        assertThat(answerRepository.findByStudentIdAndFrageId(
+        assertThat(answerRepository.findByStudentIdAndQuestionId(
                 loaded.id(), frageIdFreeResponse)).isPresent();
 
-        Optional<Answer> sc = answerRepository.findByStudentIdAndFrageId(
+        Optional<Answer> sc = answerRepository.findByStudentIdAndQuestionId(
                 loaded.id(), frageIdSC);
         assertThat(sc).isPresent();
 

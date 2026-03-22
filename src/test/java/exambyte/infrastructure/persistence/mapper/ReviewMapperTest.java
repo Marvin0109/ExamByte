@@ -35,8 +35,8 @@ class ReviewMapperTest {
         assertThat(result.getId()).isEqualTo(REVIEW_ID);
         assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
         assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
-        assertThat(result.getBewertung()).isEqualTo("Bewertung");
-        assertThat(result.getPunkte()).isEqualTo(1);
+        assertThat(result.getText()).isEqualTo("Bewertung");
+        assertThat(result.getPoints()).isEqualTo(1);
     }
 
     @Test
@@ -46,8 +46,8 @@ class ReviewMapperTest {
                 .id(REVIEW_ID)
                 .answerId(ANSWER_ID)
                 .reviewerId(REVIEWER_ID)
-                .bewertung("Bewertung")
-                .punkte(13)
+                .text("Bewertung")
+                .points(13)
                 .build();
 
         // Act

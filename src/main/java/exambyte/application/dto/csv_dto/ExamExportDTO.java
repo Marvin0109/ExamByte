@@ -1,19 +1,35 @@
 package exambyte.application.dto.csv_dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"examTitle", "author", "maxPunkte", "frageText", "frageTyp",
-        "punkte", "antwortMoeglichkeiten", "loesungen"})
+@JsonPropertyOrder({"Pruefungstitel", "Autor", "Gesamtpunktzahl", "Aufgabenstellung", "Aufgabentyp",
+        "Punkte_fuer_Aufgabe", "Antwortoptionen", "Loesungen"})
 public class ExamExportDTO {
 
+    @JsonProperty("Pruefungstitel")
     private String examTitle;
+
+    @JsonProperty("Autor")
     private String author;
-    private String frageText;
-    private double maxPunkte;
-    private String frageTyp;
-    private double punkte;
-    private String antwortMoeglichkeiten;
-    private String loesungen;
+
+    @JsonProperty("Aufgabenstellung")
+    private String questionText;
+
+    @JsonProperty("Gesamtpunktzahl")
+    private double totalPoints;
+
+    @JsonProperty("Aufgabentyp")
+    private String questionType;
+
+    @JsonProperty("Punkte_fuer_Aufgabe")
+    private double questionPoints;
+
+    @JsonProperty("Antwortoptionen")
+    private String choices;
+
+    @JsonProperty("Loesungen")
+    private String solution;
 
     public String getExamTitle() {
         return examTitle;
@@ -31,51 +47,51 @@ public class ExamExportDTO {
         this.author = author;
     }
 
-    public String getFrageText() {
-        return frageText;
+    public String getQuestionText() {
+        return questionText;
     }
 
-    public void setFrageText(String frageText) {
-        this.frageText = frageText;
+    public void setQuestionText(String questionText) {
+        this.questionText = questionText;
     }
 
-    public double getMaxPunkte() {
-        return maxPunkte;
+    public double getTotalPoints() {
+        return totalPoints;
     }
 
-    public void setMaxPunkte(double maxPunkte) {
-        this.maxPunkte = maxPunkte;
+    public void setTotalPoints(double totalPoints) {
+        this.totalPoints = totalPoints;
     }
 
-    public String getFrageTyp() {
-        return frageTyp;
+    public String getQuestionType() {
+        return questionType;
     }
 
-    public void setFrageTyp(String frageTyp) {
-        this.frageTyp = frageTyp;
+    public void setQuestionType(String questionType) {
+        this.questionType = questionType;
     }
 
-    public String getAntwortMoeglichkeiten() {
-        return antwortMoeglichkeiten;
+    public String getChoices() {
+        return choices;
     }
 
-    public void setAntwortMoeglichkeiten(String antwortMoeglichkeiten) {
-        this.antwortMoeglichkeiten = antwortMoeglichkeiten;
+    public void setChoices(String choices) {
+        this.choices = choices;
     }
 
-    public String getLoesungen() {
-        return loesungen;
+    public String getSolution() {
+        return solution;
     }
 
-    public void setLoesungen(String loesungen) {
-        this.loesungen = loesungen;
+    public void setSolution(String solution) {
+        this.solution = solution;
     }
 
-    public double getPunkte() {
-        return punkte;
+    public double getQuestionPoints() {
+        return questionPoints;
     }
 
-    public void setPunkte(double punkte) {
-        this.punkte = punkte;
+    public void setQuestionPoints(double questionPoints) {
+        this.questionPoints = questionPoints;
     }
 }

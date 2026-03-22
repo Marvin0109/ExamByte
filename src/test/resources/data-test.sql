@@ -15,20 +15,20 @@ VALUES ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
         '2025-07-02 14:00:00',
         '2025-07-09 14:00:00');
 
-INSERT INTO frage (id, frage_text, exam_id, max_punkte, type)
+INSERT INTO question (id, text, exam_id, points, type)
 VALUES ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'FrageTestText',
         'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
         10,
         'SC');
 
-INSERT INTO correct_answers (id, frage_id, solution, choices)
+INSERT INTO correct_answers (id, question_id, solution, choices)
 VALUES ('cccccccc-cccc-cccc-cccc-cccccccccccc',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'Loesung1',
         'Loesung1\nLoesung2');
 
-INSERT INTO answer (id, frage_id, answer, student_id, submit_time)
+INSERT INTO answer (id, question_id, answer, student_id, submit_time)
 VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'Loesung1',
@@ -36,7 +36,7 @@ VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         '2025-06-20 08:10:00'
         );
 
-INSERT INTO review (id, answer_id, reviewer_id, bewertung, punkte)
+INSERT INTO review (id, answer_id, reviewer_id, text, points)
 VALUES ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
         'dddddddd-dddd-dddd-dddd-dddddddddddd',
         '33333333-3333-3333-3333-333333333333',

@@ -1,12 +1,12 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.mapper.FrageDTOMapper;
+import exambyte.domain.mapper.QuestionDTOMapper;
 import exambyte.domain.service.AnswerService;
 import exambyte.domain.service.ExamService;
-import exambyte.domain.service.FrageService;
+import exambyte.domain.service.QuestionService;
 import exambyte.domain.service.StudentService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,24 +22,24 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
     private final ExamService examService;
     private final StudentService studentService;
-    private final FrageService frageService;
+    private final QuestionService questionService;
     private final AnswerService answerService;
 
     private final ExamDTOMapper examDTOMapper;
-    private final FrageDTOMapper frageDTOMapper;
+    private final QuestionDTOMapper questionDTOMapper;
 
     public ExamQueryServiceImpl(ExamService examService,
                                 StudentService studentService,
-                                FrageService frageService,
+                                QuestionService questionService,
                                 AnswerService answerService,
                                 ExamDTOMapper examDTOMapper,
-                                FrageDTOMapper frageDTOMapper) {
+                                QuestionDTOMapper questionDTOMapper) {
         this.examService = examService;
         this.studentService = studentService;
-        this.frageService = frageService;
+        this.questionService = questionService;
         this.answerService = answerService;
         this.examDTOMapper = examDTOMapper;
-        this.frageDTOMapper = frageDTOMapper;
+        this.questionDTOMapper = questionDTOMapper;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
         for (ExamDTO examDTO : examList) {
             if (start.truncatedTo(ChronoUnit.MINUTES)
-                    .equals(examDTO.startTime().truncatedTo(ChronoUnit.MINUTES))) {
+                    .equals(examDTO.start().truncatedTo(ChronoUnit.MINUTES))) {
                 return examDTO.id();
             }
         }
@@ -67,14 +67,14 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     public List<ExamDTO> getAllExams() {
         return examService.allExams().stream()
                 .map(examDTOMapper::toDTO)
-                .sorted(Comparator.comparing(ExamDTO::startTime))
+                .sorted(Comparator.comparing(ExamDTO::start))
                 .toList();
     }
 
     @Override
     public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
         UUID studentId = studentService.getStudentId(studentName);
-        List<FrageDTO> fragen = frageDTOMapper.toFrageDTOList(frageService.getFragenForExam(examId));
+        List<QuestionDTO> fragen = questionDTOMapper.toQuestionDTOList(questionService.getQuestionsForExam(examId));
 
         return fragen.stream()
                 .anyMatch(frage ->

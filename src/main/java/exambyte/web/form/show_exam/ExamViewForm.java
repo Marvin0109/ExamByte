@@ -5,5 +5,5 @@ import java.util.List;
 public record ExamViewForm(
         String examTitle,
         String authorName,
-        double maxPunkte,
+        double points,
         List<ExamAggregateDTO> questions) {}

@@ -296,18 +296,18 @@ class StudentControllerTest {
     @DisplayName("Das einreichen des Exams ist erfolgreich (mit Eingabedaten im richtigen Format)")
     void submitExam_07() throws Exception {
         UUID examId = UUID.randomUUID();
-        UUID frageId1 = UUID.randomUUID();
-        UUID frageId2 = UUID.randomUUID();
-        UUID frageId3 = UUID.randomUUID();
+        UUID questionId1 = UUID.randomUUID();
+        UUID questionId2 = UUID.randomUUID();
+        UUID questionId3 = UUID.randomUUID();
 
         when(service.examIsAlreadySubmitted(examId, "username")).thenReturn(false);
         when(service.submitExam(eq("username"), any(), eq(examId))).thenReturn(true);
 
         mvc.perform(post("/student/submit/{examId}", examId)
                 .with(csrf())
-                .param("answers[" + frageId1 + "]", "Antwort 1") // SC
-                .param("answers[" + frageId2 + "]", "Antwort 1", "Antwort 2") // MC
-                .param("answers[" + frageId3 + "]", "Dies ist meine Freitext Antwort"))
+                .param("answers[" + questionId1 + "]", "Antwort 1") // SC
+                .param("answers[" + questionId2 + "]", "Antwort 1", "Antwort 2") // MC
+                .param("answers[" + questionId3 + "]", "Dies ist meine Freitext Antwort"))
             .andExpect(status().is3xxRedirection())
             .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
             .andExpect(flash().attribute("success", true))

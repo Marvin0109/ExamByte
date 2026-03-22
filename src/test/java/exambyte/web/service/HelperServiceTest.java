@@ -232,9 +232,9 @@ class HelperServiceTest {
 
     @Test
     void prepareFrageData_freeResponse() {
-        FrageDTO frageDTO = new FrageDTO(
+        QuestionDTO questionDTO = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 2,
                 UUID.randomUUID(),
                 QuestionTypeDTO.FREE_RESPONSE
@@ -243,18 +243,18 @@ class HelperServiceTest {
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
-                frageDTO.id(),
+                questionDTO.id(),
                 UUID.randomUUID(),
                 null
         );
 
-        when(examFacadeService.getAnswerForFrageAndStudent(eq(frageDTO.id()), any())).thenReturn(answer);
-        when(examFacadeService.getLoesungForFrage(frageDTO.id())).thenReturn(null);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(eq(questionDTO.id()), any())).thenReturn(answer);
+        when(examFacadeService.getCorrectAnswerForQuestion(questionDTO.id())).thenReturn(null);
 
-        PreparedFrageData result = helperService.prepareFrageData(frageDTO, UUID.randomUUID());
+        PreparedFrageData result = helperService.prepareFrageData(questionDTO, UUID.randomUUID());
 
         assertThat(result.correctAnswers()).isNull();
-        assertThat(result.frage()).isEqualTo(frageDTO);
+        assertThat(result.frage()).isEqualTo(questionDTO);
         assertThat(result.answer()).isEqualTo(answer);
     }
 
@@ -263,9 +263,9 @@ class HelperServiceTest {
     void prepareFrageData_choiceFragen(
             QuestionTypeDTO type
     ) {
-        FrageDTO frageDTO = new FrageDTO(
+        QuestionDTO questionDTO = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 2,
                 UUID.randomUUID(),
                 type
@@ -274,7 +274,7 @@ class HelperServiceTest {
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
                 "Antwort",
-                frageDTO.id(),
+                questionDTO.id(),
                 UUID.randomUUID(),
                 null
         );
@@ -283,16 +283,16 @@ class HelperServiceTest {
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
-                frageDTO.id()
+                questionDTO.id()
         );
 
-        when(examFacadeService.getAnswerForFrageAndStudent(eq(frageDTO.id()), any())).thenReturn(answer);
-        when(examFacadeService.getLoesungForFrage(frageDTO.id())).thenReturn(correctAnswers);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(eq(questionDTO.id()), any())).thenReturn(answer);
+        when(examFacadeService.getCorrectAnswerForQuestion(questionDTO.id())).thenReturn(correctAnswers);
 
-        PreparedFrageData result = helperService.prepareFrageData(frageDTO, UUID.randomUUID());
+        PreparedFrageData result = helperService.prepareFrageData(questionDTO, UUID.randomUUID());
 
         assertThat(result.correctAnswers()).isNotNull();
-        assertThat(result.frage()).isEqualTo(frageDTO);
+        assertThat(result.frage()).isEqualTo(questionDTO);
         assertThat(result.answer()).isNotNull();
     }
 
@@ -310,9 +310,9 @@ class HelperServiceTest {
 
     @Test
     void prepareFrageData_answerNull() {
-        FrageDTO frageDTO = new FrageDTO(
+        QuestionDTO questionDTO = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 2,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC
@@ -322,16 +322,16 @@ class HelperServiceTest {
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
-                frageDTO.id()
+                questionDTO.id()
         );
 
-        when(examFacadeService.getAnswerForFrageAndStudent(eq(frageDTO.id()), any())).thenReturn(null);
-        when(examFacadeService.getLoesungForFrage(frageDTO.id())).thenReturn(correctAnswers);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(eq(questionDTO.id()), any())).thenReturn(null);
+        when(examFacadeService.getCorrectAnswerForQuestion(questionDTO.id())).thenReturn(correctAnswers);
 
-        PreparedFrageData result = helperService.prepareFrageData(frageDTO, UUID.randomUUID());
+        PreparedFrageData result = helperService.prepareFrageData(questionDTO, UUID.randomUUID());
 
         assertThat(result.correctAnswers()).isNotNull();
-        assertThat(result.frage()).isEqualTo(frageDTO);
+        assertThat(result.frage()).isEqualTo(questionDTO);
         assertThat(result.answer()).isNull();
     }
 
@@ -352,14 +352,14 @@ class HelperServiceTest {
         when(attempt.maxPunkte()).thenReturn(20.0);
         when(examFacadeService.getSubmission(examId, "Student")).thenReturn(attempt);
 
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 20,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC
         );
-        when(examFacadeService.getFragenForExam(examId)).thenReturn(List.of(frage));
+        when(examFacadeService.getQuestionsForExam(examId)).thenReturn(List.of(frage));
 
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
@@ -368,7 +368,7 @@ class HelperServiceTest {
                 studentId,
                 null
         );
-        when(examFacadeService.getAnswerForFrageAndStudent(frage.id(), studentId)).thenReturn(answer);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(frage.id(), studentId)).thenReturn(answer);
 
         CorrectAnswersDTO solution = new CorrectAnswersDTO(
                 UUID.randomUUID(),
@@ -376,7 +376,7 @@ class HelperServiceTest {
                 "A\nB\nC\nD",
                 frage.id()
         );
-        when(examFacadeService.getLoesungForFrage(frage.id())).thenReturn(solution);
+        when(examFacadeService.getCorrectAnswerForQuestion(frage.id())).thenReturn(solution);
 
         ReviewerDTO reviewer = new ReviewerDTO(UUID.randomUUID(), "Auto reviewer");
         when(examFacadeService.getReviewerById(reviewer.id())).thenReturn(reviewer);
@@ -396,8 +396,8 @@ class HelperServiceTest {
         // Assert
         assertThat(result.authorName()).isEmpty();
         assertThat(result.examTitle()).isEqualTo("Titel");
-        assertThat(result.erreichtePunkte()).isEqualTo(10.0);
-        assertThat(result.maxPunkte()).isEqualTo(20.0);
+        assertThat(result.reviewPoints()).isEqualTo(10.0);
+        assertThat(result.maxPoints()).isEqualTo(20.0);
         assertThat(result.components()).hasSize(1);
     }
 
@@ -418,14 +418,14 @@ class HelperServiceTest {
         when(attempt.maxPunkte()).thenReturn(20.0);
         when(examFacadeService.getSubmission(examId, "Student")).thenReturn(attempt);
 
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 20,
                 UUID.randomUUID(),
                 QuestionTypeDTO.FREE_RESPONSE
         );
-        when(examFacadeService.getFragenForExam(examId)).thenReturn(List.of(frage));
+        when(examFacadeService.getQuestionsForExam(examId)).thenReturn(List.of(frage));
 
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
@@ -434,7 +434,7 @@ class HelperServiceTest {
                 studentId,
                 null
         );
-        when(examFacadeService.getAnswerForFrageAndStudent(frage.id(), studentId)).thenReturn(answer);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(frage.id(), studentId)).thenReturn(answer);
 
         CorrectAnswersDTO k = new CorrectAnswersDTO(
                 UUID.randomUUID(),
@@ -442,7 +442,7 @@ class HelperServiceTest {
                 "A\nB\nC\nD",
                 frage.id()
         );
-        when(examFacadeService.getLoesungForFrage(frage.id())).thenReturn(k);
+        when(examFacadeService.getCorrectAnswerForQuestion(frage.id())).thenReturn(k);
 
         when(examFacadeService.getReviewForAnswer(answer.id())).thenReturn(null);
 
@@ -452,8 +452,8 @@ class HelperServiceTest {
         // Assert
         assertThat(result.authorName()).isEmpty();
         assertThat(result.examTitle()).isEqualTo("Titel");
-        assertThat(result.erreichtePunkte()).isEqualTo(0.0);
-        assertThat(result.maxPunkte()).isEqualTo(20.0);
+        assertThat(result.reviewPoints()).isEqualTo(0.0);
+        assertThat(result.maxPoints()).isEqualTo(20.0);
         assertThat(result.components()).hasSize(1);
     }
 
@@ -474,18 +474,18 @@ class HelperServiceTest {
         when(attempt.maxPunkte()).thenReturn(20.0);
         when(examFacadeService.getSubmission(examId, "Student")).thenReturn(attempt);
 
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 20,
                 UUID.randomUUID(),
                 QuestionTypeDTO.FREE_RESPONSE
         );
-        when(examFacadeService.getFragenForExam(examId)).thenReturn(List.of(frage));
+        when(examFacadeService.getQuestionsForExam(examId)).thenReturn(List.of(frage));
 
-        when(examFacadeService.getAnswerForFrageAndStudent(frage.id(), studentId)).thenReturn(null);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(frage.id(), studentId)).thenReturn(null);
 
-        when(examFacadeService.getLoesungForFrage(frage.id())).thenReturn(null);
+        when(examFacadeService.getCorrectAnswerForQuestion(frage.id())).thenReturn(null);
 
         // Act
         ReviewViewForm result = helperService.prepareReviewViewForm(examId, "Student");
@@ -493,12 +493,12 @@ class HelperServiceTest {
         // Assert
         assertThat(result.authorName()).isEmpty();
         assertThat(result.examTitle()).isEqualTo("Titel");
-        assertThat(result.erreichtePunkte()).isEqualTo(0.0);
-        assertThat(result.maxPunkte()).isEqualTo(20.0);
+        assertThat(result.reviewPoints()).isEqualTo(0.0);
+        assertThat(result.maxPoints()).isEqualTo(20.0);
         assertThat(result.components()).hasSize(1);
 
         var element = result.components().getFirst();
-        assertThat(element.review().bewertung()).isEqualTo("Keine Bewertung");
+        assertThat(element.review().text()).isEqualTo("Keine Bewertung");
         assertThat(element.answer().answer()).isEmpty();
     }
 
@@ -516,9 +516,9 @@ class HelperServiceTest {
                 null,
                 null);
 
-        FrageDTO frage = new FrageDTO(
+        QuestionDTO frage = new QuestionDTO(
                 HELPER_FRAGE_ID,
-                "Frage",
+                "Question",
                 1,
                 examId,
                 QuestionTypeDTO.MC
@@ -541,10 +541,10 @@ class HelperServiceTest {
 
         when(examFacadeService.getExam(examId)).thenReturn(exam);
         when(examFacadeService.getStudentIdByName("Max")).thenReturn(studentId);
-        when(examFacadeService.getFragenForExam(examId)).thenReturn(List.of(frage));
+        when(examFacadeService.getQuestionsForExam(examId)).thenReturn(List.of(frage));
 
-        when(examFacadeService.getAnswerForFrageAndStudent(frage.id(), studentId)).thenReturn(answer);
-        when(examFacadeService.getLoesungForFrage(frage.id())).thenReturn(solution);
+        when(examFacadeService.getAnswerForQuestionIdAndStudentId(frage.id(), studentId)).thenReturn(answer);
+        when(examFacadeService.getCorrectAnswerForQuestion(frage.id())).thenReturn(solution);
 
         // Act
         OldDataForm result = helperService.fillOldDataForm(examId, "Max");
@@ -555,7 +555,7 @@ class HelperServiceTest {
         assertThat(result.components()).hasSize(1);
 
         OldDataDTO dto = result.components().getFirst();
-        assertThat(dto.fragen()).isEqualTo(frage);
+        assertThat(dto.question()).isEqualTo(frage);
         assertThat(dto.answer()).isNotNull();
         assertThat(dto.correctAnswers()).isNotNull();
     }
@@ -563,9 +563,9 @@ class HelperServiceTest {
     @Test
     void fillSubmitForm_mcWithAnswer_splitsAndTrims() {
         OldDataDTO dto = new OldDataDTO(
-                new FrageDTO(
+                new QuestionDTO(
                         UUID.randomUUID(),
-                        "Frage",
+                        "Question",
                         1,
                         UUID.randomUUID(),
                         QuestionTypeDTO.MC
@@ -590,7 +590,7 @@ class HelperServiceTest {
 
         assertThat(result.getAnswers())
                 .containsEntry(
-                        dto.fragen().id().toString(),
+                        dto.question().id().toString(),
                         List.of("A", "B", "C")
                 );
     }
@@ -598,9 +598,9 @@ class HelperServiceTest {
     @Test
     void fillSubmitForm_mcWithoutAnswer_returnsEmptyList() {
         OldDataDTO dto = new OldDataDTO(
-                new FrageDTO(
+                new QuestionDTO(
                         UUID.randomUUID(),
-                        "Frage",
+                        "Question",
                         1,
                         UUID.randomUUID(),
                         QuestionTypeDTO.MC
@@ -619,7 +619,7 @@ class HelperServiceTest {
 
         assertThat(result.getAnswers())
                 .containsEntry(
-                        dto.fragen().id().toString(),
+                        dto.question().id().toString(),
                         List.of()
                 );
     }
@@ -627,9 +627,9 @@ class HelperServiceTest {
     @Test
     void fillSubmitForm_freeResponseAnswer() {
         OldDataDTO dto = new OldDataDTO(
-                new FrageDTO(
+                new QuestionDTO(
                         UUID.randomUUID(),
-                        "Frage",
+                        "Question",
                         1,
                         UUID.randomUUID(),
                         QuestionTypeDTO.FREE_RESPONSE
@@ -654,7 +654,7 @@ class HelperServiceTest {
 
         assertThat(result.getAnswers())
                 .containsEntry(
-                        dto.fragen().id().toString(),
+                        dto.question().id().toString(),
                         List.of("Antwort")
                 );
     }
@@ -662,9 +662,9 @@ class HelperServiceTest {
     @Test
     void fillSubmitForm_freeResponseWithoutAnswer() {
         OldDataDTO dto = new OldDataDTO(
-                new FrageDTO(
+                new QuestionDTO(
                         UUID.randomUUID(),
-                        "Frage",
+                        "Question",
                         1,
                         UUID.randomUUID(),
                         QuestionTypeDTO.FREE_RESPONSE
@@ -683,7 +683,7 @@ class HelperServiceTest {
 
         assertThat(result.getAnswers())
                 .containsEntry(
-                        dto.fragen().id().toString(),
+                        dto.question().id().toString(),
                         List.of("")
                 );
     }
@@ -705,18 +705,18 @@ class HelperServiceTest {
         UUID frage1Id = UUID.randomUUID();
         UUID frage2Id = UUID.randomUUID();
 
-        List<FrageDTO> fragen = List.of(
-                new FrageDTO(
+        List<QuestionDTO> fragen = List.of(
+                new QuestionDTO(
                         frage1Id,
-                        "Frage 1",
+                        "Question 1",
                         1,
                         UUID.randomUUID(),
                         QuestionTypeDTO.SC
                 ),
 
-                new FrageDTO(
+                new QuestionDTO(
                         frage2Id,
-                        "Frage 2",
+                        "Question 2",
                         4,
                         UUID.randomUUID(),
                         QuestionTypeDTO.FREE_RESPONSE
@@ -730,10 +730,10 @@ class HelperServiceTest {
                 frage1Id
         );
 
-        when(examFacadeService.getFragenForExam(any())).thenReturn(fragen);
+        when(examFacadeService.getQuestionsForExam(any())).thenReturn(fragen);
 
-        when(examFacadeService.getLoesungForFrage(frage1Id)).thenReturn(k);
-        when(examFacadeService.getLoesungForFrage(frage2Id)).thenReturn(null);
+        when(examFacadeService.getCorrectAnswerForQuestion(frage1Id)).thenReturn(k);
+        when(examFacadeService.getCorrectAnswerForQuestion(frage2Id)).thenReturn(null);
 
         // Act
         ExamViewForm result = helperService.prepareExamViewForm(UUID.randomUUID());
@@ -742,7 +742,7 @@ class HelperServiceTest {
         // Assert
         assertThat(result.examTitle()).isEqualTo("Exam");
         assertThat(result.authorName()).isEqualTo("Professor");
-        assertThat(result.maxPunkte()).isEqualTo(5 );
+        assertThat(result.points()).isEqualTo(5 );
 
         assertThat(resultComponents).hasSize(2);
         assertThat(resultComponents.getFirst().correctAnswers()).isNotNull();

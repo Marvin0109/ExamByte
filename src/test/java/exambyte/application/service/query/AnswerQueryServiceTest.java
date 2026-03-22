@@ -2,7 +2,7 @@ package exambyte.application.service.query;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.mapper.AnswerDTOMapper;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.service.AnswerService;
@@ -26,7 +26,7 @@ class AnswerQueryServiceTest {
     private AnswerQueryService answerQueryService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionQueryService questionQueryService;
 
     @Mock
     private AnswerService answerService;
@@ -43,23 +43,23 @@ class AnswerQueryServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        answerQueryService = new AnswerQueryServiceImpl(frageQueryService, answerService, answerDTOMapper);
+        answerQueryService = new AnswerQueryServiceImpl(questionQueryService, answerService, answerDTOMapper);
     }
 
     @Test
     void saveAnswers_success() {
         // Arrange
-        FrageDTO frage1 = new FrageDTO(
+        QuestionDTO frage1 = new QuestionDTO(
                 FRAGE1_ID,
-                "Frage",
+                "Question",
                 10.0,
                 null,
                 QuestionTypeDTO.MC
         );
 
-        FrageDTO frage2 = new FrageDTO(
+        QuestionDTO frage2 = new QuestionDTO(
                 FRAGE2_ID,
-                "Frage",
+                "Question",
                 5.0,
                 null,
                 QuestionTypeDTO.FREE_RESPONSE
@@ -77,8 +77,8 @@ class AnswerQueryServiceTest {
         when(answerService.findByStudentAndFrage(FRAGE2_ID, STUDENT_ID)).thenReturn(null);
         when(answerDTOMapper.toDomain(dto1)).thenReturn(mock());
         when(answerDTOMapper.toDomain(dto2)).thenReturn(mock());
-        when(frageQueryService.getFrage(FRAGE1_ID)).thenReturn(frage1);
-        when(frageQueryService.getFrage(FRAGE2_ID)).thenReturn(frage2);
+        when(questionQueryService.getQuestion(FRAGE1_ID)).thenReturn(frage1);
+        when(questionQueryService.getQuestion(FRAGE2_ID)).thenReturn(frage2);
 
         // Act
         boolean result = answerQueryService.saveAnswers(STUDENT_ID, answerMap);
@@ -156,13 +156,13 @@ class AnswerQueryServiceTest {
         // Arrange
         UUID examId = UUID.randomUUID();
 
-        FrageDTO frageDTO = mock(FrageDTO.class);
+        QuestionDTO questionDTO = mock(QuestionDTO.class);
         Answer answer = mock(Answer.class);
         AnswerDTO dto = mock(AnswerDTO.class);
 
-        when(frageDTO.id()).thenReturn(FRAGE1_ID);
-        when(frageQueryService.getFreeResponseFragen(examId))
-                .thenReturn(List.of(frageDTO));
+        when(questionDTO.id()).thenReturn(FRAGE1_ID);
+        when(questionQueryService.getFreeResponseQuestions(examId))
+                .thenReturn(List.of(questionDTO));
 
         when(answerService.findByFrageId(FRAGE1_ID))
                 .thenReturn(answer);
@@ -182,11 +182,11 @@ class AnswerQueryServiceTest {
         // Arrange
         UUID examId = UUID.randomUUID();
 
-        FrageDTO frageDTO = mock(FrageDTO.class);
-        when(frageDTO.id()).thenReturn(FRAGE1_ID);
+        QuestionDTO questionDTO = mock(QuestionDTO.class);
+        when(questionDTO.id()).thenReturn(FRAGE1_ID);
 
-        when(frageQueryService.getFreeResponseFragen(examId))
-                .thenReturn(List.of(frageDTO));
+        when(questionQueryService.getFreeResponseQuestions(examId))
+                .thenReturn(List.of(questionDTO));
 
         when(answerService.findByFrageId(FRAGE1_ID))
                 .thenReturn(null);

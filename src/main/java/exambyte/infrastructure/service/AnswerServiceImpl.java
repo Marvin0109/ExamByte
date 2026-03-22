@@ -18,7 +18,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Answer findByFrageId(UUID frageId) {
-        return repository.findByFrageId(frageId);
+        return repository.findByQuestionId(frageId);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Answer findByStudentAndFrage(UUID studentId, UUID examId) {
-        return repository.findByStudentIdAndFrageId(studentId, examId)
+        return repository.findByStudentIdAndQuestionId(studentId, examId)
                 .orElse(null);
     }
 

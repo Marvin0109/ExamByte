@@ -2,7 +2,7 @@ package exambyte.application.service;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.domain.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.service.CorrectAnswersService;
@@ -14,13 +14,13 @@ import java.util.UUID;
 
 public class ReviewData {
 
-    private List<FrageDTO> fragen;
+    private List<QuestionDTO> fragen;
     private List<AnswerDTO> answers;
     private List<CorrectAnswersDTO> correctAnswers;
     private final CorrectAnswersDTOMapper correctAnswersDTOMapper;
     private final CorrectAnswersService correctAnswersService;
 
-    public ReviewData(List<FrageDTO> fragen, List<AnswerDTO> answers,
+    public ReviewData(List<QuestionDTO> fragen, List<AnswerDTO> answers,
                       CorrectAnswersDTOMapper correctAnswersDTOMapper,
                       CorrectAnswersService correctAnswersService) {
         this.fragen = fragen;
@@ -36,7 +36,7 @@ public class ReviewData {
                 .toList();
 
         List<UUID> frageIds = fragen.stream()
-                .map(FrageDTO::id)
+                .map(QuestionDTO::id)
                 .toList();
 
         answers = answers.stream()
@@ -49,7 +49,7 @@ public class ReviewData {
                 .toList();
     }
 
-    public List<FrageDTO> getFragen() {
+    public List<QuestionDTO> getFragen() {
         return fragen;
     }
 

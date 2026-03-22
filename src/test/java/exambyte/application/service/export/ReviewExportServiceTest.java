@@ -22,8 +22,8 @@ class ReviewExportServiceTest {
 
     private ExamDTO exam;
     private final UUID studentId = UUID.randomUUID();
-    private FrageDTO frage;
-    private FrageDTO frage2;
+    private QuestionDTO frage;
+    private QuestionDTO frage2;
     private AnswerDTO antwort;
     private AnswerDTO antwort2;
     private ReviewDTO review;
@@ -33,7 +33,7 @@ class ReviewExportServiceTest {
     private ExamQueryService examQueryService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionQueryService questionQueryService;
 
     @Mock
     private StudentQueryService studentQueryService;
@@ -56,7 +56,7 @@ class ReviewExportServiceTest {
 
         service = new ReviewExportServiceImpl(
                 examQueryService,
-                frageQueryService,
+                questionQueryService,
                 studentQueryService,
                 answerQueryService,
                 reviewerQueryService,
@@ -73,17 +73,17 @@ class ReviewExportServiceTest {
                 null
         );
 
-        frage = new FrageDTO(
+        frage = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 1",
+                "Question 1",
                 4,
                 exam.id(),
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        frage2 = new FrageDTO(
+        frage2 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 2",
+                "Question 2",
                 1,
                 exam.id(),
                 QuestionTypeDTO.SC
@@ -126,7 +126,7 @@ class ReviewExportServiceTest {
     void createReviewExport() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage));
+        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(frage));
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
@@ -152,7 +152,7 @@ class ReviewExportServiceTest {
     void createReviewExport_excludingAutomaticReviewerName() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage, frage2));
+        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(frage, frage2));
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 

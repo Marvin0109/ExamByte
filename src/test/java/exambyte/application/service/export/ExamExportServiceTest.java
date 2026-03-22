@@ -2,11 +2,11 @@ package exambyte.application.service.export;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.service.query.ExamQueryService;
-import exambyte.application.service.query.FrageQueryService;
+import exambyte.application.service.query.QuestionQueryService;
 import exambyte.application.service.query.CorrectAnswersQueryService;
 import exambyte.application.service.query.ProfessorQueryService;
 import exambyte.domain.export_mapper.ExamExportDTOMapper;
@@ -27,15 +27,15 @@ class ExamExportServiceTest {
     private ExamDTO exam;
     private final UUID profId = UUID.randomUUID();
     private ProfessorDTO professor;
-    private FrageDTO frage;
-    private FrageDTO frage2;
+    private QuestionDTO frage;
+    private QuestionDTO frage2;
     private CorrectAnswersDTO correctAnswers;
 
     @Mock
     private ExamQueryService examQueryService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionQueryService questionQueryService;
 
     @Mock
     private ProfessorQueryService profQueryService;
@@ -52,7 +52,7 @@ class ExamExportServiceTest {
 
         service = new ExamExportServiceImpl(
                 examQueryService,
-                frageQueryService,
+                questionQueryService,
                 profQueryService,
                 correctAnswersQueryService,
                 examExportDTOMapper
@@ -72,17 +72,17 @@ class ExamExportServiceTest {
                 "Professor"
         );
 
-        frage = new FrageDTO(
+        frage = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 1",
+                "Question 1",
                 6,
                 exam.id(),
                 QuestionTypeDTO.MC
         );
 
-        frage2 = new FrageDTO(
+        frage2 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 2",
+                "Question 2",
                 2,
                 exam.id(),
                 QuestionTypeDTO.FREE_RESPONSE
@@ -100,7 +100,7 @@ class ExamExportServiceTest {
     void createExamExport() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
-        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage));
+        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(frage));
         when(correctAnswersQueryService.getSolutionForFrage(frage.id())).thenReturn(correctAnswers);
         when(examExportDTOMapper.mapDTOToExport(
                 exam,
@@ -124,7 +124,7 @@ class ExamExportServiceTest {
     void createExamExport_nullCorrectAnswers() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
-        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage2));
+        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(frage2));
         when(correctAnswersQueryService.getSolutionForFrage(frage2.id())).thenReturn(null);
 
         service.createExamExport(exam.id());

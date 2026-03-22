@@ -1,7 +1,7 @@
 package exambyte.integration;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Question;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.*;
@@ -36,7 +36,7 @@ class CreateExamIT {
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private CorrectAnswersRepository correctAnswersRepository;
@@ -50,13 +50,13 @@ class CreateExamIT {
         QuestionData q2 = new QuestionData();
         QuestionData q3 = new QuestionData();
 
-        q1.setQuestionText("Question 1");
-        q2.setQuestionText("Question 2");
-        q3.setQuestionText("Question 3");
+        q1.setText("Question 1");
+        q2.setText("Question 2");
+        q3.setText("Question 3");
 
-        q1.setPunkte(1.5);
-        q2.setPunkte(2.0);
-        q3.setPunkte(3.0);
+        q1.setPoints(1.5);
+        q2.setPoints(2.0);
+        q3.setPoints(3.0);
 
         q1.setType("SC");
         q2.setType("MC");
@@ -89,12 +89,12 @@ class CreateExamIT {
         assertThat(createExamMessage).isEmpty();
 
         assertThat(examRepository.findAll()).hasSize(1);
-        assertThat(frageRepository.findAll()).hasSize(3);
+        assertThat(questionRepository.findAll()).hasSize(3);
 
-        Optional<UUID> frageId = frageRepository.findAll()
+        Optional<UUID> frageId = questionRepository.findAll()
                 .stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getId)
+                .map(Question::getId)
                 .findFirst();
 
         assertThat(frageId).isPresent();

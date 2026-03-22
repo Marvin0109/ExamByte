@@ -2,7 +2,7 @@ package exambyte.application.service.usecase;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,8 +33,8 @@ class ScoringServiceTest {
 
     private static final UUID AUTOMATIC_REVIEWER = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
-    private FrageDTO frage1;
-    private FrageDTO frage2;
+    private QuestionDTO frage1;
+    private QuestionDTO frage2;
 
     private AnswerDTO answer1;
     private AnswerDTO answer2;
@@ -59,16 +59,16 @@ class ScoringServiceTest {
 
         scoringService = new ScoringServiceImpl(reviewService, fixedClock);
 
-        frage1 = new FrageDTO(
+        frage1 = new QuestionDTO(
                 FRAGE_1_ID,
-                "Frage",
+                "Question",
                 5,
                 UUID.randomUUID(),
                 QuestionTypeDTO.FREE_RESPONSE);
 
-        frage2 = new FrageDTO(
+        frage2 = new QuestionDTO(
                 FRAGE_2_ID,
-                "Frage",
+                "Question",
                 3,
                 UUID.randomUUID(),
                 QuestionTypeDTO.SC);

@@ -14,9 +14,9 @@ public class ExamMapperImpl implements ExamMapper {
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .professorId(entity.getProfessorId())
-                .startTime(entity.getStartZeitpunkt())
-                .endTime(entity.getEndZeitpunkt())
-                .resultTime(entity.getResultZeitpunkt())
+                .startTime(entity.getStart())
+                .endTime(entity.getEnd())
+                .resultTime(entity.getResult())
                 .build();
     }
 
@@ -26,9 +26,9 @@ public class ExamMapperImpl implements ExamMapper {
                 .id(exam.getId())
                 .title(exam.getTitle())
                 .professorId(exam.getProfessorId())
-                .startZeitpunkt(exam.getStartTime())
-                .endZeitpunkt(exam.getEndTime())
-                .resultZeitpunkt(exam.getResultTime())
+                .start(exam.getStartTime())
+                .end(exam.getEndTime())
+                .result(exam.getResultTime())
                 .build();
     }
 }

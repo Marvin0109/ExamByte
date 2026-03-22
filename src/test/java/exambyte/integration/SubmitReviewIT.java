@@ -3,7 +3,7 @@ package exambyte.integration;
 import exambyte.application.service.ExamControllerService;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Question;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.model.aggregate.user.Professor;
@@ -43,7 +43,7 @@ class SubmitReviewIT {
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private AnswerRepository answerRepository;
@@ -93,32 +93,32 @@ class SubmitReviewIT {
         Optional<UUID> examId = examRepository.findByStartTime(start);
         assertThat(examId).isPresent();
 
-        // Frage
-        Frage frage = new Frage.FrageBuilder()
+        // Question
+        Question question = new Question.FrageBuilder()
                 .examId(examId.get())
-                .frageText("Frage")
-                .maxPunkte(5)
+                .text("Question")
+                .points(5)
                 .type(QuestionType.FREE_RESPONSE)
                 .build();
-        frageRepository.save(frage);
-        List<Frage> frageLoaded = frageRepository.findByExamId(examId.get());
-        assertThat(frageLoaded).isNotEmpty();
+        questionRepository.save(question);
+        List<Question> questionLoaded = questionRepository.findByExamId(examId.get());
+        assertThat(questionLoaded).isNotEmpty();
 
         // Answer
         Answer answer = new Answer.AnswerBuilder()
-                .frageId(frageLoaded.getFirst().getId())
+                .frageId(questionLoaded.getFirst().getId())
                 .answer("Answer")
                 .studentId(studentId.get())
                 .submitTime(LocalDateTime.of(2026, 1, 1, 1, 0))
                 .build();
         answerRepository.save(answer);
         Optional<Answer> answerLoaded = answerRepository
-                .findByStudentIdAndFrageId(studentId.get(), frageLoaded.getFirst().getId());
+                .findByStudentIdAndQuestionId(studentId.get(), questionLoaded.getFirst().getId());
         assertThat(answerLoaded).isPresent();
 
         ReviewForm form = new ReviewForm();
-        form.setBewertung("Bewertung");
-        form.setPunkteVergeben(5.0);
+        form.setReviewText("Bewertung");
+        form.setPoints(5.0);
 
         examControllerService.createReview(form, answerLoaded.get().getId(),reviewerLoaded.get().id());
 

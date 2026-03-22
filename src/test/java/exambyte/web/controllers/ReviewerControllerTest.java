@@ -84,7 +84,7 @@ class ReviewerControllerTest {
         UUID examId = UUID.randomUUID();
 
         ExamDTO examDTO = mock(ExamDTO.class);
-        when(examDTO.endTime()).thenReturn(LocalDateTime.now().plusDays(1));
+        when(examDTO.end()).thenReturn(LocalDateTime.now().plusDays(1));
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
 
@@ -103,7 +103,7 @@ class ReviewerControllerTest {
         UUID examId = UUID.randomUUID();
 
         ExamDTO examDTO = mock(ExamDTO.class);
-        when(examDTO.endTime()).thenReturn(LocalDateTime.now().minusDays(1));
+        when(examDTO.end()).thenReturn(LocalDateTime.now().minusDays(1));
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
         when(service.getSubmitInfo(examId)).thenReturn(List.of());
@@ -153,8 +153,8 @@ class ReviewerControllerTest {
     void createReview_02() throws Exception {
         mvc.perform(post("/reviewer/createReview/{answerId}", UUID.randomUUID())
                 .with(csrf())
-                .param("bewertung", "Bewertung")
-                .param("punkteVergeben", "1.5"))
+                .param("reviewText", "Bewertung")
+                .param("points", "1.5"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
             .andExpect(flash().attribute("message", "Bewertung erfolgreich!"))
@@ -167,26 +167,26 @@ class ReviewerControllerTest {
     void createReview_03() throws Exception {
         mvc.perform(post("/reviewer/createReview/{answerId}", UUID.randomUUID())
                 .with(csrf())
-                .param("bewertung", "")
-                .param("punkteVergeben", "1"))
+                .param("reviewText", "")
+                .param("points", "1"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
             .andExpect(flash().attribute("message", "Ein Bewertungstext muss vorhanden sein"))
             .andExpect(flash().attribute("success", false));
     }
 
-    @ParameterizedTest(name = "punkteVergeben={0} -> message={1}")
+    @ParameterizedTest(name = "points={0} -> message={1}")
     @CsvSource({
             "-1, Punkte dürfen nicht negativ sein",
             "0.25, Nur halbe Punkte erlaubt (0.5 Schritte)",
             "'', Punkte müssen angegeben werden"
     })
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    void createReview_parameterizedTest(String punkteVergeben, String expectedMessage) throws Exception {
+    void createReview_parameterizedTest(String points, String expectedMessage) throws Exception {
         mvc.perform(post("/reviewer/createReview/{answerId}", UUID.randomUUID())
                 .with(csrf())
-                .param("bewertung", "B")
-                .param("punkteVergeben", punkteVergeben))
+                .param("reviewText", "B")
+                .param("points", points))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
             .andExpect(flash().attribute("message", expectedMessage))

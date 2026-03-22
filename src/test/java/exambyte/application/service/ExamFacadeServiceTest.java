@@ -1,6 +1,6 @@
 package exambyte.application.service;
 
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.service.export.ExamExportService;
 import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
@@ -27,7 +27,7 @@ class ExamFacadeServiceTest {
     private ExamManagementService examManagementService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionQueryService questionQueryService;
 
     @Mock
     private StudentQueryService studentQueryService;
@@ -62,7 +62,7 @@ class ExamFacadeServiceTest {
                 examManagementService,
                 examExportService,
                 reviewExportService,
-                frageQueryService,
+                questionQueryService,
                 professorQueryService,
                 reviewerQueryService,
                 studentQueryService,
@@ -72,10 +72,10 @@ class ExamFacadeServiceTest {
     }
 
     @Test
-    void createChoiceFrageWithCorrectParams() {
-        FrageDTO mockFrageDTO = mock(FrageDTO.class);
-        examFacadeService.createChoiceFrage(mockFrageDTO, "A", "A, B");
-        verify(frageQueryService).createChoiceFrage(mockFrageDTO, "A", "A, B");
+    void createChoiceQuestionWithCorrectParams() {
+        QuestionDTO mockQuestionDTO = mock(QuestionDTO.class);
+        examFacadeService.createChoiceQuestion(mockQuestionDTO, "A", "A, B");
+        verify(questionQueryService).createChoiceQuestion(mockQuestionDTO, "A", "A, B");
     }
 
     @Test

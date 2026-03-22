@@ -54,13 +54,13 @@
                     </a>
                 </td>
                 <td>
-                    <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                    <span th:switch="${timeNow.isBefore(exam.start)}">
                         <span th:case="true">Startet bald</span>
                         <span th:case="false">
-                            <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                            <span th:switch="${timeNow.isBefore(exam.end)}">
                                 <span th:case="true">Prüfung läuft</span>
                                 <span th:case="false">
-                                    <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                    <span th:switch="${timeNow.isBefore(exam.result)}">
                                         <span th:case="true">Korrektur läuft</span>
                                         <span th:case="false">Beendet</span>
                                     </span>

@@ -2,7 +2,7 @@ package exambyte.application.service.review;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.ReviewData;
 import exambyte.domain.mapper.CorrectAnswersDTOMapper;
@@ -33,7 +33,7 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
     }
 
     @Override
-    public List<ReviewDTO> generateReviews(UUID studentId, List<FrageDTO> fragen, List<AnswerDTO> answers) {
+    public List<ReviewDTO> generateReviews(UUID studentId, List<QuestionDTO> fragen, List<AnswerDTO> answers) {
         ReviewData mcData = new ReviewData(fragen, answers,
                 mapper, correctAnswersService);
         ReviewData scData = new ReviewData(fragen, answers,

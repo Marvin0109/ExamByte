@@ -54,13 +54,13 @@
                         </a>
                     </td>
                     <td>
-                        <span th:switch="${timeNow.isBefore(exam.startTime)}">
+                        <span th:switch="${timeNow.isBefore(exam.start)}">
                             <span th:case="true">Startet bald</span>
                             <span th:case="false">
-                                <span th:switch="${timeNow.isBefore(exam.endTime)}">
+                                <span th:switch="${timeNow.isBefore(exam.end)}">
                                     <span th:case="true">Online</span>
                                     <span th:case="false">
-                                        <span th:switch="${timeNow.isBefore(exam.resultTime)}">
+                                        <span th:switch="${timeNow.isBefore(exam.result)}">
                                             <span th:case="true">In Korrektur</span>
                                             <span th:case="false">Beendet</span>
                                         </span>
@@ -70,17 +70,17 @@
                         </span>
                     </td>
                     <td>
-                        <span th:text="${#temporals.format(exam.startTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                        <span th:text="${#temporals.format(exam.start, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
                             Startzeit der Prüfung
                         </span>
                     </td>
                     <td>
-                        <span th:text="${#temporals.format(exam.endTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                        <span th:text="${#temporals.format(exam.end, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
                             Bearbeitungsfrist
                         </span>
                     </td>
                     <td>
-                        <span th:text="${#temporals.format(exam.resultTime, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
+                        <span th:text="${#temporals.format(exam.result, 'dd.MM.yyyy, HH:mm')} + ' Uhr'">
                             Veröffentlichungszeitpunkt der Ergebnisse
                         </span>
                     </td>

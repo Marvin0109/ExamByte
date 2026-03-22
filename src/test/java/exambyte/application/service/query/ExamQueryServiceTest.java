@@ -2,16 +2,16 @@ package exambyte.application.service.query;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.mapper.FrageDTOMapper;
+import exambyte.domain.mapper.QuestionDTOMapper;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
+import exambyte.domain.model.aggregate.exam.Question;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.AnswerService;
 import exambyte.domain.service.ExamService;
-import exambyte.domain.service.FrageService;
+import exambyte.domain.service.QuestionService;
 import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,8 +35,8 @@ class ExamQueryServiceTest {
     private Exam exam1;
     private Exam exam2;
 
-    private FrageDTO frageDTO;
-    private Frage frage;
+    private QuestionDTO questionDTO;
+    private Question question;
 
     private Answer answer;
 
@@ -50,7 +50,7 @@ class ExamQueryServiceTest {
     private StudentService studentService;
 
     @Mock
-    private FrageService frageService;
+    private QuestionService questionService;
 
     @Mock
     private AnswerService answerService;
@@ -59,7 +59,7 @@ class ExamQueryServiceTest {
     private ExamDTOMapper examDTOMapper;
 
     @Mock
-    private FrageDTOMapper frageDTOMapper;
+    private QuestionDTOMapper questionDTOMapper;
 
     @BeforeEach
     void setUp() {
@@ -68,10 +68,10 @@ class ExamQueryServiceTest {
         examQueryService = new ExamQueryServiceImpl(
                 examService,
                 studentService,
-                frageService,
+                questionService,
                 answerService,
                 examDTOMapper,
-                frageDTOMapper);
+                questionDTOMapper);
 
         examDTO1 = new ExamDTO(
                 UUID.randomUUID(),
@@ -107,17 +107,17 @@ class ExamQueryServiceTest {
                 .resultTime(START.plusHours(3))
                 .build();
 
-        frageDTO = new FrageDTO(
+        questionDTO = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage",
+                "Question",
                 10,
                 exam1.getId(),
                 QuestionTypeDTO.FREE_RESPONSE);
 
-        frage = new Frage.FrageBuilder()
-                .id(frageDTO.id())
-                .frageText("Frage")
-                .maxPunkte(10)
+        question = new Question.FrageBuilder()
+                .id(questionDTO.id())
+                .text("Question")
+                .points(10)
                 .examId(exam1.getId())
                 .type(QuestionType.FREE_RESPONSE)
                 .build();
@@ -126,7 +126,7 @@ class ExamQueryServiceTest {
                 .id(UUID.randomUUID())
                 .answer("Answer")
                 .studentId(STUDENT_ID)
-                .frageId(frage.getId())
+                .frageId(question.getId())
                 .submitTime(START)
                 .build();
     }
@@ -165,9 +165,9 @@ class ExamQueryServiceTest {
     @Test
     void hasStudentSubmittedExam_returnsTrue() {
         when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
-        when(frageService.getFragenForExam(any())).thenReturn(List.of(frage));
-        when(frageDTOMapper.toFrageDTOList(any())).thenReturn(List.of(frageDTO));
-        when(answerService.findByStudentAndFrage(STUDENT_ID, frage.getId())).thenReturn(answer);
+        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
+        when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
+        when(answerService.findByStudentAndFrage(STUDENT_ID, question.getId())).thenReturn(answer);
 
         boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
 
@@ -177,9 +177,9 @@ class ExamQueryServiceTest {
     @Test
     void hasStudentSubmittedExam_returnsFalse() {
         when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
-        when(frageService.getFragenForExam(any())).thenReturn(List.of(frage));
-        when(frageDTOMapper.toFrageDTOList(any())).thenReturn(List.of(frageDTO));
-        when(answerService.findByStudentAndFrage(STUDENT_ID, frage.getId())).thenReturn(null);
+        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
+        when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
+        when(answerService.findByStudentAndFrage(STUDENT_ID, question.getId())).thenReturn(null);
 
         boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
 

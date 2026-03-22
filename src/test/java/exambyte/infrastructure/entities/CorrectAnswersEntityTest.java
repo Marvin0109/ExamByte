@@ -22,27 +22,27 @@ class CorrectAnswersEntityTest {
     static Stream<CorrectAnswersEntity.CorrectAnswersEntityBuilder> invalidBuilder() {
         return Stream.of(
                 new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                        .frageId(null)
+                        .questionId(null)
                         .solution("A\nB\nC")
                         .choices("A\nB\nC\nD"),
 
                 new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .solution("")
                         .choices("A\nB\nC\nD"),
 
                 new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .solution(" ")
                         .choices("A\nB\nC\nD"),
 
                 new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .solution("A\nB\nC")
                         .choices(""),
 
                 new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                        .frageId(UUID.randomUUID())
+                        .questionId(UUID.randomUUID())
                         .solution("A\nB\nC")
                         .choices(" ")
         );

@@ -2,7 +2,7 @@ package exambyte.web.controllers;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
@@ -78,7 +78,7 @@ public class ReviewerController {
         ExamDTO examDTO = service.getExamByUUID(examId);
         LocalDateTime now = LocalDateTime.now();
 
-        if (now.isBefore(examDTO.endTime())) {
+        if (now.isBefore(examDTO.end())) {
             return redirectWithMessage(
                     redirectAttributes,
                     "Die Prüfung läuft noch! Keine Korrektur erlaubt.",
@@ -99,10 +99,10 @@ public class ReviewerController {
             @PathVariable UUID examId,
             @PathVariable UUID studentId) {
 
-        Map<FrageDTO, AnswerDTO> frageAnswerMap =
+        Map<QuestionDTO, AnswerDTO> questionAnswerMap =
                 service.getFreeResponseSolutionForExamAndStudent(examId, studentId);
 
-        List<AnswerForm> answerForm = service.createAnswerForm(frageAnswerMap);
+        List<AnswerForm> answerForm = service.createAnswerForm(questionAnswerMap);
         ReviewForm reviewForm = new ReviewForm();
 
         model.addAttribute("answers", answerForm);

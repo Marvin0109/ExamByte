@@ -12,8 +12,8 @@ public class CorrectAnswersEntity {
     @Id
     private UUID id;
 
-    @Column("frage_id")
-    private final UUID frageId;
+    @Column("question_id")
+    private final UUID questionId;
 
     @Column("solution")
     private final String solution;
@@ -21,9 +21,9 @@ public class CorrectAnswersEntity {
     @Column("choices")
     private final String choices;
 
-    private CorrectAnswersEntity(UUID id, UUID frageId, String solution, String choices) {
+    private CorrectAnswersEntity(UUID id, UUID questionId, String solution, String choices) {
         this.id = id;
-        this.frageId = frageId;
+        this.questionId = questionId;
         this.solution = solution;
         this.choices = choices;
     }
@@ -32,8 +32,8 @@ public class CorrectAnswersEntity {
         return id;
     }
 
-    public UUID getFrageId() {
-        return frageId;
+    public UUID getQuestionId() {
+        return questionId;
     }
 
     public String getSolution() {
@@ -44,7 +44,7 @@ public class CorrectAnswersEntity {
 
     public static class CorrectAnswersEntityBuilder {
         private UUID id;
-        private UUID frageId;
+        private UUID questionId;
         private String solution;
         private String choices;
 
@@ -53,8 +53,8 @@ public class CorrectAnswersEntity {
             return this;
         }
 
-        public CorrectAnswersEntityBuilder frageId(UUID frageId) {
-            this.frageId = frageId;
+        public CorrectAnswersEntityBuilder questionId(UUID questionId) {
+            this.questionId = questionId;
             return this;
         }
 
@@ -69,12 +69,12 @@ public class CorrectAnswersEntity {
         }
 
         public CorrectAnswersEntity build() {
-            if (frageId == null) {
-                throw new IllegalStateException("Frage-ID fehlt");
+            if (questionId == null) {
+                throw new IllegalStateException("Question-ID fehlt");
             }
             checkStringField(solution, "Lösungen fehlen");
             checkStringField(choices, "Antwort Optionen fehlen");
-            return new CorrectAnswersEntity(id, frageId, solution, choices);
+            return new CorrectAnswersEntity(id, questionId, solution, choices);
         }
 
         private static void checkStringField(String field, String message) {

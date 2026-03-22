@@ -36,7 +36,7 @@ class CorrectAnswersMapperTest {
         CorrectAnswersEntity entity = correctAnswersMapper.toEntity(correctAnswers);
 
         // Assert
-        assertThat(entity.getFrageId()).isEqualTo(frageId);
+        assertThat(entity.getQuestionId()).isEqualTo(frageId);
         assertThat(entity.getSolution()).contains(solution);
         assertThat(entity.getChoices()).contains(choices);
     }
@@ -48,7 +48,7 @@ class CorrectAnswersMapperTest {
         String solution = "Lösung 1\nLösung 2";
         String choices = "Lösung 1\nLösung 2\nLösung 3";
         CorrectAnswersEntity entity = new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                .frageId(frageId)
+                .questionId(frageId)
                 .choices(choices)
                 .solution(solution)
                 .build();

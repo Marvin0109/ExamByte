@@ -27,9 +27,9 @@ public class AnswerRepositoryImpl implements AnswerRepository {
     }
 
     @Override
-    public Optional<Answer> findByStudentIdAndFrageId(UUID studentId, UUID id) {
+    public Optional<Answer> findByStudentIdAndQuestionId(UUID studentId, UUID id) {
         Optional<AnswerEntity> entity = dao
-                .findByStudentIdAndFrageId(studentId, id);
+                .findByStudentIdAndQuestionId(studentId, id);
         return entity.map(mapper::toDomain);
     }
 
@@ -37,13 +37,13 @@ public class AnswerRepositoryImpl implements AnswerRepository {
     public void save(Answer answer) {
         AnswerEntity answerEntity = mapper.toEntity(answer);
         dao.upsertAnswer(answerEntity.getStudentId(),
-                answerEntity.getFrageId(),
+                answerEntity.getQuestionId(),
                 answerEntity.getAnswer());
     }
 
     @Override
-    public Answer findByFrageId(UUID id) {
-        Optional<AnswerEntity> entity = dao.findByFrageId(id);
+    public Answer findByQuestionId(UUID id) {
+        Optional<AnswerEntity> entity = dao.findByQuestionId(id);
         return entity.map(mapper::toDomain)
                 .orElse(null);
     }

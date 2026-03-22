@@ -21,7 +21,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ExamManagementService examManagementService;
     private final ExamExportService examExportService;
     private final ReviewExportService reviewExportService;
-    private final FrageQueryService frageQueryService;
+    private final QuestionQueryService questionQueryService;
     private final ProfessorQueryService professorQueryService;
     private final ReviewerQueryService reviewerQueryService;
     private final StudentQueryService studentQueryService;
@@ -34,7 +34,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ExamManagementService examManagementService,
                                  ExamExportService examExportService,
                                  ReviewExportService reviewExportService,
-                                 FrageQueryService frageQueryService,
+                                 QuestionQueryService questionQueryService,
                                  ProfessorQueryService professorQueryService,
                                  ReviewerQueryService reviewerQueryService,
                                  StudentQueryService studentQueryService,
@@ -46,7 +46,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.examManagementService = examManagementService;
         this.examExportService = examExportService;
         this.reviewExportService = reviewExportService;
-        this.frageQueryService = frageQueryService;
+        this.questionQueryService = questionQueryService;
         this.professorQueryService = professorQueryService;
         this.reviewerQueryService = reviewerQueryService;
         this.studentQueryService = studentQueryService;
@@ -87,8 +87,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public List<FrageDTO> getFragenForExam(UUID examId) {
-        return frageQueryService.getFragenForExam(examId);
+    public List<QuestionDTO> getQuestionsForExam(UUID examId) {
+        return questionQueryService.getQuestionsForExam(examId);
     }
 
     @Override
@@ -102,18 +102,18 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void createFrage(FrageDTO frageDTO) {
-        frageQueryService.createFrage(frageDTO);
+    public void createQuestion(QuestionDTO questionDTO) {
+        questionQueryService.createQuestion(questionDTO);
     }
 
     @Override
-    public void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices) {
-        frageQueryService.createChoiceFrage(frageDTO, correctAnswer, choices);
+    public void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices) {
+        questionQueryService.createChoiceQuestion(questionDTO, correctAnswer, choices);
     }
 
     @Override
-    public String getChoiceForFrage(UUID frageId) {
-         return frageQueryService.getChoiceForFrage(frageId);
+    public String getChoicesForQuestion(UUID questionId) {
+         return questionQueryService.getChoiceForQuestion(questionId);
     }
 
     @Override
@@ -157,8 +157,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public List<FrageDTO> getFreeResponseFragen(UUID examId) {
-        return frageQueryService.getFreeResponseFragen(examId);
+    public List<QuestionDTO> getFreeResponseQuestions(UUID examId) {
+        return questionQueryService.getFreeResponseQuestions(examId);
     }
 
     @Override
@@ -187,7 +187,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public AnswerDTO getAnswerForFrageAndStudent(UUID frageId, UUID studentId) {
+    public AnswerDTO getAnswerForQuestionIdAndStudentId(UUID frageId, UUID studentId) {
         return answerQueryService.findByStudentAndFrage(studentId, frageId);
     }
 
@@ -197,7 +197,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public CorrectAnswersDTO getLoesungForFrage(UUID frageId) {
+    public CorrectAnswersDTO getCorrectAnswerForQuestion(UUID frageId) {
         return correctAnswersQueryService.getSolutionForFrage(frageId);
     }
 

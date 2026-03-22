@@ -21,7 +21,7 @@ public interface ExamManagementService {
 
     ExamDTO getExam(UUID examId);
 
-    UUID getExamIdByStartTime(LocalDateTime startTime);
+    UUID getExamIdByStartTime(LocalDateTime start);
 
     boolean deleteById(UUID examId);
 

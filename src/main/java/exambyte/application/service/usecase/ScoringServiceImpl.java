@@ -1,7 +1,7 @@
 package exambyte.application.service.usecase;
 
 import exambyte.application.dto.AnswerDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
@@ -30,11 +30,11 @@ public class ScoringServiceImpl implements ScoringService {
     }
 
     @Override
-    public double berechneErreichtePunkte(List<AnswerDTO> answers, Map<UUID, FrageDTO> fragen, LocalDateTime result) {
+    public double berechneErreichtePunkte(List<AnswerDTO> answers, Map<UUID, QuestionDTO> questionUUIDMap, LocalDateTime result) {
         return answers.stream()
                 .mapToDouble(a -> {
-                    FrageDTO f = fragen.get(a.frageId());
-                    if (f == null) return 0;
+                    QuestionDTO q = questionUUIDMap.get(a.frageId());
+                    if (q == null) return 0;
                     Review review = reviewService.getReviewByAnswerId(a.id());
 
                     UUID automaticReviewer = UUID.fromString("11111111-1111-1111-1111-111111111111");
