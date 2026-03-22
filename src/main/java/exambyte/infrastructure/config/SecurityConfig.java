@@ -54,7 +54,7 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity chainBuilder) throws Exception {
         return chainBuilder
                 .authorizeHttpRequests(configure -> configure
-                        .requestMatchers("/", "/login", "/oauth2/**", "/public/**").permitAll()
+                        .requestMatchers("/", "/error", "/login", "/oauth2/**", "/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(config -> config.userInfoEndpoint(
