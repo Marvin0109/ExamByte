@@ -12,8 +12,8 @@ public interface ReviewExportDTOMapper {
 
     List<ReviewExportDTO> mapDTOToExport(ExamDTO exam,
                                    String reviewerName,
-                                   double maxPunkte,
-                                   List<QuestionDTO> fragen,
+                                   double points,
+                                   List<QuestionDTO> questions,
                                    List<AnswerDTO> answers,
                                    List<ReviewDTO> reviews);
 }

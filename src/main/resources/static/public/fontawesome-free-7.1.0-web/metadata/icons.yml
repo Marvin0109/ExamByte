@@ -40593,7 +40593,7 @@ square-web-awesome:
     terms:
       - awesome
       - coding
-      - components
+      - oldDataDTOs
       - crown
       - web
   styles:
@@ -40609,7 +40609,7 @@ square-web-awesome-stroke:
     terms:
       - awesome
       - coding
-      - components
+      - oldDataDTOs
       - crown
       - web
   styles:
@@ -47911,7 +47911,7 @@ web-awesome:
     terms:
       - awesome
       - coding
-      - components
+      - oldDataDTOs
       - crown
       - web
   styles:

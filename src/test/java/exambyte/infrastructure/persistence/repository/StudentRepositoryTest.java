@@ -15,14 +15,14 @@ import static org.mockito.Mockito.when;
 
 class StudentRepositoryTest {
 
-    private final StudentDAO studentDAO = mock(StudentDAO.class);
-    private final StudentMapper studentMapper = mock(StudentMapper.class);
+    private final StudentDAO dao = mock(StudentDAO.class);
+    private final StudentMapper mapper = mock(StudentMapper.class);
 
     private StudentRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = new StudentRepositoryImpl(studentDAO, studentMapper);
+        repository = new StudentRepositoryImpl(dao, mapper);
     }
 
     @Test
@@ -34,7 +34,7 @@ class StudentRepositoryTest {
                 .name(name)
                 .build();
 
-        when(studentDAO.findIdByName(name)).thenReturn(Optional.of(student));
+        when(dao.findIdByName(name)).thenReturn(Optional.of(student));
 
         // Act
         Optional<UUID> result = repository.findIdByName(name);
@@ -47,7 +47,7 @@ class StudentRepositoryTest {
     @Test
     void findIdByName_notFound() {
         // Arrange
-        when(studentDAO.findIdByName("Name")).thenReturn(Optional.empty());
+        when(dao.findIdByName("Name")).thenReturn(Optional.empty());
 
         // Act
         Optional<UUID> result = repository.findIdByName("Name");

@@ -5,7 +5,7 @@ import exambyte.infrastructure.persistence.entities.AnswerEntity;
 
 public interface AnswerMapper {
 
-    Answer toDomain(AnswerEntity answerEntity);
+    Answer toDomain(AnswerEntity entity);
 
     AnswerEntity toEntity(Answer answer);
 }

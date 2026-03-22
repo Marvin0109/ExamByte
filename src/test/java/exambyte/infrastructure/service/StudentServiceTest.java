@@ -2,8 +2,7 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.repository.StudentRepository;
 import exambyte.domain.service.StudentService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
-import org.junit.jupiter.api.DisplayName;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -18,12 +17,11 @@ class StudentServiceTest {
     private final StudentService studentService = new StudentServiceImpl(studentRepository);
 
     @Test
-    @DisplayName("Ein Student kann nicht gefunden werden mit einer ID")
-    void test_01() {
+    void findById_notFound() {
         UUID studentId = UUID.randomUUID();
         when(studentRepository.findById(studentId)).thenReturn(Optional.empty());
 
-        assertThrows(NichtVorhandenException.class, () -> studentService.getStudent(studentId));
+        assertThrows(NotFoundException.class, () -> studentService.getStudent(studentId));
         verify(studentRepository).findById(studentId);
     }
 }

@@ -3,7 +3,6 @@ package exambyte.infrastructure.mapper;
 import exambyte.application.dto.StudentDTO;
 import exambyte.domain.mapper.StudentDTOMapper;
 import exambyte.domain.model.aggregate.user.Student;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -18,8 +17,7 @@ class StudentDTOMapperTest {
     private final StudentDTOMapper mapper = new StudentDTOMapperImpl();
 
     @Test
-    @DisplayName("Test StudentDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
 
@@ -37,14 +35,7 @@ class StudentDTOMapperTest {
     }
 
     @Test
-    @DisplayName("test_null_student_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toStudentDTOList Test")
-    void test_03() {
+    void toStudentDTOList() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();

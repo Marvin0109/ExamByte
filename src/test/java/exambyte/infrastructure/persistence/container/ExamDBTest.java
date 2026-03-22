@@ -6,7 +6,6 @@ import exambyte.domain.repository.*;
 import exambyte.infrastructure.persistence.mapper.*;
 import exambyte.infrastructure.persistence.repository.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -27,56 +26,52 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExamDBTest {
 
     @Autowired
-    private ExamDAO examDAO;
+    private ExamDAO dao;
 
-    private ExamRepository examRepository;
+    private ExamRepository repository;
 
-    private static final UUID EXAMUUID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+    private static final UUID EXAM_ID = UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 
     @BeforeEach
     void setUp() {
         ExamMapper examMapper = new ExamMapperImpl();
-        examRepository = new ExamRepositoryImpl(examDAO, examMapper);
+        repository = new ExamRepositoryImpl(dao, examMapper);
     }
 
     @Test
-    @DisplayName("Laden der Daten erfolgreich")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<Exam> geladenExam = examRepository.findById(EXAMUUID);
+        Optional<Exam> loaded = repository.findById(EXAM_ID);
 
         // Assert
-        assertThat(geladenExam).isPresent();
+        assertThat(loaded).isPresent();
     }
 
     @Test
-    @DisplayName("Alle Daten in der Tabelle löschen")
-    void test_02() {
+    void deleteAll_success() {
         // Act
-        examRepository.deleteAll();
+        repository.deleteAll();
 
         // Assert
-        assertThat(examRepository.findAll()).isEmpty();
+        assertThat(repository.findAll()).isEmpty();
     }
 
     @Test
-    @DisplayName("deleteById")
-    void test_03() {
+    void deleteById_success() {
         // Act
-        examRepository.deleteById(EXAMUUID);
+        repository.deleteById(EXAM_ID);
 
         // Assert
-        assertThat(examRepository.findById(EXAMUUID)).isEmpty();
+        assertThat(repository.findById(EXAM_ID)).isEmpty();
     }
 
     @Test
-    @DisplayName("Suche Exam nach Startzeit")
-    void test_04() {
+    void find_exam_by_startTime() {
         // Act
-        Optional<UUID> geladen = examRepository.findByStartTime(
+        Optional<UUID> loaded = repository.findByStartTime(
                 LocalDateTime.of(2025, 6, 20, 8, 0, 0));
 
         // Assert
-        assertThat(geladen).contains(EXAMUUID);
+        assertThat(loaded).contains(EXAM_ID);
     }
 }

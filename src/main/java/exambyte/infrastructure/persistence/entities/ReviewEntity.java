@@ -93,13 +93,13 @@ public class ReviewEntity {
         }
 
         public ReviewEntity build() {
-            checkID(answerId, "Antwort-ID fehlt");
-            checkID(reviewerId, "Reviewer-ID fehlt");
+            checkID(answerId, "Answer id is missing");
+            checkID(reviewerId, "Reviewer id is missing");
             if (text == null || text.isBlank()) {
-                throw new IllegalStateException("Bewertung fehlt");
+                throw new IllegalStateException("Review text is missing");
             }
             if (points < 0) {
-                throw new IllegalStateException("Punkte dürfen nicht negativ sein");
+                throw new IllegalStateException("Points has to be greater than 0");
             }
             return new ReviewEntity(id, answerId, reviewerId, text, points);
         }

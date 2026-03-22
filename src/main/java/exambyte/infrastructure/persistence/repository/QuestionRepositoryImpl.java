@@ -12,45 +12,45 @@ import java.util.*;
 @Repository
 public class QuestionRepositoryImpl implements QuestionRepository {
 
-    private final QuestionMapper questionMapper;
-    private final QuestionDAO questionDAO;
+    private final QuestionMapper mapper;
+    private final QuestionDAO dao;
 
     @Autowired
-    public QuestionRepositoryImpl(QuestionDAO questionDAO, QuestionMapper questionMapper) {
-        this.questionDAO = questionDAO;
-        this.questionMapper = questionMapper;
+    public QuestionRepositoryImpl(QuestionDAO dao, QuestionMapper mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override
     public Collection<Question> findAll() {
-        return questionDAO.findAll()
+        return dao.findAll()
                 .stream()
-                .map(questionMapper::toDomain)
+                .map(mapper::toDomain)
                 .toList();
     }
 
     @Override
     public Optional<Question> findById(UUID id) {
-        Optional<QuestionEntity> entity = questionDAO.findById(id);
-        return entity.map(questionMapper::toDomain);
+        Optional<QuestionEntity> entity = dao.findById(id);
+        return entity.map(mapper::toDomain);
     }
 
     @Override
     public UUID save(Question question) {
-        QuestionEntity entity = questionMapper.toEntity(question);
-        questionDAO.save(entity);
+        QuestionEntity entity = mapper.toEntity(question);
+        dao.save(entity);
         return entity.getId();
     }
 
     @Override
     public List<Question> findByExamId(UUID examId) {
-        return questionDAO.findByExamId(examId).stream()
-                .map(questionMapper::toDomain)
+        return dao.findByExamId(examId).stream()
+                .map(mapper::toDomain)
                 .toList();
     }
 
     @Override
     public void deleteAll() {
-        questionDAO.deleteAll();
+        dao.deleteAll();
     }
 }

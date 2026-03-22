@@ -14,7 +14,7 @@ public class AnswerDTOMapperImpl implements AnswerDTOMapper {
     public AnswerDTO toDTO(Answer answer) {
         return new AnswerDTO(answer.getId(),
                 answer.getAnswer(),
-                answer.getFrageId(),
+                answer.getQuestionId(),
                 answer.getStudentUUID(),
                 answer.getSubmitTime());
     }
@@ -31,7 +31,7 @@ public class AnswerDTOMapperImpl implements AnswerDTOMapper {
         return new Answer.AnswerBuilder()
             .id(dto.id())
             .answer(dto.answer())
-            .frageId(dto.frageId())
+            .questionId(dto.questionId())
             .studentId(dto.studentId())
             .submitTime(dto.submitTime())
             .build();

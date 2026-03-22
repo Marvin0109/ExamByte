@@ -14,43 +14,44 @@ import java.util.UUID;
 
 public class ReviewData {
 
-    private List<QuestionDTO> fragen;
+    private List<QuestionDTO> questions;
     private List<AnswerDTO> answers;
     private List<CorrectAnswersDTO> correctAnswers;
-    private final CorrectAnswersDTOMapper correctAnswersDTOMapper;
-    private final CorrectAnswersService correctAnswersService;
+    private final CorrectAnswersDTOMapper mapper;
+    private final CorrectAnswersService service;
 
-    public ReviewData(List<QuestionDTO> fragen, List<AnswerDTO> answers,
-                      CorrectAnswersDTOMapper correctAnswersDTOMapper,
-                      CorrectAnswersService correctAnswersService) {
-        this.fragen = fragen;
+    public ReviewData(List<QuestionDTO> questions,
+                      List<AnswerDTO> answers,
+                      CorrectAnswersDTOMapper mapper,
+                      CorrectAnswersService service) {
+        this.questions = questions;
         this.answers = answers;
-        this.correctAnswersDTOMapper = correctAnswersDTOMapper;
-        this.correctAnswersService = correctAnswersService;
+        this.mapper = mapper;
+        this.service = service;
         this.correctAnswers = new ArrayList<>();
     }
 
     public void filterToType(QuestionTypeDTO type){
-        fragen = fragen.stream()
+        questions = questions.stream()
                 .filter(f -> f.type().equals(type))
                 .toList();
 
-        List<UUID> frageIds = fragen.stream()
+        List<UUID> questionIds = questions.stream()
                 .map(QuestionDTO::id)
                 .toList();
 
         answers = answers.stream()
-                .filter(a -> frageIds.contains(a.frageId()))
+                .filter(a -> questionIds.contains(a.questionId()))
                 .toList();
 
-        correctAnswers = fragen.stream()
-                .map(f -> correctAnswersDTOMapper.toDTO(
-                        correctAnswersService.findSolution(f.id())))
+        correctAnswers = questions.stream()
+                .map(f -> mapper.toDTO(
+                        service.findSolution(f.id())))
                 .toList();
     }
 
-    public List<QuestionDTO> getFragen() {
-        return fragen;
+    public List<QuestionDTO> getQuestions() {
+        return questions;
     }
 
     public List<AnswerDTO> getAnswers() {

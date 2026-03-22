@@ -60,8 +60,8 @@ class SubmitAnswersStressTest {
     @Autowired
     private ExamControllerService examControllerService;
 
-    private UUID frageIdSC;
-    private UUID frageIdFreeResponse;
+    private UUID questionIdSC;
+    private UUID questionIdFreeResponse;
     private UUID examId;
 
     @BeforeEach
@@ -79,9 +79,9 @@ class SubmitAnswersStressTest {
 
         examRepository.save(new Exam.ExamBuilder()
                 .professorId(profId.get())
-                .startTime(start)
-                .endTime(start.plusDays(1))
-                .resultTime(start.plusDays(2))
+                .start(start)
+                .end(start.plusDays(1))
+                .result(start.plusDays(2))
                 .title("Exam")
                 .build());
 
@@ -101,24 +101,24 @@ class SubmitAnswersStressTest {
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreeResponseLoaded = questionRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
+        Optional<UUID> questionIdResponseLoaded = questionRepository.findAll().stream()
+                .filter(q -> q.getType().equals(QuestionType.FREE_RESPONSE))
                 .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdFreeResponseLoaded.isPresent());
-        frageIdFreeResponse = frageIdFreeResponseLoaded.get();
+        assert(questionIdResponseLoaded.isPresent());
+        questionIdFreeResponse = questionIdResponseLoaded.get();
 
-        Optional<UUID> frageIdSCLoaded = questionRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.SC))
+        Optional<UUID> questionIdSCLoaded = questionRepository.findAll().stream()
+                .filter(q -> q.getType().equals(QuestionType.SC))
                 .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdSCLoaded.isPresent());
-        frageIdSC = frageIdSCLoaded.get();
+        assert(questionIdSCLoaded.isPresent());
+        questionIdSC = questionIdSCLoaded.get();
 
         correctAnswersRepository.save(new CorrectAnswers.CorrectAnswersBuilder()
-                .frageId(frageIdSC)
+                .questionId(questionIdSC)
                 .choices("A\nB\nC\nD")
                 .solution("B")
                 .build());
@@ -132,7 +132,7 @@ class SubmitAnswersStressTest {
     }
 
     @Test
-    @DisplayName("500 Studenten submitten gleichzeitig")
+    @DisplayName("500 Studenten geben gleichzeitig deren Antworten ab")
     void stressTestSubmitExam() throws InterruptedException {
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < 500; i++) {
@@ -142,7 +142,6 @@ class SubmitAnswersStressTest {
         }
 
         // Stress tests starts here
-
         int threadCount = students.size();
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -154,7 +153,7 @@ class SubmitAnswersStressTest {
                 final String studentName = s.getName();
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreeResponse);
+                        Map<String, List<String>> answers = generateAnswers(questionIdSC, questionIdFreeResponse);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -175,10 +174,10 @@ class SubmitAnswersStressTest {
 
         for (Student s : students) {
             assertThat(answerRepository.findByStudentIdAndQuestionId(
-                    s.id(), frageIdFreeResponse)).isPresent();
+                    s.id(), questionIdFreeResponse)).isPresent();
 
             Optional<Answer> sc = answerRepository.findByStudentIdAndQuestionId(
-                    s.id(), frageIdSC);
+                    s.id(), questionIdSC);
             assertThat(sc).isPresent();
 
             assertThat(reviewRepository.findByAnswerId(sc.get().getId())).isNotNull();
@@ -186,14 +185,13 @@ class SubmitAnswersStressTest {
     }
 
     @Test
-    @DisplayName("50 gleichzeitige Submits eines Studenten")
+    @DisplayName("50 gleichzeitiges Einreichen eines Studenten")
     void stressTestSubmitExam_02() throws InterruptedException {
         studentRepository.save(new Student.StudentBuilder().name("Student 0").build());
         Student loaded = studentRepository.findByName("Student 0").orElseThrow();
         assertThat(loaded).isNotNull();
 
         // Stress tests starts here
-
         int threadCount = 50;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -205,7 +203,7 @@ class SubmitAnswersStressTest {
                 final String studentName = "Student 0";
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreeResponse);
+                        Map<String, List<String>> answers = generateAnswers(questionIdSC, questionIdFreeResponse);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -225,10 +223,10 @@ class SubmitAnswersStressTest {
         assertThat(exceptions).isEmpty();
 
         assertThat(answerRepository.findByStudentIdAndQuestionId(
-                loaded.id(), frageIdFreeResponse)).isPresent();
+                loaded.id(), questionIdFreeResponse)).isPresent();
 
         Optional<Answer> sc = answerRepository.findByStudentIdAndQuestionId(
-                loaded.id(), frageIdSC);
+                loaded.id(), questionIdSC);
         assertThat(sc).isPresent();
 
         assertThat(reviewRepository.findByAnswerId(sc.get().getId())).isNotNull();

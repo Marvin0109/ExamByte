@@ -93,18 +93,18 @@ class ExamQueryServiceTest {
                 .id(examDTO1.id())
                 .title("Exam 1")
                 .professorId(examDTO1.professorId())
-                .startTime(START)
-                .endTime(START.plusHours(1))
-                .resultTime(START.plusHours(2))
+                .start(START)
+                .end(START.plusHours(1))
+                .result(START.plusHours(2))
                 .build();
 
         exam2 = new Exam.ExamBuilder()
                 .id(examDTO2.id())
                 .title("Exam 2")
                 .professorId(examDTO2.professorId())
-                .startTime(START.plusHours(1))
-                .endTime(START.plusHours(2))
-                .resultTime(START.plusHours(3))
+                .start(START.plusHours(1))
+                .end(START.plusHours(2))
+                .result(START.plusHours(3))
                 .build();
 
         questionDTO = new QuestionDTO(
@@ -126,7 +126,7 @@ class ExamQueryServiceTest {
                 .id(UUID.randomUUID())
                 .answer("Answer")
                 .studentId(STUDENT_ID)
-                .frageId(question.getId())
+                .questionId(question.getId())
                 .submitTime(START)
                 .build();
     }
@@ -167,7 +167,7 @@ class ExamQueryServiceTest {
         when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
         when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
-        when(answerService.findByStudentAndFrage(STUDENT_ID, question.getId())).thenReturn(answer);
+        when(answerService.findByStudentIdAndQuestionId(STUDENT_ID, question.getId())).thenReturn(answer);
 
         boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
 
@@ -179,7 +179,7 @@ class ExamQueryServiceTest {
         when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
         when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
-        when(answerService.findByStudentAndFrage(STUDENT_ID, question.getId())).thenReturn(null);
+        when(answerService.findByStudentIdAndQuestionId(STUDENT_ID, question.getId())).thenReturn(null);
 
         boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
 

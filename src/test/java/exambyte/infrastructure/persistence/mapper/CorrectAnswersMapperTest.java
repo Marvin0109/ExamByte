@@ -12,31 +12,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CorrectAnswersMapperTest {
 
-    private CorrectAnswersMapper correctAnswersMapper;
+    private CorrectAnswersMapper mapper;
 
     @BeforeEach
     void setUp() {
-        correctAnswersMapper = new CorrectAnswersMapperImpl();
+        mapper = new CorrectAnswersMapperImpl();
     }
 
     @Test
     void toEntity() {
         // Arrange
-        UUID frageId = UUID.randomUUID();
-        String solution = "Lösung 1\nLösung 2";
-        String choices = "Lösung 1\nLösung 2\nLösung 3";
+        UUID questionId = UUID.randomUUID();
+        String solution = "Solution 1\nSolution 2";
+        String choices = "Solution 1\nSolution 2\nSolution 3";
 
         CorrectAnswers correctAnswers = new CorrectAnswers.CorrectAnswersBuilder()
-            .frageId(frageId)
+            .questionId(questionId)
             .solution(solution)
             .choices(choices)
             .build();
 
         // Act
-        CorrectAnswersEntity entity = correctAnswersMapper.toEntity(correctAnswers);
+        CorrectAnswersEntity entity = mapper.toEntity(correctAnswers);
 
         // Assert
-        assertThat(entity.getQuestionId()).isEqualTo(frageId);
+        assertThat(entity.getQuestionId()).isEqualTo(questionId);
         assertThat(entity.getSolution()).contains(solution);
         assertThat(entity.getChoices()).contains(choices);
     }
@@ -44,20 +44,20 @@ class CorrectAnswersMapperTest {
     @Test
     void toDomain() {
         // Arrange
-        UUID frageId = UUID.randomUUID();
-        String solution = "Lösung 1\nLösung 2";
-        String choices = "Lösung 1\nLösung 2\nLösung 3";
+        UUID questionId = UUID.randomUUID();
+        String solution = "Solution 1\nSolution 2";
+        String choices = "Solution 1\nSolution 2\nSolution 3";
         CorrectAnswersEntity entity = new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-                .questionId(frageId)
+                .questionId(questionId)
                 .choices(choices)
                 .solution(solution)
                 .build();
 
         // Act
-        CorrectAnswers correctAnswers = correctAnswersMapper.toDomain(entity);
+        CorrectAnswers correctAnswers = mapper.toDomain(entity);
 
         // Assert
-        assertThat(correctAnswers.getFrageId()).isEqualTo(frageId);
+        assertThat(correctAnswers.getQuestionId()).isEqualTo(questionId);
         assertThat(correctAnswers.getSolution()).contains(solution);
         assertThat(correctAnswers.getChoices()).contains(choices);
     }

@@ -25,13 +25,13 @@ VALUES ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
 INSERT INTO correct_answers (id, question_id, solution, choices)
 VALUES ('cccccccc-cccc-cccc-cccc-cccccccccccc',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-        'Loesung1',
-        'Loesung1\nLoesung2');
+        'Solution1',
+        'Solution1\nSolution2');
 
 INSERT INTO answer (id, question_id, answer, student_id, submit_time)
 VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-        'Loesung1',
+        'Solution1',
         '22222222-2222-2222-2222-222222222222',
         '2025-06-20 08:10:00'
         );
@@ -40,6 +40,6 @@ INSERT INTO review (id, answer_id, reviewer_id, text, points)
 VALUES ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
         'dddddddd-dddd-dddd-dddd-dddddddddddd',
         '33333333-3333-3333-3333-333333333333',
-        'Bewertung',
+        'Text',
         10
         );

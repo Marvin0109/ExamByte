@@ -3,14 +3,13 @@ package exambyte.infrastructure.persistence.mapper;
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.entitymapper.ProfessorMapper;
 import exambyte.infrastructure.persistence.entities.ProfessorEntity;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProfessorMapperTest {
 
-    private final ProfessorMapper professorMapper = new ProfessorMapperImpl();
+    private final ProfessorMapper mapper = new ProfessorMapperImpl();
 
     @Test
     void toEntity() {
@@ -20,14 +19,13 @@ class ProfessorMapperTest {
                 .build();
 
         // Act
-        ProfessorEntity professorEntity = professorMapper.toEntity(professor);
+        ProfessorEntity professorEntity = mapper.toEntity(professor);
 
         // Assert
         assertThat(professorEntity.getName()).isEqualTo("Dr. Scalper");
     }
 
     @Test
-    @DisplayName("ProfessorMapper test 'toDomain'")
     void toDomain() {
         // Arrange
         ProfessorEntity professorEntity = new ProfessorEntity.ProfessorEntityBuilder()
@@ -35,7 +33,7 @@ class ProfessorMapperTest {
                 .build();
 
         // Act
-        Professor professor = professorMapper.toDomain(professorEntity);
+        Professor professor = mapper.toDomain(professorEntity);
 
         // Assert
         assertThat(professor.getName()).isEqualTo("Dr. J");

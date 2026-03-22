@@ -70,10 +70,10 @@ public class CorrectAnswersEntity {
 
         public CorrectAnswersEntity build() {
             if (questionId == null) {
-                throw new IllegalStateException("Question-ID fehlt");
+                throw new IllegalStateException("Question id is missing");
             }
-            checkStringField(solution, "Lösungen fehlen");
-            checkStringField(choices, "Antwort Optionen fehlen");
+            checkStringField(solution, "Solutions are missing");
+            checkStringField(choices, "Choices are missing");
             return new CorrectAnswersEntity(id, questionId, solution, choices);
         }
 

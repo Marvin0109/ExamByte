@@ -8,18 +8,18 @@ public class Exam {
     private final UUID id;
     private final String title;
     private final UUID professorId;
-    private final LocalDateTime startTime;
-    private final LocalDateTime endTime;
-    private final LocalDateTime resultTime;
+    private final LocalDateTime start;
+    private final LocalDateTime end;
+    private final LocalDateTime result;
 
     private Exam(UUID id, String title, UUID professorId,
-                 LocalDateTime startTime, LocalDateTime endTime, LocalDateTime resultTime) {
+                 LocalDateTime start, LocalDateTime end, LocalDateTime result) {
         this.id = id;
         this.title = title;
         this.professorId = professorId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.resultTime = resultTime;
+        this.start = start;
+        this.end = end;
+        this.result = result;
     }
 
     public UUID getId() {
@@ -34,25 +34,25 @@ public class Exam {
         return professorId;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
+    public LocalDateTime getStart() {
+        return start;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
+    public LocalDateTime getEnd() {
+        return end;
     }
 
-    public LocalDateTime getResultTime() {
-        return resultTime;
+    public LocalDateTime getResult() {
+        return result;
     }
 
     public static class ExamBuilder {
         private UUID id;
         private String title;
         private UUID professorId;
-        private LocalDateTime startTime;
-        private LocalDateTime endTime;
-        private LocalDateTime resultTime;
+        private LocalDateTime start;
+        private LocalDateTime end;
+        private LocalDateTime result;
 
         public ExamBuilder id(UUID id) {
             this.id = id;
@@ -69,23 +69,23 @@ public class Exam {
             return this;
         }
 
-        public ExamBuilder startTime(LocalDateTime startTime) {
-            this.startTime = startTime;
+        public ExamBuilder start(LocalDateTime start) {
+            this.start = start;
             return this;
         }
 
-        public ExamBuilder endTime(LocalDateTime endTime) {
-            this.endTime = endTime;
+        public ExamBuilder end(LocalDateTime end) {
+            this.end = end;
             return this;
         }
 
-        public ExamBuilder resultTime(LocalDateTime resultTime) {
-            this.resultTime = resultTime;
+        public ExamBuilder result(LocalDateTime result) {
+            this.result = result;
             return this;
         }
 
         public Exam build() {
-            return new Exam(id, title, professorId, startTime, endTime, resultTime);
+            return new Exam(id, title, professorId, start, end, result);
         }
     }
 }

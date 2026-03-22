@@ -85,9 +85,9 @@ class SubmitReviewIT {
         Exam exam = new Exam.ExamBuilder()
                 .title("Exam")
                 .professorId(profLoaded.get().id())
-                .startTime(start)
-                .endTime(start.plusDays(1))
-                .resultTime(start.plusDays(2))
+                .start(start)
+                .end(start.plusDays(1))
+                .result(start.plusDays(2))
                 .build();
         examRepository.save(exam);
         Optional<UUID> examId = examRepository.findByStartTime(start);
@@ -106,7 +106,7 @@ class SubmitReviewIT {
 
         // Answer
         Answer answer = new Answer.AnswerBuilder()
-                .frageId(questionLoaded.getFirst().getId())
+                .questionId(questionLoaded.getFirst().getId())
                 .answer("Answer")
                 .studentId(studentId.get())
                 .submitTime(LocalDateTime.of(2026, 1, 1, 1, 0))
@@ -117,7 +117,7 @@ class SubmitReviewIT {
         assertThat(answerLoaded).isPresent();
 
         ReviewForm form = new ReviewForm();
-        form.setReviewText("Bewertung");
+        form.setReviewText("Text");
         form.setPoints(5.0);
 
         examControllerService.createReview(form, answerLoaded.get().getId(),reviewerLoaded.get().id());
@@ -125,6 +125,6 @@ class SubmitReviewIT {
         Review review = reviewRepository.findByAnswerId(answerLoaded.get().getId());
 
         assertThat(review).isNotNull();
-        assertThat(review.getPunkte()).isEqualTo(5);
+        assertThat(review.getPoints()).isEqualTo(5);
     }
 }

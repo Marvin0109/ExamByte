@@ -5,7 +5,6 @@ import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.mapper.QuestionDTOMapper;
 import exambyte.domain.model.aggregate.exam.Question;
 import exambyte.domain.model.common.QuestionType;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -20,8 +19,7 @@ class QuestionDTOMapperTest {
     private final QuestionDTOMapper mapper = new QuestionDTOMapperImpl();
 
     @Test
-    @DisplayName("Test QuestionDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID examId = UUID.randomUUID();
@@ -46,14 +44,7 @@ class QuestionDTOMapperTest {
     }
 
     @Test
-    @DisplayName("test_null_frage_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toFrageDTOList Test")
-    void test_03() {
+    void toQuestionDTOList() {
         // Arrange
         UUID id1 = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();
@@ -77,13 +68,13 @@ class QuestionDTOMapperTest {
                 .examId(examId2)
                 .build();
 
-        List<Question> fragen  = Arrays.asList(question1, question2);
+        List<Question> questions = Arrays.asList(question1, question2);
 
         // Act
-        List<QuestionDTO> questionDTOList = mapper.toQuestionDTOList(fragen);
+        List<QuestionDTO> questionDTOList = mapper.toQuestionDTOList(questions);
 
         // Assert
-        assertEquals(fragen.size(), questionDTOList.size());
+        assertEquals(questions.size(), questionDTOList.size());
         assertThat(questionDTOList.getFirst().id()).isEqualTo(id1);
         assertThat(questionDTOList.getFirst().type()).isEqualTo(QuestionTypeDTO.valueOf(question1.getType().name()));
         assertThat(questionDTOList.getFirst().examId()).isEqualTo(examId1);

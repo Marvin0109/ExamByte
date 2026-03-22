@@ -15,9 +15,9 @@ public class StudentRepositoryImpl implements StudentRepository {
     private final StudentMapper mapper;
     private final StudentDAO dao;
 
-    public StudentRepositoryImpl(StudentDAO studentDAO, StudentMapper studentMapper) {
-        this.dao = studentDAO;
-        this.mapper = studentMapper;
+    public StudentRepositoryImpl(StudentDAO dao, StudentMapper mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override
@@ -28,8 +28,8 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public void save(Student student) {
-        StudentEntity studentEntity = mapper.toEntity(student);
-        dao.save(studentEntity);
+        StudentEntity entity = mapper.toEntity(student);
+        dao.save(entity);
     }
 
     @Override

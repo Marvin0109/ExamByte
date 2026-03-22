@@ -17,9 +17,9 @@ public class ExamRepositoryImpl implements ExamRepository {
     private final ExamMapper mapper;
     private final ExamDAO dao;
 
-    public ExamRepositoryImpl(ExamDAO testRepository, ExamMapper examMapper) {
-        this.dao = testRepository;
-        this.mapper = examMapper;
+    public ExamRepositoryImpl(ExamDAO dao, ExamMapper mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override
@@ -37,8 +37,8 @@ public class ExamRepositoryImpl implements ExamRepository {
     }
 
     @Override
-    public void save(Exam examEntity) {
-        ExamEntity entity = mapper.toEntity(examEntity);
+    public void save(Exam exam) {
+        ExamEntity entity = mapper.toEntity(exam);
         dao.save(entity);
     }
 

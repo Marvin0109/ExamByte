@@ -17,20 +17,20 @@ import static org.mockito.Mockito.when;
 
 class AnswerRepositoryTest {
 
-    private final AnswerDAO answerDAO = mock(AnswerDAO.class);
-    private final AnswerMapper answerMapper = mock(AnswerMapper.class);
+    private final AnswerDAO dao = mock(AnswerDAO.class);
+    private final AnswerMapper mapper = mock(AnswerMapper.class);
 
     private AnswerRepository repository;
 
     private static final UUID ANSWER_ID = UUID.randomUUID();
-    private static final UUID FRAGE_ID = UUID.randomUUID();
+    private static final UUID QUESTION_ID = UUID.randomUUID();
     private static final UUID STUDENT_ID = UUID.randomUUID();
-    private static final LocalDateTime TIMESTAMP =
+    private static final LocalDateTime SUBMIT_TIME =
             LocalDateTime.of(2020, 1, 1, 0, 0);
 
     @BeforeEach
     void setUp() {
-        repository = new AnswerRepositoryImpl(answerDAO, answerMapper);
+        repository = new AnswerRepositoryImpl(dao, mapper);
     }
 
     @Test
@@ -38,19 +38,19 @@ class AnswerRepositoryTest {
         // Arrange
         AnswerEntity entity = new AnswerEntity.AnswerEntityBuilder()
                 .answer("Answer")
-                .questionId(FRAGE_ID)
+                .questionId(QUESTION_ID)
                 .studentId(STUDENT_ID)
-                .submitTime(TIMESTAMP)
+                .submitTime(SUBMIT_TIME)
                 .build();
         Answer domain = new Answer.AnswerBuilder()
                 .answer("Answer")
-                .frageId(FRAGE_ID)
+                .questionId(QUESTION_ID)
                 .studentId(STUDENT_ID)
-                .submitTime(TIMESTAMP)
+                .submitTime(SUBMIT_TIME)
                 .build();
 
-        when(answerDAO.findByQuestionId(ANSWER_ID)).thenReturn(Optional.of(entity));
-        when(answerMapper.toDomain(entity)).thenReturn(domain);
+        when(dao.findByQuestionId(ANSWER_ID)).thenReturn(Optional.of(entity));
+        when(mapper.toDomain(entity)).thenReturn(domain);
 
         // Act
         Answer result = repository.findByQuestionId(ANSWER_ID);
@@ -63,7 +63,7 @@ class AnswerRepositoryTest {
     @Test
     void findByQuestionId_notExists_returnsNull() {
         // Arrange
-        when(answerDAO.findByQuestionId(ANSWER_ID)).thenReturn(Optional.empty());
+        when(dao.findByQuestionId(ANSWER_ID)).thenReturn(Optional.empty());
 
         // Act
         Answer result = repository.findByQuestionId(ANSWER_ID);

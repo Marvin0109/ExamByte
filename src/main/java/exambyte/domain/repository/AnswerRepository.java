@@ -11,11 +11,11 @@ public interface AnswerRepository {
 
     Optional<Answer> findById(UUID id);
 
-    Optional<Answer> findByStudentIdAndQuestionId(UUID studentFachId, UUID examFachId);
+    Optional<Answer> findByStudentIdAndQuestionId(UUID studentId, UUID examId);
 
     void save(Answer answer);
 
     void deleteAll();
 
-    void deleteAnswer(UUID fachId);
+    void deleteAnswer(UUID id);
 }

@@ -7,15 +7,15 @@ public class Review {
     private final UUID id;
     private final UUID answerId;
     private final UUID reviewerId;
-    private final String bewertung;
-    private final double punkte;
+    private final String text;
+    private final double points;
 
-    private Review(UUID id, UUID answerId, UUID reviewerId, String bewertung, double punkte) {
+    private Review(UUID id, UUID answerId, UUID reviewerId, String text, double points) {
         this.id = id;
         this.answerId = answerId;
         this.reviewerId = reviewerId;
-        this.bewertung = bewertung;
-        this.punkte = punkte;
+        this.text = text;
+        this.points = points;
     }
 
     public UUID getId() {
@@ -30,20 +30,20 @@ public class Review {
         return reviewerId;
     }
 
-    public String getBewertung() {
-        return bewertung;
+    public String getText() {
+        return text;
     }
 
-    public double getPunkte() {
-        return punkte;
+    public double getPoints() {
+        return points;
     }
 
     public static class ReviewBuilder {
         private UUID id;
         private UUID answerId;
         private UUID reviewerId;
-        private String bewertung;
-        private double punkte;
+        private String text;
+        private double points;
 
         public ReviewBuilder id(UUID id) {
             this.id = id;
@@ -60,18 +60,18 @@ public class Review {
             return this;
         }
 
-        public ReviewBuilder bewertung(String bewertung) {
-            this.bewertung = bewertung;
+        public ReviewBuilder text(String text) {
+            this.text = text;
             return this;
         }
 
-        public ReviewBuilder punkte(double punkte) {
-            this.punkte = punkte;
+        public ReviewBuilder points(double points) {
+            this.points = points;
             return this;
         }
 
         public Review build() {
-            return new Review(id, answerId, reviewerId, bewertung, punkte);
+            return new Review(id, answerId, reviewerId, text, points);
         }
     }
 }

@@ -16,8 +16,8 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
                 review.getId(),
                 review.getAnswerId(),
                 review.getReviewerId(),
-                review.getBewertung(),
-                review.getPunkte());
+                review.getText(),
+                review.getPoints());
     }
 
     @Override
@@ -33,8 +33,8 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
                 .id(dto.id())
                 .answerId(dto.answerId())
                 .reviewerId(dto.reviewerId())
-                .bewertung(dto.text())
-                .punkte(dto.points())
+                .text(dto.text())
+                .points(dto.points())
                 .build();
     }
 }

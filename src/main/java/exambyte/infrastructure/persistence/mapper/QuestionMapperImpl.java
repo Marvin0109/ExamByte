@@ -24,12 +24,12 @@ public class QuestionMapperImpl implements QuestionMapper {
 
     @Override
     public QuestionEntity toEntity(Question question) {
-        int punkte = (int) Math.round(question.getPoints() * 2.0);
+        int pointsForDb = (int) Math.round(question.getPoints() * 2.0);
 
         return new QuestionEntity.QuestionEntityBuilder()
                 .id(question.getId())
                 .text(question.getText())
-                .points(punkte)
+                .points(pointsForDb)
                 .type(QuestionTypeEntity.valueOf(question.getType().name()))
                 .examId(question.getExamId())
                 .build();

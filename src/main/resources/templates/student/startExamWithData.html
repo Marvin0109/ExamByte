@@ -30,7 +30,7 @@
 
         <h1 th:text="${exam.examTitle}">Testtitel</h1>
 
-        <div th:each="component, iterStat : ${exam.components}" class="mb-3">
+        <div th:each="component, iterStat : ${exam.oldDataDTOs}" class="mb-3">
 
             <div class="card">
                 <div class="card-body">

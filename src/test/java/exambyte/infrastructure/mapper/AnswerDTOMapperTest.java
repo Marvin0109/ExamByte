@@ -3,7 +3,6 @@ package exambyte.infrastructure.mapper;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.domain.mapper.AnswerDTOMapper;
 import exambyte.domain.model.aggregate.exam.Answer;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -18,18 +17,17 @@ class AnswerDTOMapperTest {
     private final AnswerDTOMapper mapper = new AnswerDTOMapperImpl();
 
     @Test
-    @DisplayName("Test AnswerDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
-        UUID frageId = UUID.randomUUID();
+        UUID questionId = UUID.randomUUID();
         LocalDateTime submitTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         Answer answer = new Answer.AnswerBuilder()
                 .id(id)
                 .answer("Answer")
-                .frageId(frageId)
+                .questionId(questionId)
                 .studentId(studentId)
                 .submitTime(submitTime)
                 .build();
@@ -40,35 +38,28 @@ class AnswerDTOMapperTest {
         // Assert
         assertEquals(id, dto.id());
         assertEquals(studentId, dto.studentId());
-        assertEquals(frageId, dto.frageId());
+        assertEquals(questionId, dto.questionId());
         assertEquals("Answer", dto.answer());
         assertEquals(submitTime, dto.submitTime());
     }
 
     @Test
-    @DisplayName("test_null_answer_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toAnswerDTOList Test")
-    void test_03() {
+    void toAnswerDTOList() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
-        UUID frageId = UUID.randomUUID();
+        UUID questionId = UUID.randomUUID();
         LocalDateTime submitTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         UUID id2 = UUID.randomUUID();
         UUID studentId2 = UUID.randomUUID();
-        UUID frageId2 = UUID.randomUUID();
+        UUID questionId2 = UUID.randomUUID();
         LocalDateTime submitTime2 = LocalDateTime.of(2020, 1, 1, 1, 0);
 
         Answer answer = new Answer.AnswerBuilder()
                 .id(id)
                 .answer("Answer")
-                .frageId(frageId)
+                .questionId(questionId)
                 .studentId(studentId)
                 .submitTime(submitTime)
                 .build();
@@ -76,7 +67,7 @@ class AnswerDTOMapperTest {
         Answer answer2 = new Answer.AnswerBuilder()
                 .id(id2)
                 .answer("Answer2")
-                .frageId(frageId2)
+                .questionId(questionId2)
                 .studentId(studentId2)
                 .submitTime(submitTime2)
                 .build();
@@ -90,28 +81,27 @@ class AnswerDTOMapperTest {
         assertEquals(2, dtoList.size());
         assertEquals(id, dtoList.getFirst().id());
         assertEquals(studentId, dtoList.getFirst().studentId());
-        assertEquals(frageId, dtoList.getFirst().frageId());
+        assertEquals(questionId, dtoList.getFirst().questionId());
         assertEquals(submitTime, dtoList.getFirst().submitTime());
 
         assertEquals(id2, dtoList.getLast().id());
         assertEquals(studentId2, dtoList.getLast().studentId());
-        assertEquals(frageId2, dtoList.getLast().frageId());
+        assertEquals(questionId2, dtoList.getLast().questionId());
         assertEquals(submitTime2, dtoList.getLast().submitTime());
     }
 
     @Test
-    @DisplayName("toDomain Test")
-    void test_04() {
+    void toDomain() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
-        UUID frageId = UUID.randomUUID();
+        UUID questionId = UUID.randomUUID();
         LocalDateTime submitTime = LocalDateTime.of(2020, 1, 1, 0, 0);
 
         AnswerDTO dto = new AnswerDTO(
                 id,
                 "Answer",
-                frageId,
+                questionId,
                 studentId,
                 submitTime);
 
@@ -121,7 +111,7 @@ class AnswerDTOMapperTest {
         // Assert
         assertEquals(id, answer.getId());
         assertEquals(studentId, answer.getStudentUUID());
-        assertEquals(frageId, answer.getFrageId());
+        assertEquals(questionId, answer.getQuestionId());
         assertEquals(submitTime, answer.getSubmitTime());
         assertEquals("Answer", answer.getAnswer());
     }

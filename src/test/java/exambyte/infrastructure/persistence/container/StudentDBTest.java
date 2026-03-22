@@ -7,7 +7,6 @@ import exambyte.infrastructure.persistence.repository.StudentDAO;
 import exambyte.infrastructure.persistence.repository.StudentRepositoryImpl;
 import exambyte.domain.repository.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -27,25 +26,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StudentDBTest {
 
     @Autowired
-    private StudentDAO studentDAO;
+    private StudentDAO dao;
 
     private StudentRepository repository;
 
-    private static final UUID STUDENTUUID = UUID.fromString("22222222-2222-2222-2222-222222222222");
+    private static final UUID STUDENT_ID = UUID.fromString("22222222-2222-2222-2222-222222222222");
 
     @BeforeEach
     void setUp() {
         StudentMapper studentMapper = new StudentMapperImpl();
-        repository = new StudentRepositoryImpl(studentDAO, studentMapper);
+        repository = new StudentRepositoryImpl(dao, studentMapper);
     }
 
     @Test
-    @DisplayName("Ein Student kann geladen werden")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<Student> geladen = repository.findById(STUDENTUUID);
+        Optional<Student> loaded = repository.findById(STUDENT_ID);
 
         // Assert
-        assertThat(geladen).isPresent();
+        assertThat(loaded).isPresent();
     }
 }

@@ -47,8 +47,7 @@ class StudentControllerTest {
     private ExamControllerService service;
 
     @Test
-    @DisplayName("Die Seite zum Ansehen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
-    void listExamsForStudents_01() throws Exception {
+    void get_listExamsForStudents_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/student/examListForStudent"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -58,8 +57,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Die Seite zum Ansehen von Prüfungen ist für Studierende sichtbar")
-    void listExamsForStudents_02() throws Exception {
+    void get_listExamsForStudents_authorized() throws Exception {
         mvc.perform(get("/student/examListForStudent"))
             .andExpect(status().isOk())
             .andExpect(view().name("student/examListForStudent"))
@@ -72,8 +70,7 @@ class StudentControllerTest {
     }
 
     @Test
-    @DisplayName("Prüfungsmenü nicht erreichbar für nicht authentifizierte User")
-    void examMenu_01() throws Exception {
+    void get_examMenu_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/student/startExam/{examId}/menu", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -83,13 +80,12 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Prüfungsmenü ist erreichbar (noch kein Exam eingereicht vorher)")
-    void examMenu_02() throws Exception {
+    void get_examMenu_success_examNotSubmittedYet() throws Exception {
         UUID examId = UUID.randomUUID();
         UUID profId = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-        ExamTimeInfo examTimeInfo = new ExamTimeInfo("Anzeige", true);
+        ExamTimeInfo examTimeInfo = new ExamTimeInfo("Display", true);
         ExamDTO examDTO = new ExamDTO(examId, "Exam 1", profId,
                 start, start.plusHours(1), start.plusHours(2));
         ProfessorDTO p = new ProfessorDTO(profId, "ProfName");
@@ -103,7 +99,7 @@ class StudentControllerTest {
             .andExpect(status().isOk())
             .andExpect(view().name("student/examMenu"))
             .andExpect(model().attributeExists("exam"))
-            .andExpect(model().attribute("timeLeft", "Anzeige"))
+            .andExpect(model().attribute("timeLeft", "Display"))
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", false))
             .andExpect(model().attributeExists("reviewPermission"))
@@ -113,21 +109,21 @@ class StudentControllerTest {
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
     @DisplayName("Prüfungsmenü ist erreichbar (Exam eingereicht vorher)")
-    void examMenu_03() throws Exception {
+    void get_examMenu_success_examSubmittedYet() throws Exception {
         UUID examId = UUID.randomUUID();
         UUID profId = UUID.randomUUID();
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-        ExamTimeInfo examTimeInfo = new ExamTimeInfo("Anzeige", true);
+        ExamTimeInfo examTimeInfo = new ExamTimeInfo("Display", true);
         ExamDTO examDTO = new ExamDTO(examId, "Exam 1", profId,
                 start, start.plusHours(1), start.plusHours(2));
-        ProfessorDTO p = new ProfessorDTO(profId, "ProfName");
+        ProfessorDTO professor = new ProfessorDTO(profId, "ProfName");
         AttemptDTO attemptDTO = mock(AttemptDTO.class);
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
         when(service.examIsAlreadySubmitted(examId, "username")).thenReturn(true);
         when(service.getExamTimeInfo(examDTO)).thenReturn(examTimeInfo);
-        when(service.getProfessorById(profId)).thenReturn(p);
+        when(service.getProfessorById(profId)).thenReturn(professor);
 
         when(service.getAttempt(examId, "username")).thenReturn(attemptDTO);
 
@@ -135,7 +131,7 @@ class StudentControllerTest {
             .andExpect(status().isOk())
             .andExpect(view().name("student/examMenu"))
             .andExpect(model().attributeExists("exam"))
-            .andExpect(model().attribute("timeLeft", "Anzeige"))
+            .andExpect(model().attribute("timeLeft", "Display"))
             .andExpect(model().attribute("timeLeftBool", true))
             .andExpect(model().attribute("alreadySubmitted", true))
             .andExpect(model().attribute("attempt", attemptDTO))
@@ -144,8 +140,7 @@ class StudentControllerTest {
     }
 
     @Test
-    @DisplayName("Der Zugang zum Exam ist nicht erlaubt ohne Anmeldung")
-    void testExamAccess() throws Exception {
+    void get_startExam_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/student/startExam/{examId}", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -155,8 +150,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Starten des Exams erfolgreich")
-    void startExams_01() throws Exception {
+    void get_startExam_authorized() throws Exception {
         UUID examId = UUID.randomUUID();
         ExamForm form = mock(ExamForm.class);
 
@@ -171,8 +165,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (egal ob Exam vorher eingereicht oder nicht)")
-    void submitExam_02() throws Exception {
+    void post_submitExam_fail() throws Exception {
         UUID examId = UUID.randomUUID();
 
         Map<String, List<String>> answers = Map.of(
@@ -199,12 +192,11 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (fehlende Antwort)")
-    void submitExam_03() throws Exception {
+    void post_submitExam_fail_answerMissing() throws Exception {
         UUID examId = UUID.randomUUID();
 
         Map<String, List<String>> answers = Map.of(
-                "q2", List.of()
+                "q2", List.of() // Null
         );
 
         SubmitForm form = new SubmitForm();
@@ -221,12 +213,11 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (fehlende Antwort)")
-    void submitExam_04() throws Exception {
+    void post_submitExam_fail_answerMissing_2() throws Exception {
         UUID examId = UUID.randomUUID();
 
         Map<String, List<String>> answers = Map.of(
-                "q2", List.of("")
+                "q2", List.of("") // Empty
         );
 
         SubmitForm form = new SubmitForm();
@@ -243,12 +234,11 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das Einreichen eines Exams nicht erfolgreich (fehlende Antwort)")
-    void submitExam_05() throws Exception {
+    void post_submitExam_fail_answerMissing_3() throws Exception {
         UUID examId = UUID.randomUUID();
 
         Map<String, List<String>> answers = Map.of(
-                "q2", List.of(" ")
+                "q2", List.of(" ") // Blank
         );
 
         SubmitForm form = new SubmitForm();
@@ -265,8 +255,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das Einreichen eines Exams ist erfolgreich (noch kein Exam vorher eingereicht)")
-    void submitExam_06() throws Exception {
+    void post_submitExam_success_noSubmitsBefore() throws Exception {
         UUID examId = UUID.randomUUID();
 
         Map<String, List<String>> answers = Map.of(
@@ -293,8 +282,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Das einreichen des Exams ist erfolgreich (mit Eingabedaten im richtigen Format)")
-    void submitExam_07() throws Exception {
+    void post_submitExam_success_inputDataInCorrectFormat() throws Exception {
         UUID examId = UUID.randomUUID();
         UUID questionId1 = UUID.randomUUID();
         UUID questionId2 = UUID.randomUUID();
@@ -305,9 +293,9 @@ class StudentControllerTest {
 
         mvc.perform(post("/student/submit/{examId}", examId)
                 .with(csrf())
-                .param("answers[" + questionId1 + "]", "Antwort 1") // SC
-                .param("answers[" + questionId2 + "]", "Antwort 1", "Antwort 2") // MC
-                .param("answers[" + questionId3 + "]", "Dies ist meine Freitext Antwort"))
+                .param("answers[" + questionId1 + "]", "Answer 1") // SC
+                .param("answers[" + questionId2 + "]", "Answer 1", "Answer 2") // MC
+                .param("answers[" + questionId3 + "]", "Long answer"))
             .andExpect(status().is3xxRedirection())
             .andExpect(flash().attribute("message", "Alle Antworten erfolgreich eingereicht!"))
             .andExpect(flash().attribute("success", true))
@@ -316,8 +304,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Die Korrektureinsicht ist erfolgreich")
-    void showReview() throws Exception {
+    void get_showReview_success() throws Exception {
         when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
         when(service.checkTimeForReviewView(any())).thenReturn(true);
 
@@ -329,8 +316,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Korrektureinsicht nicht erfolgreich, da Ergebniszeit noch nicht erreicht wurde")
-    void showReview_failure() throws Exception {
+    void get_showReview_fail() throws Exception {
         when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
         when(service.checkTimeForReviewView(any())).thenReturn(false);
 
@@ -343,8 +329,7 @@ class StudentControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Testversuch mit alten Antworten ist erfolgreich")
-    void startWithData() throws Exception {
+    void get_startWithData_success() throws Exception {
         when(service.fillOldDataForm(any(), any())).thenReturn(mock());
         when(service.fillSubmitFormWithData(any())).thenReturn(mock());
 

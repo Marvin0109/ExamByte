@@ -15,10 +15,10 @@ public class ProfessorRepositoryImpl implements ProfessorRepository {
     private final ProfessorMapper mapper;
     private final ProfessorDAO dao;
 
-    public ProfessorRepositoryImpl(ProfessorDAO professorDAO,
-                                   ProfessorMapper professorMapper) {
-        this.dao = professorDAO;
-        this.mapper = professorMapper;
+    public ProfessorRepositoryImpl(ProfessorDAO dao,
+                                   ProfessorMapper mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override

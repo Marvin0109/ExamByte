@@ -21,8 +21,8 @@ public class CorrectAnswersQueryServiceImpl implements CorrectAnswersQueryServic
     }
 
     @Override
-    public CorrectAnswersDTO getSolutionForFrage(UUID frageId) {
-        CorrectAnswers k = service.findSolution(frageId);
-        return k != null ? mapper.toDTO(k) : null;
+    public CorrectAnswersDTO getCorrectAnswerForQuestion(UUID questionId) {
+        CorrectAnswers correctAnswers = service.findSolution(questionId);
+        return correctAnswers != null ? mapper.toDTO(correctAnswers) : null;
     }
 }

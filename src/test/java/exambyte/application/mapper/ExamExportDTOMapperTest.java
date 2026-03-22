@@ -19,8 +19,8 @@ class ExamExportDTOMapperTest {
     private ExamExportDTOMapper mapper;
 
     private ExamDTO exam;
-    private QuestionDTO frage1;
-    private QuestionDTO frage2;
+    private QuestionDTO question1;
+    private QuestionDTO question2;
     private CorrectAnswersDTO correctAnswers;
 
     @BeforeEach
@@ -36,7 +36,7 @@ class ExamExportDTOMapperTest {
                 null
         );
 
-        frage1 = new QuestionDTO(
+        question1 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 1",
                 5,
@@ -44,7 +44,7 @@ class ExamExportDTOMapperTest {
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        frage2 = new QuestionDTO(
+        question2 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 2",
                 4,
@@ -56,7 +56,7 @@ class ExamExportDTOMapperTest {
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
-                frage2.id()
+                question2.id()
         );
     }
 
@@ -66,7 +66,7 @@ class ExamExportDTOMapperTest {
                 exam,
                 "Professor",
                 9,
-                List.of(frage1, frage2),
+                List.of(question1, question2),
                 List.of(correctAnswers));
 
         assertThat(result).hasSize(2);
@@ -77,7 +77,7 @@ class ExamExportDTOMapperTest {
         assertThat(firstElement.getAuthor()).isEqualTo("Professor");
 
         assertThat(firstElement.getQuestionText()).isEqualTo("Question 1");
-        assertThat(firstElement.getQuestionType()).isEqualTo(frage1.type().name());
+        assertThat(firstElement.getQuestionType()).isEqualTo(question1.type().name());
         assertThat(firstElement.getQuestionPoints()).isEqualTo(5);
 
         assertThat(firstElement.getSolution()).isEmpty();

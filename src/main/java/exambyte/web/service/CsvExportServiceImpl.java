@@ -27,7 +27,7 @@ public class CsvExportServiceImpl implements CsvExportService {
             return csvMapper.writer(schema)
                     .writeValueAsBytes(examExportDTO);
         } catch (JsonProcessingException e) {
-            throw new CsvExportException("Fehler beim CSV Export eines Exams", e);
+            throw new CsvExportException("CSV export failed for exam", e);
         }
     }
 
@@ -42,7 +42,7 @@ public class CsvExportServiceImpl implements CsvExportService {
             return csvMapper.writer(schema)
                     .writeValueAsBytes(reviewExportDTO);
         } catch (JsonProcessingException e) {
-            throw new CsvExportException("Fehler beim CSV Export eines Reviews", e);
+            throw new CsvExportException("CSV export failed for review", e);
         }
     }
 }

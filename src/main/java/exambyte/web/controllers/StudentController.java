@@ -31,9 +31,6 @@ public class StudentController {
 
     private final ExamControllerService service;
     private static final String LOGIN_NAME = "login";
-    private static final String CURRENT_PATH = "currentPath";
-    private static final String TIME_NOW = "timeNow";
-    private static final String REDIRECT_EXAM_STUDENT = "redirect:/student/examListForStudent";
 
     public StudentController(ExamControllerService service) {
         this.service = service;
@@ -42,7 +39,7 @@ public class StudentController {
     private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("success", success);
-        return REDIRECT_EXAM_STUDENT;
+        return "redirect:/student/examListForStudent";
     }
 
     @GetMapping("/examListForStudent")
@@ -57,15 +54,15 @@ public class StudentController {
         List<ExamDTO> examDTOs = service.getAllExams();
         LocalDateTime now = LocalDateTime.now();
 
-        double progress = service.getZulassungsProgress(studentName);
-        boolean zulassungsStatus = service.hasAnyFailedAttempt(studentName);
+        double progress = service.getEligibilityProgress(studentName);
+        boolean eligibilityState = service.hasAnyFailedAttempt(studentName);
 
-        model.addAttribute(TIME_NOW, now);
+        model.addAttribute("timeNow", now);
         model.addAttribute("exams", examDTOs);
         model.addAttribute("name", studentName);
-        model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        model.addAttribute("currentPath", request.getRequestURI());
         model.addAttribute("progress", progress);
-        model.addAttribute("failedYetOrNot", zulassungsStatus);
+        model.addAttribute("failedYetOrNot", eligibilityState);
         return "student/examListForStudent";
     }
 
@@ -94,7 +91,7 @@ public class StudentController {
 
         model.addAttribute("exam", examDTO);
         model.addAttribute("alreadySubmitted", alreadySubmitted);
-        model.addAttribute("timeLeft", examTimeInfo.fristAnzeige());
+        model.addAttribute("timeLeft", examTimeInfo.deadlineDisplay());
         model.addAttribute("timeLeftBool", examTimeInfo.timeLeft());
         model.addAttribute("reviewPermission", reviewPermission);
         model.addAttribute("authorName", prof.name());

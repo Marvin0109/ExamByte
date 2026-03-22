@@ -67,7 +67,7 @@ class ReviewGenerationServiceTest {
 
         answerMC = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
+                "Answer",
                 questionDTOMC.id(),
                 STUDENT_ID,
                 TIME);
@@ -81,7 +81,7 @@ class ReviewGenerationServiceTest {
 
         answerSC = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
+                "Answer",
                 questionDTOSC.id(),
                 STUDENT_ID,
                 TIME);
@@ -90,14 +90,14 @@ class ReviewGenerationServiceTest {
                 UUID.randomUUID(),
                 answerMC.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 1);
 
         reviewDTOSC = new ReviewDTO(
                 UUID.randomUUID(),
                 answerSC.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 1);
     }
 

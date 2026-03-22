@@ -84,7 +84,7 @@
                 <tbody>
                 <tr th:if="${attempt != null}">
                     <td th:text="${#temporals.format(attempt.lastChanges, 'dd.MM.yyyy HH:mm')}"></td>
-                    <td th:text="${#numbers.formatDecimal(attempt.prozent, 1, 2)} + ' %'"></td>
+                    <td th:text="${#numbers.formatDecimal(attempt.scoreInPercent, 1, 2)} + ' %'"></td>
                 </tr>
                 <tr th:if="${attempt == null}">
                     <td colspan="2"> Keine Versuche vorhanden</td>

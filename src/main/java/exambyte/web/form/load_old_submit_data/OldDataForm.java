@@ -6,4 +6,4 @@ import java.util.UUID;
 public record OldDataForm(
         UUID examId,
         String examTitle,
-        List<OldDataDTO> components) {}
+        List<OldDataDTO> oldDataDTOs) {}

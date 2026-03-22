@@ -13,13 +13,13 @@ import java.util.UUID;
 public interface ExamFacadeService {
 
     String createExam(String profName, String title,
-                       LocalDateTime startDate, LocalDateTime endDate, LocalDateTime resultTime);
+                       LocalDateTime start, LocalDateTime end, LocalDateTime result);
 
     List<ExamDTO> getAllExams();
 
     boolean isExamAlreadySubmitted(UUID examId, String studentName);
 
-    boolean submitExam(String studentLogin, Map<String, List<String>> answer, UUID examId);
+    boolean submitExam(String studentName, Map<String, List<String>> answer, UUID examId);
 
     ExamDTO getExam(UUID examId);
 
@@ -29,19 +29,19 @@ public interface ExamFacadeService {
 
     ProfessorDTO getProfessor(UUID profId);
 
-    void createQuestion(QuestionDTO questionDTO);
+    void createQuestion(QuestionDTO question);
 
-    void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices);
+    void createChoiceQuestion(QuestionDTO question, String correctAnswer, String choices);
 
     String getChoicesForQuestion(UUID questionId);
 
-    UUID getExamByStartTime(LocalDateTime startTime);
+    UUID getExamByStartTime(LocalDateTime start);
 
     boolean deleteById(UUID examId);
 
     boolean reset();
 
-    AttemptDTO getSubmission(UUID examId, String studentLogin);
+    AttemptDTO getSubmission(UUID examId, String studentName);
 
     void saveAutomaticReviewer();
 
@@ -57,7 +57,7 @@ public interface ExamFacadeService {
 
     boolean answerHasReview(AnswerDTO answer);
 
-    void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId);
+    void createReview(String text, double points, UUID answerId, UUID reviewerId);
 
     UUID getReviewerByName(String name);
 

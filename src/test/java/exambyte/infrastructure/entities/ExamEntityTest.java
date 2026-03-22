@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ExamEntityTest {
 
-    private static final LocalDateTime START_TIME =
+    private static final LocalDateTime START =
             LocalDateTime.of(2000, 1, 1, 0, 0, 0);
 
     @ParameterizedTest
-    @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
+    @DisplayName("Field missing -> IllegalStateException")
     @MethodSource("invalidBuilder")
     void createExamEntity_fail(ExamEntity.ExamEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);
@@ -28,36 +28,36 @@ class ExamEntityTest {
                 new ExamEntity.ExamEntityBuilder()
                         .title("")
                         .professorId(UUID.randomUUID())
-                        .start(START_TIME)
-                        .end(START_TIME.plusHours(1))
-                        .result(START_TIME.plusHours(2)),
+                        .start(START)
+                        .end(START.plusHours(1))
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(null)
-                        .start(START_TIME)
-                        .end(START_TIME.plusHours(1))
-                        .result(START_TIME.plusHours(2)),
+                        .start(START)
+                        .end(START.plusHours(1))
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
                         .start(null)
-                        .end(START_TIME.plusHours(1))
-                        .result(START_TIME.plusHours(2)),
+                        .end(START.plusHours(1))
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .start(START_TIME)
+                        .start(START)
                         .end(null)
-                        .result(START_TIME.plusHours(2)),
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .start(START_TIME)
-                        .end(START_TIME.plusHours(1))
+                        .start(START)
+                        .end(START.plusHours(1))
                         .result(null)
         );
     }

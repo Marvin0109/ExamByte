@@ -5,7 +5,7 @@ import exambyte.infrastructure.persistence.entities.ExamEntity;
 
 public interface ExamMapper {
 
-    Exam toDomain(ExamEntity examEntity);
+    Exam toDomain(ExamEntity entity);
 
     ExamEntity toEntity(Exam exam);
 }

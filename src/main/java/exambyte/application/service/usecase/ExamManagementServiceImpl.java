@@ -3,7 +3,7 @@ package exambyte.application.service.usecase;
 import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,7 +65,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                              LocalDateTime result) {
 
         UUID profId = professorQueryService.getProfIdByName(profName)
-                .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + profName));
+                .orElseThrow(() -> new IllegalStateException("Professor not saved yet: " + profName));
 
         if (start.isAfter(end) || start.isEqual(end)) {
             return "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!";
@@ -95,7 +95,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         return "";
     }
 
-    @Transactional(rollbackFor = {Exception.class, NichtVorhandenException.class})
+    @Transactional(rollbackFor = {Exception.class, NotFoundException.class})
     @Override
     public SubmitExamResult submitExam(String studentName, Map<String, List<String>> answerMap, UUID examId) {
         UUID studentId = resolveStudent(studentName);
@@ -110,7 +110,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         try {
             return studentQueryService.getStudentIdByName(studentName);
         } catch (Exception e) {
-            String msg = "Student nicht gefunden: " + studentName;
+            String msg = "Student not found: " + studentName;
             logger.log(Level.SEVERE, msg, e);
             return null;
         }
@@ -120,7 +120,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
 
         List<AnswerDTO> answerList = questions.stream()
-                .map(f -> answerQueryService.findByStudentAndFrage(studentId, f.id()))
+                .map(f -> answerQueryService.findByStudentAndQuestion(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -133,7 +133,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             allReviews.forEach(this::saveReviews);
             return SubmitExamResult.SUCCESS;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
+            logger.log(Level.SEVERE, "Failed saving reviews", e);
             return SubmitExamResult.REVIEW_SAVE_FAILED;
         }
     }
@@ -155,27 +155,26 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         Map<UUID, QuestionDTO> questionMap = questionQueryService.getQuestionUUIDMap(examId);
         List<AnswerDTO> allAnswers = answerQueryService.getAnswers(studentId, questionMap.keySet());
 
-        // Gesamt-MaxPunkte
-        double gesamtMaxPunkte = questionMap.values().stream()
+        double totalPoints = questionMap.values().stream()
                 .mapToDouble(QuestionDTO::points)
                 .sum();
 
-        double erreichtePunkte = scoringService.berechneErreichtePunkte(allAnswers, questionMap, exam.result());
+        double accumulatedPoints = scoringService.accumulatedPoints(allAnswers, questionMap, exam.result());
 
-        double prozent = gesamtMaxPunkte > 0
-                ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
+        double scoreInPercent = totalPoints > 0
+                ? (accumulatedPoints / totalPoints) * 100.0
                 : 0.0;
 
-        LocalDateTime zeitpunkt = allAnswers.stream()
+        LocalDateTime submitTime = allAnswers.stream()
                 .map(AnswerDTO::submitTime)
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 
         return new AttemptDTO(
-                zeitpunkt,
-                erreichtePunkte,
-                gesamtMaxPunkte,
-                prozent
+                submitTime,
+                accumulatedPoints,
+                totalPoints,
+                scoreInPercent
         );
     }
 

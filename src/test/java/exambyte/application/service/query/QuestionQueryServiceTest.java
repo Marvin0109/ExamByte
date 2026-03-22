@@ -86,7 +86,7 @@ class QuestionQueryServiceTest {
     @Test
     void createChoiceQuestionWithCorrectParams() {
         CorrectAnswers domain = new CorrectAnswers.CorrectAnswersBuilder()
-                .frageId(questionDTOMC.id())
+                .questionId(questionDTOMC.id())
                 .solution("A")
                 .choices("A, B")
                 .build();
@@ -103,11 +103,11 @@ class QuestionQueryServiceTest {
         CorrectAnswers captured = captor.getValue();
         assertEquals("A", captured.getSolution());
         assertEquals("A, B", captured.getChoices());
-        assertEquals(questionDTOMC.id(), captured.getFrageId());
+        assertEquals(questionDTOMC.id(), captured.getQuestionId());
     }
 
     @Test
-    void getFreeResponseFragenReturnsOnlyFreeResponse() {
+    void getFreeResponseQuestionReturnsOnlyFreeResponse() {
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(questionMC, questionFreeResponse));
         when(questionDTOMapper.toDTO(questionFreeResponse)).thenReturn(questionDTOFreeResponse);
 

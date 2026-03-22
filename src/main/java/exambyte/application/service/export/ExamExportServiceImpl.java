@@ -44,19 +44,19 @@ public class ExamExportServiceImpl implements ExamExportService {
         ProfessorDTO prof = professorQueryService.getProfessorById(exam.professorId());
         List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
 
-        double punkte = questions.stream()
+        double points = questions.stream()
                 .mapToDouble(QuestionDTO::points)
                 .sum();
 
         List<CorrectAnswersDTO> correctAnswersList = new ArrayList<>();
 
-        for (QuestionDTO frage : questions) {
-            CorrectAnswersDTO k = correctAnswersQueryService.getSolutionForFrage(frage.id());
+        for (QuestionDTO question : questions) {
+            CorrectAnswersDTO k = correctAnswersQueryService.getCorrectAnswerForQuestion(question.id());
             if (k != null) {
                 correctAnswersList.add(k);
             }
         }
 
-        return examExportDTOMapper.mapDTOToExport(exam, prof.name(), punkte, questions, correctAnswersList);
+        return examExportDTOMapper.mapDTOToExport(exam, prof.name(), points, questions, correctAnswersList);
     }
 }

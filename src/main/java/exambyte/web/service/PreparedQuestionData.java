@@ -4,7 +4,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 
-public record PreparedFrageData(
-        QuestionDTO frage,
+public record PreparedQuestionData(
+        QuestionDTO question,
         AnswerDTO answer,
         CorrectAnswersDTO correctAnswers) {}

@@ -21,8 +21,8 @@ public class CorrectAnswersRepositoryImpl implements CorrectAnswersRepository {
     }
 
     @Override
-    public Optional<CorrectAnswers> findByFrageId(UUID frageId) {
-        Optional<CorrectAnswersEntity> entity = dao.findByQuestionId(frageId);
+    public Optional<CorrectAnswers> findByQuestionId(UUID id) {
+        Optional<CorrectAnswersEntity> entity = dao.findByQuestionId(id);
         return entity.map(mapper::toDomain);
     }
 

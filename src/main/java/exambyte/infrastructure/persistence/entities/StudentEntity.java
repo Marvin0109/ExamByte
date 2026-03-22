@@ -48,7 +48,7 @@ public class StudentEntity {
 
         public StudentEntity build() {
             if (name == null || name.isBlank()) {
-                throw new IllegalStateException("Name fehlt");
+                throw new IllegalStateException("Name is missing");
             }
             return new StudentEntity(id, name);
         }

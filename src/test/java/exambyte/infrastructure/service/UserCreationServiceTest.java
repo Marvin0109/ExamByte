@@ -8,7 +8,6 @@ import exambyte.domain.service.ReviewerService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,8 +38,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Student wurde gefunden")
-    void test_01() {
+    void checkStudent_success() {
         // Arrange
         String username = "student123";
         Student student = new Student.StudentBuilder()
@@ -57,8 +55,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Student wurde nicht gefunden")
-    void test_02() {
+    void checkStudent_notFound() {
         // Arrange
         String username = "student123";
         when(studentService.getStudentByName(username)).thenReturn(Optional.empty());
@@ -71,8 +68,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Reviewer wurde gefunden")
-    void test_03() {
+    void checkReviewer_success() {
         // Arrange
         String username = "reviewer123";
         Reviewer reviewer = new Reviewer.ReviewerBuilder()
@@ -89,8 +85,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Reviewer wurde nicht gefunden")
-    void test_04() {
+    void checkReviewer_notFound() {
         // Arrange
         String username = "reviewer123";
         when(reviewerService.getReviewerByName(username)).thenReturn(Optional.empty());
@@ -103,8 +98,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Professor wurde gefunden")
-    void test_05() {
+    void checkProfessor_success() {
         // Arrange
         String username = "professor123";
         Professor professor = new Professor.ProfessorBuilder()
@@ -121,8 +115,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("Ein geladener Professor wurde nicht gefunden")
-    void test_06() {
+    void checkProfessor_notFound() {
         // Arrange
         String username = "professor123";
         when(professorService.getProfessorByName(username)).thenReturn(Optional.empty());
@@ -135,8 +128,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("User erstellen mit der Rolle Admin")
-    void test_07() {
+    void create_user_with_role_admin() {
         // Arrange
         String login = "new_admin";
         Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -151,8 +143,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("User erstellen mit der Rolle Reviewer")
-    void test_08() {
+    void create_user_with_role_reviewer() {
         // Arrange
         String login = "new_reviewer";
         Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority("ROLE_REVIEWER"));
@@ -167,8 +158,7 @@ class UserCreationServiceTest {
     }
 
     @Test
-    @DisplayName("User erstellen mit der Rolle Student")
-    void test_09() {
+    void create_user_with_role_student() {
         // Arrange
         String login = "new_student";
         Set<GrantedAuthority> authorities = Set.of(new SimpleGrantedAuthority("ROLE_STUDENT"));

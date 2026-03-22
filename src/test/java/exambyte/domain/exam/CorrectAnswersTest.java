@@ -1,7 +1,6 @@
 package exambyte.domain.exam;
 
 import exambyte.domain.model.aggregate.exam.CorrectAnswers;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -12,22 +11,21 @@ import static org.junit.jupiter.api.Assertions.*;
 class CorrectAnswersTest {
 
     @Test
-    @DisplayName("CorrectAnswersBuilder Test")
-    void test_01() {
+    void correctAnswers_builder_test() {
         UUID id = UUID.randomUUID();
-        UUID frageId = UUID.randomUUID();
-        String correctAnswers = "Lösung 1\nLösung 2";
-        String choices = "Lösung 1\nLösung 2\nLösung 3";
+        UUID questionId = UUID.randomUUID();
+        String correctAnswers = "Solution 1\nSolution 2";
+        String choices = "Solution 1\nSolution 2\nSolution 3";
 
         CorrectAnswers domain = new CorrectAnswers.CorrectAnswersBuilder()
                 .id(id)
-                .frageId(frageId)
+                .questionId(questionId)
                 .solution(correctAnswers)
                 .choices(choices)
                 .build();
 
         assertEquals(id, domain.getId());
-        assertEquals(frageId, domain.getFrageId());
+        assertEquals(questionId, domain.getQuestionId());
         assertThat(domain.getSolution()).contains(correctAnswers);
         assertThat(domain.getChoices()).contains(choices);
     }

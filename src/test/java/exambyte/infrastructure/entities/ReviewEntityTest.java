@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ReviewEntityTest {
 
     @ParameterizedTest
-    @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
+    @DisplayName("Field missing -> IllegalStateException")
     @MethodSource("invalidBuilder")
     void createReviewEntity_fail(ReviewEntity.ReviewEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);
@@ -34,19 +34,19 @@ class ReviewEntityTest {
                         .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .text("Bewertung")
+                        .text("Text")
                         .answerId(null)
                         .reviewerId(UUID.randomUUID())
                         .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .text("Bewertung")
+                        .text("Text")
                         .answerId(UUID.randomUUID())
                         .reviewerId(null)
                         .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .text("Bewertung")
+                        .text("Text")
                         .answerId(UUID.randomUUID())
                         .reviewerId(UUID.randomUUID())
                         .points(-1)

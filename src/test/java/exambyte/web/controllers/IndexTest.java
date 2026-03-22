@@ -3,7 +3,6 @@ package exambyte.web.controllers;
 import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,9 +28,8 @@ class IndexTest {
     private UserCreationService creationService;
 
     @Test
-    @DisplayName("Startseite ist öffentlich erreichbar")
     @WithMockUser
-    void test_01() throws Exception {
+    void get_startPage_success() throws Exception {
         mvc.perform(get("/"))
             .andExpect(view().name("index"))
             .andExpect(model().attributeExists("currentPath"))

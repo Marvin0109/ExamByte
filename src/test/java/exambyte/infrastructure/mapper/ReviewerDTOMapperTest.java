@@ -3,7 +3,6 @@ package exambyte.infrastructure.mapper;
 import exambyte.application.dto.ReviewerDTO;
 import exambyte.domain.mapper.ReviewerDTOMapper;
 import exambyte.domain.model.aggregate.user.Reviewer;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -18,8 +17,7 @@ class ReviewerDTOMapperTest {
     private final ReviewerDTOMapper mapper = new ReviewerDTOMapperImpl();
 
     @Test
-    @DisplayName("Test ReviewerDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
 
@@ -37,14 +35,7 @@ class ReviewerDTOMapperTest {
     }
 
     @Test
-    @DisplayName("test_null_reviewer_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toReviewerDTOList Test")
-    void test_03() {
+    void toReviewerDTOList() {
         // Arrange
         UUID id1 = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();

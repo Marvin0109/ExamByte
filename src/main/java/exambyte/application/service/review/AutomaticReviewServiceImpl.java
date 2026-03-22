@@ -15,18 +15,18 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     private static final UUID AUTO_REVIEW_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
     @Override
-    public List<ReviewDTO> autoReviewSC(List<QuestionDTO> fragen,
+    public List<ReviewDTO> autoReviewSC(List<QuestionDTO> questions,
                                                 List<AnswerDTO> answers,
                                                 List<CorrectAnswersDTO> correctAnswers,
-                                                UUID studentUUID,
+                                                UUID studentId,
                                                 ReviewService reviewService) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
-        for (QuestionDTO questionDTO : fragen) {
+        for (QuestionDTO questionDTO : questions) {
             Optional<AnswerDTO> studentAnswer = answers.stream()
-                    .filter(a -> a.studentId().equals(studentUUID) &&
-                            a.frageId().equals(questionDTO.id()))
+                    .filter(a -> a.studentId().equals(studentId) &&
+                            a.questionId().equals(questionDTO.id()))
                     .findFirst();
 
             if (studentAnswer.isPresent()) {
@@ -50,16 +50,16 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     }
 
     @Override
-    public List<ReviewDTO> autoReviewMC(List<QuestionDTO> fragen,
+    public List<ReviewDTO> autoReviewMC(List<QuestionDTO> questions,
                                                 List<AnswerDTO> answers,
                                                 List<CorrectAnswersDTO> correctAnswers,
-                                                UUID studentUUID,
+                                                UUID studentId,
                                                 ReviewService reviewService) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
-        for (QuestionDTO questionDTO : fragen) {
-            Optional<AnswerDTO> studentAnswer = findStudentAnswer(questionDTO, answers, studentUUID);
+        for (QuestionDTO questionDTO : questions) {
+            Optional<AnswerDTO> studentAnswer = findStudentAnswer(questionDTO, answers, studentId);
 
             if (studentAnswer.isPresent()) {
                 Optional<CorrectAnswersDTO> correctAnswer = correctAnswers.stream()
@@ -93,7 +93,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     private static Optional<AnswerDTO> findStudentAnswer(QuestionDTO frage, List<AnswerDTO> answers, UUID studentId) {
         return answers.stream()
                 .filter(a -> a.studentId().equals(studentId)
-                        && a.frageId().equals(frage.id()))
+                        && a.questionId().equals(frage.id()))
                 .findFirst();
     }
 
@@ -107,14 +107,14 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     private static double computeMcPoints(int correctAnswers,
                                           int wrongAnswers,
                                           int totalCorrectAnswers,
-                                          double maxPunkte) {
+                                          double totalPoints) {
         if (totalCorrectAnswers <= 0) return 0.0;
 
-        double pointsPerCorrect = maxPunkte / totalCorrectAnswers;
+        double pointsPerCorrect = totalPoints / totalCorrectAnswers;
         double points = (correctAnswers - wrongAnswers) * pointsPerCorrect;
         points = Math.max(0.0, points);
 
-        // Auf 0.5 Punkte runden
+        // round to half steps
         return Math.round(points * 2) / 2.0;
     }
 }

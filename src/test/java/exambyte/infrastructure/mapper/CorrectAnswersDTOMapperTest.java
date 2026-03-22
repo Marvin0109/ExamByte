@@ -4,7 +4,6 @@ import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.domain.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -21,17 +20,16 @@ class CorrectAnswersDTOMapperTest {
     }
 
     @Test
-    @DisplayName("toDTO Test")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
-        UUID frageId = UUID.randomUUID();
-        String solution = "Lösung 1\nLösung 2";
-        String choices = "Lösung 1\nLösung 2\nLösung 3";
+        UUID questionId = UUID.randomUUID();
+        String solution = "Solution 1\nSolution 2";
+        String choices = "Solution 1\nSolution 2\nSolution 3";
 
         CorrectAnswers correctAnswers = new CorrectAnswers.CorrectAnswersBuilder()
                 .id(id)
-                .frageId(frageId)
+                .questionId(questionId)
                 .solution(solution)
                 .choices(choices)
                 .build();
@@ -41,28 +39,27 @@ class CorrectAnswersDTOMapperTest {
 
         // Assert
         assertThat(dto.id()).isEqualTo(id);
-        assertThat(dto.questionId()).isEqualTo(frageId);
+        assertThat(dto.questionId()).isEqualTo(questionId);
         assertThat(dto.solution()).contains(solution);
         assertThat(dto.choices()).contains(choices);
     }
 
     @Test
-    @DisplayName("toDomain Test")
-    void test_02() {
+    void toDomain() {
         // Arrange
         UUID id = UUID.randomUUID();
-        UUID frageId = UUID.randomUUID();
-        String solution = "Lösung 1\nLösung 2";
-        String choices = "Lösung 1\nLösung 2\nLösung 3";
+        UUID questionId = UUID.randomUUID();
+        String solution = "Solution 1\nSolution 2";
+        String choices = "Solution 1\nSolution 2\nSolution 3";
 
-        CorrectAnswersDTO dto = new CorrectAnswersDTO(id, solution, choices, frageId);
+        CorrectAnswersDTO dto = new CorrectAnswersDTO(id, solution, choices, questionId);
 
         // Act
         CorrectAnswers result = mapper.toDomain(dto);
 
         // Assert
         assertThat(result.getId()).isEqualTo(id);
-        assertThat(result.getFrageId()).isEqualTo(frageId);
+        assertThat(result.getQuestionId()).isEqualTo(questionId);
         assertThat(result.getSolution()).contains(solution);
         assertThat(result.getChoices()).contains(choices);
     }

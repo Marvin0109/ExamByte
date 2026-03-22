@@ -6,11 +6,11 @@ import java.util.UUID;
 
 public interface AnswerService {
 
-    Answer findByFrageId(UUID frageId);
+    Answer findByQuestionId(UUID id);
 
     void addAnswer(Answer answer);
 
-    Answer findByStudentAndFrage(UUID studentId, UUID frageId);
+    Answer findByStudentIdAndQuestionId(UUID studentId, UUID questionId);
 
     void deleteAll();
 

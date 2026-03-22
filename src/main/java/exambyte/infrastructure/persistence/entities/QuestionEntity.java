@@ -96,13 +96,13 @@ public class QuestionEntity {
 
         public QuestionEntity build() {
             if (text == null || text.isBlank()) {
-                throw new IllegalStateException("Fragetext fehlt");
+                throw new IllegalStateException("Question text is missing");
             }
             if (points <= 0) {
-                throw new IllegalStateException("Punkte dürfen nicht 0 oder negativ sein");
+                throw new IllegalStateException("Points must be greater than 0");
             }
             if (examId == null) {
-                throw new IllegalStateException("Exam-ID fehlt");
+                throw new IllegalStateException("Exam id is missing");
             }
             return new QuestionEntity(id, text, points, type, examId);
         }

@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface ScoringService {
 
-    double berechneErreichtePunkte(List<AnswerDTO> answers, Map<UUID, QuestionDTO> fragen, LocalDateTime result);
+    double accumulatedPoints(List<AnswerDTO> answers, Map<UUID, QuestionDTO> questionMap, LocalDateTime result);
 }

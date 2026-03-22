@@ -34,12 +34,12 @@ class StudentQueryServiceTest {
     private StudentService studentService;
 
     @Mock
-    private StudentDTOMapper studentDTOMapper;
+    private StudentDTOMapper mapper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        studentQueryService = new StudentQueryServiceImpl(answerQueryService, studentService, studentDTOMapper);
+        studentQueryService = new StudentQueryServiceImpl(answerQueryService, studentService, mapper);
 
         student = new Student.StudentBuilder()
                 .id(STUDENT_ID)
@@ -66,10 +66,10 @@ class StudentQueryServiceTest {
     }
 
     @Test
-    void getStudentSumbittedExam_OneAnswer() {
+    void getStudentSubmittedExam_OneAnswer() {
         when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
-        when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
+        when(mapper.toDTO(student)).thenReturn(studentDTO);
 
         List<StudentDTO> result = studentQueryService.getStudentSubmittedExam(UUID.randomUUID());
 
@@ -78,10 +78,10 @@ class StudentQueryServiceTest {
     }
 
     @Test
-    void getStudentSumbittedExam_TwoAnswers() {
+    void getStudentSubmittedExam_TwoAnswers() {
         when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1, answer2));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
-        when(studentDTOMapper.toDTO(student)).thenReturn(studentDTO);
+        when(mapper.toDTO(student)).thenReturn(studentDTO);
 
         List<StudentDTO> result = studentQueryService.getStudentSubmittedExam(UUID.randomUUID());
 

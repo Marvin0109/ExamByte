@@ -15,21 +15,21 @@ public class ReviewMapperImpl implements ReviewMapper {
                 .id(entity.getId())
                 .answerId(entity.getAnswerId())
                 .reviewerId(entity.getReviewerId())
-                .bewertung(entity.getText())
-                .punkte(entity.getPoints() / 2.0)
+                .text(entity.getText())
+                .points(entity.getPoints() / 2.0)
                 .build();
     }
 
     @Override
     public ReviewEntity toEntity(Review review) {
-        int punkte = (int) Math.round(review.getPunkte() * 2.0);
+        int pointsForDb = (int) Math.round(review.getPoints() * 2.0);
 
         return new ReviewEntity.ReviewEntityBuilder()
                 .id(review.getId())
                 .answerId(review.getAnswerId())
                 .reviewerId(review.getReviewerId())
-                .text(review.getBewertung())
-                .points(punkte)
+                .text(review.getText())
+                .points(pointsForDb)
                 .build();
     }
 }

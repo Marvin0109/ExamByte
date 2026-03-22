@@ -15,9 +15,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     private final ReviewMapper mapper;
     private final ReviewDAO dao;
 
-    public ReviewRepositoryImpl(ReviewDAO reviewDAO, ReviewMapper reviewMapper) {
-        this.dao = reviewDAO;
-        this.mapper = reviewMapper;
+    public ReviewRepositoryImpl(ReviewDAO dao, ReviewMapper mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override

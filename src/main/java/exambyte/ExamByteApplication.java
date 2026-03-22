@@ -12,10 +12,12 @@ import java.net.URI;
 
 /**
  * Die Hauptklasse der Anwendung, die den Spring Boot Server startet und eine URL in einem Browser öffnet. ඞ
- * Diese Klasse enthält die 'main'-Methode, die den Spring Boot-Anwendung-Context startet. Zusätzlich wird beim Starten der Anwendung
- * eine vordefinierte URL xD in einem bevorzugten Browser geöffnet.
+ * Diese Klasse enthält die 'main'-Methode, die den Spring Boot-Anwendung-Context startet.
+ * Zusätzlich wird beim Starten der Anwendung die vordefinierte URL localhost:8080 in einem bevorzugten
+ * Browser geöffnet.
  * Wenn der Desktop nicht unterstützt wird, wird versucht, die die URL über einen der gängigen
- * Browser (z. B. Firefox, Chrome, Edge) zu öffnen. Falls auch dieser Schritt fehlschlägt, wird eine Fehlermeldung ausgegeben.
+ * Browser (z. B. Firefox, Chrome, Edge) zu öffnen.
+ * Falls auch dieser Schritt fehlschlägt, wird eine Fehlermeldung ausgegeben.
  *
  * @see SpringApplication
  */
@@ -54,14 +56,9 @@ public class ExamByteApplication {
 			}
 		}
 
-		logger.info("Keiner der unterstützen Browser konnte geöffnet werden.");
+		logger.info("Non of the supported browsers are found.");
 	}
 
-	/**
-	 * Die main-Methode, die den Spring Boot-Anwendungsserver startet und eine URL in einem Browser öffnet.
-	 *
-	 * @param args Kommandozeilenargumente
-	 */
 	public static void main(String[] args) {
 		init();
 
@@ -69,7 +66,7 @@ public class ExamByteApplication {
 		try {
 			openInBrowser(LOCALHOST_URI);
 		} catch (Exception e) {
-			logger.info("Ungültige URI: " + e.getMessage());
+			logger.info("Invalid URI: " + e.getMessage());
 		}
 	}
 }

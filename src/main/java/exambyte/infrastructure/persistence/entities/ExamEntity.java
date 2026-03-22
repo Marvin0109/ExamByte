@@ -106,13 +106,13 @@ public class ExamEntity {
 
         public ExamEntity build() {
             if (title == null || title.isBlank()) {
-                throw new IllegalStateException("Titel fehlt");
+                throw new IllegalStateException("Title is missing");
             }
 
-            checkNotNull(professorId, "Professor-ID fehlt");
-            checkNotNull(start, "Start-Zeitpunkt fehlt");
-            checkNotNull(end, "End-Zeitpunkt fehlt");
-            checkNotNull(result, "Ergebnis-Zeitpunkt fehlt");
+            checkNotNull(professorId, "Professor id is missing");
+            checkNotNull(start, "Start time is missing");
+            checkNotNull(end, "End time is missing");
+            checkNotNull(result, "Result time is missing");
             return new ExamEntity(id, title, professorId, start, end, result);
         }
 

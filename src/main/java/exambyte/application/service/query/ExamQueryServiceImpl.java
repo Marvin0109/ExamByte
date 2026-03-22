@@ -74,11 +74,11 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     @Override
     public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
         UUID studentId = studentService.getStudentId(studentName);
-        List<QuestionDTO> fragen = questionDTOMapper.toQuestionDTOList(questionService.getQuestionsForExam(examId));
+        List<QuestionDTO> questions = questionDTOMapper.toQuestionDTOList(questionService.getQuestionsForExam(examId));
 
-        return fragen.stream()
-                .anyMatch(frage ->
-                        answerService.findByStudentAndFrage(studentId, frage.id()) != null);
+        return questions.stream()
+                .anyMatch(question ->
+                        answerService.findByStudentIdAndQuestionId(studentId, question.id()) != null);
     }
 
     @Override

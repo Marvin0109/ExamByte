@@ -2,7 +2,7 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.model.aggregate.user.Professor;
 import exambyte.domain.repository.ProfessorRepository;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import exambyte.domain.service.ProfessorService;
 import org.springframework.stereotype.Service;
 
@@ -14,14 +14,14 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     private final ProfessorRepository repository;
 
-    public ProfessorServiceImpl(ProfessorRepository professorRepository) {
-        this.repository = professorRepository;
+    public ProfessorServiceImpl(ProfessorRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Professor getProfessor(UUID id) {
         return repository.findById(id)
-                .orElseThrow(NichtVorhandenException::new);
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override

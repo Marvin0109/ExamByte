@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ReviewMapperTest {
 
-    private final ReviewMapper reviewMapper = new ReviewMapperImpl();
+    private final ReviewMapper mapper = new ReviewMapperImpl();
     private static final UUID REVIEW_ID = UUID.randomUUID();
     private static final UUID ANSWER_ID = UUID.randomUUID();
     private static final UUID REVIEWER_ID = UUID.randomUUID();
@@ -24,18 +24,18 @@ class ReviewMapperTest {
                 .id(REVIEW_ID)
                 .answerId(ANSWER_ID)
                 .reviewerId(REVIEWER_ID)
-                .bewertung("Bewertung")
-                .punkte(0.5)
+                .text("Text")
+                .points(0.5)
                 .build();
 
         // Act
-        ReviewEntity result = reviewMapper.toEntity(review);
+        ReviewEntity result = mapper.toEntity(review);
 
         // Assert
         assertThat(result.getId()).isEqualTo(REVIEW_ID);
         assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
         assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
-        assertThat(result.getText()).isEqualTo("Bewertung");
+        assertThat(result.getText()).isEqualTo("Text");
         assertThat(result.getPoints()).isEqualTo(1);
     }
 
@@ -46,18 +46,18 @@ class ReviewMapperTest {
                 .id(REVIEW_ID)
                 .answerId(ANSWER_ID)
                 .reviewerId(REVIEWER_ID)
-                .text("Bewertung")
+                .text("Text")
                 .points(13)
                 .build();
 
         // Act
-        Review result = reviewMapper.toDomain(entity);
+        Review result = mapper.toDomain(entity);
 
         // Assert
         assertThat(result.getId()).isEqualTo(REVIEW_ID);
         assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
         assertThat(result.getReviewerId()).isEqualTo(REVIEWER_ID);
-        assertThat(result.getBewertung()).isEqualTo("Bewertung");
-        assertThat(result.getPunkte()).isCloseTo(6.5, Offset.offset(0.001));
+        assertThat(result.getText()).isEqualTo("Text");
+        assertThat(result.getPoints()).isCloseTo(6.5, Offset.offset(0.001));
     }
 }

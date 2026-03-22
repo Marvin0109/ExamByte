@@ -7,7 +7,6 @@ import exambyte.infrastructure.persistence.repository.ProfessorRepositoryImpl;
 import exambyte.infrastructure.persistence.repository.ProfessorDAO;
 import exambyte.domain.repository.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -27,31 +26,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProfessorDBTest {
 
     @Autowired
-    private ProfessorDAO professorDAO;
+    private ProfessorDAO dao;
 
     private ProfessorRepository repository;
 
-    private static final UUID PROFUUID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private static final UUID PROFESSOR_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
     @BeforeEach
     void setUp() {
         ProfessorMapper professorMapper = new ProfessorMapperImpl();
-        repository = new ProfessorRepositoryImpl(professorDAO, professorMapper);
+        repository = new ProfessorRepositoryImpl(dao, professorMapper);
     }
 
     @Test
-    @DisplayName("Laden der Daten erfolgreich")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<Professor> geladen = repository.findById(PROFUUID);
+        Optional<Professor> loaded = repository.findById(PROFESSOR_ID);
 
         // Assert
-        assertThat(geladen).isPresent();
+        assertThat(loaded).isPresent();
     }
 
     @Test
-    @DisplayName("Die Id eines Professor kann nach dem Namen gefunden werden")
-    void test_02() {
+    void find_id_by_name_success() {
         // Act
         Optional<Professor> id = repository.findByName("ProfTestName");
 

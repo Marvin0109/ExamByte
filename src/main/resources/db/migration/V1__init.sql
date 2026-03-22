@@ -30,7 +30,7 @@ CREATE TABLE question (
     id                      UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     text                    TEXT NOT NULL,
     exam_id                 UUID NOT NULL,
-    points                  INT NOT NULL, -- Punkte * 2
+    points                  INT NOT NULL, -- Points * 2
     type                    TEXT NOT NULL,
     FOREIGN KEY(exam_id) REFERENCES exam(id) ON DELETE CASCADE
 );
@@ -51,7 +51,7 @@ CREATE TABLE review (
     answer_id               UUID NOT NULL,
     reviewer_id             UUID,
     text                    TEXT NOT NULL,
-    points                  INT NOT NULL, -- Punkte * 2
+    points                  INT NOT NULL, -- Points * 2
     FOREIGN KEY(answer_id) REFERENCES answer(id) ON DELETE CASCADE,
     FOREIGN KEY(reviewer_id) REFERENCES reviewer(id) ON DELETE SET NULL,
     CONSTRAINT unique_review UNIQUE (answer_id)
@@ -97,7 +97,7 @@ BEGIN
     WHERE a.id = NEW.answer_id;
 
     IF NEW.points > question_points THEN
-        RAISE EXCEPTION 'Zu viele Punkte vergeben';
+        RAISE EXCEPTION 'Given points greater than question points';
     END IF;
 
     RETURN NEW;

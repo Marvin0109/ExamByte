@@ -7,11 +7,11 @@ public class CorrectAnswers {
     private final UUID id;
     private final String solution;
     private final String choices;
-    private final UUID frageId;
+    private final UUID questionId;
 
-    private CorrectAnswers(UUID id, UUID frageId, String solution, String choices) {
+    private CorrectAnswers(UUID id, UUID questionId, String solution, String choices) {
         this.id = id;
-        this.frageId = frageId;
+        this.questionId = questionId;
         this.solution = solution;
         this.choices = choices;
     }
@@ -20,8 +20,8 @@ public class CorrectAnswers {
         return id;
     }
 
-    public UUID getFrageId() {
-        return frageId;
+    public UUID getQuestionId() {
+        return questionId;
     }
 
     public String getSolution() {
@@ -32,7 +32,7 @@ public class CorrectAnswers {
 
     public static class CorrectAnswersBuilder {
         private UUID id;
-        private UUID frageId;
+        private UUID questionId;
         private String solution;
         private String choices;
 
@@ -41,8 +41,8 @@ public class CorrectAnswers {
             return this;
         }
 
-        public CorrectAnswersBuilder frageId(UUID frageId) {
-            this.frageId = frageId;
+        public CorrectAnswersBuilder questionId(UUID questionId) {
+            this.questionId = questionId;
             return this;
         }
 
@@ -57,7 +57,7 @@ public class CorrectAnswers {
         }
 
         public CorrectAnswers build() {
-            return new CorrectAnswers(id, frageId, solution, choices);
+            return new CorrectAnswers(id, questionId, solution, choices);
         }
     }
 }

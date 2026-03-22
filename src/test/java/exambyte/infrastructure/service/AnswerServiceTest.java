@@ -4,7 +4,6 @@ import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.repository.AnswerRepository;
 import exambyte.domain.service.AnswerService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,8 +17,7 @@ class AnswerServiceTest {
     private final AnswerService service = new AnswerServiceImpl(repository);
 
     @Test
-    @DisplayName("gib null zurück wenn keine antwort gefunden wird nach studentID und questionID")
-    void test_01() {
+    void findByStudentIdAndQuestionId_answer_notFound() {
         // Arrange
         UUID studentId = UUID.randomUUID();
         UUID frageId = UUID.randomUUID();
@@ -27,7 +25,7 @@ class AnswerServiceTest {
         when(repository.findByStudentIdAndQuestionId(studentId, frageId)).thenReturn(Optional.empty());
 
         // Act
-        Answer result = service.findByStudentAndFrage(studentId, frageId);
+        Answer result = service.findByStudentIdAndQuestionId(studentId, frageId);
 
         // Assert
         assertNull(result);

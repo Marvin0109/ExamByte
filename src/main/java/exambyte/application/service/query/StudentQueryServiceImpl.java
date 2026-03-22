@@ -15,14 +15,14 @@ public class StudentQueryServiceImpl implements StudentQueryService {
 
     private final AnswerQueryService answerQueryService;
     private final StudentService studentService;
-    private final StudentDTOMapper studentDTOMapper;
+    private final StudentDTOMapper mapper;
 
     public StudentQueryServiceImpl(AnswerQueryService answerQueryService,
                                    StudentService studentService,
-                                   StudentDTOMapper studentDTOMapper) {
+                                   StudentDTOMapper mapper) {
         this.answerQueryService = answerQueryService;
         this.studentService = studentService;
-        this.studentDTOMapper = studentDTOMapper;
+        this.mapper = mapper;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class StudentQueryServiceImpl implements StudentQueryService {
                 ))
                 .values()
                 .stream()
-                .map(studentDTOMapper::toDTO)
+                .map(mapper::toDTO)
                 .toList();
     }
 

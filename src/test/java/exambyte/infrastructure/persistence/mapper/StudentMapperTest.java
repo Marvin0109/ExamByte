@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StudentMapperTest {
 
-    private final StudentMapper studentMapper = new StudentMapperImpl();
+    private final StudentMapper mapper = new StudentMapperImpl();
 
     @Test
     void toEntity() {
@@ -19,8 +19,8 @@ class StudentMapperTest {
                 .build();
 
         // Act
-        StudentEntity studentEntity = studentMapper.toEntity(student);
-        String entityName = studentEntity.getName();
+        StudentEntity entity = mapper.toEntity(student);
+        String entityName = entity.getName();
 
         // Assert
         assertThat(entityName).isEqualTo("Jim Bim");
@@ -29,12 +29,12 @@ class StudentMapperTest {
     @Test
     void toDomain() {
         // Arrange
-        StudentEntity studentEntity = new StudentEntity.StudentEntityBuilder()
+        StudentEntity entity = new StudentEntity.StudentEntityBuilder()
                 .name("Test student")
                 .build();
 
         // Act
-        Student student = studentMapper.toDomain(studentEntity);
+        Student student = mapper.toDomain(entity);
 
         // Assert
         assertThat(student.getName()).isEqualTo("Test student");

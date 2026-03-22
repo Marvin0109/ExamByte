@@ -46,8 +46,8 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     @Override
     public void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices) {
-        UUID frageId = questionService.addQuestion(questionDTOMapper.toDomain(questionDTO));
-        CorrectAnswersDTO dto = new CorrectAnswersDTO(null, correctAnswer, choices, frageId);
+        UUID questionId = questionService.addQuestion(questionDTOMapper.toDomain(questionDTO));
+        CorrectAnswersDTO dto = new CorrectAnswersDTO(null, correctAnswer, choices, questionId);
         correctAnswersService.addCorrectAnswer(correctAnswersDTOMapper.toDomain(dto));
     }
 
@@ -58,10 +58,10 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     @Override
     public List<QuestionDTO> getFreeResponseQuestions(UUID examId) {
-        List<Question> fragen = questionService.getQuestionsForExam(examId);
+        List<Question> questions = questionService.getQuestionsForExam(examId);
 
-        return fragen.stream()
-                .filter(frage -> QuestionType.FREE_RESPONSE == frage.getType())
+        return questions.stream()
+                .filter(question -> QuestionType.FREE_RESPONSE == question.getType())
                 .map(questionDTOMapper::toDTO)
                 .toList();
     }
@@ -70,12 +70,12 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     public Map<UUID, QuestionDTO> getQuestionUUIDMap(UUID examId) {
         return questionService.getQuestionsForExam(examId).stream()
                 .map(questionDTOMapper::toDTO)
-                .collect(Collectors.toMap(QuestionDTO::id, f -> f));
+                .collect(Collectors.toMap(QuestionDTO::id, q -> q));
     }
 
     @Override
     public QuestionDTO getQuestion(UUID questionId) {
-        Optional<Question> frage = questionService.getQuestion(questionId);
-        return frage.map(questionDTOMapper::toDTO).orElse(null);
+        Optional<Question> question = questionService.getQuestion(questionId);
+        return question.map(questionDTOMapper::toDTO).orElse(null);
     }
 }

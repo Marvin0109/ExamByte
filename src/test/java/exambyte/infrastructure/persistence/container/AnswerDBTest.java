@@ -7,7 +7,6 @@ import exambyte.infrastructure.persistence.mapper.AnswerMapperImpl;
 import exambyte.infrastructure.persistence.repository.AnswerDAO;
 import exambyte.infrastructure.persistence.repository.AnswerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -27,25 +26,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AnswerDBTest {
 
     @Autowired
-    private AnswerDAO answerDAO;
+    private AnswerDAO dao;
 
-    private AnswerRepository answerRepository;
+    private AnswerRepository repository;
 
-    private static final UUID ANSWER_UUID = UUID.fromString("dddddddd-dddd-dddd-dddd-dddddddddddd");
+    private static final UUID ANSWER_ID = UUID.fromString("dddddddd-dddd-dddd-dddd-dddddddddddd");
 
     @BeforeEach
     void setUp() {
         AnswerMapper answerMapper = new AnswerMapperImpl();
-        answerRepository = new AnswerRepositoryImpl(answerDAO, answerMapper);
+        repository = new AnswerRepositoryImpl(dao, answerMapper);
     }
 
     @Test
-    @DisplayName("Laden der Daten erfolgreich")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<Answer> geladen = answerRepository.findById(ANSWER_UUID);
+        Optional<Answer> loaded = repository.findById(ANSWER_ID);
 
         // Assert
-        assertThat(geladen).isPresent();
+        assertThat(loaded).isPresent();
     }
 }

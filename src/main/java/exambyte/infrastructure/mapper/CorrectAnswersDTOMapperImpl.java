@@ -14,14 +14,14 @@ public class CorrectAnswersDTOMapperImpl implements CorrectAnswersDTOMapper {
                 correctAnswers.getId(),
                 correctAnswers.getSolution(),
                 correctAnswers.getChoices(),
-                correctAnswers.getFrageId());
+                correctAnswers.getQuestionId());
     }
 
     @Override
     public CorrectAnswers toDomain(CorrectAnswersDTO dto) {
         return new CorrectAnswers.CorrectAnswersBuilder()
                 .id(dto.id())
-                .frageId(dto.questionId())
+                .questionId(dto.questionId())
                 .solution(dto.solution())
                 .choices(dto.choices())
                 .build();

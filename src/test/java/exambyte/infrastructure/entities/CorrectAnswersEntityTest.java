@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CorrectAnswersEntityTest {
 
     @ParameterizedTest
-    @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
+    @DisplayName("Field missing -> IllegalStateException")
     @MethodSource("invalidBuilder")
     void createCorrectAnswersEntity_fail(CorrectAnswersEntity.CorrectAnswersEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);

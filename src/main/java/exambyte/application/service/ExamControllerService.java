@@ -25,31 +25,31 @@ public interface ExamControllerService {
 
     ExamForm createExamForm(int countQuestions);
 
-    ExamForm fillExamForm(UUID examUUID);
+    ExamForm fillExamForm(UUID examId);
 
     UUID getExamUUIDByStartTime(LocalDateTime startTime);
 
     String createExam(ExamForm form, String name);
 
-    ExamDTO getExamByUUID(UUID examUUID);
+    ExamDTO getExamByUUID(UUID examId);
 
     List<ExamDTO> getAllExams();
 
-    List<QuestionDTO> getQuestionForExam(UUID examUUID);
+    List<QuestionDTO> getQuestionsForExam(UUID examId);
 
-    boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin);
+    boolean examIsAlreadySubmitted(UUID examId, String studentLogin);
 
-    void createQuestions(ExamForm form, UUID examUUID);
+    void createQuestions(ExamForm form, UUID examId);
 
-    AttemptDTO getAttempt(UUID examUUID, String studentLogin);
+    AttemptDTO getAttempt(UUID examId, String studentLogin);
 
     List<ReviewCoverageForm> getReviewCoverage(List<ExamDTO> examDTOList);
 
     ExamTimeInfo getExamTimeInfo(ExamDTO examDTO);
 
-    boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUiD);
+    boolean submitExam(String name, Map<String, List<String>> answers, UUID examId);
 
-    List<SubmitInfo> getSubmitInfo(UUID examUUID);
+    List<SubmitInfo> getSubmitInfo(UUID examId);
 
     void saveAutomaticReviewer();
 
@@ -57,15 +57,15 @@ public interface ExamControllerService {
 
     boolean reset();
 
-    boolean deleteExam(UUID examUUID);
+    boolean deleteExam(UUID examId);
 
     ProfessorDTO getProfessorById(UUID id);
 
-    double getZulassungsProgress(String studentName);
+    double getEligibilityProgress(String studentName);
 
     boolean hasAnyFailedAttempt(String studentName);
 
-    Map<QuestionDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examUUID, UUID studentUUID);
+    Map<QuestionDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examId, UUID studentId);
 
     List<AnswerForm> createAnswerForm(Map<QuestionDTO, AnswerDTO> map);
 
@@ -73,7 +73,7 @@ public interface ExamControllerService {
 
     UUID getReviewerByName(String name);
 
-    ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName);
+    ReviewViewForm prepareReviewViewForm(UUID examId, String studentName);
 
     boolean checkTimeForReviewView(UUID examId);
 

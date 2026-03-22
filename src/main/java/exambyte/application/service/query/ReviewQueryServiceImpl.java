@@ -11,53 +11,53 @@ import java.util.UUID;
 @Service
 public class ReviewQueryServiceImpl implements ReviewQueryService {
 
-    private final ReviewService reviewService;
-    private final ReviewDTOMapper reviewDTOMapper;
+    private final ReviewService service;
+    private final ReviewDTOMapper mapper;
 
-    public ReviewQueryServiceImpl(ReviewService reviewService, ReviewDTOMapper reviewDTOMapper) {
-        this.reviewService = reviewService;
-        this.reviewDTOMapper = reviewDTOMapper;
+    public ReviewQueryServiceImpl(ReviewService service, ReviewDTOMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
     }
 
     @Override
     public UUID getReviewIdByAnswerId(UUID answerId) {
-        return reviewService.getReviewByAnswerId(answerId).getAnswerId();
+        return service.getReviewByAnswerId(answerId).getAnswerId();
     }
 
     @Override
     public boolean answerHasReview(UUID answerId) {
-        return reviewService.getReviewByAnswerId(answerId) != null;
+        return service.getReviewByAnswerId(answerId) != null;
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId) {
-        Review loaded = reviewService.getReviewByAnswerId(answerId);
+    public void createReview(String text, double points, UUID answerId, UUID reviewerId) {
+        Review loaded = service.getReviewByAnswerId(answerId);
 
         UUID reviewId = loaded != null ? loaded.getId() : null;
 
-        Review review = reviewDTOMapper.toDomain(
+        Review review = mapper.toDomain(
                 new ReviewDTO(
                         reviewId,
                         answerId,
                         reviewerId,
-                        bewertung,
-                        punkte)
+                        text,
+                        points)
         );
 
-        reviewService.addReview(review);
+        service.addReview(review);
     }
 
     @Override
     public ReviewDTO getReviewByAnswerId(UUID answerId) {
-        Review review = reviewService.getReviewByAnswerId(answerId);
+        Review review = service.getReviewByAnswerId(answerId);
         if (review != null) {
-            return reviewDTOMapper.toDTO(review);
+            return mapper.toDTO(review);
         }
         return null;
     }
 
     @Override
     public void deleteReview(UUID id) {
-        reviewService.deleteReview(id);
+        service.deleteReview(id);
     }
 }

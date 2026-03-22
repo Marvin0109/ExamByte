@@ -6,6 +6,6 @@ import java.util.UUID;
 public record AnswerDTO (
         UUID id,
         String answer,
-        UUID frageId,
+        UUID questionId,
         UUID studentId,
         LocalDateTime submitTime) {}

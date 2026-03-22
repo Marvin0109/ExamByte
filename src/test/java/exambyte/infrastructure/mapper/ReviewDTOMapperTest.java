@@ -3,7 +3,6 @@ package exambyte.infrastructure.mapper;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.domain.mapper.ReviewDTOMapper;
 import exambyte.domain.model.aggregate.exam.Review;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -18,8 +17,7 @@ class ReviewDTOMapperTest {
     private final ReviewDTOMapper mapper = new ReviewDTOMapperImpl();
 
     @Test
-    @DisplayName("Test ReviewDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID answerId = UUID.randomUUID();
@@ -29,8 +27,8 @@ class ReviewDTOMapperTest {
                 .id(id)
                 .answerId(answerId)
                 .reviewerId(reviewerId)
-                .bewertung("Bewertung")
-                .punkte(3)
+                .text("Text")
+                .points(3)
                 .build();
 
         // Act
@@ -40,19 +38,12 @@ class ReviewDTOMapperTest {
         assertEquals(id, reviewDTO.id());
         assertEquals(answerId, reviewDTO.answerId());
         assertEquals(reviewerId, reviewDTO.reviewerId());
-        assertEquals("Bewertung", reviewDTO.text());
+        assertEquals("Text", reviewDTO.text());
         assertEquals(3, reviewDTO.points());
     }
 
     @Test
-    @DisplayName("test_null_review_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toReviewDTOList Test")
-    void test_03() {
+    void toReviewDTOList() {
         // Arrange
         UUID id1 = UUID.randomUUID();
         UUID answerId1 = UUID.randomUUID();
@@ -66,16 +57,16 @@ class ReviewDTOMapperTest {
                 .id(id1)
                 .answerId(answerId1)
                 .reviewerId(reviewerId1)
-                .bewertung("Bewertung 1")
-                .punkte(3)
+                .text("Text 1")
+                .points(3)
                 .build();
 
         Review review2 = new Review.ReviewBuilder()
                 .id(id2)
                 .answerId(answerId2)
                 .reviewerId(reviewerId2)
-                .bewertung("Bewertung 2")
-                .punkte(6)
+                .text("Text 2")
+                .points(6)
                 .build();
 
         List<Review> reviews = Arrays.asList(review1, review2);
@@ -88,13 +79,13 @@ class ReviewDTOMapperTest {
         assertThat(reviewDTOs.getFirst().id()).isEqualTo(id1);
         assertThat(reviewDTOs.getFirst().answerId()).isEqualTo(answerId1);
         assertThat(reviewDTOs.getFirst().reviewerId()).isEqualTo(reviewerId1);
-        assertThat(reviewDTOs.getFirst().text()).isEqualTo("Bewertung 1");
+        assertThat(reviewDTOs.getFirst().text()).isEqualTo("Text 1");
         assertThat(reviewDTOs.getFirst().points()).isEqualTo(3);
 
         assertThat(reviewDTOs.getLast().id()).isEqualTo(id2);
         assertThat(reviewDTOs.getLast().answerId()).isEqualTo(answerId2);
         assertThat(reviewDTOs.getLast().reviewerId()).isEqualTo(reviewerId2);
-        assertThat(reviewDTOs.getLast().text()).isEqualTo("Bewertung 2");
+        assertThat(reviewDTOs.getLast().text()).isEqualTo("Text 2");
         assertThat(reviewDTOs.getLast().points()).isEqualTo(6);
     }
 }

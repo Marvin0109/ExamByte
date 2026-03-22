@@ -24,11 +24,10 @@
 
 <main role="main" class="container mt-5 pt-5">
     <div class="text-center">
-        <h1 class="display-1 fw-bold text-danger" th:text="${status}">Error</h1>
+        <h1 class="display-1 fw-bold text-danger">An error has occurred!</h1>
         <img class="http-cat my-4" th:src="'https://http.cat/' + ${status}" alt="HTTP Cat">
 
-        <h3 class="mb-3" th:text="${error}">Error</h3>
-        <p class="lead mb-4" th:text="${message}">Message</p>
+        <h3 class="mb-3" th:text="'Error message: ' + ${error}">Error message</h3>
 
         <a th:href="@{/}" class="btn btn-primary btn-lg">Zurück zur Startseite</a>
     </div>

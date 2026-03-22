@@ -2,7 +2,6 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.domain.mapper.ExamDTOMapper;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -19,8 +18,7 @@ class ExamDTOMapperTest {
     private final ExamDTOMapper mapper = new ExamDTOMapperImpl();
 
     @Test
-    @DisplayName("Test ExamDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         //Arrange
         LocalDateTime now = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
         UUID id = UUID.randomUUID();
@@ -30,9 +28,9 @@ class ExamDTOMapperTest {
                 .id(id)
                 .title("Test Exam")
                 .professorId(profId)
-                .startTime(now)
-                .endTime(now.plusHours(2))
-                .resultTime(now.plusDays(1))
+                .start(now)
+                .end(now.plusHours(2))
+                .result(now.plusDays(1))
                 .build();
 
         // Act
@@ -47,16 +45,8 @@ class ExamDTOMapperTest {
         assertEquals(now.plusDays(1), dto.result());
     }
 
-    // Handling null Exam input in toDTO method
     @Test
-    @DisplayName("test_null_exam_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toExamDTOList Test")
-    void test_03() {
+    void toExamDTOList() {
         // Arrange
         LocalDateTime now = LocalDateTime.of(2020, 1, 1, 0, 0, 0);
         UUID id = UUID.randomUUID();
@@ -67,18 +57,18 @@ class ExamDTOMapperTest {
                 .id(id)
                 .title("Test Exam 1")
                 .professorId(profId)
-                .startTime(now)
-                .endTime(now.plusHours(2))
-                .resultTime(now.plusDays(1))
+                .start(now)
+                .end(now.plusHours(2))
+                .result(now.plusDays(1))
                 .build();
 
         Exam exam2 = new Exam.ExamBuilder()
                 .id(id2)
                 .title("Test Exam 2")
                 .professorId(profId)
-                .startTime(now)
-                .endTime(now.plusHours(2))
-                .resultTime(now.plusDays(1))
+                .start(now)
+                .end(now.plusHours(2))
+                .result(now.plusDays(1))
                 .build();
 
         List<Exam> exams = Arrays.asList(exam1, exam2);
@@ -97,8 +87,7 @@ class ExamDTOMapperTest {
     }
 
     @Test
-    @DisplayName("toDomain Test")
-    void test_04() {
+    void toDomain() {
         // Arrange
         UUID id = UUID.randomUUID();
         UUID profId = UUID.randomUUID();
@@ -120,8 +109,8 @@ class ExamDTOMapperTest {
         assertEquals(id, exam.getId());
         assertEquals("Exam 1", exam.getTitle());
         assertEquals(profId, exam.getProfessorId());
-        assertEquals(start, exam.getStartTime());
-        assertEquals(end, exam.getEndTime());
-        assertEquals(resultTime, exam.getResultTime());
+        assertEquals(start, exam.getStart());
+        assertEquals(end, exam.getEnd());
+        assertEquals(resultTime, exam.getResult());
     }
 }

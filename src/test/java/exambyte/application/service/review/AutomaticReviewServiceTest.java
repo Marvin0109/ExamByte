@@ -25,8 +25,8 @@ class AutomaticReviewServiceTest {
 
     private ReviewService service;
     private AutomaticReviewService automaticReviewService;
-    private final UUID studentUUID = UUID.randomUUID();
-    private final LocalDateTime antwortTime = LocalDateTime.of(2020, 1, 1, 0, 0);
+    private static final UUID STUDENT_ID = UUID.randomUUID();
+    private static final LocalDateTime SUBMIT_TIME = LocalDateTime.of(2020, 1, 1, 0, 0);
 
     @BeforeEach
     void setUp() {
@@ -36,19 +36,18 @@ class AutomaticReviewServiceTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("mcTestCases")
-    @DisplayName("MC automatische Bewertung")
     void autoReviewMC(
-            String bewertung,
-            double maxPunkte,
+            String reviewText,
+            double questionPoints,
             String studentAnswer,
             String solution,
-            double expectedPunkte
+            double expectedPoints
     ) {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
-                "Fragetext",
-                maxPunkte,
+                "Question",
+                questionPoints,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC
         );
@@ -56,72 +55,71 @@ class AutomaticReviewServiceTest {
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
                 studentAnswer,
-                frage.id(),
-                studentUUID,
-                antwortTime
+                question.id(),
+                STUDENT_ID,
+                SUBMIT_TIME
         );
 
         CorrectAnswersDTO correctAnswersDTO = new CorrectAnswersDTO(
                 UUID.randomUUID(),
                 solution,
                 "A\nB\nC\nD\nE\nF\nG\nH",
-                frage.id()
+                question.id()
         );
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
-                List.of(frage),
+                List.of(question),
                 List.of(answer),
                 List.of(correctAnswersDTO),
-                studentUUID,
+                STUDENT_ID,
                 service
         );
 
         // Assert
         assertThat(reviews).hasSize(1);
-        assertThat(reviews.getFirst().points()).isEqualTo(expectedPunkte);
+        assertThat(reviews.getFirst().points()).isEqualTo(expectedPoints);
     }
 
     static Stream<Arguments> mcTestCases() {
         return Stream.of(
-                Arguments.of("Alles richtig", 4.0, "A\nB\nC\nD", "A\nB\nC\nD", 4.0),
-                Arguments.of("3 richtig, 0 falsch", 4.0, "A\nB\nC", "A\nB\nC\nD", 3.0),
-                Arguments.of("3 richtig, 1 falsch", 4.0, "A\nB\nC\nE", "A\nB\nC\nD", 2.0),
-                Arguments.of("2 richtig, 0 falsch", 4.0, "A\nB", "A\nB\nC\nD", 2.0),
-                Arguments.of("2 richtig, 1 falsch", 4.0, "A\nB\nE", "A\nB\nC\nD", 1.0),
-                Arguments.of("2 richtig, 2 falsch", 4.0, "A\nB\nE\nF", "A\nB\nC\nD", 0.0),
-                Arguments.of("1 richtig, 0 falsch", 4.0, "A", "A\nB\nC\nD", 1.0),
-                Arguments.of("1 richtig, 1 falsch", 4.0, "A\nE", "A\nB\nC\nD", 0.0),
-                Arguments.of("0 richtig, 0 falsch", 4.0, "", "A\nB\nC\nD", 0.0),
-                Arguments.of("Alles falsch", 4.0, "E\nF\nG\nH", "A\nB\nC\nD", 0.0),
+                Arguments.of("Everything correct", 4.0, "A\nB\nC\nD", "A\nB\nC\nD", 4.0),
+                Arguments.of("3 correct, 0 wrong", 4.0, "A\nB\nC", "A\nB\nC\nD", 3.0),
+                Arguments.of("3 correct, 1 wrong", 4.0, "A\nB\nC\nE", "A\nB\nC\nD", 2.0),
+                Arguments.of("2 correct, 0 wrong", 4.0, "A\nB", "A\nB\nC\nD", 2.0),
+                Arguments.of("2 correct, 1 wrong", 4.0, "A\nB\nE", "A\nB\nC\nD", 1.0),
+                Arguments.of("2 correct, 2 wrong", 4.0, "A\nB\nE\nF", "A\nB\nC\nD", 0.0),
+                Arguments.of("1 correct, 0 wrong", 4.0, "A", "A\nB\nC\nD", 1.0),
+                Arguments.of("1 correct, 1 wrong", 4.0, "A\nE", "A\nB\nC\nD", 0.0),
+                Arguments.of("0 correct, 0 wrong", 4.0, "", "A\nB\nC\nD", 0.0),
+                Arguments.of("Everything wrong", 4.0, "E\nF\nG\nH", "A\nB\nC\nD", 0.0),
 
-                Arguments.of("Alles richtig", 3.5, "A\nB\nC\nD", "A\nB\nC\nD", 3.5),
-                Arguments.of("3 richtig, 0 falsch", 3.5, "A\nB\nC\nD", "A\nB\nC", 2.5),
-                Arguments.of("3 richtig, 1 falsch", 3.5, "A\nB\nC\nD", "A\nB\nC\nE", 2.0),
-                Arguments.of("2 richtig, 1 falsch", 3.5, "A\nB\nC\nD", "A\nB\nE", 0.0),
-                Arguments.of("1 richtig, 1 falsch", 3.5, "A\nB\nC\nD", "A\nE", 0.0),
-                Arguments.of("Alles falsch", 3.5, "A\nB\nC\nD", "E\nF\nG\nH", 0.0),
+                Arguments.of("Everything correct", 3.5, "A\nB\nC\nD", "A\nB\nC\nD", 3.5),
+                Arguments.of("3 correct, 0 wrong", 3.5, "A\nB\nC\nD", "A\nB\nC", 2.5),
+                Arguments.of("3 correct, 1 wrong", 3.5, "A\nB\nC\nD", "A\nB\nC\nE", 2.0),
+                Arguments.of("2 correct, 1 wrong", 3.5, "A\nB\nC\nD", "A\nB\nE", 0.0),
+                Arguments.of("1 correct, 1 wrong", 3.5, "A\nB\nC\nD", "A\nE", 0.0),
+                Arguments.of("Everything wrong", 3.5, "A\nB\nC\nD", "E\nF\nG\nH", 0.0),
 
-                Arguments.of("3 richtig, 1 falsch", 2.0, "A\nB\nC\nE", "A\nB\nC\nD", 1.0),
-                Arguments.of("2 richtig, 1 falsch", 2.0, "A\nB\nE", "A\nB\nC\nD", 0.5)
+                Arguments.of("3 correct, 1 wrong", 2.0, "A\nB\nC\nE", "A\nB\nC\nD", 1.0),
+                Arguments.of("2 correct, 1 wrong", 2.0, "A\nB\nE", "A\nB\nC\nD", 0.5)
         );
     }
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("scTestCases")
-    @DisplayName("SC automatische Bewertung")
     void autoReviewSC(
-            String bewertung,
-            double maxPunkte,
+            String reviewText,
+            double questionPoints,
             String studentAnswer,
             String solution,
-            double expectedPunkte
+            double expectedPoints
     ) {
         // Arrange
         QuestionDTO frage = new QuestionDTO(
                 UUID.randomUUID(),
-                "Fragetext",
-                maxPunkte,
+                "Question",
+                questionPoints,
                 UUID.randomUUID(),
                 QuestionTypeDTO.SC
         );
@@ -130,8 +128,8 @@ class AutomaticReviewServiceTest {
                 UUID.randomUUID(),
                 studentAnswer,
                 frage.id(),
-                studentUUID,
-                antwortTime
+                STUDENT_ID,
+                SUBMIT_TIME
         );
 
         CorrectAnswersDTO correctAnswers = new CorrectAnswersDTO(
@@ -146,46 +144,45 @@ class AutomaticReviewServiceTest {
                 List.of(frage),
                 List.of(answer),
                 List.of(correctAnswers),
-                studentUUID,
+                STUDENT_ID,
                 service
         );
 
         // Assert
         assertThat(reviews).hasSize(1);
-        assertThat(reviews.getFirst().points()).isEqualTo(expectedPunkte);
+        assertThat(reviews.getFirst().points()).isEqualTo(expectedPoints);
     }
 
     static Stream<Arguments> scTestCases() {
         return Stream.of(
-                Arguments.of("Richtig", 1, "A", "A", 1),
-                Arguments.of("Richtig", 0.5, "A", "A", 0.5),
-                Arguments.of("Falsch", 1, "B", "A", 0)
+                Arguments.of("Correct", 1, "A", "A", 1),
+                Arguments.of("Correct", 0.5, "A", "A", 0.5),
+                Arguments.of("Wrong", 1, "B", "A", 0)
         );
     }
 
     @Test
-    @DisplayName("SC: StudentAntwort nicht existierend")
-    void autoReviewSC_studentAntwortNotFound() {
+    void autoReviewSC_studentAnswerNotFound() {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
-                "Fragetext 1",
+                "Question 1",
                 3,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         CorrectAnswersDTO correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
-                "Antwort 2\nAntwort 4\nAntwort 5",
-                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.id());
+                "Answer 2\nAnswer 4\nAnswer 5",
+                "Answer 1\nAnswer 2\nAnswer 3\nAnswer 4\nAnswer 5",
+                question.id());
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewSC(
-                List.of(frage),
+                List.of(question),
                 List.of(),
                 List.of(correctAnswers),
-                studentUUID,
+                STUDENT_ID,
                 service
         );
 
@@ -194,29 +191,28 @@ class AutomaticReviewServiceTest {
     }
 
     @Test
-    @DisplayName("SC: KorrekteAntwort nicht existierend")
     void autoReviewSC_correctAnswersNotFound() {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
-                "Fragetext 1",
+                "Question 1",
                 3,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort 2\nAntwort 3\nAntwort 4",
-                frage.id(),
-                studentUUID,
-                antwortTime);
+                "Answer 2\nAnswer 3\nAnswer 4",
+                question.id(),
+                STUDENT_ID,
+                SUBMIT_TIME);
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewSC(
-                List.of(frage),
+                List.of(question),
                 List.of(answer),
                 List.of(),
-                studentUUID,
+                STUDENT_ID,
                 service
         );
 
@@ -225,28 +221,27 @@ class AutomaticReviewServiceTest {
     }
 
     @Test
-    @DisplayName("MC: StudentAnswer nicht existierend")
     void autoReviewMC_studentAnswerNotFound() {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
-                "Fragetext 1",
+                "Question 1",
                 3,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
         CorrectAnswersDTO correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
-                "Antwort 2\nAntwort 4\nAntwort 5",
-                "Antwort 1\nAntwort 2\nAntwort 3\nAntwort 4\nAntwort 5",
-                frage.id());
+                "Answer 2\nAnswer 4\nAnswer 5",
+                "Answer 1\nAnswer 2\nAnswer 3\nAnswer 4\nAnswer 5",
+                question.id());
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
-                List.of(frage),
+                List.of(question),
                 List.of(),
                 List.of(correctAnswers),
-                studentUUID,
+                STUDENT_ID,
                 service
         );
 
@@ -255,29 +250,28 @@ class AutomaticReviewServiceTest {
     }
 
     @Test
-    @DisplayName("MC: KorrekteAntwort nicht existierend")
     void autoReviewMC_correctAnswersNotFound() {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
-                "Fragetext 1",
+                "Question 1",
                 3,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        AnswerDTO antwort = new AnswerDTO(
+        AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort 2\nAntwort 3\nAntwort 4",
-                frage.id(),
-                studentUUID,
-                antwortTime);
+                "Answer 2\nAnswer 3\nAnswer 4",
+                question.id(),
+                STUDENT_ID,
+                SUBMIT_TIME);
 
         // Act
         List<ReviewDTO> reviews = automaticReviewService.autoReviewMC(
-                List.of(frage),
-                List.of(antwort),
+                List.of(question),
+                List.of(answer),
                 List.of(),
-                studentUUID,
+                STUDENT_ID,
                 service
         );
 

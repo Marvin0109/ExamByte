@@ -5,7 +5,7 @@ import exambyte.infrastructure.persistence.entities.ProfessorEntity;
 
 public interface ProfessorMapper {
 
-    Professor toDomain(ProfessorEntity professorEntity);
+    Professor toDomain(ProfessorEntity entity);
 
     ProfessorEntity toEntity(Professor professor);
 }

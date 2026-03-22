@@ -7,7 +7,6 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,8 +36,7 @@ class ContactTest {
     private AppUserService appUserService;
 
     @Test
-    @DisplayName("Die contact Seite ist für nicht-authentifizierte User nicht erreichbar")
-    void test_01() throws Exception {
+    void get_contact_not_authorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/contact"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -48,9 +46,7 @@ class ContactTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT", "REVIEWER", "ADMIN"})
-    @DisplayName("Die contact Seite ist für authentifizierte User erreichbar")
-    void test_02() throws Exception {
-
+    void get_contact_authorized() throws Exception {
         mvc.perform(get("/contact"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))

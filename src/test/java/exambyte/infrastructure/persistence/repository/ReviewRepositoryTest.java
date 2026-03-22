@@ -16,14 +16,14 @@ import static org.mockito.Mockito.when;
 
 class ReviewRepositoryTest {
 
-    private final ReviewDAO reviewDAO = mock(ReviewDAO.class);
-    private final ReviewMapper reviewMapper = mock(ReviewMapper.class);
+    private final ReviewDAO dao = mock(ReviewDAO.class);
+    private final ReviewMapper mapper = mock(ReviewMapper.class);
 
     private ReviewRepository repository;
 
     @BeforeEach
     void setUp() {
-        repository = new ReviewRepositoryImpl(reviewDAO, reviewMapper);
+        repository = new ReviewRepositoryImpl(dao, mapper);
     }
 
     @Test
@@ -38,15 +38,15 @@ class ReviewRepositoryTest {
                 .build();
 
         Review review = new Review.ReviewBuilder()
-                .bewertung("B")
+                .text("B")
                 .id(reviewEntity.getId())
                 .answerId(reviewEntity.getAnswerId())
                 .reviewerId(reviewEntity.getReviewerId())
-                .punkte(1)
+                .points(1)
                 .build();
 
-        when(reviewDAO.findByAnswerId(id)).thenReturn(Optional.of(reviewEntity));
-        when(reviewMapper.toDomain(reviewEntity)).thenReturn(review);
+        when(dao.findByAnswerId(id)).thenReturn(Optional.of(reviewEntity));
+        when(mapper.toDomain(reviewEntity)).thenReturn(review);
 
         // Act
         Review result = repository.findByAnswerId(id);
@@ -59,7 +59,7 @@ class ReviewRepositoryTest {
     void findByAnswerId_notFound() {
         // Arrange
         UUID id = UUID.randomUUID();
-        when(reviewDAO.findByAnswerId(id)).thenReturn(Optional.empty());
+        when(dao.findByAnswerId(id)).thenReturn(Optional.empty());
 
         // Act
         Review result = repository.findByAnswerId(id);

@@ -32,25 +32,25 @@ class AnswerQueryServiceTest {
     private AnswerService answerService;
 
     @Mock
-    private AnswerDTOMapper answerDTOMapper;
+    private AnswerDTOMapper mapper;
 
     private static final UUID STUDENT_ID = UUID.randomUUID();
-    private static final UUID FRAGE1_ID = UUID.randomUUID();
-    private static final UUID FRAGE2_ID = UUID.randomUUID();
+    private static final UUID QUESTION_1_ID = UUID.randomUUID();
+    private static final UUID QUESTION_2_ID = UUID.randomUUID();
     private static final LocalDateTime TIME =  LocalDateTime.of(2000, 1, 1, 0, 0);
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        answerQueryService = new AnswerQueryServiceImpl(questionQueryService, answerService, answerDTOMapper);
+        answerQueryService = new AnswerQueryServiceImpl(questionQueryService, answerService, mapper);
     }
 
     @Test
     void saveAnswers_success() {
         // Arrange
         QuestionDTO frage1 = new QuestionDTO(
-                FRAGE1_ID,
+                QUESTION_1_ID,
                 "Question",
                 10.0,
                 null,
@@ -58,7 +58,7 @@ class AnswerQueryServiceTest {
         );
 
         QuestionDTO frage2 = new QuestionDTO(
-                FRAGE2_ID,
+                QUESTION_2_ID,
                 "Question",
                 5.0,
                 null,
@@ -66,19 +66,19 @@ class AnswerQueryServiceTest {
         );
 
         Map<String, List<String>> answerMap = Map.of(
-                FRAGE1_ID.toString(), List.of("Answer 1", "Answer 2"),
-                FRAGE2_ID.toString(), List.of("Answer A, Answer B\nAnswer C")
+                QUESTION_1_ID.toString(), List.of("Answer 1", "Answer 2"),
+                QUESTION_2_ID.toString(), List.of("Answer A, Answer B\nAnswer C")
         );
 
-        AnswerDTO dto1 = new AnswerDTO(null, "Answer 1\nAnswer 2", FRAGE1_ID, STUDENT_ID, TIME);
-        AnswerDTO dto2 = new AnswerDTO(null, "Answer A", FRAGE2_ID, STUDENT_ID, TIME);
+        AnswerDTO dto1 = new AnswerDTO(null, "Answer 1\nAnswer 2", QUESTION_1_ID, STUDENT_ID, TIME);
+        AnswerDTO dto2 = new AnswerDTO(null, "Answer A", QUESTION_2_ID, STUDENT_ID, TIME);
 
-        when(answerService.findByStudentAndFrage(FRAGE1_ID, STUDENT_ID)).thenReturn(null);
-        when(answerService.findByStudentAndFrage(FRAGE2_ID, STUDENT_ID)).thenReturn(null);
-        when(answerDTOMapper.toDomain(dto1)).thenReturn(mock());
-        when(answerDTOMapper.toDomain(dto2)).thenReturn(mock());
-        when(questionQueryService.getQuestion(FRAGE1_ID)).thenReturn(frage1);
-        when(questionQueryService.getQuestion(FRAGE2_ID)).thenReturn(frage2);
+        when(answerService.findByStudentIdAndQuestionId(QUESTION_1_ID, STUDENT_ID)).thenReturn(null);
+        when(answerService.findByStudentIdAndQuestionId(QUESTION_2_ID, STUDENT_ID)).thenReturn(null);
+        when(mapper.toDomain(dto1)).thenReturn(mock());
+        when(mapper.toDomain(dto2)).thenReturn(mock());
+        when(questionQueryService.getQuestion(QUESTION_1_ID)).thenReturn(frage1);
+        when(questionQueryService.getQuestion(QUESTION_2_ID)).thenReturn(frage2);
 
         // Act
         boolean result = answerQueryService.saveAnswers(STUDENT_ID, answerMap);
@@ -92,10 +92,10 @@ class AnswerQueryServiceTest {
     void saveAnswers_exception() {
         // Arrange
         Map<String, List<String>> answerMap = Map.of(
-                FRAGE1_ID.toString(), List.of("Answer 1")
+                QUESTION_1_ID.toString(), List.of("Answer 1")
         );
 
-        when(answerDTOMapper.toDomain(any()))
+        when(mapper.toDomain(any()))
                 .thenThrow(new RuntimeException("Error Message"));
 
         // Act
@@ -111,44 +111,44 @@ class AnswerQueryServiceTest {
         Answer answer = mock(Answer.class);
         AnswerDTO dto = mock(AnswerDTO.class);
 
-        when(answerService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID))
+        when(answerService.findByStudentIdAndQuestionId(STUDENT_ID, QUESTION_1_ID))
                 .thenReturn(answer);
-        when(answerService.findByStudentAndFrage(STUDENT_ID, FRAGE2_ID))
+        when(answerService.findByStudentIdAndQuestionId(STUDENT_ID, QUESTION_2_ID))
                 .thenReturn(null);
 
-        when(answerDTOMapper.toDTO(answer)).thenReturn(dto);
+        when(mapper.toDTO(answer)).thenReturn(dto);
 
         // Act
         List<AnswerDTO> result = answerQueryService.getAnswers(
                 STUDENT_ID,
-                Set.of(FRAGE1_ID, FRAGE2_ID)
+                Set.of(QUESTION_1_ID, QUESTION_2_ID)
         );
 
         // Assert
         assertThat(result).hasSize(1).contains(dto);
 
         verify(answerService, times(2))
-                .findByStudentAndFrage(eq(STUDENT_ID), any());
+                .findByStudentIdAndQuestionId(eq(STUDENT_ID), any());
 
-        verify(answerDTOMapper).toDTO(answer);
-        verifyNoMoreInteractions(answerDTOMapper);
+        verify(mapper).toDTO(answer);
+        verifyNoMoreInteractions(mapper);
     }
 
     @Test
     void getAnswers_empty() {
         // Arrange
-        when(answerService.findByStudentAndFrage(any(), any()))
+        when(answerService.findByStudentIdAndQuestionId(any(), any()))
                 .thenReturn(null);
 
         // Act
         List<AnswerDTO> result = answerQueryService.getAnswers(
                 STUDENT_ID,
-                Set.of(FRAGE1_ID)
+                Set.of(QUESTION_1_ID)
         );
 
         // Assert
         assertThat(result).isEmpty();
-        verify(answerDTOMapper, never()).toDTO(any());
+        verify(mapper, never()).toDTO(any());
     }
 
     @Test
@@ -160,14 +160,14 @@ class AnswerQueryServiceTest {
         Answer answer = mock(Answer.class);
         AnswerDTO dto = mock(AnswerDTO.class);
 
-        when(questionDTO.id()).thenReturn(FRAGE1_ID);
+        when(questionDTO.id()).thenReturn(QUESTION_1_ID);
         when(questionQueryService.getFreeResponseQuestions(examId))
                 .thenReturn(List.of(questionDTO));
 
-        when(answerService.findByFrageId(FRAGE1_ID))
+        when(answerService.findByQuestionId(QUESTION_1_ID))
                 .thenReturn(answer);
 
-        when(answerDTOMapper.toDTO(answer))
+        when(mapper.toDTO(answer))
                 .thenReturn(dto);
 
         // Act
@@ -183,12 +183,12 @@ class AnswerQueryServiceTest {
         UUID examId = UUID.randomUUID();
 
         QuestionDTO questionDTO = mock(QuestionDTO.class);
-        when(questionDTO.id()).thenReturn(FRAGE1_ID);
+        when(questionDTO.id()).thenReturn(QUESTION_1_ID);
 
         when(questionQueryService.getFreeResponseQuestions(examId))
                 .thenReturn(List.of(questionDTO));
 
-        when(answerService.findByFrageId(FRAGE1_ID))
+        when(answerService.findByQuestionId(QUESTION_1_ID))
                 .thenReturn(null);
 
         // Act
@@ -196,42 +196,42 @@ class AnswerQueryServiceTest {
 
         // Assert
         assertThat(result).isEmpty();
-        verify(answerDTOMapper, never()).toDTO(any());
+        verify(mapper, never()).toDTO(any());
     }
 
     @Test
-    void findByStudentAndFrage_success() {
+    void findByStudentAndQuestion_success() {
         // Arrange
-        Answer domainAntwort = mock(Answer.class);
+        Answer answer = mock(Answer.class);
         AnswerDTO dto = mock(AnswerDTO.class);
 
-        when(answerService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID))
-                .thenReturn(domainAntwort);
-        when(answerDTOMapper.toDTO(domainAntwort))
+        when(answerService.findByStudentIdAndQuestionId(STUDENT_ID, QUESTION_1_ID))
+                .thenReturn(answer);
+        when(mapper.toDTO(answer))
                 .thenReturn(dto);
 
         // Act
         AnswerDTO result =
-                answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
+                answerQueryService.findByStudentAndQuestion(STUDENT_ID, QUESTION_1_ID);
 
         // Assert
         assertThat(result).isEqualTo(dto);
 
         verify(answerService, times(2))
-                .findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
-        verify(answerDTOMapper)
-                .toDTO(domainAntwort);
+                .findByStudentIdAndQuestionId(STUDENT_ID, QUESTION_1_ID);
+        verify(mapper)
+                .toDTO(answer);
     }
 
     @Test
-    void findByStudentAndFrage_notFound() {
-        when(answerService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID))
+    void findByStudentAndQuestion_notFound() {
+        when(answerService.findByStudentIdAndQuestionId(STUDENT_ID, QUESTION_1_ID))
                 .thenReturn(null);
 
-        AnswerDTO result = answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
+        AnswerDTO result = answerQueryService.findByStudentAndQuestion(STUDENT_ID, QUESTION_1_ID);
 
         assertThat(result).isNull();
 
-        verify(answerService).findByStudentAndFrage(STUDENT_ID, FRAGE1_ID);
+        verify(answerService).findByStudentIdAndQuestionId(STUDENT_ID, QUESTION_1_ID);
     }
 }

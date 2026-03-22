@@ -17,13 +17,13 @@ class AnswerMapperTest {
     @Test
     void toEntity() {
         // Arrange
-        UUID frageId = UUID.randomUUID();
+        UUID questionId = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
         LocalDateTime submitTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         Answer answer = new Answer.AnswerBuilder()
             .answer("Answer")
-            .frageId(frageId)
+            .questionId(questionId)
             .studentId(studentId)
             .submitTime(submitTime)
             .build();
@@ -33,7 +33,7 @@ class AnswerMapperTest {
 
         // Assert
         assertThat(answerEntity.getAnswer()).isEqualTo("Answer");
-        assertThat(answerEntity.getQuestionId()).isEqualTo(frageId);
+        assertThat(answerEntity.getQuestionId()).isEqualTo(questionId);
         assertThat(answerEntity.getStudentId()).isEqualTo(studentId);
         assertThat(answerEntity.getSubmitTime()).isEqualTo(submitTime);
     }
@@ -41,13 +41,13 @@ class AnswerMapperTest {
     @Test
     void toDomain() {
         // Arrange
-        UUID frageId = UUID.randomUUID();
+        UUID questionId = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
         LocalDateTime submitTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
         AnswerEntity answerEntity = new AnswerEntity.AnswerEntityBuilder()
             .answer("Answer")
-            .questionId(frageId)
+            .questionId(questionId)
             .studentId(studentId)
             .submitTime(submitTime)
             .build();
@@ -57,7 +57,7 @@ class AnswerMapperTest {
 
         // Assert
         assertThat(answer.getAnswer()).isEqualTo("Answer");
-        assertThat(answer.getFrageId()).isEqualTo(frageId);
+        assertThat(answer.getQuestionId()).isEqualTo(questionId);
         assertThat(answer.getStudentUUID()).isEqualTo(studentId);
         assertThat(answer.getSubmitTime()).isEqualTo(submitTime);
     }

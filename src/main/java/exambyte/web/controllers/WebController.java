@@ -95,14 +95,9 @@ public class WebController {
     public String resetExamData(RedirectAttributes redirectAttributes) {
         boolean success = service.reset();
 
-        if (success) {
-            redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
-            redirectAttributes.addFlashAttribute("success", true);
-            return "redirect:/settings";
-        }
-
-        redirectAttributes.addFlashAttribute("message", "Zulassungsszenario am laufen!");
-        redirectAttributes.addFlashAttribute("success", false);
+        redirectAttributes.addFlashAttribute("message",
+                success ? "Daten wurden erfolgreich gelöscht!" : "Zulassungsszenario am laufen!");
+        redirectAttributes.addFlashAttribute("success", success);
         return "redirect:/settings";
     }
 

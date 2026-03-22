@@ -3,7 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.exam.Exam;
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.ExamService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public Exam getExam(UUID id) {
         return repository.findById(id)
-                .orElseThrow(NichtVorhandenException::new);
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override

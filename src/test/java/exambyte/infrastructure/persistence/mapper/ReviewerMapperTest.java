@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ReviewerMapperTest {
 
-    private final ReviewerMapper reviewerMapper = new ReviewerMapperImpl();
+    private final ReviewerMapper mapper = new ReviewerMapperImpl();
 
     @Test
     void toEntity() {
@@ -19,21 +19,21 @@ class ReviewerMapperTest {
                 .build();
 
         // Act
-        ReviewerEntity reviewerEntity = reviewerMapper.toEntity(reviewer);
+        ReviewerEntity entity = mapper.toEntity(reviewer);
 
         // Assert
-        assertThat(reviewerEntity.getName()).isEqualTo("Reviewer1");
+        assertThat(entity.getName()).isEqualTo("Reviewer1");
     }
 
     @Test
     void toDomain() {
         // Arrange
-        ReviewerEntity reviewerEntity = new ReviewerEntity.ReviewerEntityBuilder()
+        ReviewerEntity entity = new ReviewerEntity.ReviewerEntityBuilder()
                 .name("Reviewer2")
                 .build();
 
         // Act
-        Reviewer reviewer = reviewerMapper.toDomain(reviewerEntity);
+        Reviewer reviewer = mapper.toDomain(entity);
 
         // Assert
         assertThat(reviewer.getName()).isEqualTo("Reviewer2");

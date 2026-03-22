@@ -16,9 +16,9 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
                 exam.getId(),
                 exam.getTitle(),
                 exam.getProfessorId(),
-                exam.getStartTime(),
-                exam.getEndTime(),
-                exam.getResultTime());
+                exam.getStart(),
+                exam.getEnd(),
+                exam.getResult());
     }
 
     @Override
@@ -34,9 +34,9 @@ public class ExamDTOMapperImpl implements ExamDTOMapper {
                 .id(examDTO.id())
                 .title(examDTO.title())
                 .professorId(examDTO.professorId())
-                .startTime(examDTO.start())
-                .endTime(examDTO.end())
-                .resultTime(examDTO.result())
+                .start(examDTO.start())
+                .end(examDTO.end())
+                .result(examDTO.result())
                 .build();
     }
 }

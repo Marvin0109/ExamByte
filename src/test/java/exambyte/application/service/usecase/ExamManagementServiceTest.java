@@ -27,8 +27,8 @@ class ExamManagementServiceTest {
 
     private static final UUID STUDENT_ID = UUID.randomUUID();
     private static final UUID EXAM_ID = UUID.randomUUID();
-    private static final UUID FRAGE_ID1 = UUID.randomUUID();
-    private static final UUID FRAGE_ID2 = UUID.randomUUID();
+    private static final UUID QUESTION_ID_1 = UUID.randomUUID();
+    private static final UUID QUESTION_ID_2 = UUID.randomUUID();
 
     @Mock
     private AnswerQueryService answerQueryService;
@@ -94,7 +94,7 @@ class ExamManagementServiceTest {
 
         // Act
         String response = examManagementService.createExam(
-                profName, "Titel", start, end, result
+                profName, "Title", start, end, result
         );
 
         // Assert
@@ -114,7 +114,7 @@ class ExamManagementServiceTest {
                 IllegalStateException.class,
                 () -> examManagementService.createExam(
                         "ProfName",
-                        "Titel",
+                        "Title",
                         start,
                         end,
                         result
@@ -141,7 +141,7 @@ class ExamManagementServiceTest {
 
         // Act
         String response = examManagementService.createExam(
-                profName, "Titel", start, end, result
+                profName, "Title", start, end, result
         );
 
         assertThat(response).isEqualTo(expectedMessage);
@@ -153,7 +153,7 @@ class ExamManagementServiceTest {
 
         ExamDTO existingExamSameMinute = new ExamDTO(
                 UUID.randomUUID(),
-                "Titel",
+                "Title",
                 UUID.randomUUID(),
                 start,
                 start.plusHours(1),
@@ -167,7 +167,7 @@ class ExamManagementServiceTest {
 
         return Stream.of(
                 Arguments.of(
-                        "Start nach End",
+                        "Start after end",
                         start.plusHours(2),
                         start.plusHours(1),
                         start.plusHours(3),
@@ -175,7 +175,7 @@ class ExamManagementServiceTest {
                         "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!"
                 ),
                 Arguments.of(
-                        "Start gleich End",
+                        "Start equals end",
                         start,
                         start,
                         start.plusHours(1),
@@ -183,7 +183,7 @@ class ExamManagementServiceTest {
                         "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!"
                 ),
                 Arguments.of(
-                        "Result vor End",
+                        "Result before end",
                         start,
                         start.plusHours(2),
                         start.plusHours(1),
@@ -191,7 +191,7 @@ class ExamManagementServiceTest {
                         "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!"
                 ),
                 Arguments.of(
-                        "Maximale Anzahl Exams überschritten",
+                        "Maximum amount of exams reached",
                         start,
                         start.plusHours(1),
                         start.plusHours(2),
@@ -199,7 +199,7 @@ class ExamManagementServiceTest {
                         "Die maximale Kapazität von 12 Exams ist nun überschritten worden!"
                 ),
                 Arguments.of(
-                        "Startzeit existiert bereits",
+                        "Start already exists",
                         start,
                         start.plusHours(1),
                         start.plusHours(2),
@@ -236,10 +236,10 @@ class ExamManagementServiceTest {
 
     @Test
     void submitExam_reviewSaveFails() {
-        QuestionDTO frage = mock(QuestionDTO.class);
-        when(frage.id()).thenReturn(FRAGE_ID1);
+        QuestionDTO question = mock(QuestionDTO.class);
+        when(question.id()).thenReturn(QUESTION_ID_1);
 
-        AnswerDTO antwort = mock(AnswerDTO.class);
+        AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
         when(review.text()).thenReturn("Test");
@@ -254,10 +254,10 @@ class ExamManagementServiceTest {
                 .thenReturn(true);
 
         when(questionQueryService.getQuestionsForExam(EXAM_ID))
-                .thenReturn(List.of(frage));
+                .thenReturn(List.of(question));
 
-        when(answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1))
-                .thenReturn(antwort);
+        when(answerQueryService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1))
+                .thenReturn(answer);
 
         when(reviewGenerationService.generateReviews(
                 eq(STUDENT_ID),
@@ -281,13 +281,12 @@ class ExamManagementServiceTest {
 
     @Test
     void submitExam_success() {
-        QuestionDTO frage = mock(QuestionDTO.class);
-        when(frage.id()).thenReturn(FRAGE_ID1);
+        QuestionDTO question = mock(QuestionDTO.class);
+        when(question.id()).thenReturn(QUESTION_ID_1);
 
         AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
-        // Review-Stub
         when(review.text()).thenReturn("OK");
         when(review.points()).thenReturn(5.0);
         when(review.answerId()).thenReturn(UUID.randomUUID());
@@ -297,9 +296,9 @@ class ExamManagementServiceTest {
 
         when(answerQueryService.saveAnswers(any(UUID.class), any())).thenReturn(true);
 
-        when(questionQueryService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(frage));
+        when(questionQueryService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(question));
 
-        when(answerQueryService.findByStudentAndFrage(STUDENT_ID, FRAGE_ID1)).thenReturn(answer);
+        when(answerQueryService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1)).thenReturn(answer);
 
         when(reviewGenerationService.generateReviews(eq(STUDENT_ID), anyList(), anyList()))
                 .thenReturn(List.of(review));
@@ -322,24 +321,24 @@ class ExamManagementServiceTest {
 
         LocalDateTime resultTime = LocalDateTime.of(2025, 1, 1, 12, 0);
 
-        QuestionDTO frage1 = mock(QuestionDTO.class);
-        when(frage1.points()).thenReturn(5.0);
+        QuestionDTO question1 = mock(QuestionDTO.class);
+        when(question1.points()).thenReturn(5.0);
 
-        QuestionDTO frage2 = mock(QuestionDTO.class);
-        when(frage2.points()).thenReturn(10.0);
+        QuestionDTO question2 = mock(QuestionDTO.class);
+        when(question2.points()).thenReturn(10.0);
 
         ExamDTO exam = mock(ExamDTO.class);
 
-        Map<UUID, QuestionDTO> frageMap = Map.of(
-                FRAGE_ID1, frage1,
-                FRAGE_ID2, frage2
+        Map<UUID, QuestionDTO> questionMap = Map.of(
+                QUESTION_ID_1, question1,
+                QUESTION_ID_2, question2
         );
 
         AnswerDTO answer1 = mock(AnswerDTO.class);
         LocalDateTime submitTime1 = LocalDateTime.of(2025, 1, 1, 10, 0);
         when(answer1.submitTime()).thenReturn(submitTime1);
 
-        AnswerDTO answer2= mock(AnswerDTO.class);
+        AnswerDTO answer2 = mock(AnswerDTO.class);
         LocalDateTime submitTime2 = LocalDateTime.of(2025, 1, 1, 11, 0);
         when(answer2.submitTime()).thenReturn(submitTime2);
 
@@ -348,23 +347,23 @@ class ExamManagementServiceTest {
         when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
         when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
         when(exam.result()).thenReturn(resultTime);
-        when(questionQueryService.getQuestionUUIDMap(EXAM_ID)).thenReturn(frageMap);
-        when(answerQueryService.getAnswers(STUDENT_ID, frageMap.keySet())).thenReturn(answerList);
-        when(scoringService.berechneErreichtePunkte(answerList, frageMap, resultTime)).thenReturn(12.0);
+        when(questionQueryService.getQuestionUUIDMap(EXAM_ID)).thenReturn(questionMap);
+        when(answerQueryService.getAnswers(STUDENT_ID, questionMap.keySet())).thenReturn(answerList);
+        when(scoringService.accumulatedPoints(answerList, questionMap, resultTime)).thenReturn(12.0);
 
         // Act
         AttemptDTO result = examManagementService.getSubmission(EXAM_ID, studentName);
 
         // Assert
-        assertThat(result.maxPunkte()).isEqualTo(15.0);
-        assertThat(result.erreichtePunkte()).isEqualTo(12.0);
-        assertThat(result.prozent()).isCloseTo(80.0, within(0.0001));
+        assertThat(result.totalPoints()).isEqualTo(15.0);
+        assertThat(result.accumulatedPoints()).isEqualTo(12.0);
+        assertThat(result.scoreInPercent()).isCloseTo(80.0, within(0.0001));
         assertThat(result.lastChanges()).isEqualTo(submitTime2);
 
         verify(studentQueryService).getStudentIdByName(studentName);
         verify(questionQueryService).getQuestionUUIDMap(EXAM_ID);
-        verify(answerQueryService).getAnswers(STUDENT_ID, frageMap.keySet());
-        verify(scoringService).berechneErreichtePunkte(answerList, frageMap, resultTime);
+        verify(answerQueryService).getAnswers(STUDENT_ID, questionMap.keySet());
+        verify(scoringService).accumulatedPoints(answerList, questionMap, resultTime);
     }
 
     @Test
@@ -372,7 +371,7 @@ class ExamManagementServiceTest {
         LocalDateTime start = LocalDateTime.of(2025, 1, 1, 12, 0);
         ExamDTO exam = new ExamDTO(
                 EXAM_ID,
-                "Titel",
+                "Title",
                 UUID.randomUUID(),
                 start,
                 start.plusHours(1),
@@ -391,7 +390,7 @@ class ExamManagementServiceTest {
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 9, 0);
         ExamDTO exam = new ExamDTO(
                 EXAM_ID,
-                "Titel",
+                "Title",
                 UUID.randomUUID(),
                 start,
                 start.plusHours(2),
@@ -408,6 +407,7 @@ class ExamManagementServiceTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("examTimeParameter")
     void deleteById(
+            String description,
             LocalDateTime startTime,
             LocalDateTime resultTime,
             boolean result
@@ -428,27 +428,32 @@ class ExamManagementServiceTest {
         assertThat(ans).isEqualTo(result);
     }
 
+    // Clock now: 2026-01-01T10:00:00Z (check line 62)
     private static Stream<Arguments> examTimeParameter() {
         return Stream.of(
                 Arguments.of(
+                        "Now is before start (1)",
                         LocalDateTime.of(2025, 12, 12, 0, 0),
                         LocalDateTime.of(2025, 12, 12, 2, 0),
                         true
                 ),
 
                 Arguments.of(
+                        "Now is before start (2)",
                         LocalDateTime.of(2026, 3, 3, 0, 0),
                         LocalDateTime.of(2026, 3, 3, 1, 0),
                         true
                 ),
 
                 Arguments.of(
+                        "Now is after start (1)",
                         LocalDateTime.of(2025, 12, 12, 0, 0),
                         LocalDateTime.of(2026, 1, 1, 12, 0),
                         false
                 ),
 
                 Arguments.of(
+                        "Now is after start (2)",
                         LocalDateTime.of(2026, 1, 1, 10, 0),
                         LocalDateTime.of(2026, 1, 1, 11, 0),
                         false

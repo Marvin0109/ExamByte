@@ -22,10 +22,10 @@ class ReviewExportServiceTest {
 
     private ExamDTO exam;
     private final UUID studentId = UUID.randomUUID();
-    private QuestionDTO frage;
-    private QuestionDTO frage2;
-    private AnswerDTO antwort;
-    private AnswerDTO antwort2;
+    private QuestionDTO question1;
+    private QuestionDTO question2;
+    private AnswerDTO answer1;
+    private AnswerDTO answer2;
     private ReviewDTO review;
     private ReviewDTO review2;
 
@@ -73,7 +73,7 @@ class ReviewExportServiceTest {
                 null
         );
 
-        frage = new QuestionDTO(
+        question1 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 1",
                 4,
@@ -81,7 +81,7 @@ class ReviewExportServiceTest {
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        frage2 = new QuestionDTO(
+        question2 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 2",
                 1,
@@ -89,35 +89,35 @@ class ReviewExportServiceTest {
                 QuestionTypeDTO.SC
         );
 
-        antwort = new AnswerDTO(
+        answer1 = new AnswerDTO(
                 UUID.randomUUID(),
                 "Answer",
-                frage.id(),
+                question1.id(),
                 studentId,
                 null
         );
 
-        antwort2 = new AnswerDTO(
+        answer2 = new AnswerDTO(
                 UUID.randomUUID(),
                 "A",
-                frage2.id(),
+                question2.id(),
                 studentId,
                 null
         );
 
         review = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort.id(),
+                answer1.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 4
         );
 
         review2 = new ReviewDTO(
                 UUID.randomUUID(),
-                antwort2.id(),
+                answer2.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 1
         );
     }
@@ -126,13 +126,13 @@ class ReviewExportServiceTest {
     void createReviewExport() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(frage));
+        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(answerQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
+        when(answerQueryService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
 
-        when(reviewQueryService.getReviewByAnswerId(antwort.id())).thenReturn(review);
+        when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
 
         when(reviewerQueryService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
@@ -143,8 +143,8 @@ class ReviewExportServiceTest {
                 exam,
                 "Reviewer",
                 4,
-                List.of(frage),
-                List.of(antwort),
+                List.of(question1),
+                List.of(answer1),
                 List.of(review));
     }
 
@@ -152,15 +152,15 @@ class ReviewExportServiceTest {
     void createReviewExport_excludingAutomaticReviewerName() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(frage, frage2));
+        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1, question2));
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(answerQueryService.findByStudentAndFrage(studentId, frage.id())).thenReturn(antwort);
-        when(answerQueryService.findByStudentAndFrage(studentId, frage2.id())).thenReturn(antwort2);
+        when(answerQueryService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
+        when(answerQueryService.findByStudentAndQuestion(studentId, question2.id())).thenReturn(answer2);
 
-        when(reviewQueryService.getReviewByAnswerId(antwort.id())).thenReturn(review);
-        when(reviewQueryService.getReviewByAnswerId(antwort2.id())).thenReturn(review2);
+        when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
+        when(reviewQueryService.getReviewByAnswerId(answer2.id())).thenReturn(review2);
 
         when(reviewerQueryService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
@@ -173,8 +173,8 @@ class ReviewExportServiceTest {
                 exam,
                 "Reviewer",
                 5,
-                List.of(frage, frage2),
-                List.of(antwort, antwort2),
+                List.of(question1, question2),
+                List.of(answer1, answer2),
                 List.of(review, review2));
     }
 }

@@ -24,9 +24,9 @@ class ExamMapperTest {
         Exam exam = new Exam.ExamBuilder()
                 .title("Test 1")
                 .professorId(UUID.randomUUID())
-                .startTime(startTime)
-                .endTime(endTime)
-                .resultTime(resultTime)
+                .start(startTime)
+                .end(endTime)
+                .result(resultTime)
                 .build();
 
         // Act
@@ -43,7 +43,6 @@ class ExamMapperTest {
     @Test
     void toDomain() {
         // Arrange
-
         LocalDateTime startTime = LocalDateTime.of(2025, 6, 20, 8, 0);
         LocalDateTime endTime = LocalDateTime.of(2025, 7, 2, 14, 0);
         LocalDateTime resultTime = LocalDateTime.of(2025, 7, 9, 14, 0);

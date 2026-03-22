@@ -5,7 +5,7 @@ import exambyte.infrastructure.persistence.entities.ReviewerEntity;
 
 public interface ReviewerMapper {
 
-    Reviewer toDomain(ReviewerEntity reviewerEntity);
+    Reviewer toDomain(ReviewerEntity entity);
 
-    public ReviewerEntity toEntity(Reviewer reviewer);
+    ReviewerEntity toEntity(Reviewer reviewer);
 }

@@ -70,9 +70,9 @@ class SubmitAnswersIT {
 
         examRepository.save(new Exam.ExamBuilder()
                 .professorId(profId.get())
-                .startTime(start)
-                .endTime(start.plusDays(1))
-                .resultTime(start.plusDays(2))
+                .start(start)
+                .end(start.plusDays(1))
+                .result(start.plusDays(2))
                 .title("Exam")
                 .build());
 
@@ -92,29 +92,29 @@ class SubmitAnswersIT {
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreeResponse = questionRepository.findAll().stream()
+        Optional<UUID> questionIdFreeResponse = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
                 .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdFreeResponse.isPresent());
+        assert(questionIdFreeResponse.isPresent());
 
-        Optional<UUID> frageIdSC = questionRepository.findAll().stream()
+        Optional<UUID> questionIdSC = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
                 .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdSC.isPresent());
+        assert(questionIdSC.isPresent());
 
         correctAnswersRepository.save(new CorrectAnswers.CorrectAnswersBuilder()
-                .frageId(frageIdSC.get())
+                .questionId(questionIdSC.get())
                 .choices("A\nB\nC\nD")
                 .solution("B")
                 .build());
 
         Map<String, List<String>> answers = new HashMap<>();
-        answers.put(frageIdFreeResponse.get().toString(), List.of("Antwort Text"));
-        answers.put(frageIdSC.get().toString(), List.of("B"));
+        answers.put(questionIdFreeResponse.get().toString(), List.of("Answer"));
+        answers.put(questionIdSC.get().toString(), List.of("B"));
 
         boolean submitted = examControllerService.examIsAlreadySubmitted(examId, "Student");
         assertThat(submitted).isFalse();
@@ -122,10 +122,10 @@ class SubmitAnswersIT {
         boolean success = examControllerService.submitExam("Student", answers, examId);
         assertThat(success).isTrue();
 
-        Answer answer = answerRepository.findByQuestionId(frageIdSC.get());
+        Answer answer = answerRepository.findByQuestionId(questionIdSC.get());
 
-        assertThat(answerRepository.findByQuestionId(frageIdFreeResponse.get())).isNotNull();
-        assertThat(answerRepository.findByQuestionId(frageIdSC.get())).isNotNull();
+        assertThat(answerRepository.findByQuestionId(questionIdFreeResponse.get())).isNotNull();
+        assertThat(answerRepository.findByQuestionId(questionIdSC.get())).isNotNull();
 
         assertThat(reviewRepository.findByAnswerId(answer.getId())).isNotNull();
     }

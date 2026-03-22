@@ -30,10 +30,10 @@ public class ScoringServiceImpl implements ScoringService {
     }
 
     @Override
-    public double berechneErreichtePunkte(List<AnswerDTO> answers, Map<UUID, QuestionDTO> questionUUIDMap, LocalDateTime result) {
+    public double accumulatedPoints(List<AnswerDTO> answers, Map<UUID, QuestionDTO> questionMap, LocalDateTime result) {
         return answers.stream()
                 .mapToDouble(a -> {
-                    QuestionDTO q = questionUUIDMap.get(a.frageId());
+                    QuestionDTO q = questionMap.get(a.questionId());
                     if (q == null) return 0;
                     Review review = reviewService.getReviewByAnswerId(a.id());
 
@@ -49,7 +49,7 @@ public class ScoringServiceImpl implements ScoringService {
                     boolean resultTimeReached = !currentTime.isBefore(result);
 
                     if (isAutomaticReview || resultTimeReached) {
-                        return review.getPunkte();
+                        return review.getPoints();
                     }
 
                     return 0;

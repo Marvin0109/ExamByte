@@ -7,7 +7,6 @@ import exambyte.domain.repository.QuestionRepository;
 import exambyte.infrastructure.persistence.repository.QuestionDAO;
 import exambyte.infrastructure.persistence.repository.QuestionRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -27,25 +26,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class QuestionDBTest {
 
     @Autowired
-    private QuestionDAO questionDAO;
+    private QuestionDAO dao;
 
-    private QuestionRepository questionRepository;
+    private QuestionRepository repository;
 
-    private static final UUID FRAGEUUID = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
+    private static final UUID QUESTION_ID = UUID.fromString("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb");
 
     @BeforeEach
     void setUp() {
         QuestionMapper questionMapper = new QuestionMapperImpl();
-        questionRepository = new QuestionRepositoryImpl(questionDAO, questionMapper);
+        repository = new QuestionRepositoryImpl(dao, questionMapper);
     }
 
     @Test
-    @DisplayName("Eine Question kann gespeichert und wieder geladen werden, außerdem kann der Professor extrahiert werden")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<Question> geladen = questionRepository.findById(FRAGEUUID);
+        Optional<Question> loaded = repository.findById(QUESTION_ID);
 
         // Assert
-        assertThat(geladen).isPresent();
+        assertThat(loaded).isPresent();
     }
 }

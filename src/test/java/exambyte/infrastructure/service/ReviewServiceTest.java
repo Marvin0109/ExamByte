@@ -3,7 +3,6 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.exam.Review;
 import exambyte.domain.repository.ReviewRepository;
 import exambyte.domain.service.ReviewService;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -13,23 +12,22 @@ import static org.mockito.Mockito.*;
 
 class ReviewServiceTest {
 
-    private final ReviewRepository reviewRepository = mock(ReviewRepository.class);
-    private final ReviewService reviewService = new ReviewServiceImpl(reviewRepository);
+    private final ReviewRepository repository = mock(ReviewRepository.class);
+    private final ReviewService service = new ReviewServiceImpl(repository);
 
     @Test
-    @DisplayName("Eine Bewertung kann gefunden werden mit der Answer-ID")
-    void test_01() {
+    void findByAnswerId_success() {
         // Arrange
         UUID answerId = UUID.randomUUID();
         var review = new Review.ReviewBuilder().answerId(answerId).build();
 
-        when(reviewRepository.findByAnswerId(answerId)).thenReturn(review);
+        when(repository.findByAnswerId(answerId)).thenReturn(review);
 
         // Act
-        Review result = reviewService.getReviewByAnswerId(answerId);
+        Review result = service.getReviewByAnswerId(answerId);
 
         // Assert
         assertThat(result.getAnswerId()).isEqualTo(answerId);
-        verify(reviewRepository).findByAnswerId(answerId);
+        verify(repository).findByAnswerId(answerId);
     }
 }

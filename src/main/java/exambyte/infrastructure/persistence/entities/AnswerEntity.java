@@ -92,13 +92,13 @@ public class AnswerEntity {
 
         public AnswerEntity build() {
             if (answer == null || answer.isBlank()) {
-                throw new IllegalStateException("Antworttext fehlt");
+                throw new IllegalStateException("Student answer is missing");
             }
             if (questionId == null) {
-                throw new IllegalStateException("Question-ID fehlt");
+                throw new IllegalStateException("Question id is missing");
             }
             if (studentId == null) {
-                throw new IllegalStateException("Student-ID fehlt");
+                throw new IllegalStateException("Student id is missing");
             }
             return new AnswerEntity(id, answer, questionId, studentId, submitTime);
         }

@@ -7,7 +7,6 @@ import exambyte.infrastructure.persistence.mapper.ReviewMapperImpl;
 import exambyte.infrastructure.persistence.repository.ReviewDAO;
 import exambyte.infrastructure.persistence.repository.ReviewRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -28,25 +27,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ReviewDBTest {
 
     @Autowired
-    private ReviewDAO reviewDAO;
+    private ReviewDAO dao;
 
-    private ReviewRepository reviewRepository;
+    private ReviewRepository repository;
 
-    private static final UUID REVIEWUUID = UUID.fromString("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
+    private static final UUID REVIEW_ID = UUID.fromString("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee");
 
     @BeforeEach
     void setUp() {
         ReviewMapper reviewMapper = new ReviewMapperImpl();
-        reviewRepository = new ReviewRepositoryImpl(reviewDAO, reviewMapper);
+        repository = new ReviewRepositoryImpl(dao, reviewMapper);
     }
 
     @Test
-    @DisplayName("Laden der Daten erfolgreich")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<Review> geladenReview = reviewRepository.findById(REVIEWUUID);
+        Optional<Review> loaded = repository.findById(REVIEW_ID);
 
         // Assert
-        assertThat(geladenReview).isPresent();
+        assertThat(loaded).isPresent();
     }
 }

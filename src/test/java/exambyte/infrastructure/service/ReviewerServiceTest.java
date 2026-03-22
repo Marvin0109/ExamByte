@@ -3,8 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.repository.ReviewerRepository;
 import exambyte.domain.service.ReviewerService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
-import org.junit.jupiter.api.DisplayName;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -15,23 +14,21 @@ import static org.mockito.Mockito.*;
 
 class ReviewerServiceTest {
 
-    private final ReviewerRepository reviewerRepository = mock(ReviewerRepository.class);
-    private final ReviewerService service = new ReviewerServiceImpl(reviewerRepository);
+    private final ReviewerRepository repository = mock(ReviewerRepository.class);
+    private final ReviewerService service = new ReviewerServiceImpl(repository);
 
     @Test
-    @DisplayName("Ein Reviewer kann nicht gefunden werden")
-    void test_01() {
+    void getReviewer_notFound() {
         UUID id = UUID.randomUUID();
-        when(reviewerRepository.findById(id)).thenReturn(Optional.empty());
+        when(repository.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(NichtVorhandenException.class, () -> service.getReviewer(id));
-        verify(reviewerRepository).findById(id);
+        assertThrows(NotFoundException.class, () -> service.getReviewer(id));
+        verify(repository).findById(id);
     }
 
     @Test
-    @DisplayName("Der Automatische Korrektur wird erfolgreich gespeichert")
-    void test_02() {
-        service.saveReviewer("Auto reviewer");
-        verify(reviewerRepository).save(any(Reviewer.class));
+    void saveReviewer_success() {
+        service.saveReviewer("Reviewer");
+        verify(repository).save(any(Reviewer.class));
     }
 }

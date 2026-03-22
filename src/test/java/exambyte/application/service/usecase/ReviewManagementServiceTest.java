@@ -40,7 +40,7 @@ class ReviewManagementServiceTest {
 
         answer = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
+                "Answer",
                 UUID.randomUUID(),
                 STUDENT_UUID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));
@@ -49,7 +49,7 @@ class ReviewManagementServiceTest {
                 UUID.randomUUID(),
                 answer.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 1);
     }
 
@@ -67,7 +67,7 @@ class ReviewManagementServiceTest {
     void getReviewCoverage_50Percent() {
         AnswerDTO answerDTO2 = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
+                "Answer",
                 UUID.randomUUID(),
                 STUDENT_UUID,
                 LocalDateTime.of(2000, 1, 1, 0, 0));

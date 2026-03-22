@@ -6,7 +6,6 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.application.service.ExamControllerService;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -43,8 +42,7 @@ class ReviewerControllerTest {
     private ExamControllerService service;
 
     @Test
-    @DisplayName("Die Seite zum Korrigieren von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
-    void listExamsForReviewer_01() throws Exception {
+    void get_listExamsForReviewer_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/reviewer/examListForReviewer"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -54,8 +52,7 @@ class ReviewerControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Die Seite zur gesamten Korrekturübersicht ist erfolgreich")
-    void listExamsForReviewer_02() throws Exception {
+    void get_listExamsForReviewer_success() throws Exception {
 
         mvc.perform(get("/reviewer/examListForReviewer"))
             .andExpect(status().isOk())
@@ -67,8 +64,7 @@ class ReviewerControllerTest {
     }
 
     @Test
-    @DisplayName("Seite zur Korrekturübersicht eines bestimmten Exams ist nicht erreichbar ohne Authentifizierung")
-    void showExamSubmits_01() throws Exception {
+    void get_showExamSubmits_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/reviewer/showExamSubmits/{examId}", UUID.randomUUID()))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -78,9 +74,7 @@ class ReviewerControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Seite zur Korrekturübersicht eines bestimmten Exams nicht erfolgreich: Exam läuft noch!")
-    void showExamSubmits_02() throws Exception {
-
+    void get_showExamSubmits_fail() throws Exception {
         UUID examId = UUID.randomUUID();
 
         ExamDTO examDTO = mock(ExamDTO.class);
@@ -97,9 +91,7 @@ class ReviewerControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Seite zur Korrekturübersicht erfolgt")
-    void showExamSubmits_03() throws Exception {
-
+    void get_showExamSubmits_success() throws Exception {
         UUID examId = UUID.randomUUID();
 
         ExamDTO examDTO = mock(ExamDTO.class);
@@ -117,8 +109,7 @@ class ReviewerControllerTest {
     }
 
     @Test
-    @DisplayName("Seite zur Korrektur erfolgt nicht ohne Authentifizierung")
-    void showSubmit_01() throws Exception {
+    void get_showSubmit_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/reviewer/showSubmit/{examId}/{studentId}",
                         UUID.randomUUID(), UUID.randomUUID()))
                 .andExpect(status().is3xxRedirection())
@@ -129,8 +120,7 @@ class ReviewerControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Korrekturseite ist erreichbar")
-    void showSubmit_02() throws Exception {
+    void get_showSubmit_success() throws Exception {
         UUID examId = UUID.randomUUID();
         UUID studentId = UUID.randomUUID();
         mvc.perform(get("/reviewer/showSubmit/{examId}/{studentId}", examId, studentId))
@@ -141,19 +131,17 @@ class ReviewerControllerTest {
     }
 
     @Test
-    @DisplayName("Das erstellen der Reviews erfolgt nicht ohne Authentifizierung")
-    void createReview_01() throws Exception {
+    void post_createReview_notAuthorized() throws Exception {
         mvc.perform(post("/reviewer/createReview/{answerId}", UUID.randomUUID()))
                 .andExpect(status().isForbidden());
     }
 
     @Test
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Erstellen einer Bewertung ist erfolgreich")
-    void createReview_02() throws Exception {
+    void post_createReview_success() throws Exception {
         mvc.perform(post("/reviewer/createReview/{answerId}", UUID.randomUUID())
                 .with(csrf())
-                .param("reviewText", "Bewertung")
+                .param("reviewText", "Text")
                 .param("points", "1.5"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/reviewer/examListForReviewer"))
@@ -163,8 +151,7 @@ class ReviewerControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"REVIEWER"})
-    @DisplayName("Erstellen einer Bewertung schlägt fehl (Bewertungstext fehlt)")
-    void createReview_03() throws Exception {
+    void post_createReview_fail() throws Exception {
         mvc.perform(post("/reviewer/createReview/{answerId}", UUID.randomUUID())
                 .with(csrf())
                 .param("reviewText", "")

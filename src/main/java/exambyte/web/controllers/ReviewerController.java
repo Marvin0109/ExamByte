@@ -35,9 +35,7 @@ public class ReviewerController {
 
     private final ExamControllerService service;
     private static final String LOGIN_NAME = "login";
-    private static final String CURRENT_PATH = "currentPath";
     private static final String TIME_NOW = "timeNow";
-    private static final String REDIRECT_EXAM_REVIEWER = "redirect:/reviewer/examListForReviewer";
 
     public ReviewerController(ExamControllerService service) {
         this.service = service;
@@ -46,7 +44,7 @@ public class ReviewerController {
     private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("success", success);
-        return REDIRECT_EXAM_REVIEWER;
+        return "redirect:/reviewer/examListForReviewer";
     }
 
     @GetMapping("/examListForReviewer")
@@ -65,7 +63,7 @@ public class ReviewerController {
 
         model.addAttribute("reviewCoverage", covList);
         model.addAttribute(TIME_NOW, now);
-        model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        model.addAttribute("currentPath", request.getRequestURI());
         return "reviewer/examListForReviewer";
     }
 

@@ -7,15 +7,15 @@ public class Answer {
 
     private final UUID id;
     private final String studentAnswer;
-    private final UUID frageId;
+    private final UUID questionId;
     private final UUID studentId;
     private final LocalDateTime submitTime;
 
-    private Answer(UUID id, String answer, UUID frageId, UUID studentId,
-                    LocalDateTime submitTime) {
+    private Answer(UUID id, String answer, UUID questionId, UUID studentId,
+                   LocalDateTime submitTime) {
         this.id = id;
         this.studentAnswer = answer;
-        this.frageId = frageId;
+        this.questionId = questionId;
         this.studentId = studentId;
         this.submitTime = submitTime;
     }
@@ -24,8 +24,8 @@ public class Answer {
         return studentAnswer;
     }
 
-    public UUID getFrageId() {
-        return frageId;
+    public UUID getQuestionId() {
+        return questionId;
     }
 
     public UUID getStudentUUID() {
@@ -38,7 +38,7 @@ public class Answer {
     public static class AnswerBuilder {
         private UUID id;
         private String answer;
-        private UUID frageId;
+        private UUID questionId;
         private UUID studentId;
         private LocalDateTime submitTime;
 
@@ -52,8 +52,8 @@ public class Answer {
             return this;
         }
 
-        public AnswerBuilder frageId(UUID frageId) {
-            this.frageId = frageId;
+        public AnswerBuilder questionId(UUID questionId) {
+            this.questionId = questionId;
             return this;
         }
 
@@ -68,7 +68,7 @@ public class Answer {
         }
 
         public Answer build() {
-            return new Answer(id, answer, frageId, studentId, submitTime);
+            return new Answer(id, answer, questionId, studentId, submitTime);
         }
     }
 }

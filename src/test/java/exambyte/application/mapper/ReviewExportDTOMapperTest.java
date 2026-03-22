@@ -20,8 +20,8 @@ class ReviewExportDTOMapperTest {
     private ReviewExportDTOMapper mapper;
 
     private ExamDTO exam;
-    private QuestionDTO frage1;
-    private QuestionDTO frage2;
+    private QuestionDTO question1;
+    private QuestionDTO question2;
     private AnswerDTO answer1;
     private AnswerDTO answer2;
     private ReviewDTO review1;
@@ -40,7 +40,7 @@ class ReviewExportDTOMapperTest {
                 null
         );
 
-        frage1 = new QuestionDTO(
+        question1 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 1",
                 6,
@@ -48,7 +48,7 @@ class ReviewExportDTOMapperTest {
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        frage2 = new QuestionDTO(
+        question2 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 2",
                 1,
@@ -58,8 +58,8 @@ class ReviewExportDTOMapperTest {
 
         answer1 = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort 1",
-                frage1.id(),
+                "Answer 1",
+                question1.id(),
                 null,
                 null
         );
@@ -67,7 +67,7 @@ class ReviewExportDTOMapperTest {
         answer2 = new AnswerDTO(
                 UUID.randomUUID(),
                 "A",
-                frage2.id(),
+                question2.id(),
                 null,
                 null
         );
@@ -76,7 +76,7 @@ class ReviewExportDTOMapperTest {
                 UUID.randomUUID(),
                 answer1.id(),
                 null,
-                "Bewertung 1",
+                "Text 1",
                 6
         );
 
@@ -84,7 +84,7 @@ class ReviewExportDTOMapperTest {
                 UUID.randomUUID(),
                 answer2.id(),
                 null,
-                "Bewertung 2",
+                "Text 2",
                 1
         );
     }
@@ -95,7 +95,7 @@ class ReviewExportDTOMapperTest {
                 exam,
                 "Reviewer",
                 7,
-                List.of(frage1, frage2),
+                List.of(question1, question2),
                 List.of(answer1, answer2),
                 List.of(review1, review2));
 
@@ -108,12 +108,12 @@ class ReviewExportDTOMapperTest {
         assertThat(firstElement.getTotalPoints()).isEqualTo(7);
 
         assertThat(firstElement.getQuestionText()).isEqualTo("Question 1");
-        assertThat(firstElement.getQuestionType()).isEqualTo(frage1.type().name());
+        assertThat(firstElement.getQuestionType()).isEqualTo(question1.type().name());
         assertThat(firstElement.getQuestionPoints()).isEqualTo(6);
 
-        assertThat(firstElement.getStudentAnswer()).isEqualTo("Antwort 1");
+        assertThat(firstElement.getStudentAnswer()).isEqualTo("Answer 1");
 
-        assertThat(firstElement.getReviewText()).isEqualTo("Bewertung 1");
+        assertThat(firstElement.getReviewText()).isEqualTo("Text 1");
         assertThat(firstElement.getReviewPoints()).isEqualTo(6);
 
         var secondElement = result.getLast();
@@ -127,7 +127,7 @@ class ReviewExportDTOMapperTest {
                 exam,
                 "Reviewer",
                 7,
-                List.of(frage1, frage2),
+                List.of(question1, question2),
                 List.of(answer1, answer2),
                 List.of(review2));
 

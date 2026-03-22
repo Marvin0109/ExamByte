@@ -15,7 +15,7 @@ public interface AnswerQueryService {
 
     List<AnswerDTO> getFreeResponseAnswersForExam(UUID examId);
 
-    AnswerDTO findByStudentAndFrage(UUID studentId, UUID frageId);
+    AnswerDTO findByStudentAndQuestion(UUID studentId, UUID questionId);
 
     void deleteAnswer(UUID id);
 }

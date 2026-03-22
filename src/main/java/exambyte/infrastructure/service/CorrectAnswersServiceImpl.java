@@ -3,6 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.exam.CorrectAnswers;
 import exambyte.domain.repository.CorrectAnswersRepository;
 import exambyte.domain.service.CorrectAnswersService;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -22,8 +23,9 @@ public class CorrectAnswersServiceImpl implements CorrectAnswersService {
     }
 
     @Override
-    public CorrectAnswers findSolution(UUID frageId) {
-        return repository.findByFrageId(frageId).orElse(null);
+    public CorrectAnswers findSolution(UUID questionId) {
+        return repository.findByQuestionId(questionId)
+                .orElse(null);
     }
 
     @Override

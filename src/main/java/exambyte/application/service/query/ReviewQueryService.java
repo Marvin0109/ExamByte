@@ -10,7 +10,7 @@ public interface ReviewQueryService {
 
     boolean answerHasReview(UUID answerId);
 
-    void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId);
+    void createReview(String text, double points, UUID answerId, UUID reviewerId);
 
     UUID getReviewIdByAnswerId(UUID answerId);
 

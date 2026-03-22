@@ -11,21 +11,21 @@ import java.util.UUID;
 @Service
 public class ProfessorQueryServiceImpl implements ProfessorQueryService {
 
-    private final ProfessorService professorService;
-    private final ProfessorDTOMapper professorDTOMapper;
+    private final ProfessorService service;
+    private final ProfessorDTOMapper mapper;
 
-    public ProfessorQueryServiceImpl(ProfessorService professorService, ProfessorDTOMapper professorDTOMapper) {
-        this.professorService = professorService;
-        this.professorDTOMapper = professorDTOMapper;
+    public ProfessorQueryServiceImpl(ProfessorService service, ProfessorDTOMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
     }
 
     @Override
     public Optional<UUID> getProfIdByName(String name) {
-        return professorService.getProfessorIdByName(name);
+        return service.getProfessorIdByName(name);
     }
 
     @Override
     public ProfessorDTO getProfessorById(UUID id) {
-        return professorDTOMapper.toDTO(professorService.getProfessor(id));
+        return mapper.toDTO(service.getProfessor(id));
     }
 }

@@ -6,5 +6,5 @@ import java.util.UUID;
 
 public interface CorrectAnswersQueryService {
 
-    CorrectAnswersDTO getSolutionForFrage(UUID frageId);
+    CorrectAnswersDTO getCorrectAnswerForQuestion(UUID questionId);
 }

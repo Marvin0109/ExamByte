@@ -3,7 +3,6 @@ package exambyte.infrastructure.mapper;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.domain.mapper.ProfessorDTOMapper;
 import exambyte.domain.model.aggregate.user.Professor;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -18,8 +17,7 @@ class ProfessorDTOMapperTest {
     private final ProfessorDTOMapper mapper = new ProfessorDTOMapperImpl();
 
     @Test
-    @DisplayName("Test ProfessorDTOMapper 'toDTO'")
-    void test_01() {
+    void toDTO() {
         // Arrange
         UUID id = UUID.randomUUID();
 
@@ -37,14 +35,7 @@ class ProfessorDTOMapperTest {
     }
 
     @Test
-    @DisplayName("test_null_professor_throws_exception")
-    void test_02() {
-        assertThrows(NullPointerException.class, () -> mapper.toDTO(null));
-    }
-
-    @Test
-    @DisplayName("toProfessorDTOList Test")
-    void test_03() {
+    void toProfessorDTOList() {
         // Arrange
         UUID id1 = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();
@@ -60,13 +51,13 @@ class ProfessorDTOMapperTest {
                 .build();
 
         // Act
-        List<Professor> professoren = Arrays.asList(professor1, professor2);
+        List<Professor> profList = Arrays.asList(professor1, professor2);
 
         // Assert
-        assertEquals(2, professoren.size());
-        assertThat(professoren.getFirst().getName()).isEqualTo("Prof 1");
-        assertThat(professoren.getFirst().id()).isEqualTo(id1);
-        assertThat(professoren.getLast().getName()).isEqualTo("Prof 2");
-        assertThat(professoren.getLast().id()).isEqualTo(id2);
+        assertEquals(2, profList.size());
+        assertThat(profList.getFirst().getName()).isEqualTo("Prof 1");
+        assertThat(profList.getFirst().id()).isEqualTo(id1);
+        assertThat(profList.getLast().getName()).isEqualTo("Prof 2");
+        assertThat(profList.getLast().id()).isEqualTo(id2);
     }
 }

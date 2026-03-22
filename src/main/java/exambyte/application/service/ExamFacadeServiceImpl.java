@@ -58,11 +58,11 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     @Override
     public String createExam(String professorName,
                               String title,
-                              LocalDateTime startTime,
-                              LocalDateTime endTime,
-                              LocalDateTime resultTime) {
+                              LocalDateTime start,
+                              LocalDateTime end,
+                              LocalDateTime result) {
 
-        return examManagementService.createExam(professorName, title, startTime, endTime, resultTime);
+        return examManagementService.createExam(professorName, title, start, end, result);
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public boolean submitExam(String studentLogin, Map<String, List<String>> answer, UUID examId) {
-        SubmitExamResult result = examManagementService.submitExam(studentLogin, answer, examId);
+    public boolean submitExam(String studentName, Map<String, List<String>> answer, UUID examId) {
+        SubmitExamResult result = examManagementService.submitExam(studentName, answer, examId);
         return result.equals(SubmitExamResult.SUCCESS);
     }
 
@@ -102,13 +102,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void createQuestion(QuestionDTO questionDTO) {
-        questionQueryService.createQuestion(questionDTO);
+    public void createQuestion(QuestionDTO question) {
+        questionQueryService.createQuestion(question);
     }
 
     @Override
-    public void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices) {
-        questionQueryService.createChoiceQuestion(questionDTO, correctAnswer, choices);
+    public void createChoiceQuestion(QuestionDTO question, String correctAnswer, String choices) {
+        questionQueryService.createChoiceQuestion(question, correctAnswer, choices);
     }
 
     @Override
@@ -117,13 +117,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public UUID getExamByStartTime(LocalDateTime startTime) {
-        return examManagementService.getExamIdByStartTime(startTime);
+    public UUID getExamByStartTime(LocalDateTime start) {
+        return examManagementService.getExamIdByStartTime(start);
     }
 
     @Override
-    public boolean deleteById(UUID uuid) {
-        return examManagementService.deleteById(uuid);
+    public boolean deleteById(UUID id) {
+        return examManagementService.deleteById(id);
     }
 
     @Override
@@ -132,8 +132,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public AttemptDTO getSubmission(UUID examId, String studentLogin) {
-        return examManagementService.getSubmission(examId, studentLogin);
+    public AttemptDTO getSubmission(UUID examId, String studentName) {
+        return examManagementService.getSubmission(examId, studentName);
     }
 
     @Override
@@ -172,8 +172,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID answerId, UUID reviewerId) {
-        reviewQueryService.createReview(bewertung, punkte, answerId, reviewerId);
+    public void createReview(String text, double points, UUID answerId, UUID reviewerId) {
+        reviewQueryService.createReview(text, points, answerId, reviewerId);
     }
 
     @Override
@@ -187,8 +187,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public AnswerDTO getAnswerForQuestionIdAndStudentId(UUID frageId, UUID studentId) {
-        return answerQueryService.findByStudentAndFrage(studentId, frageId);
+    public AnswerDTO getAnswerForQuestionIdAndStudentId(UUID questionId, UUID studentId) {
+        return answerQueryService.findByStudentAndQuestion(studentId, questionId);
     }
 
     @Override
@@ -197,8 +197,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public CorrectAnswersDTO getCorrectAnswerForQuestion(UUID frageId) {
-        return correctAnswersQueryService.getSolutionForFrage(frageId);
+    public CorrectAnswersDTO getCorrectAnswerForQuestion(UUID questionId) {
+        return correctAnswersQueryService.getCorrectAnswerForQuestion(questionId);
     }
 
     @Override

@@ -21,7 +21,7 @@ class QuestionMapperTest {
         // Arrange
         UUID examId = UUID.randomUUID();
         Question question = new Question.FrageBuilder()
-                .text("Fragetext")
+                .text("Question")
                 .points(5.5)
                 .type(QuestionType.FREE_RESPONSE)
                 .examId(examId)
@@ -31,7 +31,7 @@ class QuestionMapperTest {
         QuestionEntity entity = mapper.toEntity(question);
 
         // Assert
-        assertThat(entity.getText()).isEqualTo("Fragetext");
+        assertThat(entity.getText()).isEqualTo("Question");
         assertThat(entity.getPoints()).isEqualTo(11);
         assertThat(entity.getType()).isEqualTo(QuestionTypeEntity.FREE_RESPONSE);
         assertThat(entity.getExamId()).isEqualTo(examId);
@@ -41,18 +41,18 @@ class QuestionMapperTest {
     void toDomain() {
         // Arrange
         UUID examId = UUID.randomUUID();
-        QuestionEntity questionEntity = new QuestionEntity.QuestionEntityBuilder()
-                .text("Fragetext")
+        QuestionEntity entity = new QuestionEntity.QuestionEntityBuilder()
+                .text("Question")
                 .points(5)
                 .type(QuestionTypeEntity.FREE_RESPONSE)
                 .examId(examId)
                 .build();
 
         // Act
-        Question question = mapper.toDomain(questionEntity);
+        Question question = mapper.toDomain(entity);
 
         // Assert
-        assertThat(question.getText()).isEqualTo("Fragetext");
+        assertThat(question.getText()).isEqualTo("Question");
         assertThat(question.getType()).isEqualTo(QuestionType.FREE_RESPONSE);
         assertThat(question.getPoints()).isCloseTo(2.5, Offset.offset(0.001));
         assertThat(question.getExamId()).isEqualTo(examId);

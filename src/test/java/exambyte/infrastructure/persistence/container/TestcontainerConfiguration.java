@@ -16,7 +16,7 @@ public class TestcontainerConfiguration {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgresContainer() {
-        logger.warn("Verwende Testcontainers");
+        logger.warn("Using testcontainers");
         return new PostgreSQLContainer<>(DockerImageName.parse("postgres:15-alpine"));
     }
 

@@ -7,7 +7,6 @@ import exambyte.infrastructure.persistence.mapper.ReviewerMapperImpl;
 import exambyte.infrastructure.persistence.repository.ReviewerDAO;
 import exambyte.infrastructure.persistence.repository.ReviewerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
@@ -27,7 +26,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class ReviewerDBTest {
 
     @Autowired
-    private ReviewerDAO reviewerDAO;
+    private ReviewerDAO dao;
 
     private ReviewerRepository repository;
 
@@ -36,16 +35,15 @@ class ReviewerDBTest {
     @BeforeEach
     void setUp() {
         ReviewerMapper mapper = new ReviewerMapperImpl();
-        repository = new ReviewerRepositoryImpl(reviewerDAO, mapper);
+        repository = new ReviewerRepositoryImpl(dao, mapper);
     }
 
     @Test
-    @DisplayName("Ein kann geladen werden")
-    void test1() {
+    void load_data_success() {
         // Act
-        Optional<Reviewer> geladen = repository.findById(REVIEWER_ID);
+        Optional<Reviewer> loaded = repository.findById(REVIEWER_ID);
 
         // Assert
-        assertThat(geladen).isPresent();
+        assertThat(loaded).isPresent();
     }
 }

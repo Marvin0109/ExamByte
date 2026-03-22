@@ -27,25 +27,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CorrectAnswersDBTest {
 
     @Autowired
-    private CorrectAnswersDAO correctAnswersDAO;
+    private CorrectAnswersDAO dao;
 
     private CorrectAnswersRepository repository;
 
-    private static final UUID CORRECT_ANSWERS_UUID = UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc");
+    private static final UUID CORRECT_ANSWERS_ID = UUID.fromString("cccccccc-cccc-cccc-cccc-cccccccccccc");
 
     @BeforeEach
     void setUp() {
         CorrectAnswersMapper mapper = new CorrectAnswersMapperImpl();
-        repository = new CorrectAnswersRepositoryImpl(correctAnswersDAO, mapper);
+        repository = new CorrectAnswersRepositoryImpl(dao, mapper);
     }
 
     @Test
-    @DisplayName("Laden der Daten erfolgreich")
-    void test_01() {
+    void load_data_success() {
         // Act
-        Optional<CorrectAnswers> geladen = repository.findById(CORRECT_ANSWERS_UUID);
+        Optional<CorrectAnswers> loaded = repository.findById(CORRECT_ANSWERS_ID);
 
         // Assert
-        assertThat(geladen).isPresent();
+        assertThat(loaded).isPresent();
     }
 }

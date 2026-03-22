@@ -12,7 +12,7 @@ public class CorrectAnswersMapperImpl implements CorrectAnswersMapper {
     public CorrectAnswers toDomain(CorrectAnswersEntity entity) {
         return new CorrectAnswers.CorrectAnswersBuilder()
                 .id(entity.getId())
-                .frageId(entity.getQuestionId())
+                .questionId(entity.getQuestionId())
                 .solution(entity.getSolution())
                 .choices(entity.getChoices())
                 .build();
@@ -21,7 +21,7 @@ public class CorrectAnswersMapperImpl implements CorrectAnswersMapper {
     @Override
     public CorrectAnswersEntity toEntity(CorrectAnswers correctAnswers) {
     return new CorrectAnswersEntity.CorrectAnswersEntityBuilder()
-            .questionId(correctAnswers.getFrageId())
+            .questionId(correctAnswers.getQuestionId())
             .choices(correctAnswers.getChoices())
             .solution(correctAnswers.getSolution())
             .build();

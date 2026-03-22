@@ -3,7 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.user.Reviewer;
 import exambyte.domain.repository.ReviewerRepository;
 import exambyte.domain.service.ReviewerService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,14 +14,14 @@ public class ReviewerServiceImpl  implements ReviewerService {
 
     private final ReviewerRepository repository;
 
-    public ReviewerServiceImpl(ReviewerRepository reviewerRepository) {
-        this.repository = reviewerRepository;
+    public ReviewerServiceImpl(ReviewerRepository repository) {
+        this.repository = repository;
     }
 
     @Override
     public Reviewer getReviewer(UUID id) {
         return repository.findById(id)
-                .orElseThrow(NichtVorhandenException::new);
+                .orElseThrow(NotFoundException::new);
     }
 
     @Override

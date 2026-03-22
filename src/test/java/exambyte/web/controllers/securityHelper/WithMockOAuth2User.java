@@ -24,7 +24,6 @@ import org.springframework.security.test.context.support.WithSecurityContext;
 public @interface WithMockOAuth2User {
     int id() default 666666;
 
-
     String login() default "username";
 
     String[] roles() default {"USER"};

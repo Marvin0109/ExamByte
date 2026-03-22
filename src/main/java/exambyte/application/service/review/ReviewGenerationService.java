@@ -9,5 +9,5 @@ import java.util.UUID;
 
 public interface ReviewGenerationService {
 
-    List<ReviewDTO> generateReviews(UUID studentId, List<QuestionDTO> fragen, List<AnswerDTO> answers);
+    List<ReviewDTO> generateReviews(UUID studentId, List<QuestionDTO> questions, List<AnswerDTO> answers);
 }

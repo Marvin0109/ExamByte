@@ -21,7 +21,7 @@ public interface HelperService {
 
     String normalizeAnswerForFrontend(String toSplit);
 
-    PreparedFrageData prepareFrageData(QuestionDTO frage, UUID studentId);
+    PreparedQuestionData prepareFrageData(QuestionDTO frage, UUID studentId);
 
     ReviewViewForm prepareReviewViewForm(UUID examId, String studentName);
 

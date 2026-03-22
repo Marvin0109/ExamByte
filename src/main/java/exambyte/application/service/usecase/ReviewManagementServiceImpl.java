@@ -51,8 +51,8 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
                 .map(AnswerDTO::id)
                 .toList();
 
-        for (UUID uuid : studentAnswerList) {
-            if (reviewQueryService.getReviewByAnswerId(uuid) == null) {
+        for (UUID id : studentAnswerList) {
+            if (reviewQueryService.getReviewByAnswerId(id) == null) {
                 return false;
             }
         }

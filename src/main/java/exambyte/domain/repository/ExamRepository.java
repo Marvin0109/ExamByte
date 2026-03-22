@@ -13,7 +13,7 @@ public interface ExamRepository {
 
     Optional<Exam> findById(UUID id);
 
-    void save(Exam test);
+    void save(Exam exam);
 
     Optional<UUID> findByStartTime(LocalDateTime start);
 

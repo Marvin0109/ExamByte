@@ -12,8 +12,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository repository;
 
-    public ReviewServiceImpl(ReviewRepository reviewRepository) {
-        this.repository = reviewRepository;
+    public ReviewServiceImpl(ReviewRepository repository) {
+        this.repository = repository;
     }
 
     @Override

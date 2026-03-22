@@ -15,10 +15,10 @@ public class ReviewerRepositoryImpl implements ReviewerRepository {
     private final ReviewerMapper mapper;
     private final ReviewerDAO dao;
 
-    public ReviewerRepositoryImpl(ReviewerDAO reviewerDAO,
-                                   ReviewerMapper reviewerMapper) {
-        this.dao = reviewerDAO;
-        this.mapper = reviewerMapper;
+    public ReviewerRepositoryImpl(ReviewerDAO dao,
+                                   ReviewerMapper mapper) {
+        this.dao = dao;
+        this.mapper = mapper;
     }
 
     @Override

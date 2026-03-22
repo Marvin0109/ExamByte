@@ -3,6 +3,7 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.repository.AnswerRepository;
 import exambyte.domain.service.AnswerService;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,8 +18,8 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Answer findByFrageId(UUID frageId) {
-        return repository.findByQuestionId(frageId);
+    public Answer findByQuestionId(UUID id) {
+        return repository.findByQuestionId(id);
     }
 
     @Override
@@ -27,8 +28,8 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Answer findByStudentAndFrage(UUID studentId, UUID examId) {
-        return repository.findByStudentIdAndQuestionId(studentId, examId)
+    public Answer findByStudentIdAndQuestionId(UUID studentId, UUID questionId) {
+        return repository.findByStudentIdAndQuestionId(studentId, questionId)
                 .orElse(null);
     }
 

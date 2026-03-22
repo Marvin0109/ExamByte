@@ -44,7 +44,7 @@ public class ReviewerEntity {
 
         public ReviewerEntity build() {
             if (name == null || name.isBlank()) {
-                throw new IllegalStateException("Name darf nicht leer sein");
+                throw new IllegalStateException("Name is missing");
             }
             return new ReviewerEntity(id, name);
         }

@@ -11,30 +11,30 @@ import java.util.UUID;
 @Service
 public class ReviewerQueryServiceImpl implements ReviewerQueryService {
 
-    private final ReviewerService reviewerService;
-    private final ReviewerDTOMapper reviewerDTOMapper;
+    private final ReviewerService service;
+    private final ReviewerDTOMapper mapper;
 
-    public ReviewerQueryServiceImpl(ReviewerService reviewerService,
-                                     ReviewerDTOMapper reviewerDTOMapper) {
-        this.reviewerService = reviewerService;
-        this.reviewerDTOMapper = reviewerDTOMapper;
+    public ReviewerQueryServiceImpl(ReviewerService service,
+                                     ReviewerDTOMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
     }
 
     @Override
     public void saveAutomaticReviewer() {
-        if (reviewerService.getReviewerByName("Auto reviewer").isEmpty()) {
-            reviewerService.saveReviewer("Auto reviewer");
+        if (service.getReviewerByName("Auto reviewer").isEmpty()) {
+            service.saveReviewer("Auto reviewer");
         }
     }
 
     @Override
     public UUID getReviewerIdByName(String name) {
-        Optional<ReviewerDTO> k = reviewerService.getReviewerByName(name).map(reviewerDTOMapper::toDTO);
-        return k.map(ReviewerDTO::id).orElse(null);
+        Optional<ReviewerDTO> reviewer = service.getReviewerByName(name).map(mapper::toDTO);
+        return reviewer.map(ReviewerDTO::id).orElse(null);
     }
 
     @Override
     public ReviewerDTO getReviewerById(UUID reviewerId) {
-        return reviewerDTOMapper.toDTO(reviewerService.getReviewer(reviewerId));
+        return mapper.toDTO(service.getReviewer(reviewerId));
     }
 }

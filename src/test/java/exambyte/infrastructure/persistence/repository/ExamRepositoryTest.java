@@ -17,48 +17,48 @@ import static org.mockito.Mockito.when;
 
 class ExamRepositoryTest {
 
-    private final ExamDAO examDAO = mock(ExamDAO.class);
-    private final ExamMapper examMapper = mock(ExamMapper.class);
+    private final ExamDAO dao = mock(ExamDAO.class);
+    private final ExamMapper mapper = mock(ExamMapper.class);
 
     private ExamRepository repository;
 
-    private static final LocalDateTime TIMESTAMP =
+    private static final LocalDateTime START =
             LocalDateTime.of(2020, 1, 1, 0, 0);
 
     @BeforeEach
     void setUp() {
-        repository = new ExamRepositoryImpl(examDAO, examMapper);
+        repository = new ExamRepositoryImpl(dao, mapper);
     }
 
     @Test
     void findByStartTime_exists() {
         // Arrange
-        ExamEntity examEntity = new ExamEntity.ExamEntityBuilder()
+        ExamEntity exam = new ExamEntity.ExamEntityBuilder()
                 .id(UUID.randomUUID())
                 .professorId(UUID.randomUUID())
                 .title("Exam")
-                .start(TIMESTAMP)
-                .end(TIMESTAMP.plusHours(1))
-                .result(TIMESTAMP.plusHours(2))
+                .start(START)
+                .end(START.plusHours(1))
+                .result(START.plusHours(2))
                 .build();
 
-        when(examDAO.findByStart(TIMESTAMP)).thenReturn(Optional.of(examEntity));
+        when(dao.findByStart(START)).thenReturn(Optional.of(exam));
 
         // Act
-        Optional<UUID> result = repository.findByStartTime(TIMESTAMP);
+        Optional<UUID> result = repository.findByStartTime(START);
 
         // Assert
         assertThat(result).isPresent();
-        assertEquals(result.get(), examEntity.getId());
+        assertEquals(result.get(), exam.getId());
     }
 
     @Test
     void findByStartTime_notFound() {
         // Arrange
-        when(examDAO.findByStart(TIMESTAMP)).thenReturn(Optional.empty());
+        when(dao.findByStart(START)).thenReturn(Optional.empty());
 
         // Act
-        Optional<UUID> result = repository.findByStartTime(TIMESTAMP);
+        Optional<UUID> result = repository.findByStartTime(START);
 
         // Assert
         assertThat(result).isNotPresent();

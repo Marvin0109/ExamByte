@@ -14,32 +14,32 @@ import static org.mockito.Mockito.*;
 
 class ReviewerQueryServiceTest {
 
-    private ReviewerQueryService reviewerQueryService;
+    private ReviewerQueryService queryService;
 
     @Mock
-    private ReviewerService reviewerService;
+    private ReviewerService service;
 
     @Mock
-    private ReviewerDTOMapper reviewerDTOMapper;
+    private ReviewerDTOMapper mapper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        reviewerQueryService = new ReviewerQueryServiceImpl(reviewerService, reviewerDTOMapper);
+        queryService = new ReviewerQueryServiceImpl(service, mapper);
     }
 
     @Test
     void saveAutomaticReviewer_automaticReviewerFound() {
         Reviewer reviewer = new Reviewer.ReviewerBuilder().name("Auto reviewer").build();
-        when(reviewerService.getReviewerByName("Auto reviewer")).thenReturn(Optional.of(reviewer));
-        reviewerQueryService.saveAutomaticReviewer();
-        verify(reviewerService, never()).saveReviewer("Auto reviewer");
+        when(service.getReviewerByName("Auto reviewer")).thenReturn(Optional.of(reviewer));
+        queryService.saveAutomaticReviewer();
+        verify(service, never()).saveReviewer("Auto reviewer");
     }
 
     @Test
     void saveAutomaticReviewer_automaticReviewerNotFound() {
-        when(reviewerService.getReviewerByName("Auto reviewer")).thenReturn(Optional.empty());
-        reviewerQueryService.saveAutomaticReviewer();
-        verify(reviewerService).saveReviewer("Auto reviewer");
+        when(service.getReviewerByName("Auto reviewer")).thenReturn(Optional.empty());
+        queryService.saveAutomaticReviewer();
+        verify(service).saveReviewer("Auto reviewer");
     }
 }

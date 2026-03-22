@@ -9,7 +9,7 @@ public interface CorrectAnswersRepository {
 
     Optional<CorrectAnswers> findById(UUID id);
 
-    Optional<CorrectAnswers> findByFrageId(UUID frageID);
+    Optional<CorrectAnswers> findByQuestionId(UUID id);
 
     void save(CorrectAnswers correctAnswers);
 

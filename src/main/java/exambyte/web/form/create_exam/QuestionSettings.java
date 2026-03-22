@@ -21,7 +21,7 @@ public class QuestionSettings {
 
     @NotNull(message = "Freitext-Anzahl darf nicht leer sein")
     @Min(value = 1, message = "Freitext-Anzahl muss größer 0 sein")
-    @Max(value = 10, message = "SC-Anzahl darf höchstens 10 sein")
+    @Max(value = 10, message = "Freitext-Anzahl darf höchstens 10 sein")
     private Integer freeResponseCount;
 
     private List<QuestionTypeWeb> questionTypeList;

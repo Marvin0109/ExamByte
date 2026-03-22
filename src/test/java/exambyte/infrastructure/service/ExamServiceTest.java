@@ -2,8 +2,7 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.ExamService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
-import org.junit.jupiter.api.DisplayName;
+import exambyte.infrastructure.exceptions.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -14,16 +13,15 @@ import static org.mockito.Mockito.*;
 
 class ExamServiceTest {
 
-    private final ExamRepository examRepository = mock(ExamRepository.class);
-    private final ExamService service = new ExamServiceImpl(examRepository);
+    private final ExamRepository repository = mock(ExamRepository.class);
+    private final ExamService service = new ExamServiceImpl(repository);
 
     @Test
-    @DisplayName("Ein Exam wurde nicht gefunden")
-    void test_01() {
+    void getExam_examNotFound() {
         UUID examId = UUID.randomUUID();
-        when(examRepository.findById(any())).thenReturn(Optional.empty());
+        when(repository.findById(any())).thenReturn(Optional.empty());
 
-        assertThrows(NichtVorhandenException.class, () -> service.getExam(examId));
-        verify(examRepository).findById(examId);
+        assertThrows(NotFoundException.class, () -> service.getExam(examId));
+        verify(repository).findById(examId);
     }
 }

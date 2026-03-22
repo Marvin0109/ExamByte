@@ -33,20 +33,20 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
     }
 
     @Override
-    public List<ReviewDTO> generateReviews(UUID studentId, List<QuestionDTO> fragen, List<AnswerDTO> answers) {
-        ReviewData mcData = new ReviewData(fragen, answers,
+    public List<ReviewDTO> generateReviews(UUID studentId, List<QuestionDTO> questions, List<AnswerDTO> answers) {
+        ReviewData mcData = new ReviewData(questions, answers,
                 mapper, correctAnswersService);
-        ReviewData scData = new ReviewData(fragen, answers,
+        ReviewData scData = new ReviewData(questions, answers,
                 mapper, correctAnswersService);
 
         mcData.filterToType(QuestionTypeDTO.MC);
         scData.filterToType(QuestionTypeDTO.SC);
 
         List<ReviewDTO> reviewsMC = automaticReviewService.autoReviewMC(
-                mcData.getFragen(), mcData.getAnswers(), mcData.getCorrectAnswers(), studentId,
+                mcData.getQuestions(), mcData.getAnswers(), mcData.getCorrectAnswers(), studentId,
                 reviewService);
         List<ReviewDTO> reviewsSC = automaticReviewService.autoReviewSC(
-                scData.getFragen(), scData.getAnswers(), scData.getCorrectAnswers(), studentId,
+                scData.getQuestions(), scData.getAnswers(), scData.getCorrectAnswers(), studentId,
                 reviewService);
 
         return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();

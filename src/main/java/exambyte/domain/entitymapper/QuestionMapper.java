@@ -5,7 +5,7 @@ import exambyte.infrastructure.persistence.entities.QuestionEntity;
 
 public interface QuestionMapper {
 
-    Question toDomain(QuestionEntity questionEntity);
+    Question toDomain(QuestionEntity entity);
 
     QuestionEntity toEntity(Question question);
 }

@@ -57,8 +57,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("ExamForm wird erfolgreich erstellt")
-    void createExamForm_01() {
+    void createExamForm_success() {
         // Act
         ExamForm form = service.createExamForm(6);
         QuestionData q = form.getQuestions().getFirst();
@@ -70,10 +69,9 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Das Ausfüllen des ExamForm ist erfolgreich (Eine Freitext Aufgabe)")
-    void fillExamForm_01() {
+    void fillExamForm_success_freeResponse() {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
                 "F1",
                 2,
@@ -81,7 +79,7 @@ class ExamControllerServiceTest {
                 QuestionTypeDTO.FREE_RESPONSE);
 
         when(examFacadeService.getExam(EXAM_ID)).thenReturn(exam);
-        when(examFacadeService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(question));
 
         // Act
         ExamForm form = service.fillExamForm(EXAM_ID);
@@ -92,10 +90,9 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Das Ausfüllen des ExamForm ist erfolgreich (MC Aufgabe)")
-    void fillExamForm_02() {
+    void fillExamForm_success_mc() {
         // Arrange
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
                 "F1",
                 2,
@@ -103,8 +100,8 @@ class ExamControllerServiceTest {
                 QuestionTypeDTO.MC);
 
         when(examFacadeService.getExam(EXAM_ID)).thenReturn(exam);
-        when(examFacadeService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(frage));
-        when(examFacadeService.getChoicesForQuestion(frage.id())).thenReturn("A, B\nC\nD");
+        when(examFacadeService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(question));
+        when(examFacadeService.getChoicesForQuestion(question.id())).thenReturn("A, B\nC\nD");
 
         // Act
         ExamForm form = service.fillExamForm(EXAM_ID);
@@ -115,8 +112,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Erstellen der Fragen ist erfolgreich")
-    void createQuestions_01() {
+    void createQuestions_success() {
         // Arrange
         QuestionData q1 = new QuestionData();
         q1.setText("F1");
@@ -149,8 +145,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Erstellen der Fragen ist nicht erfolgreich, unbehandelter Fragetyp vorhanden")
-    void createQuestions_02() {
+    void createQuestions_fail_typeNotFound() {
         // Arrange
         QuestionData q1 = new QuestionData();
         q1.setText("F1");
@@ -168,8 +163,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Die Korrekturgesamtübersicht für alle Exams wird korrekt ermittelt")
-    void getReviewCoverage_01() {
+    void getReviewCoverage_success() {
         when(examFacadeService.reviewCoverage(EXAM_ID)).thenReturn(50.0);
 
         List<ReviewCoverageForm> result = service.getReviewCoverage(List.of(exam));
@@ -180,8 +174,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Test nicht verfügbar")
-    void getExamTimeInfo_01() {
+    void getExamTimeInfo_fail() {
         when(helperService.getExamAvailabilityNotice(exam)).thenReturn("Message");
 
         ExamTimeInfo info = service.getExamTimeInfo(exam);
@@ -190,8 +183,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Test verfügbar")
-    void getExamTimeInfo_02() {
+    void getExamTimeInfo_success() {
         when(helperService.getExamAvailabilityNotice(exam)).thenReturn("");
         when(helperService.getTimeDifference(exam)).thenReturn("Anzeige");
 
@@ -201,8 +193,7 @@ class ExamControllerServiceTest {
     }
 
     @Test
-    @DisplayName("Bewertungsstatus: Alice hat Bewertung, Bob nicht")
-    void getSubmitInfo_01() {
+    void getSubmitInfo_aliceHasReview_bobHasNoReview() {
         // Arrange
         StudentDTO student1 = new StudentDTO(UUID.randomUUID(),"Alice");
         StudentDTO student2 = new StudentDTO(UUID.randomUUID(),"Bob");
@@ -240,7 +231,7 @@ class ExamControllerServiceTest {
             "10, 20, 8.33",  // = 50%
             "8, 20, 0.0"      // < 50%
     })
-    void getZulassungProgress(int erreichtePunkte, int maxPunkte, double expectedProgress) {
+    void getEligibilityProgress(int accumulatedPoints, int totalPoints, double expectedProgress) {
         // Arrange
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
         List<ExamDTO> exams = List.of(
@@ -255,16 +246,16 @@ class ExamControllerServiceTest {
 
         AttemptDTO attempt = new AttemptDTO(
                 start.plusHours(3),
-                erreichtePunkte,
-                maxPunkte,
-                ((double) erreichtePunkte / maxPunkte) * 100
+                accumulatedPoints,
+                totalPoints,
+                ((double) accumulatedPoints / totalPoints) * 100
         );
 
         when(examFacadeService.getAllExams()).thenReturn(exams);
         when(helperService.getValidAttempts("student")).thenReturn(List.of(attempt));
 
         // Act
-        double result = service.getZulassungsProgress("student");
+        double result = service.getEligibilityProgress("student");
 
         // Assert
         assertThat(result).isCloseTo(expectedProgress, Offset.offset(0.01));
@@ -276,7 +267,7 @@ class ExamControllerServiceTest {
             "10, 20, false",  // = 50%
             "8, 20, true"     // < 50%
     })
-    void failedYetOrNot(int erreichtePunkte, int maxPunkte, boolean status) {
+    void failedYetOrNot(int accumulatedPoints, int totalPoints, boolean status) {
         // Arrange
         LocalDateTime start = LocalDateTime.of(2000, 1, 1, 0, 0);
         List<ExamDTO> exams = List.of(
@@ -291,9 +282,9 @@ class ExamControllerServiceTest {
 
         AttemptDTO attempt = new AttemptDTO(
                 start.plusHours(3),
-                erreichtePunkte,
-                maxPunkte,
-                ((double) erreichtePunkte / maxPunkte) * 100
+                accumulatedPoints,
+                totalPoints,
+                ((double) accumulatedPoints / totalPoints) * 100
         );
 
         when(examFacadeService.getAllExams()).thenReturn(exams);
@@ -311,14 +302,14 @@ class ExamControllerServiceTest {
         UUID studentUUID = UUID.randomUUID();
         LocalDateTime time = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-        QuestionDTO frage1 = new QuestionDTO(
+        QuestionDTO question1 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 1",
                 2,
                 EXAM_ID,
                 QuestionTypeDTO.FREE_RESPONSE);
 
-        QuestionDTO frage2 = new QuestionDTO(
+        QuestionDTO question2 = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 2",
                 1,
@@ -328,7 +319,7 @@ class ExamControllerServiceTest {
         AnswerDTO answer1 = new AnswerDTO(
                 UUID.randomUUID(),
                 "Answer 1",
-                frage1.id(),
+                question1.id(),
                 studentUUID,
                 time
         );
@@ -336,14 +327,14 @@ class ExamControllerServiceTest {
         AnswerDTO answer2 = new AnswerDTO(
                 UUID.randomUUID(),
                 "Answer 2",
-                frage2.id(),
+                question2.id(),
                 studentUUID,
                 time
         );
 
         Map<QuestionDTO, AnswerDTO> map = new LinkedHashMap<>();
-        map.put(frage1, answer1);
-        map.put(frage2, answer2);
+        map.put(question1, answer1);
+        map.put(question2, answer2);
 
         when(examFacadeService.answerHasReview(answer1)).thenReturn(false);
         when(examFacadeService.answerHasReview(answer2)).thenReturn(true);
@@ -362,7 +353,7 @@ class ExamControllerServiceTest {
     void getFreeResponseAnswersForExamAndStudent() {
         UUID studentId = UUID.randomUUID();
 
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 1",
                 2,
@@ -372,13 +363,13 @@ class ExamControllerServiceTest {
 
         AnswerDTO answer = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
-                frage.id(),
+                "Answer",
+                question.id(),
                 studentId,
                 null
         );
 
-        when(examFacadeService.getFreeResponseQuestions(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getFreeResponseQuestions(EXAM_ID)).thenReturn(List.of(question));
         when(examFacadeService.getFreeResponseSolutionForExam(EXAM_ID)).thenReturn(List.of(answer));
 
         Map<QuestionDTO, AnswerDTO> map = service.getFreeResponseSolutionForExamAndStudent(EXAM_ID, studentId);
@@ -390,7 +381,7 @@ class ExamControllerServiceTest {
     void getFreeResponseSolutionForExamAndStudent_noAnswer() {
         UUID studentId = UUID.randomUUID();
 
-        QuestionDTO frage = new QuestionDTO(
+        QuestionDTO question = new QuestionDTO(
                 UUID.randomUUID(),
                 "Question 1",
                 2,
@@ -398,7 +389,7 @@ class ExamControllerServiceTest {
                 QuestionTypeDTO.FREE_RESPONSE
         );
 
-        when(examFacadeService.getFreeResponseQuestions(EXAM_ID)).thenReturn(List.of(frage));
+        when(examFacadeService.getFreeResponseQuestions(EXAM_ID)).thenReturn(List.of(question));
         when(examFacadeService.getFreeResponseSolutionForExam(EXAM_ID)).thenReturn(List.of());
 
         Map<QuestionDTO, AnswerDTO> map = service.getFreeResponseSolutionForExamAndStudent(EXAM_ID, studentId);

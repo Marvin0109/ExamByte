@@ -25,16 +25,16 @@ class ScoringServiceTest {
 
     private ScoringService scoringService;
 
-    private static final UUID FRAGE_1_ID = UUID.randomUUID();
-    private static final UUID FRAGE_2_ID = UUID.randomUUID();
+    private static final UUID QUESTION_1_ID = UUID.randomUUID();
+    private static final UUID QUESTION_2_ID = UUID.randomUUID();
 
     private static final UUID ANSWER_1_ID = UUID.randomUUID();
     private static final UUID ANSWER_2_ID = UUID.randomUUID();
 
     private static final UUID AUTOMATIC_REVIEWER = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
-    private QuestionDTO frage1;
-    private QuestionDTO frage2;
+    private QuestionDTO question1;
+    private QuestionDTO question2;
 
     private AnswerDTO answer1;
     private AnswerDTO answer2;
@@ -42,7 +42,7 @@ class ScoringServiceTest {
     private Review review1;
     private Review review2;
 
-    private static final LocalDateTime ANTWORT_TIME =
+    private static final LocalDateTime SUBMIT_TIME =
             LocalDateTime.of(2026, 1, 1, 9, 0);
 
     @Mock
@@ -59,15 +59,15 @@ class ScoringServiceTest {
 
         scoringService = new ScoringServiceImpl(reviewService, fixedClock);
 
-        frage1 = new QuestionDTO(
-                FRAGE_1_ID,
+        question1 = new QuestionDTO(
+                QUESTION_1_ID,
                 "Question",
                 5,
                 UUID.randomUUID(),
                 QuestionTypeDTO.FREE_RESPONSE);
 
-        frage2 = new QuestionDTO(
-                FRAGE_2_ID,
+        question2 = new QuestionDTO(
+                QUESTION_2_ID,
                 "Question",
                 3,
                 UUID.randomUUID(),
@@ -75,29 +75,29 @@ class ScoringServiceTest {
 
         answer1 = new AnswerDTO(
                 ANSWER_1_ID,
-                "Antwort",
-                FRAGE_1_ID,
+                "Answer",
+                QUESTION_1_ID,
                 UUID.randomUUID(),
-                ANTWORT_TIME);
+                SUBMIT_TIME);
 
         answer2 = new AnswerDTO(
                 ANSWER_2_ID,
-                "Antwort",
-                FRAGE_2_ID,
+                "Answer",
+                QUESTION_2_ID,
                 UUID.randomUUID(),
-                ANTWORT_TIME);
+                SUBMIT_TIME);
 
         review1 = new Review.ReviewBuilder()
                 .reviewerId(UUID.randomUUID())
-                .bewertung("Bewertung")
-                .punkte(5)
+                .text("Text")
+                .points(5)
                 .answerId(ANSWER_1_ID)
                 .build();
 
         review2 = new Review.ReviewBuilder()
                 .reviewerId(AUTOMATIC_REVIEWER)
-                .bewertung("Bewertung")
-                .punkte(3)
+                .text("Text")
+                .points(3)
                 .answerId(ANSWER_2_ID)
                 .build();
     }
@@ -112,13 +112,13 @@ class ScoringServiceTest {
         LocalDateTime resultTime =
                 LocalDateTime.of(2026, 1, 1, 9, 0);
 
-        double punkte = scoringService.berechneErreichtePunkte(
+        double result = scoringService.accumulatedPoints(
                 List.of(answer1, answer2),
-                Map.of(FRAGE_1_ID, frage1, FRAGE_2_ID, frage2),
+                Map.of(QUESTION_1_ID, question1, QUESTION_2_ID, question2),
                 resultTime
         );
 
-        assertEquals(8.0, punkte);
+        assertEquals(8.0, result);
     }
 
     @Test
@@ -131,13 +131,13 @@ class ScoringServiceTest {
         LocalDateTime resultTime =
                 LocalDateTime.of(2026, 1, 1, 11, 0);
 
-        double punkte = scoringService.berechneErreichtePunkte(
+        double result = scoringService.accumulatedPoints(
                 List.of(answer1, answer2),
-                Map.of(FRAGE_1_ID, frage1, FRAGE_2_ID, frage2),
+                Map.of(QUESTION_1_ID, question1, QUESTION_2_ID, question2),
                 resultTime
         );
 
-        assertEquals(3.0, punkte);
+        assertEquals(3.0, result);
     }
 
 }

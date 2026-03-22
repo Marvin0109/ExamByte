@@ -91,14 +91,14 @@ class CreateExamIT {
         assertThat(examRepository.findAll()).hasSize(1);
         assertThat(questionRepository.findAll()).hasSize(3);
 
-        Optional<UUID> frageId = questionRepository.findAll()
+        Optional<UUID> questionId = questionRepository.findAll()
                 .stream()
-                .filter(f -> f.getType().equals(QuestionType.SC))
+                .filter(q -> q.getType().equals(QuestionType.SC))
                 .map(Question::getId)
                 .findFirst();
 
-        assertThat(frageId).isPresent();
+        assertThat(questionId).isPresent();
 
-        assertThat(correctAnswersRepository.findByFrageId(frageId.get())).isPresent();
+        assertThat(correctAnswersRepository.findByQuestionId(questionId.get())).isPresent();
     }
 }

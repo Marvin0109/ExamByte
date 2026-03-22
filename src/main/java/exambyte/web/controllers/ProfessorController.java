@@ -38,7 +38,7 @@ import java.util.UUID;
 public class ProfessorController {
 
     private final ExamControllerService service;
-    private final CsvExportService csvExportService;
+    private final CsvExportService exportService;
 
     private static final String LOGIN_NAME = "login";
     private static final String CURRENT_PATH = "currentPath";
@@ -49,9 +49,9 @@ public class ProfessorController {
 
     private final Clock clock;
 
-    public ProfessorController(ExamControllerService service, CsvExportService csvExportService, Clock clock) {
+    public ProfessorController(ExamControllerService service, CsvExportService exportService, Clock clock) {
         this.service = service;
-        this.csvExportService = csvExportService;
+        this.exportService = exportService;
         this.clock = clock;
     }
 
@@ -152,9 +152,9 @@ public class ProfessorController {
                     REDIRECT_QUESTION_SETTINGS);
         }
 
-        UUID examUUID = service.getExamUUIDByStartTime(form.getStart());
+        UUID examId = service.getExamUUIDByStartTime(form.getStart());
 
-        service.createQuestions(form, examUUID);
+        service.createQuestions(form, examId);
 
         status.setComplete();
 
@@ -170,10 +170,10 @@ public class ProfessorController {
             Model model,
             HttpServletRequest request) {
 
-        List<ExamDTO> examDTOs = service.getAllExams();
+        List<ExamDTO> exams = service.getAllExams();
 
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
-        model.addAttribute("exams", examDTOs);
+        model.addAttribute("exams", exams);
         model.addAttribute(TIME_NOW, now());
         return "professor/examListForProf";
     }
@@ -233,19 +233,10 @@ public class ProfessorController {
 
         boolean success = service.deleteExam(examId);
 
-        if (success) {
-            return redirectWithMessage(
-                    redirectAttributes,
-                    "Exam erfolgreich gelöscht!",
-                    true,
-                    REDIRECT_LIST_EXAMS
-            );
-        }
-
         return redirectWithMessage(
                 redirectAttributes,
-                "Exam am laufen!",
-                false,
+                success ? "Prüfung erfolgreich gelöscht!" : "Prüfung am laufen!",
+                success,
                 REDIRECT_LIST_EXAMS
         );
     }
@@ -256,7 +247,7 @@ public class ProfessorController {
             List<ExamExportDTO> examDTOs = service.getExamExport(examId);
             ExamDTO exam = service.getExamByUUID(examId);
 
-            byte[] csvBytes = csvExportService.exportExamToCsv(examDTOs);
+            byte[] csvBytes = exportService.exportExamToCsv(examDTOs);
 
             String fileName = exam.title() + ".csv";
 
@@ -278,7 +269,7 @@ public class ProfessorController {
             List<ReviewExportDTO> reviewDTOs = service.getReviewExport(examId, studentName);
             ExamDTO exam = service.getExamByUUID(examId);
 
-            byte[] csvBytes = csvExportService.exportReviewToCsv(reviewDTOs);
+            byte[] csvBytes = exportService.exportReviewToCsv(reviewDTOs);
 
             String fileName = exam.title() + "_" + studentName + ".csv";
 

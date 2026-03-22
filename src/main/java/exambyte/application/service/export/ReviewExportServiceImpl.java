@@ -46,7 +46,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
         List<AnswerDTO> answers = new ArrayList<>();
 
         for (QuestionDTO question : questions) {
-            AnswerDTO a = answerQueryService.findByStudentAndFrage(studentId, question.id());
+            AnswerDTO a = answerQueryService.findByStudentAndQuestion(studentId, question.id());
             answers.add(a);
         }
 
