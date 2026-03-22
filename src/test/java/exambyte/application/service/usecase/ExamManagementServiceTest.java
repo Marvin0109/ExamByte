@@ -235,6 +235,32 @@ class ExamManagementServiceTest {
     }
 
     @Test
+    void submitExam_timeIsOver() {
+        // Fixed clock now: 2026-01-01T10:00:00Z
+        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
+
+        when(studentQueryService.getStudentIdByName("Max"))
+                .thenReturn(STUDENT_ID);
+
+        ExamDTO exam = new ExamDTO(
+                EXAM_ID,
+                "Title",
+                UUID.randomUUID(),
+                start,
+                start.plusHours(10),
+                start.plusHours(12)
+        );
+
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+
+        Map<String, List<String>> dummy = Map.of();
+
+        SubmitExamResult result = examManagementService.submitExam("Max", dummy, EXAM_ID);
+
+        assertThat(result.name()).isEqualTo("SAVE_ANSWERS_FAILED");
+    }
+
+    @Test
     void submitExam_reviewSaveFails() {
         QuestionDTO question = mock(QuestionDTO.class);
         when(question.id()).thenReturn(QUESTION_ID_1);

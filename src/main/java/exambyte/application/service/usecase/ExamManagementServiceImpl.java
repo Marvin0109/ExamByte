@@ -101,9 +101,18 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         UUID studentId = resolveStudent(studentName);
         if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
+        ExamDTO exam = examQueryService.getExam(examId);
+        if (checkSubmitTime(exam.end())) {
+            return SubmitExamResult.SAVE_ANSWERS_FAILED;
+        }
+
         answerQueryService.saveAnswers(studentId, answerMap);
 
         return generateAndSaveReviews(studentId, examId);
+    }
+
+    private boolean checkSubmitTime(LocalDateTime end) {
+        return end.isBefore(now()) || end.isEqual(now());
     }
 
     private UUID resolveStudent(String studentName) {
