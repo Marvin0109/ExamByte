@@ -1,23 +1,16 @@
 /**
- * Dieses Package enthält Entity-Mapper, die als <b>Ports</b> in der Onion-Architektur fungieren.
+ * This package contains entity mappers that act as <b>ports</b> in the Onion Architecture.
  * <p>
- * Die Interfaces in diesem Package definieren die Konvertierung zwischen
- * <b>Domain-Entitäten</b> und <b>Persistence-Entities</b>.
- * Sie werden von Adaptern in der <b>Persistence-Schicht</b> implementiert.
+ * The interfaces in this package define the conversion between
+ * <b>domain entities</b> and <b>persistence entities</b>.
+ * They are implemented by adapters in the <b>persistence layer</b>.
  * </p>
  *
- * <h2>Rolle in der Onion-Architektur</h2>
+ * <h2>Role in the Onion Architecture</h2>
  * <p>
- * Dieses Package gehört zur <b>Domänenschicht</b> und bietet eine Abstraktion für
- * die Umwandlung von Datenmodellen. Die <b>Persistence-Schicht</b> (Adapter) implementiert
- * diese Interfaces, um die Infrastruktur von der Domäne zu entkoppeln.
+ * This package belongs to the <b>domain layer</b> and provides an abstraction for
+ * transforming data models. The <b>persistence layer</b> (adapters) implements
+ * these interfaces to decouple the infrastructure from the domain.
  * </p>
- *
- * <h2>Typische Verwendung</h2>
- * <ul>
- *     <li>Definiert Schnittstellen für die Konvertierung zwischen Domain- und Datenbank-Modellen.</li>
- *     <li>Ermöglicht eine saubere Trennung der Schichten gemäß der Onion-Architektur.</li>
- *     <li>Wird von der <b>Persistence-Schicht</b> implementiert, um Datenbank-Zugriff zu kapseln.</li>
- * </ul>
  */
 package exambyte.domain.entitymapper;

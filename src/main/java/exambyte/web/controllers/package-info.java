@@ -1,18 +1,19 @@
 /**
- * Das Paket enthält die Controller-Klassen der Webanwendung, die für das Routing und die Verarbeitung von HTTP-Anfragen zuständig sind.
+ * This package contains the controller classes of the web application, which are responsible for routing and processing
+ * HTTP requests.
  * <p>
- * Die Controller-Klassen:
+ * The controller classes:
  * <ul>
- *     <li>Reagieren auf verschiedene HTTP-Methoden (z. B. GET, POST, PUT, DELETE) und URL-Muster.</li>
- *     <li>Stellen die Schnittstelle zwischen der Web-Schicht (Frontend) und der Domänen-Schicht der Anwendung dar.</li>
- *     <li>Empfangen Eingaben vom Benutzer und leiten diese an die entsprechenden Services weiter.</li>
- *     <li>Geben Ergebnisse in der passenden Form (z. B. als View oder JSON) zurück.</li>
- *     <li>Führen Validierungen, Fehlerbehandlungen und Umwandlungen von Daten (z. B. von DTOs) durch.</li>
+ *     <li>Handle HTTP methods such as GET and POST as well as URL mappings.</li>
+ *     <li>Act as the interface between the web layer (frontend) and the application layer of the system.</li>
+ *     <li>Receive user input and delegate it to the appropriate services.</li>
+ *     <li>Return results in an appropriate format (e.g. as a view or JSON response).</li>
+ *     <li>Perform validation, error handling, and data transformation (e.g. from forms).</li>
  * </ul>
  * </p>
  *
+ * @see org.springframework.stereotype.Controller
  * @see org.springframework.web.bind.annotation.RestController
- * @see org.springframework.web.bind.annotation.RequestMapping
  * @see org.springframework.web.bind.annotation.GetMapping
  * @see org.springframework.web.bind.annotation.PostMapping
  */

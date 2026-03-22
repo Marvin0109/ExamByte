@@ -1,25 +1,26 @@
 /**
- * Dieses Package enthält Service-Interfaces, die als <b>Ports</b> für die Infrastruktur-Schicht dienen.
+ * This package contains service interfaces that act as <b>ports</b> for the infrastructure layer.
  * <p>
- * Die Interfaces in diesem Package definieren Geschäftslogik und Anwendungsdienste für
- * die Bearbeitung von z.B. <b>Antworten</b> im Kontext von Prüfungsfragen.
- * Die Implementierungen dieser Services befinden sich in der <b>Infrastruktur-Schicht</b>
- * und werden vom Controller verwendet, um die Geschäftslogik auszuführen.
+ * The interfaces in this package define business logic and application services for handling
+ * entities such as <b>Answer</b> in the context of exam questions.
+ * The implementations of these services reside in the <b>infrastructure layer</b>
+ * and are used by controllers to execute business logic.
  * </p>
  *
- * <h2>Rolle in der Onion-Architektur</h2>
+ * <h2>Role in the Onion Architecture</h2>
  * <p>
- * Dieses Package gehört zur <b>Domänenschicht</b> und stellt eine Abstraktion für die
- * Geschäftslogik zur Verfügung. Die Implementierungen dieser Interfaces werden in der
- * <b>Infrastruktur-Schicht</b> implementiert, um die Interaktion mit der zugrunde liegenden
- * Infrastruktur (z.B. Datenbanken) zu ermöglichen.
+ * This package belongs to the <b>domain layer</b> and provides an abstraction for business logic.
+ * The implementations of these interfaces are provided in the <b>infrastructure layer</b>,
+ * enabling interaction with the underlying infrastructure (e.g., databases).
  * </p>
  *
- * <h2>Typische Verwendung</h2>
+ * <h2>Typical Usage</h2>
  * <ul>
- *     <li>Definiert Schnittstellen für die Geschäftslogik zum Abrufen und Speichern von z.B. <b>Antworten</b>.</li>
- *     <li>Ermöglicht es, die Implementierungen in der <b>Infrastruktur-Schicht</b> zu kapseln und vom Controller zu verwenden.</li>
- *     <li>Stellt sicher, dass der Controller lediglich auf die Geschäftslogik zugreift, ohne sich um Implementierungsdetails zu kümmern.</li>
+ *     <li>Defines interfaces for business logic to retrieve and store entities such as <b>Answer</b>.</li>
+ *     <li>Allows implementations to be encapsulated in the <b>infrastructure layer</b>
+ *     and used by controllers.</li>
+ *     <li>Ensures that controllers only interact with business logic without being concerned
+ *     with implementation details.</li>
  * </ul>
  */
 package exambyte.domain.service;

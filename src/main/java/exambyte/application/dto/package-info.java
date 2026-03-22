@@ -1,17 +1,13 @@
 /**
- * Dieses Package enthält Data Transfer Objects (DTOs) für die Anwendung.
+ * This package contains Data Transfer Objects (DTOs) of the application.
  * <p>
- * DTOs dienen zur Übertragung von Daten zwischen den Schichten der Anwendung,
- * insbesondere zwischen der Infrastrukturschicht und den Web-Controllern.
- * Sie enthalten keine Geschäftslogik und sind oft immutable,
- * um eine klare Trennung zur Domänenschicht zu gewährleisten.
+ * DTOs are used to transfer data between application layers,
+ * particularly between the web layer (controllers) and the application layer.
+ * They are used by the application layer to receive input and return output.
  * </p>
- *
- * <h2>Typische Verwendung</h2>
- * <ul>
- *     <li>Transport von Daten zwischen Backend und Frontend (z. B. REST APIs).</li>
- *     <li>Reduktion der Kopplung zwischen Domänen- und Präsentationslogik.</li>
- *     <li>Optimierung der Serialisierung von Objekten.</li>
- * </ul>
+ * <p>
+ * DTOs do not contain any business logic and are often immutable
+ * to ensure a clear separation from the domain layer.
+ * </p>
  */
 package exambyte.application.dto;

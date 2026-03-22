@@ -1,24 +1,17 @@
 /**
- * Dieses Package enthält Mapper-Interfaces, die als <b>Ports</b> für die Infrastruktur- und Web-Schicht dienen.
+ * This package contains mapper interfaces that act as <b>ports</b> for the infrastructure and web layers.
  * <p>
- * Die Interfaces in diesem Package definieren die Umwandlung zwischen
- * <b>Domain-Entitäten</b> und <b>DTOs</b> für die Web- und Infrastruktur-Schicht.
- * Sie werden von Adaptern in der <b>Infrastruktur-Schicht</b> implementiert.
+ * The interfaces in this package define the transformation between
+ * <b>domain entities</b> and <b>DTOs</b> for the web and infrastructure layers.
+ * They are implemented by adapters in the <b>infrastructure layer</b>.
  * </p>
  *
- * <h2>Rolle in der Onion-Architektur</h2>
+ * <h2>Role in the Onion Architecture</h2>
  * <p>
- * Dieses Package gehört zur <b>Domänenschicht</b> und stellt eine Abstraktion für die
- * Umwandlung von Geschäftsobjekten zu DTOs bereit. Die Implementierungen dieser Mapper
- * befinden sich in der <b>Infrastruktur-Schicht</b> und ermöglichen eine saubere Trennung
- * zwischen Domäne und äußeren Schichten wie Web-Controllern.
+ * This package belongs to the <b>domain layer</b> and provides an abstraction for
+ * transforming business objects into DTOs. The implementations of these mappers
+ * reside in the <b>infrastructure layer</b> and enable a clean separation
+ * between the domain and outer layers such as web controllers.
  * </p>
- *
- * <h2>Typische Verwendung</h2>
- * <ul>
- *     <li>Definiert Schnittstellen für die Konvertierung zwischen Domain-Entitäten und DTOs.</li>
- *     <li>Ermöglicht eine lose Kopplung zwischen Web- und Infrastruktur-Schicht.</li>
- *     <li>Wird von der <b>Infrastruktur-Schicht</b> implementiert, um Daten für externe Systeme bereitzustellen.</li>
- * </ul>
  */
 package exambyte.domain.mapper;

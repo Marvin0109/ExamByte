@@ -1,22 +1,20 @@
 /**
- * Dieses Package enthält Aggregate-Klassen der Anwendung.
+ * This package contains aggregate classes of the application.
  * <p>
- * Die Aggregate in diesem Package folgen dem <b>Builder-Pattern</b> zur schrittweisen Konstruktion von Objekten.
- * Sie werden verwendet, um zusammengehörige Entitäten zu kapseln und konsistente Änderungen zu gewährleisten.
+ * The aggregates in this package follow the <b>Builder Pattern</b> for step-by-step object construction.
+ * They are used to encapsulate related entities and ensure consistent state changes.
  * </p>
  *
- * <h2>UUID als Fach-ID</h2>
+ * <h2>UUID as ID</h2>
  * <p>
- * Alle Aggregate verwenden eine <b>UUID</b> als Fach-ID zur Identifikation und Referenzierung der Objekte.
- * Diese ID dient auch als Schlüssel in der Datenbank, um eine eindeutige Zuordnung sicherzustellen.
+ * All aggregates use a <b>UUID</b> as their identifier for object identification and referencing.
+ * This ID also serves as the database key to ensure unique identification.
  * </p>
  *
- * <h2>Typische Eigenschaften der Aggregate</h2>
+ * <h2>Typical Characteristics of Aggregates</h2>
  * <ul>
- *     <li>Verwenden das <b>Builder-Pattern</b> für eine flexible und sichere Objekterstellung.</li>
- *     <li>Nutzen <b>UUID</b> als eindeutige Identifikation für Fach-Referenzen.</li>
- *     <li>Kapseln mehrere Entitäten in einer konsistenten Einheit.</li>
- *     <li>Stellen sicher, dass Änderungen nur über definierte Methoden erfolgen.</li>
+ *     <li>Use the <b>Builder Pattern</b> for flexible and safe object creation.</li>
+ *     <li>Use <b>UUID</b> as a unique identifier for references.</li>
  * </ul>
  */
 package exambyte.domain.model.aggregate;

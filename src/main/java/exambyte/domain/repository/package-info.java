@@ -1,23 +1,24 @@
 /**
- * Dieses Package enthält Repository-Interfaces, die als <b>Ports</b> für die Persistence-Schicht dienen.
+ * This package contains repository interfaces that act as <b>ports</b> for the persistence layer.
  * <p>
- * Die Interfaces in diesem Package definieren Methoden zur Interaktion mit der Datenbank,
- * insbesondere zum Abrufen und Speichern von <b>Domain-Entitäten</b>.
+ * The interfaces in this package define methods for interacting with the database,
+ * especially for retrieving and storing <b>domain entities</b>.
  * </p>
  *
- * <h2>Rolle in der Onion-Architektur</h2>
+ * <h2>Role in the Onion Architecture</h2>
  * <p>
- * Dieses Package gehört zur <b>Domänenschicht</b> und stellt eine Abstraktion für die
- * Datenbankzugriffe bereit. Die Implementierungen dieser Repositories befinden sich in der
- * <b>Persistence-Schicht</b> und ermöglichen eine saubere Trennung zwischen der Domäne und
- * der zugrunde liegenden Datenbankinfrastruktur.
+ * This package belongs to the <b>domain layer</b> and provides an abstraction for
+ * database access. The implementations of these repositories reside in the
+ * <b>persistence layer</b> and ensure a clean separation between the domain and
+ * the underlying database infrastructure.
  * </p>
  *
- * <h2>Typische Verwendung</h2>
+ * <h2>Typical Usage</h2>
  * <ul>
- *     <li>Definiert Schnittstellen zur Interaktion mit der Datenbank, um Entitäten wie z.B. <b>Antworten</b> zu speichern und abzurufen.</li>
- *     <li>Verwendet das Repository-Pattern, um eine klar definierte Schnittstelle für die Datenzugriffslogik zu bieten.</li>
- *     <li>Stellt sicher, dass der Rest der Anwendung keine direkte Abhängigkeit zur Datenbank hat, sondern über die Domänenschicht interagiert.</li>
+ *     <li>Defines interfaces for database interaction to store and retrieve entities such as <b>Answer</b>.</li>
+ *     <li>Uses the Repository Pattern to provide a well-defined contract for data access logic.</li>
+ *     <li>Ensures that the rest of the application does not directly depend on the database,
+ *     but instead interacts through the domain layer.</li>
  * </ul>
  */
 package exambyte.domain.repository;

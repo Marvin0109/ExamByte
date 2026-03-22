@@ -1,14 +1,13 @@
 /**
- * Dieser package-info.java bezieht sich auf die Interfaces.
- * Das Paket enthält die Repositories, die für den Datenzugriff und die Persistierung von Entitäten zuständig sind.
+ * This package contains repositories responsible for data access and persistence of entities.
  *
  * <p>
- * Die Repositories:
+ * The repositories:
  * <ul>
- *     <li>Erweitern {@link org.springframework.data.repository.CrudRepository} und bieten CRUD-Operationen
- *         für die Entitäten der Anwendung, einschließlich Speichern, Laden, Ändern und Löschen von Entitäten.</li>
- *     <li>Bieten zusätzliche benutzerdefinierte Abfragen, um Entitäten basierend auf bestimmten Kriterien zu finden.</li>
- *     <li>Fungieren als Schnittstellen zwischen der Domänenschicht und der Datenbank und ermöglichen einfachen Zugriff auf Entitäten.</li>
+ *     <li>Extend {@link org.springframework.data.repository.CrudRepository} and provide CRUD operations
+ *         for application entities, including saving, loading, updating, and deleting entities.</li>
+ *     <li>Provide additional custom queries to retrieve entities based on specific criteria.</li>
+ *     <li>Act as an interface between the domain layer and the database, enabling simple access to entities.</li>
  * </ul>
  * </p>
  *

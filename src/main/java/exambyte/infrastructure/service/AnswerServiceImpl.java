@@ -3,7 +3,6 @@ package exambyte.infrastructure.service;
 import exambyte.domain.model.aggregate.exam.Answer;
 import exambyte.domain.repository.AnswerRepository;
 import exambyte.domain.service.AnswerService;
-import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
