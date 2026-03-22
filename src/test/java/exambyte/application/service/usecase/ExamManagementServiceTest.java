@@ -265,6 +265,19 @@ class ExamManagementServiceTest {
         QuestionDTO question = mock(QuestionDTO.class);
         when(question.id()).thenReturn(QUESTION_ID_1);
 
+        // Fixed clock now: 2026-01-01T10:00:00Z
+        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
+        ExamDTO exam = new ExamDTO(
+                EXAM_ID,
+                "Title",
+                UUID.randomUUID(),
+                start,
+                start.plusHours(11),
+                start.plusHours(12)
+        );
+
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+
         AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
 
@@ -312,6 +325,19 @@ class ExamManagementServiceTest {
 
         AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
+
+        // Fixed clock now: 2026-01-01T10:00:00Z
+        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
+        ExamDTO exam = new ExamDTO(
+                EXAM_ID,
+                "Title",
+                UUID.randomUUID(),
+                start,
+                start.plusHours(11),
+                start.plusHours(12)
+        );
+
+        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
 
         when(review.text()).thenReturn("OK");
         when(review.points()).thenReturn(5.0);

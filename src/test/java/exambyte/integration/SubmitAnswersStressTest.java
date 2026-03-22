@@ -75,7 +75,7 @@ class SubmitAnswersStressTest {
 
         assert(profId.isPresent());
 
-        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
+        LocalDateTime start = LocalDateTime.now();
 
         examRepository.save(new Exam.ExamBuilder()
                 .professorId(profId.get())
