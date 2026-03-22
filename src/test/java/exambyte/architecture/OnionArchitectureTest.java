@@ -107,4 +107,24 @@ class OnionArchitectureTest {
         .resideOutsideOfPackage("..common..")
         .should()
         .bePrivate();
+
+    @ArchTest
+    ArchRule noApplicationDTOsInInfrastructureAllowed = noClasses()
+            .that()
+            .resideInAPackage("..infrastructure..")
+            .and()
+            .resideOutsideOfPackage("..infrastructure.mapper..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("..application.dto..");
+
+    @ArchTest
+    ArchRule noEntitiesAllowedOutsideOfInfrastructure = noClasses()
+            .that()
+            .resideOutsideOfPackage("..infrastructure..")
+            .and()
+            .resideOutsideOfPackage("..domain.entitymapper..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("..infrastructure.persistence.entities..");
 }
