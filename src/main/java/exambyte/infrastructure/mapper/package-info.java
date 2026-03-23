@@ -13,4 +13,4 @@
  * these interfaces to decouple the infrastructure from the domain.
  * </p>
  */
-package exambyte.application.mapper.export.mapper;
+package exambyte.infrastructure.mapper;

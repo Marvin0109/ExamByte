@@ -1,8 +1,6 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.exam.Answer;
-import exambyte.application.mapper.export.mapper.AnswerMapper;
-import exambyte.application.mapper.export.mapper.AnswerMapperImpl;
 import exambyte.infrastructure.entity.AnswerEntity;
 import org.junit.jupiter.api.Test;
 

@@ -1,9 +1,9 @@
 package exambyte.infrastructure.container;
 
-import exambyte.application.mapper.export.mapper.ReviewMapper;
+import exambyte.infrastructure.mapper.ReviewMapper;
 import exambyte.domain.model.exam.Review;
 import exambyte.domain.repository.ReviewRepository;
-import exambyte.application.mapper.export.mapper.ReviewMapperImpl;
+import exambyte.infrastructure.mapper.ReviewMapperImpl;
 import exambyte.infrastructure.repository.ReviewDAO;
 import exambyte.infrastructure.repository.ReviewRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package exambyte.infrastructure.repository;
 
-import exambyte.application.mapper.export.mapper.AnswerMapper;
+import exambyte.infrastructure.mapper.AnswerMapper;
 import exambyte.domain.model.exam.Answer;
 import exambyte.domain.repository.AnswerRepository;
 import exambyte.infrastructure.entity.AnswerEntity;

@@ -1,8 +1,8 @@
 package exambyte.infrastructure.container;
 
 import exambyte.domain.model.exam.Question;
-import exambyte.application.mapper.export.mapper.QuestionMapper;
-import exambyte.application.mapper.export.mapper.QuestionMapperImpl;
+import exambyte.infrastructure.mapper.QuestionMapper;
+import exambyte.infrastructure.mapper.QuestionMapperImpl;
 import exambyte.domain.repository.QuestionRepository;
 import exambyte.infrastructure.repository.QuestionDAO;
 import exambyte.infrastructure.repository.QuestionRepositoryImpl;

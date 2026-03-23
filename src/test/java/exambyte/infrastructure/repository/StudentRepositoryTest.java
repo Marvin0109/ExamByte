@@ -1,6 +1,6 @@
 package exambyte.infrastructure.repository;
 
-import exambyte.application.mapper.export.mapper.StudentMapper;
+import exambyte.infrastructure.mapper.StudentMapper;
 import exambyte.domain.repository.StudentRepository;
 import exambyte.infrastructure.entity.StudentEntity;
 import org.junit.jupiter.api.BeforeEach;

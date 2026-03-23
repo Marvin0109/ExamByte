@@ -23,7 +23,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ReviewExportService reviewExportService;
     private final QuestionQueryService questionQueryService;
     private final ProfessorService professorService;
-    private final ReviewerQueryService reviewerQueryService;
+    private final ReviewerService reviewerService;
     private final StudentService studentService;
     private final AnswerService answerService;
     private final ReviewQueryService reviewQueryService;
@@ -36,7 +36,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ReviewExportService reviewExportService,
                                  QuestionQueryService questionQueryService,
                                  ProfessorService professorService,
-                                 ReviewerQueryService reviewerQueryService,
+                                 ReviewerService reviewerService,
                                  StudentService studentService,
                                  AnswerService answerService,
                                  ReviewQueryService reviewQueryService,
@@ -48,7 +48,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.reviewExportService = reviewExportService;
         this.questionQueryService = questionQueryService;
         this.professorService = professorService;
-        this.reviewerQueryService = reviewerQueryService;
+        this.reviewerService = reviewerService;
         this.studentService = studentService;
         this.answerService = answerService;
         this.reviewQueryService = reviewQueryService;
@@ -138,7 +138,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public void saveAutomaticReviewer() {
-        reviewerQueryService.saveAutomaticReviewer();
+        reviewerService.saveAutomaticReviewer();
     }
 
     @Override
@@ -178,7 +178,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public UUID getReviewerByName(String name) {
-        return reviewerQueryService.getReviewerIdByName(name);
+        return reviewerService.getReviewerIdByName(name);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public ReviewerDTO getReviewerById(UUID reviewerId) {
-        return reviewerQueryService.getReviewerById(reviewerId);
+        return reviewerService.getReviewerById(reviewerId);
     }
 
     @Override

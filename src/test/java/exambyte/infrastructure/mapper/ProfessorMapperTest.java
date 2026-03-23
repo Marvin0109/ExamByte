@@ -1,8 +1,6 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.user.Professor;
-import exambyte.application.mapper.export.mapper.ProfessorMapper;
-import exambyte.application.mapper.export.mapper.ProfessorMapperImpl;
 import exambyte.infrastructure.entity.ProfessorEntity;
 import org.junit.jupiter.api.Test;
 

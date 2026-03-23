@@ -1,4 +1,4 @@
-package exambyte.application.mapper.export.mapper;
+package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.exam.Answer;
 import exambyte.infrastructure.entity.AnswerEntity;

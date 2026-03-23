@@ -17,7 +17,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     private final QuestionQueryService questionQueryService;
     private final StudentService studentService;
     private final AnswerService answerService;
-    private final ReviewerQueryService reviewerQueryService;
+    private final ReviewerService reviewerService;
     private final ReviewQueryService reviewQueryService;
     private final ReviewExportDTOMapper mapper;
 
@@ -25,14 +25,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
                                    QuestionQueryService questionQueryService,
                                    StudentService studentService,
                                    AnswerService answerService,
-                                   ReviewerQueryService reviewerQueryService,
+                                   ReviewerService reviewerService,
                                    ReviewQueryService reviewQueryService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
         this.questionQueryService = questionQueryService;
         this.studentService = studentService;
         this.answerService = answerService;
-        this.reviewerQueryService = reviewerQueryService;
+        this.reviewerService = reviewerService;
         this.reviewQueryService = reviewQueryService;
         this.mapper = mapper;
     }
@@ -63,7 +63,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
 
             if (r != null) {
                 reviews.add(r);
-                ReviewerDTO reviewerDTO = reviewerQueryService.getReviewerById(r.reviewerId());
+                ReviewerDTO reviewerDTO = reviewerService.getReviewerById(r.reviewerId());
 
                 if (!reviewerDTO.name().equals("Auto reviewer")) {
 

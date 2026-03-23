@@ -1,15 +1,11 @@
 package exambyte.infrastructure.service;
 
 import exambyte.application.dto.ProfessorDTO;
+import exambyte.application.dto.ReviewerDTO;
 import exambyte.application.dto.StudentDTO;
-import exambyte.application.service.query.ProfessorService;
-import exambyte.application.service.query.ProfessorServiceImpl;
-import exambyte.application.service.query.StudentService;
-import exambyte.application.service.query.StudentServiceImpl;
+import exambyte.application.service.query.*;
 import exambyte.application.service.user.UserCreationService;
 import exambyte.application.service.user.UserCreationServiceImpl;
-import exambyte.domain.model.user.Reviewer;
-import exambyte.domain.service.ReviewerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
@@ -74,10 +70,10 @@ class UserCreationServiceTest {
     void checkReviewer_success() {
         // Arrange
         String username = "reviewer123";
-        Reviewer reviewer = new Reviewer.ReviewerBuilder()
-                .id(null)
-                .name(username)
-                .build();
+        ReviewerDTO reviewer = new ReviewerDTO(
+                null,
+                username);
+
         when(reviewerService.getReviewerByName(username)).thenReturn(Optional.of(reviewer));
 
         // Act

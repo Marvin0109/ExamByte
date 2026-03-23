@@ -1,6 +1,6 @@
 package exambyte.infrastructure.repository;
 
-import exambyte.application.mapper.export.mapper.ReviewMapper;
+import exambyte.infrastructure.mapper.ReviewMapper;
 import exambyte.domain.model.exam.Review;
 import exambyte.domain.repository.ReviewRepository;
 import exambyte.infrastructure.entity.ReviewEntity;

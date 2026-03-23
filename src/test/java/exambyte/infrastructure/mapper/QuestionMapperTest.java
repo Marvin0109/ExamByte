@@ -2,8 +2,6 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
-import exambyte.application.mapper.export.mapper.QuestionMapper;
-import exambyte.application.mapper.export.mapper.QuestionMapperImpl;
 import exambyte.infrastructure.common.QuestionTypeEntity;
 import exambyte.infrastructure.entity.QuestionEntity;
 import org.assertj.core.data.Offset;

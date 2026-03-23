@@ -1,8 +1,6 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.user.Reviewer;
-import exambyte.application.mapper.export.mapper.ReviewerMapper;
-import exambyte.application.mapper.export.mapper.ReviewerMapperImpl;
 import exambyte.infrastructure.entity.ReviewerEntity;
 import org.junit.jupiter.api.Test;
 

@@ -1,8 +1,8 @@
 package exambyte.infrastructure.container;
 
 import exambyte.domain.model.user.Professor;
-import exambyte.application.mapper.export.mapper.ProfessorMapper;
-import exambyte.application.mapper.export.mapper.ProfessorMapperImpl;
+import exambyte.infrastructure.mapper.ProfessorMapper;
+import exambyte.infrastructure.mapper.ProfessorMapperImpl;
 import exambyte.infrastructure.repository.ProfessorRepositoryImpl;
 import exambyte.infrastructure.repository.ProfessorDAO;
 import exambyte.domain.repository.ProfessorRepository;

@@ -42,7 +42,7 @@ class ReviewExportServiceTest {
     private AnswerService answerService;
 
     @Mock
-    private ReviewerQueryService reviewerQueryService;
+    private ReviewerService reviewerService;
 
     @Mock
     private ReviewQueryService reviewQueryService;
@@ -59,7 +59,7 @@ class ReviewExportServiceTest {
                 questionQueryService,
                 studentService,
                 answerService,
-                reviewerQueryService,
+                reviewerService,
                 reviewQueryService,
                 mapper
         );
@@ -134,7 +134,7 @@ class ReviewExportServiceTest {
 
         when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
 
-        when(reviewerQueryService.getReviewerById(review.reviewerId()))
+        when(reviewerService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
 
         service.createReviewExport(exam.id(), "Student");
@@ -162,9 +162,9 @@ class ReviewExportServiceTest {
         when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
         when(reviewQueryService.getReviewByAnswerId(answer2.id())).thenReturn(review2);
 
-        when(reviewerQueryService.getReviewerById(review.reviewerId()))
+        when(reviewerService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
-        when(reviewerQueryService.getReviewerById(review2.reviewerId()))
+        when(reviewerService.getReviewerById(review2.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Auto reviewer"));
 
         service.createReviewExport(exam.id(), "Student");

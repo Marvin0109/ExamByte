@@ -1,8 +1,6 @@
 package exambyte.infrastructure.mapper;
 
-import exambyte.application.mapper.export.mapper.CorrectAnswersMapper;
 import exambyte.domain.model.exam.CorrectAnswers;
-import exambyte.application.mapper.export.mapper.CorrectAnswersMapperImpl;
 import exambyte.infrastructure.entity.CorrectAnswersEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

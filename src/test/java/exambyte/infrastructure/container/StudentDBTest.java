@@ -1,8 +1,8 @@
 package exambyte.infrastructure.container;
 
 import exambyte.domain.model.user.Student;
-import exambyte.application.mapper.export.mapper.StudentMapper;
-import exambyte.application.mapper.export.mapper.StudentMapperImpl;
+import exambyte.infrastructure.mapper.StudentMapper;
+import exambyte.infrastructure.mapper.StudentMapperImpl;
 import exambyte.infrastructure.repository.StudentDAO;
 import exambyte.infrastructure.repository.StudentRepositoryImpl;
 import exambyte.domain.repository.StudentRepository;

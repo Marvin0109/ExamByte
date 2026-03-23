@@ -1,9 +1,9 @@
 package exambyte.infrastructure.container;
 
-import exambyte.application.mapper.export.mapper.AnswerMapper;
+import exambyte.infrastructure.mapper.AnswerMapper;
 import exambyte.domain.model.exam.Answer;
 import exambyte.domain.repository.AnswerRepository;
-import exambyte.application.mapper.export.mapper.AnswerMapperImpl;
+import exambyte.infrastructure.mapper.AnswerMapperImpl;
 import exambyte.infrastructure.repository.AnswerDAO;
 import exambyte.infrastructure.repository.AnswerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;

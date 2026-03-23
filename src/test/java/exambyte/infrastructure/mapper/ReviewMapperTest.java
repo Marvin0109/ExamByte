@@ -1,8 +1,6 @@
 package exambyte.infrastructure.mapper;
 
-import exambyte.application.mapper.export.mapper.ReviewMapper;
 import exambyte.domain.model.exam.Review;
-import exambyte.application.mapper.export.mapper.ReviewMapperImpl;
 import exambyte.infrastructure.entity.ReviewEntity;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
