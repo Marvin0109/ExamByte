@@ -16,9 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-class CorrectAnswersQueryServiceTest {
+class CorrectAnswersServiceTest {
 
-    private CorrectAnswersQueryService queryService;
+    private CorrectAnswersService queryService;
 
     @Mock
     private CorrectAnswersRepository repository;
@@ -29,7 +29,7 @@ class CorrectAnswersQueryServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        queryService = new CorrectAnswersQueryServiceImpl(repository, mapper);
+        queryService = new CorrectAnswersServiceImpl(repository, mapper);
     }
 
     @Test

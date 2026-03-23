@@ -9,7 +9,7 @@ import exambyte.application.mapper.export.ExamExportDTOMapper;
 import exambyte.application.service.query.ExamQueryService;
 
 import exambyte.application.service.query.QuestionQueryService;
-import exambyte.application.service.query.CorrectAnswersQueryService;
+import exambyte.application.service.query.CorrectAnswersService;
 import exambyte.application.service.query.ProfessorService;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +23,18 @@ public class ExamExportServiceImpl implements ExamExportService {
     private final ExamQueryService examQueryService;
     private final QuestionQueryService questionQueryService;
     private final ProfessorService professorService;
-    private final CorrectAnswersQueryService correctAnswersQueryService;
+    private final CorrectAnswersService correctAnswersService;
     private final ExamExportDTOMapper examExportDTOMapper;
 
     public ExamExportServiceImpl(ExamQueryService examQueryService,
                                  QuestionQueryService questionQueryService,
                                  ProfessorService professorService,
-                                 CorrectAnswersQueryService correctAnswersQueryService,
+                                 CorrectAnswersService correctAnswersService,
                                  ExamExportDTOMapper examExportDTOMapper) {
         this.examQueryService = examQueryService;
         this.questionQueryService = questionQueryService;
         this.professorService = professorService;
-        this.correctAnswersQueryService = correctAnswersQueryService;
+        this.correctAnswersService = correctAnswersService;
         this.examExportDTOMapper = examExportDTOMapper;
     }
 
@@ -51,7 +51,7 @@ public class ExamExportServiceImpl implements ExamExportService {
         List<CorrectAnswersDTO> correctAnswersList = new ArrayList<>();
 
         for (QuestionDTO question : questions) {
-            CorrectAnswersDTO k = correctAnswersQueryService.getCorrectAnswerForQuestion(question.id());
+            CorrectAnswersDTO k = correctAnswersService.getCorrectAnswerForQuestion(question.id());
             if (k != null) {
                 correctAnswersList.add(k);
             }

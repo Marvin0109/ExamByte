@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     private final QuestionService questionService;
-    private final CorrectAnswersQueryService correctAnswersService;
+    private final CorrectAnswersService correctAnswersService;
     private final QuestionDTOMapper questionDTOMapper;
 
     public QuestionQueryServiceImpl(QuestionService questionService,
-                                    CorrectAnswersQueryService correctAnswersService,
+                                    CorrectAnswersService correctAnswersService,
                                     QuestionDTOMapper questionDTOMapper) {
         this.questionService = questionService;
         this.questionDTOMapper = questionDTOMapper;

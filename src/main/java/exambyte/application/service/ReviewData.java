@@ -4,7 +4,7 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
-import exambyte.application.service.query.CorrectAnswersQueryService;
+import exambyte.application.service.query.CorrectAnswersService;
 
 
 import java.util.ArrayList;
@@ -16,11 +16,11 @@ public class ReviewData {
     private List<QuestionDTO> questions;
     private List<AnswerDTO> answers;
     private List<CorrectAnswersDTO> correctAnswers;
-    private final CorrectAnswersQueryService service;
+    private final CorrectAnswersService service;
 
     public ReviewData(List<QuestionDTO> questions,
                       List<AnswerDTO> answers,
-                      CorrectAnswersQueryService service) {
+                      CorrectAnswersService service) {
         this.questions = questions;
         this.answers = answers;
         this.service = service;

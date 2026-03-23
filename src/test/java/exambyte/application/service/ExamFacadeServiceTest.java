@@ -45,7 +45,7 @@ class ExamFacadeServiceTest {
     private ReviewerService reviewerService;
 
     @Mock
-    private CorrectAnswersQueryService correctAnswersQueryService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
     private ExamExportService examExportService;
@@ -68,7 +68,7 @@ class ExamFacadeServiceTest {
                 studentService,
                 answerService,
                 reviewQueryService,
-                correctAnswersQueryService);
+                correctAnswersService);
     }
 
     @Test

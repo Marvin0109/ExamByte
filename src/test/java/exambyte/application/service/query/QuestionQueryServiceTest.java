@@ -33,7 +33,7 @@ class QuestionQueryServiceTest {
     private QuestionService questionService;
 
     @Mock
-    private CorrectAnswersQueryService correctAnswersService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
     private QuestionDTOMapper questionDTOMapper;

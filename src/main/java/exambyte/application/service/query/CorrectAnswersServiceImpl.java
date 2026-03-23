@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class CorrectAnswersQueryServiceImpl implements CorrectAnswersQueryService {
+public class CorrectAnswersServiceImpl implements CorrectAnswersService {
 
     private final CorrectAnswersRepository repository;
     private final CorrectAnswersDTOMapper mapper;
 
-    public CorrectAnswersQueryServiceImpl(CorrectAnswersRepository repository,
-                                          CorrectAnswersDTOMapper mapper) {
+    public CorrectAnswersServiceImpl(CorrectAnswersRepository repository,
+                                     CorrectAnswersDTOMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
     }

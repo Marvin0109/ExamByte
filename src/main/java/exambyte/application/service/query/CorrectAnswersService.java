@@ -4,7 +4,7 @@ import exambyte.application.dto.CorrectAnswersDTO;
 
 import java.util.UUID;
 
-public interface CorrectAnswersQueryService {
+public interface CorrectAnswersService {
 
     CorrectAnswersDTO getCorrectAnswerForQuestion(UUID questionId);
 

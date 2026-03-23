@@ -7,7 +7,7 @@ import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.service.query.ExamQueryService;
 import exambyte.application.service.query.QuestionQueryService;
-import exambyte.application.service.query.CorrectAnswersQueryService;
+import exambyte.application.service.query.CorrectAnswersService;
 import exambyte.application.service.query.ProfessorService;
 import exambyte.application.mapper.export.ExamExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +41,7 @@ class ExamExportServiceTest {
     private ProfessorService profQueryService;
 
     @Mock
-    private CorrectAnswersQueryService correctAnswersQueryService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
     private ExamExportDTOMapper mapper;
@@ -54,7 +54,7 @@ class ExamExportServiceTest {
                 examQueryService,
                 questionQueryService,
                 profQueryService,
-                correctAnswersQueryService,
+                correctAnswersService,
                 mapper
         );
 
@@ -101,7 +101,7 @@ class ExamExportServiceTest {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
-        when(correctAnswersQueryService.getCorrectAnswerForQuestion(question1.id())).thenReturn(correctAnswers);
+        when(correctAnswersService.getCorrectAnswerForQuestion(question1.id())).thenReturn(correctAnswers);
         when(mapper.mapDTOToExport(
                 exam,
                 professor.name(),
@@ -125,7 +125,7 @@ class ExamExportServiceTest {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question2));
-        when(correctAnswersQueryService.getCorrectAnswerForQuestion(question2.id())).thenReturn(null);
+        when(correctAnswersService.getCorrectAnswerForQuestion(question2.id())).thenReturn(null);
 
         service.createExamExport(exam.id());
 

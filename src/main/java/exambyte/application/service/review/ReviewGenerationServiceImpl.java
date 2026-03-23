@@ -5,7 +5,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.ReviewData;
-import exambyte.application.service.query.CorrectAnswersQueryService;
+import exambyte.application.service.query.CorrectAnswersService;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
 
     private final AutomaticReviewService automaticReviewService;
     private final ReviewService reviewService;
-    private final CorrectAnswersQueryService correctAnswersService;
+    private final CorrectAnswersService correctAnswersService;
 
     public ReviewGenerationServiceImpl(AutomaticReviewService automaticReviewService,
                                        ReviewService reviewService,
-                                       CorrectAnswersQueryService correctAnswersService) {
+                                       CorrectAnswersService correctAnswersService) {
         this.automaticReviewService = automaticReviewService;
         this.reviewService = reviewService;
         this.correctAnswersService = correctAnswersService;

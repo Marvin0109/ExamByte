@@ -27,7 +27,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final StudentService studentService;
     private final AnswerService answerService;
     private final ReviewQueryService reviewQueryService;
-    private final CorrectAnswersQueryService correctAnswersQueryService;
+    private final CorrectAnswersService correctAnswersService;
 
 
     public ExamFacadeServiceImpl(ReviewManagementService reviewManagementService,
@@ -40,7 +40,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  StudentService studentService,
                                  AnswerService answerService,
                                  ReviewQueryService reviewQueryService,
-                                 CorrectAnswersQueryService correctAnswersQueryService) {
+                                 CorrectAnswersService correctAnswersService) {
 
         this.reviewManagementService = reviewManagementService;
         this.examManagementService = examManagementService;
@@ -52,7 +52,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.studentService = studentService;
         this.answerService = answerService;
         this.reviewQueryService = reviewQueryService;
-        this.correctAnswersQueryService = correctAnswersQueryService;
+        this.correctAnswersService = correctAnswersService;
     }
 
     @Override
@@ -198,7 +198,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public CorrectAnswersDTO getCorrectAnswerForQuestion(UUID questionId) {
-        return correctAnswersQueryService.getCorrectAnswerForQuestion(questionId);
+        return correctAnswersService.getCorrectAnswerForQuestion(questionId);
     }
 
     @Override

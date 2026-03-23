@@ -4,7 +4,7 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.query.CorrectAnswersQueryService;
+import exambyte.application.service.query.CorrectAnswersService;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +43,7 @@ class ReviewGenerationServiceTest {
     private ReviewService reviewService;
 
     @Mock
-    private CorrectAnswersQueryService correctAnswersService;
+    private CorrectAnswersService correctAnswersService;
 
 
     @BeforeEach
