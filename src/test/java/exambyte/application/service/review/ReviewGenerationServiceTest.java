@@ -4,8 +4,7 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.mapper.CorrectAnswersDTOMapper;
-import exambyte.domain.service.CorrectAnswersService;
+import exambyte.application.service.query.CorrectAnswersQueryService;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,10 +43,8 @@ class ReviewGenerationServiceTest {
     private ReviewService reviewService;
 
     @Mock
-    private CorrectAnswersService correctAnswersService;
+    private CorrectAnswersQueryService correctAnswersService;
 
-    @Mock
-    private CorrectAnswersDTOMapper correctAnswersDTOMapper;
 
     @BeforeEach
     void setUp() {
@@ -55,8 +52,7 @@ class ReviewGenerationServiceTest {
         reviewGenerationService = new ReviewGenerationServiceImpl(
                 automaticReviewService,
                 reviewService,
-                correctAnswersService,
-                correctAnswersDTOMapper);
+                correctAnswersService);
 
         questionDTOMC = new QuestionDTO(
                 UUID.randomUUID(),

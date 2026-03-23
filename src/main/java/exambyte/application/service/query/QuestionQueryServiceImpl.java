@@ -3,11 +3,9 @@ package exambyte.application.service.query;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.mapper.QuestionDTOMapper;
-import exambyte.application.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.QuestionService;
-import exambyte.domain.service.CorrectAnswersService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,18 +18,15 @@ import java.util.stream.Collectors;
 public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     private final QuestionService questionService;
-    private final CorrectAnswersService correctAnswersService;
+    private final CorrectAnswersQueryService correctAnswersService;
     private final QuestionDTOMapper questionDTOMapper;
-    private final CorrectAnswersDTOMapper correctAnswersDTOMapper;
 
     public QuestionQueryServiceImpl(QuestionService questionService,
-                                    CorrectAnswersService correctAnswersService,
-                                    QuestionDTOMapper questionDTOMapper,
-                                    CorrectAnswersDTOMapper correctAnswersDTOMapper) {
+                                    CorrectAnswersQueryService correctAnswersService,
+                                    QuestionDTOMapper questionDTOMapper) {
         this.questionService = questionService;
         this.questionDTOMapper = questionDTOMapper;
         this.correctAnswersService = correctAnswersService;
-        this.correctAnswersDTOMapper = correctAnswersDTOMapper;
     }
 
     @Override
@@ -48,12 +43,12 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
     public void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices) {
         UUID questionId = questionService.addQuestion(questionDTOMapper.toDomain(questionDTO));
         CorrectAnswersDTO dto = new CorrectAnswersDTO(null, correctAnswer, choices, questionId);
-        correctAnswersService.addCorrectAnswer(correctAnswersDTOMapper.toDomain(dto));
+        correctAnswersService.addCorrectAnswers(dto);
     }
 
     @Override
     public String getChoiceForQuestion(UUID questionId) {
-        return correctAnswersService.findSolution(questionId).getChoices();
+        return correctAnswersService.getCorrectAnswerForQuestion(questionId).choices();
     }
 
     @Override

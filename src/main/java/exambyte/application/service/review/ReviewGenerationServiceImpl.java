@@ -5,8 +5,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.ReviewData;
-import exambyte.application.mapper.CorrectAnswersDTOMapper;
-import exambyte.domain.service.CorrectAnswersService;
+import exambyte.application.service.query.CorrectAnswersQueryService;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
@@ -19,25 +18,22 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
 
     private final AutomaticReviewService automaticReviewService;
     private final ReviewService reviewService;
-    private final CorrectAnswersService correctAnswersService;
-    private final CorrectAnswersDTOMapper mapper;
+    private final CorrectAnswersQueryService correctAnswersService;
 
     public ReviewGenerationServiceImpl(AutomaticReviewService automaticReviewService,
                                        ReviewService reviewService,
-                                       CorrectAnswersService correctAnswersService,
-                                       CorrectAnswersDTOMapper mapper) {
+                                       CorrectAnswersQueryService correctAnswersService) {
         this.automaticReviewService = automaticReviewService;
         this.reviewService = reviewService;
         this.correctAnswersService = correctAnswersService;
-        this.mapper = mapper;
     }
 
     @Override
     public List<ReviewDTO> generateReviews(UUID studentId, List<QuestionDTO> questions, List<AnswerDTO> answers) {
         ReviewData mcData = new ReviewData(questions, answers,
-                mapper, correctAnswersService);
+               correctAnswersService);
         ReviewData scData = new ReviewData(questions, answers,
-                mapper, correctAnswersService);
+               correctAnswersService);
 
         mcData.filterToType(QuestionTypeDTO.MC);
         scData.filterToType(QuestionTypeDTO.SC);

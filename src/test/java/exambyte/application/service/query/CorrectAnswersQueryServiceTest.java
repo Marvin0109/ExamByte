@@ -3,12 +3,13 @@ package exambyte.application.service.query;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.model.exam.CorrectAnswers;
-import exambyte.domain.service.CorrectAnswersService;
+import exambyte.domain.repository.CorrectAnswersRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +21,7 @@ class CorrectAnswersQueryServiceTest {
     private CorrectAnswersQueryService queryService;
 
     @Mock
-    private CorrectAnswersService correctAnswersService;
+    private CorrectAnswersRepository repository;
 
     @Mock
     private CorrectAnswersDTOMapper mapper;
@@ -28,7 +29,7 @@ class CorrectAnswersQueryServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        queryService = new CorrectAnswersQueryServiceImpl(correctAnswersService, mapper);
+        queryService = new CorrectAnswersQueryServiceImpl(repository, mapper);
     }
 
     @Test
@@ -43,7 +44,7 @@ class CorrectAnswersQueryServiceTest {
                 .solution("A")
                 .build();
 
-        when(correctAnswersService.findSolution(questionId)).thenReturn(correctAnswers);
+        when(repository.findByQuestionId(questionId)).thenReturn(Optional.of(correctAnswers));
 
         CorrectAnswersDTO correctAnswersDTO = new CorrectAnswersDTO(
                 correctAnswerId,
@@ -61,7 +62,7 @@ class CorrectAnswersQueryServiceTest {
 
     @Test
     void getCorrectAnswerForQuestion_fail() {
-        when(correctAnswersService.findSolution(any())).thenReturn(null);
+        when(repository.findByQuestionId(any())).thenReturn(Optional.empty());
         CorrectAnswersDTO result = queryService.getCorrectAnswerForQuestion(UUID.randomUUID());
         assertThat(result).isNull();
     }

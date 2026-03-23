@@ -63,5 +63,4 @@ public class ReviewerServiceImpl implements ReviewerService {
         return repository.findById(id)
                 .orElseThrow(NotFoundException::new);
     }
-
 }
