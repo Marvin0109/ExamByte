@@ -22,7 +22,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ExamExportService examExportService;
     private final ReviewExportService reviewExportService;
     private final QuestionQueryService questionQueryService;
-    private final ProfessorQueryService professorQueryService;
+    private final ProfessorService professorService;
     private final ReviewerQueryService reviewerQueryService;
     private final StudentQueryService studentQueryService;
     private final AnswerService answerService;
@@ -35,7 +35,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ExamExportService examExportService,
                                  ReviewExportService reviewExportService,
                                  QuestionQueryService questionQueryService,
-                                 ProfessorQueryService professorQueryService,
+                                 ProfessorService professorService,
                                  ReviewerQueryService reviewerQueryService,
                                  StudentQueryService studentQueryService,
                                  AnswerService answerService,
@@ -47,7 +47,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.examExportService = examExportService;
         this.reviewExportService = reviewExportService;
         this.questionQueryService = questionQueryService;
-        this.professorQueryService = professorQueryService;
+        this.professorService = professorService;
         this.reviewerQueryService = reviewerQueryService;
         this.studentQueryService = studentQueryService;
         this.answerService = answerService;
@@ -93,12 +93,12 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public Optional<UUID> getProfIDByName(String name) {
-        return professorQueryService.getProfIdByName(name);
+        return professorService.getProfIdByName(name);
     }
 
     @Override
     public ProfessorDTO getProfessor(UUID profId) {
-        return professorQueryService.getProfessorById(profId);
+        return professorService.getProfessorById(profId);
     }
 
     @Override

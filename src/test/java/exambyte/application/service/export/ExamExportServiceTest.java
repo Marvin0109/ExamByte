@@ -8,7 +8,7 @@ import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.service.query.ExamQueryService;
 import exambyte.application.service.query.QuestionQueryService;
 import exambyte.application.service.query.CorrectAnswersQueryService;
-import exambyte.application.service.query.ProfessorQueryService;
+import exambyte.application.service.query.ProfessorService;
 import exambyte.application.mapper.export.ExamExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ class ExamExportServiceTest {
     private QuestionQueryService questionQueryService;
 
     @Mock
-    private ProfessorQueryService profQueryService;
+    private ProfessorService profQueryService;
 
     @Mock
     private CorrectAnswersQueryService correctAnswersQueryService;

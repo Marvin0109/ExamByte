@@ -10,7 +10,7 @@ import exambyte.application.service.query.ExamQueryService;
 
 import exambyte.application.service.query.QuestionQueryService;
 import exambyte.application.service.query.CorrectAnswersQueryService;
-import exambyte.application.service.query.ProfessorQueryService;
+import exambyte.application.service.query.ProfessorService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,18 +22,18 @@ public class ExamExportServiceImpl implements ExamExportService {
 
     private final ExamQueryService examQueryService;
     private final QuestionQueryService questionQueryService;
-    private final ProfessorQueryService professorQueryService;
+    private final ProfessorService professorService;
     private final CorrectAnswersQueryService correctAnswersQueryService;
     private final ExamExportDTOMapper examExportDTOMapper;
 
     public ExamExportServiceImpl(ExamQueryService examQueryService,
                                  QuestionQueryService questionQueryService,
-                                 ProfessorQueryService professorQueryService,
+                                 ProfessorService professorService,
                                  CorrectAnswersQueryService correctAnswersQueryService,
                                  ExamExportDTOMapper examExportDTOMapper) {
         this.examQueryService = examQueryService;
         this.questionQueryService = questionQueryService;
-        this.professorQueryService = professorQueryService;
+        this.professorService = professorService;
         this.correctAnswersQueryService = correctAnswersQueryService;
         this.examExportDTOMapper = examExportDTOMapper;
     }
@@ -41,7 +41,7 @@ public class ExamExportServiceImpl implements ExamExportService {
     @Override
     public List<ExamExportDTO> createExamExport(UUID examId) {
         ExamDTO exam = examQueryService.getExam(examId);
-        ProfessorDTO prof = professorQueryService.getProfessorById(exam.professorId());
+        ProfessorDTO prof = professorService.getProfessorById(exam.professorId());
         List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
 
         double points = questions.stream()

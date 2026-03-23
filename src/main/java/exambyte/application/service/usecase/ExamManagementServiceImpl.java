@@ -21,7 +21,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final ReviewGenerationService reviewGenerationService;
     private final QuestionQueryService questionQueryService;
     private final ScoringService scoringService;
-    private final ProfessorQueryService professorQueryService;
+    private final ProfessorService professorService;
     private final StudentQueryService studentQueryService;
     private final ExamQueryService examQueryService;
     private final ReviewQueryService reviewQueryService;
@@ -35,7 +35,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ReviewGenerationService reviewGenerationService,
                                      QuestionQueryService questionQueryService,
                                      ScoringService scoringService,
-                                     ProfessorQueryService professorQueryService,
+                                     ProfessorService professorService,
                                      StudentQueryService studentQueryService,
                                      ExamQueryService examQueryService,
                                      ReviewQueryService reviewQueryService,
@@ -45,7 +45,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.reviewGenerationService = reviewGenerationService;
         this.questionQueryService = questionQueryService;
         this.scoringService = scoringService;
-        this.professorQueryService = professorQueryService;
+        this.professorService = professorService;
         this.studentQueryService = studentQueryService;
         this.examQueryService = examQueryService;
         this.reviewQueryService = reviewQueryService;
@@ -64,7 +64,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                              LocalDateTime end,
                              LocalDateTime result) {
 
-        UUID profId = professorQueryService.getProfIdByName(profName)
+        UUID profId = professorService.getProfIdByName(profName)
                 .orElseThrow(() -> new IllegalStateException("Professor not saved yet: " + profName));
 
         if (start.isAfter(end) || start.isEqual(end)) {

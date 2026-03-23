@@ -59,9 +59,9 @@ class OnionArchitectureTest {
         .beAnnotatedWith(Service.class);
 
     @ArchTest
-    ArchRule allClassesInPersistenceRepositoryShouldBeAnnotatedWithRepository = classes()
+    ArchRule allRepositoriesShouldBeAnnotatedWithRepository = classes()
         .that()
-        .resideInAPackage("..persistence.repository..")
+        .resideInAPackage("..infrastructure.repository..")
         .and().haveSimpleNameEndingWith("Impl")
         .should()
         .beAnnotatedWith(Repository.class);

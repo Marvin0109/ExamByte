@@ -1,7 +1,7 @@
 package exambyte.application.service.user;
 
+import exambyte.application.service.query.ProfessorService;
 import exambyte.domain.service.ReviewerService;
-import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;
 import exambyte.application.common.Role;
 import org.springframework.security.core.GrantedAuthority;

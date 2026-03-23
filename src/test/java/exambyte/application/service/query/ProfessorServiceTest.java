@@ -1,9 +1,10 @@
-package exambyte.infrastructure.service;
+package exambyte.application.service.query;
 
+import exambyte.application.dto.ProfessorDTO;
+import exambyte.application.exception.NotFoundException;
+import exambyte.application.mapper.ProfessorDTOMapper;
 import exambyte.domain.model.user.Professor;
 import exambyte.domain.repository.ProfessorRepository;
-import exambyte.domain.service.ProfessorService;
-import exambyte.application.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -15,19 +16,22 @@ import static org.mockito.Mockito.*;
 
 class ProfessorServiceTest {
 
+    private final ProfessorDTOMapper mapper = mock(ProfessorDTOMapper.class);
     private final ProfessorRepository repository = mock(ProfessorRepository.class);
-    private final ProfessorService service = new ProfessorServiceImpl(repository);
+    private final ProfessorService service = new ProfessorServiceImpl(repository, mapper);
 
     @Test
     void getProfessor_success() {
         // Arrange
         var profId = UUID.randomUUID();
+        ProfessorDTO professorDTO = new ProfessorDTO(profId, "");
         Professor prof = new Professor.ProfessorBuilder().id(profId).build();
 
         when(repository.findById(profId)).thenReturn(Optional.of(prof));
+        when(mapper.toDTO(prof)).thenReturn(professorDTO);
 
         // Act
-        var result = service.getProfessor(profId);
+        var result = service.getProfessorById(profId);
 
         // Assert
         assertThat(result).isNotNull();
@@ -39,7 +43,7 @@ class ProfessorServiceTest {
     void getProfessor_notFound() {
         UUID profID = UUID.randomUUID();
         when(repository.findById(profID)).thenReturn(Optional.empty());
-        assertThrows(NotFoundException.class, () -> service.getProfessor(profID));
+        assertThrows(NotFoundException.class, () -> service.getProfessorById(profID));
         verify(repository).findById(profID);
     }
 
@@ -48,15 +52,17 @@ class ProfessorServiceTest {
         // Arrange
         String name = "Prof123";
         var prof = new Professor.ProfessorBuilder().name(name).build();
+        var dto = new ProfessorDTO(null, name);
 
         when(repository.findByName(name)).thenReturn(Optional.of(prof));
+        when(mapper.toDTO(prof)).thenReturn(dto);
 
         // Act
         var result = service.getProfessorByName(name);
 
         // Assert
         assertThat(result).isPresent();
-        assertThat(result.get().getName()).isEqualTo(name);
+        assertThat(result.get().name()).isEqualTo(name);
         verify(repository).findByName(name);
     }
 }

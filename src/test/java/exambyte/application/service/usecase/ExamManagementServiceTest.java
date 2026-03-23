@@ -43,7 +43,7 @@ class ExamManagementServiceTest {
     private ScoringService scoringService;
 
     @Mock
-    private ProfessorQueryService professorQueryService;
+    private ProfessorService professorService;
 
     @Mock
     private StudentQueryService studentQueryService;
@@ -68,7 +68,7 @@ class ExamManagementServiceTest {
                 reviewGenerationService,
                 questionQueryService,
                 scoringService,
-                professorQueryService,
+                professorService,
                 studentQueryService,
                 examQueryService,
                 reviewQueryService,
@@ -86,7 +86,7 @@ class ExamManagementServiceTest {
         LocalDateTime end = start.plusHours(1);
         LocalDateTime result = end.plusHours(1);
 
-        when(professorQueryService.getProfIdByName(profName))
+        when(professorService.getProfIdByName(profName))
                 .thenReturn(Optional.of(profId));
 
         when(examQueryService.getAllExams())
@@ -107,7 +107,7 @@ class ExamManagementServiceTest {
         LocalDateTime start = LocalDateTime.of(2025, 1, 1, 10, 0);
         LocalDateTime end = start.plusHours(1);
         LocalDateTime result = end.plusHours(2);
-        when(professorQueryService.getProfIdByName("Prof X"))
+        when(professorService.getProfIdByName("Prof X"))
                 .thenReturn(Optional.empty());
 
         assertThrows(
@@ -136,7 +136,7 @@ class ExamManagementServiceTest {
         String profName = "ProfName";
         UUID profId = UUID.randomUUID();
 
-        when(professorQueryService.getProfIdByName(profName)).thenReturn(Optional.of(profId));
+        when(professorService.getProfIdByName(profName)).thenReturn(Optional.of(profId));
         when(examQueryService.getAllExams()).thenReturn(existingExams);
 
         // Act
