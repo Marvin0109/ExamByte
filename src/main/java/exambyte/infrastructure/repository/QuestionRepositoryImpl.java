@@ -1,7 +1,7 @@
 package exambyte.infrastructure.repository;
 
 import exambyte.domain.model.exam.Question;
-import exambyte.infrastructure.mapper.QuestionMapper;
+import exambyte.application.mapper.export.mapper.QuestionMapper;
 import exambyte.infrastructure.entity.QuestionEntity;
 import exambyte.domain.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;

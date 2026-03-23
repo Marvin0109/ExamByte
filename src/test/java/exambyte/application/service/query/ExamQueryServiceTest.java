@@ -11,7 +11,6 @@ import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.ExamService;
 import exambyte.domain.service.QuestionService;
-import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -163,7 +162,7 @@ class ExamQueryServiceTest {
 
     @Test
     void hasStudentSubmittedExam_returnsTrue() {
-        when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
+        when(studentService.getStudentIdByName("Student")).thenReturn(STUDENT_ID);
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
         when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
         when(answerService.findByStudentAndQuestion(STUDENT_ID, question.getId())).thenReturn(answerDTO);
@@ -175,7 +174,7 @@ class ExamQueryServiceTest {
 
     @Test
     void hasStudentSubmittedExam_returnsFalse() {
-        when(studentService.getStudentId("Student")).thenReturn(STUDENT_ID);
+        when(studentService.getStudentIdByName("Student")).thenReturn(STUDENT_ID);
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
         when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
         when(answerService.findByStudentAndQuestion(STUDENT_ID, question.getId())).thenReturn(null);

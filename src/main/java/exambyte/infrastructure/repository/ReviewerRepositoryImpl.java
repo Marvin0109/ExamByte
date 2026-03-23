@@ -1,7 +1,7 @@
 package exambyte.infrastructure.repository;
 
 import exambyte.domain.model.user.Reviewer;
-import exambyte.infrastructure.mapper.ReviewerMapper;
+import exambyte.application.mapper.export.mapper.ReviewerMapper;
 import exambyte.infrastructure.entity.ReviewerEntity;
 import exambyte.domain.repository.ReviewerRepository;
 import org.springframework.stereotype.Repository;

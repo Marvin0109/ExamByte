@@ -1,7 +1,7 @@
 package exambyte.infrastructure.repository;
 
 import exambyte.domain.model.exam.Exam;
-import exambyte.infrastructure.mapper.ExamMapper;
+import exambyte.application.mapper.export.mapper.ExamMapper;
 import exambyte.infrastructure.entity.ExamEntity;
 import exambyte.domain.repository.ExamRepository;
 import org.springframework.stereotype.Repository;

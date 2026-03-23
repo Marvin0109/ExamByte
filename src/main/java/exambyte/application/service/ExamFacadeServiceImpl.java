@@ -24,7 +24,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final QuestionQueryService questionQueryService;
     private final ProfessorService professorService;
     private final ReviewerQueryService reviewerQueryService;
-    private final StudentQueryService studentQueryService;
+    private final StudentService studentService;
     private final AnswerService answerService;
     private final ReviewQueryService reviewQueryService;
     private final CorrectAnswersQueryService correctAnswersQueryService;
@@ -37,7 +37,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  QuestionQueryService questionQueryService,
                                  ProfessorService professorService,
                                  ReviewerQueryService reviewerQueryService,
-                                 StudentQueryService studentQueryService,
+                                 StudentService studentService,
                                  AnswerService answerService,
                                  ReviewQueryService reviewQueryService,
                                  CorrectAnswersQueryService correctAnswersQueryService) {
@@ -49,7 +49,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.questionQueryService = questionQueryService;
         this.professorService = professorService;
         this.reviewerQueryService = reviewerQueryService;
-        this.studentQueryService = studentQueryService;
+        this.studentService = studentService;
         this.answerService = answerService;
         this.reviewQueryService = reviewQueryService;
         this.correctAnswersQueryService = correctAnswersQueryService;
@@ -148,7 +148,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
-        return studentQueryService.getStudentSubmittedExam(examId);
+        return studentService.getStudentSubmittedExam(examId);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public UUID getStudentIdByName(String name) {
-        return studentQueryService.getStudentIdByName(name);
+        return studentService.getStudentIdByName(name);
     }
 
     @Override

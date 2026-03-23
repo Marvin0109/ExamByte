@@ -1,14 +1,15 @@
 package exambyte.infrastructure.service;
 
 import exambyte.application.dto.ProfessorDTO;
+import exambyte.application.dto.StudentDTO;
 import exambyte.application.service.query.ProfessorService;
 import exambyte.application.service.query.ProfessorServiceImpl;
+import exambyte.application.service.query.StudentService;
+import exambyte.application.service.query.StudentServiceImpl;
 import exambyte.application.service.user.UserCreationService;
 import exambyte.application.service.user.UserCreationServiceImpl;
 import exambyte.domain.model.user.Reviewer;
-import exambyte.domain.model.user.Student;
 import exambyte.domain.service.ReviewerService;
-import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,10 +44,10 @@ class UserCreationServiceTest {
     void checkStudent_success() {
         // Arrange
         String username = "student123";
-        Student student = new Student.StudentBuilder()
-                .id(null)
-                .name(username)
-                .build();
+        StudentDTO student = new StudentDTO(
+                null,
+                username
+        );
         when(studentService.getStudentByName(username)).thenReturn(Optional.of(student));
 
         // Act

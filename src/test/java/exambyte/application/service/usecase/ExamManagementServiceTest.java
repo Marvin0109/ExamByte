@@ -46,7 +46,7 @@ class ExamManagementServiceTest {
     private ProfessorService professorService;
 
     @Mock
-    private StudentQueryService studentQueryService;
+    private StudentService studentService;
 
     @Mock
     private ExamQueryService examQueryService;
@@ -69,7 +69,7 @@ class ExamManagementServiceTest {
                 questionQueryService,
                 scoringService,
                 professorService,
-                studentQueryService,
+                studentService,
                 examQueryService,
                 reviewQueryService,
                 fixedClock
@@ -211,7 +211,7 @@ class ExamManagementServiceTest {
 
     @Test
     void submitExam_studentNotFound() {
-        when(studentQueryService.getStudentIdByName("Max"))
+        when(studentService.getStudentIdByName("Max"))
                 .thenThrow(new RuntimeException("Not found"));
 
         SubmitExamResult result = examManagementService.submitExam(
@@ -222,7 +222,7 @@ class ExamManagementServiceTest {
 
     @Test
     void submitExam_saveAnswersFails() {
-        when(studentQueryService.getStudentIdByName("Max"))
+        when(studentService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
         when(answerService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
@@ -239,7 +239,7 @@ class ExamManagementServiceTest {
         // Fixed clock now: 2026-01-01T10:00:00Z
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
 
-        when(studentQueryService.getStudentIdByName("Max"))
+        when(studentService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
         ExamDTO exam = new ExamDTO(
@@ -286,7 +286,7 @@ class ExamManagementServiceTest {
         when(review.answerId()).thenReturn(UUID.randomUUID());
         when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
-        when(studentQueryService.getStudentIdByName("Max"))
+        when(studentService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
         when(answerService.saveAnswers(any(UUID.class), any()))
@@ -344,7 +344,7 @@ class ExamManagementServiceTest {
         when(review.answerId()).thenReturn(UUID.randomUUID());
         when(review.reviewerId()).thenReturn(UUID.randomUUID());
 
-        when(studentQueryService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
+        when(studentService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
 
         when(answerService.saveAnswers(any(UUID.class), any())).thenReturn(true);
 
@@ -396,7 +396,7 @@ class ExamManagementServiceTest {
 
         List<AnswerDTO> answerList = List.of(answer1, answer2);
 
-        when(studentQueryService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
+        when(studentService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
         when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
         when(exam.result()).thenReturn(resultTime);
         when(questionQueryService.getQuestionUUIDMap(EXAM_ID)).thenReturn(questionMap);
@@ -412,7 +412,7 @@ class ExamManagementServiceTest {
         assertThat(result.scoreInPercent()).isCloseTo(80.0, within(0.0001));
         assertThat(result.lastChanges()).isEqualTo(submitTime2);
 
-        verify(studentQueryService).getStudentIdByName(studentName);
+        verify(studentService).getStudentIdByName(studentName);
         verify(questionQueryService).getQuestionUUIDMap(EXAM_ID);
         verify(answerService).getAnswers(STUDENT_ID, questionMap.keySet());
         verify(scoringService).accumulatedPoints(answerList, questionMap, resultTime);

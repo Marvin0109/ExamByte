@@ -22,7 +22,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final QuestionQueryService questionQueryService;
     private final ScoringService scoringService;
     private final ProfessorService professorService;
-    private final StudentQueryService studentQueryService;
+    private final StudentService studentService;
     private final ExamQueryService examQueryService;
     private final ReviewQueryService reviewQueryService;
     private final Clock clock;
@@ -36,7 +36,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      QuestionQueryService questionQueryService,
                                      ScoringService scoringService,
                                      ProfessorService professorService,
-                                     StudentQueryService studentQueryService,
+                                     StudentService studentService,
                                      ExamQueryService examQueryService,
                                      ReviewQueryService reviewQueryService,
                                      Clock clock) {
@@ -46,7 +46,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.questionQueryService = questionQueryService;
         this.scoringService = scoringService;
         this.professorService = professorService;
-        this.studentQueryService = studentQueryService;
+        this.studentService = studentService;
         this.examQueryService = examQueryService;
         this.reviewQueryService = reviewQueryService;
         this.clock = clock;
@@ -117,7 +117,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     private UUID resolveStudent(String studentName) {
         try {
-            return studentQueryService.getStudentIdByName(studentName);
+            return studentService.getStudentIdByName(studentName);
         } catch (Exception e) {
             String msg = "Student not found: " + studentName;
             logger.log(Level.SEVERE, msg, e);
@@ -158,7 +158,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public AttemptDTO getSubmission(UUID examId, String studentName) {
-        UUID studentId = studentQueryService.getStudentIdByName(studentName);
+        UUID studentId = studentService.getStudentIdByName(studentName);
 
         ExamDTO exam = examQueryService.getExam(examId);
         Map<UUID, QuestionDTO> questionMap = questionQueryService.getQuestionUUIDMap(examId);

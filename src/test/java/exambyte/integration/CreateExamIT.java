@@ -5,7 +5,7 @@ import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.user.Professor;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.*;
-import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
+import exambyte.infrastructure.container.TestcontainerConfiguration;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionData;
 import org.junit.jupiter.api.Test;

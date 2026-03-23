@@ -15,7 +15,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
 
     private final ExamQueryService examQueryService;
     private final QuestionQueryService questionQueryService;
-    private final StudentQueryService studentQueryService;
+    private final StudentService studentService;
     private final AnswerService answerService;
     private final ReviewerQueryService reviewerQueryService;
     private final ReviewQueryService reviewQueryService;
@@ -23,14 +23,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
 
     public ReviewExportServiceImpl(ExamQueryService examQueryService,
                                    QuestionQueryService questionQueryService,
-                                   StudentQueryService studentQueryService,
+                                   StudentService studentService,
                                    AnswerService answerService,
                                    ReviewerQueryService reviewerQueryService,
                                    ReviewQueryService reviewQueryService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
         this.questionQueryService = questionQueryService;
-        this.studentQueryService = studentQueryService;
+        this.studentService = studentService;
         this.answerService = answerService;
         this.reviewerQueryService = reviewerQueryService;
         this.reviewQueryService = reviewQueryService;
@@ -41,7 +41,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     public List<ReviewExportDTO> createReviewExport(UUID examId, String studentName) {
         ExamDTO exam = examQueryService.getExam(examId);
         List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
-        UUID studentId = studentQueryService.getStudentIdByName(studentName);
+        UUID studentId = studentService.getStudentIdByName(studentName);
 
         List<AnswerDTO> answers = new ArrayList<>();
 

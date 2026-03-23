@@ -1,6 +1,6 @@
 package exambyte.infrastructure.repository;
 
-import exambyte.infrastructure.mapper.CorrectAnswersMapper;
+import exambyte.application.mapper.export.mapper.CorrectAnswersMapper;
 import exambyte.domain.model.exam.CorrectAnswers;
 import exambyte.domain.repository.CorrectAnswersRepository;
 import exambyte.infrastructure.entity.CorrectAnswersEntity;

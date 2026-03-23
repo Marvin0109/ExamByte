@@ -11,7 +11,7 @@ import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.model.user.Student;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.*;
-import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
+import exambyte.infrastructure.container.TestcontainerConfiguration;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

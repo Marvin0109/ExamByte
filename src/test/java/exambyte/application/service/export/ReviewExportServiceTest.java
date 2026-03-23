@@ -36,7 +36,7 @@ class ReviewExportServiceTest {
     private QuestionQueryService questionQueryService;
 
     @Mock
-    private StudentQueryService studentQueryService;
+    private StudentService studentService;
 
     @Mock
     private AnswerService answerService;
@@ -57,7 +57,7 @@ class ReviewExportServiceTest {
         service = new ReviewExportServiceImpl(
                 examQueryService,
                 questionQueryService,
-                studentQueryService,
+                studentService,
                 answerService,
                 reviewerQueryService,
                 reviewQueryService,
@@ -128,7 +128,7 @@ class ReviewExportServiceTest {
 
         when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
 
-        when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
+        when(studentService.getStudentIdByName(any())).thenReturn(studentId);
 
         when(answerService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
 
@@ -154,7 +154,7 @@ class ReviewExportServiceTest {
 
         when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1, question2));
 
-        when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
+        when(studentService.getStudentIdByName(any())).thenReturn(studentId);
 
         when(answerService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
         when(answerService.findByStudentAndQuestion(studentId, question2.id())).thenReturn(answer2);
