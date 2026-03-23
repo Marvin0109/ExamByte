@@ -2,8 +2,8 @@ package exambyte.application.service.query;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.StudentDTO;
-import exambyte.domain.mapper.StudentDTOMapper;
-import exambyte.domain.model.aggregate.user.Student;
+import exambyte.application.mapper.StudentDTOMapper;
+import exambyte.domain.model.user.Student;
 import exambyte.domain.service.StudentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ class StudentQueryServiceTest {
     private AnswerDTO answer2;
 
     @Mock
-    private AnswerQueryService answerQueryService;
+    private AnswerService answerService;
 
     @Mock
     private StudentService studentService;
@@ -39,7 +39,7 @@ class StudentQueryServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        studentQueryService = new StudentQueryServiceImpl(answerQueryService, studentService, mapper);
+        studentQueryService = new StudentQueryServiceImpl(answerService, studentService, mapper);
 
         student = new Student.StudentBuilder()
                 .id(STUDENT_ID)
@@ -67,7 +67,7 @@ class StudentQueryServiceTest {
 
     @Test
     void getStudentSubmittedExam_OneAnswer() {
-        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1));
+        when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
         when(mapper.toDTO(student)).thenReturn(studentDTO);
 
@@ -79,7 +79,7 @@ class StudentQueryServiceTest {
 
     @Test
     void getStudentSubmittedExam_TwoAnswers() {
-        when(answerQueryService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1, answer2));
+        when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer1, answer2));
         when(studentService.getStudent(STUDENT_ID)).thenReturn(student);
         when(mapper.toDTO(student)).thenReturn(studentDTO);
 

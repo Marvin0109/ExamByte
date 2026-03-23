@@ -1,9 +1,9 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.repository.ReviewerRepository;
 import exambyte.domain.service.ReviewerService;
-import exambyte.infrastructure.exceptions.NotFoundException;
+import exambyte.application.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

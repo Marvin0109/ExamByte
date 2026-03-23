@@ -36,7 +36,7 @@ class ExamFacadeServiceTest {
     private ProfessorQueryService professorQueryService;
 
     @Mock
-    private AnswerQueryService answerQueryService;
+    private AnswerService answerService;
 
     @Mock
     private ReviewQueryService reviewQueryService;
@@ -66,7 +66,7 @@ class ExamFacadeServiceTest {
                 professorQueryService,
                 reviewerQueryService,
                 studentQueryService,
-                answerQueryService,
+                answerService,
                 reviewQueryService,
                 correctAnswersQueryService);
     }

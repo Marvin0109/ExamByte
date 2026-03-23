@@ -2,7 +2,7 @@ package exambyte.infrastructure.service;
 
 import exambyte.domain.repository.ExamRepository;
 import exambyte.domain.service.ExamService;
-import exambyte.infrastructure.exceptions.NotFoundException;
+import exambyte.application.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

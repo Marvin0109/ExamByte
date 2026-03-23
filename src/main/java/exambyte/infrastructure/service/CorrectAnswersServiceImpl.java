@@ -1,9 +1,8 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
+import exambyte.domain.model.exam.CorrectAnswers;
 import exambyte.domain.repository.CorrectAnswersRepository;
 import exambyte.domain.service.CorrectAnswersService;
-import exambyte.infrastructure.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

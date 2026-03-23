@@ -1,7 +1,8 @@
 package exambyte.infrastructure.service;
 
-import exambyte.application.service.AppUserService;
-import exambyte.application.service.UserCreationService;
+import exambyte.application.service.user.AppUserService;
+import exambyte.application.service.user.AppUserServiceImpl;
+import exambyte.application.service.user.UserCreationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.core.user.OAuth2User;

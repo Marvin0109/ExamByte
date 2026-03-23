@@ -1,7 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.UserCreationService;
+import exambyte.application.service.user.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

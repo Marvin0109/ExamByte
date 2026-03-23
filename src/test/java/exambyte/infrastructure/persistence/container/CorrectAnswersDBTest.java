@@ -1,13 +1,12 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.entitymapper.CorrectAnswersMapper;
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
+import exambyte.infrastructure.mapper.CorrectAnswersMapper;
+import exambyte.domain.model.exam.CorrectAnswers;
 import exambyte.domain.repository.CorrectAnswersRepository;
-import exambyte.infrastructure.persistence.mapper.CorrectAnswersMapperImpl;
-import exambyte.infrastructure.persistence.repository.CorrectAnswersDAO;
-import exambyte.infrastructure.persistence.repository.CorrectAnswersRepositoryImpl;
+import exambyte.infrastructure.mapper.CorrectAnswersMapperImpl;
+import exambyte.infrastructure.repository.CorrectAnswersDAO;
+import exambyte.infrastructure.repository.CorrectAnswersRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;

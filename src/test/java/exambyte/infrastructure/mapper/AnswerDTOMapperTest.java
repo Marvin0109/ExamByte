@@ -1,8 +1,9 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.AnswerDTO;
-import exambyte.domain.mapper.AnswerDTOMapper;
-import exambyte.domain.model.aggregate.exam.Answer;
+import exambyte.application.mapper.AnswerDTOMapper;
+import exambyte.application.mapper.AnswerDTOMapperImpl;
+import exambyte.domain.model.exam.Answer;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

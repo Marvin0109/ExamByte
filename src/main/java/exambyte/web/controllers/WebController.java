@@ -1,7 +1,7 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.UserCreationService;
+import exambyte.application.service.user.UserCreationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -101,12 +101,6 @@ public class WebController {
         return "redirect:/settings";
     }
 
-    /**
-     * Erzwingt das Abmelden des Benutzers, indem die Session invalidiert und der Sicherheitskontext gelöscht wird.
-     *
-     * @param request Das {@link HttpServletRequest}-Objekt, um die Session zu invalidieren.
-     * @return Eine Weiterleitung zur Startseite nach dem Logout.
-     */
     @PostMapping("/force-logout")
     public String forceLogout(HttpServletRequest request) {
         request.getSession(false).invalidate();

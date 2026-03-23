@@ -1,6 +1,6 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
+import exambyte.domain.model.exam.CorrectAnswers;
 
 import java.util.Optional;
 import java.util.UUID;

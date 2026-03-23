@@ -1,9 +1,9 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.application.service.CsvExportService;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
+import exambyte.application.service.export.CsvExportService;
 import exambyte.application.service.ExamControllerService;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_exam.ExamForm;

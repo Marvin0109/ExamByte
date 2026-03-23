@@ -3,7 +3,7 @@ package exambyte.application.service.usecase;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.query.ReviewQueryService;
-import exambyte.application.service.query.AnswerQueryService;
+import exambyte.application.service.query.AnswerService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,17 +14,17 @@ import java.util.UUID;
 public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     private final ReviewQueryService reviewQueryService;
-    private final AnswerQueryService answerQueryService;
+    private final AnswerService answerService;
 
     public ReviewManagementServiceImpl(ReviewQueryService reviewQueryService,
-                                       AnswerQueryService answerQueryService) {
+                                       AnswerService answerService) {
         this.reviewQueryService = reviewQueryService;
-        this.answerQueryService = answerQueryService;
+        this.answerService = answerService;
     }
 
     @Override
     public double getReviewCoverage(UUID examId) {
-        List<AnswerDTO> answers = answerQueryService.getFreeResponseAnswersForExam(examId);
+        List<AnswerDTO> answers = answerService.getFreeResponseAnswersForExam(examId);
 
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
 
     @Override
     public boolean submitHasReview(UUID examId, UUID studentId) {
-        List<AnswerDTO> answers = answerQueryService.getFreeResponseAnswersForExam(examId);
+        List<AnswerDTO> answers = answerService.getFreeResponseAnswersForExam(examId);
 
         List<UUID> studentAnswerList = answers.stream()
                 .filter(a -> a.studentId().equals(studentId))

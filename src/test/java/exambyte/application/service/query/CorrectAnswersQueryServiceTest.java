@@ -1,8 +1,8 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.CorrectAnswersDTO;
-import exambyte.domain.mapper.CorrectAnswersDTOMapper;
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
+import exambyte.application.mapper.CorrectAnswersDTOMapper;
+import exambyte.domain.model.exam.CorrectAnswers;
 import exambyte.domain.service.CorrectAnswersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

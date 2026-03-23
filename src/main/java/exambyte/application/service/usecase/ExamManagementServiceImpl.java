@@ -3,7 +3,7 @@ package exambyte.application.service.usecase;
 import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
-import exambyte.infrastructure.exceptions.NotFoundException;
+import exambyte.application.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
 
-    private final AnswerQueryService answerQueryService;
+    private final AnswerService answerService;
     private final ReviewGenerationService reviewGenerationService;
     private final QuestionQueryService questionQueryService;
     private final ScoringService scoringService;
@@ -31,7 +31,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
-    public ExamManagementServiceImpl(AnswerQueryService answerQueryService,
+    public ExamManagementServiceImpl(AnswerService answerService,
                                      ReviewGenerationService reviewGenerationService,
                                      QuestionQueryService questionQueryService,
                                      ScoringService scoringService,
@@ -41,7 +41,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ReviewQueryService reviewQueryService,
                                      Clock clock) {
 
-        this.answerQueryService = answerQueryService;
+        this.answerService = answerService;
         this.reviewGenerationService = reviewGenerationService;
         this.questionQueryService = questionQueryService;
         this.scoringService = scoringService;
@@ -106,7 +106,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return SubmitExamResult.SAVE_ANSWERS_FAILED;
         }
 
-        answerQueryService.saveAnswers(studentId, answerMap);
+        answerService.saveAnswers(studentId, answerMap);
 
         return generateAndSaveReviews(studentId, examId);
     }
@@ -129,7 +129,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
 
         List<AnswerDTO> answerList = questions.stream()
-                .map(f -> answerQueryService.findByStudentAndQuestion(studentId, f.id()))
+                .map(f -> answerService.findByStudentAndQuestion(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -162,7 +162,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
         ExamDTO exam = examQueryService.getExam(examId);
         Map<UUID, QuestionDTO> questionMap = questionQueryService.getQuestionUUIDMap(examId);
-        List<AnswerDTO> allAnswers = answerQueryService.getAnswers(studentId, questionMap.keySet());
+        List<AnswerDTO> allAnswers = answerService.getAnswers(studentId, questionMap.keySet());
 
         double totalPoints = questionMap.values().stream()
                 .mapToDouble(QuestionDTO::points)

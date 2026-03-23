@@ -1,8 +1,9 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.mapper.ReviewDTOMapper;
-import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.application.mapper.ReviewDTOMapper;
+import exambyte.application.mapper.ReviewDTOMapperImpl;
+import exambyte.domain.model.exam.Review;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

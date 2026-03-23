@@ -2,7 +2,7 @@ package exambyte.application.service.usecase;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
-import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.exam.Review;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 

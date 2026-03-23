@@ -1,8 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -2,7 +2,7 @@ package exambyte.application.service.query;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.StudentDTO;
-import exambyte.domain.mapper.StudentDTOMapper;
+import exambyte.application.mapper.StudentDTOMapper;
 import exambyte.domain.service.StudentService;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +13,21 @@ import java.util.stream.Collectors;
 @Service
 public class StudentQueryServiceImpl implements StudentQueryService {
 
-    private final AnswerQueryService answerQueryService;
+    private final AnswerService answerService;
     private final StudentService studentService;
     private final StudentDTOMapper mapper;
 
-    public StudentQueryServiceImpl(AnswerQueryService answerQueryService,
+    public StudentQueryServiceImpl(AnswerService answerService,
                                    StudentService studentService,
                                    StudentDTOMapper mapper) {
-        this.answerQueryService = answerQueryService;
+        this.answerService = answerService;
         this.studentService = studentService;
         this.mapper = mapper;
     }
 
     @Override
     public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
-        List<AnswerDTO> answers = answerQueryService.getFreeResponseAnswersForExam(examId);
+        List<AnswerDTO> answers = answerService.getFreeResponseAnswersForExam(examId);
 
         return answers.stream()
                 .collect(Collectors.toMap(

@@ -3,7 +3,7 @@ package exambyte.application.service.export;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
-import exambyte.domain.export_mapper.ReviewExportDTOMapper;
+import exambyte.application.mapper.export.ReviewExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -39,7 +39,7 @@ class ReviewExportServiceTest {
     private StudentQueryService studentQueryService;
 
     @Mock
-    private AnswerQueryService answerQueryService;
+    private AnswerService answerService;
 
     @Mock
     private ReviewerQueryService reviewerQueryService;
@@ -58,7 +58,7 @@ class ReviewExportServiceTest {
                 examQueryService,
                 questionQueryService,
                 studentQueryService,
-                answerQueryService,
+                answerService,
                 reviewerQueryService,
                 reviewQueryService,
                 mapper
@@ -130,7 +130,7 @@ class ReviewExportServiceTest {
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(answerQueryService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
+        when(answerService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
 
         when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
 
@@ -156,8 +156,8 @@ class ReviewExportServiceTest {
 
         when(studentQueryService.getStudentIdByName(any())).thenReturn(studentId);
 
-        when(answerQueryService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
-        when(answerQueryService.findByStudentAndQuestion(studentId, question2.id())).thenReturn(answer2);
+        when(answerService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
+        when(answerService.findByStudentAndQuestion(studentId, question2.id())).thenReturn(answer2);
 
         when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
         when(reviewQueryService.getReviewByAnswerId(answer2.id())).thenReturn(review2);

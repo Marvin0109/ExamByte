@@ -1,6 +1,6 @@
 package exambyte.infrastructure.entities;
 
-import exambyte.infrastructure.persistence.entities.ProfessorEntity;
+import exambyte.infrastructure.entity.ProfessorEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

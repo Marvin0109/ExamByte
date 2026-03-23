@@ -11,16 +11,17 @@ import java.io.IOException;
 import java.net.URI;
 
 /**
- * Die Hauptklasse der Anwendung, die den Spring Boot Server startet und eine URL in einem Browser öffnet. ඞ
- * Diese Klasse enthält die 'main'-Methode, die den Spring Boot-Anwendung-Context startet.
- * Zusätzlich wird beim Starten der Anwendung die vordefinierte URL localhost:8080 in einem bevorzugten
- * Browser geöffnet.
- * Wenn der Desktop nicht unterstützt wird, wird versucht, die die URL über einen der gängigen
- * Browser (z. B. Firefox, Chrome, Edge) zu öffnen.
- * Falls auch dieser Schritt fehlschlägt, wird eine Fehlermeldung ausgegeben.
+ * The main class of the application that starts the Spring Boot server and opens a URL in a browser. ඞ
+ * This class contains the 'main' method, which starts the Spring Boot application context.
+ * Additionally, when the application starts, the predefined URL localhost:8080 is opened in the preferred
+ * browser.
+ * If the desktop environment is not supported, the application attempts to open the URL using one of the
+ * common browsers (e.g., Firefox, Chrome, Edge).
+ * If this step also fails, an error message is displayed.
  *
  * @see SpringApplication
  */
+
 @SpringBootApplication()
 public class ExamByteApplication {
 
@@ -37,13 +38,6 @@ public class ExamByteApplication {
 		System.setProperty("DB_PASSWORD", Objects.requireNonNull(dotenv.get("DB_PASSWORD")));
 	}
 
-	/**
-	 * Versucht, eine URL im Standardbrowser zu öffnen.
-	 * Wenn der Desktop nicht unterstützt wird, wird die URL in einem der gängigen Browser (Firefox, Chrome, Edge) geöffnet.
-	 * Falls alle Versuche fehlschlagen, wird eine Fehlermeldung ausgegeben.
-	 *
-	 * @param uri Die URI, die im Browser geöffnet werden soll.
-	 */
 	private static void openInBrowser(URI uri) {
 		String[] browsers = {"firefox", "google-chrome", "microsoft-edge"};
 

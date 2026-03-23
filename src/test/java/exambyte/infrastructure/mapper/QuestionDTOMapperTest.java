@@ -2,8 +2,9 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.QuestionDTO;
-import exambyte.domain.mapper.QuestionDTOMapper;
-import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.application.mapper.QuestionDTOMapper;
+import exambyte.application.mapper.QuestionDTOMapperImpl;
+import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
 import org.junit.jupiter.api.Test;
 

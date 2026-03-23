@@ -1,9 +1,11 @@
 package exambyte.infrastructure.persistence.repository;
 
-import exambyte.domain.entitymapper.ReviewMapper;
-import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.infrastructure.mapper.ReviewMapper;
+import exambyte.domain.model.exam.Review;
 import exambyte.domain.repository.ReviewRepository;
-import exambyte.infrastructure.persistence.entities.ReviewEntity;
+import exambyte.infrastructure.entity.ReviewEntity;
+import exambyte.infrastructure.repository.ReviewDAO;
+import exambyte.infrastructure.repository.ReviewRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

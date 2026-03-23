@@ -1,11 +1,11 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.entitymapper.ReviewerMapper;
-import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.infrastructure.mapper.ReviewerMapper;
+import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.repository.ReviewerRepository;
-import exambyte.infrastructure.persistence.mapper.ReviewerMapperImpl;
-import exambyte.infrastructure.persistence.repository.ReviewerDAO;
-import exambyte.infrastructure.persistence.repository.ReviewerRepositoryImpl;
+import exambyte.infrastructure.mapper.ReviewerMapperImpl;
+import exambyte.infrastructure.repository.ReviewerDAO;
+import exambyte.infrastructure.repository.ReviewerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

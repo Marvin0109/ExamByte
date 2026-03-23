@@ -1,8 +1,9 @@
 package exambyte.infrastructure.persistence.mapper;
 
-import exambyte.domain.model.aggregate.exam.Answer;
-import exambyte.domain.entitymapper.AnswerMapper;
-import exambyte.infrastructure.persistence.entities.AnswerEntity;
+import exambyte.domain.model.exam.Answer;
+import exambyte.infrastructure.mapper.AnswerMapper;
+import exambyte.infrastructure.mapper.AnswerMapperImpl;
+import exambyte.infrastructure.entity.AnswerEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

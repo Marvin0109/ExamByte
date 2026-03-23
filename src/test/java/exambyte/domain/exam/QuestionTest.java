@@ -1,7 +1,7 @@
 package exambyte.domain.exam;
 
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.domain.model.exam.Question;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

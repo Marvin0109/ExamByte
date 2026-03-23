@@ -5,8 +5,9 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.domain.export_mapper.ReviewExportDTOMapper;
+import exambyte.application.dto.export.ReviewExportDTO;
+import exambyte.application.mapper.export.ReviewExportDTOMapper;
+import exambyte.application.mapper.export.ReviewExportDTOMapperImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

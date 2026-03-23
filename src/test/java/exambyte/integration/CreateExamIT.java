@@ -1,8 +1,8 @@
 package exambyte.integration;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.domain.model.aggregate.exam.Question;
-import exambyte.domain.model.aggregate.user.Professor;
+import exambyte.domain.model.exam.Question;
+import exambyte.domain.model.user.Professor;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.repository.*;
 import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;

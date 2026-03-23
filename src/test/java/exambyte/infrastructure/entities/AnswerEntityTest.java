@@ -1,6 +1,6 @@
 package exambyte.infrastructure.entities;
 
-import exambyte.infrastructure.persistence.entities.AnswerEntity;
+import exambyte.infrastructure.entity.AnswerEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;

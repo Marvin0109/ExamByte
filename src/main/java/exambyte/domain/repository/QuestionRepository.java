@@ -1,6 +1,6 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.domain.model.exam.Question;
 
 import java.util.Collection;
 import java.util.List;

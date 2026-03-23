@@ -1,11 +1,11 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.model.aggregate.exam.Question;
-import exambyte.domain.entitymapper.QuestionMapper;
-import exambyte.infrastructure.persistence.mapper.QuestionMapperImpl;
+import exambyte.domain.model.exam.Question;
+import exambyte.infrastructure.mapper.QuestionMapper;
+import exambyte.infrastructure.mapper.QuestionMapperImpl;
 import exambyte.domain.repository.QuestionRepository;
-import exambyte.infrastructure.persistence.repository.QuestionDAO;
-import exambyte.infrastructure.persistence.repository.QuestionRepositoryImpl;
+import exambyte.infrastructure.repository.QuestionDAO;
+import exambyte.infrastructure.repository.QuestionRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

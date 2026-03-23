@@ -1,8 +1,8 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.mapper.ReviewDTOMapper;
-import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.application.mapper.ReviewDTOMapper;
+import exambyte.domain.model.exam.Review;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 

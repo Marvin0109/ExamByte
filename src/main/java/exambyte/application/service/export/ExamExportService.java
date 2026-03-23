@@ -1,6 +1,6 @@
 package exambyte.application.service.export;
 
-import exambyte.application.dto.csv_dto.ExamExportDTO;
+import exambyte.application.dto.export.ExamExportDTO;
 
 import java.util.List;
 import java.util.UUID;

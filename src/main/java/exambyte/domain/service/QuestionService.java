@@ -1,6 +1,6 @@
 package exambyte.domain.service;
 
-import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.domain.model.exam.Question;
 
 import java.util.List;
 import java.util.Optional;

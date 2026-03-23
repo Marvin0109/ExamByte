@@ -1,9 +1,9 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.user.Professor;
+import exambyte.domain.model.user.Professor;
 import exambyte.domain.repository.ProfessorRepository;
 import exambyte.domain.service.ProfessorService;
-import exambyte.infrastructure.exceptions.NotFoundException;
+import exambyte.application.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

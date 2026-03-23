@@ -1,6 +1,6 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.model.exam.Exam;
 
 import java.time.LocalDateTime;
 import java.util.Collection;

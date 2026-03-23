@@ -1,7 +1,7 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.ReviewerDTO;
-import exambyte.domain.mapper.ReviewerDTOMapper;
+import exambyte.application.mapper.ReviewerDTOMapper;
 import exambyte.domain.service.ReviewerService;
 import org.springframework.stereotype.Service;
 

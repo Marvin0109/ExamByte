@@ -2,9 +2,8 @@ package exambyte.application.service.query;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
-import exambyte.domain.mapper.ExamDTOMapper;
-import exambyte.domain.mapper.QuestionDTOMapper;
-import exambyte.domain.service.AnswerService;
+import exambyte.application.mapper.ExamDTOMapper;
+import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.service.ExamService;
 import exambyte.domain.service.QuestionService;
 import exambyte.domain.service.StudentService;
@@ -78,7 +77,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
         return questions.stream()
                 .anyMatch(question ->
-                        answerService.findByStudentIdAndQuestionId(studentId, question.id()) != null);
+                        answerService.findByStudentAndQuestion(studentId, question.id()) != null);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.domain.model.exam.Question;
 import exambyte.domain.repository.QuestionRepository;
 import exambyte.domain.service.QuestionService;
 import org.springframework.stereotype.Service;

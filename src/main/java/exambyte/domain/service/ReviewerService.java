@@ -1,6 +1,6 @@
 package exambyte.domain.service;
 
-import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.domain.model.user.Reviewer;
 
 import java.util.Optional;
 import java.util.UUID;

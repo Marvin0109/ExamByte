@@ -1,8 +1,9 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.domain.mapper.ProfessorDTOMapper;
-import exambyte.domain.model.aggregate.user.Professor;
+import exambyte.application.mapper.ProfessorDTOMapper;
+import exambyte.application.mapper.ProfessorDTOMapperImpl;
+import exambyte.domain.model.user.Professor;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

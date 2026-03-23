@@ -14,35 +14,19 @@ import java.util.UUID;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
-/**
- * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
- */
+
 @AnalyzeClasses(
         packages = "exambyte",
         importOptions = ImportOption.DoNotIncludeTests.class)
 class OnionArchitectureTest {
 
-    /**
-     * Enthält die importierten Java-Klassen aus dem angegebenen Paket "exambyte".
-     * Die importierten Klassen werden für ArchUnit-Tests verwendet, um Architekturregeln innerhalb
-     * der Exambyte-Anwendung zu prüfen.
-     * Diese Variable wird hauptsächlich zur Definition und Überprüfung verschiedener Architekturregelexemplare
-     * verwendet, um sicherzustellen, dass die vorgegebene Schichtenarchitektur und andere Richtlinien
-     * eingehalten werden.
-     */
-
     @ArchTest
     ArchRule onionArchitecture = Architectures.onionArchitecture()
         .domainModels("exambyte.domain..")
         .domainServices("exambyte.domain.service..")
-        .applicationServices("exambyte.application.service..")
-        .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
-        .adapter("service", "exambyte.infrastructure.service..",
-                "exambyte.infrastructure.config..", "exambyte.web.service..")
-        .adapter("repository", "exambyte.infrastructure.persistence.repository..")
-        .adapter("controller", "exambyte.web.controllers..")
-        .adapter("mapper", "exambyte.infrastructure.mapper..",
-                "exambyte.infrastructure.persistence.mapper..", "exambyte.application.mapper..");
+        .applicationServices("exambyte.application..")
+        .adapter("infrastructure", "exambyte.infrastructure..")
+        .adapter("web", "exambyte.web..");
 
 
     @ArchTest

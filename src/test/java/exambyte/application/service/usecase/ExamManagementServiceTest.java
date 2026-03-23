@@ -31,7 +31,7 @@ class ExamManagementServiceTest {
     private static final UUID QUESTION_ID_2 = UUID.randomUUID();
 
     @Mock
-    private AnswerQueryService answerQueryService;
+    private AnswerService answerService;
 
     @Mock
     private ReviewGenerationService reviewGenerationService;
@@ -64,7 +64,7 @@ class ExamManagementServiceTest {
         );
 
         examManagementService = new ExamManagementServiceImpl(
-                answerQueryService,
+                answerService,
                 reviewGenerationService,
                 questionQueryService,
                 scoringService,
@@ -225,7 +225,7 @@ class ExamManagementServiceTest {
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
-        when(answerQueryService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
+        when(answerService.saveAnswers(any(), any())).thenThrow(new RuntimeException());
 
         assertThrows(Exception.class, () -> examManagementService.submitExam(
                 "Max",
@@ -289,13 +289,13 @@ class ExamManagementServiceTest {
         when(studentQueryService.getStudentIdByName("Max"))
                 .thenReturn(STUDENT_ID);
 
-        when(answerQueryService.saveAnswers(any(UUID.class), any()))
+        when(answerService.saveAnswers(any(UUID.class), any()))
                 .thenReturn(true);
 
         when(questionQueryService.getQuestionsForExam(EXAM_ID))
                 .thenReturn(List.of(question));
 
-        when(answerQueryService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1))
+        when(answerService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1))
                 .thenReturn(answer);
 
         when(reviewGenerationService.generateReviews(
@@ -346,11 +346,11 @@ class ExamManagementServiceTest {
 
         when(studentQueryService.getStudentIdByName("Max")).thenReturn(STUDENT_ID);
 
-        when(answerQueryService.saveAnswers(any(UUID.class), any())).thenReturn(true);
+        when(answerService.saveAnswers(any(UUID.class), any())).thenReturn(true);
 
         when(questionQueryService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(question));
 
-        when(answerQueryService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1)).thenReturn(answer);
+        when(answerService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1)).thenReturn(answer);
 
         when(reviewGenerationService.generateReviews(eq(STUDENT_ID), anyList(), anyList()))
                 .thenReturn(List.of(review));
@@ -400,7 +400,7 @@ class ExamManagementServiceTest {
         when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
         when(exam.result()).thenReturn(resultTime);
         when(questionQueryService.getQuestionUUIDMap(EXAM_ID)).thenReturn(questionMap);
-        when(answerQueryService.getAnswers(STUDENT_ID, questionMap.keySet())).thenReturn(answerList);
+        when(answerService.getAnswers(STUDENT_ID, questionMap.keySet())).thenReturn(answerList);
         when(scoringService.accumulatedPoints(answerList, questionMap, resultTime)).thenReturn(12.0);
 
         // Act
@@ -414,7 +414,7 @@ class ExamManagementServiceTest {
 
         verify(studentQueryService).getStudentIdByName(studentName);
         verify(questionQueryService).getQuestionUUIDMap(EXAM_ID);
-        verify(answerQueryService).getAnswers(STUDENT_ID, questionMap.keySet());
+        verify(answerService).getAnswers(STUDENT_ID, questionMap.keySet());
         verify(scoringService).accumulatedPoints(answerList, questionMap, resultTime);
     }
 

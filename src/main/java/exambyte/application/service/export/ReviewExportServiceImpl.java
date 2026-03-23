@@ -1,8 +1,8 @@
 package exambyte.application.service.export;
 
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.domain.export_mapper.ReviewExportDTOMapper;
+import exambyte.application.dto.export.ReviewExportDTO;
+import exambyte.application.mapper.export.ReviewExportDTOMapper;
 import exambyte.application.service.query.*;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     private final ExamQueryService examQueryService;
     private final QuestionQueryService questionQueryService;
     private final StudentQueryService studentQueryService;
-    private final AnswerQueryService answerQueryService;
+    private final AnswerService answerService;
     private final ReviewerQueryService reviewerQueryService;
     private final ReviewQueryService reviewQueryService;
     private final ReviewExportDTOMapper mapper;
@@ -24,14 +24,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     public ReviewExportServiceImpl(ExamQueryService examQueryService,
                                    QuestionQueryService questionQueryService,
                                    StudentQueryService studentQueryService,
-                                   AnswerQueryService answerQueryService,
+                                   AnswerService answerService,
                                    ReviewerQueryService reviewerQueryService,
                                    ReviewQueryService reviewQueryService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
         this.questionQueryService = questionQueryService;
         this.studentQueryService = studentQueryService;
-        this.answerQueryService = answerQueryService;
+        this.answerService = answerService;
         this.reviewerQueryService = reviewerQueryService;
         this.reviewQueryService = reviewQueryService;
         this.mapper = mapper;
@@ -46,7 +46,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
         List<AnswerDTO> answers = new ArrayList<>();
 
         for (QuestionDTO question : questions) {
-            AnswerDTO a = answerQueryService.findByStudentAndQuestion(studentId, question.id());
+            AnswerDTO a = answerService.findByStudentAndQuestion(studentId, question.id());
             answers.add(a);
         }
 

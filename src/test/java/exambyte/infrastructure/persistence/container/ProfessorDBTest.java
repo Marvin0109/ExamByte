@@ -1,10 +1,10 @@
 package exambyte.infrastructure.persistence.container;
 
-import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.entitymapper.ProfessorMapper;
-import exambyte.infrastructure.persistence.mapper.ProfessorMapperImpl;
-import exambyte.infrastructure.persistence.repository.ProfessorRepositoryImpl;
-import exambyte.infrastructure.persistence.repository.ProfessorDAO;
+import exambyte.domain.model.user.Professor;
+import exambyte.infrastructure.mapper.ProfessorMapper;
+import exambyte.infrastructure.mapper.ProfessorMapperImpl;
+import exambyte.infrastructure.repository.ProfessorRepositoryImpl;
+import exambyte.infrastructure.repository.ProfessorDAO;
 import exambyte.domain.repository.ProfessorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

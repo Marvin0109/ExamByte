@@ -1,14 +1,15 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.domain.mapper.ExamDTOMapper;
+import exambyte.application.mapper.ExamDTOMapper;
+import exambyte.application.mapper.ExamDTOMapperImpl;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.time.LocalDateTime;
-import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.model.exam.Exam;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;

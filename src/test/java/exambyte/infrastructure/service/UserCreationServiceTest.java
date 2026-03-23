@@ -1,9 +1,10 @@
 package exambyte.infrastructure.service;
 
-import exambyte.application.service.UserCreationService;
-import exambyte.domain.model.aggregate.user.Reviewer;
-import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.model.aggregate.user.Student;
+import exambyte.application.service.user.UserCreationService;
+import exambyte.application.service.user.UserCreationServiceImpl;
+import exambyte.domain.model.user.Reviewer;
+import exambyte.domain.model.user.Professor;
+import exambyte.domain.model.user.Student;
 import exambyte.domain.service.ReviewerService;
 import exambyte.domain.service.ProfessorService;
 import exambyte.domain.service.StudentService;

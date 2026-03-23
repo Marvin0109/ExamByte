@@ -5,7 +5,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.ReviewData;
-import exambyte.domain.mapper.CorrectAnswersDTOMapper;
+import exambyte.application.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.service.CorrectAnswersService;
 import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;

@@ -9,7 +9,7 @@ import exambyte.application.service.query.ExamQueryService;
 import exambyte.application.service.query.QuestionQueryService;
 import exambyte.application.service.query.CorrectAnswersQueryService;
 import exambyte.application.service.query.ProfessorQueryService;
-import exambyte.domain.export_mapper.ExamExportDTOMapper;
+import exambyte.application.mapper.export.ExamExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;

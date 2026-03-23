@@ -1,8 +1,10 @@
 package exambyte.infrastructure.persistence.repository;
 
-import exambyte.domain.entitymapper.ExamMapper;
+import exambyte.infrastructure.mapper.ExamMapper;
 import exambyte.domain.repository.ExamRepository;
-import exambyte.infrastructure.persistence.entities.ExamEntity;
+import exambyte.infrastructure.entity.ExamEntity;
+import exambyte.infrastructure.repository.ExamDAO;
+import exambyte.infrastructure.repository.ExamRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

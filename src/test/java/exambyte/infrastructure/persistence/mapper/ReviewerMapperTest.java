@@ -1,8 +1,9 @@
 package exambyte.infrastructure.persistence.mapper;
 
-import exambyte.domain.model.aggregate.user.Reviewer;
-import exambyte.domain.entitymapper.ReviewerMapper;
-import exambyte.infrastructure.persistence.entities.ReviewerEntity;
+import exambyte.domain.model.user.Reviewer;
+import exambyte.infrastructure.mapper.ReviewerMapper;
+import exambyte.infrastructure.mapper.ReviewerMapperImpl;
+import exambyte.infrastructure.entity.ReviewerEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

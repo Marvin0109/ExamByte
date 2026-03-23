@@ -1,8 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.export.ExamExportService;
 import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
@@ -25,7 +25,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ProfessorQueryService professorQueryService;
     private final ReviewerQueryService reviewerQueryService;
     private final StudentQueryService studentQueryService;
-    private final AnswerQueryService answerQueryService;
+    private final AnswerService answerService;
     private final ReviewQueryService reviewQueryService;
     private final CorrectAnswersQueryService correctAnswersQueryService;
 
@@ -38,7 +38,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ProfessorQueryService professorQueryService,
                                  ReviewerQueryService reviewerQueryService,
                                  StudentQueryService studentQueryService,
-                                 AnswerQueryService answerQueryService,
+                                 AnswerService answerService,
                                  ReviewQueryService reviewQueryService,
                                  CorrectAnswersQueryService correctAnswersQueryService) {
 
@@ -50,7 +50,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.professorQueryService = professorQueryService;
         this.reviewerQueryService = reviewerQueryService;
         this.studentQueryService = studentQueryService;
-        this.answerQueryService = answerQueryService;
+        this.answerService = answerService;
         this.reviewQueryService = reviewQueryService;
         this.correctAnswersQueryService = correctAnswersQueryService;
     }
@@ -163,7 +163,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public List<AnswerDTO> getFreeResponseSolutionForExam(UUID examId) {
-        return answerQueryService.getFreeResponseAnswersForExam(examId);
+        return answerService.getFreeResponseAnswersForExam(examId);
     }
 
     @Override
@@ -188,7 +188,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public AnswerDTO getAnswerForQuestionIdAndStudentId(UUID questionId, UUID studentId) {
-        return answerQueryService.findByStudentAndQuestion(studentId, questionId);
+        return answerService.findByStudentAndQuestion(studentId, questionId);
     }
 
     @Override

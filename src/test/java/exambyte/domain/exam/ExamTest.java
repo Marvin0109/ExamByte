@@ -1,6 +1,6 @@
 package exambyte.domain.exam;
 
-import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.model.exam.Exam;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

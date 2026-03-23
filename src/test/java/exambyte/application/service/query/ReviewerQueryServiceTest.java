@@ -1,7 +1,7 @@
 package exambyte.application.service.query;
 
-import exambyte.domain.mapper.ReviewerDTOMapper;
-import exambyte.domain.model.aggregate.user.Reviewer;
+import exambyte.application.mapper.ReviewerDTOMapper;
+import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.service.ReviewerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

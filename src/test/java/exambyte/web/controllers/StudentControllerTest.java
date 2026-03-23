@@ -5,7 +5,7 @@ import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.AttemptDTO;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.application.service.AppUserService;
+import exambyte.application.service.user.AppUserService;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ExamTimeInfo;

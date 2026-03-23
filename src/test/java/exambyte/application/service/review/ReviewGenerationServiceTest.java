@@ -4,7 +4,7 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.mapper.CorrectAnswersDTOMapper;
+import exambyte.application.mapper.CorrectAnswersDTOMapper;
 import exambyte.domain.service.CorrectAnswersService;
 import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;

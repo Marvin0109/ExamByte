@@ -1,7 +1,7 @@
 package exambyte.application.service.query;
 
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.domain.mapper.ProfessorDTOMapper;
+import exambyte.application.mapper.ProfessorDTOMapper;
 import exambyte.domain.service.ProfessorService;
 import org.springframework.stereotype.Service;
 

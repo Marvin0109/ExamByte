@@ -1,8 +1,8 @@
 package exambyte.infrastructure.service;
 
-import exambyte.domain.model.aggregate.user.Student;
+import exambyte.domain.model.user.Student;
 import exambyte.domain.repository.StudentRepository;
-import exambyte.infrastructure.exceptions.NotFoundException;
+import exambyte.application.exception.NotFoundException;
 import exambyte.domain.service.StudentService;
 import org.springframework.stereotype.Service;
 

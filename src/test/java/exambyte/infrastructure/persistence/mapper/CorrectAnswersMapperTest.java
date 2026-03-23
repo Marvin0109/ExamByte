@@ -1,8 +1,9 @@
 package exambyte.infrastructure.persistence.mapper;
 
-import exambyte.domain.entitymapper.CorrectAnswersMapper;
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
-import exambyte.infrastructure.persistence.entities.CorrectAnswersEntity;
+import exambyte.infrastructure.mapper.CorrectAnswersMapper;
+import exambyte.domain.model.exam.CorrectAnswers;
+import exambyte.infrastructure.mapper.CorrectAnswersMapperImpl;
+import exambyte.infrastructure.entity.CorrectAnswersEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

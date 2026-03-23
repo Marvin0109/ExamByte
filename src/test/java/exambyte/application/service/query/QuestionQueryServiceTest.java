@@ -2,10 +2,10 @@ package exambyte.application.service.query;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.QuestionDTO;
-import exambyte.domain.mapper.QuestionDTOMapper;
-import exambyte.domain.mapper.CorrectAnswersDTOMapper;
-import exambyte.domain.model.aggregate.exam.Question;
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
+import exambyte.application.mapper.QuestionDTOMapper;
+import exambyte.application.mapper.CorrectAnswersDTOMapper;
+import exambyte.domain.model.exam.Question;
+import exambyte.domain.model.exam.CorrectAnswers;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.QuestionService;
 import exambyte.domain.service.CorrectAnswersService;

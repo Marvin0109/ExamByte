@@ -1,8 +1,9 @@
 package exambyte.infrastructure.persistence.mapper;
 
-import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.entitymapper.ProfessorMapper;
-import exambyte.infrastructure.persistence.entities.ProfessorEntity;
+import exambyte.domain.model.user.Professor;
+import exambyte.infrastructure.mapper.ProfessorMapper;
+import exambyte.infrastructure.mapper.ProfessorMapperImpl;
+import exambyte.infrastructure.entity.ProfessorEntity;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

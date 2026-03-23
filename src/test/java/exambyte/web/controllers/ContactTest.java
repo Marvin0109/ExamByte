@@ -1,8 +1,8 @@
 package exambyte.web.controllers;
 
 import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.AppUserService;
-import exambyte.application.service.UserCreationService;
+import exambyte.application.service.user.AppUserService;
+import exambyte.application.service.user.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;

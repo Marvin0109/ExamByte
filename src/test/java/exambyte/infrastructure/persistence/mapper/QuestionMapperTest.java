@@ -1,10 +1,11 @@
 package exambyte.infrastructure.persistence.mapper;
 
-import exambyte.domain.model.aggregate.exam.Question;
+import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.entitymapper.QuestionMapper;
-import exambyte.infrastructure.persistence.common.QuestionTypeEntity;
-import exambyte.infrastructure.persistence.entities.QuestionEntity;
+import exambyte.infrastructure.mapper.QuestionMapper;
+import exambyte.infrastructure.mapper.QuestionMapperImpl;
+import exambyte.infrastructure.common.QuestionTypeEntity;
+import exambyte.infrastructure.entity.QuestionEntity;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;
 

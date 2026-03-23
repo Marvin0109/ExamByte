@@ -1,6 +1,6 @@
 package exambyte.domain.exam;
 
-import exambyte.domain.model.aggregate.exam.CorrectAnswers;
+import exambyte.domain.model.exam.CorrectAnswers;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
