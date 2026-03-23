@@ -4,7 +4,6 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,10 +15,9 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
 
     @Override
     public List<ReviewDTO> autoReviewSC(List<QuestionDTO> questions,
-                                                List<AnswerDTO> answers,
-                                                List<CorrectAnswersDTO> correctAnswers,
-                                                UUID studentId,
-                                                ReviewService reviewService) {
+                                        List<AnswerDTO> answers,
+                                        List<CorrectAnswersDTO> correctAnswers,
+                                        UUID studentId) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
@@ -53,8 +51,7 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     public List<ReviewDTO> autoReviewMC(List<QuestionDTO> questions,
                                                 List<AnswerDTO> answers,
                                                 List<CorrectAnswersDTO> correctAnswers,
-                                                UUID studentId,
-                                                ReviewService reviewService) {
+                                                UUID studentId) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 

@@ -2,7 +2,7 @@ package exambyte.application.service.usecase;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.query.ReviewQueryService;
+import exambyte.application.service.query.ReviewService;
 import exambyte.application.service.query.AnswerService;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +13,12 @@ import java.util.UUID;
 @Service
 public class ReviewManagementServiceImpl implements ReviewManagementService {
 
-    private final ReviewQueryService reviewQueryService;
+    private final ReviewService reviewService;
     private final AnswerService answerService;
 
-    public ReviewManagementServiceImpl(ReviewQueryService reviewQueryService,
+    public ReviewManagementServiceImpl(ReviewService reviewService,
                                        AnswerService answerService) {
-        this.reviewQueryService = reviewQueryService;
+        this.reviewService = reviewService;
         this.answerService = answerService;
     }
 
@@ -29,7 +29,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
         List<ReviewDTO> reviewsTotal = new ArrayList<>();
 
         for (AnswerDTO answerDTO : answers) {
-            ReviewDTO reviewDTO = reviewQueryService.getReviewByAnswerId(answerDTO.id());
+            ReviewDTO reviewDTO = reviewService.getReviewByAnswerId(answerDTO.id());
             if (reviewDTO != null) {
                 reviewsTotal.add(reviewDTO);
             }
@@ -52,7 +52,7 @@ public class ReviewManagementServiceImpl implements ReviewManagementService {
                 .toList();
 
         for (UUID id : studentAnswerList) {
-            if (reviewQueryService.getReviewByAnswerId(id) == null) {
+            if (reviewService.getReviewByAnswerId(id) == null) {
                 return false;
             }
         }

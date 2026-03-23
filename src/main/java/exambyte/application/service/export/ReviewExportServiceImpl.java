@@ -18,7 +18,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     private final StudentService studentService;
     private final AnswerService answerService;
     private final ReviewerService reviewerService;
-    private final ReviewQueryService reviewQueryService;
+    private final ReviewService reviewService;
     private final ReviewExportDTOMapper mapper;
 
     public ReviewExportServiceImpl(ExamQueryService examQueryService,
@@ -26,14 +26,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
                                    StudentService studentService,
                                    AnswerService answerService,
                                    ReviewerService reviewerService,
-                                   ReviewQueryService reviewQueryService,
+                                   ReviewService reviewService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
         this.questionQueryService = questionQueryService;
         this.studentService = studentService;
         this.answerService = answerService;
         this.reviewerService = reviewerService;
-        this.reviewQueryService = reviewQueryService;
+        this.reviewService = reviewService;
         this.mapper = mapper;
     }
 
@@ -59,7 +59,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
         StringBuilder sb = new StringBuilder();
 
         for (AnswerDTO answer : answers) {
-            ReviewDTO r = reviewQueryService.getReviewByAnswerId(answer.id());
+            ReviewDTO r = reviewService.getReviewByAnswerId(answer.id());
 
             if (r != null) {
                 reviews.add(r);

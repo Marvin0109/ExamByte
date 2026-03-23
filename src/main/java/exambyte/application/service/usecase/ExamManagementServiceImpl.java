@@ -24,7 +24,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final ProfessorService professorService;
     private final StudentService studentService;
     private final ExamQueryService examQueryService;
-    private final ReviewQueryService reviewQueryService;
+    private final ReviewService reviewService;
     private final Clock clock;
 
     private static final int EXAM_COUNT = 12;
@@ -38,7 +38,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ProfessorService professorService,
                                      StudentService studentService,
                                      ExamQueryService examQueryService,
-                                     ReviewQueryService reviewQueryService,
+                                     ReviewService reviewService,
                                      Clock clock) {
 
         this.answerService = answerService;
@@ -48,7 +48,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.professorService = professorService;
         this.studentService = studentService;
         this.examQueryService = examQueryService;
-        this.reviewQueryService = reviewQueryService;
+        this.reviewService = reviewService;
         this.clock = clock;
     }
 
@@ -148,7 +148,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     private void saveReviews(ReviewDTO reviewDTO) {
-        reviewQueryService.createReview(
+        reviewService.createReview(
                 reviewDTO.text(),
                 reviewDTO.points(),
                 reviewDTO.answerId(),

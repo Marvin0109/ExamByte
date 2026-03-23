@@ -5,7 +5,6 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.query.CorrectAnswersService;
-import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -40,9 +39,6 @@ class ReviewGenerationServiceTest {
     private AutomaticReviewService automaticReviewService;
 
     @Mock
-    private ReviewService reviewService;
-
-    @Mock
     private CorrectAnswersService correctAnswersService;
 
 
@@ -51,7 +47,6 @@ class ReviewGenerationServiceTest {
         MockitoAnnotations.openMocks(this);
         reviewGenerationService = new ReviewGenerationServiceImpl(
                 automaticReviewService,
-                reviewService,
                 correctAnswersService);
 
         questionDTOMC = new QuestionDTO(
@@ -99,7 +94,7 @@ class ReviewGenerationServiceTest {
 
     @Test
     void generateReview_MCOnly() {
-        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID)))
                 .thenReturn(List.of(reviewDTOMC));
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
@@ -112,9 +107,9 @@ class ReviewGenerationServiceTest {
 
     @Test
     void generateReview_MCWithSC() {
-        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID)))
                 .thenReturn(List.of(reviewDTOMC));
-        when(automaticReviewService.autoReviewSC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewSC(any(), any(), any(), eq(STUDENT_ID)))
                 .thenReturn(List.of(reviewDTOSC));
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(

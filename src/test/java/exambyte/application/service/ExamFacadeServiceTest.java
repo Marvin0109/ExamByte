@@ -39,7 +39,7 @@ class ExamFacadeServiceTest {
     private AnswerService answerService;
 
     @Mock
-    private ReviewQueryService reviewQueryService;
+    private ReviewService reviewService;
 
     @Mock
     private ReviewerService reviewerService;
@@ -67,7 +67,7 @@ class ExamFacadeServiceTest {
                 reviewerService,
                 studentService,
                 answerService,
-                reviewQueryService,
+                reviewService,
                 correctAnswersService);
     }
 
@@ -91,6 +91,6 @@ class ExamFacadeServiceTest {
         UUID answerId = UUID.randomUUID();
         UUID reviewerId = UUID.randomUUID();
         examFacadeService.createReview("Text", 1, answerId, reviewerId);
-        verify(reviewQueryService).createReview("Text", 1, answerId, reviewerId);
+        verify(reviewService).createReview("Text", 1, answerId, reviewerId);
     }
 }

@@ -45,7 +45,7 @@ class ReviewExportServiceTest {
     private ReviewerService reviewerService;
 
     @Mock
-    private ReviewQueryService reviewQueryService;
+    private ReviewService reviewService;
 
     @Mock
     private ReviewExportDTOMapper mapper;
@@ -60,7 +60,7 @@ class ReviewExportServiceTest {
                 studentService,
                 answerService,
                 reviewerService,
-                reviewQueryService,
+                reviewService,
                 mapper
         );
 
@@ -132,7 +132,7 @@ class ReviewExportServiceTest {
 
         when(answerService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
 
-        when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
+        when(reviewService.getReviewByAnswerId(answer1.id())).thenReturn(review);
 
         when(reviewerService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));
@@ -159,8 +159,8 @@ class ReviewExportServiceTest {
         when(answerService.findByStudentAndQuestion(studentId, question1.id())).thenReturn(answer1);
         when(answerService.findByStudentAndQuestion(studentId, question2.id())).thenReturn(answer2);
 
-        when(reviewQueryService.getReviewByAnswerId(answer1.id())).thenReturn(review);
-        when(reviewQueryService.getReviewByAnswerId(answer2.id())).thenReturn(review2);
+        when(reviewService.getReviewByAnswerId(answer1.id())).thenReturn(review);
+        when(reviewService.getReviewByAnswerId(answer2.id())).thenReturn(review2);
 
         when(reviewerService.getReviewerById(review.reviewerId()))
             .thenReturn(new ReviewerDTO(UUID.randomUUID(), "Reviewer"));

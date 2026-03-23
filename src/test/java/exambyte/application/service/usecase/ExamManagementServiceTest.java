@@ -52,7 +52,7 @@ class ExamManagementServiceTest {
     private ExamQueryService examQueryService;
 
     @Mock
-    private ReviewQueryService reviewQueryService;
+    private ReviewService reviewService;
 
     @BeforeEach
     void setUp() {
@@ -71,7 +71,7 @@ class ExamManagementServiceTest {
                 professorService,
                 studentService,
                 examQueryService,
-                reviewQueryService,
+                reviewService,
                 fixedClock
         );
     }
@@ -305,7 +305,7 @@ class ExamManagementServiceTest {
                 .thenReturn(List.of(review));
 
         doThrow(new RuntimeException("DB error"))
-                .when(reviewQueryService)
+                .when(reviewService)
                 .createReview(anyString(), anyDouble(), any(), any());
 
         SubmitExamResult result = examManagementService.submitExam(
@@ -359,7 +359,7 @@ class ExamManagementServiceTest {
 
         assertThat(result).isEqualTo(SubmitExamResult.SUCCESS);
 
-        verify(reviewQueryService).createReview(
+        verify(reviewService).createReview(
                 review.text(),
                 review.points(),
                 review.answerId(),

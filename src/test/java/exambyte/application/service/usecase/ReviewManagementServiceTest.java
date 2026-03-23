@@ -3,7 +3,7 @@ package exambyte.application.service.usecase;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.query.AnswerService;
-import exambyte.application.service.query.ReviewQueryService;
+import exambyte.application.service.query.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,14 +28,14 @@ class ReviewManagementServiceTest {
     private AnswerService answerService;
 
     @Mock
-    private ReviewQueryService reviewQueryService;
+    private ReviewService reviewService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         reviewManagementService = new ReviewManagementServiceImpl(
-                reviewQueryService,
+                reviewService,
                 answerService);
 
         answer = new AnswerDTO(
@@ -56,7 +56,7 @@ class ReviewManagementServiceTest {
     @Test
     void getReviewCoverage_100Percent() {
         when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
-        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(reviewDTO);
+        when(reviewService.getReviewByAnswerId(answer.id())).thenReturn(reviewDTO);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -73,8 +73,8 @@ class ReviewManagementServiceTest {
                 LocalDateTime.of(2000, 1, 1, 0, 0));
 
         when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer, answerDTO2));
-        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(null);
-        when(reviewQueryService.getReviewByAnswerId(answerDTO2.id())).thenReturn(reviewDTO);
+        when(reviewService.getReviewByAnswerId(answer.id())).thenReturn(null);
+        when(reviewService.getReviewByAnswerId(answerDTO2.id())).thenReturn(reviewDTO);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -84,7 +84,7 @@ class ReviewManagementServiceTest {
     @Test
     void getReviewCoverage_0Percent() {
         when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
-        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(null);
+        when(reviewService.getReviewByAnswerId(answer.id())).thenReturn(null);
 
         double result = reviewManagementService.getReviewCoverage(STUDENT_UUID);
 
@@ -94,7 +94,7 @@ class ReviewManagementServiceTest {
     @Test
     void submitHasReview_true() {
         when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
-        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(reviewDTO);
+        when(reviewService.getReviewByAnswerId(answer.id())).thenReturn(reviewDTO);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
 
@@ -104,7 +104,7 @@ class ReviewManagementServiceTest {
     @Test
     void submitHasReview_false() {
         when(answerService.getFreeResponseAnswersForExam(any())).thenReturn(List.of(answer));
-        when(reviewQueryService.getReviewByAnswerId(answer.id())).thenReturn(null);
+        when(reviewService.getReviewByAnswerId(answer.id())).thenReturn(null);
 
         boolean result = reviewManagementService.submitHasReview(UUID.randomUUID(), STUDENT_UUID);
 

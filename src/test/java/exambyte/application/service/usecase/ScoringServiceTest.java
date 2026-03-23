@@ -3,8 +3,8 @@ package exambyte.application.service.usecase;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
-import exambyte.domain.model.exam.Review;
-import exambyte.domain.service.ReviewService;
+import exambyte.application.dto.ReviewDTO;
+import exambyte.application.service.query.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -39,8 +39,8 @@ class ScoringServiceTest {
     private AnswerDTO answer1;
     private AnswerDTO answer2;
 
-    private Review review1;
-    private Review review2;
+    private ReviewDTO review1;
+    private ReviewDTO review2;
 
     private static final LocalDateTime SUBMIT_TIME =
             LocalDateTime.of(2026, 1, 1, 9, 0);
@@ -87,19 +87,21 @@ class ScoringServiceTest {
                 UUID.randomUUID(),
                 SUBMIT_TIME);
 
-        review1 = new Review.ReviewBuilder()
-                .reviewerId(UUID.randomUUID())
-                .text("Text")
-                .points(5)
-                .answerId(ANSWER_1_ID)
-                .build();
+        review1 = new ReviewDTO(
+                null,
+                ANSWER_1_ID,
+                UUID.randomUUID(),
+                "Text",
+                5
+        );
 
-        review2 = new Review.ReviewBuilder()
-                .reviewerId(AUTOMATIC_REVIEWER)
-                .text("Text")
-                .points(3)
-                .answerId(ANSWER_2_ID)
-                .build();
+        review2 = new ReviewDTO(
+                null,
+                ANSWER_2_ID,
+                AUTOMATIC_REVIEWER,
+                "Text",
+                3
+        );
     }
 
     @Test

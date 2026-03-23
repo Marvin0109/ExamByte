@@ -5,9 +5,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.service.ReviewService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,18 +17,15 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 
 class AutomaticReviewServiceTest {
 
-    private ReviewService service;
     private AutomaticReviewService automaticReviewService;
     private static final UUID STUDENT_ID = UUID.randomUUID();
     private static final LocalDateTime SUBMIT_TIME = LocalDateTime.of(2020, 1, 1, 0, 0);
 
     @BeforeEach
     void setUp() {
-        service = mock(ReviewService.class);
         automaticReviewService = new AutomaticReviewServiceImpl();
     }
 
@@ -72,8 +67,7 @@ class AutomaticReviewServiceTest {
                 List.of(question),
                 List.of(answer),
                 List.of(correctAnswersDTO),
-                STUDENT_ID,
-                service
+                STUDENT_ID
         );
 
         // Assert
@@ -144,8 +138,7 @@ class AutomaticReviewServiceTest {
                 List.of(frage),
                 List.of(answer),
                 List.of(correctAnswers),
-                STUDENT_ID,
-                service
+                STUDENT_ID
         );
 
         // Assert
@@ -182,8 +175,7 @@ class AutomaticReviewServiceTest {
                 List.of(question),
                 List.of(),
                 List.of(correctAnswers),
-                STUDENT_ID,
-                service
+                STUDENT_ID
         );
 
         // Assert
@@ -212,8 +204,7 @@ class AutomaticReviewServiceTest {
                 List.of(question),
                 List.of(answer),
                 List.of(),
-                STUDENT_ID,
-                service
+                STUDENT_ID
         );
 
         // Assert
@@ -241,8 +232,7 @@ class AutomaticReviewServiceTest {
                 List.of(question),
                 List.of(),
                 List.of(correctAnswers),
-                STUDENT_ID,
-                service
+                STUDENT_ID
         );
 
         // Assert
@@ -271,8 +261,7 @@ class AutomaticReviewServiceTest {
                 List.of(question),
                 List.of(answer),
                 List.of(),
-                STUDENT_ID,
-                service
+                STUDENT_ID
         );
 
         // Assert

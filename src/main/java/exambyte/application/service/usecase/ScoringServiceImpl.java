@@ -2,8 +2,8 @@ package exambyte.application.service.usecase;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
-import exambyte.domain.model.exam.Review;
-import exambyte.domain.service.ReviewService;
+import exambyte.application.dto.ReviewDTO;
+import exambyte.application.service.query.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -35,7 +35,7 @@ public class ScoringServiceImpl implements ScoringService {
                 .mapToDouble(a -> {
                     QuestionDTO q = questionMap.get(a.questionId());
                     if (q == null) return 0;
-                    Review review = reviewService.getReviewByAnswerId(a.id());
+                    ReviewDTO review = reviewService.getReviewByAnswerId(a.id());
 
                     UUID automaticReviewer = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
@@ -44,12 +44,12 @@ public class ScoringServiceImpl implements ScoringService {
                         return 0;
                     }
 
-                    boolean isAutomaticReview = review.getReviewerId().equals(automaticReviewer);
+                    boolean isAutomaticReview = review.reviewerId().equals(automaticReviewer);
 
                     boolean resultTimeReached = !currentTime.isBefore(result);
 
                     if (isAutomaticReview || resultTimeReached) {
-                        return review.getPoints();
+                        return review.points();
                     }
 
                     return 0;

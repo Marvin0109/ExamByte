@@ -26,7 +26,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ReviewerService reviewerService;
     private final StudentService studentService;
     private final AnswerService answerService;
-    private final ReviewQueryService reviewQueryService;
+    private final ReviewService reviewService;
     private final CorrectAnswersService correctAnswersService;
 
 
@@ -39,7 +39,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ReviewerService reviewerService,
                                  StudentService studentService,
                                  AnswerService answerService,
-                                 ReviewQueryService reviewQueryService,
+                                 ReviewService reviewService,
                                  CorrectAnswersService correctAnswersService) {
 
         this.reviewManagementService = reviewManagementService;
@@ -51,7 +51,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.reviewerService = reviewerService;
         this.studentService = studentService;
         this.answerService = answerService;
-        this.reviewQueryService = reviewQueryService;
+        this.reviewService = reviewService;
         this.correctAnswersService = correctAnswersService;
     }
 
@@ -168,12 +168,12 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public boolean answerHasReview(AnswerDTO answer) {
-       return reviewQueryService.answerHasReview(answer.id());
+       return reviewService.answerHasReview(answer.id());
     }
 
     @Override
     public void createReview(String text, double points, UUID answerId, UUID reviewerId) {
-        reviewQueryService.createReview(text, points, answerId, reviewerId);
+        reviewService.createReview(text, points, answerId, reviewerId);
     }
 
     @Override
@@ -193,7 +193,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public ReviewDTO getReviewForAnswer(UUID answerId) {
-        return reviewQueryService.getReviewByAnswerId(answerId);
+        return reviewService.getReviewByAnswerId(answerId);
     }
 
     @Override

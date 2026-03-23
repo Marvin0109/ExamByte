@@ -3,7 +3,7 @@ package exambyte.application.service.query;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.mapper.ReviewDTOMapper;
 import exambyte.domain.model.exam.Review;
-import exambyte.domain.service.ReviewService;
+import exambyte.domain.repository.ReviewRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -19,15 +19,15 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class ReviewQueryServiceTest {
+class ReviewServiceTest {
 
-    private ReviewQueryService queryService;
+    private ReviewService queryService;
     private Review review;
     private static final UUID ANSWER_ID = UUID.randomUUID();
     private static final UUID REVIEWER_ID = UUID.randomUUID();
 
     @Mock
-    private ReviewService service;
+    private ReviewRepository repository;
 
     @Mock
     private ReviewDTOMapper mapper;
@@ -35,7 +35,7 @@ class ReviewQueryServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        queryService = new ReviewQueryServiceImpl(service, mapper);
+        queryService = new ReviewServiceImpl(repository, mapper);
 
         review = new Review.ReviewBuilder()
                 .answerId(ANSWER_ID)
@@ -49,7 +49,7 @@ class ReviewQueryServiceTest {
     void createReview_withCorrectParams_noExistingReview() {
         // Arrange
         when(mapper.toDomain(any())).thenReturn(review);
-        when(service.getReviewByAnswerId(ANSWER_ID)).thenReturn(null);
+        when(repository.findByAnswerId(ANSWER_ID)).thenReturn(null);
 
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
@@ -57,7 +57,7 @@ class ReviewQueryServiceTest {
         queryService.createReview("Text", 1, ANSWER_ID, REVIEWER_ID);
 
         // Assert
-        verify(service).addReview(captor.capture());
+        verify(repository).save(captor.capture());
         Review result = captor.getValue();
 
         assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
@@ -69,7 +69,7 @@ class ReviewQueryServiceTest {
     void createReview_withCorrectParams_existingReview() {
         // Arrange
         when(mapper.toDomain(any())).thenReturn(review);
-        when(service.getReviewByAnswerId(ANSWER_ID)).thenReturn(review);
+        when(repository.findByAnswerId(ANSWER_ID)).thenReturn(review);
 
         ArgumentCaptor<Review> captor = ArgumentCaptor.forClass(Review.class);
 
@@ -77,7 +77,7 @@ class ReviewQueryServiceTest {
         queryService.createReview("Text", 1, ANSWER_ID, REVIEWER_ID);
 
         // Assert
-        verify(service).addReview(captor.capture());
+        verify(repository).save(captor.capture());
         Review result = captor.getValue();
 
         assertThat(result.getAnswerId()).isEqualTo(ANSWER_ID);
@@ -94,7 +94,7 @@ class ReviewQueryServiceTest {
                 review.getText(),
                 review.getPoints());
 
-        when(service.getReviewByAnswerId(any())).thenReturn(review);
+        when(repository.findByAnswerId(any())).thenReturn(review);
         when(mapper.toDTO(review)).thenReturn(reviewDTO);
 
         ReviewDTO result = queryService.getReviewByAnswerId(ANSWER_ID);
@@ -104,7 +104,7 @@ class ReviewQueryServiceTest {
 
     @Test
     void getReviewByAnswerId_notFound() {
-        when(service.getReviewByAnswerId(any())).thenReturn(null);
+        when(repository.findByAnswerId(any())).thenReturn(null);
         ReviewDTO result = queryService.getReviewByAnswerId(ANSWER_ID);
         assertNull(result);
     }

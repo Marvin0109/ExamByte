@@ -3,35 +3,30 @@ package exambyte.application.service.query;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.mapper.ReviewDTOMapper;
 import exambyte.domain.model.exam.Review;
-import exambyte.domain.service.ReviewService;
+import exambyte.domain.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
-public class ReviewQueryServiceImpl implements ReviewQueryService {
+public class ReviewServiceImpl implements ReviewService {
 
-    private final ReviewService service;
+    private final ReviewRepository repository;
     private final ReviewDTOMapper mapper;
 
-    public ReviewQueryServiceImpl(ReviewService service, ReviewDTOMapper mapper) {
-        this.service = service;
+    public ReviewServiceImpl(ReviewRepository repository, ReviewDTOMapper mapper) {
+        this.repository = repository;
         this.mapper = mapper;
     }
 
     @Override
-    public UUID getReviewIdByAnswerId(UUID answerId) {
-        return service.getReviewByAnswerId(answerId).getAnswerId();
-    }
-
-    @Override
     public boolean answerHasReview(UUID answerId) {
-        return service.getReviewByAnswerId(answerId) != null;
+        return repository.findByAnswerId(answerId) != null;
     }
 
     @Override
     public void createReview(String text, double points, UUID answerId, UUID reviewerId) {
-        Review loaded = service.getReviewByAnswerId(answerId);
+        Review loaded = repository.findByAnswerId(answerId);
 
         UUID reviewId = loaded != null ? loaded.getId() : null;
 
@@ -44,20 +39,15 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
                         points)
         );
 
-        service.addReview(review);
+        repository.save(review);
     }
 
     @Override
     public ReviewDTO getReviewByAnswerId(UUID answerId) {
-        Review review = service.getReviewByAnswerId(answerId);
+        Review review = repository.findByAnswerId(answerId);
         if (review != null) {
             return mapper.toDTO(review);
         }
         return null;
-    }
-
-    @Override
-    public void deleteReview(UUID id) {
-        service.deleteReview(id);
     }
 }

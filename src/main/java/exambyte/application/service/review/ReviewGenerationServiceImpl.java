@@ -6,7 +6,6 @@ import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.ReviewData;
 import exambyte.application.service.query.CorrectAnswersService;
-import exambyte.domain.service.ReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,14 +16,11 @@ import java.util.stream.Stream;
 public class ReviewGenerationServiceImpl implements ReviewGenerationService {
 
     private final AutomaticReviewService automaticReviewService;
-    private final ReviewService reviewService;
     private final CorrectAnswersService correctAnswersService;
 
     public ReviewGenerationServiceImpl(AutomaticReviewService automaticReviewService,
-                                       ReviewService reviewService,
                                        CorrectAnswersService correctAnswersService) {
         this.automaticReviewService = automaticReviewService;
-        this.reviewService = reviewService;
         this.correctAnswersService = correctAnswersService;
     }
 
@@ -39,11 +35,9 @@ public class ReviewGenerationServiceImpl implements ReviewGenerationService {
         scData.filterToType(QuestionTypeDTO.SC);
 
         List<ReviewDTO> reviewsMC = automaticReviewService.autoReviewMC(
-                mcData.getQuestions(), mcData.getAnswers(), mcData.getCorrectAnswers(), studentId,
-                reviewService);
+                mcData.getQuestions(), mcData.getAnswers(), mcData.getCorrectAnswers(), studentId);
         List<ReviewDTO> reviewsSC = automaticReviewService.autoReviewSC(
-                scData.getQuestions(), scData.getAnswers(), scData.getCorrectAnswers(), studentId,
-                reviewService);
+                scData.getQuestions(), scData.getAnswers(), scData.getCorrectAnswers(), studentId);
 
         return Stream.concat(reviewsMC.stream(), reviewsSC.stream()).toList();
     }
