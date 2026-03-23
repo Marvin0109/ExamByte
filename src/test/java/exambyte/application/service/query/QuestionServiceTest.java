@@ -6,7 +6,7 @@ import exambyte.application.dto.QuestionDTO;
 import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.service.QuestionService;
+import exambyte.domain.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-class QuestionQueryServiceTest {
+class QuestionServiceTest {
 
-    private QuestionQueryService questionQueryService;
+    private QuestionService questionService;
 
     private QuestionDTO questionDTOFreeResponse;
     private QuestionDTO questionDTOMC;
@@ -30,7 +30,7 @@ class QuestionQueryServiceTest {
     private Question questionFreeResponse;
 
     @Mock
-    private QuestionService questionService;
+    private QuestionRepository repository;
 
     @Mock
     private CorrectAnswersService correctAnswersService;
@@ -42,8 +42,8 @@ class QuestionQueryServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        questionQueryService = new QuestionQueryServiceImpl(
-                questionService,
+        questionService = new QuestionServiceImpl(
+                repository,
                 correctAnswersService,
                 questionDTOMapper);
 
@@ -80,9 +80,9 @@ class QuestionQueryServiceTest {
     @Test
     void createChoiceQuestionWithCorrectParams() {
         when(questionDTOMapper.toDomain(questionDTOMC)).thenReturn(questionMC);
-        when(questionService.addQuestion(any())).thenReturn(questionDTOMC.id());
+        when(repository.save(any())).thenReturn(questionDTOMC.id());
 
-        questionQueryService.createChoiceQuestion(questionDTOMC, "A", "A, B");
+        questionService.createChoiceQuestion(questionDTOMC, "A", "A, B");
 
         ArgumentCaptor<CorrectAnswersDTO> captor = ArgumentCaptor.forClass(CorrectAnswersDTO.class);
         verify(correctAnswersService).addCorrectAnswers(captor.capture());
@@ -95,10 +95,10 @@ class QuestionQueryServiceTest {
 
     @Test
     void getFreeResponseQuestionReturnsOnlyFreeResponse() {
-        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(questionMC, questionFreeResponse));
+        when(repository.findByExamId(any())).thenReturn(List.of(questionMC, questionFreeResponse));
         when(questionDTOMapper.toDTO(questionFreeResponse)).thenReturn(questionDTOFreeResponse);
 
-        List<QuestionDTO> result = questionQueryService.getFreeResponseQuestions(UUID.randomUUID());
+        List<QuestionDTO> result = questionService.getFreeResponseQuestions(UUID.randomUUID());
 
         assertEquals(1, result.size());
         verify(questionDTOMapper).toDTO(questionFreeResponse);

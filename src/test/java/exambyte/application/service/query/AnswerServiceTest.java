@@ -23,7 +23,7 @@ class AnswerServiceTest {
     private AnswerService answerService;
 
     @Mock
-    private QuestionQueryService questionQueryService;
+    private QuestionService questionService;
 
     @Mock
     private AnswerRepository repository;
@@ -40,7 +40,7 @@ class AnswerServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        answerService = new AnswerServiceImpl(questionQueryService, repository, mapper);
+        answerService = new AnswerServiceImpl(questionService, repository, mapper);
     }
 
     @Test
@@ -74,8 +74,8 @@ class AnswerServiceTest {
         when(repository.findByStudentIdAndQuestionId(QUESTION_2_ID, STUDENT_ID)).thenReturn(null);
         when(mapper.toDomain(dto1)).thenReturn(mock());
         when(mapper.toDomain(dto2)).thenReturn(mock());
-        when(questionQueryService.getQuestion(QUESTION_1_ID)).thenReturn(frage1);
-        when(questionQueryService.getQuestion(QUESTION_2_ID)).thenReturn(frage2);
+        when(questionService.getQuestion(QUESTION_1_ID)).thenReturn(frage1);
+        when(questionService.getQuestion(QUESTION_2_ID)).thenReturn(frage2);
 
         // Act
         boolean result = answerService.saveAnswers(STUDENT_ID, answerMap);
@@ -158,7 +158,7 @@ class AnswerServiceTest {
         AnswerDTO dto = mock(AnswerDTO.class);
 
         when(questionDTO.id()).thenReturn(QUESTION_1_ID);
-        when(questionQueryService.getFreeResponseQuestions(examId))
+        when(questionService.getFreeResponseQuestions(examId))
                 .thenReturn(List.of(questionDTO));
 
         when(repository.findByQuestionId(QUESTION_1_ID))
@@ -182,7 +182,7 @@ class AnswerServiceTest {
         QuestionDTO questionDTO = mock(QuestionDTO.class);
         when(questionDTO.id()).thenReturn(QUESTION_1_ID);
 
-        when(questionQueryService.getFreeResponseQuestions(examId))
+        when(questionService.getFreeResponseQuestions(examId))
                 .thenReturn(List.of(questionDTO));
 
         when(repository.findByQuestionId(QUESTION_1_ID))

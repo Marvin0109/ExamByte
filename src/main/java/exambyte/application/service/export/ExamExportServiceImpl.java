@@ -8,7 +8,7 @@ import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.mapper.export.ExamExportDTOMapper;
 import exambyte.application.service.query.ExamQueryService;
 
-import exambyte.application.service.query.QuestionQueryService;
+import exambyte.application.service.query.QuestionService;
 import exambyte.application.service.query.CorrectAnswersService;
 import exambyte.application.service.query.ProfessorService;
 import org.springframework.stereotype.Service;
@@ -21,18 +21,18 @@ import java.util.UUID;
 public class ExamExportServiceImpl implements ExamExportService {
 
     private final ExamQueryService examQueryService;
-    private final QuestionQueryService questionQueryService;
+    private final QuestionService questionService;
     private final ProfessorService professorService;
     private final CorrectAnswersService correctAnswersService;
     private final ExamExportDTOMapper examExportDTOMapper;
 
     public ExamExportServiceImpl(ExamQueryService examQueryService,
-                                 QuestionQueryService questionQueryService,
+                                 QuestionService questionService,
                                  ProfessorService professorService,
                                  CorrectAnswersService correctAnswersService,
                                  ExamExportDTOMapper examExportDTOMapper) {
         this.examQueryService = examQueryService;
-        this.questionQueryService = questionQueryService;
+        this.questionService = questionService;
         this.professorService = professorService;
         this.correctAnswersService = correctAnswersService;
         this.examExportDTOMapper = examExportDTOMapper;
@@ -42,7 +42,7 @@ public class ExamExportServiceImpl implements ExamExportService {
     public List<ExamExportDTO> createExamExport(UUID examId) {
         ExamDTO exam = examQueryService.getExam(examId);
         ProfessorDTO prof = professorService.getProfessorById(exam.professorId());
-        List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
 
         double points = questions.stream()
                 .mapToDouble(QuestionDTO::points)

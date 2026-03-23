@@ -19,7 +19,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     private final AnswerService answerService;
     private final ReviewGenerationService reviewGenerationService;
-    private final QuestionQueryService questionQueryService;
+    private final QuestionService questionService;
     private final ScoringService scoringService;
     private final ProfessorService professorService;
     private final StudentService studentService;
@@ -33,7 +33,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     public ExamManagementServiceImpl(AnswerService answerService,
                                      ReviewGenerationService reviewGenerationService,
-                                     QuestionQueryService questionQueryService,
+                                     QuestionService questionService,
                                      ScoringService scoringService,
                                      ProfessorService professorService,
                                      StudentService studentService,
@@ -43,7 +43,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
         this.answerService = answerService;
         this.reviewGenerationService = reviewGenerationService;
-        this.questionQueryService = questionQueryService;
+        this.questionService = questionService;
         this.scoringService = scoringService;
         this.professorService = professorService;
         this.studentService = studentService;
@@ -126,7 +126,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     }
 
     private SubmitExamResult generateAndSaveReviews(UUID studentId, UUID examId) {
-        List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
 
         List<AnswerDTO> answerList = questions.stream()
                 .map(f -> answerService.findByStudentAndQuestion(studentId, f.id()))
@@ -161,7 +161,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         UUID studentId = studentService.getStudentIdByName(studentName);
 
         ExamDTO exam = examQueryService.getExam(examId);
-        Map<UUID, QuestionDTO> questionMap = questionQueryService.getQuestionUUIDMap(examId);
+        Map<UUID, QuestionDTO> questionMap = questionService.getQuestionUUIDMap(examId);
         List<AnswerDTO> allAnswers = answerService.getAnswers(studentId, questionMap.keySet());
 
         double totalPoints = questionMap.values().stream()

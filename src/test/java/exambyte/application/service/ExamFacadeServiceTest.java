@@ -27,7 +27,7 @@ class ExamFacadeServiceTest {
     private ExamManagementService examManagementService;
 
     @Mock
-    private QuestionQueryService questionQueryService;
+    private QuestionService questionService;
 
     @Mock
     private StudentService studentService;
@@ -62,7 +62,7 @@ class ExamFacadeServiceTest {
                 examManagementService,
                 examExportService,
                 reviewExportService,
-                questionQueryService,
+                questionService,
                 professorService,
                 reviewerService,
                 studentService,
@@ -75,7 +75,7 @@ class ExamFacadeServiceTest {
     void createChoiceQuestionWithCorrectParams() {
         QuestionDTO mockQuestionDTO = mock(QuestionDTO.class);
         examFacadeService.createChoiceQuestion(mockQuestionDTO, "A", "A, B");
-        verify(questionQueryService).createChoiceQuestion(mockQuestionDTO, "A", "A, B");
+        verify(questionService).createChoiceQuestion(mockQuestionDTO, "A", "A, B");
     }
 
     @Test

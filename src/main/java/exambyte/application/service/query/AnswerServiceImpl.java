@@ -12,14 +12,14 @@ import java.util.*;
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
-    private final QuestionQueryService questionQueryService;
+    private final QuestionService questionService;
     private final AnswerRepository repository;
     private final AnswerDTOMapper mapper;
 
-    public AnswerServiceImpl(QuestionQueryService questionQueryService,
+    public AnswerServiceImpl(QuestionService questionService,
                              AnswerRepository repository,
                              AnswerDTOMapper mapper) {
-        this.questionQueryService = questionQueryService;
+        this.questionService = questionService;
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -36,7 +36,7 @@ public class AnswerServiceImpl implements AnswerService {
 
             UUID answerId = loaded != null ? loaded.getId() : null;
 
-            QuestionDTO loadedQuestion = questionQueryService.getQuestion(questionId);
+            QuestionDTO loadedQuestion = questionService.getQuestion(questionId);
             if (!loadedQuestion.type().name().equals("FREE_RESPONSE")) {
                 answer = String.join("\n", entry.getValue());
                 replaced = answer.replace("ĸ", ",");
@@ -62,7 +62,7 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public List<AnswerDTO> getFreeResponseAnswersForExam(UUID examId) {
-        return questionQueryService.getFreeResponseQuestions(examId).stream()
+        return questionService.getFreeResponseQuestions(examId).stream()
                 .map(frageDTO -> findByQuestionId(frageDTO.id()))
                 .filter(Objects::nonNull)
                 .map(mapper::toDTO)

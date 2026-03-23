@@ -5,7 +5,7 @@ import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.service.QuestionService;
+import exambyte.domain.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,33 +15,33 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class QuestionQueryServiceImpl implements QuestionQueryService {
+public class QuestionServiceImpl implements QuestionService {
 
-    private final QuestionService questionService;
+    private final QuestionRepository repository;
     private final CorrectAnswersService correctAnswersService;
     private final QuestionDTOMapper questionDTOMapper;
 
-    public QuestionQueryServiceImpl(QuestionService questionService,
-                                    CorrectAnswersService correctAnswersService,
-                                    QuestionDTOMapper questionDTOMapper) {
-        this.questionService = questionService;
+    public QuestionServiceImpl(QuestionRepository repository,
+                               CorrectAnswersService correctAnswersService,
+                               QuestionDTOMapper questionDTOMapper) {
+        this.repository = repository;
         this.questionDTOMapper = questionDTOMapper;
         this.correctAnswersService = correctAnswersService;
     }
 
     @Override
     public List<QuestionDTO> getQuestionsForExam(UUID examId) {
-        return questionDTOMapper.toQuestionDTOList(questionService.getQuestionsForExam(examId));
+        return questionDTOMapper.toQuestionDTOList(findQuestionsForExam(examId));
     }
 
     @Override
     public void createQuestion(QuestionDTO questionDTO) {
-        questionService.addQuestion(questionDTOMapper.toDomain(questionDTO));
+        addQuestion(questionDTOMapper.toDomain(questionDTO));
     }
 
     @Override
     public void createChoiceQuestion(QuestionDTO questionDTO, String correctAnswer, String choices) {
-        UUID questionId = questionService.addQuestion(questionDTOMapper.toDomain(questionDTO));
+        UUID questionId = addQuestion(questionDTOMapper.toDomain(questionDTO));
         CorrectAnswersDTO dto = new CorrectAnswersDTO(null, correctAnswer, choices, questionId);
         correctAnswersService.addCorrectAnswers(dto);
     }
@@ -53,7 +53,7 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     @Override
     public List<QuestionDTO> getFreeResponseQuestions(UUID examId) {
-        List<Question> questions = questionService.getQuestionsForExam(examId);
+        List<Question> questions = findQuestionsForExam(examId);
 
         return questions.stream()
                 .filter(question -> QuestionType.FREE_RESPONSE == question.getType())
@@ -63,14 +63,26 @@ public class QuestionQueryServiceImpl implements QuestionQueryService {
 
     @Override
     public Map<UUID, QuestionDTO> getQuestionUUIDMap(UUID examId) {
-        return questionService.getQuestionsForExam(examId).stream()
+        return findQuestionsForExam(examId).stream()
                 .map(questionDTOMapper::toDTO)
                 .collect(Collectors.toMap(QuestionDTO::id, q -> q));
     }
 
     @Override
     public QuestionDTO getQuestion(UUID questionId) {
-        Optional<Question> question = questionService.getQuestion(questionId);
+        Optional<Question> question = findQuestion(questionId);
         return question.map(questionDTOMapper::toDTO).orElse(null);
+    }
+
+    private List<Question> findQuestionsForExam(UUID examId) {
+        return repository.findByExamId(examId);
+    }
+
+    private Optional<Question> findQuestion(UUID questionId) {
+        return repository.findById(questionId);
+    }
+
+    private UUID addQuestion(Question question) {
+        return repository.save(question);
     }
 }

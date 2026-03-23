@@ -14,7 +14,7 @@ import java.util.UUID;
 public class ReviewExportServiceImpl implements ReviewExportService {
 
     private final ExamQueryService examQueryService;
-    private final QuestionQueryService questionQueryService;
+    private final QuestionService questionService;
     private final StudentService studentService;
     private final AnswerService answerService;
     private final ReviewerService reviewerService;
@@ -22,14 +22,14 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     private final ReviewExportDTOMapper mapper;
 
     public ReviewExportServiceImpl(ExamQueryService examQueryService,
-                                   QuestionQueryService questionQueryService,
+                                   QuestionService questionService,
                                    StudentService studentService,
                                    AnswerService answerService,
                                    ReviewerService reviewerService,
                                    ReviewService reviewService,
                                    ReviewExportDTOMapper mapper) {
         this.examQueryService = examQueryService;
-        this.questionQueryService = questionQueryService;
+        this.questionService = questionService;
         this.studentService = studentService;
         this.answerService = answerService;
         this.reviewerService = reviewerService;
@@ -40,7 +40,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
     @Override
     public List<ReviewExportDTO> createReviewExport(UUID examId, String studentName) {
         ExamDTO exam = examQueryService.getExam(examId);
-        List<QuestionDTO> questions = questionQueryService.getQuestionsForExam(examId);
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
         UUID studentId = studentService.getStudentIdByName(studentName);
 
         List<AnswerDTO> answers = new ArrayList<>();

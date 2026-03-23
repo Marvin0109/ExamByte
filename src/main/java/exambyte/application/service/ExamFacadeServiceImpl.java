@@ -21,7 +21,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ExamManagementService examManagementService;
     private final ExamExportService examExportService;
     private final ReviewExportService reviewExportService;
-    private final QuestionQueryService questionQueryService;
+    private final QuestionService questionService;
     private final ProfessorService professorService;
     private final ReviewerService reviewerService;
     private final StudentService studentService;
@@ -34,7 +34,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
                                  ExamManagementService examManagementService,
                                  ExamExportService examExportService,
                                  ReviewExportService reviewExportService,
-                                 QuestionQueryService questionQueryService,
+                                 QuestionService questionService,
                                  ProfessorService professorService,
                                  ReviewerService reviewerService,
                                  StudentService studentService,
@@ -46,7 +46,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
         this.examManagementService = examManagementService;
         this.examExportService = examExportService;
         this.reviewExportService = reviewExportService;
-        this.questionQueryService = questionQueryService;
+        this.questionService = questionService;
         this.professorService = professorService;
         this.reviewerService = reviewerService;
         this.studentService = studentService;
@@ -88,7 +88,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public List<QuestionDTO> getQuestionsForExam(UUID examId) {
-        return questionQueryService.getQuestionsForExam(examId);
+        return questionService.getQuestionsForExam(examId);
     }
 
     @Override
@@ -103,17 +103,17 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public void createQuestion(QuestionDTO question) {
-        questionQueryService.createQuestion(question);
+        questionService.createQuestion(question);
     }
 
     @Override
     public void createChoiceQuestion(QuestionDTO question, String correctAnswer, String choices) {
-        questionQueryService.createChoiceQuestion(question, correctAnswer, choices);
+        questionService.createChoiceQuestion(question, correctAnswer, choices);
     }
 
     @Override
     public String getChoicesForQuestion(UUID questionId) {
-         return questionQueryService.getChoiceForQuestion(questionId);
+         return questionService.getChoiceForQuestion(questionId);
     }
 
     @Override
@@ -158,7 +158,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public List<QuestionDTO> getFreeResponseQuestions(UUID examId) {
-        return questionQueryService.getFreeResponseQuestions(examId);
+        return questionService.getFreeResponseQuestions(examId);
     }
 
     @Override

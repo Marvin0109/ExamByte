@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public interface QuestionQueryService {
+public interface QuestionService {
 
     List<QuestionDTO> getQuestionsForExam(UUID examId);
 

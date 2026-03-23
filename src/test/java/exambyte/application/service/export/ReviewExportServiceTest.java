@@ -33,7 +33,7 @@ class ReviewExportServiceTest {
     private ExamQueryService examQueryService;
 
     @Mock
-    private QuestionQueryService questionQueryService;
+    private QuestionService questionService;
 
     @Mock
     private StudentService studentService;
@@ -56,7 +56,7 @@ class ReviewExportServiceTest {
 
         service = new ReviewExportServiceImpl(
                 examQueryService,
-                questionQueryService,
+                questionService,
                 studentService,
                 answerService,
                 reviewerService,
@@ -126,7 +126,7 @@ class ReviewExportServiceTest {
     void createReviewExport() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
+        when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
 
         when(studentService.getStudentIdByName(any())).thenReturn(studentId);
 
@@ -152,7 +152,7 @@ class ReviewExportServiceTest {
     void createReviewExport_excludingAutomaticReviewerName() {
         when(examQueryService.getExam(exam.id())).thenReturn(exam);
 
-        when(questionQueryService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1, question2));
+        when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1, question2));
 
         when(studentService.getStudentIdByName(any())).thenReturn(studentId);
 

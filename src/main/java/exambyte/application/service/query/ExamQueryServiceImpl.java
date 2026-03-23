@@ -3,9 +3,7 @@ package exambyte.application.service.query;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.mapper.ExamDTOMapper;
-import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.service.ExamService;
-import exambyte.domain.service.QuestionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,20 +22,17 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     private final AnswerService answerService;
 
     private final ExamDTOMapper examDTOMapper;
-    private final QuestionDTOMapper questionDTOMapper;
 
     public ExamQueryServiceImpl(ExamService examService,
                                 StudentService studentService,
                                 QuestionService questionService,
                                 AnswerService answerService,
-                                ExamDTOMapper examDTOMapper,
-                                QuestionDTOMapper questionDTOMapper) {
+                                ExamDTOMapper examDTOMapper) {
         this.examService = examService;
         this.studentService = studentService;
         this.questionService = questionService;
         this.answerService = answerService;
         this.examDTOMapper = examDTOMapper;
-        this.questionDTOMapper = questionDTOMapper;
     }
 
     @Override
@@ -72,7 +67,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
     @Override
     public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
         UUID studentId = studentService.getStudentIdByName(studentName);
-        List<QuestionDTO> questions = questionDTOMapper.toQuestionDTOList(questionService.getQuestionsForExam(examId));
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
 
         return questions.stream()
                 .anyMatch(question ->

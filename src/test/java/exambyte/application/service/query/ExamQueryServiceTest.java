@@ -5,12 +5,10 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.mapper.ExamDTOMapper;
-import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.model.exam.Exam;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
 import exambyte.domain.service.ExamService;
-import exambyte.domain.service.QuestionService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -56,9 +54,6 @@ class ExamQueryServiceTest {
     @Mock
     private ExamDTOMapper examDTOMapper;
 
-    @Mock
-    private QuestionDTOMapper questionDTOMapper;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
@@ -68,8 +63,7 @@ class ExamQueryServiceTest {
                 studentService,
                 questionService,
                 answerService,
-                examDTOMapper,
-                questionDTOMapper);
+                examDTOMapper);
 
         examDTO1 = new ExamDTO(
                 UUID.randomUUID(),
@@ -163,8 +157,7 @@ class ExamQueryServiceTest {
     @Test
     void hasStudentSubmittedExam_returnsTrue() {
         when(studentService.getStudentIdByName("Student")).thenReturn(STUDENT_ID);
-        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
-        when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
+        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(questionDTO));
         when(answerService.findByStudentAndQuestion(STUDENT_ID, question.getId())).thenReturn(answerDTO);
 
         boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
@@ -175,8 +168,7 @@ class ExamQueryServiceTest {
     @Test
     void hasStudentSubmittedExam_returnsFalse() {
         when(studentService.getStudentIdByName("Student")).thenReturn(STUDENT_ID);
-        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(question));
-        when(questionDTOMapper.toQuestionDTOList(any())).thenReturn(List.of(questionDTO));
+        when(questionService.getQuestionsForExam(any())).thenReturn(List.of(questionDTO));
         when(answerService.findByStudentAndQuestion(STUDENT_ID, question.getId())).thenReturn(null);
 
         boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");

@@ -37,7 +37,7 @@ class ExamManagementServiceTest {
     private ReviewGenerationService reviewGenerationService;
 
     @Mock
-    private QuestionQueryService questionQueryService;
+    private QuestionService questionService;
 
     @Mock
     private ScoringService scoringService;
@@ -66,7 +66,7 @@ class ExamManagementServiceTest {
         examManagementService = new ExamManagementServiceImpl(
                 answerService,
                 reviewGenerationService,
-                questionQueryService,
+                questionService,
                 scoringService,
                 professorService,
                 studentService,
@@ -292,7 +292,7 @@ class ExamManagementServiceTest {
         when(answerService.saveAnswers(any(UUID.class), any()))
                 .thenReturn(true);
 
-        when(questionQueryService.getQuestionsForExam(EXAM_ID))
+        when(questionService.getQuestionsForExam(EXAM_ID))
                 .thenReturn(List.of(question));
 
         when(answerService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1))
@@ -348,7 +348,7 @@ class ExamManagementServiceTest {
 
         when(answerService.saveAnswers(any(UUID.class), any())).thenReturn(true);
 
-        when(questionQueryService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(question));
+        when(questionService.getQuestionsForExam(EXAM_ID)).thenReturn(List.of(question));
 
         when(answerService.findByStudentAndQuestion(STUDENT_ID, QUESTION_ID_1)).thenReturn(answer);
 
@@ -399,7 +399,7 @@ class ExamManagementServiceTest {
         when(studentService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
         when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
         when(exam.result()).thenReturn(resultTime);
-        when(questionQueryService.getQuestionUUIDMap(EXAM_ID)).thenReturn(questionMap);
+        when(questionService.getQuestionUUIDMap(EXAM_ID)).thenReturn(questionMap);
         when(answerService.getAnswers(STUDENT_ID, questionMap.keySet())).thenReturn(answerList);
         when(scoringService.accumulatedPoints(answerList, questionMap, resultTime)).thenReturn(12.0);
 
@@ -413,7 +413,7 @@ class ExamManagementServiceTest {
         assertThat(result.lastChanges()).isEqualTo(submitTime2);
 
         verify(studentService).getStudentIdByName(studentName);
-        verify(questionQueryService).getQuestionUUIDMap(EXAM_ID);
+        verify(questionService).getQuestionUUIDMap(EXAM_ID);
         verify(answerService).getAnswers(STUDENT_ID, questionMap.keySet());
         verify(scoringService).accumulatedPoints(answerList, questionMap, resultTime);
     }
