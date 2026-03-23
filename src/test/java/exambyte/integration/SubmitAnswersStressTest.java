@@ -132,7 +132,7 @@ class SubmitAnswersStressTest {
     }
 
     @Test
-    @DisplayName("500 Studenten geben gleichzeitig deren Antworten ab")
+    @DisplayName("500 Students submitting")
     void stressTestSubmitExam() throws InterruptedException {
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < 500; i++) {
