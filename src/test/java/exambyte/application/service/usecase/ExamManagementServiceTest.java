@@ -49,7 +49,7 @@ class ExamManagementServiceTest {
     private StudentService studentService;
 
     @Mock
-    private ExamQueryService examQueryService;
+    private ExamService examService;
 
     @Mock
     private ReviewService reviewService;
@@ -70,7 +70,7 @@ class ExamManagementServiceTest {
                 scoringService,
                 professorService,
                 studentService,
-                examQueryService,
+                examService,
                 reviewService,
                 fixedClock
         );
@@ -89,7 +89,7 @@ class ExamManagementServiceTest {
         when(professorService.getProfIdByName(profName))
                 .thenReturn(Optional.of(profId));
 
-        when(examQueryService.getAllExams())
+        when(examService.getAllExams())
                 .thenReturn(List.of());
 
         // Act
@@ -99,7 +99,7 @@ class ExamManagementServiceTest {
 
         // Assert
         assertThat(response).isEmpty();
-        verify(examQueryService).addExam(any(ExamDTO.class));
+        verify(examService).addExam(any(ExamDTO.class));
     }
 
     @Test
@@ -137,7 +137,7 @@ class ExamManagementServiceTest {
         UUID profId = UUID.randomUUID();
 
         when(professorService.getProfIdByName(profName)).thenReturn(Optional.of(profId));
-        when(examQueryService.getAllExams()).thenReturn(existingExams);
+        when(examService.getAllExams()).thenReturn(existingExams);
 
         // Act
         String response = examManagementService.createExam(
@@ -145,7 +145,7 @@ class ExamManagementServiceTest {
         );
 
         assertThat(response).isEqualTo(expectedMessage);
-        verify(examQueryService, never()).addExam(any());
+        verify(examService, never()).addExam(any());
     }
 
     static Stream<Arguments> invalidExamParameters() {
@@ -251,7 +251,7 @@ class ExamManagementServiceTest {
                 start.plusHours(12)
         );
 
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
 
         Map<String, List<String>> dummy = Map.of();
 
@@ -276,7 +276,7 @@ class ExamManagementServiceTest {
                 start.plusHours(12)
         );
 
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
 
         AnswerDTO answer = mock(AnswerDTO.class);
         ReviewDTO review = mock(ReviewDTO.class);
@@ -337,7 +337,7 @@ class ExamManagementServiceTest {
                 start.plusHours(12)
         );
 
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
 
         when(review.text()).thenReturn("OK");
         when(review.points()).thenReturn(5.0);
@@ -397,7 +397,7 @@ class ExamManagementServiceTest {
         List<AnswerDTO> answerList = List.of(answer1, answer2);
 
         when(studentService.getStudentIdByName(studentName)).thenReturn(STUDENT_ID);
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
         when(exam.result()).thenReturn(resultTime);
         when(questionService.getQuestionUUIDMap(EXAM_ID)).thenReturn(questionMap);
         when(answerService.getAnswers(STUDENT_ID, questionMap.keySet())).thenReturn(answerList);
@@ -430,7 +430,7 @@ class ExamManagementServiceTest {
                 start.plusHours(2)
         );
 
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
 
         boolean result = examManagementService.allowedToViewReview(EXAM_ID);
 
@@ -449,7 +449,7 @@ class ExamManagementServiceTest {
                 start.plusHours(3)
         );
 
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
 
         boolean result = examManagementService.allowedToViewReview(EXAM_ID);
 
@@ -473,7 +473,7 @@ class ExamManagementServiceTest {
                 resultTime
         );
 
-        when(examQueryService.getExam(EXAM_ID)).thenReturn(exam);
+        when(examService.getExam(EXAM_ID)).thenReturn(exam);
 
         boolean ans = examManagementService.deleteById(EXAM_ID);
 
@@ -515,12 +515,12 @@ class ExamManagementServiceTest {
 
     @Test
     void resetAllExamDataCascade_fail() {
-        when(examQueryService.getAllExams()).thenReturn(List.of());
+        when(examService.getAllExams()).thenReturn(List.of());
 
         boolean result = examManagementService.resetAllExamDataCascade();
 
         assertThat(result).isFalse();
-        verify(examQueryService, never()).resetAllExamDataCascade();
+        verify(examService, never()).resetAllExamDataCascade();
     }
 
     @Test
@@ -529,12 +529,12 @@ class ExamManagementServiceTest {
         when(finishedExam.end()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
 
         List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(11, finishedExam));
-        when(examQueryService.getAllExams()).thenReturn(examList);
+        when(examService.getAllExams()).thenReturn(examList);
 
         boolean result = examManagementService.resetAllExamDataCascade();
 
         assertThat(result).isFalse();
-        verify(examQueryService, never()).resetAllExamDataCascade();
+        verify(examService, never()).resetAllExamDataCascade();
     }
 
     @Test
@@ -547,12 +547,12 @@ class ExamManagementServiceTest {
 
         List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(11, finishedExam));
         examList.add(examRunning);
-        when(examQueryService.getAllExams()).thenReturn(examList);
+        when(examService.getAllExams()).thenReturn(examList);
 
         boolean result = examManagementService.resetAllExamDataCascade();
 
         assertThat(result).isFalse();
-        verify(examQueryService, never()).resetAllExamDataCascade();
+        verify(examService, never()).resetAllExamDataCascade();
     }
 
     @Test
@@ -561,11 +561,11 @@ class ExamManagementServiceTest {
         when(finishedExam.end()).thenReturn(LocalDateTime.of(2025, 12, 12, 0, 0));
 
         List<ExamDTO> examList = new ArrayList<>(Collections.nCopies(12, finishedExam));
-        when(examQueryService.getAllExams()).thenReturn(examList);
+        when(examService.getAllExams()).thenReturn(examList);
 
         boolean result = examManagementService.resetAllExamDataCascade();
 
         assertThat(result).isTrue();
-        verify(examQueryService).resetAllExamDataCascade();
+        verify(examService).resetAllExamDataCascade();
     }
 }

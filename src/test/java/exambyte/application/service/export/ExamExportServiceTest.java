@@ -5,7 +5,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.application.service.query.ExamQueryService;
+import exambyte.application.service.query.ExamService;
 import exambyte.application.service.query.QuestionService;
 import exambyte.application.service.query.CorrectAnswersService;
 import exambyte.application.service.query.ProfessorService;
@@ -32,7 +32,7 @@ class ExamExportServiceTest {
     private CorrectAnswersDTO correctAnswers;
 
     @Mock
-    private ExamQueryService examQueryService;
+    private ExamService examService;
 
     @Mock
     private QuestionService questionService;
@@ -51,7 +51,7 @@ class ExamExportServiceTest {
         MockitoAnnotations.openMocks(this);
 
         service = new ExamExportServiceImpl(
-                examQueryService,
+                examService,
                 questionService,
                 profQueryService,
                 correctAnswersService,
@@ -98,7 +98,7 @@ class ExamExportServiceTest {
 
     @Test
     void createExamExport() {
-        when(examQueryService.getExam(exam.id())).thenReturn(exam);
+        when(examService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
         when(correctAnswersService.getCorrectAnswerForQuestion(question1.id())).thenReturn(correctAnswers);
@@ -122,7 +122,7 @@ class ExamExportServiceTest {
 
     @Test
     void createExamExport_nullCorrectAnswers() {
-        when(examQueryService.getExam(exam.id())).thenReturn(exam);
+        when(examService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
         when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question2));
         when(correctAnswersService.getCorrectAnswerForQuestion(question2.id())).thenReturn(null);

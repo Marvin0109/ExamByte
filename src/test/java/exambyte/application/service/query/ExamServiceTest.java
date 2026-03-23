@@ -4,11 +4,12 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
+import exambyte.application.exception.NotFoundException;
 import exambyte.application.mapper.ExamDTOMapper;
 import exambyte.domain.model.exam.Exam;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.common.QuestionType;
-import exambyte.domain.service.ExamService;
+import exambyte.domain.repository.ExamRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -16,15 +17,17 @@ import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class ExamQueryServiceTest {
+class ExamServiceTest {
 
-    private ExamQueryService examQueryService;
+    private ExamService examService;
 
     private ExamDTO examDTO1;
     private ExamDTO examDTO2;
@@ -40,7 +43,7 @@ class ExamQueryServiceTest {
     private static final UUID STUDENT_ID = UUID.randomUUID();
 
     @Mock
-    private ExamService examService;
+    private ExamRepository repository;
 
     @Mock
     private StudentService studentService;
@@ -58,8 +61,8 @@ class ExamQueryServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        examQueryService = new ExamQueryServiceImpl(
-                examService,
+        examService = new ExamServiceImpl(
+                repository,
                 studentService,
                 questionService,
                 answerService,
@@ -125,31 +128,31 @@ class ExamQueryServiceTest {
 
     @Test
     void getExamIdByStartTime_returnsUUID() {
-        when(examService.allExams()).thenReturn(List.of(exam1, exam2));
+        when(repository.findAll()).thenReturn(List.of(exam1, exam2));
         when(examDTOMapper.toDTO(exam1)).thenReturn(examDTO1);
         when(examDTOMapper.toDTO(exam2)).thenReturn(examDTO2);
 
-        UUID result = examQueryService.getExamIdByStartTime(START);
+        UUID result = examService.getExamIdByStartTime(START);
 
         assertEquals(exam1.getId(), result);
     }
 
     @Test
     void getExamIdByStartTime_returnsNull() {
-        when(examService.allExams()).thenReturn(List.of());
+        when(repository.findAll()).thenReturn(List.of());
 
-        UUID result = examQueryService.getExamIdByStartTime(START);
+        UUID result = examService.getExamIdByStartTime(START);
 
         assertNull(result);
     }
 
     @Test
     void getAllExams_returnsSorted() {
-        when(examService.allExams()).thenReturn(List.of(exam2, exam1));
+        when(repository.findAll()).thenReturn(List.of(exam2, exam1));
         when(examDTOMapper.toDTO(exam1)).thenReturn(examDTO1);
         when(examDTOMapper.toDTO(exam2)).thenReturn(examDTO2);
 
-        List<ExamDTO> result = examQueryService.getAllExams();
+        List<ExamDTO> result = examService.getAllExams();
 
         assertEquals(List.of(examDTO1, examDTO2), result);
     }
@@ -160,7 +163,7 @@ class ExamQueryServiceTest {
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(questionDTO));
         when(answerService.findByStudentAndQuestion(STUDENT_ID, question.getId())).thenReturn(answerDTO);
 
-        boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
+        boolean result = examService.hasStudentSubmittedExam(exam1.getId(), "Student");
 
         assertTrue(result);
     }
@@ -171,8 +174,17 @@ class ExamQueryServiceTest {
         when(questionService.getQuestionsForExam(any())).thenReturn(List.of(questionDTO));
         when(answerService.findByStudentAndQuestion(STUDENT_ID, question.getId())).thenReturn(null);
 
-        boolean result = examQueryService.hasStudentSubmittedExam(exam1.getId(), "Student");
+        boolean result = examService.hasStudentSubmittedExam(exam1.getId(), "Student");
 
         assertFalse(result);
+    }
+
+    @Test
+    void getExam_examNotFound() {
+        UUID examId = UUID.randomUUID();
+        when(repository.findById(any())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> examService.getExam(examId));
+        verify(repository).findById(examId);
     }
 }

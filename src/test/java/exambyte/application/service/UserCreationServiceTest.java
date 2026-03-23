@@ -1,4 +1,4 @@
-package exambyte.infrastructure.service;
+package exambyte.application.service;
 
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.ReviewerDTO;

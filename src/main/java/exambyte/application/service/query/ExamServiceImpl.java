@@ -2,8 +2,10 @@ package exambyte.application.service.query;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;
+import exambyte.application.exception.NotFoundException;
 import exambyte.application.mapper.ExamDTOMapper;
-import exambyte.domain.service.ExamService;
+import exambyte.domain.model.exam.Exam;
+import exambyte.domain.repository.ExamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,21 +16,21 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-public class ExamQueryServiceImpl implements ExamQueryService {
+public class ExamServiceImpl implements ExamService {
 
-    private final ExamService examService;
+    private final ExamRepository repository;
     private final StudentService studentService;
     private final QuestionService questionService;
     private final AnswerService answerService;
 
     private final ExamDTOMapper examDTOMapper;
 
-    public ExamQueryServiceImpl(ExamService examService,
-                                StudentService studentService,
-                                QuestionService questionService,
-                                AnswerService answerService,
-                                ExamDTOMapper examDTOMapper) {
-        this.examService = examService;
+    public ExamServiceImpl(ExamRepository repository,
+                           StudentService studentService,
+                           QuestionService questionService,
+                           AnswerService answerService,
+                           ExamDTOMapper examDTOMapper) {
+        this.repository = repository;
         this.studentService = studentService;
         this.questionService = questionService;
         this.answerService = answerService;
@@ -37,12 +39,12 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
     @Override
     public ExamDTO getExam(UUID examId) {
-        return examDTOMapper.toDTO(examService.getExam(examId));
+        return examDTOMapper.toDTO(findById(examId));
     }
 
     @Override
     public UUID getExamIdByStartTime(LocalDateTime start) {
-        List<ExamDTO> examList = examService.allExams().stream()
+        List<ExamDTO> examList = findAll().stream()
                 .map(examDTOMapper::toDTO)
                 .toList();
 
@@ -58,7 +60,7 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
     @Override
     public List<ExamDTO> getAllExams() {
-        return examService.allExams().stream()
+        return findAll().stream()
                 .map(examDTOMapper::toDTO)
                 .sorted(Comparator.comparing(ExamDTO::start))
                 .toList();
@@ -76,17 +78,32 @@ public class ExamQueryServiceImpl implements ExamQueryService {
 
     @Override
     public void deleteById(UUID examId) {
-        examService.deleteById(examId);
+        repository.deleteById(examId);
+    }
+
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
     }
 
     @Transactional
     @Override
     public void resetAllExamDataCascade() {
-        examService.deleteAll();
+        repository.deleteAll();
     }
 
     @Override
     public void addExam(ExamDTO examDTO) {
-        examService.addExam(examDTOMapper.toDomain(examDTO));
+        repository.save(examDTOMapper.toDomain(examDTO));
+    }
+
+    private Exam findById(UUID examId) {
+        return repository.findById(examId)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    private List<Exam> findAll() {
+        return repository.findAll()
+                .stream().toList();
     }
 }

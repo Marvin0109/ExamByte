@@ -1,4 +1,4 @@
-package exambyte.infrastructure.service;
+package exambyte.application.service;
 
 import exambyte.application.service.user.AppUserService;
 import exambyte.application.service.user.AppUserServiceImpl;

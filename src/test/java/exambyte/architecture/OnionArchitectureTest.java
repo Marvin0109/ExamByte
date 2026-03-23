@@ -35,14 +35,6 @@ class OnionArchitectureTest {
             .callMethod(UUID.class, "randomUUID");
 
     @ArchTest
-    ArchRule allClassesInInfrastructureServiceShouldBeAnnotatedWithService = classes()
-        .that()
-        .resideInAPackage("..infrastructure.service..")
-        .and().haveSimpleNameEndingWith("Impl")
-        .should()
-        .beAnnotatedWith(Service.class);
-
-    @ArchTest
     ArchRule allClassesInApplicationServiceShouldBeAnnotatedWithService = classes()
         .that()
         .resideInAPackage("..application.service..")

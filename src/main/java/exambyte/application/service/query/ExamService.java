@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-public interface ExamQueryService {
+public interface ExamService {
     ExamDTO getExam(UUID examId);
 
     UUID getExamIdByStartTime(LocalDateTime start);
@@ -16,6 +16,8 @@ public interface ExamQueryService {
     boolean hasStudentSubmittedExam(UUID examId, String studentName);
 
     void deleteById(UUID examId);
+
+    void deleteAll();
 
     void resetAllExamDataCascade();
 

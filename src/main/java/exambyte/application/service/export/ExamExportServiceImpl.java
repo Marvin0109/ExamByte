@@ -6,7 +6,7 @@ import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.mapper.export.ExamExportDTOMapper;
-import exambyte.application.service.query.ExamQueryService;
+import exambyte.application.service.query.ExamService;
 
 import exambyte.application.service.query.QuestionService;
 import exambyte.application.service.query.CorrectAnswersService;
@@ -20,18 +20,18 @@ import java.util.UUID;
 @Service
 public class ExamExportServiceImpl implements ExamExportService {
 
-    private final ExamQueryService examQueryService;
+    private final ExamService examService;
     private final QuestionService questionService;
     private final ProfessorService professorService;
     private final CorrectAnswersService correctAnswersService;
     private final ExamExportDTOMapper examExportDTOMapper;
 
-    public ExamExportServiceImpl(ExamQueryService examQueryService,
+    public ExamExportServiceImpl(ExamService examService,
                                  QuestionService questionService,
                                  ProfessorService professorService,
                                  CorrectAnswersService correctAnswersService,
                                  ExamExportDTOMapper examExportDTOMapper) {
-        this.examQueryService = examQueryService;
+        this.examService = examService;
         this.questionService = questionService;
         this.professorService = professorService;
         this.correctAnswersService = correctAnswersService;
@@ -40,7 +40,7 @@ public class ExamExportServiceImpl implements ExamExportService {
 
     @Override
     public List<ExamExportDTO> createExamExport(UUID examId) {
-        ExamDTO exam = examQueryService.getExam(examId);
+        ExamDTO exam = examService.getExam(examId);
         ProfessorDTO prof = professorService.getProfessorById(exam.professorId());
         List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
 

@@ -30,7 +30,7 @@ class ReviewExportServiceTest {
     private ReviewDTO review2;
 
     @Mock
-    private ExamQueryService examQueryService;
+    private ExamService examService;
 
     @Mock
     private QuestionService questionService;
@@ -55,7 +55,7 @@ class ReviewExportServiceTest {
         MockitoAnnotations.openMocks(this);
 
         service = new ReviewExportServiceImpl(
-                examQueryService,
+                examService,
                 questionService,
                 studentService,
                 answerService,
@@ -124,7 +124,7 @@ class ReviewExportServiceTest {
 
     @Test
     void createReviewExport() {
-        when(examQueryService.getExam(exam.id())).thenReturn(exam);
+        when(examService.getExam(exam.id())).thenReturn(exam);
 
         when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
 
@@ -150,7 +150,7 @@ class ReviewExportServiceTest {
 
     @Test
     void createReviewExport_excludingAutomaticReviewerName() {
-        when(examQueryService.getExam(exam.id())).thenReturn(exam);
+        when(examService.getExam(exam.id())).thenReturn(exam);
 
         when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1, question2));
 

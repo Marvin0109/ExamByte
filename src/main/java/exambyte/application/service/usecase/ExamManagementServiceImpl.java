@@ -23,7 +23,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final ScoringService scoringService;
     private final ProfessorService professorService;
     private final StudentService studentService;
-    private final ExamQueryService examQueryService;
+    private final ExamService examService;
     private final ReviewService reviewService;
     private final Clock clock;
 
@@ -37,7 +37,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                                      ScoringService scoringService,
                                      ProfessorService professorService,
                                      StudentService studentService,
-                                     ExamQueryService examQueryService,
+                                     ExamService examService,
                                      ReviewService reviewService,
                                      Clock clock) {
 
@@ -47,7 +47,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         this.scoringService = scoringService;
         this.professorService = professorService;
         this.studentService = studentService;
-        this.examQueryService = examQueryService;
+        this.examService = examService;
         this.reviewService = reviewService;
         this.clock = clock;
     }
@@ -75,7 +75,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!";
         }
 
-        List<ExamDTO> exams = examQueryService.getAllExams();
+        List<ExamDTO> exams = examService.getAllExams();
         int examCount = exams.size();
 
         if (examCount >= EXAM_COUNT) {
@@ -91,7 +91,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         }
 
         ExamDTO examDTO = new ExamDTO(null, title, profId, start, end, result);
-        examQueryService.addExam(examDTO);
+        examService.addExam(examDTO);
         return "";
     }
 
@@ -101,7 +101,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         UUID studentId = resolveStudent(studentName);
         if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
-        ExamDTO exam = examQueryService.getExam(examId);
+        ExamDTO exam = examService.getExam(examId);
         if (checkSubmitTime(exam.end())) {
             return SubmitExamResult.SAVE_ANSWERS_FAILED;
         }
@@ -160,7 +160,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     public AttemptDTO getSubmission(UUID examId, String studentName) {
         UUID studentId = studentService.getStudentIdByName(studentName);
 
-        ExamDTO exam = examQueryService.getExam(examId);
+        ExamDTO exam = examService.getExam(examId);
         Map<UUID, QuestionDTO> questionMap = questionService.getQuestionUUIDMap(examId);
         List<AnswerDTO> allAnswers = answerService.getAnswers(studentId, questionMap.keySet());
 
@@ -189,30 +189,30 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public List<ExamDTO> getAllExams() {
-        return examQueryService.getAllExams();
+        return examService.getAllExams();
     }
 
     @Override
     public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
-        return examQueryService.hasStudentSubmittedExam(examId, studentName);
+        return examService.hasStudentSubmittedExam(examId, studentName);
     }
 
     @Override
     public ExamDTO getExam(UUID examId) {
-        return examQueryService.getExam(examId);
+        return examService.getExam(examId);
     }
 
     @Override
     public UUID getExamIdByStartTime(LocalDateTime start) {
-        return examQueryService.getExamIdByStartTime(start);
+        return examService.getExamIdByStartTime(start);
     }
 
     @Override
     public boolean deleteById(UUID id) {
-        ExamDTO exam = examQueryService.getExam(id);
+        ExamDTO exam = examService.getExam(id);
 
         if (now().isBefore(exam.start()) || exam.result().isBefore(now())) {
-            examQueryService.deleteById(exam.id());
+            examService.deleteById(exam.id());
             return true;
         }
         return false;
@@ -220,7 +220,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public boolean resetAllExamDataCascade() {
-        List<ExamDTO> examList = examQueryService.getAllExams();
+        List<ExamDTO> examList = examService.getAllExams();
 
         if (examList.size() != EXAM_COUNT) return false;
         else {
@@ -229,7 +229,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                     return false;
                 }
             }
-            examQueryService.resetAllExamDataCascade();
+            examService.resetAllExamDataCascade();
         }
 
         return true;
@@ -237,7 +237,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public boolean allowedToViewReview(UUID examId) {
-        ExamDTO exam = examQueryService.getExam(examId);
+        ExamDTO exam = examService.getExam(examId);
         return exam.result().isBefore(now().truncatedTo(ChronoUnit.MINUTES));
     }
 }
