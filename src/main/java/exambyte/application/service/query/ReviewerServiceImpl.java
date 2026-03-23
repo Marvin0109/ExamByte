@@ -3,6 +3,7 @@ package exambyte.application.service.query;
 import exambyte.application.dto.ReviewerDTO;
 import exambyte.application.exception.NotFoundException;
 import exambyte.application.mapper.ReviewerDTOMapper;
+import exambyte.domain.model.common.AutoReviewer;
 import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.repository.ReviewerRepository;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,8 @@ public class ReviewerServiceImpl implements ReviewerService {
 
     @Override
     public void saveAutomaticReviewer() {
-        if (getReviewerByUsername("Auto reviewer").isEmpty()) {
-            saveReviewer("Auto reviewer");
+        if (getReviewerByUsername(AutoReviewer.NAME).isEmpty()) {
+            saveReviewer(AutoReviewer.NAME);
         }
     }
 

@@ -1,4 +1,4 @@
-package exambyte.domain.model.user;
+package exambyte.domain.model.common;
 
 import java.util.UUID;
 

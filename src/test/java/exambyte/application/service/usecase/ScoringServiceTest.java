@@ -5,6 +5,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.query.ReviewService;
+import exambyte.domain.model.common.AutoReviewer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -31,7 +32,7 @@ class ScoringServiceTest {
     private static final UUID ANSWER_1_ID = UUID.randomUUID();
     private static final UUID ANSWER_2_ID = UUID.randomUUID();
 
-    private static final UUID AUTOMATIC_REVIEWER = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private static final UUID AUTOMATIC_REVIEWER = AutoReviewer.AUTOMATIC_REVIEWER;
 
     private QuestionDTO question1;
     private QuestionDTO question2;

@@ -14,7 +14,6 @@ import java.util.UUID;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
-
 @AnalyzeClasses(
         packages = "exambyte",
         importOptions = ImportOption.DoNotIncludeTests.class)
