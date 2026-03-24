@@ -4,7 +4,7 @@ import exambyte.application.dto.*;
 import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.mapper.export.ReviewExportDTOMapper;
 import exambyte.application.service.query.*;
-import exambyte.domain.model.common.AutoReviewer;
+import exambyte.domain.model.user.AutoReviewer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public class ReviewExportServiceImpl implements ReviewExportService {
                 reviews.add(r);
                 ReviewerDTO reviewerDTO = reviewerService.getReviewerById(r.reviewerId());
 
-                if (!reviewerDTO.name().equals(AutoReviewer.NAME)) {
+                if (!reviewerDTO.name().equals(AutoReviewer.getName())) {
 
                     if (!sb.isEmpty()) {
                         sb.append(", ");

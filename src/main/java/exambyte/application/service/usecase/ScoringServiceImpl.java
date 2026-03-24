@@ -4,7 +4,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
 import exambyte.application.service.query.ReviewService;
-import exambyte.domain.model.common.AutoReviewer;
+import exambyte.domain.model.user.AutoReviewer;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -43,7 +43,7 @@ public class ScoringServiceImpl implements ScoringService {
                         return 0;
                     }
 
-                    boolean isAutomaticReview = review.reviewerId().equals(AutoReviewer.AUTOMATIC_REVIEWER);
+                    boolean isAutomaticReview = review.reviewerId().equals(AutoReviewer.getAutoReviewer());
 
                     boolean resultTimeReached = !currentTime.isBefore(result);
 

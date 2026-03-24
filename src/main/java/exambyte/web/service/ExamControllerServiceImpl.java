@@ -5,7 +5,7 @@ import exambyte.application.dto.*;
 import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.ExamFacadeService;
-import exambyte.domain.model.common.ExamCount;
+import exambyte.domain.model.exam.ExamCount;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
@@ -173,7 +173,7 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     public double getEligibilityProgress(String studentLogin) {
         List<AttemptDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
-        double progressForSuccessAttempt = 100.0 / ExamCount.MAX_EXAM_COUNT;
+        double progressForSuccessAttempt = 100.0 / ExamCount.getMaxExamCount();
         double progress = 0.0;
         for (AttemptDTO v : allValidAttempts) {
             if (v.accumulatedPoints() >= v.totalPoints() * 0.5) {

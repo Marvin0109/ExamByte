@@ -4,7 +4,7 @@ import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.model.common.AutoReviewer;
+import exambyte.domain.model.user.AutoReviewer;
 import exambyte.domain.service.AnswerParser;
 import exambyte.domain.service.McScoringPolicy;
 import org.springframework.stereotype.Service;
@@ -99,6 +99,6 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     }
 
     private static ReviewDTO createReview(UUID answerId, String solution, double points) {
-        return new ReviewDTO(null, answerId, AutoReviewer.AUTOMATIC_REVIEWER, "Lösung: " + solution, points);
+        return new ReviewDTO(null, answerId, AutoReviewer.getAutoReviewer(), "Lösung: " + solution, points);
     }
 }

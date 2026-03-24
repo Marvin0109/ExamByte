@@ -3,7 +3,7 @@ package exambyte.web.service;
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamFacadeService;
-import exambyte.domain.model.common.AutoReviewer;
+import exambyte.domain.model.user.AutoReviewer;
 import exambyte.web.form.load_old_submit_data.OldDataDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_exam.ExamAggregateDTO;
@@ -200,7 +200,7 @@ public class HelperServiceImpl implements HelperService {
         String reviewerNames = reviewers.stream()
                 .map(service::getReviewerById)
                 .map(ReviewerDTO::name)
-                .filter(name -> !name.equals(AutoReviewer.NAME))
+                .filter(name -> !name.equals(AutoReviewer.getName()))
                 .distinct()
                 .collect(Collectors.joining(", "));
 
