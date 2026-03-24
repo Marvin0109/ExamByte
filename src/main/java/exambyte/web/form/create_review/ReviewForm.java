@@ -8,26 +8,26 @@ import jakarta.validation.constraints.NotNull;
 public class ReviewForm {
 
     @NotBlank(message = "Ein Bewertungstext muss vorhanden sein")
-    private String bewertung;
+    private String reviewText;
 
     @NotNull(message = "Punkte müssen angegeben werden")
     @HalfPointsAboveZero
     @Min(value = 0, message = "Punkte dürfen nicht negativ sein")
-    private Double punkteVergeben;
+    private Double points;
 
-    public String getBewertung() {
-        return bewertung;
+    public String getReviewText() {
+        return reviewText;
     }
 
-    public void setBewertung(String bewertung) {
-        this.bewertung = bewertung;
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
     }
 
-    public Double getPunkteVergeben() {
-        return punkteVergeben;
+    public Double getPoints() {
+        return points;
     }
 
-    public void setPunkteVergeben(Double punkteVergeben) {
-        this.punkteVergeben = punkteVergeben;
+    public void setPoints(Double points) {
+        this.points = points;
     }
 }

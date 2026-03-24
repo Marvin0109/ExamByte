@@ -1,17 +1,17 @@
 package exambyte.integration;
 
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.application.service.usecase.ExamManagementService;
-import exambyte.domain.model.aggregate.exam.Antwort;
-import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.model.aggregate.user.Student;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.exam.Answer;
+import exambyte.domain.model.exam.Exam;
+import exambyte.domain.model.exam.Question;
+import exambyte.domain.model.exam.CorrectAnswers;
+import exambyte.domain.model.user.Professor;
+import exambyte.domain.model.user.Reviewer;
+import exambyte.domain.model.user.Student;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.*;
-import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
+import exambyte.infrastructure.container.TestcontainerConfiguration;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,19 +37,19 @@ class SubmitAnswersStressTest {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private KorrektorRepository korrektorRepository;
+    private ReviewerRepository reviewerRepository;
 
     @Autowired
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private KorrekteAntwortenRepository korrekteAntwortenRepository;
+    private CorrectAnswersRepository correctAnswersRepository;
 
     @Autowired
-    private AntwortRepository antwortRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -60,67 +60,67 @@ class SubmitAnswersStressTest {
     @Autowired
     private ExamControllerService examControllerService;
 
-    private UUID frageIdSC;
-    private UUID frageIdFreitext;
+    private UUID questionIdSC;
+    private UUID questionIdFreeResponse;
     private UUID examId;
 
     @BeforeEach
     void setUp() {
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
-        korrektorRepository.save(new Korrektor.KorrektorBuilder()
-                .name("Automatischer Korrektor")
+        reviewerRepository.save(new Reviewer.ReviewerBuilder()
+                .name("Auto reviewer")
                 .build());
 
         Optional<UUID> profId = examControllerService.getProfIdByName("Professor");
 
         assert(profId.isPresent());
 
-        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
+        LocalDateTime start = LocalDateTime.now();
 
         examRepository.save(new Exam.ExamBuilder()
                 .professorId(profId.get())
-                .startTime(start)
-                .endTime(start.plusDays(1))
-                .resultTime(start.plusDays(2))
+                .start(start)
+                .end(start.plusDays(1))
+                .result(start.plusDays(2))
                 .title("Exam")
                 .build());
 
         examId = examControllerService.getExamUUIDByStartTime(start);
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage")
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question")
                 .type(QuestionType.SC)
-                .maxPunkte(1)
+                .points(1)
                 .examId(examId)
                 .build());
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage 2")
-                .type(QuestionType.FREITEXT)
-                .maxPunkte(2)
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question 2")
+                .type(QuestionType.FREE_RESPONSE)
+                .points(2)
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreitextLoaded = frageRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.FREITEXT))
-                .map(Frage::getId)
+        Optional<UUID> questionIdResponseLoaded = questionRepository.findAll().stream()
+                .filter(q -> q.getType().equals(QuestionType.FREE_RESPONSE))
+                .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdFreitextLoaded.isPresent());
-        frageIdFreitext = frageIdFreitextLoaded.get();
+        assert(questionIdResponseLoaded.isPresent());
+        questionIdFreeResponse = questionIdResponseLoaded.get();
 
-        Optional<UUID> frageIdSCLoaded = frageRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getId)
+        Optional<UUID> questionIdSCLoaded = questionRepository.findAll().stream()
+                .filter(q -> q.getType().equals(QuestionType.SC))
+                .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdSCLoaded.isPresent());
-        frageIdSC = frageIdSCLoaded.get();
+        assert(questionIdSCLoaded.isPresent());
+        questionIdSC = questionIdSCLoaded.get();
 
-        korrekteAntwortenRepository.save(new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .frageId(frageIdSC)
-                .antwortOptionen("A\nB\nC\nD")
-                .loesungen("B")
+        correctAnswersRepository.save(new CorrectAnswers.CorrectAnswersBuilder()
+                .questionId(questionIdSC)
+                .choices("A\nB\nC\nD")
+                .solution("B")
                 .build());
     }
 
@@ -128,11 +128,11 @@ class SubmitAnswersStressTest {
     void tearDown() {
         studentRepository.deleteAll();
         professorRepository.deleteAll();
-        korrektorRepository.deleteAll();
+        reviewerRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("500 Studenten submitten gleichzeitig")
+    @DisplayName("500 Students submitting")
     void stressTestSubmitExam() throws InterruptedException {
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < 500; i++) {
@@ -142,7 +142,6 @@ class SubmitAnswersStressTest {
         }
 
         // Stress tests starts here
-
         int threadCount = students.size();
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -154,7 +153,7 @@ class SubmitAnswersStressTest {
                 final String studentName = s.getName();
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreitext);
+                        Map<String, List<String>> answers = generateAnswers(questionIdSC, questionIdFreeResponse);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -174,26 +173,25 @@ class SubmitAnswersStressTest {
         assertThat(exceptions).isEmpty();
 
         for (Student s : students) {
-            assertThat(antwortRepository.findByStudentIdAndFrageId(
-                    s.id(), frageIdFreitext)).isPresent();
+            assertThat(answerRepository.findByStudentIdAndQuestionId(
+                    s.id(), questionIdFreeResponse)).isPresent();
 
-            Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
-                    s.id(), frageIdSC);
+            Optional<Answer> sc = answerRepository.findByStudentIdAndQuestionId(
+                    s.id(), questionIdSC);
             assertThat(sc).isPresent();
 
-            assertThat(reviewRepository.findByAntwortId(sc.get().getId())).isNotNull();
+            assertThat(reviewRepository.findByAnswerId(sc.get().getId())).isNotNull();
         }
     }
 
     @Test
-    @DisplayName("50 gleichzeitige Submits eines Studenten")
+    @DisplayName("50 gleichzeitiges Einreichen eines Studenten")
     void stressTestSubmitExam_02() throws InterruptedException {
         studentRepository.save(new Student.StudentBuilder().name("Student 0").build());
         Student loaded = studentRepository.findByName("Student 0").orElseThrow();
         assertThat(loaded).isNotNull();
 
         // Stress tests starts here
-
         int threadCount = 50;
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -205,7 +203,7 @@ class SubmitAnswersStressTest {
                 final String studentName = "Student 0";
                 executor.submit(() -> {
                     try {
-                        Map<String, List<String>> answers = generateAnswers(frageIdSC, frageIdFreitext);
+                        Map<String, List<String>> answers = generateAnswers(questionIdSC, questionIdFreeResponse);
                         managementService.submitExam(studentName, answers, examId);
                     } catch (Exception e) {
                         exceptions.add(e);
@@ -224,20 +222,20 @@ class SubmitAnswersStressTest {
 
         assertThat(exceptions).isEmpty();
 
-        assertThat(antwortRepository.findByStudentIdAndFrageId(
-                loaded.id(), frageIdFreitext)).isPresent();
+        assertThat(answerRepository.findByStudentIdAndQuestionId(
+                loaded.id(), questionIdFreeResponse)).isPresent();
 
-        Optional<Antwort> sc = antwortRepository.findByStudentIdAndFrageId(
-                loaded.id(), frageIdSC);
+        Optional<Answer> sc = answerRepository.findByStudentIdAndQuestionId(
+                loaded.id(), questionIdSC);
         assertThat(sc).isPresent();
 
-        assertThat(reviewRepository.findByAntwortId(sc.get().getId())).isNotNull();
+        assertThat(reviewRepository.findByAnswerId(sc.get().getId())).isNotNull();
     }
 
     private Map<String, List<String>> generateAnswers(UUID frage1Id, UUID frage2Id) {
         Map<String, List<String>> answers = new HashMap<>();
         answers.put(frage1Id.toString(), List.of("A"));
-        answers.put(frage2Id.toString(), List.of("Freitext"));
+        answers.put(frage2Id.toString(), List.of("FreeResponse"));
         return answers;
     }
 }

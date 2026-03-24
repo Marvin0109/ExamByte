@@ -14,49 +14,23 @@ import java.util.UUID;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
-/**
- * Diese Klasse enthält ArchUnit-Tests, die Architekturregeln für die Exambyte-Anwendung überprüfen.
- */
 @AnalyzeClasses(
         packages = "exambyte",
         importOptions = ImportOption.DoNotIncludeTests.class)
 class OnionArchitectureTest {
 
-    /**
-     * Enthält die importierten Java-Klassen aus dem angegebenen Paket "exambyte".
-     * Die importierten Klassen werden für ArchUnit-Tests verwendet, um Architekturregeln innerhalb
-     * der Exambyte-Anwendung zu prüfen.
-     * Diese Variable wird hauptsächlich zur Definition und Überprüfung verschiedener Architekturregelexemplare
-     * verwendet, um sicherzustellen, dass die vorgegebene Schichtenarchitektur und andere Richtlinien
-     * eingehalten werden.
-     */
-
     @ArchTest
     ArchRule onionArchitecture = Architectures.onionArchitecture()
         .domainModels("exambyte.domain..")
         .domainServices("exambyte.domain.service..")
-        .applicationServices("exambyte.application.service..")
-        .adapter("persistence", "exambyte.infrastructure.persistence.repository..")
-        .adapter("service", "exambyte.infrastructure.service..",
-                "exambyte.infrastructure.config..", "exambyte.web.service..")
-        .adapter("repository", "exambyte.infrastructure.persistence.repository..")
-        .adapter("controller", "exambyte.web.controllers..")
-        .adapter("mapper", "exambyte.infrastructure.mapper..",
-                "exambyte.infrastructure.persistence.mapper..", "exambyte.application.mapper..");
-
+        .applicationServices("exambyte.application..")
+        .adapter("infrastructure", "exambyte.infrastructure..")
+        .adapter("web", "exambyte.web..");
 
     @ArchTest
     ArchRule noRandomUUIDUsage = noClasses()
             .should()
             .callMethod(UUID.class, "randomUUID");
-
-    @ArchTest
-    ArchRule allClassesInInfrastructureServiceShouldBeAnnotatedWithService = classes()
-        .that()
-        .resideInAPackage("..infrastructure.service..")
-        .and().haveSimpleNameEndingWith("Impl")
-        .should()
-        .beAnnotatedWith(Service.class);
 
     @ArchTest
     ArchRule allClassesInApplicationServiceShouldBeAnnotatedWithService = classes()
@@ -75,9 +49,9 @@ class OnionArchitectureTest {
         .beAnnotatedWith(Service.class);
 
     @ArchTest
-    ArchRule allClassesInPersistenceRepositoryShouldBeAnnotatedWithRepository = classes()
+    ArchRule allRepositoriesShouldBeAnnotatedWithRepository = classes()
         .that()
-        .resideInAPackage("..persistence.repository..")
+        .resideInAPackage("..infrastructure.repository..")
         .and().haveSimpleNameEndingWith("Impl")
         .should()
         .beAnnotatedWith(Repository.class);
@@ -91,7 +65,7 @@ class OnionArchitectureTest {
         .beAnnotatedWith(Controller.class);
 
     @ArchTest
-    ArchRule allMapperShouldBeAnnotatedWithController = classes()
+    ArchRule allMapperShouldBeAnnotatedWithComponent = classes()
         .that()
         .haveSimpleNameEndingWith("MapperImpl")
         .should()
@@ -104,7 +78,35 @@ class OnionArchitectureTest {
         .resideInAPackage("..domain..")
         .and()
         .areDeclaredInClassesThat()
-        .resideOutsideOfPackage("..common..")
+        .resideOutsideOfPackage("..enums..")
         .should()
         .bePrivate();
+
+    @ArchTest
+    ArchRule domainShouldNotDependOnOuterLayers = noClasses()
+            .that()
+            .resideInAPackage("..domain..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAnyPackage("..application..", "..infrastructure..", "..web..");
+
+    @ArchTest
+    ArchRule noApplicationDTOsInInfrastructureAllowed = noClasses()
+            .that()
+            .resideInAPackage("..infrastructure..")
+            .and()
+            .resideOutsideOfPackage("..infrastructure.mapper..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("..application.dto..");
+
+    @ArchTest
+    ArchRule noEntitiesAllowedOutsideOfInfrastructure = noClasses()
+            .that()
+            .resideOutsideOfPackage("..infrastructure..")
+            .and()
+            .resideOutsideOfPackage("..domain.entitymapper..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("..infrastructure.persistence.entities..");
 }

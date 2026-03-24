@@ -4,8 +4,8 @@ VALUES ('11111111-1111-1111-1111-111111111111', 'ProfTestName');
 INSERT INTO student (id, name)
 VALUES ('22222222-2222-2222-2222-222222222222', 'StudentTestName');
 
-INSERT INTO korrektor(id, name)
-VALUES ('33333333-3333-3333-3333-333333333333', 'KorrektorTestName');
+INSERT INTO reviewer(id, name)
+VALUES ('33333333-3333-3333-3333-333333333333', 'ReviewerTestName');
 
 INSERT INTO exam (id, title, professor_id, start_time, end_time, result_time)
 VALUES ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
@@ -15,31 +15,31 @@ VALUES ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
         '2025-07-02 14:00:00',
         '2025-07-09 14:00:00');
 
-INSERT INTO frage (id, frage_text, exam_id, max_punkte, type)
+INSERT INTO question (id, text, exam_id, points, type)
 VALUES ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
         'FrageTestText',
         'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
         10,
         'SC');
 
-INSERT INTO correct_answers (id, frage_id, richtige_antwort, antwort_optionen)
+INSERT INTO correct_answers (id, question_id, solution, choices)
 VALUES ('cccccccc-cccc-cccc-cccc-cccccccccccc',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-        'Loesung1',
-        'Loesung1\nLoesung2');
+        'Solution1',
+        'Solution1\nSolution2');
 
-INSERT INTO antwort (id, frage_id, antwort_text, student_id, antwort_zeitpunkt)
+INSERT INTO answer (id, question_id, answer, student_id, submit_time)
 VALUES ('dddddddd-dddd-dddd-dddd-dddddddddddd',
         'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb',
-        'Loesung1',
+        'Solution1',
         '22222222-2222-2222-2222-222222222222',
         '2025-06-20 08:10:00'
         );
 
-INSERT INTO review (id, antwort_id, korrektor_id, bewertung, punkte)
+INSERT INTO review (id, answer_id, reviewer_id, text, points)
 VALUES ('eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee',
         'dddddddd-dddd-dddd-dddd-dddddddddddd',
         '33333333-3333-3333-3333-333333333333',
-        'Bewertung',
+        'Text',
         10
         );

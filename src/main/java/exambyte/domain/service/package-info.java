@@ -1,25 +1,18 @@
 /**
- * Dieses Package enthält Service-Interfaces, die als <b>Ports</b> für die Infrastruktur-Schicht dienen.
+ * This package contains domain service classes of the application.
  * <p>
- * Die Interfaces in diesem Package definieren Geschäftslogik und Anwendungsdienste für
- * die Bearbeitung von z.B. <b>Antworten</b> im Kontext von Prüfungsfragen.
- * Die Implementierungen dieser Services befinden sich in der <b>Infrastruktur-Schicht</b>
- * und werden vom Controller verwendet, um die Geschäftslogik auszuführen.
+ *     These services contain business logic that does not naturally belong to a single entity
+ *     and therefore is implemented on a domain service level.
  * </p>
- *
- * <h2>Rolle in der Onion-Architektur</h2>
  * <p>
- * Dieses Package gehört zur <b>Domänenschicht</b> und stellt eine Abstraktion für die
- * Geschäftslogik zur Verfügung. Die Implementierungen dieser Interfaces werden in der
- * <b>Infrastruktur-Schicht</b> implementiert, um die Interaktion mit der zugrunde liegenden
- * Infrastruktur (z.B. Datenbanken) zu ermöglichen.
+ *     If additional business logic arises, new service classes can be added to this package as needed.
  * </p>
- *
- * <h2>Typische Verwendung</h2>
- * <ul>
- *     <li>Definiert Schnittstellen für die Geschäftslogik zum Abrufen und Speichern von z.B. <b>Antworten</b>.</li>
- *     <li>Ermöglicht es, die Implementierungen in der <b>Infrastruktur-Schicht</b> zu kapseln und vom Controller zu verwenden.</li>
- *     <li>Stellt sicher, dass der Controller lediglich auf die Geschäftslogik zugreift, ohne sich um Implementierungsdetails zu kümmern.</li>
- * </ul>
+ * <p>
+ *     Note: Some business logic is still distributed across other parts of the application.
+ *     A consolidation into domain services is intended but has not yet been fully completed.
+ * </p>
+ * <p>
+ *     Currently, this package already contains some service implementations.
+ * </p>
  */
 package exambyte.domain.service;

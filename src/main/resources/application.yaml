@@ -44,5 +44,5 @@ spring:
     password: ${DB_PASSWORD}
     schemas:
       - public
-    locations: classpath:db/migration # Definiert den Speicherort der Migrationsskripte
+    locations: classpath:db/migration
     baseline-on-migrate: true

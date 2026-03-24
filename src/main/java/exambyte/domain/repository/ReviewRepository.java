@@ -1,13 +1,13 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.model.aggregate.exam.Review;
+import exambyte.domain.model.exam.Review;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public interface ReviewRepository {
 
-    Review findByAntwortId(UUID id);
+    Review findByAnswerId(UUID id);
 
     Optional<Review> findById(UUID id);
 

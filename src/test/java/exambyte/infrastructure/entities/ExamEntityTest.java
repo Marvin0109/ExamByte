@@ -1,6 +1,6 @@
 package exambyte.infrastructure.entities;
 
-import exambyte.infrastructure.persistence.entities.ExamEntity;
+import exambyte.infrastructure.entity.ExamEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,52 +13,52 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ExamEntityTest {
 
-    private static final LocalDateTime START_TIME =
+    private static final LocalDateTime START =
             LocalDateTime.of(2000, 1, 1, 0, 0, 0);
 
     @ParameterizedTest
-    @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
-    @MethodSource("ungueltigeBuilder")
+    @DisplayName("Field missing -> IllegalStateException")
+    @MethodSource("invalidBuilder")
     void createExamEntity_fail(ExamEntity.ExamEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);
     }
 
-    static Stream<ExamEntity.ExamEntityBuilder> ungueltigeBuilder() {
+    static Stream<ExamEntity.ExamEntityBuilder> invalidBuilder() {
         return Stream.of(
                 new ExamEntity.ExamEntityBuilder()
                         .title("")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(START)
+                        .end(START.plusHours(1))
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(null)
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(START)
+                        .end(START.plusHours(1))
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(null)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(null)
+                        .end(START.plusHours(1))
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(null)
-                        .resultZeitpunkt(START_TIME.plusHours(2)),
+                        .start(START)
+                        .end(null)
+                        .result(START.plusHours(2)),
 
                 new ExamEntity.ExamEntityBuilder()
                         .title("Exam")
                         .professorId(UUID.randomUUID())
-                        .startZeitpunkt(START_TIME)
-                        .endZeitpunkt(START_TIME.plusHours(1))
-                        .resultZeitpunkt(null)
+                        .start(START)
+                        .end(START.plusHours(1))
+                        .result(null)
         );
     }
 }

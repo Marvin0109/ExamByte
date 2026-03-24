@@ -1,16 +1,16 @@
 package exambyte.integration;
 
-import exambyte.application.service.ExamControllerService;
-import exambyte.domain.model.aggregate.exam.Antwort;
-import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.KorrekteAntworten;
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.model.aggregate.user.Student;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.web.service.ExamControllerService;
+import exambyte.domain.model.exam.Answer;
+import exambyte.domain.model.exam.Exam;
+import exambyte.domain.model.exam.Question;
+import exambyte.domain.model.exam.CorrectAnswers;
+import exambyte.domain.model.user.Reviewer;
+import exambyte.domain.model.user.Professor;
+import exambyte.domain.model.user.Student;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.*;
-import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
+import exambyte.infrastructure.container.TestcontainerConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,19 +34,19 @@ class SubmitAnswersIT {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private KorrektorRepository korrektorRepository;
+    private ReviewerRepository reviewerRepository;
 
     @Autowired
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private KorrekteAntwortenRepository korrekteAntwortenRepository;
+    private CorrectAnswersRepository correctAnswersRepository;
 
     @Autowired
-    private AntwortRepository antwortRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -58,63 +58,63 @@ class SubmitAnswersIT {
     void submitAnswers_generateReviews() {
         studentRepository.save(new Student.StudentBuilder().name("Student").build());
         professorRepository.save(new Professor.ProfessorBuilder().name("Professor").build());
-        korrektorRepository.save(new Korrektor.KorrektorBuilder()
-                .name("Automatischer Korrektor")
+        reviewerRepository.save(new Reviewer.ReviewerBuilder()
+                .name("Auto reviewer")
                 .build());
 
         Optional<UUID> profId = examControllerService.getProfIdByName("Professor");
 
         assert(profId.isPresent());
 
-        LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
+        LocalDateTime start = LocalDateTime.now();
 
         examRepository.save(new Exam.ExamBuilder()
                 .professorId(profId.get())
-                .startTime(start)
-                .endTime(start.plusDays(1))
-                .resultTime(start.plusDays(2))
+                .start(start)
+                .end(start.plusDays(1))
+                .result(start.plusDays(2))
                 .title("Exam")
                 .build());
 
         UUID examId = examControllerService.getExamUUIDByStartTime(start);
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage")
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question")
                 .type(QuestionType.SC)
-                .maxPunkte(1)
+                .points(1)
                 .examId(examId)
                 .build());
 
-        frageRepository.save(new Frage.FrageBuilder()
-                .frageText("Frage 2")
-                .type(QuestionType.FREITEXT)
-                .maxPunkte(2)
+        questionRepository.save(new Question.FrageBuilder()
+                .text("Question 2")
+                .type(QuestionType.FREE_RESPONSE)
+                .points(2)
                 .examId(examId)
                 .build());
 
-        Optional<UUID> frageIdFreitext = frageRepository.findAll().stream()
-                .filter(f -> f.getType().equals(QuestionType.FREITEXT))
-                .map(Frage::getId)
+        Optional<UUID> questionIdFreeResponse = questionRepository.findAll().stream()
+                .filter(f -> f.getType().equals(QuestionType.FREE_RESPONSE))
+                .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdFreitext.isPresent());
+        assert(questionIdFreeResponse.isPresent());
 
-        Optional<UUID> frageIdSC = frageRepository.findAll().stream()
+        Optional<UUID> questionIdSC = questionRepository.findAll().stream()
                 .filter(f -> f.getType().equals(QuestionType.SC))
-                .map(Frage::getId)
+                .map(Question::getId)
                 .findFirst();
 
-        assert(frageIdSC.isPresent());
+        assert(questionIdSC.isPresent());
 
-        korrekteAntwortenRepository.save(new KorrekteAntworten.KorrekteAntwortenBuilder()
-                .frageId(frageIdSC.get())
-                .antwortOptionen("A\nB\nC\nD")
-                .loesungen("B")
+        correctAnswersRepository.save(new CorrectAnswers.CorrectAnswersBuilder()
+                .questionId(questionIdSC.get())
+                .choices("A\nB\nC\nD")
+                .solution("B")
                 .build());
 
         Map<String, List<String>> answers = new HashMap<>();
-        answers.put(frageIdFreitext.get().toString(), List.of("Antwort Text"));
-        answers.put(frageIdSC.get().toString(), List.of("B"));
+        answers.put(questionIdFreeResponse.get().toString(), List.of("Answer"));
+        answers.put(questionIdSC.get().toString(), List.of("B"));
 
         boolean submitted = examControllerService.examIsAlreadySubmitted(examId, "Student");
         assertThat(submitted).isFalse();
@@ -122,11 +122,11 @@ class SubmitAnswersIT {
         boolean success = examControllerService.submitExam("Student", answers, examId);
         assertThat(success).isTrue();
 
-        Antwort antwort = antwortRepository.findByFrageId(frageIdSC.get());
+        Answer answer = answerRepository.findByQuestionId(questionIdSC.get());
 
-        assertThat(antwortRepository.findByFrageId(frageIdFreitext.get())).isNotNull();
-        assertThat(antwortRepository.findByFrageId(frageIdSC.get())).isNotNull();
+        assertThat(answerRepository.findByQuestionId(questionIdFreeResponse.get())).isNotNull();
+        assertThat(answerRepository.findByQuestionId(questionIdSC.get())).isNotNull();
 
-        assertThat(reviewRepository.findByAntwortId(antwort.getId())).isNotNull();
+        assertThat(reviewRepository.findByAnswerId(answer.getId())).isNotNull();
     }
 }

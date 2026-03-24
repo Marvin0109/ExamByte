@@ -1,15 +1,15 @@
 package exambyte.application.service.export;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.QuestionDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.application.service.query.ExamQueryService;
-import exambyte.application.service.query.FrageQueryService;
-import exambyte.application.service.query.KorrekteAntwortenQueryService;
-import exambyte.application.service.query.ProfessorQueryService;
-import exambyte.domain.export_mapper.ExamExportDTOMapper;
+import exambyte.application.service.query.ExamService;
+import exambyte.application.service.query.QuestionService;
+import exambyte.application.service.query.CorrectAnswersService;
+import exambyte.application.service.query.ProfessorService;
+import exambyte.application.mapper.export.ExamExportDTOMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -27,35 +27,35 @@ class ExamExportServiceTest {
     private ExamDTO exam;
     private final UUID profId = UUID.randomUUID();
     private ProfessorDTO professor;
-    private FrageDTO frage;
-    private FrageDTO frage2;
-    private KorrekteAntwortenDTO korrekteAntworten;
+    private QuestionDTO question1;
+    private QuestionDTO question2;
+    private CorrectAnswersDTO correctAnswers;
 
     @Mock
-    private ExamQueryService examQueryService;
+    private ExamService examService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionService questionService;
 
     @Mock
-    private ProfessorQueryService profQueryService;
+    private ProfessorService profQueryService;
 
     @Mock
-    private KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
-    private ExamExportDTOMapper examExportDTOMapper;
+    private ExamExportDTOMapper mapper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
         service = new ExamExportServiceImpl(
-                examQueryService,
-                frageQueryService,
+                examService,
+                questionService,
                 profQueryService,
-                korrekteAntwortenQueryService,
-                examExportDTOMapper
+                correctAnswersService,
+                mapper
         );
 
         exam = new ExamDTO(
@@ -72,68 +72,68 @@ class ExamExportServiceTest {
                 "Professor"
         );
 
-        frage = new FrageDTO(
+        question1 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 1",
+                "Question 1",
                 6,
                 exam.id(),
                 QuestionTypeDTO.MC
         );
 
-        frage2 = new FrageDTO(
+        question2 = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage 2",
+                "Question 2",
                 2,
                 exam.id(),
-                QuestionTypeDTO.FREITEXT
+                QuestionTypeDTO.FREE_RESPONSE
         );
 
-        korrekteAntworten = new KorrekteAntwortenDTO(
+        correctAnswers = new CorrectAnswersDTO(
                 UUID.randomUUID(),
                 "A\nB",
                 "A\nB\nC\nD",
-                frage.id()
+                question1.id()
         );
     }
 
     @Test
     void createExamExport() {
-        when(examQueryService.getExam(exam.id())).thenReturn(exam);
+        when(examService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
-        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage));
-        when(korrekteAntwortenQueryService.getLoesungForFrage(frage.id())).thenReturn(korrekteAntworten);
-        when(examExportDTOMapper.mapDTOToExport(
+        when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question1));
+        when(correctAnswersService.getCorrectAnswerForQuestion(question1.id())).thenReturn(correctAnswers);
+        when(mapper.mapDTOToExport(
                 exam,
                 professor.name(),
                 6,
-                List.of(frage),
-                List.of(korrekteAntworten)))
+                List.of(question1),
+                List.of(correctAnswers)))
                 .thenReturn(mock());
 
         service.createExamExport(exam.id());
 
-        verify(examExportDTOMapper).mapDTOToExport(
+        verify(mapper).mapDTOToExport(
                 exam,
                 professor.name(),
                 6,
-                List.of(frage),
-                List.of(korrekteAntworten));
+                List.of(question1),
+                List.of(correctAnswers));
     }
 
     @Test
-    void createExamExport_nullKorrekteAntworten() {
-        when(examQueryService.getExam(exam.id())).thenReturn(exam);
+    void createExamExport_nullCorrectAnswers() {
+        when(examService.getExam(exam.id())).thenReturn(exam);
         when(profQueryService.getProfessorById(profId)).thenReturn(professor);
-        when(frageQueryService.getFragenForExam(exam.id())).thenReturn(List.of(frage2));
-        when(korrekteAntwortenQueryService.getLoesungForFrage(frage2.id())).thenReturn(null);
+        when(questionService.getQuestionsForExam(exam.id())).thenReturn(List.of(question2));
+        when(correctAnswersService.getCorrectAnswerForQuestion(question2.id())).thenReturn(null);
 
         service.createExamExport(exam.id());
 
-        verify(examExportDTOMapper).mapDTOToExport(
+        verify(mapper).mapDTOToExport(
                 exam,
                 professor.name(),
                 2,
-                List.of(frage2),
+                List.of(question2),
                 List.of());
     }
 }

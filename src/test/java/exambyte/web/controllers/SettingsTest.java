@@ -1,12 +1,11 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.UserCreationService;
+import exambyte.web.service.ExamControllerService;
+import exambyte.application.service.user.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.application.service.AppUserService;
+import exambyte.application.service.user.AppUserService;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -39,8 +38,7 @@ class SettingsTest {
     private AppUserService appUserService;
 
     @Test
-    @DisplayName("Die settings Seite nicht angemeldete User nicht zugänglich")
-    void test_01() throws Exception {
+    void get_settings_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/settings"))
                 .andExpect(status().is3xxRedirection())
                 .andReturn();
@@ -50,8 +48,7 @@ class SettingsTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT", "REVIEWER", "ADMIN"})
-    @DisplayName("Die settings Seite ist für jeden angemeldeten User zugänglich")
-    void test_02() throws Exception {
+    void get_settings_authorized() throws Exception {
         mvc.perform(get("/settings"))
             .andExpect(status().isOk())
             .andExpect(model().attributeExists("currentPath"))
@@ -60,8 +57,7 @@ class SettingsTest {
 
     @Test
     @WithMockOAuth2User(roles = {"STUDENT"})
-    @DisplayName("Die settings Seite ist für jeden Studenten zugänglich")
-    void test_03() throws Exception {
+    void get_settings_authorized_withOnlyOneRole() throws Exception {
         mvc.perform(get("/settings"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("currentPath"))
@@ -70,8 +66,7 @@ class SettingsTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Das löschen der Daten ist erfolgreich")
-    void test_04() throws Exception {
+    void post_rest_success() throws Exception {
         when(service.reset()).thenReturn(true);
 
         mvc.perform(post("/settings/reset")
@@ -84,8 +79,7 @@ class SettingsTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Das löschen der Daten ist nicht erfolgreich")
-    void test_05() throws Exception {
+    void post_rest_fail() throws Exception {
         when(service.reset()).thenReturn(false);
 
         mvc.perform(post("/settings/reset")

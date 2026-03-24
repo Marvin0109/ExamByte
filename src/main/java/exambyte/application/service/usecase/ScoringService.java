@@ -1,7 +1,7 @@
 package exambyte.application.service.usecase;
 
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.AnswerDTO;
+import exambyte.application.dto.QuestionDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface ScoringService {
 
-    double berechneErreichtePunkte(List<AntwortDTO> antworten, Map<UUID, FrageDTO> fragen, LocalDateTime result);
+    double accumulatedPoints(List<AnswerDTO> answers, Map<UUID, QuestionDTO> questionMap, LocalDateTime result);
 }

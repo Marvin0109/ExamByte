@@ -1,12 +1,10 @@
 package exambyte.application.service.review;
 
-import exambyte.application.common.QuestionTypeDTO;
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.enums.QuestionTypeDTO;
+import exambyte.application.dto.AnswerDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.mapper.KorrekteAntwortenDTOMapper;
-import exambyte.domain.service.KorrekteAntwortenService;
-import exambyte.domain.service.ReviewService;
+import exambyte.application.service.query.CorrectAnswersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -28,11 +26,11 @@ class ReviewGenerationServiceTest {
     private static final UUID STUDENT_ID = UUID.randomUUID();
     private static final LocalDateTime TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
 
-    private FrageDTO frageDTOMC;
-    private AntwortDTO antwortDTOMC;
+    private QuestionDTO questionDTOMC;
+    private AnswerDTO answerMC;
 
-    private FrageDTO frageDTOSC;
-    private AntwortDTO antwortDTOSC;
+    private QuestionDTO questionDTOSC;
+    private AnswerDTO answerSC;
 
     private ReviewDTO reviewDTOMC;
     private ReviewDTO reviewDTOSC;
@@ -41,90 +39,83 @@ class ReviewGenerationServiceTest {
     private AutomaticReviewService automaticReviewService;
 
     @Mock
-    private ReviewService reviewService;
+    private CorrectAnswersService correctAnswersService;
 
-    @Mock
-    private KorrekteAntwortenService korrekteAntwortenService;
-
-    @Mock
-    private KorrekteAntwortenDTOMapper korrekteAntwortenDTOMapper;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         reviewGenerationService = new ReviewGenerationServiceImpl(
                 automaticReviewService,
-                reviewService,
-                korrekteAntwortenService,
-                korrekteAntwortenDTOMapper);
+                correctAnswersService);
 
-        frageDTOMC = new FrageDTO(
+        questionDTOMC = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage",
+                "Question",
                 2,
                 UUID.randomUUID(),
                 QuestionTypeDTO.MC);
 
-        antwortDTOMC = new AntwortDTO(
+        answerMC = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
-                frageDTOMC.id(),
+                "Answer",
+                questionDTOMC.id(),
                 STUDENT_ID,
                 TIME);
 
-        frageDTOSC = new FrageDTO(
+        questionDTOSC = new QuestionDTO(
                 UUID.randomUUID(),
-                "Frage",
+                "Question",
                 1,
                 UUID.randomUUID(),
                 QuestionTypeDTO.SC);
 
-        antwortDTOSC = new AntwortDTO(
+        answerSC = new AnswerDTO(
                 UUID.randomUUID(),
-                "Antwort",
-                frageDTOSC.id(),
+                "Answer",
+                questionDTOSC.id(),
                 STUDENT_ID,
                 TIME);
 
         reviewDTOMC = new ReviewDTO(
                 UUID.randomUUID(),
-                antwortDTOMC.id(),
+                answerMC.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 1);
 
         reviewDTOSC = new ReviewDTO(
                 UUID.randomUUID(),
-                antwortDTOSC.id(),
+                answerSC.id(),
                 UUID.randomUUID(),
-                "Bewertung",
+                "Text",
                 1);
     }
 
     @Test
     void generateReview_MCOnly() {
-        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID)))
                 .thenReturn(List.of(reviewDTOMC));
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
                 STUDENT_ID,
-                List.of(frageDTOMC),
-                List.of(antwortDTOMC));
+                List.of(questionDTOMC),
+                List.of(answerMC));
 
         assertThat(result).hasSize(1);
     }
 
     @Test
     void generateReview_MCWithSC() {
-        when(automaticReviewService.automatischeReviewMC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewMC(any(), any(), any(), eq(STUDENT_ID)))
                 .thenReturn(List.of(reviewDTOMC));
-        when(automaticReviewService.automatischeReviewSC(any(), any(), any(), eq(STUDENT_ID), any()))
+        when(automaticReviewService.autoReviewSC(any(), any(), any(), eq(STUDENT_ID)))
                 .thenReturn(List.of(reviewDTOSC));
 
         List<ReviewDTO> result = reviewGenerationService.generateReviews(
                 STUDENT_ID,
-                List.of(frageDTOMC, frageDTOSC),
-                List.of(antwortDTOMC, antwortDTOSC));
+                List.of(questionDTOMC, questionDTOSC),
+                List.of(answerMC, answerSC));
 
         assertThat(result).hasSize(2);
     }

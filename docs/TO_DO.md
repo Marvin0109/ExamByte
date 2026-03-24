@@ -1,7 +1,7 @@
 # Todo für ExamByte
 
 > **Autor:** Marvin0109,
-> **aktualisiert am:** 18.03.2026
+> **aktualisiert am:** 24.03.2026
 
 > [!IMPORTANT]
 > Die Tasks sollen in der gegebenen Reihenfolge bearbeitet werden wie sie aufgelistet sind.
@@ -19,7 +19,7 @@
 11. [X] CSV-Export einführen
 12. [X] Datenbankoptimierung und Stresstests
 13. [X] Vorschau von Prüfung für Professor
-14. [ ] Sicherstellung von Codekonventionen und Clean Up
+14. [X] Sicherstellung von Codekonventionen und Clean Up
 
 ---
 

@@ -49,7 +49,7 @@
              th:if="${timeLeftBool and alreadySubmitted}">
 
             <form method="get"
-                  th:action="@{/student/startExam/{examFachId}(examFachId=${exam.id})}"
+                  th:action="@{/student/startExam/{examId}(examId=${exam.id})}"
                   style="margin-right: 1rem;">
                 <input type="hidden" name="examFachId" th:value="${exam.id}" />
                 <button type="submit" class="btn btn-outline-primary">
@@ -61,7 +61,7 @@
             <p>
 
             <form method="get"
-                  th:action="@{/student/startWithData/{examFachId}(examFachId=${exam.id})}">
+                  th:action="@{/student/startWithData/{examId}(examId=${exam.id})}">
                 <input type="hidden" name="examFachId" th:value="${exam.id}" />
                 <button type="submit" class="btn btn-outline-secondary">
                     Letzten Versuch ändern
@@ -84,7 +84,7 @@
                 <tbody>
                 <tr th:if="${attempt != null}">
                     <td th:text="${#temporals.format(attempt.lastChanges, 'dd.MM.yyyy HH:mm')}"></td>
-                    <td th:text="${#numbers.formatDecimal(attempt.prozent, 1, 2)} + ' %'"></td>
+                    <td th:text="${#numbers.formatDecimal(attempt.scoreInPercent, 1, 2)} + ' %'"></td>
                 </tr>
                 <tr th:if="${attempt == null}">
                     <td colspan="2"> Keine Versuche vorhanden</td>
@@ -101,7 +101,7 @@
         <div class="card-body">
             <form th:if="${reviewPermission}"
                   method="get"
-                  th:action="@{/student/showReview/{examFachId}(examFachId=${exam.id})}">
+                  th:action="@{/student/showReview/{examId}(examId=${exam.id})}">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-clipboard-check"></i>
                     Korrektur anzeigen

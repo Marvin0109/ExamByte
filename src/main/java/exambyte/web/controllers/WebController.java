@@ -1,7 +1,7 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.ExamControllerService;
-import exambyte.application.service.UserCreationService;
+import exambyte.web.service.ExamControllerService;
+import exambyte.application.service.user.UserCreationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -95,23 +95,12 @@ public class WebController {
     public String resetExamData(RedirectAttributes redirectAttributes) {
         boolean success = service.reset();
 
-        if (success) {
-            redirectAttributes.addFlashAttribute("message", "Daten wurden erfolgreich gelöscht!");
-            redirectAttributes.addFlashAttribute("success", true);
-            return "redirect:/settings";
-        }
-
-        redirectAttributes.addFlashAttribute("message", "Zulassungsszenario am laufen!");
-        redirectAttributes.addFlashAttribute("success", false);
+        redirectAttributes.addFlashAttribute("message",
+                success ? "Daten wurden erfolgreich gelöscht!" : "Zulassungsszenario am laufen!");
+        redirectAttributes.addFlashAttribute("success", success);
         return "redirect:/settings";
     }
 
-    /**
-     * Erzwingt das Abmelden des Benutzers, indem die Session invalidiert und der Sicherheitskontext gelöscht wird.
-     *
-     * @param request Das {@link HttpServletRequest}-Objekt, um die Session zu invalidieren.
-     * @return Eine Weiterleitung zur Startseite nach dem Logout.
-     */
     @PostMapping("/force-logout")
     public String forceLogout(HttpServletRequest request) {
         request.getSession(false).invalidate();

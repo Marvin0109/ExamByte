@@ -1,15 +1,15 @@
 package exambyte.web.controllers;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.application.service.AppUserService;
-import exambyte.application.service.CsvExportService;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
+import exambyte.application.service.user.AppUserService;
+import exambyte.application.service.export.CsvExportService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.form.create_exam.ExamForm;
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.web.form.show_exam.ExamViewForm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,8 +67,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Seite für die Eingabe von Anzahl der Fragetypen ist erreichbar mit entsprechender Rolle")
-    void questionSettings() throws Exception {
+    void get_questionSettings_authorized() throws Exception {
         mvc.perform(get("/professor/questionSettings"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"))
@@ -78,13 +77,13 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Valide Eingabedaten für Generierung von Prüfungsformular")
+    @DisplayName("Valid input to generate examForm")
     void generateQuestions_01() throws Exception {
         MvcResult result = mvc.perform(post("/professor/generateQuestions")
                     .with(csrf())
                 .param("mcCount", "1")
                 .param("scCount", "4")
-                .param("freitextCount", "5"))
+                .param("freeResponseCount", "5"))
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/professor/createExam"))
             .andReturn();
@@ -99,46 +98,44 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Invalide Eingabedaten für die Generierung von Prüfungsformular (0 MC Fragen)")
+    @DisplayName("Invalid input to generate examForm (mcCount is zero)")
     void generateQuestions_02() throws Exception {
         mvc.perform(post("/professor/generateQuestions")
                     .with(csrf())
                 .param("mcCount", "0")
                 .param("scCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Invalide Eingabedaten für die Generierung von Prüfungsformular (11 Freitext Fragen)")
+    @DisplayName("Invalid input to generate examForm (freeResponseCount is greater than 10)")
     void generateQuestions_03() throws Exception {
         mvc.perform(post("/professor/generateQuestions")
                     .with(csrf())
                 .param("mcCount", "1")
                 .param("scCount", "1")
-                .param("freitextCount", "11"))
+                .param("freeResponseCount", "11"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Invalide Eingabedaten für die Generierung von Prüfungsformular (SC Fragen fehlen)")
+    @DisplayName("Invalid input to generate examForm (scCount is missing)")
     void generateQuestions_04() throws Exception {
         mvc.perform(post("/professor/generateQuestions")
                     .with(csrf())
                 .param("mcCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
     }
 
     @Test
-    @DisplayName("Die Seite zum Erstellen von Prüfungen ist für nicht authentifizierte User nicht erreichbar")
-    void showCreateExamForm_01() throws Exception {
-
+    void get_showCreateExamForm_notAuthorized() throws Exception {
         MvcResult mvcResult = mvc.perform(get("/professor/createExam"))
             .andExpect(status().is3xxRedirection())
             .andReturn();
@@ -148,16 +145,14 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Die Seite zum Erstellen von Prüfungen ist für Professoren sichtbar")
-    void showCreateExamForm_02() throws Exception {
-
+    void get_showCreateExamForm_authorized() throws Exception {
         ExamForm form = new ExamForm();
         when(service.createExamForm(anyInt())).thenReturn(form);
 
         mvc.perform(get("/professor/createExam")
                 .param("mcCount", "1")
                 .param("scCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(model().attribute("name", "username"))
             .andExpect(model().attributeExists("examForm"))
@@ -169,13 +164,11 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Die Seite zum Erstellen von Prüfungen ist nicht sichtbar (Invalide Eingabedaten in ModelAttribute)")
-    void showCreateExamForm_03() throws Exception {
-
+    void get_showCreateExamForm_invalid_modelAttribute() throws Exception {
         mvc.perform(get("/professor/createExam")
                 .param("mcCount", "0")
                 .param("scCount", "1")
-                .param("freitextCount", "1"))
+                .param("freeResponseCount", "1"))
             .andExpect(status().isOk())
             .andExpect(view().name("professor/questionSettings"));
 
@@ -184,9 +177,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Das erstellen eines Tests ist erfolgreich")
-    void createExam_01() throws Exception {
-
+    void createExam_success() throws Exception {
         when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("");
 
         mvc.perform(post("/professor/createExam")
@@ -196,21 +187,21 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                .param("questions[0].punkte", "2.5")
+                .param("questions[0].points", "2.5")
                 .param("questions[0].type", "MC")
-                .param("questions[0].questionText", "Text")
-                .param("questions[0].choices", "Antwort1\nAntwort2")
-                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
+                .param("questions[0].text", "Text")
+                .param("questions[0].choices", "Answer1\nAnswer2")
+                .param("questions[0].correctAnswers", "Answer1\nAnswer2")
 
-                .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
-                .param("questions[1].questionText", "Text")
+                .param("questions[1].points", "1")
+                .param("questions[1].type", "FREE_RESPONSE")
+                .param("questions[1].text", "Text")
 
-                .param("questions[2].punkte", "1")
+                .param("questions[2].points", "1")
                 .param("questions[2].type", "SC")
-                .param("questions[2].questionText", "Text")
-                .param("questions[2].choices", "Antwort1\nAntwort2")
-                .param("questions[2].correctAnswer", "Antwort1")
+                .param("questions[2].text", "Text")
+                .param("questions[2].choices", "Answer1\nAnswer2")
+                .param("questions[2].correctAnswer", "Answer1")
             )
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/professor/questionSettings"))
@@ -220,7 +211,7 @@ class ProfessorControllerTest {
     }
 
     @ParameterizedTest(name = "Choices={0} -> Solution={1}")
-    @DisplayName("createExam() schlägt fehl bei ungültigen Antwortoptionen und Lösungen")
+    @DisplayName("Input validation test for choices and correctAnswers")
     @CsvSource({
             "'A\\nB\\nC\\nD', 'E'",
             "'', 'A'",
@@ -235,21 +226,21 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                .param("questions[0].punkte", "2.5")
+                .param("questions[0].points", "2.5")
                 .param("questions[0].type", "MC")
-                .param("questions[0].questionText", "Text")
+                .param("questions[0].text", "Text")
                 .param("questions[0].choices", choices != null ? choices : "")
                 .param("questions[0].correctAnswers", solution != null ? solution : "")
 
-                .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
-                .param("questions[1].questionText", "Text")
+                .param("questions[1].points", "1")
+                .param("questions[1].type", "FREE_RESPONSE")
+                .param("questions[1].text", "Text")
 
-                .param("questions[2].punkte", "1")
+                .param("questions[2].points", "1")
                 .param("questions[2].type", "SC")
-                .param("questions[2].questionText", "Text")
-                .param("questions[2].choices", "Antwort1\nAntwort2")
-                .param("questions[2].correctAnswer", "Antwort1")
+                .param("questions[2].text", "Text")
+                .param("questions[2].choices", "Answer1\nAnswer2")
+                .param("questions[2].correctAnswer", "Answer1")
             )
             .andExpect(status().isOk())
             .andExpect(view().name("professor/createExam"))
@@ -260,8 +251,8 @@ class ProfessorControllerTest {
         assertNotNull(session.getAttribute("questionForm"));
     }
 
-    @ParameterizedTest(name = "Punkte={0}")
-    @DisplayName("createExam() schlägt fehl bei ungültige Angabe von Punkten")
+    @ParameterizedTest(name = "Points={0}")
+    @DisplayName("Input validation test for points")
     @CsvSource({
             "0",
             "0.25",
@@ -269,7 +260,7 @@ class ProfessorControllerTest {
             "''"
     })
     @WithMockOAuth2User(roles = {"ADMIN"})
-    void createExam_parameterizedTest_withPunkte(String punkte) throws Exception {
+    void createExam_parameterizedTest_withPoints(String points) throws Exception {
         MvcResult result = mvc.perform(post("/professor/createExam")
                     .with(csrf())
                 .param("title", "Test")
@@ -277,24 +268,21 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                // erste Frage mit variablem Punktewert
-                .param("questions[0].punkte", punkte != null ? punkte : "")
+                .param("questions[0].points", points != null ? points : "")
                 .param("questions[0].type", "MC")
-                .param("questions[0].questionText", "Text")
-                .param("questions[0].choices", "Antwort1\nAntwort2")
-                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
+                .param("questions[0].text", "Text")
+                .param("questions[0].choices", "Answer1\nAnswer2")
+                .param("questions[0].correctAnswers", "Answer1\nAnswer2")
 
-                // zweite Frage
-                .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
-                .param("questions[1].questionText", "Text")
+                .param("questions[1].points", "1")
+                .param("questions[1].type", "FREE_RESPONSE")
+                .param("questions[1].text", "Text")
 
-                // dritte Frage
-                .param("questions[2].punkte", "1")
+                .param("questions[2].points", "1")
                 .param("questions[2].type", "SC")
-                .param("questions[2].questionText", "Text")
-                .param("questions[2].choices", "Antwort1\nAntwort2")
-                .param("questions[2].correctAnswer", "Antwort1")
+                .param("questions[2].text", "Text")
+                .param("questions[2].choices", "Answer1\nAnswer2")
+                .param("questions[2].correctAnswer", "Answer1")
             )
             .andExpect(status().isOk())
             .andExpect(view().name("professor/createExam"))
@@ -307,10 +295,10 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Ein Exam mit der selben Startzeit existiert bereits / Maximale Kapazität ist überschritten worden")
-    void createExam_06() throws Exception {
+    @DisplayName("Exam count greater than 12 or exam with same start time exists already")
+    void post_createExam_fail() throws Exception {
 
-        when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Error Nachricht");
+        when(service.createExam(any(ExamForm.class), eq("username"))).thenReturn("Any error message");
 
         MvcResult result = mvc.perform(post("/professor/createExam")
                 .with(csrf())
@@ -319,25 +307,25 @@ class ProfessorControllerTest {
                 .param("end", "2020-01-01T01:00")
                 .param("result", "2020-01-01T02:00")
 
-                .param("questions[0].punkte", "1")
+                .param("questions[0].points", "1")
                 .param("questions[0].type", "MC")
-                .param("questions[0].questionText", "Text")
-                .param("questions[0].choices", "Antwort1\nAntwort2")
-                .param("questions[0].correctAnswers", "Antwort1\nAntwort2")
+                .param("questions[0].text", "Text")
+                .param("questions[0].choices", "Answer1\nAnswer2")
+                .param("questions[0].correctAnswers", "Answer1\nAnswer2")
 
-                .param("questions[1].punkte", "1")
-                .param("questions[1].type", "FREITEXT")
-                .param("questions[1].questionText", "Text")
+                .param("questions[1].points", "1")
+                .param("questions[1].type", "FREE_RESPONSE")
+                .param("questions[1].text", "Text")
 
-                .param("questions[2].punkte", "1")
+                .param("questions[2].points", "1")
                 .param("questions[2].type", "SC")
-                .param("questions[2].questionText", "Text")
-                .param("questions[2].choices", "Antwort1\nAntwort2")
-                .param("questions[2].correctAnswer", "Antwort1")
+                .param("questions[2].text", "Text")
+                .param("questions[2].choices", "Answer1\nAnswer2")
+                .param("questions[2].correctAnswer", "Answer1")
             )
             .andExpect(status().is3xxRedirection())
             .andExpect(redirectedUrl("/professor/questionSettings"))
-            .andExpect(flash().attribute("message", "Error Nachricht"))
+            .andExpect(flash().attribute("message", "Any error message"))
             .andExpect(flash().attribute("success", false))
             .andReturn();
 
@@ -349,8 +337,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Anzeige aller Prüfungen")
-    void listExams() throws Exception {
+    void get_listExams_success() throws Exception {
         when(service.getAllExams()).thenReturn(List.of());
 
         mvc.perform(get("/professor/listExams"))
@@ -363,14 +350,14 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Liste die Prüflinge für eine Prüfung auf (Ergebnisse sind vorhanden)")
-    void listParticipants_01() throws Exception {
+    void get_listParticipants_success() throws Exception {
         ExamDTO exam = new ExamDTO(
                 null,
                 "",
                 null,
                 LocalDateTime.of(2026, 1, 1, 8, 0),
                 LocalDateTime.of(2026, 1, 1, 9, 0),
+                // Clock fixed: 2026-01-01T10:00:00Z (result time is before now)
                 LocalDateTime.of(2026, 1, 1, 9, 1)
         );
 
@@ -387,14 +374,14 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Liste die Prüflinge für eine Prüfung auf (keine Ergebnisse sind vorhanden)")
-    void listParticipants_02() throws Exception {
+    void get_listParticipants_fail() throws Exception {
         ExamDTO exam = new ExamDTO(
                 null,
                 "",
                 null,
                 LocalDateTime.of(2026, 1, 1, 8, 0),
                 LocalDateTime.of(2026, 1, 1, 9, 0),
+                // Clock fixed: 2026-01-01T10:00:00Z (result time is after now)
                 LocalDateTime.of(2026, 1, 1, 11, 0)
         );
 
@@ -409,11 +396,11 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Ergebnis eines Studenten für eine Prüfung einsehbar")
-    void showStudentResult() throws Exception {
+    void get_showStudentResult_success() throws Exception {
         when(service.prepareReviewViewForm(any(), any())).thenReturn(mock());
 
-        mvc.perform(get("/professor/showResult/{examId}/{studentName}", UUID.randomUUID(), "Student"))
+        mvc.perform(get("/professor/showResult/{examId}/{studentName}",
+                        UUID.randomUUID(), "Student"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("student/showReview"))
                 .andExpect(model().attributeExists("view"));
@@ -421,8 +408,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Ein Exam kann gelöscht werden")
-    void deleteExam_01() throws Exception {
+    void deleteExam_success() throws Exception {
         when(service.deleteExam(any())).thenReturn(true);
 
         mvc.perform(post("/professor/deleteExam/{examId}", UUID.randomUUID())
@@ -430,13 +416,12 @@ class ProfessorControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/professor/listExams"))
                 .andExpect(flash().attribute("success", true))
-                .andExpect(flash().attribute("message", "Exam erfolgreich gelöscht!"));
+                .andExpect(flash().attribute("message", "Prüfung erfolgreich gelöscht!"));
     }
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Ein laufendes Exam kann nicht gelöscht werden")
-    void deleteExam_02() throws Exception {
+    void deleteExam_fail() throws Exception {
         when(service.deleteExam(any())).thenReturn(false);
 
         mvc.perform(post("/professor/deleteExam/{examId}", UUID.randomUUID())
@@ -444,13 +429,12 @@ class ProfessorControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/professor/listExams"))
                 .andExpect(flash().attribute("success", false))
-                .andExpect(flash().attribute("message", "Exam am laufen!"));
+                .andExpect(flash().attribute("message", "Prüfung am laufen!"));
     }
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Export einer Exam ist erfolgreich")
-    void downloadExam_01() throws Exception {
+    void downloadExam_success() throws Exception {
         UUID examId = UUID.randomUUID();
         ExamDTO exam = mock(ExamDTO.class);
         when(service.getExamByUUID(examId)).thenReturn(exam);
@@ -474,8 +458,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Exception wird geworfen beim Download eines Exams")
-    void downloadExam_02() throws Exception {
+    void downloadExam_fail() throws Exception {
         UUID examId = UUID.randomUUID();
 
         when(service.getExamExport(examId))
@@ -487,8 +470,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Export einer Bewertung ist erfolgreich")
-    void downloadReview_01() throws Exception {
+    void downloadReview_success() throws Exception {
         UUID examId = UUID.randomUUID();
         ExamDTO exam = mock(ExamDTO.class);
         when(service.getExamByUUID(examId)).thenReturn(exam);
@@ -512,8 +494,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Exception wird geworfen beim Download eines Exams")
-    void downloadReview_02() throws Exception {
+    void downloadReview_fail() throws Exception {
         UUID examId = UUID.randomUUID();
 
         when(service.getReviewExport(examId, "Student"))
@@ -525,8 +506,7 @@ class ProfessorControllerTest {
 
     @Test
     @WithMockOAuth2User(roles = {"ADMIN"})
-    @DisplayName("Vorschau eines Exams ist erfolgreich")
-    void showExam() throws Exception {
+    void get_showExam_success() throws Exception {
         when(service.getExamView(any())).thenReturn(mock(ExamViewForm.class));
 
         mvc.perform(get("/professor/showExam/{examId}", UUID.randomUUID()))

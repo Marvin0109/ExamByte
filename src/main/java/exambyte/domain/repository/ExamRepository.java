@@ -1,6 +1,6 @@
 package exambyte.domain.repository;
 
-import exambyte.domain.model.aggregate.exam.Exam;
+import exambyte.domain.model.exam.Exam;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -13,9 +13,9 @@ public interface ExamRepository {
 
     Optional<Exam> findById(UUID id);
 
-    void save(Exam test);
+    void save(Exam exam);
 
-    Optional<UUID> findByStartTime(LocalDateTime startTime);
+    Optional<UUID> findByStartTime(LocalDateTime start);
 
     void deleteById(UUID id);
 

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Error Seite">
+    <meta name="author" content="Marvin0109">
+    <link rel="icon" href="/public/pictures/exambyteIcon.ico">
+
+    <title>Error Page</title>
+
+    <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="/public/bootstrap-5.3.8-dist/css/bootstrap.min.css">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/public/custom/index.css">
+</head>
+
+<body>
+<!-- Navigation -->
+<header th:replace="~{navigation/navbar.html}"> </header>
+
+<main role="main" class="container mt-5 pt-5">
+    <div class="text-center">
+        <h1 class="display-1 fw-bold text-danger">An error has occurred!</h1>
+        <img class="http-cat my-4" th:src="'https://http.cat/' + ${status}" alt="HTTP Cat">
+
+        <h3 class="mb-3" th:text="'Error message: ' + ${error}">Error message</h3>
+
+        <a th:href="@{/}" class="btn btn-primary btn-lg">Zurück zur Startseite</a>
+    </div>
+</main>
+
+<!-- Navigation -->
+<header th:replace="~{navigation/navbarDown.html}"> </header>
+
+<!-- js Imports -->
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

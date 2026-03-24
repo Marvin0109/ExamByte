@@ -1,9 +1,10 @@
 package exambyte.application.service.usecase;
 
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.domain.model.aggregate.exam.Review;
-import exambyte.domain.service.ReviewService;
+import exambyte.application.dto.AnswerDTO;
+import exambyte.application.dto.QuestionDTO;
+import exambyte.application.dto.ReviewDTO;
+import exambyte.application.service.query.ReviewService;
+import exambyte.domain.model.user.AutoReviewer;
 import org.springframework.stereotype.Service;
 
 import java.time.Clock;
@@ -30,26 +31,24 @@ public class ScoringServiceImpl implements ScoringService {
     }
 
     @Override
-    public double berechneErreichtePunkte(List<AntwortDTO> antworten, Map<UUID, FrageDTO> fragen, LocalDateTime result) {
-        return antworten.stream()
+    public double accumulatedPoints(List<AnswerDTO> answers, Map<UUID, QuestionDTO> questionMap, LocalDateTime result) {
+        return answers.stream()
                 .mapToDouble(a -> {
-                    FrageDTO f = fragen.get(a.frageId());
-                    if (f == null) return 0;
-                    Review review = reviewService.getReviewByAntwortId(a.id());
-
-                    UUID automaticReviewer = UUID.fromString("11111111-1111-1111-1111-111111111111");
+                    QuestionDTO q = questionMap.get(a.questionId());
+                    if (q == null) return 0;
+                    ReviewDTO review = reviewService.getReviewByAnswerId(a.id());
 
                     LocalDateTime currentTime = now();
                     if (review == null) {
                         return 0;
                     }
 
-                    boolean isAutomaticReview = review.getKorrektorId().equals(automaticReviewer);
+                    boolean isAutomaticReview = review.reviewerId().equals(AutoReviewer.getAutoReviewer());
 
                     boolean resultTimeReached = !currentTime.isBefore(result);
 
                     if (isAutomaticReview || resultTimeReached) {
-                        return review.getPunkte();
+                        return review.points();
                     }
 
                     return 0;

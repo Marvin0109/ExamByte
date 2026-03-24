@@ -1,16 +1,14 @@
 # Aktueller Stand
 
 >**Autor:** Marvin0109,
->**aktualisiert am:** 18.03.2026
+>**aktualisiert am:** 24.03.2026
 
 > [!NOTE]
 > Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
 > 
-> **UPDATE**:
-> 
-> Seit dem 18.03.26 wird die Weiterentwicklung von ExamByte eingestellt. Das nächste Update wäre die Vereinheitlichung
-> der Sprache vom Quellcode auf Englisch sowie die Überprüfung der restlichen Codekonventionen 
-> gemäß [Styleguide](STYLEGUIDE.md).
+> Seit dem 24.03.26 wurde die Weiterentwicklung von ExamByte eingestellt. Das letzte Update war die Vereinheitlichung
+> der Sprache vom Quellcode auf Englisch, die Überprüfung der restlichen Codekonventionen 
+> gemäß [Styleguide](STYLEGUIDE.md) und die Korrektur der Onion Architektur.
 
 ## Aktivitätsprotokoll
 
@@ -702,3 +700,29 @@ Validierung Informationen)
 - Implementierung von `feature/review-lock` verworfen (Branch wird nicht gemerged und wurde gelöscht) → nicht
 obligatorisch für die Grundfunktion von ExamByte in seiner ersten vollständigen Version
 - Dokumentationen aktualisiert, Screenshots angehängt als visuelle Demonstration von Grundfunktionen
+
+---
+
+### 19.03.2026 - 20.03.2026
+**Bereich:** Sprache
+- Wesentliche Änderungen im Quellcode:
+  - `Korrektor` → `Reviewer`
+  - `Antwort` → `Answer`
+  - `KorrekteAntworten` → `CorrectAnswers`
+- Zugehörige `Mapper`, `Entity`, `DTO` usw. dementsprechend geändert
+- Zustand der Anwendung mithilfe von Regressionstest und manuelles Testing
+überprüft worden
+
+---
+
+### 22.03.2026 - 24.03.2026
+** Bereich:** Sprache / Onion Architektur / Error Page / UX
+- Sprachänderungen im Quellcode:
+  - `Frage` → `Question`
+  - Restliche Methodennamen und Felder
+- Verwendung einer generischen Fehlermeldungsseite für Frontend
+- Logik eingeführt: Student kann keine Lösungen mehr absenden nach Ablauf der Frist
+- Verschmelzung der `infrastructure.service`-Schicht mit `application.service.query`-Schicht
+- Korrektur der Onion Architektur und zusätzliche Tests
+- Extras und clean up
+- Dokumentationen aktualisiert (Inhaltsverzeichnis eingefügt)

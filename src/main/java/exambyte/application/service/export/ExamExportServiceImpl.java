@@ -1,16 +1,16 @@
 package exambyte.application.service.export;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.QuestionDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ProfessorDTO;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.domain.export_mapper.ExamExportDTOMapper;
-import exambyte.application.service.query.ExamQueryService;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.mapper.export.ExamExportDTOMapper;
+import exambyte.application.service.query.ExamService;
 
-import exambyte.application.service.query.FrageQueryService;
-import exambyte.application.service.query.KorrekteAntwortenQueryService;
-import exambyte.application.service.query.ProfessorQueryService;
+import exambyte.application.service.query.QuestionService;
+import exambyte.application.service.query.CorrectAnswersService;
+import exambyte.application.service.query.ProfessorService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,43 +20,43 @@ import java.util.UUID;
 @Service
 public class ExamExportServiceImpl implements ExamExportService {
 
-    private final ExamQueryService examQueryService;
-    private final FrageQueryService frageQueryService;
-    private final ProfessorQueryService professorQueryService;
-    private final KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+    private final ExamService examService;
+    private final QuestionService questionService;
+    private final ProfessorService professorService;
+    private final CorrectAnswersService correctAnswersService;
     private final ExamExportDTOMapper examExportDTOMapper;
 
-    public ExamExportServiceImpl(ExamQueryService examQueryService,
-                                 FrageQueryService frageQueryService,
-                                 ProfessorQueryService professorQueryService,
-                                 KorrekteAntwortenQueryService korrekteAntwortenQueryService,
+    public ExamExportServiceImpl(ExamService examService,
+                                 QuestionService questionService,
+                                 ProfessorService professorService,
+                                 CorrectAnswersService correctAnswersService,
                                  ExamExportDTOMapper examExportDTOMapper) {
-        this.examQueryService = examQueryService;
-        this.frageQueryService = frageQueryService;
-        this.professorQueryService = professorQueryService;
-        this.korrekteAntwortenQueryService = korrekteAntwortenQueryService;
+        this.examService = examService;
+        this.questionService = questionService;
+        this.professorService = professorService;
+        this.correctAnswersService = correctAnswersService;
         this.examExportDTOMapper = examExportDTOMapper;
     }
 
     @Override
     public List<ExamExportDTO> createExamExport(UUID examId) {
-        ExamDTO exam = examQueryService.getExam(examId);
-        ProfessorDTO prof = professorQueryService.getProfessorById(exam.professorId());
-        List<FrageDTO> fragen = frageQueryService.getFragenForExam(examId);
+        ExamDTO exam = examService.getExam(examId);
+        ProfessorDTO prof = professorService.getProfessorById(exam.professorId());
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
 
-        double punkte = fragen.stream()
-                .mapToDouble(FrageDTO::maxPunkte)
+        double points = questions.stream()
+                .mapToDouble(QuestionDTO::points)
                 .sum();
 
-        List<KorrekteAntwortenDTO> loesungen = new ArrayList<>();
+        List<CorrectAnswersDTO> correctAnswersList = new ArrayList<>();
 
-        for (FrageDTO frage : fragen) {
-            KorrekteAntwortenDTO k = korrekteAntwortenQueryService.getLoesungForFrage(frage.id());
+        for (QuestionDTO question : questions) {
+            CorrectAnswersDTO k = correctAnswersService.getCorrectAnswerForQuestion(question.id());
             if (k != null) {
-                loesungen.add(k);
+                correctAnswersList.add(k);
             }
         }
 
-        return examExportDTOMapper.mapDTOToExport(exam, prof.name(), punkte, fragen, loesungen);
+        return examExportDTOMapper.mapDTOToExport(exam, prof.name(), points, questions, correctAnswersList);
     }
 }

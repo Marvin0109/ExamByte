@@ -1,6 +1,6 @@
 package exambyte.application.service;
 
-import exambyte.application.dto.FrageDTO;
+import exambyte.application.dto.QuestionDTO;
 import exambyte.application.service.export.ExamExportService;
 import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
@@ -27,25 +27,25 @@ class ExamFacadeServiceTest {
     private ExamManagementService examManagementService;
 
     @Mock
-    private FrageQueryService frageQueryService;
+    private QuestionService questionService;
 
     @Mock
-    private StudentQueryService studentQueryService;
+    private StudentService studentService;
 
     @Mock
-    private ProfessorQueryService professorQueryService;
+    private ProfessorService professorService;
 
     @Mock
-    private AntwortQueryService antwortQueryService;
+    private AnswerService answerService;
 
     @Mock
-    private ReviewQueryService reviewQueryService;
+    private ReviewService reviewService;
 
     @Mock
-    private KorrektorQueryService korrektorQueryService;
+    private ReviewerService reviewerService;
 
     @Mock
-    private KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+    private CorrectAnswersService correctAnswersService;
 
     @Mock
     private ExamExportService examExportService;
@@ -62,20 +62,20 @@ class ExamFacadeServiceTest {
                 examManagementService,
                 examExportService,
                 reviewExportService,
-                frageQueryService,
-                professorQueryService,
-                korrektorQueryService,
-                studentQueryService,
-                antwortQueryService,
-                reviewQueryService,
-                korrekteAntwortenQueryService);
+                questionService,
+                professorService,
+                reviewerService,
+                studentService,
+                answerService,
+                reviewService,
+                correctAnswersService);
     }
 
     @Test
-    void createChoiceFrageWithCorrectParams() {
-        FrageDTO mockFrageDTO = mock(FrageDTO.class);
-        examFacadeService.createChoiceFrage(mockFrageDTO, "A", "A, B");
-        verify(frageQueryService).createChoiceFrage(mockFrageDTO, "A", "A, B");
+    void createChoiceQuestionWithCorrectParams() {
+        QuestionDTO mockQuestionDTO = mock(QuestionDTO.class);
+        examFacadeService.createChoiceQuestion(mockQuestionDTO, "A", "A, B");
+        verify(questionService).createChoiceQuestion(mockQuestionDTO, "A", "A, B");
     }
 
     @Test
@@ -88,9 +88,9 @@ class ExamFacadeServiceTest {
 
     @Test
     void createReviewWithCorrectParams() {
-        UUID antwortId = UUID.randomUUID();
-        UUID korrektorId = UUID.randomUUID();
-        examFacadeService.createReview("Bewertung", 1, antwortId, korrektorId);
-        verify(reviewQueryService).createReview("Bewertung", 1, antwortId, korrektorId);
+        UUID answerId = UUID.randomUUID();
+        UUID reviewerId = UUID.randomUUID();
+        examFacadeService.createReview("Text", 1, answerId, reviewerId);
+        verify(reviewService).createReview("Text", 1, answerId, reviewerId);
     }
 }

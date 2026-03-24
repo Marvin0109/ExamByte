@@ -1,8 +1,8 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,35 +13,35 @@ import java.util.UUID;
 public interface ExamFacadeService {
 
     String createExam(String profName, String title,
-                       LocalDateTime startDate, LocalDateTime endDate, LocalDateTime resultTime);
+                       LocalDateTime start, LocalDateTime end, LocalDateTime result);
 
     List<ExamDTO> getAllExams();
 
     boolean isExamAlreadySubmitted(UUID examId, String studentName);
 
-    boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examId);
+    boolean submitExam(String studentName, Map<String, List<String>> answer, UUID examId);
 
     ExamDTO getExam(UUID examId);
 
-    List<FrageDTO> getFragenForExam(UUID examId);
+    List<QuestionDTO> getQuestionsForExam(UUID examId);
 
     Optional<UUID> getProfIDByName(String name);
 
     ProfessorDTO getProfessor(UUID profId);
 
-    void createFrage(FrageDTO frageDTO);
+    void createQuestion(QuestionDTO question);
 
-    void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices);
+    void createChoiceQuestion(QuestionDTO question, String correctAnswer, String choices);
 
-    String getChoiceForFrage(UUID frageId);
+    String getChoicesForQuestion(UUID questionId);
 
-    UUID getExamByStartTime(LocalDateTime startTime);
+    UUID getExamByStartTime(LocalDateTime start);
 
     boolean deleteById(UUID examId);
 
     boolean reset();
 
-    VersuchDTO getSubmission(UUID examId, String studentLogin);
+    AttemptDTO getSubmission(UUID examId, String studentName);
 
     void saveAutomaticReviewer();
 
@@ -51,27 +51,27 @@ public interface ExamFacadeService {
 
     boolean isSubmitBeingReviewed(UUID examId, UUID studentId);
 
-    List<FrageDTO> getFreitextFragen(UUID examId);
+    List<QuestionDTO> getFreeResponseQuestions(UUID examId);
 
-    List<AntwortDTO> getFreitextAntwortenForExam(UUID examId);
+    List<AnswerDTO> getFreeResponseSolutionForExam(UUID examId);
 
-    boolean antwortHasReview(AntwortDTO antwort);
+    boolean answerHasReview(AnswerDTO answer);
 
-    void createReview(String bewertung, double punkte, UUID antwortId, UUID korrektorId);
+    void createReview(String text, double points, UUID answerId, UUID reviewerId);
 
     UUID getReviewerByName(String name);
 
     UUID getStudentIdByName(String name);
 
-    AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId);
+    AnswerDTO getAnswerForQuestionIdAndStudentId(UUID frageId, UUID studentId);
 
-    ReviewDTO getReviewForAntwort(UUID antwortId);
+    ReviewDTO getReviewForAnswer(UUID answerId);
 
-    KorrekteAntwortenDTO getLoesungForFrage(UUID frageId);
+    CorrectAnswersDTO getCorrectAnswerForQuestion(UUID frageId);
 
     boolean timeReachedToViewReview(UUID examId);
 
-    KorrektorDTO getReviewerById(UUID reviewerId);
+    ReviewerDTO getReviewerById(UUID reviewerId);
 
     List<ExamExportDTO> getExamExportDTOs(UUID examId);
 

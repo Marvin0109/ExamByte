@@ -1,9 +1,11 @@
 package exambyte.application.service.usecase;
 
 import exambyte.application.dto.*;
+import exambyte.application.enums.SubmitExamResult;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
-import exambyte.infrastructure.exceptions.NichtVorhandenException;
+import exambyte.application.exception.NotFoundException;
+import exambyte.domain.model.exam.ExamCount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,38 +19,36 @@ import java.util.logging.Logger;
 @Service
 public class ExamManagementServiceImpl implements ExamManagementService {
 
-    private final AntwortQueryService antwortQueryService;
+    private final AnswerService answerService;
     private final ReviewGenerationService reviewGenerationService;
-    private final FrageQueryService frageQueryService;
+    private final QuestionService questionService;
     private final ScoringService scoringService;
-    private final ProfessorQueryService professorQueryService;
-    private final StudentQueryService studentQueryService;
-    private final ExamQueryService examQueryService;
-    private final ReviewQueryService reviewQueryService;
+    private final ProfessorService professorService;
+    private final StudentService studentService;
+    private final ExamService examService;
+    private final ReviewService reviewService;
     private final Clock clock;
-
-    private static final int EXAM_COUNT = 12;
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
-    public ExamManagementServiceImpl(AntwortQueryService antwortQueryService,
+    public ExamManagementServiceImpl(AnswerService answerService,
                                      ReviewGenerationService reviewGenerationService,
-                                     FrageQueryService frageQueryService,
+                                     QuestionService questionService,
                                      ScoringService scoringService,
-                                     ProfessorQueryService professorQueryService,
-                                     StudentQueryService studentQueryService,
-                                     ExamQueryService examQueryService,
-                                     ReviewQueryService reviewQueryService,
+                                     ProfessorService professorService,
+                                     StudentService studentService,
+                                     ExamService examService,
+                                     ReviewService reviewService,
                                      Clock clock) {
 
-        this.antwortQueryService = antwortQueryService;
+        this.answerService = answerService;
         this.reviewGenerationService = reviewGenerationService;
-        this.frageQueryService = frageQueryService;
+        this.questionService = questionService;
         this.scoringService = scoringService;
-        this.professorQueryService = professorQueryService;
-        this.studentQueryService = studentQueryService;
-        this.examQueryService = examQueryService;
-        this.reviewQueryService = reviewQueryService;
+        this.professorService = professorService;
+        this.studentService = studentService;
+        this.examService = examService;
+        this.reviewService = reviewService;
         this.clock = clock;
     }
 
@@ -64,8 +64,8 @@ public class ExamManagementServiceImpl implements ExamManagementService {
                              LocalDateTime end,
                              LocalDateTime result) {
 
-        UUID profId = professorQueryService.getProfIdByName(profName)
-                .orElseThrow(() -> new IllegalStateException("Professor noch nicht gespeichert: " + profName));
+        UUID profId = professorService.getProfIdByName(profName)
+                .orElseThrow(() -> new IllegalStateException("Professor not saved yet: " + profName));
 
         if (start.isAfter(end) || start.isEqual(end)) {
             return "Start-Zeitpunkt muss vor End-Zeitpunkt liegen!";
@@ -75,15 +75,15 @@ public class ExamManagementServiceImpl implements ExamManagementService {
             return "Ergebnis-Zeitpunkt muss nach End-Zeitpunkt liegen!";
         }
 
-        List<ExamDTO> exams = examQueryService.getAllExams();
+        List<ExamDTO> exams = examService.getAllExams();
         int examCount = exams.size();
 
-        if (examCount >= EXAM_COUNT) {
+        if (examCount >= ExamCount.getMaxExamCount()) {
             return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
         }
 
         boolean startTimeExists = exams.stream()
-                .anyMatch(e -> e.startTime().truncatedTo(ChronoUnit.MINUTES)
+                .anyMatch(e -> e.start().truncatedTo(ChronoUnit.MINUTES)
                         .equals(start.truncatedTo(ChronoUnit.MINUTES)));
 
         if (startTimeExists) {
@@ -91,120 +91,128 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         }
 
         ExamDTO examDTO = new ExamDTO(null, title, profId, start, end, result);
-        examQueryService.addExam(examDTO);
+        examService.addExam(examDTO);
         return "";
     }
 
-    @Transactional(rollbackFor = {Exception.class, NichtVorhandenException.class})
+    @Transactional(rollbackFor = {Exception.class, NotFoundException.class})
     @Override
-    public SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId) {
+    public SubmitExamResult submitExam(String studentName, Map<String, List<String>> answerMap, UUID examId) {
         UUID studentId = resolveStudent(studentName);
         if (studentId == null) return SubmitExamResult.STUDENT_NOT_FOUND;
 
-        antwortQueryService.saveAnswers(studentId, antworten);
+        ExamDTO exam = examService.getExam(examId);
+        if (checkSubmitTime(exam.end())) {
+            return SubmitExamResult.SAVE_ANSWERS_FAILED;
+        }
+
+        answerService.saveAnswers(studentId, answerMap);
 
         return generateAndSaveReviews(studentId, examId);
     }
 
+    private boolean checkSubmitTime(LocalDateTime end) {
+        return end.isBefore(now()) || end.isEqual(now());
+    }
+
     private UUID resolveStudent(String studentName) {
         try {
-            return studentQueryService.getStudentIdByName(studentName);
+            return studentService.getStudentIdByName(studentName);
         } catch (Exception e) {
-            String msg = "Student nicht gefunden: " + studentName;
+            String msg = "Student not found: " + studentName;
             logger.log(Level.SEVERE, msg, e);
             return null;
         }
     }
 
     private SubmitExamResult generateAndSaveReviews(UUID studentId, UUID examId) {
-        List<FrageDTO> fragenList = frageQueryService.getFragenForExam(examId);
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
 
-        List<AntwortDTO> antwortList = fragenList.stream()
-                .map(f -> antwortQueryService.findByStudentAndFrage(studentId, f.id()))
+        List<AnswerDTO> answerList = questions.stream()
+                .map(f -> answerService.findByStudentAndQuestion(studentId, f.id()))
                 .filter(Objects::nonNull)
                 .toList();
 
         List<ReviewDTO> allReviews = reviewGenerationService.generateReviews(
                 studentId,
-                fragenList,
-                antwortList);
+                questions,
+                answerList);
 
         try {
             allReviews.forEach(this::saveReviews);
             return SubmitExamResult.SUCCESS;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Fehler beim Speichern der Reviews", e);
+            logger.log(Level.SEVERE, "Failed saving reviews", e);
             return SubmitExamResult.REVIEW_SAVE_FAILED;
         }
     }
 
     private void saveReviews(ReviewDTO reviewDTO) {
-        reviewQueryService.createReview(
-                reviewDTO.bewertung(),
-                reviewDTO.punkte(),
-                reviewDTO.antwortId(),
-                reviewDTO.korrektorId()
+        reviewService.createReview(
+                reviewDTO.text(),
+                reviewDTO.points(),
+                reviewDTO.answerId(),
+                reviewDTO.reviewerId()
         );
     }
 
     @Override
-    public VersuchDTO getSubmission(UUID examId, String studentName) {
-        UUID studentId = studentQueryService.getStudentIdByName(studentName);
+    public AttemptDTO getSubmission(UUID examId, String studentName) {
+        UUID studentId = studentService.getStudentIdByName(studentName);
 
-        ExamDTO exam = examQueryService.getExam(examId);
-        Map<UUID, FrageDTO> frageMap = frageQueryService.getFragenUUIDMap(examId);
-        List<AntwortDTO> alleAntworten = antwortQueryService.getAntworten(studentId, frageMap.keySet());
+        ExamDTO exam = examService.getExam(examId);
+        Map<UUID, QuestionDTO> questionMap = questionService.getQuestionUUIDMap(examId);
+        List<AnswerDTO> allAnswers = answerService.getAnswers(studentId, questionMap.keySet());
 
-        // Gesamt-MaxPunkte
-        double gesamtMaxPunkte = frageMap.values().stream()
-                .mapToDouble(FrageDTO::maxPunkte)
+        double totalPoints = questionMap.values().stream()
+                .mapToDouble(QuestionDTO::points)
                 .sum();
 
-        double erreichtePunkte = scoringService.berechneErreichtePunkte(alleAntworten, frageMap, exam.resultTime());
+        double accumulatedPoints = scoringService.accumulatedPoints(allAnswers, questionMap, exam.result());
 
-        double prozent = gesamtMaxPunkte > 0
-                ? (erreichtePunkte / gesamtMaxPunkte) * 100.0
+        double scoreInPercent = totalPoints > 0
+                ? (accumulatedPoints / totalPoints) * 100.0
                 : 0.0;
 
-        LocalDateTime zeitpunkt = alleAntworten.stream()
-                .map(AntwortDTO::antwortZeitpunkt)
+        LocalDateTime submitTime = allAnswers.stream()
+                .map(AnswerDTO::submitTime)
                 .max(LocalDateTime::compareTo)
                 .orElse(LocalDateTime.now());
 
-        return new VersuchDTO(
-                zeitpunkt,
-                erreichtePunkte,
-                gesamtMaxPunkte,
-                prozent
+        return new AttemptDTO(
+                submitTime,
+                accumulatedPoints,
+                totalPoints,
+                scoreInPercent
         );
     }
 
     @Override
     public List<ExamDTO> getAllExams() {
-        return examQueryService.getAllExams();
+        return examService.getAllExams();
     }
 
     @Override
     public boolean hasStudentSubmittedExam(UUID examId, String studentName) {
-        return examQueryService.hasStudentSubmittedExam(examId, studentName);
+        return examService.hasStudentSubmittedExam(examId, studentName);
     }
 
     @Override
     public ExamDTO getExam(UUID examId) {
-        return examQueryService.getExam(examId);
+        return examService.getExam(examId);
     }
 
     @Override
-    public UUID getExamIdByStartTime(LocalDateTime startTime) {
-        return examQueryService.getExamIdByStartTime(startTime);
+    public UUID getExamIdByStartTime(LocalDateTime start) {
+        return examService.getExamIdByStartTime(start);
     }
 
     @Override
     public boolean deleteById(UUID id) {
-        ExamDTO exam = examQueryService.getExam(id);
+        ExamDTO exam = examService.getExam(id);
 
-        if (now().isBefore(exam.startTime()) || exam.resultTime().isBefore(now())) {
-            examQueryService.deleteById(exam.id());
+        if (now().isBefore(exam.start()) || exam.result().isBefore(now())) {
+            examService.deleteById(exam.id());
             return true;
         }
         return false;
@@ -212,16 +220,16 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public boolean resetAllExamDataCascade() {
-        List<ExamDTO> examList = examQueryService.getAllExams();
+        List<ExamDTO> examList = examService.getAllExams();
 
-        if (examList.size() != EXAM_COUNT) return false;
+        if (examList.size() != ExamCount.getMaxExamCount()) return false;
         else {
             for (ExamDTO exam : examList) {
-                if (exam.endTime().isAfter(now())) {
+                if (exam.end().isAfter(now())) {
                     return false;
                 }
             }
-            examQueryService.resetAllExamDataCascade();
+            examService.resetAllExamDataCascade();
         }
 
         return true;
@@ -229,7 +237,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
 
     @Override
     public boolean allowedToViewReview(UUID examId) {
-        ExamDTO exam = examQueryService.getExam(examId);
-        return exam.resultTime().isBefore(now().truncatedTo(ChronoUnit.MINUTES));
+        ExamDTO exam = examService.getExam(examId);
+        return exam.result().isBefore(now().truncatedTo(ChronoUnit.MINUTES));
     }
 }

@@ -1,7 +1,7 @@
 package exambyte.infrastructure.config;
 
-import exambyte.application.service.AppUserService;
-import exambyte.infrastructure.service.AppUserServiceImpl;
+import exambyte.application.service.user.AppUserService;
+import exambyte.application.service.user.AppUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,64 +10,64 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Diese Klasse konfiguriert die Sicherheitsrichtlinien für die Webanwendung,
- * einschließlich Authentifizierung, Autorisierung und Logout-Logik.
+ * This class configures the security policies for the web application,
+ * including authentication, authorization, and logout logic.
  *
- * <p>Die Konfiguration legt fest, welche URLs öffentlich zugänglich sind und welche eine Authentifizierung erfordern.</p>
- * <p>Die OAuth2-Login-Integration wird konfiguriert, wobei ein benutzerdefinierter {@link AppUserService} verwendet wird,
- * um Benutzerinformationen zu laden. Die eigentliche Implementierung liegt in {@link AppUserServiceImpl}</p>
- * <p>Die Logout-Logik wird so konfiguriert, dass nach dem Logout die Session invalidiert und bestimmte Cookies gelöscht werden.</p>
+ * <p>The configuration defines which URLs are publicly accessible and which require authentication.</p>
  *
- * <p><b>Wichtiger Hinweis:</b> Es gibt ein bekanntes Problem mit der Logout-Funktionalität, bei dem der Browser geschlossen werden muss,
- * um den Login-Cookie zu löschen.</p>
+ * <p>The OAuth2 login integration is configured using a custom
+ * {@link AppUserService} to load user information.
+ * The actual implementation is provided by {@link AppUserServiceImpl}.</p>
+ *
+ * <p>The logout logic is configured so that the session is invalidated
+ * and the security context is cleared after logout.</p>
+ *
+ * <p><b>Important note:</b> For a new login, the browser must be closed or a new session must be started.</p>
  *
  * @see AppUserServiceImpl
  */
+
 @Configuration
 public class SecurityConfig {
 
     private final AppUserService appUserService;
 
-    /**
-     * Konstruktor für die {@link SecurityConfig}, der den {@link AppUserService} injiziert.
-     *
-     * @param appUserService Der benutzerdefinierte {@link AppUserService}, der zur Authentifizierung der Benutzer verwendet wird.
-     */
     @Autowired
     public SecurityConfig(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
 
     /**
-     * Diese Methode konfiguriert die {@link SecurityFilterChain} für die Webanwendung,
-     * um den Zugriff auf URLs zu regeln und die Authentifizierung zu steuern.
+     * This method configures the {@link SecurityFilterChain} for the web application,
+     * defining access rules for URLs and controlling authentication.
      *
-     * <p>Bestimmte URLs (wie z.B. "/login" und "/public/**") sind ohne Authentifizierung zugänglich.</p>
-     * <p>Alle anderen Anfragen erfordern eine Authentifizierung, die durch eine OAuth2-Login-Integration bereitgestellt wird.</p>
-     * <p>Die Logout-Logik stellt sicher, dass die Session invalidiert und Cookies gelöscht werden.</p>
+     * <p>Certain URLs (such as "/login" and "/public/**") are accessible without authentication.</p>
+     * <p>All other requests require authentication, which is provided via OAuth2 login integration.</p>
+     * <p>The logout logic ensures that the session is invalidated and cookies are cleared.</p>
      *
-     * @param chainBuilder Der {@link HttpSecurity}-Builder, der verwendet wird, um die Sicherheitsrichtlinien zu konfigurieren.
-     * @return Eine konfigurierte {@link SecurityFilterChain}-Instanz, die die Sicherheitsrichtlinien anwendet.
-     * @throws Exception Falls ein Fehler bei der Konfiguration der Sicherheitsfilterkette auftritt.
+     * @param chainBuilder The {@link HttpSecurity} builder used to configure the security policies.
+     * @return A configured {@link SecurityFilterChain} instance that applies the security rules.
+     * @throws Exception If an error occurs while configuring the security filter chain.
      */
+
     @Bean
     public SecurityFilterChain configure(HttpSecurity chainBuilder) throws Exception {
         return chainBuilder
                 .authorizeHttpRequests(configure -> configure
-                        .requestMatchers("/", "/login", "/oauth2/**", "/public/**").permitAll()
+                        .requestMatchers("/", "/error", "/login", "/oauth2/**", "/public/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(config -> config.userInfoEndpoint(
                         info -> info.userService(appUserService)
                 ))
                 .logout(logout -> logout
-                        .logoutUrl("/logout") // URL für Logout
-                        .logoutSuccessUrl("/") // Nach erfolgreichem Logout
-                        .invalidateHttpSession(true) // Session invalidieren
-                        .deleteCookies("JSESSIONID") // Cookies löschen
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                         .addLogoutHandler(
                                 (request, response, authentication) ->
-                                    SecurityContextHolder.clearContext() // Sicherheitskontext löschen
+                                    SecurityContextHolder.clearContext()
                         )
                 )
                 .build();

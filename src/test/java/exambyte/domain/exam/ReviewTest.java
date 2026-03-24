@@ -1,7 +1,6 @@
 package exambyte.domain.exam;
 
-import exambyte.domain.model.aggregate.exam.Review;
-import org.junit.jupiter.api.DisplayName;
+import exambyte.domain.model.exam.Review;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -11,26 +10,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ReviewTest {
 
     @Test
-    @DisplayName("ReviewBuilder Test")
-    void test_01() {
+    void review_builder_test() {
         UUID id = UUID.randomUUID();
-        UUID antwortId = UUID.randomUUID();
-        UUID korrektorId = UUID.randomUUID();
-        String bewertung = "Good work";
-        double punkte = 85;
+        UUID answerId = UUID.randomUUID();
+        UUID reviewerId = UUID.randomUUID();
+        String text = "Good work";
+        double points = 85;
 
         Review review = new Review.ReviewBuilder()
                 .id(id)
-                .antwortId(antwortId)
-                .korrektorId(korrektorId)
-                .bewertung(bewertung)
-                .punkte(punkte)
+                .answerId(answerId)
+                .reviewerId(reviewerId)
+                .text(text)
+                .points(points)
                 .build();
 
         assertEquals(id, review.getId());
-        assertEquals(antwortId, review.getAntwortId());
-        assertEquals(korrektorId, review.getKorrektorId());
-        assertEquals(bewertung, review.getBewertung());
-        assertEquals(punkte, review.getPunkte());
+        assertEquals(answerId, review.getAnswerId());
+        assertEquals(reviewerId, review.getReviewerId());
+        assertEquals(text, review.getText());
+        assertEquals(points, review.getPoints());
     }
 }

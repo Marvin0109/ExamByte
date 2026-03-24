@@ -1,16 +1,16 @@
 package exambyte.integration;
 
-import exambyte.application.service.ExamControllerService;
-import exambyte.domain.model.aggregate.exam.Antwort;
-import exambyte.domain.model.aggregate.exam.Exam;
-import exambyte.domain.model.aggregate.exam.Frage;
-import exambyte.domain.model.aggregate.exam.Review;
-import exambyte.domain.model.aggregate.user.Korrektor;
-import exambyte.domain.model.aggregate.user.Professor;
-import exambyte.domain.model.aggregate.user.Student;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.web.service.ExamControllerService;
+import exambyte.domain.model.exam.Answer;
+import exambyte.domain.model.exam.Exam;
+import exambyte.domain.model.exam.Question;
+import exambyte.domain.model.exam.Review;
+import exambyte.domain.model.user.Reviewer;
+import exambyte.domain.model.user.Professor;
+import exambyte.domain.model.user.Student;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.*;
-import exambyte.infrastructure.persistence.container.TestcontainerConfiguration;
+import exambyte.infrastructure.container.TestcontainerConfiguration;
 import exambyte.web.form.create_review.ReviewForm;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +37,16 @@ class SubmitReviewIT {
     private ProfessorRepository professorRepository;
 
     @Autowired
-    private KorrektorRepository korrektorRepository;
+    private ReviewerRepository reviewerRepository;
 
     @Autowired
     private ExamRepository examRepository;
 
     @Autowired
-    private FrageRepository frageRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private AntwortRepository antwortRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private ReviewRepository reviewRepository;
@@ -72,59 +72,59 @@ class SubmitReviewIT {
         Optional<Professor> profLoaded = professorRepository.findByName("Professor");
         assertThat(profLoaded).isPresent();
 
-        // Korrektor
-        Korrektor korrektor = new Korrektor.KorrektorBuilder()
-                .name("Korrektor")
+        // Reviewer
+        Reviewer reviewer = new Reviewer.ReviewerBuilder()
+                .name("Reviewer")
                 .build();
-        korrektorRepository.save(korrektor);
-        Optional<Korrektor> korrektorLoaded = korrektorRepository.findByName("Korrektor");
-        assertThat(korrektorLoaded).isPresent();
+        reviewerRepository.save(reviewer);
+        Optional<Reviewer> reviewerLoaded = reviewerRepository.findByName("Reviewer");
+        assertThat(reviewerLoaded).isPresent();
 
         // Exam
         LocalDateTime start = LocalDateTime.of(2026, 1, 1, 0, 0);
         Exam exam = new Exam.ExamBuilder()
                 .title("Exam")
                 .professorId(profLoaded.get().id())
-                .startTime(start)
-                .endTime(start.plusDays(1))
-                .resultTime(start.plusDays(2))
+                .start(start)
+                .end(start.plusDays(1))
+                .result(start.plusDays(2))
                 .build();
         examRepository.save(exam);
         Optional<UUID> examId = examRepository.findByStartTime(start);
         assertThat(examId).isPresent();
 
-        // Frage
-        Frage frage = new Frage.FrageBuilder()
+        // Question
+        Question question = new Question.FrageBuilder()
                 .examId(examId.get())
-                .frageText("Frage")
-                .maxPunkte(5)
-                .type(QuestionType.FREITEXT)
+                .text("Question")
+                .points(5)
+                .type(QuestionType.FREE_RESPONSE)
                 .build();
-        frageRepository.save(frage);
-        List<Frage> frageLoaded = frageRepository.findByExamId(examId.get());
-        assertThat(frageLoaded).isNotEmpty();
+        questionRepository.save(question);
+        List<Question> questionLoaded = questionRepository.findByExamId(examId.get());
+        assertThat(questionLoaded).isNotEmpty();
 
-        // Antwort
-        Antwort antwort = new Antwort.AntwortBuilder()
-                .frageId(frageLoaded.getFirst().getId())
-                .antwortText("Antwort")
+        // Answer
+        Answer answer = new Answer.AnswerBuilder()
+                .questionId(questionLoaded.getFirst().getId())
+                .answer("Answer")
                 .studentId(studentId.get())
-                .antwortZeitpunkt(LocalDateTime.of(2026, 1, 1, 1, 0))
+                .submitTime(LocalDateTime.of(2026, 1, 1, 1, 0))
                 .build();
-        antwortRepository.save(antwort);
-        Optional<Antwort> antwortLoaded = antwortRepository
-                .findByStudentIdAndFrageId(studentId.get(), frageLoaded.getFirst().getId());
-        assertThat(antwortLoaded).isPresent();
+        answerRepository.save(answer);
+        Optional<Answer> answerLoaded = answerRepository
+                .findByStudentIdAndQuestionId(studentId.get(), questionLoaded.getFirst().getId());
+        assertThat(answerLoaded).isPresent();
 
         ReviewForm form = new ReviewForm();
-        form.setBewertung("Bewertung");
-        form.setPunkteVergeben(5.0);
+        form.setReviewText("Text");
+        form.setPoints(5.0);
 
-        examControllerService.createReview(form, antwortLoaded.get().getId(), korrektorLoaded.get().id());
+        examControllerService.createReview(form, answerLoaded.get().getId(),reviewerLoaded.get().id());
 
-        Review review = reviewRepository.findByAntwortId(antwortLoaded.get().getId());
+        Review review = reviewRepository.findByAnswerId(answerLoaded.get().getId());
 
         assertThat(review).isNotNull();
-        assertThat(review.getPunkte()).isEqualTo(5);
+        assertThat(review.getPoints()).isEqualTo(5);
     }
 }

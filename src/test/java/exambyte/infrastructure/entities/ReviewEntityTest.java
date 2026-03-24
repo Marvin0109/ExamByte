@@ -1,6 +1,6 @@
 package exambyte.infrastructure.entities;
 
-import exambyte.infrastructure.persistence.entities.ReviewEntity;
+import exambyte.infrastructure.entity.ReviewEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,43 +13,43 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ReviewEntityTest {
 
     @ParameterizedTest
-    @DisplayName("Pflichtfeld fehlt -> IllegalStateException")
-    @MethodSource("ungueltigeBuilder")
+    @DisplayName("Field missing -> IllegalStateException")
+    @MethodSource("invalidBuilder")
     void createReviewEntity_fail(ReviewEntity.ReviewEntityBuilder builder) {
         assertThrows(IllegalStateException.class, builder::build);
     }
 
-    static Stream<ReviewEntity.ReviewEntityBuilder> ungueltigeBuilder() {
+    static Stream<ReviewEntity.ReviewEntityBuilder> invalidBuilder() {
         return Stream.of(
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("")
-                        .antwortId(UUID.randomUUID())
-                        .korrektorId(UUID.randomUUID())
-                        .punkte(1),
+                        .text("")
+                        .answerId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung(" ")
-                        .antwortId(UUID.randomUUID())
-                        .korrektorId(UUID.randomUUID())
-                        .punkte(1),
+                        .text(" ")
+                        .answerId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("Bewertung")
-                        .antwortId(null)
-                        .korrektorId(UUID.randomUUID())
-                        .punkte(1),
+                        .text("Text")
+                        .answerId(null)
+                        .reviewerId(UUID.randomUUID())
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("Bewertung")
-                        .antwortId(UUID.randomUUID())
-                        .korrektorId(null)
-                        .punkte(1),
+                        .text("Text")
+                        .answerId(UUID.randomUUID())
+                        .reviewerId(null)
+                        .points(1),
 
                 new ReviewEntity.ReviewEntityBuilder()
-                        .bewertung("Bewertung")
-                        .antwortId(UUID.randomUUID())
-                        .korrektorId(UUID.randomUUID())
-                        .punkte(-1)
+                        .text("Text")
+                        .answerId(UUID.randomUUID())
+                        .reviewerId(UUID.randomUUID())
+                        .points(-1)
         );
     }
 }

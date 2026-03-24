@@ -1,8 +1,9 @@
 package exambyte.web.service;
 
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.application.service.CsvExportService;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
+import exambyte.application.service.export.CsvExportService;
+import exambyte.application.service.export.CsvExportServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ class CsvExportServiceTest {
     void exportExamToCsv() {
         ExamExportDTO dto = new ExamExportDTO();
         dto.setExamTitle("Test 1");
-        dto.setMaxPunkte(10);
+        dto.setTotalPoints(10);
 
         List<ExamExportDTO> list = List.of(dto);
 
@@ -34,7 +35,7 @@ class CsvExportServiceTest {
         String csv = new String(result, StandardCharsets.UTF_8);
 
         assertNotNull(result);
-        assertTrue(csv.contains("examTitle"));
+        assertTrue(csv.contains("Pruefungstitel"));
         assertTrue(csv.contains("Test 1"));
         assertTrue(csv.contains(";"));
     }
@@ -48,14 +49,14 @@ class CsvExportServiceTest {
         String csv = new String(result, StandardCharsets.UTF_8);
 
         assertNotNull(result);
-        assertTrue(csv.contains("examTitle"));
+        assertTrue(csv.contains("Pruefungstitel"));
     }
 
     @Test
     void exportReviewToCsv() {
         ReviewExportDTO dto = new ReviewExportDTO();
         dto.setExamTitle("Test 1");
-        dto.setMaxPunkte(10);
+        dto.setTotalPoints(10);
 
         List<ReviewExportDTO> list = List.of(dto);
 
@@ -64,7 +65,7 @@ class CsvExportServiceTest {
         String csv = new String(result, StandardCharsets.UTF_8);
 
         assertNotNull(result);
-        assertTrue(csv.contains("examTitle"));
+        assertTrue(csv.contains("Pruefungstitel"));
         assertTrue(csv.contains("Test 1"));
         assertTrue(csv.contains(";"));
     }
@@ -78,6 +79,6 @@ class CsvExportServiceTest {
         String csv = new String(result, StandardCharsets.UTF_8);
 
         assertNotNull(result);
-        assertTrue(csv.contains("examTitle"));
+        assertTrue(csv.contains("Pruefungstitel"));
     }
 }

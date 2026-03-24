@@ -1,12 +1,12 @@
 package exambyte.web.service;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.application.service.ExamControllerService;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.ExamFacadeService;
-import exambyte.web.common.QuestionTypeWeb;
+import exambyte.domain.model.exam.ExamCount;
+import exambyte.web.enums.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;
@@ -28,7 +28,6 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     private final ExamFacadeService service;
     private final HelperService helperService;
-    private static final double EXAM_COUNT = 12;
 
     public ExamControllerServiceImpl(ExamFacadeService service, HelperService helperService) {
         this.service = service;
@@ -41,9 +40,9 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
         for (int i = 0; i < countQuestions; i++) {
             QuestionData q = new QuestionData();
-            q.setQuestionText("");
+            q.setText("");
             q.setType("");
-            q.setPunkte(0.0);
+            q.setPoints(0.0);
             q.setChoices("");
             q.setCorrectAnswers("");
             q.setCorrectAnswer("");
@@ -54,41 +53,41 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public ExamForm fillExamForm(UUID examUUID) {
-        ExamDTO examDTO = service.getExam(examUUID);
-        List<FrageDTO> fragen = service.getFragenForExam(examUUID);
+    public ExamForm fillExamForm(UUID examId) {
+        ExamDTO examDTO = service.getExam(examId);
+        List<QuestionDTO> questionDTOList = service.getQuestionsForExam(examId);
 
         ExamForm form = new ExamForm();
-        form.setStart(examDTO.startTime());
-        form.setEnd(examDTO.endTime());
-        form.setEnd(examDTO.endTime());
+        form.setStart(examDTO.start());
+        form.setEnd(examDTO.end());
+        form.setEnd(examDTO.end());
         form.setTitle(examDTO.title());
-        form.setId(examUUID);
+        form.setId(examId);
 
-        List<QuestionData> questions = new ArrayList<>();
+        List<QuestionData> questionDataList = new ArrayList<>();
 
-        for (FrageDTO frage : fragen) {
+        for (QuestionDTO dto : questionDTOList) {
             QuestionData questionData = new QuestionData();
-            questionData.setQuestionText(frage.frageText());
-            questionData.setPunkte(frage.maxPunkte());
-            questionData.setType(frage.type().toString());
-            questionData.setId(frage.id());
+            questionData.setText(dto.text());
+            questionData.setPoints(dto.points());
+            questionData.setType(dto.type().toString());
+            questionData.setId(dto.id());
             if (questionData.getType().equals("MC") || questionData.getType().equals("SC")) {
-                String choice = service.getChoiceForFrage(frage.id());
+                String choice = service.getChoicesForQuestion(dto.id());
                 String normalized = helperService.normalizeAnswerForFrontend(choice);
                 questionData.setChoices(normalized);
             }
-            questions.add(questionData);
+            questionDataList.add(questionData);
         }
 
-        form.setQuestions(questions);
+        form.setQuestions(questionDataList);
 
         return form;
     }
 
     @Override
-    public UUID getExamUUIDByStartTime(LocalDateTime startTime) {
-        return service.getExamByStartTime(startTime);
+    public UUID getExamUUIDByStartTime(LocalDateTime start) {
+        return service.getExamByStartTime(start);
     }
 
     @Override
@@ -103,8 +102,8 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public ExamDTO getExamByUUID(UUID examUUID) {
-        return service.getExam(examUUID);
+    public ExamDTO getExamByUUID(UUID examId) {
+        return service.getExam(examId);
     }
 
     @Override
@@ -113,13 +112,13 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public List<FrageDTO> getFragenForExam(UUID examUUID) {
-        return service.getFragenForExam(examUUID);
+    public List<QuestionDTO> getQuestionsForExam(UUID examId) {
+        return service.getQuestionsForExam(examId);
     }
 
     @Override
-    public boolean examIsAlreadySubmitted(UUID examUUID, String studentLogin) {
-        return service.isExamAlreadySubmitted(examUUID, studentLogin);
+    public boolean examIsAlreadySubmitted(UUID examId, String studentLogin) {
+        return service.isExamAlreadySubmitted(examId, studentLogin);
     }
 
     @Override
@@ -128,56 +127,56 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void createQuestions(ExamForm form, UUID examUUID) {
+    public void createQuestions(ExamForm form, UUID examId) {
         for (QuestionData q : form.getQuestions()) {
-            String frageText = q.getQuestionText();
-            frageText = frageText.replace("\\n", "\n");
-            QuestionTypeWeb frageTyp;
+            String questionText = q.getText();
+            questionText = questionText.replace("\\n", "\n");
+            QuestionTypeWeb type;
 
             try {
-                frageTyp = QuestionTypeWeb.valueOf(q.getType().trim());
+                type = QuestionTypeWeb.valueOf(q.getType().trim());
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Fehlender Fragetyp im ENUM: " + q.getType(), e);
+                throw new IllegalArgumentException("Unknown question type: " + q.getType(), e);
             }
 
-            double maxPunkte = q.getPunkte();
+            double points = q.getPoints();
 
-            switch(frageTyp) {
-                case QuestionTypeWeb.FREITEXT:
-                    service.createFrage(new FrageDTO(null, frageText,
-                            maxPunkte, examUUID, QuestionTypeDTO.valueOf(frageTyp.name())));
+            switch(type) {
+                case QuestionTypeWeb.FREE_RESPONSE:
+                    service.createQuestion(new QuestionDTO(null, questionText,
+                            points, examId, QuestionTypeDTO.valueOf(type.name())));
                     break;
                 case QuestionTypeWeb.SC:
                     String correctAnswer = q.getCorrectAnswer();
-                    FrageDTO f1 = new FrageDTO(null, frageText, maxPunkte, examUUID,
-                            QuestionTypeDTO.valueOf(frageTyp.name()));
-                    service.createChoiceFrage(f1, correctAnswer, q.getChoices());
+                    QuestionDTO f1 = new QuestionDTO(null, questionText, points, examId,
+                            QuestionTypeDTO.valueOf(type.name()));
+                    service.createChoiceQuestion(f1, correctAnswer, q.getChoices());
                     break;
                 case QuestionTypeWeb.MC:
                     String correctAnswers = q.getCorrectAnswers();
-                    FrageDTO f2 = new FrageDTO(null, frageText, maxPunkte, examUUID,
-                            QuestionTypeDTO.valueOf(frageTyp.name()));
-                    service.createChoiceFrage(f2, correctAnswers, q.getChoices());
+                    QuestionDTO f2 = new QuestionDTO(null, questionText, points, examId,
+                            QuestionTypeDTO.valueOf(type.name()));
+                    service.createChoiceQuestion(f2, correctAnswers, q.getChoices());
                     break;
                 default:
-                    throw new IllegalStateException("Unbehandelter Fragetyp: " + frageTyp);
+                    throw new IllegalStateException("Unkown question type: " + type);
             }
         }
     }
 
     @Override
-    public VersuchDTO getAttempt(UUID examUUID, String studentLogin) {
-        return service.getSubmission(examUUID, studentLogin);
+    public AttemptDTO getAttempt(UUID examId, String studentLogin) {
+        return service.getSubmission(examId, studentLogin);
     }
 
     @Override
-    public double getZulassungsProgress(String studentLogin) {
-        List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
+    public double getEligibilityProgress(String studentLogin) {
+        List<AttemptDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
-        double progressForSuccessAttempt = 100.0 / EXAM_COUNT;
+        double progressForSuccessAttempt = 100.0 / ExamCount.getMaxExamCount();
         double progress = 0.0;
-        for (VersuchDTO v : allValidAttempts) {
-            if (v.erreichtePunkte() >= v.maxPunkte() * 0.5) {
+        for (AttemptDTO v : allValidAttempts) {
+            if (v.accumulatedPoints() >= v.totalPoints() * 0.5) {
                 progress += progressForSuccessAttempt;
             }
         }
@@ -187,10 +186,10 @@ public class ExamControllerServiceImpl implements ExamControllerService {
 
     @Override
     public boolean hasAnyFailedAttempt(String studentLogin) {
-        List<VersuchDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
+        List<AttemptDTO> allValidAttempts = helperService.getValidAttempts(studentLogin);
 
-        for (VersuchDTO v : allValidAttempts) {
-            if (v.erreichtePunkte() < v.maxPunkte() * 0.5) {
+        for (AttemptDTO attempt : allValidAttempts) {
+            if (attempt.accumulatedPoints() < attempt.totalPoints() * 0.5) {
                 return true;
             }
         }
@@ -217,27 +216,27 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     @Override
     public ExamTimeInfo getExamTimeInfo(ExamDTO examDTO) {
         boolean timeLeft = false;
-        String fristAnzeige = helperService.getExamAvailabilityNotice(examDTO);
-        if (fristAnzeige.isEmpty()) {
-            fristAnzeige = helperService.getTimeDifference(examDTO);
+        String deadlineDisplay = helperService.getExamAvailabilityNotice(examDTO);
+        if (deadlineDisplay.isEmpty()) {
+            deadlineDisplay = helperService.getTimeDifference(examDTO);
             timeLeft = true;
         }
 
-        return new ExamTimeInfo(fristAnzeige, timeLeft);
+        return new ExamTimeInfo(deadlineDisplay, timeLeft);
     }
 
     @Override
-    public boolean submitExam(String name, Map<String, List<String>> answers, UUID examUUID) {
-        return service.submitExam(name, answers, examUUID);
+    public boolean submitExam(String name, Map<String, List<String>> answers, UUID examId) {
+        return service.submitExam(name, answers, examId);
     }
 
     @Override
-    public List<SubmitInfo> getSubmitInfo(UUID examUUID) {
-        List<StudentDTO> students = service.getStudentSubmittedExam(examUUID);
+    public List<SubmitInfo> getSubmitInfo(UUID examId) {
+        List<StudentDTO> students = service.getStudentSubmittedExam(examId);
         List<SubmitInfo> submitInfoList = new ArrayList<>();
 
         for (StudentDTO student : students) {
-            if (service.isSubmitBeingReviewed(examUUID, student.id())) {
+            if (service.isSubmitBeingReviewed(examId, student.id())) {
                 submitInfoList.add(new SubmitInfo(student.name(), student.id(),  true));
             } else {
                 submitInfoList.add(new SubmitInfo(student.name(), student.id(), false));
@@ -263,33 +262,33 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public Map<FrageDTO, AntwortDTO> getFreitextAntwortenForExamAndStudent(UUID examId, UUID studentId) {
-        List<FrageDTO> fragen = service.getFreitextFragen(examId);
-        List<AntwortDTO> antworten = service.getFreitextAntwortenForExam(examId);
+    public Map<QuestionDTO, AnswerDTO> getFreeResponseSolutionForExamAndStudent(UUID examId, UUID studentId) {
+        List<QuestionDTO> questions = service.getFreeResponseQuestions(examId);
+        List<AnswerDTO> answers = service.getFreeResponseSolutionForExam(examId);
 
-        Map<FrageDTO, AntwortDTO> resultMap = new HashMap<>();
+        Map<QuestionDTO, AnswerDTO> resultMap = new HashMap<>();
 
-        for (FrageDTO frage : fragen) {
-            antworten.stream()
-                    .filter(a -> a.frageId().equals(frage.id()))
+        for (QuestionDTO question : questions) {
+            answers.stream()
+                    .filter(a -> a.questionId().equals(question.id()))
                     .filter(a -> a.studentId().equals(studentId))
-                    .findFirst().ifPresent(ans -> resultMap.put(frage, ans));
+                    .findFirst().ifPresent(ans -> resultMap.put(question, ans));
         }
 
         return resultMap;
     }
 
     @Override
-    public List<AnswerForm> createAnswerForm(Map<FrageDTO, AntwortDTO> map) {
+    public List<AnswerForm> createAnswerForm(Map<QuestionDTO, AnswerDTO> map) {
         List<AnswerForm> answerFormList = new ArrayList<>();
 
-        for (Map.Entry<FrageDTO, AntwortDTO> entry : map.entrySet()) {
-            if (!service.antwortHasReview(entry.getValue())) {
+        for (Map.Entry<QuestionDTO, AnswerDTO> entry : map.entrySet()) {
+            if (!service.answerHasReview(entry.getValue())) {
                 AnswerForm answerForm = new AnswerForm();
-                answerForm.setFrageText(entry.getKey().frageText());
-                answerForm.setAntwort(entry.getValue().antwortText());
-                answerForm.setMaxPunkte(entry.getKey().maxPunkte());
-                answerForm.setAntwortId(entry.getValue().id());
+                answerForm.setQuestionText(entry.getKey().text());
+                answerForm.setAnswer(entry.getValue().answer());
+                answerForm.setQuestionPoints(entry.getKey().points());
+                answerForm.setAnswerId(entry.getValue().id());
 
                 answerFormList.add(answerForm);
             }
@@ -299,12 +298,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public void createReview(ReviewForm reviewForm, UUID antwortId, UUID korrektorId) {
+    public void createReview(ReviewForm reviewForm, UUID answerId, UUID reviewerId) {
         service.createReview(
-                reviewForm.getBewertung(),
-                reviewForm.getPunkteVergeben(),
-                antwortId,
-                korrektorId);
+                reviewForm.getReviewText(),
+                reviewForm.getPoints(),
+                answerId,
+                reviewerId);
     }
 
     @Override
@@ -313,8 +312,8 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public ReviewViewForm prepareReviewViewForm(UUID examUUID, String studentName) {
-        return helperService.prepareReviewViewForm(examUUID, studentName);
+    public ReviewViewForm prepareReviewViewForm(UUID examId, String studentName) {
+        return helperService.prepareReviewViewForm(examId, studentName);
     }
 
     @Override
@@ -348,12 +347,12 @@ public class ExamControllerServiceImpl implements ExamControllerService {
     }
 
     @Override
-    public List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freitextCount) {
+    public List<QuestionTypeWeb> createQuestionTypeList(int mcCount, int scCount, int freeResponseCount) {
         List<QuestionTypeWeb> questionTypeWebList = new ArrayList<>();
 
         questionTypeWebList.addAll(Collections.nCopies(mcCount, QuestionTypeWeb.MC));
         questionTypeWebList.addAll(Collections.nCopies(scCount, QuestionTypeWeb.SC));
-        questionTypeWebList.addAll(Collections.nCopies(freitextCount, QuestionTypeWeb.FREITEXT));
+        questionTypeWebList.addAll(Collections.nCopies(freeResponseCount, QuestionTypeWeb.FREE_RESPONSE));
 
         Collections.shuffle(questionTypeWebList);
 

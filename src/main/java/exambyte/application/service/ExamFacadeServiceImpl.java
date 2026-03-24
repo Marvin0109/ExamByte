@@ -1,14 +1,14 @@
 package exambyte.application.service;
 
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ExamExportDTO;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
+import exambyte.application.dto.export.ExamExportDTO;
+import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.export.ExamExportService;
 import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
 import exambyte.application.service.usecase.ReviewManagementService;
 import exambyte.application.service.usecase.ExamManagementService;
-import exambyte.application.service.usecase.SubmitExamResult;
+import exambyte.application.enums.SubmitExamResult;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,48 +21,48 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     private final ExamManagementService examManagementService;
     private final ExamExportService examExportService;
     private final ReviewExportService reviewExportService;
-    private final FrageQueryService frageQueryService;
-    private final ProfessorQueryService professorQueryService;
-    private final KorrektorQueryService korrektorQueryService;
-    private final StudentQueryService studentQueryService;
-    private final AntwortQueryService antwortQueryService;
-    private final ReviewQueryService reviewQueryService;
-    private final KorrekteAntwortenQueryService korrekteAntwortenQueryService;
+    private final QuestionService questionService;
+    private final ProfessorService professorService;
+    private final ReviewerService reviewerService;
+    private final StudentService studentService;
+    private final AnswerService answerService;
+    private final ReviewService reviewService;
+    private final CorrectAnswersService correctAnswersService;
 
 
     public ExamFacadeServiceImpl(ReviewManagementService reviewManagementService,
                                  ExamManagementService examManagementService,
                                  ExamExportService examExportService,
                                  ReviewExportService reviewExportService,
-                                 FrageQueryService frageQueryService,
-                                 ProfessorQueryService professorQueryService,
-                                 KorrektorQueryService korrektorQueryService,
-                                 StudentQueryService studentQueryService,
-                                 AntwortQueryService antwortQueryService,
-                                 ReviewQueryService reviewQueryService,
-                                 KorrekteAntwortenQueryService korrekteAntwortenQueryService) {
+                                 QuestionService questionService,
+                                 ProfessorService professorService,
+                                 ReviewerService reviewerService,
+                                 StudentService studentService,
+                                 AnswerService answerService,
+                                 ReviewService reviewService,
+                                 CorrectAnswersService correctAnswersService) {
 
         this.reviewManagementService = reviewManagementService;
         this.examManagementService = examManagementService;
         this.examExportService = examExportService;
         this.reviewExportService = reviewExportService;
-        this.frageQueryService = frageQueryService;
-        this.professorQueryService = professorQueryService;
-        this.korrektorQueryService = korrektorQueryService;
-        this.studentQueryService = studentQueryService;
-        this.antwortQueryService = antwortQueryService;
-        this.reviewQueryService = reviewQueryService;
-        this.korrekteAntwortenQueryService = korrekteAntwortenQueryService;
+        this.questionService = questionService;
+        this.professorService = professorService;
+        this.reviewerService = reviewerService;
+        this.studentService = studentService;
+        this.answerService = answerService;
+        this.reviewService = reviewService;
+        this.correctAnswersService = correctAnswersService;
     }
 
     @Override
     public String createExam(String professorName,
                               String title,
-                              LocalDateTime startTime,
-                              LocalDateTime endTime,
-                              LocalDateTime resultTime) {
+                              LocalDateTime start,
+                              LocalDateTime end,
+                              LocalDateTime result) {
 
-        return examManagementService.createExam(professorName, title, startTime, endTime, resultTime);
+        return examManagementService.createExam(professorName, title, start, end, result);
     }
 
     @Override
@@ -76,8 +76,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public boolean submitExam(String studentLogin, Map<String, List<String>> antworten, UUID examId) {
-        SubmitExamResult result = examManagementService.submitExam(studentLogin, antworten, examId);
+    public boolean submitExam(String studentName, Map<String, List<String>> answer, UUID examId) {
+        SubmitExamResult result = examManagementService.submitExam(studentName, answer, examId);
         return result.equals(SubmitExamResult.SUCCESS);
     }
 
@@ -87,43 +87,43 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public List<FrageDTO> getFragenForExam(UUID examId) {
-        return frageQueryService.getFragenForExam(examId);
+    public List<QuestionDTO> getQuestionsForExam(UUID examId) {
+        return questionService.getQuestionsForExam(examId);
     }
 
     @Override
     public Optional<UUID> getProfIDByName(String name) {
-        return professorQueryService.getProfIdByName(name);
+        return professorService.getProfIdByName(name);
     }
 
     @Override
     public ProfessorDTO getProfessor(UUID profId) {
-        return professorQueryService.getProfessorById(profId);
+        return professorService.getProfessorById(profId);
     }
 
     @Override
-    public void createFrage(FrageDTO frageDTO) {
-        frageQueryService.createFrage(frageDTO);
+    public void createQuestion(QuestionDTO question) {
+        questionService.createQuestion(question);
     }
 
     @Override
-    public void createChoiceFrage(FrageDTO frageDTO, String correctAnswer, String choices) {
-        frageQueryService.createChoiceFrage(frageDTO, correctAnswer, choices);
+    public void createChoiceQuestion(QuestionDTO question, String correctAnswer, String choices) {
+        questionService.createChoiceQuestion(question, correctAnswer, choices);
     }
 
     @Override
-    public String getChoiceForFrage(UUID frageId) {
-         return frageQueryService.getChoiceForFrage(frageId);
+    public String getChoicesForQuestion(UUID questionId) {
+         return questionService.getChoiceForQuestion(questionId);
     }
 
     @Override
-    public UUID getExamByStartTime(LocalDateTime startTime) {
-        return examManagementService.getExamIdByStartTime(startTime);
+    public UUID getExamByStartTime(LocalDateTime start) {
+        return examManagementService.getExamIdByStartTime(start);
     }
 
     @Override
-    public boolean deleteById(UUID uuid) {
-        return examManagementService.deleteById(uuid);
+    public boolean deleteById(UUID id) {
+        return examManagementService.deleteById(id);
     }
 
     @Override
@@ -132,13 +132,13 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public VersuchDTO getSubmission(UUID examId, String studentLogin) {
-        return examManagementService.getSubmission(examId, studentLogin);
+    public AttemptDTO getSubmission(UUID examId, String studentName) {
+        return examManagementService.getSubmission(examId, studentName);
     }
 
     @Override
     public void saveAutomaticReviewer() {
-        korrektorQueryService.saveAutomaticReviewer();
+        reviewerService.saveAutomaticReviewer();
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
 
     @Override
     public List<StudentDTO> getStudentSubmittedExam(UUID examId) {
-        return studentQueryService.getStudentSubmittedExam(examId);
+        return studentService.getStudentSubmittedExam(examId);
     }
 
     @Override
@@ -157,48 +157,48 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public List<FrageDTO> getFreitextFragen(UUID examId) {
-        return frageQueryService.getFreitextFragen(examId);
+    public List<QuestionDTO> getFreeResponseQuestions(UUID examId) {
+        return questionService.getFreeResponseQuestions(examId);
     }
 
     @Override
-    public List<AntwortDTO> getFreitextAntwortenForExam(UUID examId) {
-        return antwortQueryService.getFreitextAntwortenForExam(examId);
+    public List<AnswerDTO> getFreeResponseSolutionForExam(UUID examId) {
+        return answerService.getFreeResponseAnswersForExam(examId);
     }
 
     @Override
-    public boolean antwortHasReview(AntwortDTO antwort) {
-       return reviewQueryService.antwortHasReview(antwort.id());
+    public boolean answerHasReview(AnswerDTO answer) {
+       return reviewService.answerHasReview(answer.id());
     }
 
     @Override
-    public void createReview(String bewertung, double punkte, UUID antwortId, UUID korrektorId) {
-        reviewQueryService.createReview(bewertung, punkte, antwortId, korrektorId);
+    public void createReview(String text, double points, UUID answerId, UUID reviewerId) {
+        reviewService.createReview(text, points, answerId, reviewerId);
     }
 
     @Override
     public UUID getReviewerByName(String name) {
-        return korrektorQueryService.getReviewerIdByName(name);
+        return reviewerService.getReviewerIdByName(name);
     }
 
     @Override
     public UUID getStudentIdByName(String name) {
-        return studentQueryService.getStudentIdByName(name);
+        return studentService.getStudentIdByName(name);
     }
 
     @Override
-    public AntwortDTO getAntwortForFrageAndStudent(UUID frageId, UUID studentId) {
-        return antwortQueryService.findByStudentAndFrage(studentId, frageId);
+    public AnswerDTO getAnswerForQuestionIdAndStudentId(UUID questionId, UUID studentId) {
+        return answerService.findByStudentAndQuestion(studentId, questionId);
     }
 
     @Override
-    public ReviewDTO getReviewForAntwort(UUID antwortId) {
-        return reviewQueryService.getReviewByAntwortId(antwortId);
+    public ReviewDTO getReviewForAnswer(UUID answerId) {
+        return reviewService.getReviewByAnswerId(answerId);
     }
 
     @Override
-    public KorrekteAntwortenDTO getLoesungForFrage(UUID frageId) {
-        return korrekteAntwortenQueryService.getLoesungForFrage(frageId);
+    public CorrectAnswersDTO getCorrectAnswerForQuestion(UUID questionId) {
+        return correctAnswersService.getCorrectAnswerForQuestion(questionId);
     }
 
     @Override
@@ -207,8 +207,8 @@ public class ExamFacadeServiceImpl implements ExamFacadeService {
     }
 
     @Override
-    public KorrektorDTO getReviewerById(UUID reviewerId) {
-        return korrektorQueryService.getReviewerById(reviewerId);
+    public ReviewerDTO getReviewerById(UUID reviewerId) {
+        return reviewerService.getReviewerById(reviewerId);
     }
 
     @Override

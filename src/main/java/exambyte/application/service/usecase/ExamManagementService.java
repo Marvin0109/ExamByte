@@ -1,7 +1,8 @@
 package exambyte.application.service.usecase;
 
 import exambyte.application.dto.ExamDTO;
-import exambyte.application.dto.VersuchDTO;
+import exambyte.application.dto.AttemptDTO;
+import exambyte.application.enums.SubmitExamResult;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.UUID;
 public interface ExamManagementService {
     String createExam(String profName, String title, LocalDateTime start, LocalDateTime end, LocalDateTime result);
 
-    SubmitExamResult submitExam(String studentName, Map<String, List<String>> antworten, UUID examId);
+    SubmitExamResult submitExam(String studentName, Map<String, List<String>> answers, UUID examId);
 
-    VersuchDTO getSubmission(UUID examId, String studentName);
+    AttemptDTO getSubmission(UUID examId, String studentName);
 
     List<ExamDTO> getAllExams();
 
@@ -21,7 +22,7 @@ public interface ExamManagementService {
 
     ExamDTO getExam(UUID examId);
 
-    UUID getExamIdByStartTime(LocalDateTime startTime);
+    UUID getExamIdByStartTime(LocalDateTime start);
 
     boolean deleteById(UUID examId);
 

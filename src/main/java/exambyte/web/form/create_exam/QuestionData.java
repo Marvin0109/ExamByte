@@ -12,14 +12,14 @@ import java.util.UUID;
 public class QuestionData {
 
     @NotBlank(message = "Fragetext darf nicht leer sein!")
-    private String questionText;
+    private String text;
 
     private String type;
 
     @NotNull(message = "Punkte müssen angegeben werden")
     @HalfPoints
     @DecimalMin(value = "0.5", message = "Punkte müssen mehr als 0.5 sein")
-    private Double punkte;
+    private Double points;
 
     private String choices;
     private String correctAnswer;
@@ -27,12 +27,12 @@ public class QuestionData {
 
     private UUID id;
 
-    public String getQuestionText() {
-        return questionText;
+    public String getText() {
+        return text;
     }
 
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getType() {
@@ -43,12 +43,12 @@ public class QuestionData {
         this.type = type;
     }
 
-    public Double getPunkte() {
-        return punkte;
+    public Double getPoints() {
+        return points;
     }
 
-    public void setPunkte(Double punkte) {
-        this.punkte = punkte;
+    public void setPoints(Double points) {
+        this.points = points;
     }
 
     public void setId(UUID id) {

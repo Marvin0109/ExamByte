@@ -28,65 +28,65 @@
 
     <h5 th:text="'Autor: ' + ${exam.authorName}">Autor</h5>
 
-    <h5 th:text="'Gesamtpunktzahl: ' + ${exam.maxPunkte}">Punkte</h5>
+    <h5 th:text="'Gesamtpunktzahl: ' + ${exam.points}">Punkte</h5>
 
     <div th:each="viewItem, iterStat : ${exam.questions}" class="mb-3">
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
-                <p class="card-text" th:text="'Fragestellung: ' + ${viewItem.frage.frageText}">Fragestellung</p>
-                <p th:text="'Punkte: ' + ${viewItem.frage.maxPunkte}">Punkte</p>
+                <p class="card-text" th:text="'Fragestellung: ' + ${viewItem.question.text}">Fragestellung</p>
+                <p th:text="'Punkte: ' + ${viewItem.question.points}">Punkte</p>
 
                 <!-- Multiple Choice -->
-                <div class="mb-2" th:if="${viewItem.frage.type.name == 'MC'}">
+                <div class="mb-2" th:if="${viewItem.question.type.name == 'MC'}">
                     <p class="card-text">Lösung:</p>
                     <div class="form-check mb-2"
-                         th:each="antwort : ${#strings.arraySplit(viewItem.korrekteAntworten.antwortOptionen, ',')}">
+                         th:each="answer : ${#strings.arraySplit(viewItem.correctAnswers.choices, ',')}">
                         <input class="form-check-input"
                                type="checkbox"
                                disabled="disabled"
-                               th:id="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
-                               th:name="${viewItem.frage.id}"
+                               th:id="'answer-' + ${viewItem.question.id} + '-' + ${iterStat.index}"
+                               th:name="${viewItem.question.id}"
                                th:checked="${#arrays.contains(
-                               #strings.arraySplit(viewItem.korrekteAntworten.antworten, ','),
-                               antwort)}"
-                               th:value="${antwort}" />
+                               #strings.arraySplit(viewItem.correctAnswers.solution, ','),
+                               answer)}"
+                               th:value="${answer}" />
                         <label class="form-check-label w-100"
-                               th:for="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
-                               th:text="${antwort.replace('ĸ', ',')}">
+                               th:for="'answer-' + ${viewItem.question.id} + '-' + ${iterStat.index}"
+                               th:text="${answer.replace('ĸ', ',')}">
                         </label>
                     </div>
                 </div>
 
                 <!-- Single Choice -->
-                <div class="mb-2" th:if="${viewItem.frage.type.name == 'SC'}">
+                <div class="mb-2" th:if="${viewItem.question.type.name == 'SC'}">
                     <p class="card-text">Lösung:</p>
                     <div class="form-check mb-2"
-                         th:each="antwort : ${#strings.arraySplit(viewItem.korrekteAntworten.antwortOptionen, ',')}">
+                         th:each="answer : ${#strings.arraySplit(viewItem.correctAnswers.choices, ',')}">
                         <input class="form-check-input"
                                type="radio"
                                disabled="disabled"
-                               th:id="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
-                               th:name="${viewItem.frage.id}"
+                               th:id="'answer-' + ${viewItem.question.id} + '-' + ${iterStat.index}"
+                               th:name="${viewItem.question.id}"
                                th:checked="${#arrays.contains(
-                               #strings.arraySplit(viewItem.korrekteAntworten.antworten, ','),
-                               antwort)}"
-                               th:value="${antwort}" />
+                               #strings.arraySplit(viewItem.correctAnswers.solution, ','),
+                               answer)}"
+                               th:value="${answer}" />
                         <label class="form-check-label w-100"
-                               th:for="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
-                               th:text="${antwort.replace('ĸ', ',')}">
+                               th:for="'answer-' + ${viewItem.question.id} + '-' + ${iterStat.index}"
+                               th:text="${answer.replace('ĸ', ',')}">
                         </label>
                     </div>
                 </div>
 
-                <!-- Freitext -->
-                <div class="mb-2" th:if="${viewItem.frage.type.name == 'FREITEXT'}">
+                <!-- FREE_RESPONSE -->
+                <div class="mb-2" th:if="${viewItem.question.type.name == 'FREE_RESPONSE'}">
                     <label class="form-label"
-                           th:for="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}">
+                           th:for="'answer-' + ${viewItem.question.id} + '-' + ${iterStat.index}">
                         Antwort:
                     </label>
-                    <textarea th:name="${viewItem.frage.id}"
-                              th:id="'antwort-' + ${viewItem.frage.id} + '-' + ${iterStat.index}"
+                    <textarea th:name="${viewItem.question.id}"
+                              th:id="'answer-' + ${viewItem.question.id} + '-' + ${iterStat.index}"
                               class="form-control"
                               disabled="disabled">
                     </textarea>

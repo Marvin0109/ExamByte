@@ -1,8 +1,9 @@
 package exambyte.web.service;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamFacadeService;
+import exambyte.domain.model.user.AutoReviewer;
 import exambyte.web.form.load_old_submit_data.OldDataDTO;
 import exambyte.web.form.load_old_submit_data.OldDataForm;
 import exambyte.web.form.show_exam.ExamAggregateDTO;
@@ -37,14 +38,14 @@ public class HelperServiceImpl implements HelperService {
     }
 
     @Override
-    public List<VersuchDTO> getValidAttempts(String studentName) {
+    public List<AttemptDTO> getValidAttempts(String studentName) {
         List<ExamDTO> exams = service.getAllExams();
-        List<VersuchDTO> allValidAttempts = new ArrayList<>();
+        List<AttemptDTO> allValidAttempts = new ArrayList<>();
 
         for (ExamDTO exam : exams) {
-            VersuchDTO v = service.getSubmission(exam.id(), studentName);
-            if (exam.resultTime().isBefore(now())) {
-                allValidAttempts.add(v);
+            AttemptDTO attempt = service.getSubmission(exam.id(), studentName);
+            if (exam.result().isBefore(now())) {
+                allValidAttempts.add(attempt);
             }
         }
 
@@ -55,14 +56,14 @@ public class HelperServiceImpl implements HelperService {
     public String getExamAvailabilityNotice(ExamDTO dto) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d. MMM yyyy, HH:mm");
 
-        if (now().isBefore(dto.startTime())) {
-            String startTimeFormatted = dto.startTime().format(formatter);
+        if (now().isBefore(dto.start())) {
+            String startTimeFormatted = dto.start().format(formatter);
 
             return "Der Test kann erst ab den " + startTimeFormatted + " bearbeitet werden.";
         }
 
-        if (now().isAfter(dto.endTime()) || now().isEqual(dto.endTime())) {
-            String endTimeFormatted = dto.endTime().format(formatter);
+        if (now().isAfter(dto.end()) || now().isEqual(dto.end())) {
+            String endTimeFormatted = dto.end().format(formatter);
 
             return "Sie haben die längstmögliche Bearbeitungsdauer des Tests überschritten. Der Test " +
                     "konnte nur bis " + endTimeFormatted + " bearbeitet werden.";
@@ -73,40 +74,40 @@ public class HelperServiceImpl implements HelperService {
 
     @Override
     public String getTimeDifference(ExamDTO examDTO) {
-        StringBuilder fristAnzeige = new StringBuilder();
-        String tageAnzeige = "";
-        String stundenAnzeige = "";
-        String minutenAnzeige = "";
+        StringBuilder deadlineDisplay = new StringBuilder();
+        String daysDisplay = "";
+        String hoursDisplay = "";
+        String minutesDisplay = "";
 
         Duration diff = Duration.between(now(),
-                examDTO.endTime().truncatedTo(ChronoUnit.MINUTES));
+                examDTO.end().truncatedTo(ChronoUnit.MINUTES));
 
         long days = diff.toDays();
         long hours = diff.toHours() % 24;
         long minutes = diff.toMinutes() % 60;
 
         if (days == 1) {
-            tageAnzeige = days + " Tag";
+            daysDisplay = days + " Tag";
         } else if (days > 1) {
-            tageAnzeige = days + " Tage";
+            daysDisplay = days + " Tage";
         }
 
         if (hours == 1) {
-            stundenAnzeige = hours + " Stunde";
+            hoursDisplay = hours + " Stunde";
         } else if (hours > 1) {
-            stundenAnzeige = hours + " Stunden";
+            hoursDisplay = hours + " Stunden";
         }
 
         if (minutes == 1) {
-            minutenAnzeige = minutes + " Minute";
+            minutesDisplay = minutes + " Minute";
         } else if (minutes > 1) {
-            minutenAnzeige = minutes + " Minuten";
+            minutesDisplay = minutes + " Minuten";
         }
 
-        if (!tageAnzeige.isEmpty()) fristAnzeige.append(tageAnzeige).append(" ");
-        if (!stundenAnzeige.isEmpty()) fristAnzeige.append(stundenAnzeige).append(" ");
-        if (!minutenAnzeige.isEmpty()) fristAnzeige.append(minutenAnzeige).append(" ");
-        return fristAnzeige.toString();
+        if (!daysDisplay.isEmpty()) deadlineDisplay.append(daysDisplay).append(" ");
+        if (!hoursDisplay.isEmpty()) deadlineDisplay.append(hoursDisplay).append(" ");
+        if (!minutesDisplay.isEmpty()) deadlineDisplay.append(minutesDisplay).append(" ");
+        return deadlineDisplay.toString();
     }
 
     @Override
@@ -121,40 +122,37 @@ public class HelperServiceImpl implements HelperService {
     }
 
     @Override
-    public PreparedFrageData prepareFrageData(FrageDTO frage, UUID studentId) {
-        AntwortDTO antwort = service.getAntwortForFrageAndStudent(frage.id(), studentId);
-        KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.id());
+    public PreparedQuestionData prepareFrageData(QuestionDTO question, UUID studentId) {
+        AnswerDTO answer = service.getAnswerForQuestionIdAndStudentId(question.id(), studentId);
+        CorrectAnswersDTO correctAnswers = service.getCorrectAnswerForQuestion(question.id());
 
-        if (frage.type().name().equals("MC") || frage.type().name().equals("SC")) {
-            k = normalizeKorrekteAntworten(k);
+        if (question.type().name().equals("MC") || question.type().name().equals("SC")) {
+            correctAnswers = normalizeCorrectAnswers(correctAnswers);
 
-            if (antwort != null) {
-                String normalized = normalizeAnswerForFrontend(antwort.antwortText());
-                antwort = new AntwortDTO(
-                        antwort.id(),
+            if (answer != null) {
+                String normalized = normalizeAnswerForFrontend(answer.answer());
+                answer = new AnswerDTO(
+                        answer.id(),
                         normalized,
-                        antwort.frageId(),
-                        antwort.studentId(),
-                        antwort.antwortZeitpunkt()
+                        answer.questionId(),
+                        answer.studentId(),
+                        answer.submitTime()
                 );
             }
         }
 
-        return new PreparedFrageData(frage, antwort, k);
+        return new PreparedQuestionData(question, answer, correctAnswers);
     }
 
-    private KorrekteAntwortenDTO normalizeKorrekteAntworten(KorrekteAntwortenDTO k) {
-        String optionen = k.antwortOptionen();
-        String optionenNormalized = normalizeAnswerForFrontend(optionen);
+    private CorrectAnswersDTO normalizeCorrectAnswers(CorrectAnswersDTO correctAnswers) {
+        String choicesNormalized = normalizeAnswerForFrontend(correctAnswers.choices());
+        String solutionNormalized = normalizeAnswerForFrontend(correctAnswers.solution());
 
-        String loesung = k.antworten();
-        String loesungNormalized = normalizeAnswerForFrontend(loesung);
-
-        return new KorrekteAntwortenDTO(
-                k.id(),
-                loesungNormalized,
-                optionenNormalized,
-                k.frageId()
+        return new CorrectAnswersDTO(
+                correctAnswers.id(),
+                solutionNormalized,
+                choicesNormalized,
+                correctAnswers.questionId()
         );
     }
 
@@ -162,27 +160,27 @@ public class HelperServiceImpl implements HelperService {
     public ReviewViewForm prepareReviewViewForm(UUID examId, String studentName) {
         ExamDTO exam = service.getExam(examId);
         UUID studentId = service.getStudentIdByName(studentName);
-        VersuchDTO versuch = service.getSubmission(examId, studentName);
+        AttemptDTO attempt = service.getSubmission(examId, studentName);
 
-        List<FrageDTO> fragen = service.getFragenForExam(examId);
+        List<QuestionDTO> questions = service.getQuestionsForExam(examId);
         List<ReviewAggregateDTO> componentList = new ArrayList<>();
-        List<UUID> korrektoren = new ArrayList<>();
+        List<UUID> reviewers = new ArrayList<>();
 
-        for (FrageDTO frage : fragen) {
-            PreparedFrageData preparedFrageData = prepareFrageData(frage, studentId);
-            AntwortDTO antwort = preparedFrageData.antwort();
+        for (QuestionDTO question : questions) {
+            PreparedQuestionData preparedQuestionData = prepareFrageData(question, studentId);
+            AnswerDTO answer = preparedQuestionData.answer();
 
-            KorrekteAntwortenDTO k = preparedFrageData.korrekteAntwortenDTO();
+            CorrectAnswersDTO k = preparedQuestionData.correctAnswers();
 
-            if (antwort != null) {
-                ReviewDTO review = service.getReviewForAntwort(antwort.id());
-                if (review != null) korrektoren.add(review.korrektorId());
-                componentList.add(new ReviewAggregateDTO(frage, antwort, review, k));
+            if (answer != null) {
+                ReviewDTO review = service.getReviewForAnswer(answer.id());
+                if (review != null) reviewers.add(review.reviewerId());
+                componentList.add(new ReviewAggregateDTO(question, answer, review, k));
             } else {
-                AntwortDTO emptyAntwort = new AntwortDTO(
+                AnswerDTO emptyAnswer = new AnswerDTO(
                         null,
                         "",
-                        frage.id(),
+                        question.id(),
                         studentId,
                         null
                 );
@@ -195,22 +193,22 @@ public class HelperServiceImpl implements HelperService {
                         0
                 );
 
-                componentList.add(new ReviewAggregateDTO(frage, emptyAntwort, emptyReview, k));
+                componentList.add(new ReviewAggregateDTO(question, emptyAnswer, emptyReview, k));
             }
         }
 
-        String korrektorNames = korrektoren.stream()
+        String reviewerNames = reviewers.stream()
                 .map(service::getReviewerById)
-                .map(KorrektorDTO::name)
-                .filter(name -> !name.equals("Automatischer Korrektor"))
+                .map(ReviewerDTO::name)
+                .filter(name -> !name.equals(AutoReviewer.getName()))
                 .distinct()
                 .collect(Collectors.joining(", "));
 
         return new ReviewViewForm(
                 exam.title(),
-                korrektorNames,
-                versuch.erreichtePunkte(),
-                versuch.maxPunkte(),
+                reviewerNames,
+                attempt.accumulatedPoints(),
+                attempt.totalPoints(),
                 componentList);
     }
 
@@ -220,17 +218,17 @@ public class HelperServiceImpl implements HelperService {
 
         UUID studentId = service.getStudentIdByName(studentName);
 
-        List<FrageDTO> fragen = service.getFragenForExam(examId);
+        List<QuestionDTO> questions = service.getQuestionsForExam(examId);
 
         List<OldDataDTO> oldDataDTOList = new ArrayList<>();
 
-        for (FrageDTO frage : fragen) {
-            PreparedFrageData preparedFrageData = prepareFrageData(frage, studentId);
+        for (QuestionDTO frage : questions) {
+            PreparedQuestionData preparedQuestionData = prepareFrageData(frage, studentId);
 
             OldDataDTO oldDataDTO = new OldDataDTO(
                     frage,
-                    preparedFrageData.korrekteAntwortenDTO(),
-                    preparedFrageData.antwort());
+                    preparedQuestionData.correctAnswers(),
+                    preparedQuestionData.answer());
 
             oldDataDTOList.add(oldDataDTO);
         }
@@ -242,30 +240,30 @@ public class HelperServiceImpl implements HelperService {
     public SubmitForm fillSubmitFormWithData(OldDataForm form) {
         SubmitForm submitForm = new SubmitForm();
         Map<String, List<String>> answers = new HashMap<>();
-        List<OldDataDTO> oldDataDTOList = form.components();
+        List<OldDataDTO> oldDataDTOList = form.oldDataDTOs();
 
         for (OldDataDTO oldDataDTO : oldDataDTOList) {
-            String frageId = String.valueOf(oldDataDTO.fragen().id());
-            boolean answerIsPresent = oldDataDTO.antwort() != null && oldDataDTO.antwort().antwortText() != null;
+            String questionId = String.valueOf(oldDataDTO.question().id());
+            boolean answerIsPresent = oldDataDTO.answer() != null && oldDataDTO.answer().answer() != null;
 
-            if (Objects.requireNonNull(oldDataDTO.fragen().type()) == QuestionTypeDTO.MC) {
+            if (Objects.requireNonNull(oldDataDTO.question().type()) == QuestionTypeDTO.MC) {
                 if (answerIsPresent) {
-                    String answer = oldDataDTO.antwort().antwortText();
+                    String answer = oldDataDTO.answer().answer();
                     List<String> choices = Arrays.stream(answer.split(","))
                             .map(String::trim)
                             .filter(s -> !s.isEmpty())
                             .toList();
 
-                    answers.put(frageId, choices);
+                    answers.put(questionId, choices);
                 } else {
-                    answers.put(frageId, new ArrayList<>());
+                    answers.put(questionId, new ArrayList<>());
                 }
             } else {
                 if (answerIsPresent) {
-                    String normalized = oldDataDTO.antwort().antwortText();
-                    answers.put(frageId, List.of(normalized));
+                    String normalized = oldDataDTO.answer().answer();
+                    answers.put(questionId, List.of(normalized));
                 } else {
-                    answers.put(frageId, Collections.singletonList(""));
+                    answers.put(questionId, Collections.singletonList(""));
                 }
             }
         }
@@ -278,28 +276,28 @@ public class HelperServiceImpl implements HelperService {
     public ExamViewForm prepareExamViewForm(UUID examId) {
         ExamDTO exam = service.getExam(examId);
         ProfessorDTO prof = service.getProfessor(exam.professorId());
-        List<FrageDTO> fragen = service.getFragenForExam(examId);
+        List<QuestionDTO> questions = service.getQuestionsForExam(examId);
 
         List<ExamAggregateDTO> components = new ArrayList<>();
 
-        double maxPunkte = 0;
+        double totalPoints = 0;
 
-        for (FrageDTO frage : fragen) {
-            maxPunkte += frage.maxPunkte();
-            KorrekteAntwortenDTO k = service.getLoesungForFrage(frage.id());
+        for (QuestionDTO question : questions) {
+            totalPoints += question.points();
+            CorrectAnswersDTO correctAnswers = service.getCorrectAnswerForQuestion(question.id());
 
-            if (k != null) {
-                k = normalizeKorrekteAntworten(k);
-                components.add(new ExamAggregateDTO(frage, k));
+            if (correctAnswers != null) {
+                correctAnswers = normalizeCorrectAnswers(correctAnswers);
+                components.add(new ExamAggregateDTO(question, correctAnswers));
             } else {
-                components.add(new ExamAggregateDTO(frage, null));
+                components.add(new ExamAggregateDTO(question, null));
             }
         }
 
         return new ExamViewForm(
                 exam.title(),
                 prof.name(),
-                maxPunkte,
+                totalPoints,
                 components);
     }
 }

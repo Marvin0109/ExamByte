@@ -55,12 +55,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="FREITEXT">Freitextaufgaben:</label>
-            <input type="number" id="FREITEXT" class="form-control"
-                   min="1" max="10" th:field="*{freitextCount}" required>
+            <label for="FREE_RESPONSE">Freitextaufgaben:</label>
+            <input type="number" id="FREE_RESPONSE" class="form-control"
+                   min="1" max="10" th:field="*{freeResponseCount}" required>
             <small class="text-danger d-block"
-                   th:if="${#fields.hasErrors('freitextCount')}"
-                   th:errors="*{freitextCount}"></small>
+                   th:if="${#fields.hasErrors('freeResponseCount')}"
+                   th:errors="*{freeResponseCount}"></small>
         </div>
 
         <button class="btn btn-primary" type="submit">Generiere Prüfungsformular</button>

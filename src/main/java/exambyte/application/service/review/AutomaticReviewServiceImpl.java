@@ -1,10 +1,12 @@
 package exambyte.application.service.review;
 
-import exambyte.application.dto.AntwortDTO;
-import exambyte.application.dto.FrageDTO;
-import exambyte.application.dto.KorrekteAntwortenDTO;
+import exambyte.application.dto.AnswerDTO;
+import exambyte.application.dto.QuestionDTO;
+import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.domain.service.ReviewService;
+import exambyte.domain.model.user.AutoReviewer;
+import exambyte.domain.service.AnswerParser;
+import exambyte.domain.service.McScoringPolicy;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,37 +14,34 @@ import java.util.*;
 @Service
 public class AutomaticReviewServiceImpl implements AutomaticReviewService {
 
-    private static final UUID AUTO_REVIEW_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+    private final McScoringPolicy mcScoringPolicy;
+    private final AnswerParser answerParser;
+
+    public AutomaticReviewServiceImpl(McScoringPolicy mcScoringPolicy, AnswerParser answerParser) {
+        this.mcScoringPolicy = mcScoringPolicy;
+        this.answerParser = answerParser;
+    }
 
     @Override
-    public List<ReviewDTO> automatischeReviewSC(List<FrageDTO> fragen,
-                                                List<AntwortDTO> antworten,
-                                                List<KorrekteAntwortenDTO> korrekteAntworten,
-                                                UUID studentUUID,
-                                                ReviewService reviewService) {
+    public List<ReviewDTO> autoReviewSC(List<QuestionDTO> questions,
+                                        List<AnswerDTO> answers,
+                                        List<CorrectAnswersDTO> correctAnswers,
+                                        UUID studentId) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
-        for (FrageDTO frageDTO : fragen) {
-            Optional<AntwortDTO> studentAntwort = antworten.stream()
-                    .filter(a -> a.studentId().equals(studentUUID) &&
-                            a.frageId().equals(frageDTO.id()))
-                    .findFirst();
+        for (QuestionDTO questionDTO : questions) {
+            Optional<AnswerDTO> studentAnswer = findStudentAnswer(questionDTO, answers, studentId);
 
-            if (studentAntwort.isPresent()) {
-                Optional<KorrekteAntwortenDTO> korrekteAntwort = korrekteAntworten.stream()
-                        .filter(k -> k.frageId().equals(frageDTO.id()))
-                        .findFirst();
+            if (studentAnswer.isPresent()) {
+                Optional<CorrectAnswersDTO> correctAnswer = findCorrectAnswer(correctAnswers, questionDTO.id());
+                if (correctAnswer.isPresent()) {
+                    String solution = correctAnswer.get().solution();
 
-                if (korrekteAntwort.isPresent()) {
-                    String richtigeAntwort = korrekteAntwort.get().antworten();
-                    boolean isCorrect = studentAntwort.get().antwortText().equals(richtigeAntwort);
+                    boolean isCorrect = studentAnswer.get().answer().equals(solution);
 
-                    ReviewDTO review = new ReviewDTO(null, studentAntwort.get().id(),
-                            AUTO_REVIEW_ID, "Lösung: " + richtigeAntwort,
-                            isCorrect ? frageDTO.maxPunkte() : 0);
-                    
-                    reviewDTOList.add(review);
+                    reviewDTOList.add(createReview(studentAnswer.get().id(), solution,
+                            isCorrect ? questionDTO.points() : 0));
                 }
             }
         }
@@ -50,71 +49,56 @@ public class AutomaticReviewServiceImpl implements AutomaticReviewService {
     }
 
     @Override
-    public List<ReviewDTO> automatischeReviewMC(List<FrageDTO> fragen,
-                                                List<AntwortDTO> antworten,
-                                                List<KorrekteAntwortenDTO> answers,
-                                                UUID studentUUID,
-                                                ReviewService reviewService) {
+    public List<ReviewDTO> autoReviewMC(List<QuestionDTO> questions,
+                                                List<AnswerDTO> answers,
+                                                List<CorrectAnswersDTO> correctAnswers,
+                                                UUID studentId) {
 
         List<ReviewDTO> reviewDTOList = new ArrayList<>();
 
-        for (FrageDTO frageDTO : fragen) {
-            Optional<AntwortDTO> studentAntwort = findStudentAntwort(frageDTO, antworten, studentUUID);
+        for (QuestionDTO questionDTO : questions) {
+            Optional<AnswerDTO> studentAnswer = findStudentAnswer(questionDTO, answers, studentId);
 
-            if (studentAntwort.isPresent()) {
-                Optional<KorrekteAntwortenDTO> korrekteAntwort = answers.stream()
-                        .filter(k -> k.frageId().equals(frageDTO.id()))
-                        .findFirst();
+            if (studentAnswer.isPresent()) {
+                Optional<CorrectAnswersDTO> correctAnswer = findCorrectAnswer(correctAnswers, questionDTO.id());
 
-                if (korrekteAntwort.isPresent()) {
-                    List<String> richtigeAntworten = parseAntworten(korrekteAntwort.get().antworten());
-                    List<String> studentAntworten = parseAntworten(studentAntwort.get().antwortText());
+                if (correctAnswer.isPresent()) {
+                    List<String> solutionParsed = answerParser.parseAnswer(correctAnswer.get().solution());
+                    List<String> studentAnswerParsed = answerParser.parseAnswer(studentAnswer.get().answer());
 
-                    Set<String> richtigeSet = new HashSet<>(richtigeAntworten);
+                    Set<String> solutionSet = new HashSet<>(solutionParsed);
 
-                    int correctAnswers = (int) studentAntworten.stream().filter(richtigeSet::contains).count();
-                    int wrongAnswers = (int) studentAntworten.stream()
-                            .filter(a -> !richtigeSet.contains(a)).count();
+                    int correctAnswersCount = (int) studentAnswerParsed.stream().filter(solutionSet::contains).count();
+                    int wrongAnswersCount = (int) studentAnswerParsed.stream()
+                            .filter(a -> !solutionSet.contains(a)).count();
+                    double points = mcScoringPolicy.computeMcPoints(correctAnswersCount, wrongAnswersCount,
+                            solutionParsed.size(), questionDTO.points());
 
-                    double points = computeMcPoints(correctAnswers, wrongAnswers,
-                            richtigeAntworten.size(), frageDTO.maxPunkte());
-
-                    String richtigeAntwortenText = String.join("; ", richtigeAntworten);
-
-                    ReviewDTO review = new ReviewDTO(null, studentAntwort.get().id(),
-                            AUTO_REVIEW_ID, "Lösung: " + richtigeAntwortenText, points);
-                    reviewDTOList.add(review);
+                    String solutionParsedText = String.join("; ", solutionParsed);
+                    reviewDTOList.add(createReview(studentAnswer.get().id(), solutionParsedText, points));
                 }
             }
         }
         return reviewDTOList;
     }
 
-    private static Optional<AntwortDTO> findStudentAntwort(FrageDTO frage, List<AntwortDTO> antworten, UUID studentId) {
-        return antworten.stream()
+    private static Optional<AnswerDTO> findStudentAnswer(QuestionDTO question,
+                                                         List<AnswerDTO> answers,
+                                                         UUID studentId) {
+        return answers.stream()
                 .filter(a -> a.studentId().equals(studentId)
-                        && a.frageId().equals(frage.id()))
+                        && a.questionId().equals(question.id()))
                 .findFirst();
     }
 
-    private static List<String> parseAntworten(String antwortText) {
-        return Arrays.stream(antwortText.split("\n"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
-                .toList();
+    private static Optional<CorrectAnswersDTO> findCorrectAnswer(List<CorrectAnswersDTO> correctAnswers,
+                                                                 UUID questionId) {
+        return correctAnswers.stream()
+                .filter(q -> q.questionId().equals(questionId))
+                .findFirst();
     }
 
-    private static double computeMcPoints(int correctAnswers,
-                                          int wrongAnswers,
-                                          int totalCorrectAnswers,
-                                          double maxPunkte) {
-        if (totalCorrectAnswers <= 0) return 0.0;
-
-        double pointsPerCorrect = maxPunkte / totalCorrectAnswers;
-        double points = (correctAnswers - wrongAnswers) * pointsPerCorrect;
-        points = Math.max(0.0, points);
-
-        // Auf 0.5 Punkte runden
-        return Math.round(points * 2) / 2.0;
+    private static ReviewDTO createReview(UUID answerId, String solution, double points) {
+        return new ReviewDTO(null, answerId, AutoReviewer.getAutoReviewer(), "Lösung: " + solution, points);
     }
 }

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record ReviewDTO (
         UUID id,
-        UUID antwortId,
-        UUID korrektorId,
-        String bewertung,
-        double punkte) {}
+        UUID answerId,
+        UUID reviewerId,
+        String text,
+        double points) {}

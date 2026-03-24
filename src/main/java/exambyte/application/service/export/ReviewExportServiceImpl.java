@@ -1,9 +1,10 @@
 package exambyte.application.service.export;
 
 import exambyte.application.dto.*;
-import exambyte.application.dto.csv_dto.ReviewExportDTO;
-import exambyte.domain.export_mapper.ReviewExportDTOMapper;
+import exambyte.application.dto.export.ReviewExportDTO;
+import exambyte.application.mapper.export.ReviewExportDTOMapper;
 import exambyte.application.service.query.*;
+import exambyte.domain.model.user.AutoReviewer;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,69 +14,69 @@ import java.util.UUID;
 @Service
 public class ReviewExportServiceImpl implements ReviewExportService {
 
-    private final ExamQueryService examQueryService;
-    private final FrageQueryService frageQueryService;
-    private final StudentQueryService studentQueryService;
-    private final AntwortQueryService antwortQueryService;
-    private final KorrektorQueryService korrektorQueryService;
-    private final ReviewQueryService reviewQueryService;
+    private final ExamService examService;
+    private final QuestionService questionService;
+    private final StudentService studentService;
+    private final AnswerService answerService;
+    private final ReviewerService reviewerService;
+    private final ReviewService reviewService;
     private final ReviewExportDTOMapper mapper;
 
-    public ReviewExportServiceImpl(ExamQueryService examQueryService,
-                                   FrageQueryService frageQueryService,
-                                   StudentQueryService studentQueryService,
-                                   AntwortQueryService antwortQueryService,
-                                   KorrektorQueryService korrektorQueryService,
-                                   ReviewQueryService reviewQueryService,
+    public ReviewExportServiceImpl(ExamService examService,
+                                   QuestionService questionService,
+                                   StudentService studentService,
+                                   AnswerService answerService,
+                                   ReviewerService reviewerService,
+                                   ReviewService reviewService,
                                    ReviewExportDTOMapper mapper) {
-        this.examQueryService = examQueryService;
-        this.frageQueryService = frageQueryService;
-        this.studentQueryService = studentQueryService;
-        this.antwortQueryService = antwortQueryService;
-        this.korrektorQueryService = korrektorQueryService;
-        this.reviewQueryService = reviewQueryService;
+        this.examService = examService;
+        this.questionService = questionService;
+        this.studentService = studentService;
+        this.answerService = answerService;
+        this.reviewerService = reviewerService;
+        this.reviewService = reviewService;
         this.mapper = mapper;
     }
 
     @Override
     public List<ReviewExportDTO> createReviewExport(UUID examId, String studentName) {
-        ExamDTO exam = examQueryService.getExam(examId);
-        List<FrageDTO> fragen = frageQueryService.getFragenForExam(examId);
-        UUID studentId = studentQueryService.getStudentIdByName(studentName);
+        ExamDTO exam = examService.getExam(examId);
+        List<QuestionDTO> questions = questionService.getQuestionsForExam(examId);
+        UUID studentId = studentService.getStudentIdByName(studentName);
 
-        List<AntwortDTO> antworten = new ArrayList<>();
+        List<AnswerDTO> answers = new ArrayList<>();
 
-        for (FrageDTO frage : fragen) {
-            AntwortDTO a = antwortQueryService.findByStudentAndFrage(studentId, frage.id());
-            antworten.add(a);
+        for (QuestionDTO question : questions) {
+            AnswerDTO a = answerService.findByStudentAndQuestion(studentId, question.id());
+            answers.add(a);
         }
 
-        double maxPunkte = fragen.stream()
-                .mapToDouble(FrageDTO::maxPunkte)
+        double points = questions.stream()
+                .mapToDouble(QuestionDTO::points)
                 .sum();
 
         List<ReviewDTO> reviews = new ArrayList<>();
 
         StringBuilder sb = new StringBuilder();
 
-        for (AntwortDTO antwort : antworten) {
-            ReviewDTO r = reviewQueryService.getReviewByAntwortId(antwort.id());
+        for (AnswerDTO answer : answers) {
+            ReviewDTO r = reviewService.getReviewByAnswerId(answer.id());
 
             if (r != null) {
                 reviews.add(r);
-                KorrektorDTO korrektorDTO = korrektorQueryService.getReviewerById(r.korrektorId());
+                ReviewerDTO reviewerDTO = reviewerService.getReviewerById(r.reviewerId());
 
-                if (!korrektorDTO.name().equals("Automatischer Korrektor")) {
+                if (!reviewerDTO.name().equals(AutoReviewer.getName())) {
 
                     if (!sb.isEmpty()) {
                         sb.append(", ");
                     }
 
-                    sb.append(korrektorDTO.name());
+                    sb.append(reviewerDTO.name());
                 }
             }
         }
 
-        return mapper.mapDTOToExport(exam, sb.toString(), maxPunkte, fragen, antworten, reviews);
+        return mapper.mapDTOToExport(exam, sb.toString(), points, questions, answers, reviews);
     }
 }
