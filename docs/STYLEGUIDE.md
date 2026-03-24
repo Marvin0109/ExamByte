@@ -2,13 +2,28 @@
 
 >**Autor**: Marvin0109,
 >**erstellt am**: 08.01.2025,
->**aktualisiert am**: 18.03.2026
+>**aktualisiert am**: 24.03.2026
 
 > [!NOTE]
 > Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
 die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
 Er wurde ursprünglich für ein Team von 5 Entwickler:innen erstellt, wird aktuell jedoch von einer Person gepflegt 
 und angepasst, die das Projekt privat weiterführt.
+
+## Übersicht
+
+- [Formatierung](#formatierung)
+- [Technologien und Versionen](#technologien-und-versionen)
+- [Code-Stil](#code-stil)
+- [Versionierung](#versionierung-git)
+- [Testing und Qualitätssicherung](#testing-und-qualitätssicherung)
+- [HTML-Regeln](#html-regeln)
+- [Thymeleaf-Regeln](#thymeleaf-regeln)
+- [Sicherheit](#sicherheit)
+- [QA (Demo)](#quality-assurance-demo)
+- [Ressourcen](#ressourcen)
+- [Fun Facts](#fun-facts)
+- [Schlussbemerkung](#schlussbemerkung)
 
 ## Allgemeine Regeln
 
@@ -60,6 +75,12 @@ und angepasst, die das Projekt privat weiterführt.
   (Datenbank-Migrations-Tool)
 - **SonarQube:** Version **7.2.2.6593**
   (Scanning tool für Erkennen von Code Smells)
+
+### Github OAuth-App
+
+Verwendung einer *Authorized OAuth App ExamByte* von `Marvin0109`.
+
+(Nach Bedarf kann man selber eine erstellen und sie anbinden ans Projekt, wichtig hier sind die Umgebungsvariablen zu setzen in einer eigenen `.env`)
 
 ### Entwicklungsumgebung
 - **IDE:** Wir verwenden IntelliJ IDEA, am besten die Ultimate-Edition, für die andere Versionen bezüglich Datenbanken
@@ -122,7 +143,7 @@ siehe [hier.](#datenbank)
 - Nach Bedarf auch *@link* und *@see* verwenden im Beschreibungstext für Verweise auf Variablen, Klassen oder sonstiges.
 - Testklassen auch dokumentieren bei Bedarf, siehe [hier.](#dokumentation-der-tests)
 
-## Versionierung
+## Versionierung (Git)
 
 ### Branch-Namen
 - Aktueller Hauptbranch: `main`
@@ -173,7 +194,7 @@ siehe [hier.](#datenbank)
    ```
    git commit -m "[BugFix]: Fix login button issue. Closes #1"
 
-### Testing und Qualitätssicherung
+## Testing und Qualitätssicherung
 - Wir verwenden **JUnit**, **Mockito**, **ArchUnit** und **Testcontainers**.
 
 ### Namenskonventionen für Tests
@@ -209,15 +230,6 @@ mehr ausreicht.
 - Um einen bestandenen Gesamtstatus zu erreichen, sind sämtliche Hinweise 
 von Sonar zu berücksichtigen und die Testabdeckung in einem guten Bereich zu halten.
 - Siehe aktuelle [Sonar Übersicht](#sonarqube-übersicht)
-## Tools
-
-### Versionskontrolle
-- Git-Workflow
-- Authorized OAuth App ExamByte owned by 'Marvin0109' (Nach Bedarf kann man selber eine erstellen und sie 
-  anbinden ans Projekt, wichtig hier sind die Umgebungsvariablen zu setzen in einer eigenen `.env`)
-
-### Build-Tool
-- Gradle
 
 ## HTML-Regeln
 
@@ -435,13 +447,13 @@ Das eingefügte Script wird nicht ausgeführt.
 > 
 > `th:utext` behandelt alles als `raw` statt wie `th:text`.
 
-## Quality Assurance
+## Quality Assurance (Demo)
 
-## JacocoTestReport
+### JacocoTestReport
 
-![JacocoTestReport](/src/main/resources/static/public/pictures/quality_assurance/JacocoTest_Report-18-03-2026.png)
+![JacocoTestReport](/src/main/resources/static/public/pictures/quality_assurance/JacocoTest_Report-24-03-2026.png)
 
-## SonarQube Übersicht
+### SonarQube Übersicht
 
 ![SonarQube Overview](/src/main/resources/static/public/pictures/quality_assurance/sonarOverview.png)
 
@@ -460,56 +472,56 @@ Das eingefügte Script wird nicht ausgeführt.
 ### Codelines Statistik
 
 Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
-Hier die Statistik vom 18.03.2026 (`JSON`, `YAML` `CSS` usw. wegen *FontAwesome* und *Bootstrap*):
+Hier die Statistik vom 24.03.2026 (`JSON`, `YAML` `CSS` usw. wegen *FontAwesome* und *Bootstrap*):
 ```
 $ cloc .
 
-github.com/AlDanial/cloc v 1.98  T=3.28 s (1559.5 files/s, 157817.1 lines/s)
+github.com/AlDanial/cloc v 1.98  T=4.11 s (1239.8 files/s, 125872.7 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 JSON                             3              0              0         225011
-YAML                             8              9              0         113720
-CSS                             42           9297            266          60375
+YAML                             9             13              0         113764
+CSS                             41           9293            266          60357
 JavaScript                      23           1620           2779          30956
-HTML                           444           1657            121          20769
+HTML                           433           1650            126          20322
 SVG                           4180              0             30          16726
-Java                           279           3462            642          13014
+Java                           266           3393            551          12662
 SCSS                            20             98             85           7718
-XML                            100             25              0           7227
-Markdown                         6            386              7           1323
+XML                             98             28              0           7158
+Markdown                         6            402              7           1407
 Text                             4             61              0            158
 SQL                              2             23              0            132
 Bourne Shell                     1             28            118            105
 Maven                            1              9              9             88
-Gradle                           2             23             25             84
+Gradle                           2             20              9             83
 DOS Batch                        1             21              2             71
 PlantUML                         2              5              1             20
 Properties                       4              0              1             12
 -------------------------------------------------------------------------------
-SUM:                          5122          16724           4086         497509
+SUM:                          5096          16664           3984         496750
 -------------------------------------------------------------------------------
 
 $ cloc src/main/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.09 s (2151.7 files/s, 89464.7 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.08 s (2377.1 files/s, 100436.2 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           195           1746            301           6061
+Java                           183           1677            223           5832
 -------------------------------------------------------------------------------
-SUM:                           195           1746            301           6061
+SUM:                           183           1677            223           5832
 -------------------------------------------------------------------------------
 
 $ cloc src/test/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.06 s (1341.4 files/s, 143876.8 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.06 s (1462.7 files/s, 156388.9 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            84           1716            341           6953
+Java                            83           1716            328           6830
 -------------------------------------------------------------------------------
-SUM:                            84           1716            341           6953
+SUM:                            83           1716            328           6830
 -------------------------------------------------------------------------------
 ```
 
@@ -617,8 +629,11 @@ Fast-forward
 ```
 
 ## Schlussbemerkung
-- Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeiteten 
+- Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeitete 
 schließlich nur noch ich als alleiniger Entwickler weiter.
 - Vielen Dank an alle ursprünglichen Teammitglieder für ihre Unterstützung und Beiträge.
-- Die Weiterentwicklung des Projekts wird derzeit von mir allein durchgeführt. 
-Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich abzuschließen.
+- Die Weiterentwicklung des Projekts wurde von mir allein durchgeführt. 
+Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich abzuschließen 
+(weitere Details in [Readme](../README.md)).
+
+[Zurück zur Übersicht](#übersicht)

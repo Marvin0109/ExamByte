@@ -15,7 +15,7 @@
 - [Mitwirkende](#mitwirkende)
 
 > [!NOTE]
-> Die Weiterentwicklung von ExamByte endete am 18.03.2026. 
+> Die Weiterentwicklung von ExamByte endete am **24.03.2026**. 
 > 
 > Nach umfangreicher Entwicklungszeit wurde entschieden, die aktuelle Version als final zu betrachten und
 > keine weiteren Features oder Anpassungen mehr umzusetzen.
@@ -24,7 +24,7 @@
 > Der zugehörige Entwicklungs-Branch `feature/review-lock` wurde nicht gemerged und entsprechend verworfen.
 > Der aktuelle Stand wird als abgeschlossen betrachtet.
 >
-> Finale Codeüberprüfung wird noch stattfinden, für mehr Details siehe [To-do](docs/TO_DO.md).
+> Finale Codeüberprüfung ist abgeschlossen, für mehr Details wie mögliche Erweiterungen siehe [To-do](docs/TO_DO.md).
 > 
 
 ## Was ist ExamByte?

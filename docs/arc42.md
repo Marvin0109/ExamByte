@@ -6,9 +6,35 @@
 > - **Autor**: Marvin0109
 > - **Version**: 1.3
 > - **Erstellt am**: 03. Februar 2025
-> - **Aktualisiert am**: 18. März 2026
+> - **Aktualisiert am**: 24. März 2026
 > - **Zielgruppen**: Entwickler, Benutzer
 > - **Verwendete Werkzeuge**: PlantUML
+
+## Übersicht
+
+- [1. Einführung und Ziele](#1-einführung-und-ziele)
+  - [1.1 Aufgabenstellung](#11-aufgabenstellung)
+  - [1.2 Qualitätsziele](#12-qualitätsziele)
+  - [1.3 Stakeholder](#13-stakeholder)
+- [2. Randbedingung](#2-randbedingung)
+  - [2.1 Technische Randbedingungen](#21-technische-randbedingungen)
+  - [2.2 Organisatorisch](#22-organisatorisch)
+  - [2.3 Konventionen](#23-konventionen)
+- [3. Kontextabgrenzung](#3-kontextabgrenzung)
+  - [3.1 Fachlicher Kontext](#31-fachlicher-kontext)
+- [4. Lösungssicht](#4-lösungssicht)
+  - [4.1 Architekturübersicht](#41-architekturübersicht)
+  - [4.2 Hauptkomponenten](#42-hauptkomponenten)
+- [5. Bausteinsicht](#5-bausteinsicht)
+- [6. Laufzeitsicht](#6-laufzeitsicht)
+  - [6.1 Erstellung eines Tests](#61-erstellung-eines-tests)
+  - [6.2 Testdurchführung](#62-testdurchführung)
+  - [6.3 Bewertung eines Tests](#63-bewertung-eines-tests)
+  - [6.4 Zulassungsstatus](#64-zulassungsstatus)
+- [7. Verteilungssicht](#7-verteilungssicht)
+- [8. Qualitätsszenarien](#8-qualitätsszenarien)
+- [9. Risiken und technische Schulden](#9-risiken-und-technische-schulden)
+- [10. Glossar](#10-glossar)
 
 ## 1. Einführung und Ziele
 
@@ -167,15 +193,18 @@ Zulassung erreicht wurde oder nicht.
 - **Mögliche Risiken:**
   - **Verfügbarkeit der GitHub-OAuth-Integration**, insbesondere die Abhängigkeit von der OAuth-App 
   (keine Anmeldung möglich bei Github-Ausfall)
-  - **Gleichzeitige Korrektur von einer Aufgabe**, race condition möglich.
+  - **Gleichzeitige Korrektur von einer Aufgabe**, [race condition](#10-glossar) möglich.
 
 ---
 
 ## 10 Glossar
 
-| Begriff             | Bedeutung                                                                                                                         |
-|---------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| MC                  | Multiple-Choice                                                                                                                   |
-| SC                  | Single-Choice                                                                                                                     |
-| Administrator:innen | Da es sich um eine Anwendung zwischen Studierende und Professoren handelt, ist hier der Administrator:in mit Professor:in gemeint |
-| OAuth               | Offenes Authentifizierungsprotokoll                                                                                               |
+| Begriff             | Bedeutung                                                                                                                                                                      |
+|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| MC                  | Multiple-Choice                                                                                                                                                                |
+| SC                  | Single-Choice                                                                                                                                                                  |
+| Administrator:innen | Da es sich um eine Anwendung zwischen Studierende und Professoren handelt, ist hier der Administrator:in mit Professor:in gemeint                                              |
+| OAuth               | Offenes Authentifizierungsprotokoll                                                                                                                                            |
+| Race condition      | Ein *race condition* entsteht, wenn mehrere Threads oder Prozesse auf gemeinsame Daten zugreifen und das Ergebnis davon abhängt, in welcher Reihenfolge sie ausgeführt werden. |
+
+[Zurück zur Übersicht](#übersicht)
