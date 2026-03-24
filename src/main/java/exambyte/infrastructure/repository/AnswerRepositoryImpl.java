@@ -47,14 +47,4 @@ public class AnswerRepositoryImpl implements AnswerRepository {
         return entity.map(mapper::toDomain)
                 .orElse(null);
     }
-
-    @Override
-    public void deleteAll() {
-        dao.deleteAll();
-    }
-
-    @Override
-    public void deleteAnswer(UUID id) {
-        dao.deleteById(id);
-    }
 }

@@ -14,8 +14,4 @@ public interface AnswerRepository {
     Optional<Answer> findByStudentIdAndQuestionId(UUID studentId, UUID examId);
 
     void save(Answer answer);
-
-    void deleteAll();
-
-    void deleteAnswer(UUID id);
 }

@@ -77,14 +77,6 @@ public class AnswerServiceImpl implements AnswerService {
         return mapper.toDTO(findByStudentIdAndQuestionId(studentId, questionId));
     }
 
-    private void deleteAnswer(UUID id) {
-        repository.deleteAnswer(id);
-    }
-
-    private void deleteAll() {
-        repository.deleteAll();
-    }
-
     private Answer findByQuestionId(UUID id) {
         return repository.findByQuestionId(id);
     }
