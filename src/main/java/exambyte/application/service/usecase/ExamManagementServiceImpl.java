@@ -4,6 +4,7 @@ import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
 import exambyte.application.exception.NotFoundException;
+import exambyte.domain.model.common.ExamCount;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +27,6 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     private final ExamService examService;
     private final ReviewService reviewService;
     private final Clock clock;
-
-    private static final int EXAM_COUNT = 12;
 
     private static final Logger logger = Logger.getLogger(ExamManagementServiceImpl.class.getName());
 
@@ -78,7 +77,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         List<ExamDTO> exams = examService.getAllExams();
         int examCount = exams.size();
 
-        if (examCount >= EXAM_COUNT) {
+        if (examCount >= ExamCount.MAX_EXAM_COUNT) {
             return "Die maximale Kapazität von 12 Exams ist nun überschritten worden!";
         }
 
@@ -222,7 +221,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
     public boolean resetAllExamDataCascade() {
         List<ExamDTO> examList = examService.getAllExams();
 
-        if (examList.size() != EXAM_COUNT) return false;
+        if (examList.size() != ExamCount.MAX_EXAM_COUNT) return false;
         else {
             for (ExamDTO exam : examList) {
                 if (exam.end().isAfter(now())) {
