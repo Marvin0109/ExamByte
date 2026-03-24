@@ -1,11 +1,11 @@
 package exambyte.application.service.query;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.model.exam.Question;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

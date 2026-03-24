@@ -8,7 +8,7 @@ import exambyte.domain.model.exam.Review;
 import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.model.user.Professor;
 import exambyte.domain.model.user.Student;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.*;
 import exambyte.infrastructure.container.TestcontainerConfiguration;
 import exambyte.web.form.create_review.ReviewForm;

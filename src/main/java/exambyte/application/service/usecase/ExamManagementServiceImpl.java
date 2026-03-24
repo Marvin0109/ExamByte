@@ -1,6 +1,7 @@
 package exambyte.application.service.usecase;
 
 import exambyte.application.dto.*;
+import exambyte.application.enums.SubmitExamResult;
 import exambyte.application.service.query.*;
 import exambyte.application.service.review.ReviewGenerationService;
 import exambyte.application.exception.NotFoundException;

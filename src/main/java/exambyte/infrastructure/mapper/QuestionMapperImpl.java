@@ -1,7 +1,7 @@
 package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.exam.Question;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.infrastructure.common.QuestionTypeEntity;
 import exambyte.infrastructure.entity.QuestionEntity;
 import org.springframework.stereotype.Component;

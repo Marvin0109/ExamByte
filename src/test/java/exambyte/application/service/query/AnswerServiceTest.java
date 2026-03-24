@@ -1,6 +1,6 @@
 package exambyte.application.service.query;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.mapper.AnswerDTOMapper;

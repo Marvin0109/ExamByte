@@ -2,6 +2,7 @@ package exambyte.application.service.usecase;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.AttemptDTO;
+import exambyte.application.enums.SubmitExamResult;
 
 import java.time.LocalDateTime;
 import java.util.List;

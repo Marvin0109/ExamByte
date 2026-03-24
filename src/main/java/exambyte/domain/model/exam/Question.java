@@ -1,6 +1,6 @@
 package exambyte.domain.model.exam;
 
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 
 import java.util.UUID;
 

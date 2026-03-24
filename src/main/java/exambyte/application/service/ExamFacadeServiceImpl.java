@@ -8,7 +8,7 @@ import exambyte.application.service.export.ReviewExportService;
 import exambyte.application.service.query.*;
 import exambyte.application.service.usecase.ReviewManagementService;
 import exambyte.application.service.usecase.ExamManagementService;
-import exambyte.application.service.usecase.SubmitExamResult;
+import exambyte.application.enums.SubmitExamResult;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

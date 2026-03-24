@@ -3,7 +3,7 @@ package exambyte.integration;
 import exambyte.web.service.ExamControllerService;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.user.Professor;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.*;
 import exambyte.infrastructure.container.TestcontainerConfiguration;
 import exambyte.web.form.create_exam.ExamForm;

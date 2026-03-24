@@ -1,9 +1,9 @@
 package exambyte.application.mapper;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.domain.model.exam.Question;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package exambyte.application.common;
+package exambyte.application.enums;
 
 public enum Role {
     ADMIN,

@@ -3,7 +3,7 @@ package exambyte.web.service;
 import exambyte.application.dto.*;
 import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.dto.export.ReviewExportDTO;
-import exambyte.web.common.QuestionTypeWeb;
+import exambyte.web.enums.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;

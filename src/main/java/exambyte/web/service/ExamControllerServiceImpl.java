@@ -1,12 +1,12 @@
 package exambyte.web.service;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.domain.model.exam.ExamCount;
-import exambyte.web.common.QuestionTypeWeb;
+import exambyte.web.enums.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
 import exambyte.web.form.create_review.ReviewForm;
 import exambyte.web.form.info.SubmitInfo;

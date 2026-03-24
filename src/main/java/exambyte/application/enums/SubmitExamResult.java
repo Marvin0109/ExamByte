@@ -1,4 +1,4 @@
-package exambyte.application.service.usecase;
+package exambyte.application.enums;
 
 public enum SubmitExamResult {
     SUCCESS,

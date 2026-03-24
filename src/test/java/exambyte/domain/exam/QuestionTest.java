@@ -1,6 +1,6 @@
 package exambyte.domain.exam;
 
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.model.exam.Question;
 import org.junit.jupiter.api.Test;
 

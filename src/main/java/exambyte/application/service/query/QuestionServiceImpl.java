@@ -4,7 +4,7 @@ import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.CorrectAnswersDTO;
 import exambyte.application.mapper.QuestionDTOMapper;
 import exambyte.domain.model.exam.Question;
-import exambyte.domain.model.common.QuestionType;
+import exambyte.domain.model.enums.QuestionType;
 import exambyte.domain.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package exambyte.application.service.export;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.query.*;
 import exambyte.application.mapper.export.ReviewExportDTOMapper;

@@ -78,7 +78,7 @@ class OnionArchitectureTest {
         .resideInAPackage("..domain..")
         .and()
         .areDeclaredInClassesThat()
-        .resideOutsideOfPackage("..common..")
+        .resideOutsideOfPackage("..enums..")
         .should()
         .bePrivate();
 

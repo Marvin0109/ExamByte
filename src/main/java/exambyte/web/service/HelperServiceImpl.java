@@ -1,6 +1,6 @@
 package exambyte.web.service;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.*;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.domain.model.user.AutoReviewer;

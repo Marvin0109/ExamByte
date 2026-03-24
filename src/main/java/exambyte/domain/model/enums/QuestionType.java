@@ -1,4 +1,4 @@
-package exambyte.domain.model.common;
+package exambyte.domain.model.enums;
 
 public enum QuestionType {
     MC, SC, FREE_RESPONSE

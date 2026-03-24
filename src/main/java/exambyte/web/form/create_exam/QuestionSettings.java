@@ -1,6 +1,6 @@
 package exambyte.web.form.create_exam;
 
-import exambyte.web.common.QuestionTypeWeb;
+import exambyte.web.enums.QuestionTypeWeb;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;

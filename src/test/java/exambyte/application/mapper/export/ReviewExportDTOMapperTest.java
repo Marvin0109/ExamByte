@@ -1,6 +1,6 @@
 package exambyte.application.mapper.export;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.QuestionDTO;

@@ -1,6 +1,6 @@
 package exambyte.application.dto;
 
-import exambyte.application.common.QuestionTypeDTO;
+import exambyte.application.enums.QuestionTypeDTO;
 
 import java.util.UUID;
 
