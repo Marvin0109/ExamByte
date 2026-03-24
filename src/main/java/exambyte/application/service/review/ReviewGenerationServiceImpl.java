@@ -4,7 +4,6 @@ import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.AnswerDTO;
 import exambyte.application.dto.QuestionDTO;
 import exambyte.application.dto.ReviewDTO;
-import exambyte.application.service.ReviewData;
 import exambyte.application.service.query.CorrectAnswersService;
 import org.springframework.stereotype.Service;
 

@@ -16,6 +16,6 @@
  * </ul>
  * </p>
  *
- * @see exambyte.infrastructure.persistence.entities
+ * @see exambyte.infrastructure.entity
  */
 package exambyte.infrastructure.entity;
