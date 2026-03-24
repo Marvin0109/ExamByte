@@ -1,6 +1,6 @@
 package exambyte.web.controllers;
 
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.application.service.user.AppUserService;
 import exambyte.application.service.user.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;

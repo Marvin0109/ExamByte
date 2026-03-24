@@ -1,6 +1,6 @@
 package exambyte.integration;
 
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.user.Professor;
 import exambyte.domain.model.common.QuestionType;

@@ -2,7 +2,6 @@ package exambyte.web.service;
 
 import exambyte.application.common.QuestionTypeDTO;
 import exambyte.application.dto.*;
-import exambyte.application.service.ExamControllerService;
 import exambyte.application.service.ExamFacadeService;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_review.AnswerForm;
@@ -13,7 +12,6 @@ import exambyte.web.form.create_exam.QuestionData;
 import exambyte.web.form.info.ReviewCoverageForm;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

@@ -3,7 +3,7 @@ package exambyte.web.controllers;
 import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.application.dto.AttemptDTO;
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.load_old_submit_data.OldDataForm;

@@ -1,4 +1,4 @@
-package exambyte.application.service;
+package exambyte.web.service;
 
 import exambyte.application.dto.*;
 import exambyte.application.dto.export.ExamExportDTO;

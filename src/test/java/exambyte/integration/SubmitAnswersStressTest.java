@@ -1,6 +1,6 @@
 package exambyte.integration;
 
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.application.service.usecase.ExamManagementService;
 import exambyte.domain.model.exam.Answer;
 import exambyte.domain.model.exam.Exam;

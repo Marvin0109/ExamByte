@@ -4,7 +4,7 @@ import exambyte.application.dto.ExamDTO;
 import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.export.CsvExportService;
-import exambyte.application.service.ExamControllerService;
+import exambyte.web.service.ExamControllerService;
 import exambyte.web.common.QuestionTypeWeb;
 import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.create_exam.QuestionSettings;

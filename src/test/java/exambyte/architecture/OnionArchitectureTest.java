@@ -27,7 +27,6 @@ class OnionArchitectureTest {
         .adapter("infrastructure", "exambyte.infrastructure..")
         .adapter("web", "exambyte.web..");
 
-
     @ArchTest
     ArchRule noRandomUUIDUsage = noClasses()
             .should()
@@ -66,7 +65,7 @@ class OnionArchitectureTest {
         .beAnnotatedWith(Controller.class);
 
     @ArchTest
-    ArchRule allMapperShouldBeAnnotatedWithController = classes()
+    ArchRule allMapperShouldBeAnnotatedWithComponent = classes()
         .that()
         .haveSimpleNameEndingWith("MapperImpl")
         .should()
@@ -82,6 +81,14 @@ class OnionArchitectureTest {
         .resideOutsideOfPackage("..common..")
         .should()
         .bePrivate();
+
+    @ArchTest
+    ArchRule domainShouldNotDependOnOuterLayers = noClasses()
+            .that()
+            .resideInAPackage("..domain..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAnyPackage("..application..", "..infrastructure..", "..web..");
 
     @ArchTest
     ArchRule noApplicationDTOsInInfrastructureAllowed = noClasses()
