@@ -2,7 +2,7 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.exam.Question;
 import exambyte.domain.model.enums.QuestionType;
-import exambyte.infrastructure.common.QuestionTypeEntity;
+import exambyte.infrastructure.enums.QuestionTypeEntity;
 import exambyte.infrastructure.entity.QuestionEntity;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package exambyte.infrastructure.entity;
 
-import exambyte.infrastructure.common.QuestionTypeEntity;
+import exambyte.infrastructure.enums.QuestionTypeEntity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 
