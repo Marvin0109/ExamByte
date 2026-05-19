@@ -1,210 +1,213 @@
-# ExamByte - Architektur-Dokumentation (arc42)
+# ExamByte – Architecture Documentation (arc42)
 
-## Meta-Informationen
+## Meta Information
 
-> - **Titel**: ExamByte - Architektur-Dokumentation (arc42)
-> - **Autor**: Marvin0109
+> - **Title**: ExamByte – Architecture Documentation (arc42)
+> - **Author**: Marvin0109
 > - **Version**: 1.3
-> - **Erstellt am**: 03. Februar 2025
-> - **Aktualisiert am**: 24. März 2026
-> - **Zielgruppen**: Entwickler, Benutzer
-> - **Verwendete Werkzeuge**: PlantUML
+> - **Created on**: February 03, 2025
+> - **Updated on**: March 24, 2026
+> - **Target audience**: Developers, users
+> - **Tools used**: PlantUML
 
-## Übersicht
+## Overview
 
-- [1. Einführung und Ziele](#1-einführung-und-ziele)
-  - [1.1 Aufgabenstellung](#11-aufgabenstellung)
-  - [1.2 Qualitätsziele](#12-qualitätsziele)
-  - [1.3 Stakeholder](#13-stakeholder)
-- [2. Randbedingung](#2-randbedingung)
-  - [2.1 Technische Randbedingungen](#21-technische-randbedingungen)
-  - [2.2 Organisatorisch](#22-organisatorisch)
-  - [2.3 Konventionen](#23-konventionen)
-- [3. Kontextabgrenzung](#3-kontextabgrenzung)
-  - [3.1 Fachlicher Kontext](#31-fachlicher-kontext)
-- [4. Lösungssicht](#4-lösungssicht)
-  - [4.1 Architekturübersicht](#41-architekturübersicht)
-  - [4.2 Hauptkomponenten](#42-hauptkomponenten)
-- [5. Bausteinsicht](#5-bausteinsicht)
-- [6. Laufzeitsicht](#6-laufzeitsicht)
-  - [6.1 Erstellung eines Tests](#61-erstellung-eines-tests)
-  - [6.2 Testdurchführung](#62-testdurchführung)
-  - [6.3 Bewertung eines Tests](#63-bewertung-eines-tests)
-  - [6.4 Zulassungsstatus](#64-zulassungsstatus)
-- [7. Verteilungssicht](#7-verteilungssicht)
-- [8. Qualitätsszenarien](#8-qualitätsszenarien)
-- [9. Risiken und technische Schulden](#9-risiken-und-technische-schulden)
-- [10. Glossar](#10-glossar)
+- [1. Introduction and Goals](#1-introduction-and-goals)
+  - [1.1 Task definition](#11-task-definition)
+  - [1.2 Quality Goals](#12-quality-goals)
+  - [1.3 Stakeholders](#13-stakeholders)
+- [2. Constraints](#2-constraints)
+  - [2.1 Technical Constraints](#21-technical-constraints)
+  - [2.2 Organizational Constraints](#22-organizational-constraints)
+  - [2.3 Conventions](#23-conventions)
+- [3. Context and Scope](#3-context-and-scope)
+  - [3.1 Business Context](#31-business-context)
+- [4. Solution Strategy](#4-solution-strategy)
+  - [4.1 Architecture Overview](#41-architecture-overview)
+  - [4.2 Main Components](#42-main-components)
+- [5. Building Block View](#5-building-block-view)
+- [6. Runtime View](#6-runtime-view)
+  - [6.1 Creating an Exam](#61-creating-an-exam)
+  - [6.2 Exam Execution](#62-exam-execution)
+  - [6.3 Exam Grading](#63-exam-grading)
+  - [6.4 Admission Status](#64-admission-status)
+- [7. Deployment View](#7-deployment-view)
+- [8. Quality Scenarios](#8-quality-scenarios)
+- [9. Risks and Technical Debt](#9-risks-and-technical-debt)
+- [10. Glossar](#10-glossary)
 
-## 1. Einführung und Ziele
+## 1. Introduction and Goals
 
-### 1.1 Aufgabenstellung
+### 1.1 Task Definition
 
-ExamByte ist eine Webanwendung zur Verwaltung und Durchführung von Prüfungen im Programmierpraktikum. 
-Sie ersetzt Ilias als System zur Zulassung für die Abschlussprüfung. Die Anwendung ermöglicht die Durchführung von Tests, 
-manuelle Bewertung von Freitextaufgaben durch Korrektor:innen und eine Ergebnisauswertung für Studierende und 
-[Administrator:innen](#10-glossar).
+ExamByte is a web application for managing and conducting exams in programming lab courses.  
+It replaces ILIAS as the system for exam admission for the final exam. 
+The application enables test execution, manual grading of free-text answers by reviewers, 
+and result evaluation for students and [administrators](#10-glossary).
 
-### 1.2 Qualitätsziele
+### 1.2 Quality Goals
 
-**Bereits umgesetzt / teilweise umgesetzt:**
-- **Benutzerfreundlich:** Die Bedienung ist größtenteils intuitiv für Studierende, Korrektor:innen und Administrator:innen; weitere Optimierungen sind noch möglich.
-- **Sicherheit:** Anmeldung erfolgt über Github [OAuth](#10-glossar) zur sicheren Authentifizierung.
-- **Automatisierung:** Multiple-Choice- und Single-Choice-Aufgaben werden automatisch bewertet.
+**Already implemented / partially implemented:**
+- **Usability:** The application is mostly intuitive for students, reviewers, and administrators; further 
+improvements are still possible.
+- **Security:** Login is handled via GitHub [OAuth](#10-glossary) for secure authentication.
+- **Automation:** Multiple-choice and single-choice questions are automatically graded.
 
-**Geplante / noch nicht vollständig umgesetzte Ziele:**
-- **Nachvollziehbarkeit:** Klare Statusübersicht über Testergebnisse und Zulassung ist teilweise vorhanden und soll weiter verbessert werden.
-- **Skalierbarkeit:** Unterstützung paralleler Testdurchführungen für eine wachsende Anzahl von Nutzer:innen ist vorgesehen, aktuell aber noch nicht umgesetzt.
+**Planned / not fully implemented yet:**
+- **Traceability:** A clear overview of test results and admission status is partially implemented 
+and will be improved further.
+- **Scalability:** Support for parallel exam execution for a growing number of users is planned but 
+partially implemented.
 
-### 1.3 Stakeholder
+### 1.3 Stakeholders
 
-| Rolle               | Interesse                                       |
-|---------------------|-------------------------------------------------|
-| Studierende         | Teilnahme an Tests, Prüfungsergebnisse einsehen |
-| Korrektor:innen     | Bewertung von Freitextaufgaben                  |
-| Administrator:innen | Testverwaltung, Ergebnisse überprüfen           |
-| Entwickler:innen    | Wartung und Weiterentwicklung                   |
-
----
-
-## 2. Randbedingung
-
-### 2.1 Technische Randbedingungen
-
-| Randbedingung                | Erläuterung                                                                                           |
-|------------------------------|-------------------------------------------------------------------------------------------------------|
-| Betrieb auf Betriebssystemen | Jegliche Linux Distro oder auch Windows mit WSL erwünscht                                             |
-| Implementierung in Java      | Anwendung wurde im Java-lastigen Semester entwickelt. Entwicklung unter Version Java 21.              |
-| Fremdsoftware frei verfügbar | Für die Authentifizierung ist die GitHub OAuth App nötig, welche kostenlos ist für den Eigengebrauch. |
-
-### 2.2 Organisatorisch
-
-| Randbedingung                    | Erläuterung                                                                                                                                                                                                                                                                                                                                      |
-|----------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Team                             | Marvin0109                                                                                                                                                                                                                                                                                                                                       |
-| Zeitplan                         | Beginn der Entwicklung Anfang November 2024                                                                                                                                                                                                                                                                                                      |
-| Vorgehensmodell                  | Das Projekt wurde parallel zur Vorlesung *Programmierpraktikum 2* entwickelt. Methoden wie *Domain Storytelling* wurden erst im Laufe der Veranstaltung eingeführt und standen daher zu Projektbeginn **nicht** zur Verfügung, was Auswirkungen hatte auf die Entwicklungszeit. <br/> Zur Dokumentation der Architektur kommt arc42 zum Einsatz. |
-| Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](activity-log.md) gesammelt worden. Erstellung von Java-Quellcode in IntelliJ Ultimate.                                                                                                                       |
-| Versionsverwaltung               | Git, Github                                                                                                                                                                                                                                                                                                                                      |
-| Testwerkzeuge und -prozesse      | JUnit, ArchUnit, Integrationstests, WebMvcTests und Testcontainer für Datenbanktests.                                                                                                                                                                                                                                                            |
-
-### 2.3 Konventionen
-
-| Konvention                 | Erläuterung                                                                                                                                                                                                           |
-|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Architekturdokumentation   | Dieses Dokument stellt die Architektur der Software dar und befindet sich in der Version 1.3, welche die erste vollständige und stabile Version ist.                                                                  |
-| Kodierrichtlinien für Java | Java Format nach Google-Java-Format, geprüft mit Hilfe von in der IDE eingebautem Google-Java-Format Plugin                                                                                                           |
-
-Alles Weitere an Konventionen: [Styleguide hier](style-guide.md)
+| Role           | Interest                            |
+|----------------|-------------------------------------|
+| Students       | Take tests, view exam results       |
+| Reviewers      | Grade free-text answers             |
+| Administrators | Manage tests and review results     |
+| Developers     | Maintenance and further development |
 
 ---
 
-## 3 Kontextabgrenzung
+## 2. Constraints
 
-### 3.1 Fachlicher Kontext
+### 2.1 Technical Constraints
 
-![Exam Process Diagram](../src/main/resources/static/public/pictures/ExamByteProzess.png)
+| Constraint                | Explanation                                                                      |
+|---------------------------|----------------------------------------------------------------------------------|
+| Operating system support  | Any Linux distribution or Windows with WSL is supported                          |
+| Java implementation       | The application was developed in a Java-heavy semester. Development uses Java 21 |
+| Free third-party software | GitHub OAuth is required for authentication and is free for personal use         |
 
-*Abbildung 1: Kontextabgrenzungsdiagramm von ExamByte*
+### 2.2 Organizational Constraints
 
-Das Diagramm zeigt ExamByte im Zentrum, die externen Akteure (Studierende, Korrektor:innen, Administrator:innen) sowie externe Systeme (Github OAuth2, PostgreSQL) und deren Interaktionen.
+| Constraint                | Explanation                                                                                                                                                                                                                                                                                  |
+|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Team                      | Marvin0109                                                                                                                                                                                                                                                                                   |
+| Schedule                  | Development started at the beginning of November 2024                                                                                                                                                                                                                                        |
+| Development approach      | The project was developed in parallel to the *Programmierpraktikum 2* course. Methods such as *domain storytelling* were only introduced during the course and were therefore not available at the beginning, which impacted development time. The architecture documentation follows arc42. |
+| Development tools         | The system design was already known from using the ILIAS system during studies. Work results are collected in the [activity log](activity-log.md). Java source code was developed using IntelliJ IDEA Ultimate.                                                                              |
+| Version control           | Git, GitHub                                                                                                                                                                                                                                                                                  |
+| Testing tools and process | JUnit, ArchUnit, integration tests, WebMvc tests, and Testcontainers for database testing.                                                                                                                                                                                                   |
 
----
+### 2.3 Conventions
 
-## 4 Lösungssicht
+| Convention                 | Explanation                                                                                                                   |
+|----------------------------|-------------------------------------------------------------------------------------------------------------------------------|
+| Architecture documentation | This document describes the software architecture and is version 1.3, which represents the first complete and stable version. |
+| Java coding conventions    | Java code follows the Google Java Format, enforced using the Google Java Format plugin integrated into the IDE                |
 
-### 4.1 Architekturübersicht
-
-Die Anwendung folgt einer klassischen **Client-Server-Architektur:**
-
-- **Frontend:** Weboberfläche mit HTML und Thymeleaf
-- **Backend:** Spring-Boot-Anwendung mit Spring-MVC
-- **Datenbank:** PostgreSQL, angebunden über JPA
-
-### 4.2 Hauptkomponenten
-
-- **Benutzermanagement:** Rollenverwaltung, Github-Login
-- **Testverwaltung:** Erstellung, Bearbeitung und Veröffentlichung von Tests
-- **Bewertungssystem:** Automatische [MC-/SC](#10-glossar)-Bewertung, manuelle Korrektur von Freitextaufgaben
-- **Ergebnisanzeige:** Visualisierung der Testergebnisse für alle Beteiligten
-
----
-
-## 5 Bausteinsicht
-
-- **Controller-Schicht:** Bearbeitung von Anfragen
-- **Service-Schicht:** Geschäftslogik und Validierung
-- **Datenbank-Schicht:** Speicherung und Abruf von Daten
+All other conventions: [Style guide here](style-guide.md)
 
 ---
 
-## 6 Laufzeitsicht
+## 3. Context and Scope
 
-### 6.1 Erstellung eines Tests
+### 3.1 Business Context
 
-1. Professoren:innen setzen die Anzahl an Fragetypen fest und lassen vom Server das
-Formular generieren,
-2. Sie setzen die relevanten Zeiten fest (Startzeit, Frist, Veröffentlichung der Ergebnisse).
-3. Sie füllen das Testformular aus mit Fragestellungen, Antwortmöglichkeiten, Punkte, etc. und senden das Formular ab.
-4. Das Exportieren und Vorschau eines Tests erfolgt über einer anderen Seiten.
+![Exam Process Diagram](../src/main/resources/static/public/pictures/ExamByteProcess.png)
 
-### 6.2 Testdurchführung
+*Figure 1: Context diagram of ExamByte*
 
-1. Studierende melden sich mit ihrem Github-Account an.
-2. Sie gehen zur Testübersicht und starten einen aktiven Test.
-3. Sie beantworten die Fragen und das Ergebnis der automatischen Korrektur ist sichtbar.
-4. Unzählige Testdurchläufe sind seitdem möglich, bewertet für die Zulassung wird aber nur der letzte Versuch.
-5. Nach Ablauf der Testzeit wird die Bearbeitung gesperrt und die endgültigen Ergebnisse werden nach einer gewissen Zeit sichtbar sein.
-6. Der Zulassungsstatus ist immer einsehbar und wird aktualisiert.
-
-### 6.3 Bewertung eines Tests
-
-1. MC-/SC-Fragen werden automatisch bewertet.
-2. Antworten für Freitextaufgaben können die Korrektoren einsehen und bewerten.
-3. Nach Bedarf kann auch der Professor:in eine neue Bewertung erstellen, dies gilt auch für Korrektoren.
-
-### 6.4 Zulassungsstatus
-
-Nach einer bestimmten Anzahl an Tests (12 Tests) wird der Zulassungsstatus aktualisiert und gibt bekannt, ob die 
-Zulassung erreicht wurde oder nicht.
+The diagram shows ExamByte at the center, external actors (students, reviewers, administrators), 
+as well as external systems (GitHub OAuth2, PostgreSQL) and their interactions.
 
 ---
 
-## 7 Verteilungssicht
+## 4 Solution Strategy
 
-- **Client:** Webbrowser (führt HTML/CSS aus, stellt HTTP-Anfragen)
-- **Applikationsserver:** Spring-Boot-Anwendung (Spring MVC, Geschäftslogik, Thymeleaf-Rendering)
-- **Datenbankserver:** PostgreSQL-Datenbank
+### 4.1 Architecture Overview
 
----
+The application follows a classic **client-server architecture:**
 
-## 8 Qualitätsszenarien
+- **Frontend:** Web interface using HTML and Thymeleaf
+- **Backend:** Spring Boot application with Spring MVC
+- **Database:** PostgreSQL connected via JPA
 
-| Qualitätsziel  | Szenario                                                                                                                                                                               |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Sicherheit     | Ein nicht authentifizierter Benutzer versucht, einen Test zu starten. Das System verweigert den Zugriff und leitet zur Login-Seite weiter.                                             |
-| Skalierbarkeit | Das System ist derzeit für eine typische Anzahl gleichzeitiger Nutzer ausgelegt. Hohe Lastsituationen (z. B. sehr große Kurse bis zu 800 Studenten) stellen kein bekanntes Risiko dar. |
-| Verfügbarkeit  | Während eines laufenden Tests ist das System erreichbar und Ausfälle führen nicht zum Verlust bereits abgegebener Antworten.                                                           |
+### 4.2 Main Components
 
----
-
-## 9 Risiken und technische Schulden
-
-- **Mögliche Risiken:**
-  - **Verfügbarkeit der GitHub-OAuth-Integration**, insbesondere die Abhängigkeit von der OAuth-App 
-  (keine Anmeldung möglich bei Github-Ausfall)
-  - **Gleichzeitige Korrektur von einer Aufgabe**, [race condition](#10-glossar) möglich.
+- **User management:** Role handling, GitHub login
+- **Test management:** Creation, editing, and publishing of tests
+- **Grading system:** Automatic grading of [MC/SC](#10-glossary) questions, manual grading of free-text answers
+- **Results view:** Visualization of test results for all stakeholders
 
 ---
 
-## 10 Glossar
+## 5 Building Block View
 
-| Begriff             | Bedeutung                                                                                                                                                                      |
-|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| MC                  | Multiple-Choice                                                                                                                                                                |
-| SC                  | Single-Choice                                                                                                                                                                  |
-| Administrator:innen | Da es sich um eine Anwendung zwischen Studierende und Professoren handelt, ist hier der Administrator:in mit Professor:in gemeint                                              |
-| OAuth               | Offenes Authentifizierungsprotokoll                                                                                                                                            |
-| Race condition      | Ein *race condition* entsteht, wenn mehrere Threads oder Prozesse auf gemeinsame Daten zugreifen und das Ergebnis davon abhängt, in welcher Reihenfolge sie ausgeführt werden. |
+- **Controller layer:** Handles incoming requests
+- **Service layer:** Business logic and validation
+- **Database layer:** Data storage and retrieval
 
-[Zurück zur Übersicht](#übersicht)
+---
+
+## 6 Runtime View
+
+### 6.1 Creating an Exam
+
+1. Professors define the number of question types and let the server generate the form.
+2. They set the relevant times (start time, deadline, result publication time).
+3. They fill out the exam form with questions, answer options, points, etc., and submit the form.
+4. Exporting and previewing an exam is done on separate pages.
+
+### 6.2 Exam Execution
+
+1. Students log in using their GitHub account.
+2. They navigate to the exam overview and start an active exam.
+3. They answer the questions, and the result of the automatic grading is displayed.
+4. Multiple exam attempts are allowed; however, only the last attempt counts for admission.
+5. After the exam deadline, editing is disabled and final results become visible after a defined release period.
+6. The admission status is always visible and continuously updated.
+
+### 6.3 Exam Grading
+
+1. MC/SC questions are graded automatically.
+2. Reviewers can view and grade answers to free-text questions.
+3. If needed, professors can also create a new grading; the same applies to reviewers.
+
+### 6.4 Admission Status
+
+After a certain number of exams (12 tests), the admission status is updated and indicates whether
+the admission requirement has been met or not.
+
+---
+
+## 7 Deployment View
+
+- **Client:** Web browser (executes HTML/CSS, sends HTTP requests)
+- **Application server:** Spring Boot application (Spring MVC, business logic, Thymeleaf rendering)
+- **Database server:** PostgreSQL database
+
+---
+
+## 8 Quality Scenarios
+
+| Quality goal | Scenario                                                                                                                                                                           |
+|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Security     | An unauthenticated user tries to start an exam. The system denies access and redirects to the login page.                                                                          |
+| Scalability  | The system is currently designed for a typical number of concurrent users. High-load scenarios (e.g., very large courses with up to 800 students) are not considered a known risk. |
+| Availability | During an ongoing exam, the system remains available, and outages do not result in loss of already submitted answers.                                                              |                                                     |
+
+---
+
+## 9 Risks and Technical Debt
+
+- **Possible risks:**
+  - **Availability of GitHub OAuth integration**, especially dependency on the OAuth application  
+    (no login possible if GitHub is unavailable)
+  - **Concurrent grading of a task**, possible [race condition](#10-glossary)
+
+---
+
+## 10 Glossary
+
+| Term           | Meaning                                                                                                                     |
+|----------------|-----------------------------------------------------------------------------------------------------------------------------|
+| MC             | Multiple choice                                                                                                             |
+| SC             | Single choice                                                                                                               |
+| Administrators | Since this application is used between students and professors, the term administrator refers to professors                 |
+| OAuth          | Open authentication protocol                                                                                                |
+| Race condition | A race condition occurs when multiple threads or processes access shared data and the result depends on the execution order |
+
+[Back to overview](#overview)
