@@ -4,126 +4,130 @@
 
 # ExamByte
 
-## Übersicht
+## Overview
 
-- [Was ist ExamByte?](#was-ist-exambyte)
-- [Funktionen](#funktionen)
+> [!TIP]
+> German version of documents check [here.](docs/de)
+
+- [What is ExamByte?](#what-is-exambyte)
+- [Features](#features)
 - [Installation (Linux)](#installation-linux)
-- [Nutzung und Demo](#nutzung)
-- [Architektur](#architektur)
-- [Dokumentation](#dokumentation)
-- [Mitwirkende](#mitwirkende)
+- [Usage and Demo](#usage-and-demo)
+- [Architecture](#architecture)
+- [Documentation](#documentation)
+- [Contributors](#contributors)
 
 > [!NOTE]
-> Die Weiterentwicklung von ExamByte endete am **24.03.2026**. 
-> 
-> Nach umfangreicher Entwicklungszeit wurde entschieden, die aktuelle Version als final zu betrachten und
-> keine weiteren Features oder Anpassungen mehr umzusetzen.
-> Offene oder geplante Erweiterungen werden nicht weiterverfolgt.
+> Development of ExamByte officially ended on **March 24, 2026**.
 >
-> Der zugehörige Entwicklungs-Branch `feature/review-lock` wurde nicht gemerged und entsprechend verworfen.
-> Der aktuelle Stand wird als abgeschlossen betrachtet.
+> After extensive development, the current version has been declared final and
+> no further features or changes will be implemented.
+> Open or planned enhancements will no longer be pursued.
 >
-> Finale Codeüberprüfung ist abgeschlossen, für mehr Details wie mögliche Erweiterungen siehe [To-do](docs/TO_DO.md).
-> 
+> The related development branch `feature/review-lock` was never merged and has therefore been discarded.
+> The current state of the project is considered complete.
+>
+> Final code review has been completed. For more details and possible future ideas, see [To-do](docs/TO_DO.md).
 
-## Was ist ExamByte?
+## What is ExamByte?
 
-ExamByte ist eine Webanwendung zur Durchführung und Bewertung von Tests im Programmierpraktikum.
-Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
+ExamByte is a web application for conducting and grading tests in programming lab courses.
+It replaces ILIAS as the testing platform for exam admission and provides:
 
-- **Automatische Bewertung** von Multiple-Choice-Fragen
-- **Manuelle Korrektur** von Freitextaufgaben durch Korrektor:innen
-- **Verwaltung von Testergebnissen** für Studierende und Organisator:innen
-- **Benutzerverwaltung** mit GitHub-Authentifizierung
+- **Automatic grading** of multiple-choice questions
+- **Manual review** of free-text tasks by reviewers
+- **Management of test results** for students and organizers
+- **User management** with GitHub authentication
 
-## Funktionen
+## Features
 
-- **Testverwaltung**: Erstellen, Vorschau und Durchführung von Tests
-- **Testbewertung**: Automatische Bewertung von MC-Fragen, manuelle Bewertung von Freitextaufgaben
-- **Zulassungsstatus**: Studierende sehen ihren Fortschritt und den aktuellen Zulassungsstand
-- **Ergebnisübersichten**: Organisator:innen haben eine Gesamtübersicht der Testergebnisse
-- **Exportfunktion**: Testergebnisse als CSV-Datei herunterladen
+- **Test management**: Create, preview, and conduct tests
+- **Test evaluation**: Automatic grading of multiple-choice questions and manual review of free-text tasks
+- **Admission status**: Students can track their progress and current admission status
+- **Result overview**: Organizers have access to a complete overview of test results
+- **Export feature**: Download test results as CSV files
 
 ## Installation (Linux)
 
-### Voraussetzungen
+### Requirements
 - Java 21
-- Github-Account für Authentifizierung
-- Docker für die Datenbank
-- Einrichtung von SSH für das Klonen des Repository (optional)
-- Einsetzen der Credentials in einer `.env`-Datei (verwende hier für `.env.example`)
+- A GitHub account for authentication
+- Docker for the database
+- SSH setup for cloning the repository (optional)
+- Add the required credentials to a `.env` file (use `.env.example` as a template)
 
-### Projekt klonen mit SSH
+### Cloning repository via SSH
 ```
 $ git clone git@github.com:Marvin0109/ExamByte.git
 ```
 
-### Container starten
+### Starting container
 > [!IMPORTANT]
-> Docker Container **immer** vor der Ausführung der `.jar` starten, ansonsten wird die Anwendung nicht starten.
+> Always start the Docker container **before** running the `.jar` file, otherwise the application will fail to start.
 ```
 $ docker compose up -d
 ```
-   
-### JAR-File bauen und starten
+
+### Building and using JAR-File
 ```
 $ ./gradlew build
 $ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
 ```
-   
+
 > [!WARNING]
-> Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
-> Workaround:
-> - Docker aktualisieren
-> - Spring Boot aktualisieren
-> - Temporär die API-Version manuell setzen (**langfristig nicht empfohlen**)
+> If Testcontainers cannot detect Docker API version `1.44`, the integration tests will fail.
+>
+> Workarounds:
+> - Update Docker
+> - Update Spring Boot
+> - Temporarily set the API version manually (**not recommended as a long-term solution**)
 >   ```
 >   $ echo api.version=1.44 >> ~/.docker-java.properties
 >   ```
->   
->   Quellen:
-> - [Stackoverflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
-> - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
-   
-### Anwendung stoppen
+>
+>   Sources:
+> - [Stack Overflow: Docker error about client API version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
+> - [GitHub: testcontainers-java issue](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
+
+### Shutting down the application
 ```
-$ ^C # Verwende strg+c
+$ ^C # Use ctrl+c
 $ docker compose down
 ```
 
 > [!TIP]
-> Falls auch die DB-Daten gelöscht werden sollen, verwende Argument `-v`
+> If the database data should also be removed, use the `-v` argument.
 > ```
-> $ docker compose down -v # Volumes werden gelöscht
+> $ docker compose down -v # Deleting volumes
 > ```
 
-## Nutzung
+## Usage and Demo
 
 > [!NOTE]
-> 
-> Die Screenshots zeigen die grundlegenden Features von ExamByte vom Stand 18.03.2026.
-> 
-> Weitere Screenshots sind [hier](src/main/resources/static/public/demo).
-### Prüfung erstellen
+>
+> The screenshots show the core features of ExamByte as of March 18, 2026.
+>
+> More screenshots [here](src/main/resources/static/public/demo).
 
-![Prüfung erstellen](src/main/resources/static/public/demo/createExam_1.png)
+### Creating tests
 
-### Prüfung bearbeiten
+![Creating tests](src/main/resources/static/public/demo/createExam_1.png)
 
-![Prüfung bearbeiten](src/main/resources/static/public/demo/submitExam.png)
+### Conducting tests
 
-### Prüfung korrigieren
+![Conducting tests](src/main/resources/static/public/demo/submitExam.png)
 
-![Korrektur einer Studenten Antwort](src/main/resources/static/public/demo/review.png)
+### Reviewing student submission
 
-### Ergebnis
+![Reviewing student submission](src/main/resources/static/public/demo/review.png)
 
-![Ergebnisanzeige](src/main/resources/static/public/demo/showReview.png)
+### Results overview
 
-## Architektur
+![Results overview](src/main/resources/static/public/demo/showReview.png)
 
-### Datenfluss und API-Calls
+## Architecture
+
+### Data flow and API calls
 ```mermaid
 flowchart TD
     n1[Controller] -->|Request| n2[Service]
@@ -139,8 +143,7 @@ flowchart TD
     style n4 fill:#CB6CE6,stroke:#000,color:#000000
 ```
 
-### Abhängigkeiten der Layers (Onion Architektur)
-
+### Dependencies of layers (Onion architecture)
 ```mermaid
 flowchart TD
     classDef web fill:#f9f,stroke:#333,stroke-width:2px;
@@ -191,17 +194,16 @@ flowchart TD
     Infrastructure --- Domain
 ```
 
-## Dokumentation
+## Documentation
 
-- [arc42-Architekturdokumentation](docs/arc42.md)
-- [Aktivitätsprotokoll](docs/Activity_Protocol.md)
-- [To-Do](docs/TO_DO.md)
+- [arc42 architecture documentation](docs/arc42.md)
+- [Activity log](docs/Activity_log.md)
+- [To do](docs/TO_DO.md)
 - [Styleguide](docs/STYLEGUIDE.md)
 
-## Mitwirkende
+## Contributors
 
-- Marvin0109 - Hauptentwicklung und Wartung
-- muz70wuc - Mitentwicklung in der Anfangsphase
+- Marvin0109 - Main development and maintenance
+- muz70wuc - Early-stage co-development
 
-[Zurück zur Übersicht.](#übersicht)
-
+[Back to overview.](#overview)

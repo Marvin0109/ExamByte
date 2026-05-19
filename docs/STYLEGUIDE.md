@@ -634,6 +634,6 @@ schließlich nur noch ich als alleiniger Entwickler weiter.
 - Vielen Dank an alle ursprünglichen Teammitglieder für ihre Unterstützung und Beiträge.
 - Die Weiterentwicklung des Projekts wurde von mir allein durchgeführt. 
 Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich abzuschließen 
-(weitere Details in [Readme](../README.md)).
+(weitere Details in [Readme](de/README.de.md)).
 
 [Zurück zur Übersicht](#übersicht)
