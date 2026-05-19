@@ -27,7 +27,7 @@
 > The related development branch `feature/review-lock` was never merged and has therefore been discarded.
 > The current state of the project is considered complete.
 >
-> Final code review has been completed. For more details and possible future ideas, see [To-do](docs/todo.md).
+> Final code review has been completed. For more details and possible future ideas, check [To do](docs/todo.md).
 
 ## What is ExamByte?
 

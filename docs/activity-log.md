@@ -1,728 +1,738 @@
-# Aktueller Stand
+# Current Status
 
->**Autor:** Marvin0109,
->**aktualisiert am:** 24.03.2026
+> **Author:** Marvin0109
+> **Updated on:** May 19, 2026
 
 > [!NOTE]
-> Seit dem 11.02.25 wird die Anwendung ausschließlich von Marvin0109 weiterentwickelt.
-> 
-> Seit dem 24.03.26 wurde die Weiterentwicklung von ExamByte eingestellt. Das letzte Update war die Vereinheitlichung
-> der Sprache vom Quellcode auf Englisch, die Überprüfung der restlichen Codekonventionen 
-> gemäß [Styleguide](style-guide.md) und die Korrektur der Onion Architektur.
+> Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
+>
+> Since March 24, 2026, further development of ExamByte has been discontinued. The last update included the
+> standardization of the codebase language to English, a review of remaining code conventions according to the
+> [Style Guide](style-guide.md), and fixes related to the Onion Architecture.
 
-## Aktivitätsprotokoll
+## Activity Log
 
 ### 07.11.24
 
-**Bereich**: Frontend / Backend / Tests
-- Erstellung von `index.html` und `contact.html`
-- Notwendige Controller erstellt
-- Tests geschrieben, die bei `gradle:build` fehlschlagen, aber manuell funktionen
+**Area**: Frontend / Backend / Tests
+- Created `index.html` and `contact.html`
+- Implemented required controllers
+- Wrote tests that fail during `gradle build`, but work when executed manually
 
 ---
 
 ### 08.11.24
 
-**Bereich**: Frontend / Fehlerbehandlung
-- Login-Popup implementiert
-- 405-Post-Error-Page erstellt
-- Weitere kleine Extras ergänzt
+**Area**: Frontend / Error Handling
+- Implemented login popup
+- Created 405 POST error page
+- Added minor additional features
 
 ---
 
 ### 13.11.24
 
-**Bereich**: Frontend / Struktur
-- Navigationslogik von HTML-Seiten getrennt 
-- `scripts.js` eingebunden
+**Area**: Frontend / Structure
+- Separated navigation logic from HTML pages
+- Added `scripts.js`
 
 ---
 
 ### 14.11.24
 
-**Bereich**: Security
-- OAuth2-Login implementiert
+**Area**: Security
+- Implemented OAuth2 login
 
 ---
 
 ### 20.11.24
 
-**Bereich**: Security / Frontend
-- Admin Rolle hinzugefügt
-- Problem: `loadUser()` wird nicht aufgerufen (Ursache unbekannt)
-- 403-Error-Page erstellt
-- `exams.html` angelegt
-- Weitere Extras ergänzt
+**Area**: Security / Frontend
+- Added admin role
+- Issue: `loadUser()` is not being called (root cause unknown)
+- Created 403 error page
+- Created `exams.html`
+- Added additional minor features
 
 ---
 
 ### 22.11.24
 
-**Bereich**: Security / Tests
-- Browser-Neustart notwendig, damit Rollenänderung greifen
-- Benutzername in `loadUser()` temporär manuell gesetzt
-- Tests für WebController und Authentifizierung geschrieben
+**Area**: Security / Tests
+- Browser restart required for role changes to take effect
+- Temporarily hardcoded username in `loadUser()`
+- Wrote tests for WebController and authentication
 
 ---
 
 ### 24.11.24
 
-**Bereich**: Security
-- Logout-Funktion hinzugefügt
-- Problem: Login-Daten werden beim Logout nicht vollständig gelöscht
+**Area**: Security
+- Added logout functionality
+- Issue: login data is not fully cleared on logout
 
 ---
 
 ### 28.11.24
 
-**Bereich**: Architektur / Tests
-- Projekt auf Onion-Architektur umgestellt  
-- `IndexTest` zunächst fehlerhaft, kurze Zeit später behoben
+**Area**: Architecture / Tests
+- Migrated project to Onion Architecture
+- `IndexTest` initially failing, later fixed
 
 ---
 
 ### 17.12.2024
 
-**Bereich**: Architektur / Tests
-- Test zur Onion-Architektur geschrieben, jedoch fehlgeschlagen
+**Area**: Architecture / Tests
+- Created Onion Architecture test, but it is failing
 
 ---
 
 ### 07.01.2025
-**Bereich**: Dokumentation
-- Allgemeine Dokumentation erstellt
+
+**Area**: Documentation
+- Created general documentation
 
 ---
 
 ### 08.01.2025
-**Bereich**: Dokumentation
-- Styleguide hinzugefügt
+
+**Area**: Documentation
+- Added style guide
 
 ---
 
 ### 09.01.2025
-**Bereich**: Infrastruktur / Tests
-- `docker-compose.yml` erstellt
-- (Noch nicht funktionierender) Datenbanktest angelegt
-- Gradle-Dependencies aktualisiert und dokumentiert
-- `application.yml` setting
+
+**Area**: Infrastructure / Tests
+- Created `docker-compose.yml`
+- Added (non-functional) database test
+- Updated and documented Gradle dependencies
+- `application.yml` configuration updates
 
 ---
 
 ### 14.01.2025
-**Bereich**: Datenbank / Domain
-- SQL-Tabellen für User, Antwort und Frage erstellt
-- Zugehörige Aggregate vorerst fertiggestellt
+
+**Area**: Database / Domain
+- Created SQL tables for users, answers, and questions
+- Initial implementation of related aggregates completed
 
 ---
 
 ### 16.01.2025
-**Bereich**: Architektur / Tests
-- Onion-Architektur überarbeitet
-- Architekturtest angepasst (schlägt erwartungsgemäß fehl)
+
+**Area**: Architecture / Tests
+- Revised Onion Architecture
+- Adjusted architecture test (expected to fail)
 
 ---
 
 ### 21.01.2025
-**Bereich**: Architektur / Persistenz
-- Onion-Architektur in `domain` verlagert
-- Mapper- und Entity-Klassen in `persistence` erstellt
-- Bugfix in `ExamByteApplication.java` (`scanBasePackages`)
-- Data-Ordner wird nun lokal gespeichert (nicht committen)
+
+**Area**: Architecture / Persistence
+- Moved Onion Architecture into `domain`
+- Created mapper and entity classes in `persistence`
+- Fixed bug in `ExamByteApplication.java` (`scanBasePackages`)
+- Data directory is now stored locally (do not commit)
 
 ---
 
 ### 23.01.2025
-**Bereich**: Datenbank / Tests
-- Bugfix bei Serververbindung
-- Professor- und Student-Repositories ergänzt
-- Zugehörige Mapper erstellt
-- Erster Test zum Datenaustausch zwischen Server-DB und lokalem System (noch nicht erfolgreich)
+
+**Area**: Database / Tests
+- Fixed server connection bug
+- Added professor and student repositories
+- Created related mappers
+- First test for data exchange between server DB and local system (not yet successful)
 
 ---
 
-
 ### 27.01.2025
-**Bereich**: Persistenz / Tests
-- Separate Klassen und Packages für JPA und JDBC
-- JDBC-Test erstellt und erfolgreich ausgeführt
-- Service-Klasse (implementiert Repository) angelegt 
-- SQL Datei in vier Dateien aufgeteilt
-- Hintergrund: Spring Data, Woche 11
+**Area**: Persistence / Tests
+- Separate classes and packages for JPA and JDBC
+- Created and successfully executed JDBC test
+- Added service class (implements repository)
+- Split SQL file into four separate files
+- Context: Spring Data, week 11
 
 ---
 
 ### 29.01.2025
-**Bereich**: Datenbank / Tests
-- Flyway-Migration-Fehler behoben (separate Skripte für vier Tabellen)
-- `DataBaseTest` schlägt weiterhin fehl (`No Bean Type Found`)
-- Klassenverschiebungen analog zu VL Woche 12 (ohne Erfolg)
+**Area**: Database / Tests
+- Fixed Flyway migration issue (separate scripts for four tables)
+- `DataBaseTest` still failing (`No Bean Type Found`)
+- Package restructuring according to lecture week 12 (without success)
 
 ---
 
 ### 30.01.2025
-**Bereich**: Infrastruktur / Refactoring
-- JPA und H2 entfernt
-- Testcontainers als einzige Testdatenbank verwendet
-- Bean-Type-Error behoben
-- Klassen umbenannt und verschoben
-- UUID eingeführt (noch nicht vollständig getestet)
+**Area**: Infrastructure / Refactoring
+- Removed JPA and H2
+- Switched to Testcontainers as the only test database
+- Fixed bean type error
+- Renamed and moved classes
+- Introduced UUID (not fully tested yet)
 
 ---
 
 ### 31.01.2025
-**Bereich**: Domain / Tests
-- Exam-Entität hinzugefügt
-- Tests für Datenbankrelationen gestartet
+**Area**: Domain / Tests
+- Added Exam entity
+- Started tests for database relationships
 
 ---
 
 ### 01.02.2025
-**Bereich**: Datenbank / Tests
-- Vollständige Datenbanklogik umgesetzt
-- Integrations- und Unit-Tests erstellt und ausgeführt
-- `README`-Inhalte zu `Activity_Protocol` verschoben
+**Area**: Database / Tests
+- Fully implemented database logic
+- Created and executed integration and unit tests
+- Moved README content to `Activity_log`
 
 ---
 
 ### 02.02.2025
-**Bereich**: Architektur / Refactoring
-- Onion-Architektur und Tests überarbeitet
-- Toten Code entfernt
-- Neue Packages angelegt
-- Builder-Pattern eingeführt
+**Area**: Architecture / Refactoring
+- Revised Onion Architecture and tests
+- Removed dead code
+- Created new packages
+- Introduced Builder pattern
 
 ---
 
 ### 03.02.2025
-**Bereich**: Service / Dokumentation
-- Service-Klassen ergänzt
-- arc42-Dokumentation erstellt
-- README erneuert
-- Onion-Test schlägt wegen Abhängigkeiten zwischen `application.config` und `application.service` fehl
+**Area**: Service / Documentation
+- Added service classes
+- Created arc42 architecture documentation
+- Updated README
+- Onion test failing due to dependencies between `application.config` and `application.service`
 
 ---
 
 ### 04.02.2025
-**Bereich**: Web / Tests
-- Vier Exam-HTML-Seiten erstellt
-- Passende Tests ergänzt
-- Zusätzliche Methode in Antwort-Klassen
-- ExamController erstellt (Korrekturbedarf vorhanden)
+**Area**: Web / Tests
+- Created four exam HTML pages
+- Added corresponding tests
+- Added additional method in answer classes
+- Created ExamController (needs refactoring)
 
 ---
 
 ### 05.02.2025
-**Bereich**: Security / Tests
-- Bean-Dependency-Probleme in Tests behoben
-- WebController angepasst und Zugriffsrechte ergänzt
-- URLs in ExamController-Tests korrigiert
-- Rolle `ROLE_USER` → `ROLE_STUDENT` geändert
-- UUID-Extraktionsmethoden erstellt
-- Onion-Test weiterhin fehlerhaft
+**Area**: Security / Tests
+- Fixed bean dependency issues in tests
+- Adjusted WebController and added access roles
+- Fixed URLs in ExamController tests
+- Renamed role `ROLE_USER` → `ROLE_STUDENT`
+- Created UUID extraction methods
+- Onion test still failing
 
 ---
 
 ### 06.02.2025
-**Bereich**: Architektur / Tests
-- Onion-Architektur stabilisiert
-- Container- und Mapper-Tests angepasst
-- Test für die Aggregate und Infrastructure geschrieben
+**Area**: Architecture / Tests
+- Stabilized Onion Architecture
+- Adjusted container and mapper tests
+- Added tests for aggregates and infrastructure
 
 ---
 
 ### 07.02.2025
-**Bereich**: Security / Tests
-- OAuth2-Login, Rollenverteilung und Tests gefixt
-- DTOs, Mapper und Interfaces vervollständigt
-- Package-Dokumentationen (Javadoc) erstellt
+**Area**: Security / Tests
+- Fixed OAuth2 login, role assignment, and tests
+- Completed DTOs, mappers, and interfaces
+- Added package documentation (Javadoc)
 
 ---
 
 ### 09.02.2025
-**Bereich**: Qualitätssicherung / Tests
-- SpotBugs integriert
-- Rollenverteilung angepasst (temporäre Lösung)
-- Umgang mit `NichtVorhandenException` via `Optional<T>`
-- DTOMapper- und Service-Tests ergänzt
-- ExamControllerTests größtenteils behoben
-- PowerMock-Dependencies ergänzt
+**Area**: Quality Assurance / Tests
+- Integrated SpotBugs
+- Adjusted role assignment (temporary solution)
+- Handled `NotFoundException` using `Optional<T>`
+- Added DTO mapper and service tests
+- Mostly fixed ExamController tests
+- Added PowerMock dependencies
 
 ---
 
 ### 18.02.2025
-**Bereich**: Architektur
-- Persistenz-Package in Infrastrukturschicht verschoben
-- `domain.model.service` und `.impl` für zukünftige Logik erstellt
-- Onion-Test angepasst
+**Area**: Architecture
+- Moved persistence package into infrastructure layer
+- Created `domain.model.service` and `.impl` for future logic
+- Adjusted Onion Architecture test
 
 ---
 
 ### 03.03.2025
-**Bereich**: Tests / Infrastruktur
-- Tests korrigiert
-- Unnötige Imports entfernt
-- `AntwortServiceTest` gefixt
+**Area**: Tests / Infrastructure
+- Fixed tests
+- Removed unnecessary imports
+- Fixed `AntwortServiceTest`
 
 ---
 
 ### 13.03.2025
-**Bereich**: Umgebungsvariable
-- `.env` Datei erstellt
-- Fehleranalyse zu Issue #1
+**Area**: Environment variables
+- Created `.env` file
+- Issue analysis for issue #1
 
 ---
 
 ### 16.03.2025
-**Bereich**: Build / Infrastruktur
-- JaCoCo-Settings für Gradle 8.x aktualisiert
-- Dotenv für Umgebungsvariablen integriert
+**Area**: Build / Infrastructure
+- Updated JaCoCo settings for Gradle 8.x
+- Integrated Dotenv for environment variables
 
 ---
 
 ### 29.03.2025
-**Bereich**: Tests / Frontend
-- Weitere Service-Tests erstellt
-- Dateipfade in Exam-HTML-Seiten korrigiert
-- `TestSystemPropertyInitializer` für Tests eingebunden
+**Area**: Tests / Frontend
+- Created additional service tests
+- Fixed file paths in exam HTML pages
+- Integrated `TestSystemPropertyInitializer` for tests
 
 ---
 
 ### 30.03.2025
-**Bereich**: Infrastruktur / Tests
-- Spring von 3.3.5 auf 3.4.3 aktualisiert
-- DB-Umgebungsvariablen für Tests gesetzt
-- `UserCreationTest` und `AppUserServiceTest` ergänzt
+**Area**: Infrastructure / Tests
+- Updated Spring from 3.3.5 to 3.4.3
+- Set DB environment variables for tests
+- Added `UserCreationTest` and `AppUserServiceTest`
 
 ---
 
 ### 01.04.2025
-**Bereich**: Domain / Tests
-- Zulassungslogik inkl. Test umgesetzt
-- Maximal 12 Exams für Zulassung
-- Trennung von Domain- und Application-Schicht korrigiert
+**Area**: Domain / Tests
+- Implemented admission logic with tests
+- Maximum of 12 exams for admission
+- Fixed separation between domain and application layer
 
 ---
 
 ### 02.04.2025
-**Bereich**: Bewertung / Tests
-- Speicherung von MC/SC-Lösungen implementiert
-- Automatische Bewertungslogik erstellt
-- Tests angepasst
-- ExamProfessoren erweitert (Fragen per Klick, noch fehlerhaft)
+**Area**: Grading / Tests
+- Implemented storage of MC/SC solutions
+- Created automatic grading logic
+- Adjusted tests
+- Extended ExamProfessor functionality (question selection via click, still buggy)
 
 ---
 
 ### 03.04.2025
-**Bereich**: Frontend
-- DOM hinzugefügt (fehlerhaft, technischer Schuldenpunkt)
+**Area**: Frontend
+- Added DOM logic (buggy, technical debt)
 
 ---
 
 ### 05.04.2025
-**Bereich**: Frontend
-- Problem mit fehlerhaftem Indexing (Issue #2)
+**Area**: Frontend
+- Issue with broken indexing (Issue #2)
 
 ---
 
 ### 06.04.2025
-**Bereich**: Frontend / UX
-- Löschen mehrerer Fragen entfernt (zu komplex)
-- Neue Logik: Nur letzte Frage kann gelöscht werden
-- JavaScript-Code in `addQuestion.js`
+**Area**: Frontend / UX
+- Removed multi-question deletion (too complex)
+- New logic: only last question can be deleted
+- JavaScript code in `addQuestion.js`
 
 ---
 
 ### 17.04.2025
-**Bereich**: Frontend / Tests
-- Mehr Antwortoptionen für MC/SC (aktuell 6)
-- Übergabe der Fragedaten als JSON
-- Frageformular entfernt
+**Area**: Frontend / Tests
+- Increased MC/SC answer options to 6
+- Passing question data as JSON
+- Removed question form
 
 ---
 
 ### 18.04.2025
-**Bereich**: Web / Tests
-- JSON vom Model getrennt
-- Zwei separate Forms erstellt
-- `BindingResult` weiterhin fehlerhaft (White Error Page)
+**Area**: Web / Tests
+- Separated JSON from model
+- Created two separate forms
+- `BindingResult` still broken (White error page)
 
 ---
 
 ### 20.04.2025
-**Bereich**: Web / Tests
-- `BindingResult` gefixt (`@Valid` ohne `@ModelAttribute`)
-- ExamManagementServiceTest erstellt (noch unvollständig)
-- Feature: Anzeige der eigenen Fach-ID auf der Contact-Seite
-- Weitere Details in Commits dokumentiert
+**Area**: Web / Tests
+- Fixed `BindingResult` (`@Valid` without `@ModelAttribute`)
+- Created `ExamManagementServiceTest` (still incomplete)
+- Feature: display of faculty ID on contact page
+- More details documented in commits
 
 ---
 
 ### 11.08.2025
-**Bereich**: Cleanup
-- Löschfunktion (teilweise) implementiert
-- TODO-Markierungen aktualisiert
-- `update_progress.sh` gelöscht
+**Area**: Cleanup
+- Partially implemented delete functionality
+- Updated TODO markers
+- Removed `update_progress.sh`
 
 ---
 
 ### 12.08.2025
-**Bereich**: Frontend / Export
-- DOM-Event entfernt
-- CSV-Export implementiert (noch ungetestet)
-- Formular zur Exam-Erstellung angelegt
+**Area**: Frontend / Export
+- Removed DOM event
+- Implemented CSV export (not yet tested)
+- Added exam creation form
 
 ---
 
 ### 14.08.2025
-**Bereich**: Domain / Tests
-- Enums in allen Schichten definiert
-- Tests für Fragetypen angepasst
-- Speichern von Tests mit Fragen erfolgreich
-- CSV-Export weiterhin fehlerhaft
+**Area**: Domain / Tests
+- Defined enums across all layers
+- Adjusted tests for question types
+- Successfully saved exams with questions
+- CSV export still failing
 
 ---
 
 ### 08.09.2025
-**Bereich**: Web / Tests
-- Speicherung von Antwortmöglichkeiten ergänzt
-- Anzeigen von Tests zur Bearbeitung funktionsfähig
+**Area**: Web / Tests
+- Added storage of answer options
+- Exam listing and editing now functional
 
 ---
 
 ### 09.09.2025
-**Bereich**: Web
-- Exams laden und Anzeige in `examsDurchfuehren.html`
+**Area**: Web
+- Loaded and displayed exams in `examsDurchfuehren.html`
 
 ---
 
 ### 11.09.2025
-**Bereich**: Tests
-- `SubmitExam` Test geschrieben
-- Weitere To-dos ergänzt
+**Area**: Tests
+- Created `SubmitExam` test
+- Added additional TODOs
 
 ---
 
 ### 15.09.2025
-**Bereich**: Feature / Bewertung
-- Extra Menü-Seite mit Testinformationen implementiert
-- Automatischer Korrektor initialisiert
-- Bewertungslogik noch fehlerhaft
+**Area**: Feature / Grading
+- Added extra menu page with exam information
+- Initialized automatic grader
+- Grading logic still buggy
 
 ---
 
 ### 17.09.2025
-**Bereich**: Tests / Bugs
-- Tests für automatische Bewertungen geschrieben
-- Fehler dokumentiert (Issues)
+**Area**: Tests / Bugs
+- Created tests for automatic grading
+- Documented errors (issues)
 
 ---
 
 ### 22.09.2025
-**Bereich**: Feature / CI
-- Bearbeitung eines Tests implementiert
-- SpotBugs deaktiviert
-- Continuos Integration eingerichtet
+**Area**: Feature / CI
+- Implemented editing of an exam
+- Disabled SpotBugs
+- Set up continuous integration
 
 ---
 
 ### 23.09.2025
-**Bereich**: Frontend / Dokumentation
-- Tests an Änderungen vom 22.09. angepasst
-- Aktiver Navigationsstatus für Menüpunkte
-- Styleguide und TODO-Dokument aktualisiert
+**Area**: Frontend / Documentation
+- Adjusted tests after 22.09 changes
+- Active navigation state for menu items
+- Updated style guide and TODO documentation
 
 ---
 
 ### 03.11.2025
-**Bereich**: Dokumentation
-- arc42 und README aktualisiert
+**Area**: Documentation
+- Updated arc42 and README
 
 ---
 
 ### 04.01.2026
-**Bereich**: Infrastruktur / Tests
-- Docker auf Version 29.1.3 aktualisiert
-- Testcontainers-Problem mit alter API-Version analysiert und behoben
+**Area**: Infrastructure / Tests
+- Updated Docker to version 29.1.3
+- Analyzed and fixed Testcontainers issue with outdated API version
 - Fix: https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version
-- `TestSystemPropertyInitializer` entfernt
-- Bewertungslogik: Nur letzter Versuch zählt
-- Weitere Tests noch offen
+- Removed `TestSystemPropertyInitializer`
+- Grading logic: only the last attempt counts
+- Additional tests still pending
 
 ---
 
 ### 05.01.2026
-**Bereich**: Refactoring / UI
-- Variablennamen in der Persistenzschicht angepasst
-- Button im Test-Menü geändert
+**Area**: Refactoring / UI
+- Adjusted variable names in persistence layer
+- Modified button in test menu
 
 ---
 
 ### 06.01.2026
-**Bereich**: Web / UX / Dokumentation
-- Statusmeldung auf Exam-Erstellungsseite korrekt eingebunden
-- Logik ergänzt: Bearbeitung vor Startzeit nicht möglich
-- Navigationsleiste zusätzlich unten eingefügt
-- Exam-Übersicht optimiert (Statusanzeige + Tabelle)
-- `Activity_Protocol` umgeschrieben
+**Area**: Web / UX / Documentation
+- Properly integrated status message on exam creation page
+- Added logic: editing not allowed before exam start time
+- Added navigation bar at the bottom
+- Improved exam overview (status display + table)
+- Refactored `Activity_Protocol`
 
 ---
 
 ### 07.01.2026
-**Bereich**: Frontend / Web / UX / Test
-- Bewertungsübersicht vorerst implementiert
-- Bewertungsstatus von manueller Korrekturen pro Exam eingebunden
-- Angefangene Tests, weitere folgen
+**Area**: Frontend / Web / UX / Tests
+- Initial implementation of grading overview
+- Added grading status of manual corrections per exam
+- In-progress tests, further work pending
 
 ---
 
-### 08.01.2026 - 09.01.2026
-**Bereich**: Web / Test / Refactoring
-- Bewertungsübersicht getestet
-- Testcode aufgeräumt, angepasst, neue geschrieben
-- ExamController von Logik getrennt (Logik in `ExamControllerHelper.java`)
-- Weitere Klassen aufgeräumt in Hinsicht auf Codequalität
+### 08.01.2026 – 09.01.2026
+**Area**: Web / Tests / Refactoring
+- Tested grading overview
+- Cleaned up, adjusted, and added new test code
+- Split logic from `ExamController` into `ExamControllerHelper.java`
+- Refactored additional classes for code quality
 
 ---
 
 ### 10.01.2026
-**Bereich**: Web / Frontend / Architektur / Test / Bugs
-- Bug gefixt, wo mehrere Studenten aufgelistet werden bei Korrekturübersicht eines Exams
-- Tests angepasst in Hinsicht auf Architekturanpassungen
+**Area**: Web / Frontend / Architecture / Tests / Bugs
+- Fixed bug where multiple students were shown in grading overview of an exam
+- Updated tests due to architectural changes
 
 ---
 
 ### 21.01.2026
-**Bereich**: Dokumentation
-- arc42-Dokumentation überarbeitet
-- TO_DO aktualisiert
-- Activity_Protocol aktualisiert
+**Area**: Documentation
+- Updated arc42 documentation
+- Updated TO_DO
+- Updated Activity log
 
 ---
 
 ### 22.01.2026
-**Bereich**: Refactoring / Testing / Infrastruktur
-- Neuen Branch erstellt: `refactor`
-- `SonarQube` als Plugin in `build.gradle` eingefügt
-- Mithilfe von `SonarQube` schwere Code Smells entfernt
-- `data-test.sql` angelegt und Datenbanktests angepasst
+**Area**: Refactoring / Testing / Infrastructure
+- Created new branch `refactor`
+- Added `SonarQube` plugin to `build.gradle`
+- Removed major code smells using `SonarQube`
+- Added `data-test.sql` and adjusted database tests
 
 ---
 
 ### 23.01.2026
-**Bereich**: Refactoring / Testing / Dokumentation / Datenbank / Umgebungsvariablen / Jar
-- SQL Skript `V1__init.sql` um weitere Integritätsbedingungen erweitert
-- Restliche Code Smells beseitigt
-- SonarQube Bedienungshinweise in `example.env` hinzugefügt
-- Redundante Attribute von `DTO`'s, `Entities` und `Model` Objekten entfernt
-- `ExamManagementServiceImpl` und zugehöriger Test optimiert in Hinsicht auf Wartbarkeit
-- Jar konnte die Thymeleaf Templates nicht finden aufgrund von `\`-Prefix in View Namen 
-(s. https://github.com/spring-projects/spring-boot/issues/2057)
-- Docker Volume eingeführt, kein externer, lokaler Data Ordner mehr
-- README aktualisiert (Installationsanweisungen ergänzt)
+**Area**: Refactoring / Testing / Documentation / Database / Environment Variables / JAR
+- Extended SQL script `V1__init.sql` with additional integrity constraints
+- Removed remaining code smells
+- Added SonarQube usage notes to `example.env`
+- Removed redundant attributes from DTOs, entities, and model objects
+- Optimized `ExamManagementServiceImpl` and its test for maintainability
+- JAR failed to find Thymeleaf templates due to `\` prefix in view names  
+  (see https://github.com/spring-projects/spring-boot/issues/2057)
+- Introduced Docker volume, removed external local data folder
+- Updated README (added installation instructions)
 
 ---
 
 ### 24.01.2026
-**Bereich**: UX / Authentifizierung / Test / Architektur
-- Feature hinzugefügt, wo man seine Rolle sich aussuchen kann
-- Jeder angemeldeter User erhält die Rolle `STUDENT` als Standard Rolle
-- Onion-Architektur aufrechterhalten
-- Index, Contact und Setting Test korrigiert
+**Area**: UX / Authentication / Tests / Architecture
+- Added feature allowing users to choose their role
+- Every logged-in user receives the `STUDENT` role by default
+- Maintained Onion Architecture
+- Fixed Index, Contact, and Settings tests
 
 ---
 
 ### 25.01.2026
-**Bereich**: Dokumentation
-- Testcontainer Troubleshooting in `README` hinzugefügt
+**Area**: Documentation
+- Added Testcontainers troubleshooting to `README`
 
 ---
 
 ### 26.01.2026
-**Bereich**: Ressourcen / Dokumentation
-- Code Statistik aktualisiert (`cloc`)
-- Testabdeckungsstatistik aktualisiert
+**Area**: Resources / Documentation
+- Updated code statistics (`cloc`)
+- Updated test coverage statistics
 
 ---
 
 ### 27.01.2026
-**Bereich**: Ressourcen / Test / Geschäftslogik
-- Weitere Logiktests erstellt
-- JacocoTest-Report aktualisiert
-- Paar Validierungen hinzugefügt in Entities und in Service-Klassen
+**Area**: Resources / Tests / Business Logic
+- Added additional logic tests
+- Updated JaCoCo test report
+- Added validations in entities and service classes
 
 ---
 
 ### 28.01.2026
-**Bereich**: UI / UX
-- HTML Dokumente auf Barrierefreiheit überprüft und korrigiert
-- Startseite mit Einleitung und Nutzungshinweise
-- Extras
+**Area**: UI / UX
+- Reviewed and fixed HTML documents for accessibility
+- Added landing page with introduction and usage instructions
+- Minor extras
 
 ---
 
 ### 29.01.2026
-**Bereich**: UI 
-- Letzte Bearbeitung der HTML-Dokumente in Hinblick auf Benutzerfreundlichkeit
+**Area**: UI
+- Final adjustments to HTML documents regarding usability
 
 ---
 
-### 30.01.2026 - 31.01.2026
-**Bereich**: UI / UX / Feature
-- Zulassungslogik als Fortschrittbalken eingeführt
-- Korrektur einer Antwort implementiert
+### 30.01.2026 – 31.01.2026
+**Area**: UI / UX / Feature
+- Implemented admission logic as a progress bar
+- Added answer correction feature
 
 ---
 
-### 01.02.2026 - 03.02.2026
-**Bereich**: Wartbarkeit / Feature / env / Dokumentation
-- `ExamManagementServiceImpl` zerlegt in Hinblick auf Wartbarkeit und Kohäsion
-- `git pull`-Log auf `STYLEGUIDE` unter *Fun Facts*
-- Ergebnisse von manuellen Korrekturen werden erst nach der Ergebniszeit angezeigt
-- `example.env` zu `.env.example` umbenannt und `.gitignore` aktualisiert
+### 01.02.2026 – 03.02.2026
+**Area**: Maintainability / Feature / env / Documentation
+- Refactored `ExamManagementServiceImpl` for better maintainability and cohesion
+- Added `git pull` log to STYLEGUIDE under *Fun Facts*
+- Manual correction results are now only visible after the result release time
+- Renamed `example.env` to `.env.example` and updated `.gitignore`
 
 ---
 
 ### 04.02.2026
-**Bereich**: UI / UX / Architektur / Test
-- Ergebniseinsicht für Studierende implementiert
-- Form Objekte in Packages aufgeteilt
-- Tests zum Feature Ergebniseinsicht
+**Area**: UI / UX / Architecture / Tests
+- Implemented result view for students
+- Split form objects into separate packages
+- Added tests for result view feature
 
 ---
 
-### 05.02.2026 - 06.02.2026
-**Bereich**: UI / UX / Refactoring / Test
-- Hilfsmethoden aus `ExamControllerServiceImpl` in `HelperServiceImpl` verlagert
-- Testdurchlauf mit alten Antworten implementiert
-- Umwandlung von Kommas für die Datenbank und für die Anzeige gefixt
+### 05.02.2026 – 06.02.2026
+**Area**: UI / UX / Refactoring / Tests
+- Moved helper methods from `ExamControllerServiceImpl` to `HelperServiceImpl`
+- Implemented test run with historical answers
+- Fixed comma conversion for database storage and UI display
 - Tests
 
 ---
 
 ### 08.02.2026
-**Bereich**: Test / Refactoring
-- Integrationstest eingeführt für folgende *Use Cases*: `createExam`, `submitAnswers` und `createReview`
-- Kleine Smells behoben
+**Area**: Tests / Refactoring
+- Added integration tests for the following use cases: `createExam`, `submitAnswers`, and `createReview`
+- Fixed minor code smells
 
 ---
 
-### 10.02.2026 - 11.02.2026
-**Bereich**: UI / Refactoring
-- HTML erstellt für Ergebnisübersicht
-- `ExamController` zerlegt und Tests sowie URLs angepasst
+### 10.02.2026 – 11.02.2026
+**Area**: UI / Refactoring
+- Created HTML for results overview
+- Split `ExamController` and updated tests and endpoints
 
 ---
 
 ### 13.02.2026
-**Bereich**: UI / UX / Test / Dependency
-- Ergebnisübersicht vollständig implementiert und getestet
-- Spring Boot Version auf **3.5.8** aktualisiert (Testcontainer funktionierte nicht auf Github Actions)
+**Area**: UI / UX / Tests / Dependencies
+- Fully implemented and tested results overview
+- Updated Spring Boot to **3.5.8** (Testcontainers failed on GitHub Actions without it)
 
 ---
 
-### 15.02.2026 - 16.02.2026
-**Bereich**: UI / UX / Feature / Test
-- CSV-Download von Prüfungen sowie Ergebnisse eines Studenten implementiert und getestet
-- Delete-Exam Logik verbessert
+### 15.02.2026 – 16.02.2026
+**Area**: UI / UX / Feature / Tests
+- Implemented and tested CSV download for exams and student results
+- Improved delete exam logic
 
 ---
 
 ### 17.02.2026
-**Bereich**: UI / UX
-- Lange Antwortmöglichkeiten in MC/SC Fragen werden richtig abgebildet
-- Nutzungshinweise zu der Erstellung von MC/SC-Aufgaben hinzugefügt
+**Area**: UI / UX
+- Proper rendering of long answer options in MC/SC questions
+- Added usage guidelines for creating MC/SC questions
 
 ---
 
 ### 19.02.2026
-**Bereich**: UX / Feature
-- Die Anzahl an Fragetypen für Prüfungen ist jetzt benutzerdefiniert
-- `showReview` ist erfolgreich auch bei nicht eingereichten Antworten
+**Area**: UX / Feature
+- Number of question types for exams is now configurable
+- `showReview` now works even for non-submitted answers
 
 ---
 
 ### 03.03.2026
-**Bereich**: Race Condition / Datenbankoptimierung
-- Ursprünglichen Primärschlüssel durch Fach-ID (`UUID`) ersetzt
-- Transaktionen von `submitExam` optimiert (vorher: Find + Delete + Insert, jetzt: Upsert)
-- Stresstests implementiert für `submitExam`
-- Extras
+**Area**: Race Condition / Database Optimization
+- Replaced original primary key with subject ID (`UUID`)
+- Optimized transactions in `submitExam` (previously: find + delete + insert, now: upsert)
+- Implemented stress tests for `submitExam`
+- Minor extras
 
 ---
 
 ### 04.03.2026
-**Bereich**: UI / UX
-- Vorschau von Prüfungen für Professor implementiert
-- Fragestellungen mit Trennzeilen werden jetzt richtig angezeigt
-- Extras und zugehörige Tests
+**Area**: UI / UX
+- Implemented exam preview for professors
+- Fixed rendering of questions with separators
+- Extras and related tests
 
 ---
 
 ### 12.03.2026
-**Bereich**: Dokumentation
-- Info Annotation in Markdown Dateien verwendet
-- Dokumentationen aktualisiert
+**Area**: Documentation
+- Used info annotations in Markdown files
+- Updated documentation
 
 ---
 
 ### 15.03.2026
-**Bereich**: Dokumentation / UI
-- Die Anzeige von mehrzeiligen Fragestellungen korrigiert
-- `README` aktualisiert und Extras
+**Area**: Documentation / UI
+- Fixed rendering of multi-line questions
+- Updated README and extras
 
 ---
 
 ### 16.03.2026
-**Bereich**: DB / Feature / Validation / UX
-- Die Anwendung verwendet konsistent `double` für die Punkteberechnung (halbe Punkte erlaubt)
-- Einsatz von Trigger für `maxPunkte >= reviewPunkte`
-- Für die DB werden die Punkte von `double` zu `int` verdoppelt
-- Eingabevalidierungen erweitert für `createExam` (`typeMismatch`, Antwortoptionen und Lösungen, ...)
-- Statt eine Umleitung bei invaliden Eingaben wird man auf das aktuelle Formular zurückverwiesen (Anzeige von
-Validierung Informationen)
-- Punkteberechnung in `AutomaticReviewService` aktualisiert
-- Nötige Tests implementiert
+**Area**: Database / Feature / Validation / UX
+- Standardized application to use `double` for score calculation (half points allowed)
+- Introduced trigger ensuring `maxPoints >= reviewPoints`
+- Doubled points in database from `double` to `int`
+- Extended input validation for `createExam` (`typeMismatch`, answer options, correct solutions, etc.)
+- Replaced redirect on invalid input with returning to the current form (with validation messages displayed)
+- Updated scoring logic in `AutomaticReviewService`
+- Added required tests
 
 ---
 
 ### 17.03.2026
-**Bereich**: Dokumentation / Feature
-- Flowchart für Softwarearchitektur und API-Calls erstellt
-- Login Demo angehängt
-- Start von `feature/review-lock`-Branch
+**Area**: Documentation / Feature
+- Created flowchart for software architecture and API calls
+- Added login demo
+- Started `feature/review-lock` branch
 
 ---
 
 ### 18.03.2026
-**Bereich:** Dokumentation / UI / Entwicklungsabschluss
-- Paar UI-Fixes (korrekte Anzeige von mehrzeiligen Sätzen)
-- Implementierung von `feature/review-lock` verworfen (Branch wird nicht gemerged und wurde gelöscht) → nicht
-obligatorisch für die Grundfunktion von ExamByte in seiner ersten vollständigen Version
-- Dokumentationen aktualisiert, Screenshots angehängt als visuelle Demonstration von Grundfunktionen
+**Area**: Documentation / UI / Project closure
+- Minor UI fixes (correct rendering of multi-line sentences)
+- Implementation of `feature/review-lock` discarded (branch was not merged and has been deleted) → not required
+  for the core functionality of ExamByte in its first complete version
+- Updated documentation and added screenshots as visual demonstration of core features
 
 ---
 
-### 19.03.2026 - 20.03.2026
-**Bereich:** Sprache
-- Wesentliche Änderungen im Quellcode:
-  - `Korrektor` → `Reviewer`
-  - `Antwort` → `Answer`
-  - `KorrekteAntworten` → `CorrectAnswers`
-- Zugehörige `Mapper`, `Entity`, `DTO` usw. dementsprechend geändert
-- Zustand der Anwendung mithilfe von Regressionstest und manuelles Testing
-überprüft worden
+### 19.03.2026 – 20.03.2026
+**Area**: Language refactoring
+- Major source code renaming:
+    - `Korrektor` → `Reviewer`
+    - `Antwort` → `Answer`
+    - `KorrekteAntworten` → `CorrectAnswers`
+- Updated corresponding mappers, entities, DTOs, etc.
+- Verified application state using regression tests and manual testing
 
 ---
 
-### 22.03.2026 - 24.03.2026
-** Bereich:** Sprache / Onion Architektur / Error Page / UX
-- Sprachänderungen im Quellcode:
-  - `Frage` → `Question`
-  - Restliche Methodennamen und Felder
-- Verwendung einer generischen Fehlermeldungsseite für Frontend
-- Logik eingeführt: Student kann keine Lösungen mehr absenden nach Ablauf der Frist
-- Verschmelzung der `infrastructure.service`-Schicht mit `application.service.query`-Schicht
-- Korrektur der Onion Architektur und zusätzliche Tests
-- Extras und clean up
-- Dokumentationen aktualisiert (Inhaltsverzeichnis eingefügt)
+### 22.03.2026 – 24.03.2026
+**Area**: Language / Onion Architecture / Error handling / UX
+- Continued language migration in source code:
+    - `Frage` → `Question`
+    - Remaining method names and fields updated
+- Introduced generic error page for frontend
+- Added logic preventing students from submitting answers after the deadline
+- Merged `infrastructure.service` layer into `application.service.query` layer
+- Fixed Onion Architecture and added additional tests
+- Minor extras and cleanup
+- Updated documentation (added table of contents)
+
+---
+
+### 19.05.2026
+**Area**: Documentation
+- Translating existing docs (de → en)
