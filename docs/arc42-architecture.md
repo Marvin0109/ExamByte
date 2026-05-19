@@ -34,7 +34,7 @@
 - [7. Deployment View](#7-deployment-view)
 - [8. Quality Scenarios](#8-quality-scenarios)
 - [9. Risks and Technical Debt](#9-risks-and-technical-debt)
-- [10. Glossar](#10-glossary)
+- [10. Glossary](#10-glossary)
 
 ## 1. Introduction and Goals
 
