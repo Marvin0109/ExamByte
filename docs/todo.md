@@ -1,35 +1,36 @@
-# Todo für ExamByte
+# Todo for ExamByte
 
-> **Autor:** Marvin0109,
-> **aktualisiert am:** 24.03.2026
+> **Author:** Marvin0109  
+> **Updated on:** March 24, 2026
 
 > [!IMPORTANT]
-> Die Tasks sollen in der gegebenen Reihenfolge bearbeitet werden wie sie aufgelistet sind.
+> Tasks should be completed in the order they are listed.
 
-1. [X] arc42-Doc aktualisieren
-2. [X] Code Refactoring mithilfe von SonarQube
-3. [X] Rollenverteilungs-Feature
-4. [X] HTML-Inhalte Überarbeiten hinsichtlich Benutzerfreundlichkeit
-5. [X] **Accessiblity**: Überprüfung auf Accessibility
-6. [X] Logiktests vervollständigen
-7. [X] Korrektur der Freitextantworten
-8. [X] Zulassungslogik
-9. [X] Testdurchlauf mit alten Antworten
-10. [X] Einsicht auf Testergebnisse
-11. [X] CSV-Export einführen
-12. [X] Datenbankoptimierung und Stresstests
-13. [X] Vorschau von Prüfung für Professor
-14. [X] Sicherstellung von Codekonventionen und Clean Up
+1. [X] Update arc42 documentation
+2. [X] Code refactoring using SonarQube
+3. [X] Role distribution feature
+4. [X] Improve HTML content for better usability
+5. [X] **Accessibility**: accessibility review
+6. [X] Complete logic tests
+7. [X] Fix free-text answer evaluation
+8. [X] Admission logic
+9. [X] Test run with historical answers
+10. [X] Access to test results
+11. [X] Implement CSV export
+12. [X] Database optimization and load testing
+13. [X] Exam preview for professors
+14. [X] Ensure code conventions and cleanup
 
 ---
 
 > [!NOTE]
-> Mit dem Abschluss der Anwendung sind diese unten genannten Features Ideen, die man umsetzen könnte, aber nicht
-> obligatorisch für die erste funktionierende Version von ExamByte.
-1. [ ] Erstellen von Review überarbeiten
-    1. [ ] Nur ein Nutzer darf eine Antwort korrigieren (Zugriff wird verweigert für alle anderen)
-    2. [ ] Erstellung von Reviews Thread-sicher machen
-    3. [ ] Lasttests
-2. [ ] Bewertung von Antworten als Professor
-3. [ ] Zulassungsübersicht für Professoren
-4. [ ] Automatisches speichern und Zwischenspeichern von Antworten
+> After completing the application, the features listed below are ideas that could be implemented, but are not
+> required for the first working version of ExamByte.
+
+1. [ ] Refactor review creation process
+   1. [ ] Only one user may correct an answer (access denied for others)
+   2. [ ] Make review creation thread-safe
+   3. [ ] Load testing
+2. [ ] Grade answers as a professor
+3. [ ] Admission overview for professors
+4. [ ] Automatic saving and autosave of answers
