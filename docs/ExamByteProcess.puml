@@ -1,21 +1,21 @@
 @startuml
 actor Administrator
 actor Student
-actor Korrektor
+actor Reviewer
 database PostgreSQL
 
 cloud {
-    ["Github OAuth2"]
+    ["GitHub OAuth2"]
 }
 
 component "ExamByte"
 
+Administrator --> "ExamByte" : Create exams, view overview
+Student --> "ExamByte" : Take exams
+Reviewer --> "ExamByte" : Grade exams
+"ExamByte" --> PostgreSQL : Store / retrieve data
 
-Administrator --> "ExamByte" : Test erstellen, Übersicht einsehen
-Student --> "ExamByte" : Tests bearbeiten
-Korrektor --> "ExamByte" : Tests bewerten
-"ExamByte" --> PostgreSQL : Daten speichern / abrufen
-Student --> ["Github OAuth2"] : Anmeldung
-Korrektor --> ["Github OAuth2"] : Anmeldung
-Administrator --> ["Github OAuth2"] : Anmeldung
+Student --> ["GitHub OAuth2"] : Authentication
+Reviewer --> ["GitHub OAuth2"] : Authentication
+Administrator --> ["GitHub OAuth2"] : Authentication
 @enduml
