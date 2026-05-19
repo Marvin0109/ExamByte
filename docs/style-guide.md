@@ -1,98 +1,141 @@
-# Projekt-Styleguide
+# Project Style Guide
 
->**Autor**: Marvin0109,
->**erstellt am**: 08.01.2025,
->**aktualisiert am**: 24.03.2026
+> **Author**: Marvin0109  
+> **Created on**: January 08, 2025  
+> **Updated on**: March 24, 2026
 
 > [!NOTE]
-> Dieser Styleguide enthält die Formatierung- und Konventionsregeln für unser Projekt. Ziel ist es,
-die Zusammenarbeit zu erleichtern und die Codequalität zu sichern.
-Er wurde ursprünglich für ein Team von 5 Entwickler:innen erstellt, wird aktuell jedoch von einer Person gepflegt 
-und angepasst, die das Projekt privat weiterführt.
+> This style guide defines formatting and convention rules for the project. The goal is to
+facilitate collaboration and ensure code quality.
+> It was originally created for a team of 5 developers but is currently maintained and adapted by a single person
+who continues the project privately.
 
-## Übersicht
+## Overview
 
-- [Formatierung](#formatierung)
-- [Technologien und Versionen](#technologien-und-versionen)
-- [Code-Stil](#code-stil)
-- [Versionierung](#versionierung-git)
-- [Testing und Qualitätssicherung](#testing-und-qualitätssicherung)
-- [HTML-Regeln](#html-regeln)
-- [Thymeleaf-Regeln](#thymeleaf-regeln)
-- [Sicherheit](#sicherheit)
-- [QA (Demo)](#quality-assurance-demo)
-- [Ressourcen](#ressourcen)
+- [General Rules](#general-rules)
+  - [Language](#language)
+  - [File Names](#file-names)
+- [Formatting](#formatting)
+  - [Indentation](#indentation)
+  - [Line Length](#line-length)
+  - [Blank Lines](#blank-lines)
+- [Technology and Versions](#technologies-and-versions)
+  - [Java Version](#java-version)
+  - [Frameworks and Libraries](#frameworks-and-libraries)
+  - [GitHub OAuth App](#github-oauth-app)
+  - [Development Environment](#development-environment)
+  - [Docker](#docker)
+  - [Database](#database)
+- [Code Style](#code-style)
+  - [Variable Names](#variable-names)
+  - [Class Names](#class-names)
+  - [Constants](#constants)
+  - [Comments and Documentation](#comments-and-documentation)
+- [Version Control (Git)](#version-control-git)
+  - [Branch Names](#branch-names)
+  - [Commit Messages](#commit-messages)
+  - [Issue Tracker](#issue-tracker)
+- [Testing and Quality Assurance](#testing-and-quality-assurance)
+  - [Naming Conventions for Tests](#naming-conventions-for-tests)
+  - [Test documentation](#test-documentation)
+  - [Code Coverage](#code-coverage)
+  - [SonarQube](#sonarqube)
+- [HTML-Regeln](#html-guidelines)
+  - [Sample HTML Page](#sample-html-page)
+  - [Indentation and Formatting](#indentation-and-formatting)
+  - [Tags](#tags)
+  - [Attributes](#attributes)
+  - [Class and ID Names](#class-and-id-names)
+  - [Accessibility](#accessibility)
+  - [External Resources](#external-resources)
+- [Thymeleaf Rules](#thymeleaf-rules)
+  - [Usage of Placeholders](#usage-of-placeholders)
+  - [Attributes](#attributes-1)
+  - [Loops and Conditions](#loops-and-conditions)
+  - [Default Values](#default-values)
+  - [Comments](#comments)
+  - [Structured Templates](#structured-templates)
+- [Security](#security)
+  - [CSRF](#csrf-cross-site-request-forgery)
+  - [XSS](#xss-cross-site-scripting)
+- [Quality Assurance (Demo)](#quality-assurance-demo)
+  - [JacocoTest Report](#jacocotestreport)
+  - [SonarQube Overview](#sonarqube-overview)
+- [Resources](#resources)
+  - [Images, GIFS, Videos, etc.](#images-gifs-videos-etc)
+  - [Text](#text)
 - [Fun Facts](#fun-facts)
-- [Schlussbemerkung](#schlussbemerkung)
+  - [Codelines Statistics](#codelines-statistics)
+  - [God-Class Refactoring](#god-class-refactoring-exammanagementserviceimpl)
+- [Closing Remarks](#closing-remarks)
 
-## Allgemeine Regeln
+## General Rules
 
-### Sprache
-- Wir programmieren hauptsächlich in **Java** und verwenden **HTML** für die Weboberfläche.  
-- Für die Datenhaltung kommt die **PostgreSQL-Datenbank** zum Einsatz.
-- Alle Kommentare und Dokumentationen sind auf **Deutsch** zu schreiben.
+### Language
+- We mainly program in **Java** and use **HTML** for the web interface.
+- The **PostgreSQL database** is used for data storage.
+- All comments and documentation should be written in **German**.
 
 > [!NOTE]
-> Codesprache auf Englisch sofern möglich.
+> Code language should be English whenever possible.
 
-### Dateinamen
-- Verwende **UpperCamelCase** für Java Dateien (z.B. 'HelloWorld.java').
-- Sonstige Dateien normaler **camelCase** (z.B. 'beepoRun.png').
-- Tests enden auf 'Test' (z.B. 'UserRepositoryTest.java').
+### File Names
+- Use **UpperCamelCase** for Java files (e.g. `HelloWorld.java`).
+- Other files use **camelCase** (e.g. `beepoRun.png`).
+- Tests must end with `Test` (e.g. `UserRepositoryTest.java`).
 
-## Formatierung
+## Formatting
 
-### Einrückung
-- Verwende einen Tab (Normale Einrückung in IntelliJ).
+### Indentation
+- Use a tab (default indentation in IntelliJ).
 
-### Zeilenlänge
-- Maximal **80 Zeichen pro Zeile** (außer bei langen URLs).
-- Wenn längere Zeilen notwendig sind, wie bei SQL oder langen Strings, nutze sinnvolle Umbrüche.
+### Line Length
+- Maximum **80 characters per line** (except for long URLs).
+- If longer lines are necessary (e.g. SQL or long strings), use meaningful line breaks.
 
-### Leerzeilen
-- 1 Leerzeile zwischen Methoden oder Klassen.
-- **0** Leerzeilen zwischen Dokumentation und Klassen oder Methoden.
+### Blank Lines
+- 1 blank line between methods or classes.
+- **0** blank lines between documentation and classes or methods.
 
-## Technologien und Versionen
+## Technologies and Versions
 
-### Java-Version
-- Das Projekt verwendet **Java 21**. Es wird empfohlen, diese Version oder eine kompatible Version zu verwenden, 
-  um sicherzustellen, dass der Code korrekt kompiliert und ausgeführt werden kann.
+### Java Version
+- The project uses **Java 21**. It is recommended to use this version or a compatible one to ensure that the code compiles and runs correctly.
 
-### Frameworks und Bibliotheken
+### Frameworks and Libraries
 - **Spring Boot:** Version **3.5.8**  
-  (Zentrales Framework für die Erstellung der Webanwendung)
-- **Spring Security:** (Für Sicherheitsaspekte, inkl. OAuth2-Client)
-- **Thymeleaf:** (Template-Rendering mit Spring Boot)
-- **JUnit:** (Unit-Tests)
+  (Core framework for building the web application)
+- **Spring Security:** (For security aspects, including OAuth2 client)
+- **Thymeleaf:** (Template rendering with Spring Boot)
+- **JUnit:** (Unit testing)
 - **ArchUnit:** Version **1.3.0**  
-  (Architekturtests zur Einhaltung der Regeln)
-- **Testcontainers:** (Ermöglicht Integrationstests mit realen Datenbanken in Containern)
+  (Architecture tests to enforce architectural rules)
+- **Testcontainers:** (Enables integration testing with real databases in containers)
 - **Gradle:** Version **8.x**  
-  (Build-Tool)
-- **Dotenv:** (Lädt Umgebungsvariablen aus einer `.env` Datei)
-- **Flyway:** Version **11.2.0**
-  (Datenbank-Migrations-Tool)
-- **SonarQube:** Version **7.2.2.6593**
-  (Scanning tool für Erkennen von Code Smells)
+  (Build tool)
+- **Dotenv:** (Loads environment variables from a `.env` file)
+- **Flyway:** Version **11.2.0**  
+  (Database migration tool)
+- **SonarQube:** Version **7.2.2.6593**  
+  (Code analysis tool for detecting code smells)
 
-### Github OAuth-App
+### GitHub OAuth App
 
-Verwendung einer *Authorized OAuth App ExamByte* von `Marvin0109`.
+Uses an *Authorized OAuth App ExamByte* from *Marvin0109*.
 
-(Nach Bedarf kann man selber eine erstellen und sie anbinden ans Projekt, wichtig hier sind die Umgebungsvariablen zu setzen in einer eigenen `.env`)
+(If needed, a custom OAuth app can be created and connected to the project. In this case, the required environment 
+variables must be set in a local `.env` file.)
 
-### Entwicklungsumgebung
-- **IDE:** Wir verwenden IntelliJ IDEA, am besten die Ultimate-Edition, für die andere Versionen bezüglich Datenbanken
-siehe [hier.](#datenbank)
+### Development Environment
+- **IDE:** We use IntelliJ IDEA, preferably the Ultimate edition, as other versions may have limitations regarding databases.  
+  See [here](#database) for more details.
 
 ### Docker
-- **Docker Desktop:** Wir verwenden **Docker Desktop** für das Erstellen, Testen und Ausführen von 
-  Docker-Containern während der Entwicklung.
-- **Dockerfiles und YAML:** Dockerfiles werden für das Erstellen von Docker-Images verwendet. In **docker-compose.yml**
-  definieren wir die Container-Konfigurationen und Verknüpfungen, um eine konsistente Entwicklungsumgebung zu 
-  gewährleisten.
-  - Beispiel:
+- **Docker Desktop:** We use **Docker Desktop** for building, testing, and running
+  Docker containers during development.
+- **Dockerfiles and YAML:** Dockerfiles are used to build Docker images. In **docker-compose.yml**,
+  container configurations and connections are defined to ensure a consistent development environment.
+  - Example:
   ```yaml
   services:
     web:
@@ -108,132 +151,132 @@ siehe [hier.](#datenbank)
         POSTGRES_PASSWORD: password
         POSTGRES_DB: mydb
 
-### Datenbank
-- **Datenbank:** Das Projekt nutzt `postgres:15-alpine`
-- Nicht Ultimate-Versionen sollten Datenbank-Tools wie [DBeaver-Community.](https://dbeaver.io/download/)
-- Oder halt andere DB-Tools mit denen Sie vertraut sind.
+### Database
+- **Database:** The project uses `postgres:15-alpine`
+- Non-Ultimate versions of IntelliJ should use database tools such as [DBeaver Community](https://dbeaver.io/download/)
+- Alternatively, any database tool the user is familiar with can be used
 
-## Code-Stil
+## Code Style
 
-### Variablennamen
-- Nutze **camelCase**.
-  - Beispiel: `chainBuilder`
+### Variable Names
+- Use **camelCase**
+  - Example: `chainBuilder`
 
-### Klassennamen
-- Nutze **UpperCamelCase**.
-  - Beispiel: `AppUserService`, `SecurityConfig`
+### Class Names
+- Use **UpperCamelCase**
+  - Example: `AppUserService`, `SecurityConfig`
 
-### Konstanten
-- Schreibweise in **UPPER_CASE**.
-  - Beispiel: `MAX_ATTEMPTS`, `DEFAULT_TIMEOUT`.
+### Constants
+- Use **UPPER_CASE**
+  - Example: `MAX_ATTEMPTS`, `DEFAULT_TIMEOUT`
 
-### Kommentare und Dokumentation
-- Dokumentation am **Anfang** der Klasse, was sie macht und wofür sie da ist, falls nötig.
-- Nutze JavaDoc für die Dokumentation:
+### Comments and Documentation
+- Class-level documentation should be placed at the **beginning of the class**, describing its purpose when necessary.
+- Use Javadoc for documentation:
+
   ```java
-    /**
-     * Verarbeitet Benutzeranfragen.
-     *
-     * @param userId ID des Benutzers
-     * @return Benutzer-Objekt
-     * @see UserRepository#findById(Long)
-     * @link https://docs.spring.io
-     */
+  /**
+   * Processes user requests.
+   *
+   * @param userId ID of the user
+   * @return user object
+   * @see UserRepository#findById(Long)
+   * @link https://docs.spring.io
+   */
 
-- Nach Bedarf auch *@link* und *@see* verwenden im Beschreibungstext für Verweise auf Variablen, Klassen oder sonstiges.
-- Testklassen auch dokumentieren bei Bedarf, siehe [hier.](#dokumentation-der-tests)
+- Use @link and @see where appropriate to reference variables, classes, or other elements.
+- Test classes should also be documented when necessary, check [here.](#test-documentation)
 
-## Versionierung (Git)
+## Version Control (Git)
 
-### Branch-Namen
-- Aktueller Hauptbranch: `main`
-- Für mögliche Erweiterungen: Branches nach [feature], [bugfix], etc. benennen.
-  - Beispiel: `feature/user-login`, `bugfix/login-error`.
+### Branch Names
+- Current main branch: `main`
+- For possible extensions: use branches like `feature`, `bugfix`, etc.
+  - Example: `feature/user-login`, `bugfix/login-error`
 
-### Commit-Messages
-- Format: `[Typ] Beschreibung`
-  - Beispiel: `[Feature] Added user login API`
-- Übersicht aller Typen mit Beispielen:
-  - [Feature]: Neue Funktionen oder Features werden hinzugefügt.
-    - Bsp: `[Feature] Add user authentication module`
-  - [Bug]: Bug Bericht erstellen mit **Issue Tracker**
-    - siehe [hier](#issue-tracker)
-  - [BugFix]: Fehlerbehebungen, um bestehende Probleme zu lösen.
-    - Bsp: `[BugFix] Fix login validation issue. Closes #x`
-  - [Docs]: Änderungen an der Dokumentation oder das Hinzufügen von Dokumentationsdateien.
-    - Bsp: `[Docs] Update STYLEGUIDE with new setup instructions`
-  - [Refactor]: Codeänderungen, die die Struktur verbessern, ohne das Verhalten zu ändern.
-    - Bsp: `[Refactor] Simplify authentication service`
-  - [Test]: Hinzufügen oder Ändern von Tests.
-    - Bsp: `[Test] Add unit tests for login service`
-  - [Chore]: Änderungen, die keine neue Funktionalität oder Fehlerbehebung betreffen, wie z. B. Konfigurationsänderungen
-    oder das Hinzufügen von Tools.
-    - Bsp: `[Chore] Update dependencies`
+### Commit Messages
+- Format: `[Type] Description`
+  - Example: `[Feature] Added user login API`
 
-> [!NOTE]
-> Für Commit-Messages in anderen Branches ist die Verwendung von `[...] <commit message>` nicht zwingend nötig.
+- Overview of types with examples:
+  - `[Feature]`: New functionality or features are added.
+    - Example: `[Feature] Add user authentication module`
+  - `[Bug]`: Bug reports are created using the issue tracker
+    - see [here](#issue-tracker)
+  - `[BugFix]`: Fixes for existing issues
+    - Example: `[BugFix] Fix login validation issue. Closes #x`
+  - `[Docs]`: Changes or additions to documentation
+    - Example: `[Docs] Update STYLEGUIDE with new setup instructions`
+  - `[Refactor]`: Code changes that improve structure without changing behavior
+    - Example: `[Refactor] Simplify authentication service`
+  - `[Test]`: Adding or modifying tests
+    - Example: `[Test] Add unit tests for login service`
+  - `[Chore]`: Changes that do not affect functionality or bug fixes (e.g. configuration, tooling)
+    - Example: `[Chore] Update dependencies`
+
+> [!TIP]
+> For commit messages in other branches, using the `[Type] <commit message>` format is not mandatory.
 
 ### Issue Tracker
-1. **Issue erstellen auf GitHub**
-   - Gehe zu GitHub → Repository → Issues → New Issues
-   - Title: *Login button funktioniert nicht*
-   - Description: *Login button funktioniert nicht, wenn man ihn auf der Startseite anklickt.*
-   - Images: Verwende Bilder für bessere Nachvollziehbarkeit
-   - GitHub wird ein Ticket erstellen, mit dem man bei Commits referenzieren kann z.B.: `#1`
+**Create an Issue on GitHub**
+  - Go to GitHub → Repository → Issues → New Issue
+  - **Title:** e.g., *Login button not working*
+  - **Description:** e.g., *The login button does not work when clicked on the homepage.*
+  - **Images:** Use screenshots for better clarity
+  - GitHub will create a ticket that can be referenced in commits, e.g., `#1`
 
-2. **Committe zuerst den Bug**
-   - Arbeite am Code und speichere deine Arbeit mit git add
+**Work on the Bug**
+  - Make changes in the code and stage your work locally:
+    ```
+    git add .
 
-3. **Referenziere dem Issue**
-   - Erstelle einen Commit und referenziere es mit dem Issue `#1`
-   ```
-   git commit -m "[Bug]: Login Issue (#1)"
-   
-4. **Commit with fixed bug and closing issue**
-   - Nach dem Bugfix dann committen und dem Issue schließen.
-   ```
-   git commit -m "[BugFix]: Fix login button issue. Closes #1"
+**Commit referencing the Issue**
+  - Create a commit and reference the issue:
+    ```
+    git commit -m "[Bug]: Login Issue (#1)"
 
-## Testing und Qualitätssicherung
-- Wir verwenden **JUnit**, **Mockito**, **ArchUnit** und **Testcontainers**.
+**Commit the Fix and Close the Issue**
+  - After fixing the bug:
+    ```
+    git commit -m "[BugFix]: Fix login button issue. Closes #1"
 
-### Namenskonventionen für Tests
-- Testmethoden werden nach den zu testenden Methoden benannt.
-  - Beispiel: 
+## Testing and Quality Assurance
+
+### Naming Conventions for Tests
+- Test methods are named after the method or functionality being tested.
+  - Example:
   ```java
   void multiplicationSuccess_03() { ... }
-- Im Namen soll auch sehr kurz erwähnt werden, welche Logik getestet wird.
-  - Beispiel: 
+- The name should also briefly indicate which logic is being tested.
+  - Example: 
   ```java
   void login_unauthorized_01() { ... }
 
-### Dokumentation der Tests
-- Wir verwenden **@DisplayName** für eine **kurze** Beschreibung der jeweiligen Testfälle, falls der Methodenname nicht 
-mehr ausreicht.
-  - Beispiel:
+### Test documentation
+- We use `@DisplayName` for a short description of each test case, in case the method name alone is not sufficient.
+  - Example:
   ```java
   @Test
-  @DisplayName("Testbeschreibung")
+  @DisplayName("Test description")
   void test_01() { ... }
 
-### Codeabdeckung
-- **> 90 %** Abdeckung bei *Instructions* (Code wurde mind. einmal in einem Test durchlaufen)
-- **> 80 %** Abdeckung bei *Branches* (Randfälle, Logik, Exceptions, ...)
-- So soll ein guter [JacocoTestReport](#jacocotestreport) aussehen
+### Code Coverage
+- **> 90%** coverage for *Instructions* (code executed at least once in a test)
+- **> 80%** coverage for *Branches* (edge cases, logic, exceptions, ...)
+- This is how a good [JacocoTestReport](#jacocotestreport) should look like
 
 > [!TIP]
-> Führen sie alle Tests vorher aus, damit die Testabdeckung auf dem neuesten Stand ist. 
-> Unter `build/jacocoHtml/index.html` ist die Testabdeckung zu finden.
+> Run all tests beforehand to ensure the code coverage is up to date.
+> The coverage report can be found at `build/jacocoHtml/index.html`.
 
-### SonarQube
-- Verwende SonarQube für automatischen Code-Review in Hinblick auf Code Smells, Bugs, Vulnerabilities usw.
-- Um einen bestandenen Gesamtstatus zu erreichen, sind sämtliche Hinweise 
-von Sonar zu berücksichtigen und die Testabdeckung in einem guten Bereich zu halten.
-- Siehe aktuelle [Sonar Übersicht](#sonarqube-übersicht)
+# SonarQube
+- Use SonarQube for automated code review regarding code smells, bugs, vulnerabilities, etc.
+- To achieve a passing overall status, all Sonar issues should be addressed and code coverage should be kept at a good level.
+- See the current [Sonar overview](#sonarqube-overview)
 
-## HTML-Regeln
+## HTML Guidelines
 
-### Muster-HTML Seite
+### Sample HTML Page
 
 ```html
 <!DOCTYPE html>
@@ -277,129 +320,124 @@ von Sonar zu berücksichtigen und die Testabdeckung in einem guten Bereich zu ha
 ```
 
 > [!TIP]
-> Verfügbar [hier.](../src/main/resources/templates/example/example.html)
+> Template available [here.](../src/main/resources/templates/example/example.html)
 
-### Einrückung und Formatierung
-- Verwende **2 Tab** für die Einrückung.
-- Jede Öffnung eines neuen Elements sollte eingerückt sein, um die Struktur lesbar zu machen.
-  - Beispiel:
+### Indentation and Formatting
+- Use **2 tabs** for indentation.
+- Each opening of a new element should be indented to make the structure readable.
+  - Example:
   ```html
   <div>
-      <p>Beispieltext</p>
+      <p>Example</p>
   </div>
 
 ### Tags
-- **Geschlossene Tags:** Alle HTML-Tags, die ein End-Tag benötigen, müssen korrekt geschlossen werden.
+- **Closed tags:** All HTML tags that require an end tag must be properly closed.
 
-### Attribute
-- Alle Attribute in **Kleinbuchstaben** schreiben.
-- Doppelte Anführungszeichen (`"`) für Attributwerte verwenden.
-  - Beispiel:
+### Attributes
+- Write all attributes in **lowercase**.
+- Use double quotes (`"`) for attribute values.
+  - Example:
   ```html
   <input type="text" name="username" />
 
-- Reihenfolge der Attribute: Zuerst Pflichtattribute, dann optionale.
-  - Beispiel:
+- **Attribute order:** List required attributes first, then optional ones.
+  - Example:
   ```html
-  <img src="bild.jpg" alt="Beschreibung" width="300" height="200" />
+  <img src="fig.jpg" alt="Description" width="300" height="200" />
 
-### Klassen- und ID-Namen
-- Verwende **kebab-case** für Klassen- und ID-Namen.
-  - Beispiel:
+### Class and ID Names
+- Use **kebab-case** for class and ID names.
+  - Example:
   ```html
   <div id="main-header" class="user-profile"></div>
 
-- Verwende Kommentare, um Abschnitte im HTML-Code zu kennzeichnen.
-  - Beispiel:
+- Use comments to mark sections in the HTML code.
+  - Example:
   ```html
   <!-- Navigation -->
   <nav>
     ...
   </nav>
-  
+
 ### Accessibility
-- Nutze `alt`-Attribute bei Bildern für Screenreader.
-- Vermeide rein dekorative Inhalte ohne Kontext.
-- Formulare sollten immer ein `<label>` enthalten, das mit einem `for`-Attribut auf das Eingabefeld verweist.
+- Use `alt` attributes for images to support screen readers.
+- Avoid purely decorative content without context.
+- Forms should always include a `<label>` element linked to the input field via the `for` attribute.
 
-### Externe Ressourcen
-- Lade CSS- und JavaScript-Dateien am richtigen Ort:
-  - CSS: Im `<head>`-Tag.
-  - JavaScript: Am Ende des `<body>`-Tag
+### External Resources
+- Load CSS and JavaScript files in the correct location:
+  - CSS: In the `<head>` tag.
+  - JavaScript: At the end of the `<body>` tag.
 
-## Thymeleaf-Regeln
+## Thymeleaf Rules
 
-### Verwendung von Platzhaltern
-- Nutze die **Thymeleaf-Ausdruckssyntax** `${}` für Variablen.
-- Vermeide es, reinen HTML-Code mit serverseitigen Werten zu mischen, wenn es durch Thymeleaf-Ausdrücke gelöst werden 
-  kann.
-  - Beispiel:
+### Usage of Placeholders
+- Use the **Thymeleaf expression syntax** `${}` for variables.
+- Avoid mixing plain HTML with server-side values if it can be handled using Thymeleaf expressions.
+  - Example:
   ```html
-  <p th:text="${user.name}">Benutzername</p>
+  <p th:text="${user.name}">Username</p>
 
-### Attribute
-- Verwende Thymeleaf-spezifische Attribute wie `th:text`, `th:href`, `th:if`, `th:each` für dynamische Inhalte.
-- Die `th:*`-Attribute sollten anstelle der statischen HTML-Attribute stehen.
-  - Beispiel:
+### Attributes
+- Use Thymeleaf-specific attributes like `th:text`, `th:href`, `th:if`, `th:each` for dynamic content.
+- The `th:*` attributes should be used **instead of static HTML attributes**.
+  - Example:
   ```html
-  <a th:href="@{/profile}" href="#">Profil</a>
+  <a th:href="@{/profile}" href="#">Profile</a>
 
-### Schleifen und Bedingungen
-- Nutze `th:each` für Schleifen und `th:if` oder `th:unless` für Bedingungen.
-  - Beispiel:
+### Loops and Conditions
+- Use `th:each` for loops and `th:if` or `th:unless` for conditions.
+  - Example:
   ```html
   <ul>
-      <li th:each="item : ${items}" th:text="${item}">Eintrag</li>
+      <li th:each="item : ${items}" th:text="${item}">Item</li>
   </ul>
   
-- Beispiel für Bedingungen:
+- Examples for conditions:
   ```html
-  <p th:if="${user.loggedIn}">Willkommen zurück!</p>
-  <p th:unless="${user.loggedIn}">Bitte einloggen.</p>
-  
-### Standardwerte
-- Nutze `th:text` mit einem Default-Wert, falls der Platzhalter `null` ist.
-  - Beispiel:
+  <p th:if="${user.loggedIn}">Welcome back!</p>
+  <p th:unless="${user.loggedIn}">Login please.</p>
+
+### Default Values
+- Use `th:text` with a default value in case the placeholder is `null`.
+  - Example:
   ```html
-  <p th:text="${user.name ?: 'Gast'}">Gast</p>
+  <p th:text="${user.name ?: 'Guest'}">Guest</p>
 
-- **Niemals** `th:utext` verwenden! Weitere Informationen [hier.](#xss-cross-site-scripting)
+- **Never** use `th:utext`! For more details check [here.](#xss-cross-site-scripting)
 
-### HTML-Kommentare
-- Thymeleaf biete eigene Kommentar-Syntax, die beim Rendern entfernt wird:
-  - Beispiel:
+### Comments
+- Thymeleaf provides its own comment syntax, which is removed during rendering:
+  - Example:
   ```html
-  <!--/* Kommentar wird entfernt */-->
+  <!--/* Deleting comment */-->
 
-### Barrierefreiheit
-- Stelle sicher, dass dynamische Inhalte (z.B. Bilder oder Links) immer mit sinnvollen Attributen (wie 'alt' bei Bildern)
-  ergänzt werden.
+### Structured Templates
+- Error pages in `templates/error`
+- Web pages in `templates`
 
-### Strukturierte Templates
-- Error-Pages in `templates.error`
-- Webseiten in `templates`
-
-## Sicherheit
+## Security
 
 ### CSRF (Cross-Site Request Forgery)
 
-Um unsere Anwendung durch [CSRF-Angriffe](https://de.wikipedia.org/wiki/Cross-Site-Request-Forgery) zu schützen,
-verwenden wir `Spring Security` und Thymeleaf auf alle Anfragen (`POST`).
+To protect our application from [CSRF attacks](https://en.wikipedia.org/wiki/Cross-site_request_forgery),
+we use `Spring Security` and Thymeleaf for all requests (`POST`).
 
-**Beispiel:**
+**Example:**
 
 ```html
-<form th:action="@{/post-x}" method="post"> <!-- Mit th:action arbeiten -->
+<form th:action="@{/post-x}" method="post"> <!-- Using th:action -->
     <input type="text" name="name"/>
 </form>
 ```
 
 > [!NOTE]
-> Spring Security und Thymeleaf fügen **automatisch** ein *hidden* CSRF-Input ein, wenn CSRF aktiv ist.
-> Nicht nötig wäre dann sowas:
+> Spring Security and Thymeleaf automatically add a *hidden* CSRF input when CSRF protection is enabled.
+> You do **not** need to do something like this:
 > ```html
 > <form th:action="@{/post-x}" method="post">
->    <!-- nicht nötig, wird automatisch erzeugt -->
+>    <!-- not needed, automatically generated -->
 >    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 > 
 >    <input type="text" name="name"/>
@@ -408,44 +446,44 @@ verwenden wir `Spring Security` und Thymeleaf auf alle Anfragen (`POST`).
 
 ### XSS (Cross-Site Scripting)
 
-[XSS-Angriff](https://developer.mozilla.org/de/docs/Web/Security/Attacks/XSS) ist eine weitere Möglichkeit, unsere
-Anwendung zu schaden. Wird schützen unsere Anwendung durch die Verwendung von Thymeleaf.
+[XSS attacks](https://developer.mozilla.org/en-US/docs/Web/Security/Attacks/XSS) are another way to harm our
+application. We protect our application by using Thymeleaf.
 
-**Beispiel:**
+**Example:**
 
-Ein Nutzer gibt Folgendes ein:
+A user submits the following input:
 
 ```javascript
 <script>alert('Hacked!')</script>
 ```
 
-Mit `th:text`:
+With `th:text`:
 ```html
 <p th:text="${user.input}"></p>
 ```
 
-Wird gerendert als:
+It will be rendered as:
 ```html
 <p>&lt;script&gt;alert('Hacked!')&lt;/script&gt;</p>
 ```
 
-Das eingefügte Script wird nicht ausgeführt.
+The injected script will **not** be executed.
 
 > [!CAUTION]
-> Verwende nie `th:utext` !
-> Warum? Mal das vorherige Beispiel, aber mit `th:utext`:
+> Never use `th:utext`!
+> Why? Let's take the previous example but with `th:utext`:
 > ```html
 > <p th:utext="${user.input}"></p>
 > ```
-> 
-> Wird gerendert als:
+>
+> It will be rendered as:
 > ```html
 > <p><script>alert('Hacked!')</script></p>
 > ```
-> 
-> Script wird ausgeführt, XSS-Angriff ist dann hiermit erfolgreich!
-> 
-> `th:utext` behandelt alles als `raw` statt wie `th:text`.
+>
+> The script will be executed, and an XSS attack becomes possible!
+>
+> `th:utext` treats everything as raw content, unlike `th:text`.
 
 ## Quality Assurance (Demo)
 
@@ -453,26 +491,27 @@ Das eingefügte Script wird nicht ausgeführt.
 
 ![JacocoTestReport](/src/main/resources/static/public/pictures/quality_assurance/JacocoTest_Report-24-03-2026.png)
 
-### SonarQube Übersicht
+### SonarQube Overview
 
 ![SonarQube Overview](/src/main/resources/static/public/pictures/quality_assurance/sonarOverview.png)
 
-## Ressourcen
+## Resources
 
-### Bilder, GIFS, Videos, usw.
-- Memes **erlaubt**.
+### Images, GIFS, Videos, etc.
+- Memes **allowed**.
 - Emotes: https://old.7tv.app/emotes
-- Alle Ressourcen im Ordner `resources.static.public` ablegen.
+- Save all files in `resources.static.public`.
 
 ### Text
-- Textgenerator: https://www.loremipsum.de/
+- Generating dummy text: https://www.loremipsum.de/
 
 ## Fun Facts
 
-### Codelines Statistik
+### Codelines Statistics
 
-Mit `cloc` kann man anzeigen lassen, wie viel Codezeilen man hat und auch in welcher Sprache.
-Hier die Statistik vom 24.03.2026 (`JSON`, `YAML` `CSS` usw. wegen *FontAwesome* und *Bootstrap*):
+Using `cloc`, you can see how many lines of code exist and in which programming languages.  
+Here is the code statistics as of 24.03.2026 
+(including `JSON`, `YAML`, `CSS`, etc., due to *FontAwesome* and *Bootstrap*):
 ```
 $ cloc .
 
@@ -628,12 +667,11 @@ Fast-forward
  create mode 100644 src/test/java/exambyte/application/service/usecase/ScoringServiceTest.java
 ```
 
-## Schlussbemerkung
-- Das Projekt startete ursprünglich mit 5 Teilnehmer:innen. Nach Abschluss der Klausur arbeitete 
-schließlich nur noch ich als alleiniger Entwickler weiter.
-- Vielen Dank an alle ursprünglichen Teammitglieder für ihre Unterstützung und Beiträge.
-- Die Weiterentwicklung des Projekts wurde von mir allein durchgeführt. 
-Mit Geduld und konzentrierter Arbeit ist es gelungen, das Projekt erfolgreich abzuschließen 
-(weitere Details in [Readme](../README.de.md)).
+## Closing Remarks
+- The project initially started with 5 participants. After the completion of the exam, 
+I continued as the sole developer.
+- Many thanks to all original team members for their support and contributions.
+- The further development of the project was carried out solely by me.  
+  With patience and focused work, the project was successfully completed (for more details, check [README](../README.md)).
 
-[Zurück zur Übersicht](#übersicht)
+[Back to overview](#overview)
