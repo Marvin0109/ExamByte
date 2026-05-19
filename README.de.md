@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="../../src/main/resources/static/public/pictures/exambyteLogo.png" alt="ExamByte Logo" width="400">
+    <img src="src/main/resources/static/public/pictures/exambyteLogo.png" alt="ExamByte Logo" width="400">
 </p>
 
 # ExamByte
@@ -24,7 +24,7 @@
 > Der zugehörige Entwicklungs-Branch `feature/review-lock` wurde nicht gemerged und entsprechend verworfen.
 > Der aktuelle Stand wird als abgeschlossen betrachtet.
 >
-> Finale Codeüberprüfung ist abgeschlossen, für mehr Details wie mögliche Erweiterungen siehe [To-do](../TO_DO.md).
+> Finale Codeüberprüfung ist abgeschlossen, für mehr Details wie mögliche Erweiterungen siehe [To do](docs/todo.md).
 
 ## Was ist ExamByte?
 
@@ -103,23 +103,23 @@ $ docker compose down
 > 
 > Die Screenshots zeigen die grundlegenden Features von ExamByte vom Stand 18.03.2026.
 > 
-> Weitere Screenshots sind [hier](../../src/main/resources/static/public/demo).
+> Weitere Screenshots sind [hier](src/main/resources/static/public/demo).
 
 ### Prüfung erstellen
 
-![Prüfung erstellen](../../src/main/resources/static/public/demo/createExam_1.png)
+![Prüfung erstellen](src/main/resources/static/public/demo/createExam_1.png)
 
 ### Prüfung bearbeiten
 
-![Prüfung bearbeiten](../../src/main/resources/static/public/demo/submitExam.png)
+![Prüfung bearbeiten](src/main/resources/static/public/demo/submitExam.png)
 
 ### Prüfung korrigieren
 
-![Korrektur einer Studenten Antwort](../../src/main/resources/static/public/demo/review.png)
+![Korrektur einer Studenten Antwort](src/main/resources/static/public/demo/review.png)
 
 ### Ergebnisanzeige
 
-![Ergebnisanzeige](../../src/main/resources/static/public/demo/showReview.png)
+![Ergebnisanzeige](src/main/resources/static/public/demo/showReview.png)
 
 ## Architektur
 
@@ -192,10 +192,10 @@ flowchart TD
 
 ## Dokumentation
 
-- [arc42-Architekturdokumentation](../arc42.md)
-- [Aktivitätsprotokoll](../Activity_log.md)
-- [To do](../TO_DO.md)
-- [Styleguide](../STYLEGUIDE.md)
+- [arc42-Architekturdokumentation](docs/arc42-architecture.md)
+- [Aktivitätsprotokoll](docs/activity-log.md)
+- [To do](docs/todo.md)
+- [Styleguide](docs/style-guide.md)
 
 ## Mitwirkende
 

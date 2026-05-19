@@ -8,7 +8,7 @@
 > 
 > Seit dem 24.03.26 wurde die Weiterentwicklung von ExamByte eingestellt. Das letzte Update war die Vereinheitlichung
 > der Sprache vom Quellcode auf Englisch, die Überprüfung der restlichen Codekonventionen 
-> gemäß [Styleguide](STYLEGUIDE.md) und die Korrektur der Onion Architektur.
+> gemäß [Styleguide](style-guide.md) und die Korrektur der Onion Architektur.
 
 ## Aktivitätsprotokoll
 

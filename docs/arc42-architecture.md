@@ -84,7 +84,7 @@ manuelle Bewertung von Freitextaufgaben durch Korrektor:innen und eine Ergebnisa
 | Team                             | Marvin0109                                                                                                                                                                                                                                                                                                                                       |
 | Zeitplan                         | Beginn der Entwicklung Anfang November 2024                                                                                                                                                                                                                                                                                                      |
 | Vorgehensmodell                  | Das Projekt wurde parallel zur Vorlesung *Programmierpraktikum 2* entwickelt. Methoden wie *Domain Storytelling* wurden erst im Laufe der Veranstaltung eingeführt und standen daher zu Projektbeginn **nicht** zur Verfügung, was Auswirkungen hatte auf die Entwicklungszeit. <br/> Zur Dokumentation der Architektur kommt arc42 zum Einsatz. |
-| Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](Activity_log.md) gesammelt worden. Erstellung von Java-Quellcode in IntelliJ Ultimate.                                                                                                                       |
+| Entwicklungswerkzeuge            | Der Entwurf war schon bekannt durch das verwenden des Ilias System im Studium. Arbeitsergebnisse sind im [Aktivitätsprotokoll](activity-log.md) gesammelt worden. Erstellung von Java-Quellcode in IntelliJ Ultimate.                                                                                                                       |
 | Versionsverwaltung               | Git, Github                                                                                                                                                                                                                                                                                                                                      |
 | Testwerkzeuge und -prozesse      | JUnit, ArchUnit, Integrationstests, WebMvcTests und Testcontainer für Datenbanktests.                                                                                                                                                                                                                                                            |
 
@@ -95,7 +95,7 @@ manuelle Bewertung von Freitextaufgaben durch Korrektor:innen und eine Ergebnisa
 | Architekturdokumentation   | Dieses Dokument stellt die Architektur der Software dar und befindet sich in der Version 1.3, welche die erste vollständige und stabile Version ist.                                                                  |
 | Kodierrichtlinien für Java | Java Format nach Google-Java-Format, geprüft mit Hilfe von in der IDE eingebautem Google-Java-Format Plugin                                                                                                           |
 
-Alles Weitere an Konventionen: [Styleguide hier](STYLEGUIDE.md)
+Alles Weitere an Konventionen: [Styleguide hier](style-guide.md)
 
 ---
 

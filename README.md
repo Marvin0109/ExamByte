@@ -7,7 +7,7 @@
 ## Overview
 
 > [!TIP]
-> German version of documents check [here.](docs/de)
+> German version of README check [here.](README.de.md)
 
 - [What is ExamByte?](#what-is-exambyte)
 - [Features](#features)
@@ -27,7 +27,7 @@
 > The related development branch `feature/review-lock` was never merged and has therefore been discarded.
 > The current state of the project is considered complete.
 >
-> Final code review has been completed. For more details and possible future ideas, see [To-do](docs/TO_DO.md).
+> Final code review has been completed. For more details and possible future ideas, see [To-do](docs/todo.md).
 
 ## What is ExamByte?
 
@@ -196,10 +196,10 @@ flowchart TD
 
 ## Documentation
 
-- [arc42 architecture documentation](docs/arc42.md)
-- [Activity log](docs/Activity_log.md)
-- [To do](docs/TO_DO.md)
-- [Styleguide](docs/STYLEGUIDE.md)
+- [arc42 architecture documentation](docs/arc42-architecture.md)
+- [Activity log](docs/activity-log.md)
+- [To do](docs/todo.md)
+- [Styleguide](docs/style-guide.md)
 
 ## Contributors
 
