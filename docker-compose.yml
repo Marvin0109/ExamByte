@@ -2,15 +2,34 @@ services:
   exambyteDB:
     image: postgres:15-alpine
     container_name: exambyte_postgres
+
     ports:
       - "5432:5432"
-    volumes:
-      - exambyte_data:/var/lib/postgresql/data
-      - ./src/main/resources/db/migration/V1__init.sql:/docker-entrypoint-initdb.d/V1__init.sql
+
     environment:
       - "POSTGRES_DB=${DB_NAME}"
       - "POSTGRES_USER=${DB_USERNAME}"
       - "POSTGRES_PASSWORD=${DB_PASSWORD}"
+
+    volumes:
+      - exambyte_data:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: exambyte_app
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      CLIENT_ID: ${CLIENT_ID}
+      CLIENT_SECRET: ${CLIENT_SECRET}
+
+    depends_on:
+      - exambyteDB
 
 volumes:
   exambyte_data:

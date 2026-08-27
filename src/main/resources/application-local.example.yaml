@@ -1,0 +1,20 @@
+# Use credentials from your .env
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ # DB_NAME
+    username: # DB_USERNAME
+    password: # DB_PASSWORD
+
+  flyway:
+    url: jdbc:postgresql://localhost:5432/ # DB_NAME
+    user: # DB_USERNAME
+    password: # DB_PASSWORD
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: # CLIENT_ID
+            client-secret: # CLIENT_SECRET

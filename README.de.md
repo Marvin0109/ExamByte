@@ -44,7 +44,7 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 - **Ergebnisübersichten**: Organisator:innen haben eine Gesamtübersicht der Testergebnisse
 - **Exportfunktion**: Testergebnisse als CSV-Datei herunterladen
 
-## Installation (Linux)
+## Lokale Entwicklung (Linux)
 
 ### Voraussetzungen
 - Java 21
@@ -58,44 +58,42 @@ Es ersetzt ILIAS als Testsystem für die Klausurzulassung und ermöglicht:
 $ git clone git@github.com:Marvin0109/ExamByte.git
 ```
 
-### Container starten
-> [!IMPORTANT]
-> Docker Container **immer** vor der Ausführung der `.jar` starten, ansonsten wird die Anwendung nicht starten.
+Für die lokale Entwicklung kann PostgreSQL in Docker ausgeführt werden, während die 
+Spring-Boot-Anwendung direkt auf dem Host-System läuft.
+
+Zuerst den Datenbank-Container starten:
 ```
-$ docker compose up -d
+$ docker compose up -d exambyteDB
 ```
-   
-### JAR-File bauen und starten
+
+Anschließend die Anwendung mit dem `local`-Spring-Profil starten:
 ```
-$ ./gradlew build
-$ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
+$ ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
-   
-> [!WARNING]
-> Wenn Testcontainer nicht die Docker API-Version `1.44` erkennen tut, werden die Integrationstests fehlschlagen.
-> Workaround:
-> - Docker aktualisieren
-> - Spring Boot aktualisieren
-> - Temporär die API-Version manuell setzen (**langfristig nicht empfohlen**)
->   ```
->   $ echo api.version=1.44 >> ~/.docker-java.properties
->   ```
->   
->   Quellen:
-> - [Stack Overflow: Docker-Error about client api version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
-> - [Github: Testcontainer-Java issues](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
-   
-### Anwendung stoppen
+
+Die Anwendung ist anschließend unter `http://localhost:8080` erreichbar.
+
+### Anwendung beenden
+
+Die lokal laufende Spring-Boot-Anwendung mit `Strg+C` beenden.
+
+Anschließend die Docker-Container stoppen:
 ```
-$ ^C # Verwende strg+c
 $ docker compose down
 ```
 
-> [!TIP]
-> Falls auch die DB-Daten gelöscht werden sollen, verwende Argument `-v`
-> ```
-> $ docker compose down -v # Volumes werden gelöscht
-> ```
+Um zusätzlich das Datenbank-Volume zu löschen, den Parameter `-v` verwenden:
+```
+$ docker compose down -v
+```
+
+## Gesamte Anwendung mit Docker ausführen
+
+Um sowohl die Spring-Boot-Anwendung als auch PostgreSQL vollständig in Docker auszuführen:
+```
+$ ./gradlew clean bootJar
+$ docker compose up -d --build
+```
 
 ## Nutzung
 

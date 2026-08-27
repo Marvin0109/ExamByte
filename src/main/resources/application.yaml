@@ -33,15 +33,12 @@ spring:
           no-store: true
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/${DB_NAME}
+    url: jdbc:postgresql://exambyteDB:5432/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   flyway:
     enabled: true
-    url: jdbc:postgresql://localhost:5432/${DB_NAME}
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
     schemas:
       - public
     locations: classpath:db/migration

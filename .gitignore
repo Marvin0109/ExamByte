@@ -44,3 +44,4 @@ out/
 docs/feedback.txt
 docs/feedback2.txt
 docs/FlywayHolzHammerMethode.md
+src/main/resources/application-local.yaml

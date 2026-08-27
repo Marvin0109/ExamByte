@@ -47,7 +47,7 @@ It replaces ILIAS as the testing platform for exam admission and provides:
 - **Result overview**: Organizers have access to a complete overview of test results
 - **Export feature**: Download test results as CSV files
 
-## Installation (Linux)
+## Local development (Linux)
 
 ### Requirements
 - Java 21
@@ -55,51 +55,48 @@ It replaces ILIAS as the testing platform for exam admission and provides:
 - Docker for the database
 - SSH setup for cloning the repository (optional)
 - Add the required credentials to a `.env` file (use `.env.example` as a template)
+- Create `application-local.yaml` by using the template `application-local.example.yaml`
 
 ### Cloning repository via SSH
 ```
 $ git clone git@github.com:Marvin0109/ExamByte.git
 ```
 
-### Starting container
-> [!IMPORTANT]
-> Always start the Docker container **before** running the `.jar` file, otherwise the application will fail to start.
+For local development, PostgreSQL can be run in Docker while the Spring Boot application runs directly on the host
+machine. 
+
+Start the database container first:
 ```
-$ docker compose up -d
+$ docker compose up -d exambyteDB
 ```
 
-### Building and using JAR-File
+Then start the application with the `local` Spring profile:
 ```
-$ ./gradlew build
-$ java -jar build/libs/exambyte-chillex-0.0.1-SNAPSHOT.jar
+$ ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
-> [!WARNING]
-> If Testcontainers cannot detect Docker API version `1.44`, the integration tests will fail.
->
-> Workarounds:
-> - Update Docker
-> - Update Spring Boot
-> - Temporarily set the API version manually (**not recommended as a long-term solution**)
->   ```
->   $ echo api.version=1.44 >> ~/.docker-java.properties
->   ```
->
->   Sources:
-> - [Stack Overflow: Docker error about client API version](https://stackoverflow.com/questions/79817033/sudden-docker-error-about-client-api-version)
-> - [GitHub: testcontainers-java issue](https://github.com/testcontainers/testcontainers-java/issues/11212#issuecomment-3516573631)
+The application will then be available at `http://localhost:8080`.
 
 ### Shutting down the application
+Stop the local Spring Boot application with `Ctrl+C`.
+
+Then stop the Docker containers:
 ```
-$ ^C # Use ctrl+c
 $ docker compose down
 ```
 
-> [!TIP]
-> If the database data should also be removed, use the `-v` argument.
-> ```
-> $ docker compose down -v # Deleting volumes
-> ```
+To also delete the database volume, use `-v`:
+```
+$ docker compose down -v
+```
+
+## Running the complete application with Docker
+
+To run both the Spring Boot application and PostgreSQL in Docker:
+```
+$ ./gradlew clean bootJar
+$ docker compose up -d --build
+```
 
 ## Usage and Demo
 
