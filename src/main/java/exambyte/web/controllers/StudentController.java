@@ -20,9 +20,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
+
+import static org.springframework.data.relational.core.sql.When.when;
 
 @Controller
 @RequestMapping("/student")
@@ -30,10 +34,12 @@ import java.util.UUID;
 public class StudentController {
 
     private final ExamControllerService service;
+    private final Clock clock;
     private static final String LOGIN_NAME = "login";
 
-    public StudentController(ExamControllerService service) {
+    public StudentController(ExamControllerService service, Clock clock) {
         this.service = service;
+        this.clock = clock;
     }
 
     private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
@@ -52,7 +58,7 @@ public class StudentController {
         String studentName = user.getAttribute(LOGIN_NAME);
 
         List<ExamDTO> examDTOs = service.getAllExams();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(clock);
 
         double progress = service.getEligibilityProgress(studentName);
         boolean eligibilityState = service.hasAnyFailedAttempt(studentName);

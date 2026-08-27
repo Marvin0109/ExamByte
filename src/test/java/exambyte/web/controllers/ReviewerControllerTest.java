@@ -6,6 +6,7 @@ import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
 import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
 import exambyte.web.service.ExamControllerService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -16,7 +17,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +44,15 @@ class ReviewerControllerTest {
 
     @MockitoBean
     private ExamControllerService service;
+
+    @MockitoBean
+    private Clock clock;
+
+    @BeforeEach
+    void setUp() {
+        when(clock.instant()).thenReturn(Instant.parse("2026-01-01T00:00:00.00Z"));
+        when(clock.getZone()).thenReturn(ZoneId.of("Europe/Berlin"));
+    }
 
     @Test
     void get_listExamsForReviewer_notAuthorized() throws Exception {
@@ -78,7 +91,8 @@ class ReviewerControllerTest {
         UUID examId = UUID.randomUUID();
 
         ExamDTO examDTO = mock(ExamDTO.class);
-        when(examDTO.end()).thenReturn(LocalDateTime.now().plusDays(1));
+        LocalDateTime tomorrow = LocalDateTime.now(clock).plusDays(1);
+        when(examDTO.end()).thenReturn(tomorrow);
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
 
@@ -95,7 +109,8 @@ class ReviewerControllerTest {
         UUID examId = UUID.randomUUID();
 
         ExamDTO examDTO = mock(ExamDTO.class);
-        when(examDTO.end()).thenReturn(LocalDateTime.now().minusDays(1));
+        LocalDateTime yesterday = LocalDateTime.now(clock).minusDays(1);
+        when(examDTO.end()).thenReturn(yesterday);
 
         when(service.getExamByUUID(examId)).thenReturn(examDTO);
         when(service.getSubmitInfo(examId)).thenReturn(List.of());

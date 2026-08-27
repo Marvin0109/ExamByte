@@ -11,6 +11,7 @@ import exambyte.web.form.create_exam.ExamForm;
 import exambyte.web.form.info.ExamTimeInfo;
 import exambyte.web.form.submit_answers.SubmitForm;
 import exambyte.web.service.ExamControllerService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.time.Clock;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -45,6 +49,15 @@ class StudentControllerTest {
 
     @MockitoBean
     private ExamControllerService service;
+
+    @MockitoBean
+    private Clock clock;
+
+    @BeforeEach
+    void setUp() {
+        when(clock.instant()).thenReturn(Instant.parse("2026-01-01T00:00:00.00Z"));
+        when(clock.getZone()).thenReturn(ZoneId.of("Europe/Berlin"));
+    }
 
     @Test
     void get_listExamsForStudents_notAuthorized() throws Exception {

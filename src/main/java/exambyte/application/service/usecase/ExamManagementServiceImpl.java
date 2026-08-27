@@ -177,7 +177,7 @@ public class ExamManagementServiceImpl implements ExamManagementService {
         LocalDateTime submitTime = allAnswers.stream()
                 .map(AnswerDTO::submitTime)
                 .max(LocalDateTime::compareTo)
-                .orElse(LocalDateTime.now());
+                .orElse(LocalDateTime.now(clock));
 
         return new AttemptDTO(
                 submitTime,

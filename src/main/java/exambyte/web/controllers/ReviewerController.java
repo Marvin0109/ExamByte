@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -34,11 +35,13 @@ import java.util.UUID;
 public class ReviewerController {
 
     private final ExamControllerService service;
+    private final Clock clock;
     private static final String LOGIN_NAME = "login";
     private static final String TIME_NOW = "timeNow";
 
-    public ReviewerController(ExamControllerService service) {
+    public ReviewerController(ExamControllerService service, Clock clock) {
         this.service = service;
+        this.clock = clock;
     }
 
     private String redirectWithMessage(RedirectAttributes redirectAttributes, String message, boolean success) {
@@ -57,7 +60,7 @@ public class ReviewerController {
         model.addAttribute("name", user.getAttribute(LOGIN_NAME));
 
         List<ExamDTO> examDTOs = service.getAllExams();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(clock);
 
         List<ReviewCoverageForm> covList = service.getReviewCoverage(examDTOs);
 
@@ -74,7 +77,7 @@ public class ReviewerController {
             RedirectAttributes redirectAttributes) {
 
         ExamDTO examDTO = service.getExamByUUID(examId);
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(clock);
 
         if (now.isBefore(examDTO.end())) {
             return redirectWithMessage(
