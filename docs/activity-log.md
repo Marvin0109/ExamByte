@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** May 19, 2026
+> **Updated on:** August 28, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -736,3 +736,12 @@
 ### 19.05.26
 **Area**: Documentation
 - Translating existing docs (de → en)
+
+---
+
+### 27.08.26
+**Area**: Deployment / Time logic / Configurations
+- Creating Dockerfile for deployment
+- Creating `application-local.example.yaml` for local development
+- Changing configs in `docker-compose.yml` for local development and deployment
+- Using `Clock` instead of `LocalDateTime.now()` in some classes
