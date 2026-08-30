@@ -3,7 +3,6 @@ package exambyte.infrastructure.container;
 import exambyte.domain.model.exam.Exam;
 import exambyte.domain.repository.*;
 import exambyte.infrastructure.mapper.ExamMapper;
-import exambyte.infrastructure.mapper.ExamMapperImpl;
 import exambyte.infrastructure.repository.ExamDAO;
 import exambyte.infrastructure.repository.ExamRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +34,7 @@ class ExamDBTest {
 
     @BeforeEach
     void setUp() {
-        ExamMapper examMapper = new ExamMapperImpl();
+        ExamMapper examMapper = new ExamMapper();
         repository = new ExamRepositoryImpl(dao, examMapper);
     }
 

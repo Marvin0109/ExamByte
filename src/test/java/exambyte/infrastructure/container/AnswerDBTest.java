@@ -3,7 +3,6 @@ package exambyte.infrastructure.container;
 import exambyte.infrastructure.mapper.AnswerMapper;
 import exambyte.domain.model.exam.Answer;
 import exambyte.domain.repository.AnswerRepository;
-import exambyte.infrastructure.mapper.AnswerMapperImpl;
 import exambyte.infrastructure.repository.AnswerDAO;
 import exambyte.infrastructure.repository.AnswerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +33,7 @@ class AnswerDBTest {
 
     @BeforeEach
     void setUp() {
-        AnswerMapper answerMapper = new AnswerMapperImpl();
+        AnswerMapper answerMapper = new AnswerMapper();
         repository = new AnswerRepositoryImpl(dao, answerMapper);
     }
 

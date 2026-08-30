@@ -2,10 +2,22 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.user.Reviewer;
 import exambyte.infrastructure.entity.ReviewerEntity;
+import org.springframework.stereotype.Component;
 
-public interface ReviewerMapper {
+@Component
+public class ReviewerMapper {
 
-    Reviewer toDomain(ReviewerEntity entity);
+    public Reviewer toDomain(ReviewerEntity entity) {
+        return new Reviewer.ReviewerBuilder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
+    }
 
-    ReviewerEntity toEntity(Reviewer reviewer);
+    public ReviewerEntity toEntity(Reviewer reviewer) {
+        return new ReviewerEntity.ReviewerEntityBuilder()
+                .id(reviewer.id())
+                .name(reviewer.getName())
+                .build();
+    }
 }

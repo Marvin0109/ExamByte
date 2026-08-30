@@ -2,7 +2,6 @@ package exambyte.infrastructure.container;
 
 import exambyte.domain.model.exam.Question;
 import exambyte.infrastructure.mapper.QuestionMapper;
-import exambyte.infrastructure.mapper.QuestionMapperImpl;
 import exambyte.domain.repository.QuestionRepository;
 import exambyte.infrastructure.repository.QuestionDAO;
 import exambyte.infrastructure.repository.QuestionRepositoryImpl;
@@ -34,7 +33,7 @@ class QuestionDBTest {
 
     @BeforeEach
     void setUp() {
-        QuestionMapper questionMapper = new QuestionMapperImpl();
+        QuestionMapper questionMapper = new QuestionMapper();
         repository = new QuestionRepositoryImpl(dao, questionMapper);
     }
 

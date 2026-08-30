@@ -2,10 +2,22 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.user.Student;
 import exambyte.infrastructure.entity.StudentEntity;
+import org.springframework.stereotype.Component;
 
-public interface StudentMapper {
+@Component
+public class StudentMapper {
 
-    Student toDomain(StudentEntity entity);
+    public Student toDomain(StudentEntity entity) {
+        return new Student.StudentBuilder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .build();
+    }
 
-    StudentEntity toEntity(Student student);
+    public StudentEntity toEntity(Student student) {
+        return new StudentEntity.StudentEntityBuilder()
+                .id(student.id())
+                .name(student.getName())
+                .build();
+    }
 }

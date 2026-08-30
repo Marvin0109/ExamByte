@@ -2,7 +2,6 @@ package exambyte.infrastructure.container;
 
 import exambyte.domain.model.user.Student;
 import exambyte.infrastructure.mapper.StudentMapper;
-import exambyte.infrastructure.mapper.StudentMapperImpl;
 import exambyte.infrastructure.repository.StudentDAO;
 import exambyte.infrastructure.repository.StudentRepositoryImpl;
 import exambyte.domain.repository.StudentRepository;
@@ -34,7 +33,7 @@ class StudentDBTest {
 
     @BeforeEach
     void setUp() {
-        StudentMapper studentMapper = new StudentMapperImpl();
+        StudentMapper studentMapper = new StudentMapper();
         repository = new StudentRepositoryImpl(dao, studentMapper);
     }
 

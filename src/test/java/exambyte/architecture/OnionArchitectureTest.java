@@ -67,7 +67,7 @@ class OnionArchitectureTest {
     @ArchTest
     ArchRule allMapperShouldBeAnnotatedWithComponent = classes()
         .that()
-        .haveSimpleNameEndingWith("MapperImpl")
+        .haveSimpleNameEndingWith("Mapper")
         .should()
         .beAnnotatedWith(Component.class);
 
