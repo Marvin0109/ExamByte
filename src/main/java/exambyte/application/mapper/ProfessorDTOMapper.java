@@ -2,8 +2,14 @@ package exambyte.application.mapper;
 
 import exambyte.application.dto.ProfessorDTO;
 import exambyte.domain.model.user.Professor;
+import org.springframework.stereotype.Component;
 
-public interface ProfessorDTOMapper {
+@Component
+public class ProfessorDTOMapper {
 
-    ProfessorDTO toDTO(Professor professor);
+    public ProfessorDTO toDTO(Professor professor) {
+        return new ProfessorDTO(
+                professor.id(),
+                professor.getName());
+    }
 }

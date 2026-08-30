@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class AnswerMapperTest {
 
-    private final AnswerMapper mapper = new AnswerMapperImpl();
+    private final AnswerMapper mapper = new AnswerMapper();
 
     @Test
     void toEntity() {

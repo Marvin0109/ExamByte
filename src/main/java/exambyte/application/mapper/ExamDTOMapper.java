@@ -2,14 +2,37 @@ package exambyte.application.mapper;
 
 import exambyte.application.dto.ExamDTO;
 import exambyte.domain.model.exam.Exam;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public interface ExamDTOMapper {
+@Component
+public class ExamDTOMapper {
 
-    ExamDTO toDTO(Exam exam);
+    public ExamDTO toDTO(Exam exam) {
+        return new ExamDTO(
+                exam.getId(),
+                exam.getTitle(),
+                exam.getProfessorId(),
+                exam.getStart(),
+                exam.getEnd(),
+                exam.getResult());
+    }
 
-    Exam toDomain(ExamDTO dto);
+    public List<ExamDTO> toExamDTOList(List<Exam> exams) {
+        return exams.stream()
+                .map(this::toDTO)
+                .toList();
+    }
 
-    List<ExamDTO> toExamDTOList(List<Exam> exams);
+    public Exam toDomain(ExamDTO examDTO) {
+        return new Exam.ExamBuilder()
+                .id(examDTO.id())
+                .title(examDTO.title())
+                .professorId(examDTO.professorId())
+                .start(examDTO.start())
+                .end(examDTO.end())
+                .result(examDTO.result())
+                .build();
+    }
 }

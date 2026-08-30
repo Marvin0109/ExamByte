@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ReviewMapperTest {
 
-    private final ReviewMapper mapper = new ReviewMapperImpl();
+    private final ReviewMapper mapper = new ReviewMapper();
     private static final UUID REVIEW_ID = UUID.randomUUID();
     private static final UUID ANSWER_ID = UUID.randomUUID();
     private static final UUID REVIEWER_ID = UUID.randomUUID();

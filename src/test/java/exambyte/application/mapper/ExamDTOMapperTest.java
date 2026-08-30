@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ExamDTOMapperTest {
 
-    private final ExamDTOMapper mapper = new ExamDTOMapperImpl();
+    private final ExamDTOMapper mapper = new ExamDTOMapper();
 
     @Test
     void toDTO() {

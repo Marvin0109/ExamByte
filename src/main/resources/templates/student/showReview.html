@@ -28,7 +28,7 @@
 
     <h5 th:text="'Korrektor: ' + ${view.authorName}">Korrektoren</h5>
 
-    <h5 th:text="'Punktestand: ' + ${view.maxPoints} + ' / ' + ${view.maxPoints}">Punktestand</h5>
+    <h5 th:text="'Punktestand: ' + ${view.reviewPoints} + ' / ' + ${view.maxPoints}">Punktestand</h5>
 
     <div th:each="viewItem, iterStat : ${view.components}" class="mb-3">
         <div class="card">

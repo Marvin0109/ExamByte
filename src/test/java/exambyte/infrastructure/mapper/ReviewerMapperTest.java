@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ReviewerMapperTest {
 
-    private final ReviewerMapper mapper = new ReviewerMapperImpl();
+    private final ReviewerMapper mapper = new ReviewerMapper();
 
     @Test
     void toEntity() {

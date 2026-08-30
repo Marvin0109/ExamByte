@@ -15,7 +15,7 @@ class CorrectAnswersMapperTest {
 
     @BeforeEach
     void setUp() {
-        mapper = new CorrectAnswersMapperImpl();
+        mapper = new CorrectAnswersMapper();
     }
 
     @Test

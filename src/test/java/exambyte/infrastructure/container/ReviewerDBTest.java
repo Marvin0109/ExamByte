@@ -3,7 +3,6 @@ package exambyte.infrastructure.container;
 import exambyte.infrastructure.mapper.ReviewerMapper;
 import exambyte.domain.model.user.Reviewer;
 import exambyte.domain.repository.ReviewerRepository;
-import exambyte.infrastructure.mapper.ReviewerMapperImpl;
 import exambyte.infrastructure.repository.ReviewerDAO;
 import exambyte.infrastructure.repository.ReviewerRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +33,7 @@ class ReviewerDBTest {
 
     @BeforeEach
     void setUp() {
-        ReviewerMapper mapper = new ReviewerMapperImpl();
+        ReviewerMapper mapper = new ReviewerMapper();
         repository = new ReviewerRepositoryImpl(dao, mapper);
     }
 

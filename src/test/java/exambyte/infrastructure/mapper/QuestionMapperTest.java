@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class QuestionMapperTest {
 
-    private final QuestionMapper mapper = new QuestionMapperImpl();
+    private final QuestionMapper mapper = new QuestionMapper();
 
     @Test
     void toEntity() {

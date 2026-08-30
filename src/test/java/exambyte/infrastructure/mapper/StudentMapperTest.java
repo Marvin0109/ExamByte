@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StudentMapperTest {
 
-    private final StudentMapper mapper = new StudentMapperImpl();
+    private final StudentMapper mapper = new StudentMapper();
 
     @Test
     void toEntity() {

@@ -3,7 +3,6 @@ package exambyte.web.service;
 import exambyte.application.dto.export.ExamExportDTO;
 import exambyte.application.dto.export.ReviewExportDTO;
 import exambyte.application.service.export.CsvExportService;
-import exambyte.application.service.export.CsvExportServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ class CsvExportServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new CsvExportServiceImpl();
+        service = new CsvExportService();
     }
 
     @Test

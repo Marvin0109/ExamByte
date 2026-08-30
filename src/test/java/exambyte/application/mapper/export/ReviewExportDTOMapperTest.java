@@ -28,7 +28,7 @@ class ReviewExportDTOMapperTest {
 
     @BeforeEach
     void setUp() {
-        mapper = new ReviewExportDTOMapperImpl();
+        mapper = new ReviewExportDTOMapper();
 
         exam = new ExamDTO(
                 UUID.randomUUID(),

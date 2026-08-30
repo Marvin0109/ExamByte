@@ -2,10 +2,30 @@ package exambyte.infrastructure.mapper;
 
 import exambyte.domain.model.exam.Answer;
 import exambyte.infrastructure.entity.AnswerEntity;
+import org.springframework.stereotype.Component;
 
-public interface AnswerMapper {
+@Component
+public class AnswerMapper {
 
-    Answer toDomain(AnswerEntity entity);
+    public Answer toDomain(AnswerEntity entity) {
 
-    AnswerEntity toEntity(Answer answer);
+        return new Answer.AnswerBuilder()
+                .id(entity.getId())
+                .answer(entity.getAnswer())
+                .questionId(entity.getQuestionId())
+                .studentId(entity.getStudentId())
+                .submitTime(entity.getSubmitTime())
+                .build();
+    }
+
+    public AnswerEntity toEntity(Answer answer) {
+
+        return new AnswerEntity.AnswerEntityBuilder()
+                .id(answer.getId())
+                .answer(answer.getAnswer())
+                .questionId(answer.getQuestionId())
+                .studentId(answer.getStudentUUID())
+                .submitTime(answer.getSubmitTime())
+                .build();
+    }
 }
