@@ -2,14 +2,37 @@ package exambyte.application.mapper;
 
 import exambyte.application.dto.AnswerDTO;
 import exambyte.domain.model.exam.Answer;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public interface AnswerDTOMapper {
+@Component
+public class AnswerDTOMapperImpl implements AnswerDTOMapper {
 
-    AnswerDTO toDTO(Answer answer);
+    @Override
+    public AnswerDTO toDTO(Answer answer) {
+        return new AnswerDTO(answer.getId(),
+                answer.getAnswer(),
+                answer.getQuestionId(),
+                answer.getStudentUUID(),
+                answer.getSubmitTime());
+    }
 
-    Answer toDomain(AnswerDTO dto);
+    @Override
+    public List<AnswerDTO> toAnswerDTOList(List<Answer> answers) {
+        return answers.stream()
+                .map(this::toDTO)
+                .toList();
+    }
 
-    List<AnswerDTO> toAnswerDTOList(List<Answer> answers);
+    @Override
+    public Answer toDomain(AnswerDTO dto) {
+        return new Answer.AnswerBuilder()
+            .id(dto.id())
+            .answer(dto.answer())
+            .questionId(dto.questionId())
+            .studentId(dto.studentId())
+            .submitTime(dto.submitTime())
+            .build();
+    }
 }

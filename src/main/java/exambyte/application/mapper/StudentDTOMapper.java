@@ -2,12 +2,24 @@ package exambyte.application.mapper;
 
 import exambyte.application.dto.StudentDTO;
 import exambyte.domain.model.user.Student;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-public interface StudentDTOMapper {
+@Component
+public class StudentDTOMapperImpl implements StudentDTOMapper {
 
-    StudentDTO toDTO(Student student);
+    @Override
+    public StudentDTO toDTO(Student student) {
+        return new StudentDTO(
+                student.id(),
+                student.getName());
+    }
 
-    List<StudentDTO> toStudentDTOList(List<Student> students);
+    @Override
+    public List<StudentDTO> toStudentDTOList(List<Student> students) {
+        return students.stream()
+                .map(this::toDTO)
+                .toList();
+    }
 }
