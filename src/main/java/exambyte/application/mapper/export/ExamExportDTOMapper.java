@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ExamExportDTOMapperImpl implements ExamExportDTOMapper {
+public class ExamExportDTOMapper {
 
-    @Override
     public List<ExamExportDTO> mapDTOToExport(ExamDTO exam,
                                               String profName,
                                               double points,

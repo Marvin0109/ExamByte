@@ -24,7 +24,7 @@ class ExamExportDTOMapperTest {
 
     @BeforeEach
     void setUp() {
-        mapper = new ExamExportDTOMapperImpl();
+        mapper = new ExamExportDTOMapper();
 
         exam = new ExamDTO(
                 UUID.randomUUID(),

@@ -9,9 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class QuestionDTOMapperImpl implements QuestionDTOMapper {
+public class QuestionDTOMapper {
 
-    @Override
     public QuestionDTO toDTO(Question question) {
         return new QuestionDTO(
                 question.getId(),
@@ -21,14 +20,12 @@ public class QuestionDTOMapperImpl implements QuestionDTOMapper {
                 QuestionTypeDTO.valueOf(question.getType().name()));
     }
 
-    @Override
     public List<QuestionDTO> toQuestionDTOList(List<Question> questions) {
         return questions.stream()
                 .map(this::toDTO)
                 .toList();
     }
 
-    @Override
     public Question toDomain(QuestionDTO dto) {
         return new Question.FrageBuilder()
                 .id(dto.id())

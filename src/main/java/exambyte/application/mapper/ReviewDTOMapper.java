@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ReviewDTOMapperImpl implements ReviewDTOMapper {
+public class ReviewDTOMapper {
 
-    @Override
     public ReviewDTO toDTO(Review review) {
         return new ReviewDTO(
                 review.getId(),
@@ -19,14 +18,12 @@ public class ReviewDTOMapperImpl implements ReviewDTOMapper {
                 review.getPoints());
     }
 
-    @Override
     public List<ReviewDTO> toReviewDTOList(List<Review> reviews) {
         return reviews.stream()
                 .map(this::toDTO)
                 .toList();
     }
 
-    @Override
     public Review toDomain(ReviewDTO dto) {
         return new Review.ReviewBuilder()
                 .id(dto.id())

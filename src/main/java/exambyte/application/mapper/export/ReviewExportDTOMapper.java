@@ -11,9 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ReviewExportDTOMapperImpl implements ReviewExportDTOMapper {
+public class ReviewExportDTOMapper {
 
-    @Override
     public List<ReviewExportDTO> mapDTOToExport(ExamDTO exam,
                                           String reviewerName,
                                           double points,

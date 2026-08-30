@@ -7,16 +7,14 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ReviewerDTOMapperImpl implements ReviewerDTOMapper {
+public class ReviewerDTOMapper {
 
-    @Override
     public ReviewerDTO toDTO(Reviewer reviewer) {
         return new ReviewerDTO(
                 reviewer.id(),
                 reviewer.getName());
     }
 
-    @Override
     public List<ReviewerDTO> toReviewerDTOList(List<Reviewer> reviewers) {
         return reviewers.stream()
                 .map(this::toDTO)

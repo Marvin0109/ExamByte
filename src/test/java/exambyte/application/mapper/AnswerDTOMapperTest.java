@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AnswerDTOMapperTest {
 
-    private final AnswerDTOMapper mapper = new AnswerDTOMapperImpl();
+    private final AnswerDTOMapper mapper = new AnswerDTOMapper();
 
     @Test
     void toDTO() {
@@ -40,53 +40,6 @@ class AnswerDTOMapperTest {
         assertEquals(questionId, dto.questionId());
         assertEquals("Answer", dto.answer());
         assertEquals(submitTime, dto.submitTime());
-    }
-
-    @Test
-    void toAnswerDTOList() {
-        // Arrange
-        UUID id = UUID.randomUUID();
-        UUID studentId = UUID.randomUUID();
-        UUID questionId = UUID.randomUUID();
-        LocalDateTime submitTime = LocalDateTime.of(2020, 1, 1, 0, 0);
-
-        UUID id2 = UUID.randomUUID();
-        UUID studentId2 = UUID.randomUUID();
-        UUID questionId2 = UUID.randomUUID();
-        LocalDateTime submitTime2 = LocalDateTime.of(2020, 1, 1, 1, 0);
-
-        Answer answer = new Answer.AnswerBuilder()
-                .id(id)
-                .answer("Answer")
-                .questionId(questionId)
-                .studentId(studentId)
-                .submitTime(submitTime)
-                .build();
-
-        Answer answer2 = new Answer.AnswerBuilder()
-                .id(id2)
-                .answer("Answer2")
-                .questionId(questionId2)
-                .studentId(studentId2)
-                .submitTime(submitTime2)
-                .build();
-
-        List<Answer> answerList = Arrays.asList(answer, answer2);
-
-        // Act
-        List<AnswerDTO> dtoList = mapper.toAnswerDTOList(answerList);
-
-        // Assert
-        assertEquals(2, dtoList.size());
-        assertEquals(id, dtoList.getFirst().id());
-        assertEquals(studentId, dtoList.getFirst().studentId());
-        assertEquals(questionId, dtoList.getFirst().questionId());
-        assertEquals(submitTime, dtoList.getFirst().submitTime());
-
-        assertEquals(id2, dtoList.getLast().id());
-        assertEquals(studentId2, dtoList.getLast().studentId());
-        assertEquals(questionId2, dtoList.getLast().questionId());
-        assertEquals(submitTime2, dtoList.getLast().submitTime());
     }
 
     @Test

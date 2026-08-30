@@ -5,9 +5,8 @@ import exambyte.domain.model.user.Professor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProfessorDTOMapperImpl implements ProfessorDTOMapper {
+public class ProfessorDTOMapper {
 
-    @Override
     public ProfessorDTO toDTO(Professor professor) {
         return new ProfessorDTO(
                 professor.id(),

@@ -5,9 +5,8 @@ import exambyte.domain.model.exam.CorrectAnswers;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CorrectAnswersDTOMapperImpl implements CorrectAnswersDTOMapper {
+public class CorrectAnswersDTOMapper {
 
-    @Override
     public CorrectAnswersDTO toDTO(CorrectAnswers correctAnswers) {
         return new CorrectAnswersDTO(
                 correctAnswers.getId(),
@@ -16,7 +15,6 @@ public class CorrectAnswersDTOMapperImpl implements CorrectAnswersDTOMapper {
                 correctAnswers.getQuestionId());
     }
 
-    @Override
     public CorrectAnswers toDomain(CorrectAnswersDTO dto) {
         return new CorrectAnswers.CorrectAnswersBuilder()
                 .id(dto.id())

@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProfessorDTOMapperTest {
 
-    private final ProfessorDTOMapper mapper = new ProfessorDTOMapperImpl();
+    private final ProfessorDTOMapper mapper = new ProfessorDTOMapper();
 
     @Test
     void toDTO() {
