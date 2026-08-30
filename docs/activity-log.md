@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** August 28, 2026
+> **Updated on:** August 30, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -745,3 +745,10 @@
 - Creating `application-local.example.yaml` for local development
 - Changing configs in `docker-compose.yml` for local development and deployment
 - Using `Clock` instead of `LocalDateTime.now()` in some classes
+
+---
+
+### 30.08.26
+**Area**: Refactoring / Review
+- Removed unnecessary interfaces of mapper classes
+- Display of reached points in a review is fixed (`maxPoints` -> `reachedPoints`)
