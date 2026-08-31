@@ -8,7 +8,7 @@
 
 - [Was ist ExamByte?](#was-ist-exambyte)
 - [Funktionen](#funktionen)
-- [Installation (Linux)](#installation-linux)
+- [Lokale Entwicklung (Linux)](#lokale-entwicklung-linux)
 - [Nutzung und Demo](#nutzung)
 - [Architektur](#architektur)
 - [Dokumentation](#dokumentation)

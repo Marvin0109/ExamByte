@@ -11,7 +11,7 @@
 
 - [What is ExamByte?](#what-is-exambyte)
 - [Features](#features)
-- [Installation (Linux)](#installation-linux)
+- [Local Development (Linux)](#local-development-linux)
 - [Usage and Demo](#usage-and-demo)
 - [Architecture](#architecture)
 - [Documentation](#documentation)

@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** August 30, 2026
+> **Updated on:** August 31, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -752,3 +752,10 @@
 **Area**: Refactoring / Review
 - Removed unnecessary interfaces of mapper classes
 - Display of reached points in a review is fixed (`maxPoints` -> `reachedPoints`)
+
+---
+
+### 31.08.26
+**Area**: Deployment
+- Adding Caddyfile
+- Adding configurations for using Caddy
