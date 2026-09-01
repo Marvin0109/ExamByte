@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** August 31, 2026
+> **Updated on:** September 1, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -759,3 +759,10 @@
 **Area**: Deployment
 - Adding Caddyfile
 - Adding configurations for using Caddy
+
+---
+
+### 01.09.26
+**Area**: Deployment / Local development
+- Creating `dev.sh` for starting local development
+- Changing some configurations in `application.yaml` for deployment

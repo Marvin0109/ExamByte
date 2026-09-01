@@ -9,6 +9,8 @@
 - [Was ist ExamByte?](#was-ist-exambyte)
 - [Funktionen](#funktionen)
 - [Lokale Entwicklung (Linux)](#lokale-entwicklung-linux)
+- [Starten mit Docker](#gesamte-anwendung-mit-docker-ausführen)
+- [Bereitstellung (Deployment)](#bereitstellung-deployment)
 - [Nutzung und Demo](#nutzung)
 - [Architektur](#architektur)
 - [Dokumentation](#dokumentation)
@@ -91,6 +93,12 @@ Um sowohl die Spring-Boot-Anwendung als auch PostgreSQL vollständig in Docker a
 $ ./gradlew clean bootJar
 $ docker compose up -d --build
 ```
+
+## Bereitstellung (Deployment)
+
+(Status: 01.09.26)
+
+Die Anwendung ist aktuell [hier](https://exambyte.org) am Laufen.
 
 ## Nutzung
 
