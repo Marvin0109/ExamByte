@@ -2,6 +2,9 @@ logging:
   level:
     root: info
 
+server:
+  forward-headers-strategy: framework
+
 spring:
   application:
     name: ExamByte
