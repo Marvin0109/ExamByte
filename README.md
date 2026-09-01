@@ -65,15 +65,12 @@ $ git clone git@github.com:Marvin0109/ExamByte.git
 For local development, PostgreSQL can be run in Docker while the Spring Boot application runs directly on the host
 machine. 
 
-Start the database container first:
+Start the script `dev.sh`:
 ```
-$ docker compose up -d exambyteDB
+$ ./dev.sh
 ```
 
-Then start the application with the `local` Spring profile:
-```
-$ ./gradlew bootRun --args='--spring.profiles.active=local'
-```
+Be sure set the necessary permissions with `chmod +x dev.sh`.
 
 The application will then be available at `http://localhost:8080`.
 

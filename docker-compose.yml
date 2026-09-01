@@ -2,9 +2,7 @@ services:
   exambyteDB:
     image: postgres:15-alpine
     container_name: exambyte_postgres
-
-    ports:
-      - "127.0.0.1:5432:5432"
+    restart: unless-stopped
 
     environment:
       - "POSTGRES_DB=${DB_NAME}"
@@ -17,6 +15,7 @@ services:
   app:
     build: .
     container_name: exambyte_app
+    restart: unless-stopped
 
     environment:
       DB_NAME: ${DB_NAME}
@@ -31,6 +30,7 @@ services:
   caddy:
     image: caddy:2
     container_name: exambyte_caddy
+    restart: unless-stopped
 
     ports:
       - "80:80"
