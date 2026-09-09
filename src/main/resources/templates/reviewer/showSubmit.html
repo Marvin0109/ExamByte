@@ -7,7 +7,7 @@
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Menü</title>
+    <title> Manuelle Korrekturen </title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -24,7 +24,7 @@
 
 <main role="main" class="container mt-5 pt-5">
 
-    <h1>Korrektur</h1>
+    <h1> Manuelle Korrekturen </h1>
 
     <div class="alert alert-info rounded-3 flex-column" role="alert">
         <i class="fas fa-info-circle fa-lg me-2"></i>
@@ -37,13 +37,14 @@
         <form th:action="@{/reviewer/createReview/{answerId}(answerId=${answer.answerId})}" method="post"
               th:object="${reviewForm}">
             <div class="card-body">
-                <h5 class="card-text" th:text="${answer.questionText}">Fragestellung</h5>
+                <h2 class="card-text" th:text="${answer.questionText}">Fragestellung</h2>
                 <p class="card-text">
                     <small class="text-muted" th:text="${answer.questionPoints} + ' Punkte'">
-                        Punkte für Frage
+                        Punktzahl der Aufgabe
                     </small>
                 </p>
                 <p class="card-text" th:text="${answer.answer}">Antwort des Studenten</p>
+
                 <label class="form-label" th:for="'Bewertung' + ${iterStat.index}">Bewertungstext</label>
                 <textarea class="form-control mb-2"
                           rows="6"
@@ -53,7 +54,8 @@
                 <small class="text-danger"
                        th:if="${#fields.hasErrors('reviewText')}"
                        th:errors="*{reviewText}"></small>
-                <label th:for="'Punkte' + ${iterStat.index}">Punkte</label>
+
+                <label th:for="'Punkte' + ${iterStat.index}">Erreichte Punkte</label>
                 <input class="form-control mb-2"
                        type="number"
                        th:id="'Punkte' + ${iterStat.index}"

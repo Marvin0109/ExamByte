@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Korrektur eines Studenten ansehen">
+    <meta name="description" content="Korrektur einer Prüfung ansehen">
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
@@ -26,14 +26,14 @@
 
     <h1 th:text="${view.examTitle}">Testtitel</h1>
 
-    <h5 th:text="'Korrektor: ' + ${view.authorName}">Korrektoren</h5>
+    <h2 th:text="'Korrektor: ' + ${view.authorName}">Korrektoren</h2>
 
-    <h5 th:text="'Punktestand: ' + ${view.reviewPoints} + ' / ' + ${view.maxPoints}">Punktestand</h5>
+    <h3 th:text="'Punktestand: ' + ${view.reviewPoints} + ' / ' + ${view.maxPoints}">Punktestand</h3>
 
     <div th:each="viewItem, iterStat : ${view.components}" class="mb-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h5>
+                <h4 class="card-title" th:text="'Aufgabe ' + (${iterStat.index}+1)">Aufgabe</h4>
                 <p class="card-text" th:text="${viewItem.question.text}">Fragestellung</p>
 
                 <!-- Multiple Choice -->

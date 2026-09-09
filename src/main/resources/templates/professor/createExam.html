@@ -41,7 +41,7 @@
         <p>
             <strong>
                 Hinweis: Das ganze Zulassungsszenario ist da drauf ausgelegt, dass es keine zwei oder mehr Tests am
-                selben Zeitpunkt starten!
+                selben Zeitpunkt starten. Laufende Tests können auch nicht gelöscht werden!
             </strong>
         </p>
     </div>
@@ -89,7 +89,7 @@
                 <div class="mb-3">
                     <label th:for="'mc_points_' + ${iterStat.index}">Punkte:</label>
                     <input type="number"
-                           th:id="'mc_points' + ${iterStat.index}"
+                           th:id="'mc_points_' + ${iterStat.index}"
                            th:field="*{questions[__${iterStat.index}__].points}"
                            class="form-control"
                            min="0.5"
@@ -146,7 +146,7 @@
                 <div class="mb-3">
                     <label th:for="'sc_points_' + ${iterStat.index}">Punkte:</label>
                     <input type="number"
-                           th:id="'sc_points' + ${iterStat.index}"
+                           th:id="'sc_points_' + ${iterStat.index}"
                            th:field="*{questions[__${iterStat.index}__].points}"
                            class="form-control"
                            min="0.5"
@@ -203,7 +203,7 @@
                 <div class="mb-3">
                     <label th:for="'freeResponse_points_' + ${iterStat.index}">Punkte:</label>
                     <input type="number"
-                           th:id="'freeResponse_points' + ${iterStat.index}"
+                           th:id="'freeResponse_points_' + ${iterStat.index}"
                            th:field="*{questions[__${iterStat.index}__].points}"
                            class="form-control"
                            min="0.5"

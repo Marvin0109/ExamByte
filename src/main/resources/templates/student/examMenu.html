@@ -7,7 +7,7 @@
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Informationen zum Testversuch</title>
+    <title> Informationen zum Testversuch </title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -25,7 +25,7 @@
 <main role="main" class="container mt-5 pt-5">
 
     <div class="mb-3">
-        <h1 th:text="${exam.title}">Titel der Online Prüfung</h1>
+        <h1 th:text="${exam.title}">Titel der Prüfung</h1>
 
         <div th:if="${timeLeftBool}">
             <p>Übrige Zeit: <span th:text="${timeLeft}"></span></p>
@@ -87,7 +87,7 @@
                     <td th:text="${#numbers.formatDecimal(attempt.scoreInPercent, 1, 2)} + ' %'"></td>
                 </tr>
                 <tr th:if="${attempt == null}">
-                    <td colspan="2"> Keine Versuche vorhanden</td>
+                    <td colspan="2">Keine Versuche vorhanden</td>
                 </tr>
                 </tbody>
             </table>
@@ -134,7 +134,7 @@
                     angezeigt, wenn die Option ausgewählt wurde.
                     <p>
                         <strong>Alle Aufgaben müssen bearbeitet werden! Bei Freitextaufgaben gilt: Verwende "\", falls
-                        Sie die Aufgabe nicht beantworten tun.
+                        Sie die Aufgabe nicht beantworten.
                         </strong>
                     </p>
                 </td>

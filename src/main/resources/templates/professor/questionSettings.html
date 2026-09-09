@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Einstellungen zu Prüfungsfragen">
+    <meta name="description" content="Seite zur Auswahl an Aufgabentypen">
     <meta name="author" content="Marvin0109">
     <link rel="icon" href="/public/pictures/exambyteIcon.ico">
 
-    <title>Einstellungen von Fragen</title>
+    <title> Auswahl an Aufgabentypen </title>
 
     <link rel="stylesheet" href="/public/fontawesome-free-7.1.0-web/css/all.min.css">
 
@@ -31,11 +31,9 @@
         <span th:text="${message}"></span>
     </div>
 
-    <h1>Einstellung von Prüfungsfragen</h1>
+    <h1>Auswahl an Aufgabentypen</h1>
 
     <form method="post" th:action="@{/professor/generateQuestions}" th:object="${questionForm}">
-        <h2 class="mb-4">Anzahl der Fragetypen auswählen</h2>
-
         <div class="mb-3">
             <label for="MC">MC-Aufgaben (Multiple-Choice):</label>
             <input type="number" id="MC" class="form-control"
