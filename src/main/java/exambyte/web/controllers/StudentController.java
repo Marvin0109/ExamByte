@@ -22,11 +22,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
-
-import static org.springframework.data.relational.core.sql.When.when;
 
 @Controller
 @RequestMapping("/student")

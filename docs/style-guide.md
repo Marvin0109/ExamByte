@@ -2,7 +2,7 @@
 
 > **Author**: Marvin0109  
 > **Created on**: January 08, 2025  
-> **Updated on**: March 24, 2026
+> **Updated on**: September 9, 2026
 
 > [!NOTE]
 > This style guide defines formatting and convention rules for the project. The goal is to
@@ -489,7 +489,7 @@ The injected script will **not** be executed.
 
 ### JacocoTestReport
 
-![JacocoTestReport](/src/main/resources/static/public/pictures/quality_assurance/JacocoTest_Report-24-03-2026.png)
+![JacocoTestReport](/src/main/resources/static/public/pictures/quality_assurance/JacocoTest_Report-09-09-2026.png)
 
 ### SonarQube Overview
 
@@ -515,52 +515,53 @@ Here is the code statistics as of 24.03.2026
 ```
 $ cloc .
 
-github.com/AlDanial/cloc v 1.98  T=4.11 s (1239.8 files/s, 125872.7 lines/s)
+github.com/AlDanial/cloc v 1.98  T=3.44 s (1488.0 files/s, 150744.6 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 JSON                             3              0              0         225011
-YAML                             9             13              0         113764
+YAML                            11             24              1         113780
 CSS                             41           9293            266          60357
 JavaScript                      23           1620           2779          30956
-HTML                           433           1650            126          20322
+HTML                           470           1858            128          21350
 SVG                           4180              0             30          16726
-Java                           266           3393            551          12662
+Java                           247           3301            526          12436
 SCSS                            20             98             85           7718
-XML                             98             28              0           7158
-Markdown                         6            402              7           1407
-Text                             4             61              0            158
+XML                             99             28              0           7207
+Markdown                         7            481              7           1642
+Text                             4             61              0            154
 SQL                              2             23              0            132
-Bourne Shell                     1             28            118            105
+Bourne Shell                     2             32            118            116
 Maven                            1              9              9             88
-Gradle                           2             20              9             83
+Gradle                           2             19              8             82
 DOS Batch                        1             21              2             71
 PlantUML                         2              5              1             20
 Properties                       4              0              1             12
+Dockerfile                       1              4              0              5
 -------------------------------------------------------------------------------
-SUM:                          5096          16664           3984         496750
+SUM:                          5120          16877           3961         497863
 -------------------------------------------------------------------------------
 
 $ cloc src/main/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.08 s (2377.1 files/s, 100436.2 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.08 s (2036.7 files/s, 92111.4 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                           183           1677            223           5832
+Java                           164           1589            201           5627
 -------------------------------------------------------------------------------
-SUM:                           183           1677            223           5832
+SUM:                           164           1589            201           5627
 -------------------------------------------------------------------------------
 
 $ cloc src/test/java/
 
-github.com/AlDanial/cloc v 1.98  T=0.06 s (1462.7 files/s, 156388.9 lines/s)
+github.com/AlDanial/cloc v 1.98  T=0.06 s (1406.7 files/s, 149927.3 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            83           1716            328           6830
+Java                            83           1712            325           6809
 -------------------------------------------------------------------------------
-SUM:                            83           1716            328           6830
+SUM:                            83           1712            325           6809
 -------------------------------------------------------------------------------
 ```
 

@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** September 1, 2026
+> **Updated on:** September 9, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -766,3 +766,9 @@
 **Area**: Deployment / Local development
 - Creating `dev.sh` for starting local development
 - Changing some configurations in `application.yaml` for deployment
+
+---
+
+### 09.09.26
+**Area**: Frontend / Accessibility / SEO / CLS
+- Using chromium lighthouse analysis to correct HTML templates
