@@ -770,5 +770,7 @@
 ---
 
 ### 09.09.26
-**Area**: Frontend / Accessibility / SEO / CLS
+**Area**: Frontend / Accessibility / SEO / CLS / Script
 - Using chromium lighthouse analysis to correct HTML templates
+- Removing `navbar-toggler`-Button from bottom navigation
+- Adding `prod.sh` for new releases
