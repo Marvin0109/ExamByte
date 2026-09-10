@@ -1,0 +1,19 @@
+<footer class="bg-dark">
+    <div class="container-fluid d-flex justify-content-center py-1">
+        <div class="d-flex gap-3">
+            <a class="text-light text-decoration-none"
+               th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}"
+               th:classappend="${currentPath == '/contact'} ? ' active' : ''"
+               href="/contact">
+                <i class="fas fa-envelope me-1"></i>
+                Kontakt
+            </a>
+
+            <a class="text-light text-decoration-none"
+               href="https://github.com/Marvin0109/ExamByte">
+                <i class="fab fa-github me-1"></i>
+                Quellcode
+            </a>
+        </div>
+    </div>
+</footer>

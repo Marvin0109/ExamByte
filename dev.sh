@@ -12,4 +12,3 @@ echo "PostgreSQL is running."
 
 echo "Starting Spring Boot with the local profile..."
 ./gradlew bootRun --args='--spring.profiles.active=local'
-```

@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** September 9, 2026
+> **Updated on:** September 10, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -774,3 +774,10 @@
 - Using chromium lighthouse analysis to correct HTML templates
 - Removing `navbar-toggler`-Button from bottom navigation
 - Adding `prod.sh` for new releases
+
+---
+
+### 10.09.26
+**Area**: UI / UX
+- Using footer instead of navbar
+- Minor changes

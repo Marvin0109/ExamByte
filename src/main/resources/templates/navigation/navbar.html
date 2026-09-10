@@ -73,7 +73,7 @@
                 <li class="nav-item"
                     th:if="${#authorization.expression('!hasAnyRole(''REVIEWER'',''ADMIN'',''STUDENT'')')}">
                     <a class="nav-link" th:href="@{/oauth2/authorization/github}">
-                        <i class="fab fa-github me-1"></i>
+                        <i class="fas fa-right-to-bracket me-1"></i>
                         Login
                     </a>
                 </li>

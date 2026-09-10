@@ -2,7 +2,7 @@
 
 > **Author**: Marvin0109  
 > **Created on**: January 08, 2025  
-> **Updated on**: September 9, 2026
+> **Updated on**: September 10, 2026
 
 > [!NOTE]
 > This style guide defines formatting and convention rules for the project. The goal is to
@@ -299,7 +299,7 @@ variables must be set in a local `.env` file.)
     <link rel="stylesheet" href="/public/custom/index.css">
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 <!-- Navigation top -->
 <header th:replace="~{navigation/navbar.html}"> </header>
 
@@ -309,8 +309,8 @@ variables must be set in a local `.env` file.)
   
 </main>
 
-<!-- Navigation bottom -->
-<header th:replace="~{navigation/navbarDown.html}"> </header>
+<!-- Footer -->
+<footer th:replace="~{navigation/footer.html}"> </footer>
 
 <!-- js Imports -->
 <script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
