@@ -778,6 +778,7 @@
 ---
 
 ### 10.09.26
-**Area**: UI / UX
+**Area**: UI / UX / Misc
 - Using footer instead of navbar
 - Minor changes
+- Adding `sitemap.xml`

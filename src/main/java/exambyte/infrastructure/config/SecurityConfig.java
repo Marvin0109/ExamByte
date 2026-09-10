@@ -54,7 +54,13 @@ public class SecurityConfig {
     public SecurityFilterChain configure(HttpSecurity chainBuilder) throws Exception {
         return chainBuilder
                 .authorizeHttpRequests(configure -> configure
-                        .requestMatchers("/", "/error", "/login", "/oauth2/**", "/public/**",
+                        .requestMatchers(
+                                "/",
+                                "/error",
+                                "/login",
+                                "/oauth2/**",
+                                "/public/**",
+                                "/sitemap.xml",
                                 "/robots.txt").permitAll()
                         .anyRequest().authenticated()
                 )
