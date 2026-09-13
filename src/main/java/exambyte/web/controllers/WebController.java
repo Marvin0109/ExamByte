@@ -42,6 +42,12 @@ public class WebController {
         return "legalNotice";
     }
 
+    @GetMapping("/privacyPolicy")
+    public String privacyPolicy(Model model, HttpServletRequest request) {
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        return "privacyPolicy";
+    }
+
     @GetMapping("/contact")
     public String contact(Model model, HttpServletRequest request) {
         model.addAttribute(CURRENT_PATH, request.getRequestURI());

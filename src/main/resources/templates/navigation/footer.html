@@ -17,6 +17,13 @@
             </a>
 
             <a class="footer-link"
+               th:classappend="${currentPath == '/privacyPolicy'} ? ' active' : ''"
+               href="/privacyPolicy">
+                Datenschutz
+                <span class="visually-hidden" th:if="${currentPath == '/privacyPolicy'}">(current)</span>
+            </a>
+
+            <a class="footer-link"
                href="https://github.com/Marvin0109/ExamByte">
                 <i class="fab fa-github me-1"></i>
                 Quellcode

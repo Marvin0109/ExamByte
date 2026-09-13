@@ -57,6 +57,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/",
                                 "/legalNotice",
+                                "/privacyPolicy",
                                 "/contact",
                                 "/error",
                                 "/login",
