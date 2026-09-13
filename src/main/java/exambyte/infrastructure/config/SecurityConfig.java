@@ -56,6 +56,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(configure -> configure
                         .requestMatchers(
                                 "/",
+                                "/legalNotice",
+                                "/contact",
                                 "/error",
                                 "/login",
                                 "/oauth2/**",

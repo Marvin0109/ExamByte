@@ -1,15 +1,22 @@
 <footer class="bg-dark">
     <div class="container-fluid d-flex justify-content-center py-1">
         <div class="d-flex gap-3">
-            <a class="text-light text-decoration-none"
-               th:if="${#authorization.expression('hasAnyRole(''STUDENT'',''REVIEWER'',''ADMIN'')')}"
+            <a class="footer-link"
                th:classappend="${currentPath == '/contact'} ? ' active' : ''"
                href="/contact">
                 <i class="fas fa-envelope me-1"></i>
                 Kontakt
+                <span class="visually-hidden" th:if="${currentPath == '/contact'}">(current)</span>
             </a>
 
-            <a class="text-light text-decoration-none"
+            <a class="footer-link"
+               th:classappend="${currentPath == '/legalNotice'} ? ' active' : ''"
+               href="/legalNotice">
+                Impressum
+                <span class="visually-hidden" th:if="${currentPath == '/legalNotice'}">(current)</span>
+            </a>
+
+            <a class="footer-link"
                href="https://github.com/Marvin0109/ExamByte">
                 <i class="fab fa-github me-1"></i>
                 Quellcode

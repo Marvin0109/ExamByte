@@ -1,6 +1,3 @@
-/* index.css */
-
-/* 1. Global Styles (Basis-Stile für die gesamte Seite) */
 * {
     margin: 0;
     padding: 0;
@@ -15,14 +12,12 @@ body {
     background-color: #f4f4f4;
 }
 
-/* 2. Container */
 .container {
     width: 80%;
     margin: auto;
     max-width: 1200px;
 }
 
-/* 3. Header und Navigation */
 header {
     background-color: #333;
     color: #fff;
@@ -30,29 +25,12 @@ header {
     text-align: center;
 }
 
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-
-nav ul li {
-    display: inline;
-    margin: 0 10px;
-}
-
-nav ul li a {
-    color: #fff;
-    text-decoration: none;
-}
-
-/* 4. Hauptinhalte */
 .main-content {
     padding: 20px;
     background-color: #fff;
     margin-top: 20px;
 }
 
-/* 5. Footer */
 footer {
     background-color: #333;
     color: #fff;
@@ -61,7 +39,6 @@ footer {
     margin-top: 20px;
 }
 
-/* 6. Weitere Stilgruppen (Buttons, Formulare, etc.) */
 button {
     background-color: #333;
     color: #fff;
@@ -74,9 +51,6 @@ button:hover {
     background-color: #555;
 }
 
-/* index.css */
-
-/* Sidebar Styling */
 .sidebar {
     position: fixed;
     top: 0;
@@ -86,13 +60,11 @@ button:hover {
     padding-top: 20px;
 }
 
-/* Anpassung für die Hauptinhalte */
 .content {
-    margin-left: 250px; /* Platz für die Sidebar */
+    margin-left: 250px;
     padding: 20px;
 }
 
-/* Zusätzliche Styling-Anpassungen */
 .sidebar .navbar-nav .nav-link {
     color: #ddd;
     font-size: 1.1em;
@@ -100,17 +72,6 @@ button:hover {
 
 .sidebar .navbar-nav .nav-link:hover {
     color: #fff;
-}
-
-#search-icon {
-    background-color: #343a40;
-    color: white;
-    padding: 5px;            /* Optional: etwas Abstand für das Icon */
-    border: none;            /* Umrandung entfernen */
-}
-
-#search-icon i {
-    font-size: 16px;         /* Größe des Icons anpassen (optional) */
 }
 
 .responsive-img {
@@ -129,5 +90,20 @@ button:hover {
 
 .card-text {
     white-space: pre-line;
+}
+
+.footer-link {
+    color: #ddd;
+    text-decoration: none;
+}
+
+.footer-link:hover {
+    color: #fff;
+}
+
+.footer-link.active {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
 }
 

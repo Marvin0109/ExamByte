@@ -1,27 +1,23 @@
 package exambyte.web.controllers;
 
-import exambyte.web.service.ExamControllerService;
 import exambyte.application.service.user.AppUserService;
 import exambyte.application.service.user.UserCreationService;
 import exambyte.infrastructure.config.MethodSecurityConfig;
 import exambyte.infrastructure.config.SecurityConfig;
-import exambyte.web.controllers.securityHelper.WithMockOAuth2User;
-
+import exambyte.web.service.ExamControllerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WebController.class)
 @Import({SecurityConfig.class, MethodSecurityConfig.class})
-class ContactTest {
+class LegalNoticeTest {
 
     @Autowired
     private MockMvc mvc;
@@ -36,10 +32,10 @@ class ContactTest {
     private AppUserService userService;
 
     @Test
-    void get_contact() throws Exception {
-        mvc.perform(get("/contact"))
-            .andExpect(status().isOk())
-            .andExpect(view().name("contact"))
-            .andExpect(model().attributeExists("currentPath"));
+    void get_legal_notice_success() throws Exception{
+        mvc.perform(get("/legalNotice"))
+            .andExpect(view().name("legalNotice"))
+            .andExpect(model().attributeExists("currentPath"))
+            .andExpect(status().isOk());
     }
 }

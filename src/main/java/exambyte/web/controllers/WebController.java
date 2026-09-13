@@ -36,10 +36,14 @@ public class WebController {
         return "index";
     }
 
+    @GetMapping("/legalNotice")
+    public String legalNotice(Model model, HttpServletRequest request) {
+        model.addAttribute(CURRENT_PATH, request.getRequestURI());
+        return "legalNotice";
+    }
+
     @GetMapping("/contact")
-    @Secured({"ROLE_STUDENT", "ROLE_REVIEWER", "ROLE_ADMIN"})
-    public String contact(Model model, HttpServletRequest request, OAuth2AuthenticationToken auth) {
-        model.addAttribute("name", auth.getPrincipal().getAttribute("login"));
+    public String contact(Model model, HttpServletRequest request) {
         model.addAttribute(CURRENT_PATH, request.getRequestURI());
         return "contact";
     }
