@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** September 10, 2026
+> **Updated on:** September 13, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -782,3 +782,9 @@
 - Using footer instead of navbar
 - Minor changes
 - Adding `sitemap.xml`
+
+---
+
+### 13.09.26
+**Area**: Privacy policy / Contact / Legal notice
+- Adding `privacyPolicy.html`, `legalNotice.html` and adding contact mail in `contact.html`
