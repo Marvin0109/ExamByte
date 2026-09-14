@@ -162,7 +162,7 @@ class AnswerServiceTest {
                 .thenReturn(List.of(questionDTO));
 
         when(repository.findByQuestionId(QUESTION_1_ID))
-                .thenReturn(answer);
+                .thenReturn(List.of(answer));
 
         when(mapper.toDTO(answer))
                 .thenReturn(dto);
@@ -186,7 +186,7 @@ class AnswerServiceTest {
                 .thenReturn(List.of(questionDTO));
 
         when(repository.findByQuestionId(QUESTION_1_ID))
-                .thenReturn(null);
+                .thenReturn(List.of());
 
         // Act
         List<AnswerDTO> result = answerService.getFreeResponseAnswersForExam(examId);

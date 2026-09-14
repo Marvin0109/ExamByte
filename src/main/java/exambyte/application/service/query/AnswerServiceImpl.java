@@ -63,8 +63,7 @@ public class AnswerServiceImpl implements AnswerService {
     @Override
     public List<AnswerDTO> getFreeResponseAnswersForExam(UUID examId) {
         return questionService.getFreeResponseQuestions(examId).stream()
-                .map(frageDTO -> findByQuestionId(frageDTO.id()))
-                .filter(Objects::nonNull)
+                .flatMap(frageDTO -> findByQuestionId(frageDTO.id()).stream())
                 .map(mapper::toDTO)
                 .toList();
     }
@@ -77,7 +76,7 @@ public class AnswerServiceImpl implements AnswerService {
         return mapper.toDTO(findByStudentIdAndQuestionId(studentId, questionId));
     }
 
-    private Answer findByQuestionId(UUID id) {
+    private List<Answer> findByQuestionId(UUID id) {
         return repository.findByQuestionId(id);
     }
 

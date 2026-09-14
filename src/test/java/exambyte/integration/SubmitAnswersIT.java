@@ -122,11 +122,11 @@ class SubmitAnswersIT {
         boolean success = examControllerService.submitExam("Student", answers, examId);
         assertThat(success).isTrue();
 
-        Answer answer = answerRepository.findByQuestionId(questionIdSC.get());
+        List<Answer> answerList = answerRepository.findByQuestionId(questionIdSC.get());
 
         assertThat(answerRepository.findByQuestionId(questionIdFreeResponse.get())).isNotNull();
         assertThat(answerRepository.findByQuestionId(questionIdSC.get())).isNotNull();
 
-        assertThat(reviewRepository.findByAnswerId(answer.getId())).isNotNull();
+        assertThat(reviewRepository.findByAnswerId(answerList.getFirst().getId())).isNotNull();
     }
 }
