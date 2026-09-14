@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public interface AnswerDAO extends CrudRepository<AnswerEntity, UUID> {
             @Param("questionId") UUID questionId);
 
     @Query("SELECT * FROM answer WHERE question_id = :questionId")
-    Optional<AnswerEntity> findByQuestionId(@Param("questionId") UUID questionId);
+    List<AnswerEntity> findByQuestionId(@Param("questionId") UUID questionId);
 
     @Transactional
     @Modifying

@@ -6,6 +6,7 @@ import exambyte.infrastructure.entity.AnswerEntity;
 import exambyte.domain.repository.AnswerRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,9 +43,10 @@ public class AnswerRepositoryImpl implements AnswerRepository {
     }
 
     @Override
-    public Answer findByQuestionId(UUID id) {
-        Optional<AnswerEntity> entity = dao.findByQuestionId(id);
-        return entity.map(mapper::toDomain)
-                .orElse(null);
+    public List<Answer> findByQuestionId(UUID id) {
+        List<AnswerEntity> list = dao.findByQuestionId(id);
+        return list.stream()
+                .map(mapper::toDomain)
+                .toList();
     }
 }
