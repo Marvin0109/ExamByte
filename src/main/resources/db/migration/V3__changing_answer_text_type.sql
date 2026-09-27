@@ -1,0 +1,2 @@
+ALTER TABLE answer
+    ALTER COLUMN answer TYPE TEXT;
