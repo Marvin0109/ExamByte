@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** September 14, 2026
+> **Updated on:** September 27, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -794,3 +794,11 @@
 ### 14.09.26
 **Area**: Repository / Services / Bug
 - Fixing issue: Two students can submit answers, but answers can't be accessible to review (Check Issue #31)
+
+---
+
+### 27.09.26
+**Area**: DB / UX / Test / Bug
+- Fixing issue: Student can submit answer with character length up to 5000 (Check Issue #33)
+- Added character counter
+- Fixing tests and field validations
