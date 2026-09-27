@@ -78,8 +78,15 @@
                         <textarea th:name="${frage.id}"
                                   th:id="'antwort-' + ${frage.id} + '-' + ${iterStat.index}"
                                   th:field="*{answers[__${frage.id}__]}"
-                                  class="form-control" rows="6">
+                                  class="form-control"
+                                  rows="6"
+                                  maxlength="5000"
+                                  oninput="updateCharCount(this)">
                         </textarea>
+
+                        <small class="text-muted">
+                            <span class="char-count">0</span> / 5000 Zeichen
+                        </small>
                     </div>
                 </div>
             </div>
@@ -96,7 +103,8 @@
 <header th:replace="~{navigation/footer.html}"> </header>
 
 <!-- js Imports -->
-<script defer src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+<script src="/public/custom/updateCharCount.js"></script>
 
 </body>
 </html>
