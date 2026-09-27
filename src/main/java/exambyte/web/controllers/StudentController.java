@@ -22,7 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -112,6 +114,7 @@ public class StudentController {
 
         model.addAttribute("exam", form);
         model.addAttribute("submitForm", submitForm);
+        model.addAttribute("answerErrors", new HashMap<String, String>());
         return "student/startExam";
     }
 
@@ -121,13 +124,29 @@ public class StudentController {
             @Valid @ModelAttribute("submitForm") SubmitForm submitForm,
             BindingResult bindingResult,
             OAuth2AuthenticationToken auth,
-            RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
         if (bindingResult.hasErrors()) {
-            return redirectWithMessage(
-                    redirectAttributes,
-                    "Alle Antworten müssen gesetzt werden!",
-                    false);
+            Map<String, String> answerErrors = new HashMap<>();
+
+            bindingResult.getFieldErrors().forEach(error -> {
+                String field = error.getField();
+
+                if (field.startsWith("answers[")) {
+                    int start = field.indexOf("[") + 1;
+                    int end = field.indexOf("]");
+
+                    String questionId = field.substring(start, end);
+
+                    answerErrors.put(questionId, error.getDefaultMessage());
+                }
+            });
+            model.addAttribute("answerErrors", answerErrors);
+
+            ExamForm form = service.fillExamForm(examId);
+            model.addAttribute("exam", form);
+            return "student/startExam";
         }
 
         OAuth2User user = auth.getPrincipal();
@@ -156,6 +175,7 @@ public class StudentController {
 
         model.addAttribute("exam", form);
         model.addAttribute("submitForm", submitForm);
+        model.addAttribute("answerErrors", new HashMap<String, String>());
         return "student/startExamWithData";
     }
 

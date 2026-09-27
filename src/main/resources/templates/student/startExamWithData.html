@@ -52,10 +52,17 @@
                                    th:text="${answer.replace('ĸ', ',')}">
                             </label>
                         </div>
+                        <small class="text-danger d-block"
+                               th:if="${answerErrors.containsKey(component.question.id.toString())}"
+                               th:text="${answerErrors.get(component.question.id.toString())}">
+                        </small>
                     </div>
 
                     <!-- Single Choice -->
                     <div class="mb-2" th:if="${component.question.type.name == 'SC'}">
+                        <input type="hidden"
+                               th:name="'_answers[' + ${component.question.id} + ']'"
+                               value="on" />
                         <div class="form-check mb-2"
                              th:each="answer, answerStat : ${#strings.arraySplit(component.correctAnswers.choices, ',')}">
                             <input class="form-check-input"
@@ -69,6 +76,10 @@
                                    th:text="${answer.replace('ĸ', ',')}">
                             </label>
                         </div>
+                        <small class="text-danger d-block"
+                               th:if="${answerErrors.containsKey(component.question.id.toString())}"
+                               th:text="${answerErrors.get(component.question.id.toString())}">
+                        </small>
                     </div>
 
                     <!-- FREE_RESPONSE -->
@@ -82,10 +93,12 @@
                                   th:field="*{answers[__${component.question.id}__]}"
                                   class="form-control"
                                   rows="6"
-                                  maxlength="5000"
                                   oninput="updateCharCount(this)">
                         </textarea>
-
+                        <small class="text-danger d-block"
+                               th:if="${answerErrors.containsKey(component.question.id.toString())}"
+                               th:text="${answerErrors.get(component.question.id.toString())}">
+                        </small>
                         <small class="text-muted">
                             <span class="char-count">0</span> / 5000 Zeichen
                         </small>
