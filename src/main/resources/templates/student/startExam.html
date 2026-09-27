@@ -50,10 +50,17 @@
                                    th:text="${antwort.replace('ĸ', ',')}">
                             </label>
                         </div>
+                        <small class="text-danger d-block"
+                               th:if="${answerErrors.containsKey(frage.id.toString())}"
+                               th:text="${answerErrors.get(frage.id.toString())}">
+                        </small>
                     </div>
 
                     <!-- Single Choice -->
                     <div class="mb-2" th:if="${frage.type == 'SC'}">
+                        <input type="hidden"
+                               th:name="'_answers[' + ${frage.id} + ']'"
+                               value="on" />
                         <div class="form-check mb-2"
                              th:each="antwort, antwortStat : ${#strings.arraySplit(frage.choices, ',')}">
                             <input class="form-check-input"
@@ -67,6 +74,10 @@
                                    th:text="${antwort.replace('ĸ', ',')}">
                             </label>
                         </div>
+                        <small class="text-danger d-block"
+                               th:if="${answerErrors.containsKey(frage.id.toString())}"
+                               th:text="${answerErrors.get(frage.id.toString())}">
+                        </small>
                     </div>
 
                     <!-- FREE_RESPONSE -->
@@ -78,8 +89,17 @@
                         <textarea th:name="${frage.id}"
                                   th:id="'antwort-' + ${frage.id} + '-' + ${iterStat.index}"
                                   th:field="*{answers[__${frage.id}__]}"
-                                  class="form-control" rows="6">
+                                  class="form-control"
+                                  rows="6"
+                                  oninput="updateCharCount(this)">
                         </textarea>
+                        <small class="text-danger d-block"
+                               th:if="${answerErrors.containsKey(frage.id.toString())}"
+                               th:text="${answerErrors.get(frage.id.toString())}">
+                        </small>
+                        <small class="text-muted">
+                            <span class="char-count">0</span> / 5000 Zeichen
+                        </small>
                     </div>
                 </div>
             </div>
@@ -96,7 +116,8 @@
 <header th:replace="~{navigation/footer.html}"> </header>
 
 <!-- js Imports -->
-<script defer src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+<script src="/public/bootstrap-5.3.8-dist/js/bootstrap.min.js"></script>
+<script src="/public/custom/updateCharCount.js"></script>
 
 </body>
 </html>

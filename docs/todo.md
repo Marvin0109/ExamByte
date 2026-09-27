@@ -1,7 +1,7 @@
 # Todo for ExamByte
 
 > **Author:** Marvin0109  
-> **Updated on:** March 24, 2026
+> **Updated on:** September 27, 2026
 
 > [!IMPORTANT]
 > Tasks should be completed in the order they are listed.
@@ -25,7 +25,7 @@
 
 > [!NOTE]
 > After completing the application, the features listed below are ideas that could be implemented, but are not
-> required for the first working version of ExamByte.
+> required for the first working version of ExamByte. For Small bugs or necessary changes, use GitHub Issues.
 
 1. [ ] Refactor review creation process
    1. [ ] Only one user may correct an answer (access denied for others)

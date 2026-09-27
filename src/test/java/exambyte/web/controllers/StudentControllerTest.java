@@ -173,6 +173,7 @@ class StudentControllerTest {
             .andExpect(status().isOk())
             .andExpect(model().attribute("exam", form))
             .andExpect(model().attributeExists("submitForm"))
+            .andExpect(model().attributeExists("answerErrors"))
             .andExpect(view().name("student/startExam"));
     }
 
@@ -215,13 +216,15 @@ class StudentControllerTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
+        when(service.fillExamForm(examId)).thenReturn(new ExamForm());
+
         mvc.perform(post("/student/submit/{examId}", examId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/student/examListForStudent"))
-                .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
-                .andExpect(flash().attribute("success", false));
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/startExam"))
+                .andExpect(model().attributeExists("exam"))
+                .andExpect(model().attributeExists("answerErrors"));
     }
 
     @Test
@@ -236,13 +239,15 @@ class StudentControllerTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
+        when(service.fillExamForm(examId)).thenReturn(new ExamForm());
+
         mvc.perform(post("/student/submit/{examId}", examId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/student/examListForStudent"))
-                .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
-                .andExpect(flash().attribute("success", false));
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/startExam"))
+                .andExpect(model().attributeExists("exam"))
+                .andExpect(model().attributeExists("answerErrors"));
     }
 
     @Test
@@ -257,13 +262,39 @@ class StudentControllerTest {
         SubmitForm form = new SubmitForm();
         form.setAnswers(answers);
 
+        when(service.fillExamForm(examId)).thenReturn(new ExamForm());
+
         mvc.perform(post("/student/submit/{examId}", examId)
                         .flashAttr("submitForm", form)
                         .with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/student/examListForStudent"))
-                .andExpect(flash().attribute("message", "Alle Antworten müssen gesetzt werden!"))
-                .andExpect(flash().attribute("success", false));
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/startExam"))
+                .andExpect(model().attributeExists("exam"))
+                .andExpect(model().attributeExists("answerErrors"));
+    }
+
+    @Test
+    @WithMockOAuth2User(roles = {"STUDENT"})
+    void post_submitExam_fail_toLongValue() throws Exception {
+        UUID examId = UUID.randomUUID();
+
+        String toLong = "A".repeat(5001);
+        Map<String, List<String>> answers = Map.of(
+                "q2", List.of(toLong)
+        );
+
+        SubmitForm form = new SubmitForm();
+        form.setAnswers(answers);
+
+        when(service.fillExamForm(examId)).thenReturn(new ExamForm());
+
+        mvc.perform(post("/student/submit/{examId}", examId)
+                        .flashAttr("submitForm", form)
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("student/startExam"))
+                .andExpect(model().attributeExists("exam"))
+                .andExpect(model().attributeExists("answerErrors"));
     }
 
     @Test
