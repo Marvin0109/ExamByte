@@ -37,13 +37,18 @@
         <form th:action="@{/reviewer/createReview/{answerId}(answerId=${answer.answerId})}" method="post"
               th:object="${reviewForm}">
             <div class="card-body">
-                <h2 class="card-text" th:text="${answer.questionText}">Fragestellung</h2>
-                <p class="card-text">
-                    <small class="text-muted" th:text="${answer.questionPoints} + ' Punkte'">
-                        Punktzahl der Aufgabe
-                    </small>
+                <p class="mb-2">
+                    <strong>Fragestellung:</strong>
+                    <span th:text="${answer.questionText}">Fragestellung</span>
                 </p>
-                <p class="card-text" th:text="${answer.answer}">Antwort des Studenten</p>
+                <p class="mb-2">
+                    <strong>Punkte:</strong>
+                    <span th:text="${answer.questionPoints}">Punktzahl der Aufgabe</span>
+                </p>
+                <p class="mb-3">
+                    <strong>Antwort:</strong>
+                    <span th:text="${answer.answer}">Antwort des Studenten</span>
+                </p>
 
                 <label class="form-label" th:for="'Bewertung' + ${iterStat.index}">Bewertungstext</label>
                 <textarea class="form-control mb-2"
@@ -55,7 +60,7 @@
                        th:if="${#fields.hasErrors('reviewText')}"
                        th:errors="*{reviewText}"></small>
 
-                <label th:for="'Punkte' + ${iterStat.index}">Erreichte Punkte</label>
+                <label class="form-label" th:for="'Punkte' + ${iterStat.index}">Erreichte Punkte</label>
                 <input class="form-control mb-2"
                        type="number"
                        th:id="'Punkte' + ${iterStat.index}"

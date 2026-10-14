@@ -1,7 +1,7 @@
 # Current Status
 
 > **Author:** Marvin0109
-> **Updated on:** September 27, 2026
+> **Updated on:** October 14, 2026
 
 > [!NOTE]
 > Since February 11, 2025, the application has been maintained exclusively by Marvin0109.
@@ -802,3 +802,9 @@
 - Fixing issue: Student can submit answer with character length up to 5000 (Check Issue #33)
 - Added character counter
 - Fixing tests and field validations
+
+---
+
+### 14.10.26
+**Area**: UI / Bug
+- Fixing issue: Changing font size of reviewing-exam template
